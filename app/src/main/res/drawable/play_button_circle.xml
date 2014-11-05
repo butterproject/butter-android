@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFFFF" />
+        </shape>
+    </item>
+    <item>
+        <selector android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+            <item android:state_pressed="true">
+                <shape android:shape="oval">
+                    <solid android:color="#FFE2E2E2" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</layer-list>

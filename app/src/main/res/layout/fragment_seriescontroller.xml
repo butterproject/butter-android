@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:paddingTop="?attr/actionBarSize"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/buttonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:background="@color/primary">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+            <pct.droid.widget.ImageButton
+                android:id="@+id/favouriteButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_favourite"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/add_favourite"
+                />
+            <pct.droid.widget.ImageButton
+                android:id="@+id/watchedButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="4dp"
+                android:layout_marginLeft="@dimen/action_margin"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_watched"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/watched"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <pct.droid.widget.JoystickView
+        android:id="@+id/joystick"
+        android:layout_below="@id/buttonBar"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+</RelativeLayout>

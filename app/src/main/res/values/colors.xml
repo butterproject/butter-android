@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="bg">#2F383F</color>
+    <color name="list_selected">#55FFFFFF</color>
+    <color name="primary">#FF1976D2</color>
+    <color name="primary_dark">#FF1668B9</color>
+    <color name="accent">#FF1C84EB</color>
+
+    <color name="viewfinder_laser">#FF1976D2</color>
+    <color name="viewfinder_border">#FFFFFFFF</color>
+
+    <color name="trans_white">#99FFFFFF</color>
+    <color name="div_white">#22FFFFFF</color>
+
+    <color name="text_color">#FFFFFF</color>
+    <color name="secondary_text_color">#AAFFFFFF</color>
+
+    <color name="overlay">#33000000</color>
+
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:paddingTop="?attr/actionBarSize"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/buttonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:background="@color/primary">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+            <pct.droid.widget.ImageButton
+                android:id="@+id/tabsButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_switch"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/toggle_tabs"
+                />
+            <pct.droid.widget.ImageButton
+                android:id="@+id/favouriteButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:layout_marginLeft="@dimen/action_margin"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_favourite"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/add_favourite"
+                />
+            <pct.droid.widget.ImageButton
+                android:id="@+id/searchButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:layout_marginLeft="@dimen/action_margin"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_search"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/search"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/searchInputBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:background="@color/primary"
+            android:visibility="gone">
+            <pct.droid.widget.ClearableEditText
+                android:id="@+id/searchInput"
+                android:hint="Search..."
+                android:layout_marginLeft="@dimen/action_margin"
+                android:layout_marginRight="@dimen/action_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <pct.droid.widget.JoystickView
+        android:id="@+id/joystick"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@id/buttonBar"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+</RelativeLayout>
