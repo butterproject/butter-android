@@ -12,12 +12,6 @@ android {
         versionName "1.0"
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['src/jniLibs']
-        }
-    }
-
     buildTypes {
         release {
             runProguard false
