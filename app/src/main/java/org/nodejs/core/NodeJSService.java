@@ -15,12 +15,14 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
 public class NodeJSService extends Service {
 
+    private final IBinder mBinder = new ServiceBinder();
     private static final String TAG = "nodejs-service";
     private static final String NODEJS_PATH = "backend";
     private static final String DEFAULT_PACKAGE = "backend.zip";
@@ -28,6 +30,42 @@ public class NodeJSService extends Service {
     private String mPackageName = DEFAULT_PACKAGE;
     private NodeJSTask mTask = null;
 
+    public class ServiceBinder extends Binder {
+        public NodeJSService getService() {
+            return NodeJSService.this;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        PackageManager pm = getPackageManager();
+        ComponentName component = new ComponentName(this, this.getClass());
+        ServiceInfo info;
+
+        Log.d(TAG, component.toString());
+
+        try {
+            info = pm.getServiceInfo(component, PackageManager.GET_META_DATA);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            return START_NOT_STICKY;
+        }
+
+        Bundle metaData = info.metaData;
+
+        if(metaData.getString("node_package") != null) {
+            mPackageName = metaData.getString("node_package");
+        }
+
+        return START_STICKY;
+    }
+
+    /** Important Node stuff below **/
     private class NodeJSTask extends AsyncTask<String, Void, String> {
 
         Context mContext = null;
@@ -46,9 +84,6 @@ public class NodeJSService extends Service {
 
             File appPath = mContext.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
 
-
-
-
             String mainJS = params[0];
             File js = new File(appPath, NODEJS_PATH + "/" + "src" + "/" + "app" + "/" + mainJS);
             if (!js.exists()) {
@@ -58,12 +93,8 @@ public class NodeJSService extends Service {
                     // TODO Auto-generated catch block
                     Log.e(TAG, "Error while installing script", e);
                 }
-
-
-
             }
             return js.toString();
-
         }
 
         @Override
@@ -78,7 +109,6 @@ public class NodeJSService extends Service {
 
             running = false;
         }
-
     }
 
     public static void installPackage(AssetManager assets, String packageName, File targetDir) throws IOException {
@@ -132,50 +162,6 @@ public class NodeJSService extends Service {
                 mTask.running = true;
             }
         }
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        PackageManager pm = getPackageManager();
-        ComponentName component = new ComponentName(this, this.getClass());
-        ServiceInfo info;
-
-        Log.d(TAG, component.toString());
-
-        try {
-            info = pm.getServiceInfo(component, PackageManager.GET_META_DATA);
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-            return START_NOT_STICKY;
-        }
-
-        Bundle metaData = info.metaData;
-
-        String scriptName = metaData.getString("script");
-
-        if(metaData.getString("node_package") != null) {
-            mPackageName = metaData.getString("node_package");
-        }
-
-        if (scriptName == null) {
-            Log.e(TAG, "Script <" + scriptName
-                    + "> is not set as service's meta");
-            return START_NOT_STICKY;
-        }
-
-        try {
-            runScript(scriptName);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return START_NOT_STICKY;
-        }
-
-        return START_STICKY;
     }
 
 }
