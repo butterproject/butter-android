@@ -25,6 +25,7 @@ public class OverviewActivity extends BaseActivity {
     private OverviewGridAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private YTSProvider mProvider = new YTSProvider();
+    private Integer mColumns = 2;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -39,10 +40,8 @@ public class OverviewActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         recyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(this, 2);
+        mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        getApp().runScript("app", "9000");
 
         mProvider.getList(null, mCallback);
     }
@@ -83,7 +82,7 @@ public class OverviewActivity extends BaseActivity {
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
         public void onSuccess(ArrayList<MediaProvider.Video> items) {
-            mAdapter = new OverviewGridAdapter(OverviewActivity.this, items);
+            mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
                 @Override
