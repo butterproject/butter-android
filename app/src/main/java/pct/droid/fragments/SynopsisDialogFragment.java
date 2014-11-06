@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import eu.se_bastiaan.popcorntimeremote.R;
+import pct.droid.R;
 
 public class SynopsisDialogFragment extends DialogFragment {
 
