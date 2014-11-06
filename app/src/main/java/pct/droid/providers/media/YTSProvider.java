@@ -71,7 +71,13 @@ public class YTSProvider extends MediaProvider {
     }
 
     @Override
-    public Call getList(HashMap<String, String> filters, final Callback callback) {
+    public Call getList(ArrayList<MediaProvider.Video> currentList, HashMap<String, String> filters, final Callback callback) {
+        if(currentList != null) {
+            mResults = currentList;
+        } else {
+            mResults = new ArrayList<MediaProvider.Video>();
+        }
+
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("limit", "50"));
 
@@ -132,10 +138,6 @@ public class YTSProvider extends MediaProvider {
     @Override
     public Call getDetail(String torrentId, Callback callback) {
         return null;
-    }
-
-    public void clearResults() {
-        mResults.clear();
     }
 
     private void formatForPopcorn(ArrayList<LinkedTreeMap<String, Object>> list) {

@@ -123,7 +123,11 @@ public abstract class MediaProvider extends BaseProvider {
         };
     }
 
-    public abstract Call getList(HashMap<String, String> filters, Callback callback);
+    public Call getList(HashMap<String, String> filters, Callback callback) {
+        return getList(null, filters, callback);
+    }
+
+    public abstract Call getList(ArrayList<MediaProvider.Video> currentList, HashMap<String, String> filters, Callback callback);
     public abstract Call getDetail(String torrentId, Callback callback);
 
     public interface Callback {
