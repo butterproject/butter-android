@@ -78,6 +78,7 @@ public abstract class MediaProvider extends BaseProvider {
 
     public static class Torrent implements Parcelable {
         public String url;
+        public String magnet;
         public String size;
         public String fileSize;
         public String seeds;
@@ -89,6 +90,7 @@ public abstract class MediaProvider extends BaseProvider {
 
         protected Torrent(Parcel in) {
             url = in.readString();
+            magnet = in.readString();
             size = in.readString();
             fileSize = in.readString();
             seeds = in.readString();
@@ -103,6 +105,7 @@ public abstract class MediaProvider extends BaseProvider {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(url);
+            dest.writeString(magnet);
             dest.writeString(size);
             dest.writeString(fileSize);
             dest.writeString(seeds);

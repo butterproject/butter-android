@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -19,7 +17,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,7 +24,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 
-import pct.droid.PopcornApplication;
 import pct.droid.utils.LogUtils;
 
 public class NodeJSService extends Service {
@@ -51,10 +47,7 @@ public class NodeJSService extends Service {
                 switch (msg.what) {
                     case MSG_RUN_SCRIPT:
                         Bundle args = msg.getData();
-                        String fileName = args.getString("file_name") + ".js";
-                        args.remove("file_name");
-
-                        runScript(fileName, args);
+                        runScript(args.getString("directory"), args.getString("stream_url"));
                         break;
                     default:
                         super.handleMessage(msg);
@@ -91,26 +84,31 @@ public class NodeJSService extends Service {
             mPackageName = metaData.getString("node_package");
         }
 
+        AssetManager assets = NodeJSService.this.getAssets();
+        File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
+        File js = new File(appPath, "app.js");
+        if (!js.exists()) {
+            try {
+                installPackage(assets, mPackageName, appPath);
+            } catch (IOException e) {
+                Log.e(TAG, "Error while installing script", e);
+            }
+        }
+
         return START_STICKY;
     }
 
     /** Important Node stuff below **/
     private class NodeJSThread extends Thread {
 
-        private String mFileName;
-        private Bundle mArgs;
+        private String mFileName = "app.js", mDirectory = "", mStreamUrl = "";
 
-        public NodeJSThread() {
-            mFileName = "app.js";
-            mArgs = new Bundle();
+        public void setDirectory(String directory) {
+            mDirectory = directory;
         }
 
-        public void setFileName(String fileName) {
-            mFileName = fileName;
-        }
-
-        public void setArgs(Bundle args) {
-            mArgs = args;
+        public void setStreamUrl(String url) {
+            mStreamUrl = url;
         }
 
         @Override
@@ -123,7 +121,7 @@ public class NodeJSService extends Service {
 
             File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
 
-            File js = new File(appPath, NODEJS_PATH + "/" + "src" + "/" + "app" + "/" + mFileName);
+            File js = new File(appPath, mFileName);
             if (!js.exists()) {
                 try {
                     installPackage(assets, mPackageName, appPath);
@@ -132,37 +130,52 @@ public class NodeJSService extends Service {
                 }
             }
 
+            try {
+                File status = new File(mDirectory + "/status.json");
+                if (status.exists()) {
+                    status.delete();
+                    status.createNewFile();
+                    status.setWritable(true);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error while creating status.json", e);
+            }
+
+            try {
+                File status = new File(mDirectory + "/streamer.json");
+                if (status.exists()) {
+                    status.delete();
+                    status.createNewFile();
+                    status.setWritable(true);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error while creating streamer.json", e);
+            }
 
             LogUtils.d(TAG, "run :" + js);
-            if(mArgs.size() < 0) {
-                NodeJSCore.run(js.toString());
-            } else {
-                File script = new File(appPath, NODEJS_PATH + "/" + "src" + "/" + "app" + "/" + "main_node_script.js");
-                if(script.exists()) {
-                    script.delete();
-                }
-                String[] keySet = new String[mArgs.size()];
-                mArgs.keySet().toArray(keySet);
-                try {
-                    script.createNewFile();
-
-                    BufferedReader reader = new BufferedReader(new FileReader(js));
-                    PrintWriter writer = new PrintWriter(new FileWriter(script));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        for(int i = 0; i < keySet.length; i++) {
-                            line = line.replace("{" + keySet[i] + "}", mArgs.getString(keySet[i]));
-                        }
-                        writer.println(line);
-                    }
-
-                    reader.close();
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                NodeJSCore.run(script.toString());
+            File script = new File(appPath, "main_node_script.js");
+            if(script.exists()) {
+                script.delete();
             }
+
+            try {
+                script.createNewFile();
+
+                BufferedReader reader = new BufferedReader(new FileReader(js));
+                PrintWriter writer = new PrintWriter(new FileWriter(script));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.replace("<stream_url>", mStreamUrl);
+                    line = line.replace("<directory>", mDirectory);
+                    writer.println(line);
+                }
+
+                reader.close();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            NodeJSCore.run(script.toString());
             LogUtils.d(TAG, "run end");
         }
 
@@ -180,14 +193,12 @@ public class NodeJSService extends Service {
         }
 
         ZipInputStream zin = new ZipInputStream(assets.open(packageName));
-
         ZipEntry ze = null;
 
         try {
             while((ze = zin.getNextEntry()) != null) {
                 if(ze.isDirectory()) {
                     File path = new File(targetDir, ze.getName());
-
                     path.mkdirs();
                 } else {
                     File path = new File(targetDir, ze.getName());
@@ -211,7 +222,7 @@ public class NodeJSService extends Service {
         }
     }
 
-    public void runScript(String mainJS, Bundle args) throws IOException {
+    public void runScript(String dir, String streamUrl) throws IOException {
         synchronized(this) {
             if(mThread == null) {
                 mThread = new NodeJSThread();
@@ -220,8 +231,8 @@ public class NodeJSService extends Service {
             if (!mThread.isInterrupted() && mRunningScript) {
                 mThread.interrupt();
             }
-            mThread.setFileName(mainJS);
-            mThread.setArgs(args);
+            mThread.setDirectory(dir);
+            mThread.setStreamUrl(streamUrl);
             mThread.run();
         }
     }
