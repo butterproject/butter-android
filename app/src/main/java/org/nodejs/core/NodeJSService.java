@@ -1,9 +1,8 @@
-package pct.droid.org.nodejs.core;
+package org.nodejs.core;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -85,9 +84,7 @@ public class NodeJSService extends Service {
 
     }
 
-    public static void installScripts(AssetManager assets, File targetDir,
-                                      String basePath) throws IOException {
-
+    public static void installScripts(AssetManager assets, File targetDir, String basePath) throws IOException {
         String[] files = assets.list(basePath);
 
         if (!targetDir.exists()) {
@@ -131,12 +128,10 @@ public class NodeJSService extends Service {
     }
 
     public static void installPackage(AssetManager assets, String packageName, File targetDir) throws IOException {
-
         if (!targetDir.exists()) {
             targetDir.mkdirs();
-
-
         }
+
         ZipInputStream zin = new ZipInputStream(assets.open(packageName));
 
         ZipEntry ze = null;

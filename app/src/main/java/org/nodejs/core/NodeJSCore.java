@@ -1,4 +1,4 @@
-package pct.droid.org.nodejs.core;
+package org.nodejs.core;
 
 import pct.droid.utils.LogUtils;
 
