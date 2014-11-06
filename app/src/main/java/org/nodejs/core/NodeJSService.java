@@ -1,7 +1,13 @@
 package org.nodejs.core;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -46,13 +52,9 @@ public class NodeJSService extends Service {
                     case MSG_RUN_SCRIPT:
                         Bundle args = msg.getData();
                         String fileName = args.getString("file_name") + ".js";
-                        String arguments = "";
+                        args.remove("file_name");
 
-                        if (args.containsKey("args")) {
-                            arguments += args.getString("args");
-                        }
-
-                        runScript(fileName, arguments);
+                        runScript(fileName, args);
                         break;
                     default:
                         super.handleMessage(msg);
@@ -95,18 +97,19 @@ public class NodeJSService extends Service {
     /** Important Node stuff below **/
     private class NodeJSThread extends Thread {
 
-        private String mFileName, mArgs;
+        private String mFileName;
+        private Bundle mArgs;
 
         public NodeJSThread() {
             mFileName = "app.js";
-            mArgs = "";
+            mArgs = new Bundle();
         }
 
         public void setFileName(String fileName) {
             mFileName = fileName;
         }
 
-        public void setArgs(String args) {
+        public void setArgs(Bundle args) {
             mArgs = args;
         }
 
@@ -125,13 +128,41 @@ public class NodeJSService extends Service {
                 try {
                     installPackage(assets, mPackageName, appPath);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     Log.e(TAG, "Error while installing script", e);
                 }
             }
 
+
             LogUtils.d(TAG, "run :" + js);
-            NodeJSCore.run(js.toString() + " " + mArgs + "");
+            if(mArgs.size() < 0) {
+                NodeJSCore.run(js.toString());
+            } else {
+                File script = new File(appPath, NODEJS_PATH + "/" + "src" + "/" + "app" + "/" + "main_node_script.js");
+                if(script.exists()) {
+                    script.delete();
+                }
+                String[] keySet = new String[mArgs.size()];
+                mArgs.keySet().toArray(keySet);
+                try {
+                    script.createNewFile();
+
+                    BufferedReader reader = new BufferedReader(new FileReader(js));
+                    PrintWriter writer = new PrintWriter(new FileWriter(script));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        for(int i = 0; i < keySet.length; i++) {
+                            line = line.replace("{" + keySet[i] + "}", mArgs.getString(keySet[i]));
+                        }
+                        writer.println(line);
+                    }
+
+                    reader.close();
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                NodeJSCore.run(script.toString());
+            }
             LogUtils.d(TAG, "run end");
         }
 
@@ -180,7 +211,7 @@ public class NodeJSService extends Service {
         }
     }
 
-    public void runScript(String mainJS, String args) throws IOException {
+    public void runScript(String mainJS, Bundle args) throws IOException {
         synchronized(this) {
             if(mThread == null) {
                 mThread = new NodeJSThread();
