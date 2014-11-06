@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ public class OverviewActivity extends BaseActivity {
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    @InjectView(R.id.progressOverlay)
+    LinearLayout progressOverlay;
     @InjectView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -35,8 +38,11 @@ public class OverviewActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_overview);
         setSupportActionBar(toolbar);
 
+        recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
+
+        getApp().runScript("app", "9000");
 
         mProvider.getList(null, mCallback);
     }
@@ -44,10 +50,22 @@ public class OverviewActivity extends BaseActivity {
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, final MediaProvider.Video item, int position) {
+            progressOverlay.setBackgroundColor(getResources().getColor(R.color.overlay_bg));
+            progressOverlay.setVisibility(View.VISIBLE);
+
             mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<MediaProvider.Video> items) {
                     if (items.size() <= 0) return;
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressOverlay.setVisibility(View.GONE);
+                            progressOverlay.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                        }
+                    });
+
                     MediaProvider.Video item = items.get(0);
                     Intent intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
                     intent.putExtra("item", item);
@@ -65,19 +83,20 @@ public class OverviewActivity extends BaseActivity {
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
         public void onSuccess(ArrayList<MediaProvider.Video> items) {
-            mAdapter = new OverviewGridAdapter(items);
+            mAdapter = new OverviewGridAdapter(OverviewActivity.this, items);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    progressOverlay.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
                 }
             });
         }
 
         @Override
-        public void onFailure(Exception exception) {
-
+        public void onFailure(Exception e) {
+            e.printStackTrace();
         }
     };
 
