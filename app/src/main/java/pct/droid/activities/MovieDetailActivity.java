@@ -154,11 +154,19 @@ public class MovieDetailActivity extends BaseActivity {
         scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
-        YTSProvider.Video item = getIntent().getParcelableExtra("item");
+        final YTSProvider.Video item = getIntent().getParcelableExtra("item");
         LogUtils.d("MovieDetailActivity", getIntent().getExtras());
         titleText.setText(item.title);
         yearText.setText(item.year);
-        ratingText.setText(item.rating);
+        ratingText.setText(item.rating + "/10");
+
+        if(item.runtime != null) {
+            runtimeText.setText(Integer.toString(item.runtime) + " " + getString(R.string.minutes));
+        }
+
+        if(item.synopsis != null) {
+            synopsisText.setText(item.synopsis);
+        }
 
         Picasso.with(this).load(item.image).into(new Target() {
             @Override
@@ -182,22 +190,24 @@ public class MovieDetailActivity extends BaseActivity {
                         @Override
                         public void run() {
                             playButton.setImageDrawable(td);
+                            Picasso.with(MovieDetailActivity.this).load(item.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, R.anim.fade_in);
+
+                                    mainInfoBlockColorFade.start();
+                                    td.startTransition(500);
+                                    coverImage.setVisibility(View.VISIBLE);
+                                    coverImage.startAnimation(fadeInAnim);
+                                }
+
+                                @Override
+                                public void onError() {
+
+                                }
+                            });
                         }
                     });
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, R.anim.fade_in);
-
-                            mainInfoBlockColorFade.start();
-                            td.startTransition(500);
-                            coverImage.setImageBitmap(bitmap);
-                            coverImage.setVisibility(View.VISIBLE);
-                            coverImage.startAnimation(fadeInAnim);
-                        }
-                    });
-
             }
 
             @Override
