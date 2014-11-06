@@ -31,18 +31,16 @@ public class PopcornApplication extends Application {
         return mBound;
     }
 
-    public void runScript(String file_name, String args) {
+    public void runScript(String file_name, Bundle args) {
         if (!mBound) return;
 
         Message msg = Message.obtain(null, NodeJSService.MSG_RUN_SCRIPT, 0, 0);
 
-        Bundle extras = new Bundle();
-        extras.putString("file_name", file_name);
-        if(args != null) {
-            extras.putString("args", args);
+        if(args == null) {
+            args = new Bundle();
         }
-
-        msg.setData(extras);
+        args.putString("file_name", file_name);
+        msg.setData(args);
 
         try {
             mService.send(msg);
@@ -75,7 +73,9 @@ public class PopcornApplication extends Application {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
             mBound = true;
-            runScript("app", "9000");
+            Bundle bundle = new Bundle();
+            bundle.putString("port", "9000");
+            runScript("app", bundle);
         }
 
         @Override
