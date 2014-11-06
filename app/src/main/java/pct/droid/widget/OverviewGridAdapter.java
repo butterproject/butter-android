@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -22,8 +23,7 @@ import pct.droid.utils.LogUtils;
 
 public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapter.ViewHolder> {
 
-    TreeMap<String, MediaProvider.Video> mItems;
-    Object[] mKeys;
+    ArrayList<MediaProvider.Video> mItems;
     OverviewGridAdapter.OnItemClickListener mItemClickListener;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -50,10 +50,8 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapte
         public void onItemClick(View v, MediaProvider.Video item, int position);
     }
 
-    public OverviewGridAdapter(TreeMap<String, MediaProvider.Video> items) {
+    public OverviewGridAdapter(ArrayList<MediaProvider.Video> items) {
         mItems = items;
-        mKeys = mItems.keySet().toArray();
-        LogUtils.d("OverviewGridAdapter", mItems);
     }
 
     @Override
@@ -77,15 +75,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapte
     }
 
     public MediaProvider.Video getItem(int position) {
-        return mItems.get(getKey(position));
-    }
-
-    public String getKey(int position) {
-        if(mKeys.length > position) {
-            return (String) mKeys[position];
-        } else {
-            return (String) mKeys[0];
-        }
+        return mItems.get(position);
     }
 
     public void setOnItemClickListener(OverviewGridAdapter.OnItemClickListener listener) {

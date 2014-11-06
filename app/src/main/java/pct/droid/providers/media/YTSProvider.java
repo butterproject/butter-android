@@ -14,13 +14,11 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
-
-import pct.droid.utils.LogUtils;
 
 public class YTSProvider extends MediaProvider {
 
-    public String mApiUrl = "https://yts.wf/api/";
+    private String mApiUrl = "https://yts.wf/api/";
+    private ArrayList<MediaProvider.Video> mResults;
 
     public static class Video extends MediaProvider.Video implements Parcelable {
         public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
@@ -66,6 +64,10 @@ public class YTSProvider extends MediaProvider {
                 return new Video[size];
             }
         };
+    }
+
+    public YTSProvider() {
+        mResults = new ArrayList<MediaProvider.Video>();
     }
 
     @Override
@@ -118,8 +120,8 @@ public class YTSProvider extends MediaProvider {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-
-                    callback.onSuccess(result.formatForPopcorn());
+                    formatForPopcorn(result.MovieList);
+                    callback.onSuccess(mResults);
                 } else {
                     callback.onFailure(new NetworkErrorException());
                 }
@@ -132,47 +134,40 @@ public class YTSProvider extends MediaProvider {
         return null;
     }
 
+    public void clearResults() {
+        mResults.clear();
+    }
+
+    private void formatForPopcorn(ArrayList<LinkedTreeMap<String, Object>> list) {
+        for(LinkedTreeMap<String, Object> item : list) {
+            Video video = new Video();
+            video.imdbId = item.get("ImdbCode").toString();
+            String torrentQuality = item.get("Quality").toString();
+
+            if(isInResults(video.imdbId) || torrentQuality.equals("3D")) {
+                continue;
+            }
+
+            video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
+            video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
+            video.year = item.get("MovieYear").toString();
+            video.genre = item.get("Genre").toString();
+            video.rating = item.get("MovieRating").toString();
+            video.type = "movie";
+
+            mResults.add(video);
+        }
+    }
+
+    private boolean isInResults(String id) {
+        for(MediaProvider.Video item : mResults) {
+            if(item.imdbId.equals(id)) return true;
+        }
+        return false;
+    }
+
     private class YTSReponse {
         public ArrayList<LinkedTreeMap<String, Object>> MovieList;
-
-        public TreeMap<String, MediaProvider.Video> formatForPopcorn() {
-            TreeMap<String, MediaProvider.Video> formattedResult = new TreeMap<String, MediaProvider.Video>();
-
-            for(LinkedTreeMap<String, Object> item : MovieList) {
-                String torrentQuality = item.get("Quality").toString();
-                if(torrentQuality.equals("3D")) {
-                    continue;
-                }
-
-                Video video = new Video();
-                video.imdbId = item.get("ImdbCode").toString();
-
-                Torrent torrent = new Torrent();
-                torrent.url = item.get("TorrentUrl").toString();
-                torrent.size = item.get("SizeByte").toString();
-                torrent.fileSize = item.get("Size").toString();
-                torrent.seeds = item.get("TorrentSeeds").toString();
-                torrent.peers = item.get("TorrentPeers").toString();
-
-                if(!formattedResult.containsKey(video.imdbId)) {
-                    video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
-                    video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
-                    video.year = item.get("MovieYear").toString();
-                    video.genre = item.get("Genre").toString();
-                    video.rating = item.get("MovieRating").toString();
-                    video.type = "movie";
-                } else {
-                    video = (Video) formattedResult.get(video.imdbId);
-                }
-
-                if(!video.torrents.containsKey(torrentQuality)) {
-                    video.torrents.put(torrentQuality, torrent);
-                }
-
-                formattedResult.put(video.imdbId, video);
-            }
-            return formattedResult;
-        }
     }
 
 }
