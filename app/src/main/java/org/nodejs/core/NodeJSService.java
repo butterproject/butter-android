@@ -19,9 +19,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-/**
- * Created by wally on 06/11/14.
- */
 public class NodeJSService extends Service {
 
     private static final String TAG = "nodejs-service";
@@ -84,49 +81,6 @@ public class NodeJSService extends Service {
 
     }
 
-    public static void installScripts(AssetManager assets, File targetDir, String basePath) throws IOException {
-        String[] files = assets.list(basePath);
-
-        if (!targetDir.exists()) {
-            targetDir.mkdirs();
-
-        }
-
-        if (files.length == 0) {
-
-            // basePath is a file. Copy file
-            Log.d(TAG, "copy file: " + basePath);
-            File targetFile = new File(targetDir, basePath);
-            InputStream src = assets.open(basePath, AssetManager.ACCESS_BUFFER);
-            File path = targetFile.getParentFile();
-
-            if (!path.exists()) {
-                path.mkdirs();
-            }
-
-            FileOutputStream out = new FileOutputStream(targetFile);
-            try {
-                byte[] buf = new byte[4096];
-                int len;
-
-                while ((len = src.read(buf)) > -1) {
-                    out.write(buf, 0, len);
-                }
-
-                out.flush();
-            } finally {
-                src.close();
-                out.close();
-            }
-
-            return;
-        } else {
-            for (String file : files) {
-                installScripts(assets, targetDir, basePath + "/" + file);
-            }
-        }
-    }
-
     public static void installPackage(AssetManager assets, String packageName, File targetDir) throws IOException {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
@@ -162,9 +116,6 @@ public class NodeJSService extends Service {
         } finally {
             zin.close();
         }
-
-
-
     }
 
     public void runScript(String mainJS) throws IOException {
@@ -192,7 +143,7 @@ public class NodeJSService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         PackageManager pm = getPackageManager();
         ComponentName component = new ComponentName(this, this.getClass());
-        ServiceInfo info = null;
+        ServiceInfo info;
 
         Log.d(TAG, component.toString());
 
