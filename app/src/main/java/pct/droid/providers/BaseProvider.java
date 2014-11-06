@@ -18,9 +18,13 @@ public abstract class BaseProvider {
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
     public static final MediaType MEDIA_TYPE_XML = MediaType.parse("application/xml");
 
+    protected Call enqueue(Request request) {
+        return enqueue(request, null);
+    }
+
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
         Call call = mClient.newCall(request);
-        call.enqueue(requestCallback);
+        if(requestCallback != null) call.enqueue(requestCallback);
         return call;
     }
 
