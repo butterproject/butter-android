@@ -18,7 +18,6 @@ import java.util.HashMap;
 public class YTSProvider extends MediaProvider {
 
     private String mApiUrl = "https://yts.wf/api/";
-    private ArrayList<MediaProvider.Video> mResults;
 
     public static class Video extends MediaProvider.Video implements Parcelable {
         public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
@@ -66,16 +65,13 @@ public class YTSProvider extends MediaProvider {
         };
     }
 
-    public YTSProvider() {
-        mResults = new ArrayList<MediaProvider.Video>();
-    }
-
     @Override
-    public Call getList(ArrayList<MediaProvider.Video> currentList, HashMap<String, String> filters, final Callback callback) {
-        if(currentList != null) {
-            mResults = currentList;
+    public Call getList(ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
+        final ArrayList<MediaProvider.Video> currentList;
+        if(existingList == null) {
+            currentList = new ArrayList<MediaProvider.Video>();
         } else {
-            mResults = new ArrayList<MediaProvider.Video>();
+            currentList = existingList;
         }
 
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -126,8 +122,7 @@ public class YTSProvider extends MediaProvider {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    formatForPopcorn(result.MovieList);
-                    callback.onSuccess(mResults);
+                    callback.onSuccess(result.formatForPopcorn(currentList));
                 } else {
                     callback.onFailure(new NetworkErrorException());
                 }
@@ -140,29 +135,8 @@ public class YTSProvider extends MediaProvider {
         return null;
     }
 
-    private void formatForPopcorn(ArrayList<LinkedTreeMap<String, Object>> list) {
-        for(LinkedTreeMap<String, Object> item : list) {
-            Video video = new Video();
-            video.imdbId = item.get("ImdbCode").toString();
-            String torrentQuality = item.get("Quality").toString();
-
-            if(isInResults(video.imdbId) || torrentQuality.equals("3D")) {
-                continue;
-            }
-
-            video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
-            video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
-            video.year = item.get("MovieYear").toString();
-            video.genre = item.get("Genre").toString();
-            video.rating = item.get("MovieRating").toString();
-            video.type = "movie";
-
-            mResults.add(video);
-        }
-    }
-
-    private boolean isInResults(String id) {
-        for(MediaProvider.Video item : mResults) {
+    private boolean isInResults(ArrayList<MediaProvider.Video> results, String id) {
+        for(MediaProvider.Video item : results) {
             if(item.imdbId.equals(id)) return true;
         }
         return false;
@@ -170,6 +144,28 @@ public class YTSProvider extends MediaProvider {
 
     private class YTSReponse {
         public ArrayList<LinkedTreeMap<String, Object>> MovieList;
+
+        public ArrayList<MediaProvider.Video> formatForPopcorn(ArrayList<MediaProvider.Video> existingList) {
+            for(LinkedTreeMap<String, Object> item : MovieList) {
+                Video video = new Video();
+                video.imdbId = item.get("ImdbCode").toString();
+                String torrentQuality = item.get("Quality").toString();
+
+                if(isInResults(existingList, video.imdbId) || torrentQuality.equals("3D")) {
+                    continue;
+                }
+
+                video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
+                video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
+                video.year = item.get("MovieYear").toString();
+                video.genre = item.get("Genre").toString();
+                video.rating = item.get("MovieRating").toString();
+                video.type = "movie";
+
+                existingList.add(video);
+            }
+            return existingList;
+        }
     }
 
 }
