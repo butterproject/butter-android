@@ -17,7 +17,6 @@ public class BaseActivity extends ActionBarActivity {
 
     public void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(this, NodeJSService.class));
         setContentView(layoutId);
         ButterKnife.inject(this);
         mHandler = new Handler(getMainLooper());
