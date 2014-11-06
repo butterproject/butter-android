@@ -28,6 +28,7 @@ import com.squareup.picasso.Target;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.providers.media.YTSProvider;
 import pct.droid.utils.ActionBarBackground;
 import pct.droid.utils.LogUtils;
@@ -35,6 +36,7 @@ import pct.droid.utils.PixelUtils;
 
 public class MovieDetailActivity extends BaseActivity {
 
+    private YTSProvider.Video mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
@@ -75,6 +77,15 @@ public class MovieDetailActivity extends BaseActivity {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.synopsisBlock:
+                    SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
+                    Bundle b = new Bundle();
+                    b.putString("text", mItem.synopsis);
+                    synopsisDialogFragment.setArguments(b);
+                    synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    break;
+            }
 
         }
     };
@@ -102,12 +113,19 @@ public class MovieDetailActivity extends BaseActivity {
                     mOpenBar = false;
                 }
 
-                if (layoutParams.topMargin <= 0)
+                if (layoutParams.topMargin <= 0) {
                     layoutParams.topMargin = mOpenBarPos - scrollView.getScrollY();
+                }
 
                 if (layoutParams.topMargin > 0) {
                     layoutParams.topMargin = 0;
                 }
+            }
+
+            if(layoutParams.topMargin < 0) {
+                scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            } else {
+                scrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
             }
 
                 /* Fade out when over header */
@@ -151,70 +169,73 @@ public class MovieDetailActivity extends BaseActivity {
         mParallaxHeight = PixelUtils.getPixelsFromDp(this, 228);
         mToolbarHeight = toolbar.getHeight();
         mHeaderHeight = mParallaxHeight - mToolbarHeight;
-        scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
-        final YTSProvider.Video item = getIntent().getParcelableExtra("item");
+        mItem = getIntent().getParcelableExtra("item");
         LogUtils.d("MovieDetailActivity", getIntent().getExtras());
-        titleText.setText(item.title);
-        yearText.setText(item.year);
-        ratingText.setText(item.rating + "/10");
+        titleText.setText(mItem.title);
+        yearText.setText(mItem.year);
+        ratingText.setText(mItem.rating + "/10");
 
-        if(item.runtime != null) {
-            runtimeText.setText(Integer.toString(item.runtime) + " " + getString(R.string.minutes));
+        if(mItem.runtime != null) {
+            runtimeText.setText(Integer.toString(mItem.runtime) + " " + getString(R.string.minutes));
         }
 
-        if(item.synopsis != null) {
-            synopsisText.setText(item.synopsis);
+        if(mItem.synopsis != null) {
+            synopsisText.setText(mItem.synopsis);
+        } else {
+            synopsisBlock.setClickable(false);
         }
 
-        Picasso.with(this).load(item.image).into(new Target() {
+        Picasso.with(this).load(mItem.image).into(new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 Palette palette = Palette.generate(bitmap);
 
-                    int vibrantColor = palette.getVibrantColor(R.color.primary);
-                    if (vibrantColor == R.color.primary) {
-                        mPaletteColor = palette.getMutedColor(R.color.primary);
-                    } else {
-                        mPaletteColor = vibrantColor;
+                int vibrantColor = palette.getVibrantColor(R.color.primary);
+                if (vibrantColor == R.color.primary) {
+                    mPaletteColor = palette.getMutedColor(R.color.primary);
+                } else {
+                    mPaletteColor = vibrantColor;
+                }
+
+                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), getResources().getColor(R.color.primary), mPaletteColor);
+                mainInfoBlockColorFade.setDuration(500);
+                Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
+                mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
+                final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        playButton.setImageDrawable(td);
+                        Picasso.with(MovieDetailActivity.this).load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, R.anim.fade_in);
+
+                                mainInfoBlockColorFade.start();
+                                td.startTransition(500);
+                                coverImage.setVisibility(View.VISIBLE);
+                                coverImage.startAnimation(fadeInAnim);
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
                     }
-
-                    final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), getResources().getColor(R.color.primary), mPaletteColor);
-                    mainInfoBlockColorFade.setDuration(500);
-                    Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
-                    mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
-                    final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            playButton.setImageDrawable(td);
-                            Picasso.with(MovieDetailActivity.this).load(item.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, R.anim.fade_in);
-
-                                    mainInfoBlockColorFade.start();
-                                    td.startTransition(500);
-                                    coverImage.setVisibility(View.VISIBLE);
-                                    coverImage.startAnimation(fadeInAnim);
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                }
-                            });
-                        }
-                    });
+                });
             }
 
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {}
+            public void onBitmapFailed(Drawable errorDrawable) {
+            }
 
             @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
         });
     }
 
