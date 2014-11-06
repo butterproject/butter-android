@@ -9,6 +9,7 @@ import android.view.Window;
 import org.nodejs.core.NodeJSService;
 import android.content.Intent;
 import butterknife.ButterKnife;
+import pct.droid.PopcornApplication;
 import pct.droid.R;
 
 public class BaseActivity extends ActionBarActivity {
@@ -27,6 +28,10 @@ public class BaseActivity extends ActionBarActivity {
         View decorView = window.getDecorView();
         int resId = getResources().getIdentifier("toolbar", "id", getPackageName());
         return decorView.findViewById(resId);
+    }
+
+    protected PopcornApplication getApp() {
+        return (PopcornApplication) getApplication();
     }
 
 }
