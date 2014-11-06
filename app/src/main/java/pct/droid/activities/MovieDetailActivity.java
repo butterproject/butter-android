@@ -26,6 +26,8 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.IOException;
+
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.fragments.SynopsisDialogFragment;
@@ -84,6 +86,9 @@ public class MovieDetailActivity extends BaseActivity {
                     b.putString("text", mItem.synopsis);
                     synopsisDialogFragment.setArguments(b);
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    break;
+                case R.id.playButton:
+                    // start streamer
                     break;
             }
 

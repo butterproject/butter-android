@@ -2,7 +2,6 @@ package org.nodejs.core;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -15,30 +14,63 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
-import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
+
+import pct.droid.PopcornApplication;
+import pct.droid.utils.LogUtils;
 
 public class NodeJSService extends Service {
 
-    private final IBinder mBinder = new ServiceBinder();
     private static final String TAG = "nodejs-service";
     private static final String NODEJS_PATH = "backend";
     private static final String DEFAULT_PACKAGE = "backend.zip";
 
     private String mPackageName = DEFAULT_PACKAGE;
-    private NodeJSTask mTask = null;
+    private NodeJSThread mThread = null;
+    private Boolean mRunningScript = false;
 
-    public class ServiceBinder extends Binder {
-        public NodeJSService getService() {
-            return NodeJSService.this;
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+    public static final int MSG_RUN_SCRIPT = 0;
+
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            try {
+                LogUtils.d(TAG, "handleMessage: " + msg.what);
+                switch (msg.what) {
+                    case MSG_RUN_SCRIPT:
+                        Bundle args = msg.getData();
+                        String nodeCommand = "";
+
+                        if (args.containsKey("file_name")) {
+                            nodeCommand += args.getString("file_name") + ".js";
+                        }
+
+                        if (args.containsKey("args")) {
+                            nodeCommand += " " + args.getString("args");
+                        }
+
+                        if(!nodeCommand.equals("") && nodeCommand.contains(".js")) {
+                            runScript(nodeCommand);
+                        }
+                        break;
+                    default:
+                        super.handleMessage(msg);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        return mMessenger.getBinder();
     }
 
     @Override
@@ -47,7 +79,7 @@ public class NodeJSService extends Service {
         ComponentName component = new ComponentName(this, this.getClass());
         ServiceInfo info;
 
-        Log.d(TAG, component.toString());
+        LogUtils.d(TAG, component.toString());
 
         try {
             info = pm.getServiceInfo(component, PackageManager.GET_META_DATA);
@@ -66,26 +98,29 @@ public class NodeJSService extends Service {
     }
 
     /** Important Node stuff below **/
-    private class NodeJSTask extends AsyncTask<String, Void, String> {
+    private class NodeJSThread extends Thread {
 
-        Context mContext = null;
-        boolean running = false;
+        private String mFileName;
 
-        NodeJSTask() {
-            mContext = NodeJSService.this;
+        public NodeJSThread() {
+            mFileName = "app.js";
+        }
+
+        public void setFileName(String fileName) {
+            mFileName = fileName;
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            running = true;
+        public void run() {
+            super.run();
 
-            // Copy files from assets to app path
-            AssetManager assets = mContext.getAssets();
+            mRunningScript = true;
 
-            File appPath = mContext.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
+            AssetManager assets = NodeJSService.this.getAssets();
 
-            String mainJS = params[0];
-            File js = new File(appPath, NODEJS_PATH + "/" + "src" + "/" + "app" + "/" + mainJS);
+            File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
+
+            File js = new File(appPath, NODEJS_PATH + "/" + "src" + "/" + "app" + "/" + mFileName);
             if (!js.exists()) {
                 try {
                     installPackage(assets, mPackageName, appPath);
@@ -94,20 +129,17 @@ public class NodeJSService extends Service {
                     Log.e(TAG, "Error while installing script", e);
                 }
             }
-            return js.toString();
+
+            LogUtils.d(TAG, "run :" + js);
+            NodeJSCore.run(js.toString());
+            LogUtils.d(TAG, "run end");
         }
 
         @Override
-        protected void onPostExecute(String js) {
-            if (js != null) {
-                Log.d(TAG, "run :" + js);
-                NodeJSCore.run(js);
-                Log.d(TAG, "run end");
-            } else {
-                NodeJSService.this.stopSelf();
-            }
-
-            running = false;
+        public void interrupt() {
+            super.interrupt();
+            LogUtils.d(TAG, "script interrupted");
+            mRunningScript = false;
         }
     }
 
@@ -130,7 +162,7 @@ public class NodeJSService extends Service {
                     File path = new File(targetDir, ze.getName());
                     FileOutputStream out = new FileOutputStream(path);
 
-                    Log.d(TAG, "extract " + ze.getName() + " to " + path);
+                    LogUtils.d(TAG, "extract " + ze.getName() + " to " + path);
 
                     byte[] buf = new byte[4096];
                     int len;
@@ -150,17 +182,15 @@ public class NodeJSService extends Service {
 
     public void runScript(String mainJS) throws IOException {
         synchronized(this) {
-            if(mTask == null) {
-                mTask = new NodeJSTask();
+            if(mThread == null) {
+                mThread = new NodeJSThread();
             }
 
-            try {
-                if (!mTask.running) {
-                    mTask.execute(mainJS);
-                }
-            } catch (IllegalStateException e) {
-                mTask.running = true;
+            if (!mThread.isInterrupted() && mRunningScript) {
+                mThread.interrupt();
             }
+            mThread.setFileName(mainJS);
+            mThread.run();
         }
     }
 

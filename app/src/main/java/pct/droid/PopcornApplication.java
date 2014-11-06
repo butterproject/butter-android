@@ -1,19 +1,24 @@
 package pct.droid;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.IBinder;
+import android.os.*;
 
 import org.nodejs.core.NodeJSService;
 
+import java.io.IOException;
+import java.util.List;
+
+import pct.droid.utils.LogUtils;
+
 public class PopcornApplication extends Application {
 
-    private Boolean mBound;
-    private NodeJSService mService;
-    private ServiceConnection mExternalConnection;
+    private Boolean mBound = false;
+    private Messenger mService;
 
     @Override
     public void onCreate() {
@@ -22,24 +27,69 @@ public class PopcornApplication extends Application {
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void setExternalConnection(ServiceConnection connection) {
-        mExternalConnection = connection;
+    public Boolean isServiceBound() {
+        return mBound;
+    }
+
+    public void runScript(String file_name, String args) {
+        if (!mBound) return;
+
+        Message msg = Message.obtain(null, NodeJSService.MSG_RUN_SCRIPT, 0, 0);
+
+        Bundle extras = new Bundle();
+        extras.putString("file_name", file_name);
+        if(args != null) {
+            extras.putString("args", args);
+        }
+
+        msg.setData(extras);
+
+        try {
+            mService.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopScript() {
+        if (!mBound) return;
+
+        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> pids = am.getRunningAppProcesses();
+        int processId = 0;
+        for(int i = 0; i < pids.size(); i++)
+        {
+            ActivityManager.RunningAppProcessInfo info = pids.get(i);
+            if(info.processName.equalsIgnoreCase("pct.droid:node")){
+                processId = info.pid;
+            }
+        }
+
+        if(processId > 0) {
+            try {
+                Runtime.getRuntime().exec("kill -SIGINT " + processId);
+                android.os.Process.killProcess(processId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Intent nodeServiceIntent = new Intent(this, NodeJSService.class);
+        bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            NodeJSService.ServiceBinder binder = (NodeJSService.ServiceBinder) service;
-            mService = binder.getService();
+            mService = new Messenger(service);
             mBound = true;
-            if(mExternalConnection != null) mExternalConnection.onServiceConnected(className, service);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            mService = null;
             mBound = false;
-            if(mExternalConnection != null) mExternalConnection.onServiceDisconnected(componentName);
         }
     };
 
