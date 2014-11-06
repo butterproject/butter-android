@@ -43,10 +43,22 @@ public class OverviewActivity extends BaseActivity {
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(View view, MediaProvider.Video item, int position) {
-            Intent intent = new Intent(view.getContext(), MovieDetailActivity.class);
-            intent.putExtra("item", item);
-            view.getContext().startActivity(intent);
+        public void onItemClick(View view, final MediaProvider.Video item, int position) {
+            mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
+                @Override
+                public void onSuccess(ArrayList<MediaProvider.Video> items) {
+                    if (items.size() <= 0) return;
+                    MediaProvider.Video item = items.get(0);
+                    Intent intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
+                    intent.putExtra("item", item);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+
+                }
+            });
         }
     };
 
