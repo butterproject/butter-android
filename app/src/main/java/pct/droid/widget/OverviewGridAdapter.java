@@ -1,5 +1,6 @@
 package pct.droid.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import pct.droid.utils.LogUtils;
 
 public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapter.ViewHolder> {
 
+    Integer mItemWidth, mItemHeight;
     ArrayList<MediaProvider.Video> mItems;
     OverviewGridAdapter.OnItemClickListener mItemClickListener;
 
@@ -50,13 +52,18 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapte
         public void onItemClick(View v, MediaProvider.Video item, int position);
     }
 
-    public OverviewGridAdapter(ArrayList<MediaProvider.Video> items) {
+    public OverviewGridAdapter(Activity activity, ArrayList<MediaProvider.Video> items) {
         mItems = items;
+        mItemWidth = (activity.getWindow().getDecorView().getWidth() / 2);
+        LogUtils.d("itemwidth", mItemWidth);
+        mItemHeight = (int) (1.5 * (double) mItemWidth);
+        LogUtils.d("itemheight", mItemHeight);
     }
 
     @Override
     public OverviewGridAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_overview_griditem, parent, false);
+        parent.getWidth();
         return new OverviewGridAdapter.ViewHolder(v);
     }
 
@@ -65,7 +72,8 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapte
         final MediaProvider.Video item = getItem(position);
 
         Picasso.with(viewHolder.coverImage.getContext()).load(item.image)
-                .placeholder(R.drawable.popcorn_logo)
+                .placeholder(R.drawable.transparant)
+                .resize(mItemWidth, mItemHeight)
                 .into(viewHolder.coverImage);
     }
 

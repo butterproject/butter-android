@@ -9,7 +9,7 @@
     <string name="no_connection_desc">We could not connect to the selected Popcorn Time instance, make sure Popcorn Time (v0.3.3+) is running and check your settings and internet connection.</string>
     <string name="retry">Retry</string>
     <string name="now_playing">Now playing</string>
-    <string name="loading">Popcorn Time is loading data…</string>
+    <string name="loading">Loading data…</string>
 
     <string name="minutes">min</string>
     <string name="watch_trailer">Watch trailer</string>
