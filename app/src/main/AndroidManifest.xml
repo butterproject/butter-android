@@ -3,10 +3,9 @@
     package="pct.droid" android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -27,6 +26,9 @@
             android:name=".activities.MovieDetailActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" />
+        <service android:name="pct.droid.org.nodejs.core.NodeJSService" android:process=":remote">
+            <meta-data android:name="script" android:value="app.js" />
+        </service>
     </application>
 
 </manifest>
