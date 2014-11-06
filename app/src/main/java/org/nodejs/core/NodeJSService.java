@@ -45,19 +45,14 @@ public class NodeJSService extends Service {
                 switch (msg.what) {
                     case MSG_RUN_SCRIPT:
                         Bundle args = msg.getData();
-                        String nodeCommand = "";
-
-                        if (args.containsKey("file_name")) {
-                            nodeCommand += args.getString("file_name") + ".js";
-                        }
+                        String fileName = args.getString("file_name") + ".js";
+                        String arguments = "";
 
                         if (args.containsKey("args")) {
-                            nodeCommand += " " + args.getString("args");
+                            arguments += args.getString("args");
                         }
 
-                        if(!nodeCommand.equals("") && nodeCommand.contains(".js")) {
-                            runScript(nodeCommand);
-                        }
+                        runScript(fileName, arguments);
                         break;
                     default:
                         super.handleMessage(msg);
@@ -100,14 +95,19 @@ public class NodeJSService extends Service {
     /** Important Node stuff below **/
     private class NodeJSThread extends Thread {
 
-        private String mFileName;
+        private String mFileName, mArgs;
 
         public NodeJSThread() {
             mFileName = "app.js";
+            mArgs = "";
         }
 
         public void setFileName(String fileName) {
             mFileName = fileName;
+        }
+
+        public void setArgs(String args) {
+            mArgs = args;
         }
 
         @Override
@@ -131,7 +131,7 @@ public class NodeJSService extends Service {
             }
 
             LogUtils.d(TAG, "run :" + js);
-            NodeJSCore.run(js.toString());
+            NodeJSCore.run(js.toString() + " " + mArgs + "");
             LogUtils.d(TAG, "run end");
         }
 
@@ -180,7 +180,7 @@ public class NodeJSService extends Service {
         }
     }
 
-    public void runScript(String mainJS) throws IOException {
+    public void runScript(String mainJS, String args) throws IOException {
         synchronized(this) {
             if(mThread == null) {
                 mThread = new NodeJSThread();
@@ -190,6 +190,7 @@ public class NodeJSService extends Service {
                 mThread.interrupt();
             }
             mThread.setFileName(mainJS);
+            mThread.setArgs(args);
             mThread.run();
         }
     }
