@@ -19,13 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public abstract class MediaProvider {
+import pct.droid.providers.BaseProvider;
 
-    protected OkHttpClient mClient = new OkHttpClient();
-    protected Gson mGson = new Gson();
-    private String mApiUrl;
-    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
-    public static final MediaType MEDIA_TYPE_XML = MediaType.parse("application/xml");
+public abstract class MediaProvider extends BaseProvider {
 
     public static class Video implements Parcelable {
         public String imdbId;
@@ -127,31 +123,11 @@ public abstract class MediaProvider {
         };
     }
 
-    protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        Call call = mClient.newCall(request);
-        call.enqueue(requestCallback);
-        return call;
-    }
-
-    protected String buildQuery(List<BasicNameValuePair> valuePairs) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for(int i = 0; i < valuePairs.size(); i++) {
-            NameValuePair pair = valuePairs.get(i);
-            stringBuilder.append(pair.getName());
-            stringBuilder.append("=");
-            stringBuilder.append(pair.getValue());
-            if(i + 1 != valuePairs.size()) stringBuilder.append("&");
-        }
-
-        return stringBuilder.toString();
-    }
-
     public abstract Call getList(HashMap<String, String> filters, Callback callback);
     public abstract Call getDetail(String torrentId, Callback callback);
 
     public interface Callback {
-        public void onSuccess(TreeMap<String, Video> items);
+        public void onSuccess(ArrayList<Video> items);
         public void onFailure(Exception exception);
     }
 
