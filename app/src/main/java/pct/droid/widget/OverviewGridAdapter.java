@@ -55,9 +55,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapte
     public OverviewGridAdapter(Activity activity, ArrayList<MediaProvider.Video> items) {
         mItems = items;
         mItemWidth = (activity.getWindow().getDecorView().getWidth() / 2);
-        LogUtils.d("itemwidth", mItemWidth);
         mItemHeight = (int) (1.5 * (double) mItemWidth);
-        LogUtils.d("itemheight", mItemHeight);
     }
 
     @Override
