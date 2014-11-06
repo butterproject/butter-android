@@ -27,7 +27,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import butterknife.InjectView;
-import pct.droid.PopcornApplication;
 import pct.droid.R;
 import pct.droid.providers.media.YTSProvider;
 import pct.droid.utils.ActionBarBackground;
@@ -233,9 +232,5 @@ public class MovieDetailActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public PopcornApplication getApp() {
-        return (PopcornApplication) getApplication();
     }
 }
