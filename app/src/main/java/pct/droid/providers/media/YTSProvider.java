@@ -263,7 +263,11 @@ public class YTSProvider extends MediaProvider {
                     video.torrents.put(torrentQuality, torrent);
                 }
 
-                existingList.add(video);
+                if(existingItem == -1) {
+                    existingList.add(video);
+                } else {
+                    existingList.set(existingItem, video);
+                }
             }
             return existingList;
         }
