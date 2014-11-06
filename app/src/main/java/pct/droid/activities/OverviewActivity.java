@@ -65,10 +65,16 @@ public class OverviewActivity extends BaseActivity {
                         }
                     });
 
-                    MediaProvider.Video item = items.get(0);
-                    Intent intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
-                    intent.putExtra("item", item);
-                    startActivity(intent);
+                    final MediaProvider.Video item = items.get(0);
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
+                            intent.putExtra("item", item);
+                            startActivity(intent);
+                        }
+                    });
                 }
 
                 @Override

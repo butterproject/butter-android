@@ -208,6 +208,7 @@ public class YTSProvider extends MediaProvider {
 
                 Torrent torrent = new Torrent();
                 torrent.url = item.get("TorrentUrl").toString();
+                torrent.magnet = item.get("TorrentMagnetUrl").toString();
                 torrent.size = item.get("SizeByte").toString();
                 torrent.fileSize = item.get("Size").toString();
                 torrent.seeds = item.get("TorrentSeeds").toString();

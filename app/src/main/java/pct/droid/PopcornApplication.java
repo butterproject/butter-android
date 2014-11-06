@@ -6,11 +6,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.*;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 
 import org.nodejs.core.NodeJSService;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
 import pct.droid.utils.LogUtils;
@@ -19,27 +24,36 @@ public class PopcornApplication extends Application {
 
     private Boolean mBound = false;
     private Messenger mService;
+    private String mCacheDir;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Intent nodeServiceIntent = new Intent(this, NodeJSService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+
+        File path = PopcornApplication.this.getExternalCacheDir();
+        File directory = new File(path, "/torrents/");
+        directory.mkdirs();
+        File temp = new File(path, "/torrents/tmp");
+        temp.mkdirs();
+        mCacheDir = directory.toString() + "/";
     }
 
     public Boolean isServiceBound() {
         return mBound;
     }
 
-    public void runScript(String file_name, Bundle args) {
+    public void startStreamer(String streamUrl) {
         if (!mBound) return;
+
+        LogUtils.d("PopcornApplication", "Start streamer: " + streamUrl);
 
         Message msg = Message.obtain(null, NodeJSService.MSG_RUN_SCRIPT, 0, 0);
 
-        if(args == null) {
-            args = new Bundle();
-        }
-        args.putString("file_name", file_name);
+        Bundle args = new Bundle();
+        args.putString("directory", mCacheDir);
+        args.putString("stream_url", streamUrl);
         msg.setData(args);
 
         try {
@@ -49,7 +63,7 @@ public class PopcornApplication extends Application {
         }
     }
 
-    public void stopScript() {
+    public void stopStreamer() {
         if (!mBound) return;
 
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -73,9 +87,6 @@ public class PopcornApplication extends Application {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
             mBound = true;
-            Bundle bundle = new Bundle();
-            bundle.putString("port", "9000");
-            runScript("app", bundle);
         }
 
         @Override

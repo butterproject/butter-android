@@ -1,8 +1,10 @@
 package pct.droid.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.graphics.Palette;
@@ -88,7 +90,21 @@ public class MovieDetailActivity extends BaseActivity {
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.playButton:
-                    // start streamer
+                    if(mItem.torrents.containsKey("720p")) {
+                        getApp().startStreamer(mItem.torrents.get("720p").magnet);
+                    } else {
+                        getApp().startStreamer(mItem.torrents.get("1080p").magnet);
+                    }
+
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setDataAndType(Uri.parse("http://localhost:9999"), "video/*");
+                            startActivity(i);
+                        }
+                    }, 5000);
+
                     break;
             }
 
@@ -242,6 +258,12 @@ public class MovieDetailActivity extends BaseActivity {
             public void onPrepareLoad(Drawable placeHolderDrawable) {
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getApp().stopStreamer();
     }
 
     @Override
