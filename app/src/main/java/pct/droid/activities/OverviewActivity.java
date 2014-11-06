@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -51,10 +52,7 @@ public class OverviewActivity extends BaseActivity {
 
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
-        public void onSuccess(TreeMap<String, MediaProvider.Video> items) {
-            for(String key : items.keySet()) {
-                LogUtils.d("OverviewActivity", items.get(key).title);
-            }
+        public void onSuccess(ArrayList<MediaProvider.Video> items) {
             mAdapter = new OverviewGridAdapter(items);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
