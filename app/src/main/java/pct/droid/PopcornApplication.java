@@ -55,22 +55,13 @@ public class PopcornApplication extends Application {
         if (!mBound) return;
 
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> pids = am.getRunningAppProcesses();
-        int processId = 0;
-        for(int i = 0; i < pids.size(); i++)
-        {
-            ActivityManager.RunningAppProcessInfo info = pids.get(i);
-            if(info.processName.equalsIgnoreCase("pct.droid:node")){
-                processId = info.pid;
-            }
-        }
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
 
-        if(processId > 0) {
-            try {
-                Runtime.getRuntime().exec("kill -SIGINT " + processId);
-                android.os.Process.killProcess(processId);
-            } catch (IOException e) {
-                e.printStackTrace();
+        for(int i = 0; i < runningAppProcesses.size(); i++)
+        {
+            ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
+            if(info.processName.equalsIgnoreCase("pct.droid:node")){
+                android.os.Process.killProcess(info.pid);
             }
         }
 
@@ -84,6 +75,7 @@ public class PopcornApplication extends Application {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
             mBound = true;
+            runScript("app", "9000");
         }
 
         @Override
