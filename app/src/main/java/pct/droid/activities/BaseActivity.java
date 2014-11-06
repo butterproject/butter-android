@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
-
+import pct.droid.org.nodejs.core.NodeJSService;
 
 import butterknife.ButterKnife;
 import pct.droid.R;
@@ -17,6 +17,7 @@ public class BaseActivity extends ActionBarActivity {
 
     public void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState);
+        startService(new Intent(this, NodeJSService.class));
         setContentView(layoutId);
         ButterKnife.inject(this);
         mHandler = new Handler(getMainLooper());
