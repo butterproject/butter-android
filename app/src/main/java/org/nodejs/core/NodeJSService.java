@@ -167,15 +167,18 @@ public class NodeJSService extends Service {
 
     }
 
-
     public void runScript(String mainJS) throws IOException {
         synchronized(this) {
             if(mTask == null) {
                 mTask = new NodeJSTask();
             }
 
-            if(!mTask.running) {
-                mTask.execute(mainJS);
+            try {
+                if (!mTask.running) {
+                    mTask.execute(mainJS);
+                }
+            } catch (IllegalStateException e) {
+                mTask.running = true;
             }
         }
     }
@@ -184,7 +187,6 @@ public class NodeJSService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
