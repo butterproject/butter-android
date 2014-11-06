@@ -6,7 +6,7 @@
         android:id="@+id/placeholderImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="30dp"
+        android:padding="@dimen/activity_horizontal_margin"
         android:scaleType="centerInside"
         android:src="@drawable/popcorn_logo" />
 
