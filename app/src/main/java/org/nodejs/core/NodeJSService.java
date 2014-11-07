@@ -175,6 +175,7 @@ public class NodeJSService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            LogUtils.d(TAG, "populated script");
             NodeJSCore.run(script.toString());
             LogUtils.d(TAG, "run end");
         }

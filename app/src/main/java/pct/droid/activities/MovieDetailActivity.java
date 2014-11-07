@@ -2,6 +2,7 @@ package pct.droid.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
@@ -90,20 +91,16 @@ public class MovieDetailActivity extends BaseActivity {
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.playButton:
+                    final String streamUrl;
                     if(mItem.torrents.containsKey("720p")) {
-                        getApp().startStreamer(mItem.torrents.get("720p").magnet);
+                        streamUrl = mItem.torrents.get("720p").magnet;
                     } else {
-                        getApp().startStreamer(mItem.torrents.get("1080p").magnet);
+                        streamUrl = mItem.torrents.get("1080p").magnet;
                     }
 
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setDataAndType(Uri.parse("http://localhost:9999"), "video/*");
-                            startActivity(i);
-                        }
-                    }, 5000);
+                    Intent i = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
+                    i.putExtra("stream_url", streamUrl);
+                    startActivity(i);
 
                     break;
             }
@@ -261,8 +258,8 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
         getApp().stopStreamer();
     }
 

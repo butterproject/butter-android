@@ -78,8 +78,8 @@ public class OverviewActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onFailure(Exception exception) {
-
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
