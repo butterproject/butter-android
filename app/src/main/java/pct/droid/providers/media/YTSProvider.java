@@ -86,7 +86,7 @@ public class YTSProvider extends MediaProvider {
         };
     }
 
-    protected String mApiUrl = "https://yts.wf/api/";
+    protected String mApiUrl = "http://yts.wf/api/";
 
     @Override
     public Call getList(ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {

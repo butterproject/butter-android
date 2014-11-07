@@ -44,6 +44,10 @@ public class PopcornApplication extends Application {
         return mBound;
     }
 
+    public String getStreamDir() {
+        return mCacheDir;
+    }
+
     public void startStreamer(String streamUrl) {
         if (!mBound) return;
 

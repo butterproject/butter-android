@@ -32,6 +32,7 @@ public class TraktProvider extends BaseProvider {
             }
         } catch (IOException e) {
             // eat exception for now TODO
+            e.printStackTrace();
         }
 
         return new MetaData();

@@ -135,7 +135,7 @@ public abstract class MediaProvider extends BaseProvider {
 
     public interface Callback {
         public void onSuccess(ArrayList<Video> items);
-        public void onFailure(Exception exception);
+        public void onFailure(Exception e);
     }
 
 }
