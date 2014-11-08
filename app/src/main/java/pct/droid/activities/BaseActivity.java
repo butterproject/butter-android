@@ -21,6 +21,11 @@ public class BaseActivity extends ActionBarActivity {
         setContentView(layoutId);
         ButterKnife.inject(this);
         mHandler = new Handler(getMainLooper());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getApp().startService();
     }
 
