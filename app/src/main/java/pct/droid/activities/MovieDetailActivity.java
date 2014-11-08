@@ -260,7 +260,6 @@ public class MovieDetailActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        getApp().stopStreamer();
     }
 
     @Override
