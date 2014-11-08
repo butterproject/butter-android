@@ -4,14 +4,26 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileObserver;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import java.io.IOException;
+
+import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.streamer.Status;
+import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
 
 public class StreamLoadingActivity extends BaseActivity {
 
     private FileObserver mFileObserver;
     private Boolean mStreaming = false;
+
+    @InjectView(R.id.progressIndicator)
+    ProgressBar progressIndicator;
+    @InjectView(R.id.progressText)
+    TextView progressText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,6 +34,11 @@ public class StreamLoadingActivity extends BaseActivity {
         }
 
         String streamUrl = getIntent().getStringExtra("stream_url");
+
+        while(!getApp().isServiceBound()) {
+            getApp().startService();
+        }
+
         getApp().startStreamer(streamUrl);
 
         String directory = getApp().getStreamDir();
@@ -46,6 +63,7 @@ public class StreamLoadingActivity extends BaseActivity {
                         case CREATE:
                         case MODIFY:
                             LogUtils.d("StreamLoadingActivity", "Status file changed");
+                            updateStatus();
                             break;
                     }
                 }
@@ -53,6 +71,23 @@ public class StreamLoadingActivity extends BaseActivity {
         };
 
         mFileObserver.startWatching();
+    }
+
+    private void updateStatus() {
+        try {
+            final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
+            LogUtils.d("StreamLoadingActivity", status.toString());
+            final int progress = (int)Math.floor(status.progress);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    progressIndicator.setProgress(progress);
+                    progressText.setText(status.progress + "%");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
