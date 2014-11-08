@@ -81,6 +81,11 @@ public class PopcornApplication extends Application {
             }
         }
 
+        startService();
+    }
+
+    public void startService() {
+        if(mBound) return;
         Intent nodeServiceIntent = new Intent(this, NodeJSService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }

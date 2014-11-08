@@ -58,17 +58,13 @@ public class StreamLoadingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(mStreaming) {
-            getApp().stopStreamer();
-            finish();
-        } else {
-            mStreaming = true;
-        }
+        // ask user if he wants to stop streaming or open video player
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mFileObserver.stopWatching();
+        getApp().stopStreamer();
     }
 }

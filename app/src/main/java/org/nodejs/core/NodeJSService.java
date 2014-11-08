@@ -84,18 +84,7 @@ public class NodeJSService extends Service {
             mPackageName = metaData.getString("node_package");
         }
 
-        AssetManager assets = NodeJSService.this.getAssets();
-        File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
-        File js = new File(appPath, "app.js");
-        if (!js.exists()) {
-            try {
-                installPackage(assets, mPackageName, appPath);
-            } catch (IOException e) {
-                Log.e(TAG, "Error while installing script", e);
-            }
-        }
-
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     /** Important Node stuff below **/
