@@ -12,6 +12,7 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -86,7 +87,8 @@ public class YTSProvider extends MediaProvider {
         };
     }
 
-    protected String mApiUrl = "http://yts.wf/api/";
+    protected String mApiUrl = "https://yts.im/api/";
+    protected String mMirrorApiUrl = "https://yts.wf/api/";
 
     @Override
     public Call getList(ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
@@ -145,9 +147,39 @@ public class YTSProvider extends MediaProvider {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    callback.onSuccess(result.formatForPopcorn(currentList));
+
+                    ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn(currentList);
+
+                    String[] imdbIds = new String[formattedData.size()];
+                    for(MediaProvider.Video item : formattedData) {
+                        int index = formattedData.indexOf(item);
+                        imdbIds[index] = item.imdbId;
+                    }
+
+                    TraktProvider traktProvider = new TraktProvider();
+                    TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
+                    int i = 0;
+                    for(TraktProvider.MetaData meta : metaDatas) {
+                        Video video = (Video) formattedData.get(i);
+                        if (meta.images.containsKey("poster")) {
+                            video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                            video.fullImage = meta.images.get("poster");
+                        }
+
+                        if (meta.images.containsKey("fanart")) {
+                            video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                        }
+
+                        if (meta.title != null) {
+                            video.title = meta.title;
+                        }
+                        formattedData.set(i, video);
+                        i++;
+                    }
+
+                    callback.onSuccess(formattedData);
                 } else {
-                    callback.onFailure(new NetworkErrorException());
+                    callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
             }
         });
@@ -169,10 +201,51 @@ public class YTSProvider extends MediaProvider {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    ArrayList<MediaProvider.Video> callbackResult = result.formatForPopcorn();
-                    callback.onSuccess(callbackResult);
+                    ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn();
+
+                    TraktProvider traktProvider = new TraktProvider();
+                    for(MediaProvider.Video item : formattedData) {
+                        int index = formattedData.indexOf(item);
+                        Video video = (Video) item;
+
+                        TraktProvider.MetaData meta = traktProvider.getSummary(video.imdbId, "movie");
+                        if (meta.images.containsKey("poster")) {
+                            video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                            video.fullImage = meta.images.get("poster");
+                        }
+
+                        if (meta.images.containsKey("fanart")) {
+                            video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                        }
+
+                        if (meta.title != null) {
+                            video.title = meta.title;
+                        }
+
+                        if (meta.overview != null) {
+                            video.synopsis = meta.overview;
+                        }
+
+                        if (meta.tagline != null) {
+                            video.tagline = meta.tagline;
+                        }
+
+                        if (meta.trailer != null) {
+                            video.trailer = meta.trailer;
+                        }
+
+                        if (meta.runtime != null) {
+                            video.runtime = meta.runtime;
+                        }
+
+                        if (meta.certification != null) {
+                            video.certification = meta.certification;
+                        }
+                    }
+
+                    callback.onSuccess(formattedData);
                 } else {
-                    callback.onFailure(new NetworkErrorException());
+                    callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
             }
         });
@@ -195,8 +268,6 @@ public class YTSProvider extends MediaProvider {
         }
 
         public ArrayList<MediaProvider.Video> formatForPopcorn(ArrayList<MediaProvider.Video> existingList) {
-            TraktProvider traktProvider = new TraktProvider();
-
             for(LinkedTreeMap<String, Object> item : MovieList) {
                 Video video = new Video();
                 video.imdbId = item.get("ImdbCode").toString();
@@ -222,40 +293,6 @@ public class YTSProvider extends MediaProvider {
                     video.genre = item.get("Genre").toString();
                     video.rating = item.get("MovieRating").toString();
                     video.type = "movie";
-
-                    TraktProvider.MetaData meta = traktProvider.getMetaData(video.imdbId, "movie");
-                    if (meta.images.containsKey("poster")) {
-                        video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                        video.fullImage = meta.images.get("poster");
-                    }
-
-                    if (meta.images.containsKey("fanart")) {
-                        video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                    }
-
-                    if (meta.title != null) {
-                        video.title = meta.title;
-                    }
-
-                    if (meta.overview != null) {
-                        video.synopsis = meta.overview;
-                    }
-
-                    if (meta.tagline != null) {
-                        video.tagline = meta.tagline;
-                    }
-
-                    if (meta.trailer != null) {
-                        video.trailer = meta.trailer;
-                    }
-
-                    if (meta.runtime != null) {
-                        video.runtime = meta.runtime;
-                    }
-
-                    if (meta.certification != null) {
-                        video.certification = meta.certification;
-                    }
                 } else {
                     video = (Video) existingList.get(existingItem);
                 }
