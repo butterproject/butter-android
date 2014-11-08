@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class OverviewActivity extends BaseActivity {
     private OverviewGridAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private YTSProvider mProvider = new YTSProvider();
-    private Integer mColumns = 2;
+    private Integer mColumns = 2, mRetries = 0;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -80,6 +81,8 @@ public class OverviewActivity extends BaseActivity {
                 @Override
                 public void onFailure(Exception e) {
                     e.printStackTrace();
+                    Log.e("OverviewActivity", e.getMessage());
+                    Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -102,6 +105,13 @@ public class OverviewActivity extends BaseActivity {
         @Override
         public void onFailure(Exception e) {
             e.printStackTrace();
+            Log.e("OverviewActivity", e.getMessage());
+            if(mRetries > 1) {
+                Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            } else {
+                mProvider.getList(null, mCallback);
+            }
+            mRetries++;
         }
     };
 
