@@ -21,6 +21,7 @@ public class BaseActivity extends ActionBarActivity {
         setContentView(layoutId);
         ButterKnife.inject(this);
         mHandler = new Handler(getMainLooper());
+        getApp().startService();
     }
 
     protected View getActionBarView() {
