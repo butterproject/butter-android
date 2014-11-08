@@ -18,7 +18,7 @@ import pct.droid.utils.LogUtils;
 public class StreamLoadingActivity extends BaseActivity {
 
     private FileObserver mFileObserver;
-    private Boolean mStreaming = false;
+    private Boolean mIntentStarted = false;
 
     @InjectView(R.id.progressIndicator)
     ProgressBar progressIndicator;
@@ -53,9 +53,12 @@ public class StreamLoadingActivity extends BaseActivity {
                             break;
                         case MODIFY:
                             LogUtils.d("StreamLoadingActivity", "Streamer file modified");
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setDataAndType(Uri.parse("http://localhost:9999"), "video/*");
-                            startActivity(i);
+                            if(!mIntentStarted) {
+                                mIntentStarted = true;
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setDataAndType(Uri.parse("http://localhost:9999"), "video/*");
+                                startActivity(i);
+                            }
                             break;
                     }
                 } else if(path.contains("status.json")) {
@@ -81,11 +84,12 @@ public class StreamLoadingActivity extends BaseActivity {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    progressIndicator.setIndeterminate(false);
                     progressIndicator.setProgress(progress);
                     progressText.setText(status.progress + "%");
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
