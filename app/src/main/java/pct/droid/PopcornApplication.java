@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.List;
 
 import pct.droid.utils.LogUtils;
+import pct.droid.utils.StorageUtils;
 
 public class PopcornApplication extends Application {
 
@@ -38,6 +39,9 @@ public class PopcornApplication extends Application {
         File temp = new File(path, "/torrents/tmp");
         temp.mkdirs();
         mCacheDir = directory.toString() + "/";
+
+        LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
+        LogUtils.d("Chosen cache location: " + mCacheDir);
     }
 
     public Boolean isServiceBound() {
