@@ -12,21 +12,23 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
+import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.utils.LogUtils;
-import pct.droid.widget.OverviewGridAdapter;
 
 public class OverviewActivity extends BaseActivity {
 
     private OverviewGridAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private GridLayoutManager mLayoutManager;
     private YTSProvider mProvider = new YTSProvider();
-    private Integer mColumns = 2, mRetries = 0;
+    private HashMap<String, String> mFilters = new HashMap<String, String>();
+    private Integer mColumns = 2, mRetries = 0, mPage = 1;
+    private boolean mLoading = true;
+    private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 4, mPreviousTotal = 0;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -41,10 +43,12 @@ public class OverviewActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         recyclerView.setHasFixedSize(true);
+        mColumns = getResources().getInteger(R.integer.overview_cols);
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
         mProvider.getList(null, mCallback);
+        mPage++;
     }
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
@@ -90,16 +94,28 @@ public class OverviewActivity extends BaseActivity {
 
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
-        public void onSuccess(ArrayList<MediaProvider.Video> items) {
-            mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
-            mAdapter.setOnItemClickListener(mOnItemClickListener);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    progressOverlay.setVisibility(View.GONE);
-                    recyclerView.setAdapter(mAdapter);
-                }
-            });
+        public void onSuccess(final ArrayList<MediaProvider.Video> items) {
+            if(mTotalItemCount <= 0) {
+                mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
+                mAdapter.setOnItemClickListener(mOnItemClickListener);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressOverlay.setVisibility(View.GONE);
+                        recyclerView.setAdapter(mAdapter);
+                        recyclerView.setOnScrollListener(mScrollListener);
+                        mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+                    }
+                });
+                mLoading = false;
+            } else {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.setItems(items);
+                    }
+                });
+            }
         }
 
         @Override
@@ -110,13 +126,36 @@ public class OverviewActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
                     }
                 });
             } else {
                 mProvider.getList(null, mCallback);
             }
             mRetries++;
+        }
+    };
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            mVisibleItemCount = mLayoutManager.getChildCount();
+            mTotalItemCount = mLayoutManager.getItemCount();
+            mFirstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+
+            if (mLoading) {
+                if (mTotalItemCount > mPreviousTotal) {
+                    mLoading = false;
+                    mPreviousTotal = mTotalItemCount;
+                    mPage++;
+                }
+            }
+
+            if (!mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
+                mLoading = true;
+                mFilters.put("page", Integer.toString(mPage));
+                mProvider.getList(mAdapter.getItems(), mFilters, mCallback);
+            }
         }
     };
 
