@@ -1,4 +1,4 @@
-package pct.droid.widget;
+package pct.droid.adapters;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
