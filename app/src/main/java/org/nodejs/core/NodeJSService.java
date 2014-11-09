@@ -108,7 +108,9 @@ public class NodeJSService extends Service {
 
             AssetManager assets = NodeJSService.this.getAssets();
 
-            File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
+            //File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
+            File appPath = NodeJSService.this.getExternalCacheDir();
+            appPath = new File(appPath, NODEJS_PATH);
 
             File js = new File(appPath, mFileName);
             if (!js.exists()) {
