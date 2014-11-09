@@ -107,7 +107,6 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void setItems(ArrayList<MediaProvider.Video> items) {
         MediaProvider.Video loadingItem = new MediaProvider.Video();
-        loadingItem.title = "loading";
         items.add(loadingItem);
         mItems = items;
         notifyDataSetChanged();
