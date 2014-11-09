@@ -1,4 +1,4 @@
-package pct.droid.widget;
+package pct.droid.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
