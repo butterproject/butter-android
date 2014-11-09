@@ -43,7 +43,7 @@
                     android:id="@+id/coverImage"
                     android:visibility="invisible"
                     android:layout_width="match_parent"
-                    android:layout_height="228dp"
+                    android:layout_height="match_parent"
                     android:scaleType="centerCrop" />
 
                 <View
@@ -162,8 +162,8 @@
                         android:id="@+id/synopsisBlock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/playercontrol_margin"
-                        android:paddingRight="@dimen/playercontrol_margin_right"
+                        android:paddingLeft="@dimen/detail_margin"
+                        android:paddingRight="@dimen/detail_margin_right"
                         android:paddingTop="@dimen/activity_vertical_margin"
                         android:paddingBottom="@dimen/activity_vertical_margin"
                         android:layout_gravity="center_horizontal"
@@ -174,17 +174,17 @@
                             android:id="@+id/synopsisBlockImage"
                             android:layout_width="@dimen/context_icon"
                             android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/playercontrol_icon_margin"
+                            android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_action_info" />
                         <TextView
                             android:id="@+id/synopsisText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/playercontrol_margin"
+                            android:layout_marginRight="@dimen/detail_margin"
                             android:text="..."
                             android:maxLines="6"
                             android:ellipsize="end"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
                     </LinearLayout>
                     <View
@@ -196,8 +196,8 @@
                         android:id="@+id/trailerBlock"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:paddingLeft="@dimen/playercontrol_margin"
-                        android:paddingRight="@dimen/playercontrol_margin_right"
+                        android:paddingLeft="@dimen/detail_margin"
+                        android:paddingRight="@dimen/detail_margin_right"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
@@ -207,16 +207,16 @@
                             android:id="@+id/trailerBlockImage"
                             android:layout_width="@dimen/context_icon"
                             android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/playercontrol_icon_margin"
+                            android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_av_trailer" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/playercontrol_margin"
+                            android:layout_marginRight="@dimen/detail_margin"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:text="@string/watch_trailer"
-                            android:textSize="@dimen/playercontrol_text_size"
+                            android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
                     </LinearLayout>
                     <View
@@ -228,8 +228,8 @@
                         android:id="@+id/favouriteBlock"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:paddingLeft="@dimen/playercontrol_margin"
-                        android:paddingRight="@dimen/playercontrol_margin_right"
+                        android:paddingLeft="@dimen/detail_margin"
+                        android:paddingRight="@dimen/detail_margin_right"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
@@ -239,17 +239,17 @@
                             android:id="@+id/favouriteBlockImage"
                             android:layout_width="@dimen/context_icon"
                             android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/playercontrol_icon_margin"
+                            android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_action_favourite" />
                         <TextView
                             android:id="@+id/favouriteText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/playercontrol_margin"
+                            android:layout_marginRight="@dimen/detail_margin"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:text="@string/add_favourite"
-                            android:textSize="@dimen/playercontrol_text_size"
+                            android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
                     </LinearLayout>
                     <View
@@ -261,8 +261,8 @@
                         android:id="@+id/qualityBlock"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:paddingLeft="@dimen/playercontrol_margin"
-                        android:paddingRight="@dimen/playercontrol_margin_right"
+                        android:paddingLeft="@dimen/detail_margin"
+                        android:paddingRight="@dimen/detail_margin_right"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
@@ -272,16 +272,16 @@
                             android:id="@+id/qualityBlockImage"
                             android:layout_width="@dimen/context_icon"
                             android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/playercontrol_icon_margin"
+                            android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_action_quality" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/playercontrol_margin"
+                            android:layout_marginRight="@dimen/detail_margin"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:text="@string/quality"
-                            android:textSize="@dimen/playercontrol_text_size"
+                            android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
                     </LinearLayout>
                     <View
@@ -293,8 +293,8 @@
                         android:id="@+id/subtitlesBlock"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:paddingLeft="@dimen/playercontrol_margin"
-                        android:paddingRight="@dimen/playercontrol_margin_right"
+                        android:paddingLeft="@dimen/detail_margin"
+                        android:paddingRight="@dimen/detail_margin_right"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
@@ -304,16 +304,16 @@
                             android:id="@+id/subtitlesBlockImage"
                             android:layout_width="@dimen/context_icon"
                             android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/playercontrol_icon_margin"
+                            android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_av_subs" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/playercontrol_margin"
+                            android:layout_marginRight="@dimen/detail_margin"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:text="@string/subs"
-                            android:textSize="@dimen/playercontrol_text_size"
+                            android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
                     </LinearLayout>
                 </LinearLayout>

@@ -51,7 +51,7 @@ public class PopcornApplication extends Application {
     public void startStreamer(String streamUrl) {
         if (!mBound) return;
 
-        LogUtils.d("PopcornApplication", "Start streamer: " + streamUrl);
+        LogUtils.d("Start streamer: " + streamUrl);
 
         Message msg = Message.obtain(null, NodeJSService.MSG_RUN_SCRIPT, 0, 0);
 

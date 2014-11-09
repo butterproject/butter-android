@@ -107,7 +107,12 @@ public class OverviewActivity extends BaseActivity {
             e.printStackTrace();
             Log.e("OverviewActivity", e.getMessage());
             if(mRetries > 1) {
-                Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else {
                 mProvider.getList(null, mCallback);
             }

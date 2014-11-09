@@ -190,7 +190,7 @@ public class MovieDetailActivity extends BaseActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
         mItem = getIntent().getParcelableExtra("item");
-        LogUtils.d("MovieDetailActivity", getIntent().getExtras());
+        LogUtils.d(getIntent().getExtras());
         titleText.setText(mItem.title);
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
@@ -230,7 +230,7 @@ public class MovieDetailActivity extends BaseActivity {
                         Picasso.with(MovieDetailActivity.this).load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
-                                Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, R.anim.fade_in);
+                                Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, android.R.anim.fade_in);
 
                                 mainInfoBlockColorFade.start();
                                 td.startTransition(500);

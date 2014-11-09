@@ -1,7 +1,6 @@
 package pct.droid.widget;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,12 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
-import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 
 
@@ -83,7 +79,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<OverviewGridAdapte
         }
 
         Picasso.with(viewHolder.coverImage.getContext()).load(item.image)
-                .placeholder(R.drawable.transparant)
+                .placeholder(R.drawable.transparant_cover)
                 .resize(mItemWidth, mItemHeight)
                 .into(viewHolder.coverImage);
     }
