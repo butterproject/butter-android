@@ -32,11 +32,11 @@ public abstract class MediaProvider extends BaseProvider {
         public String image;
         public String type;
 
-        protected Video() {
+        public Video() {
 
         }
 
-        protected Video(Parcel in) {
+        public Video(Parcel in) {
             imdbId = in.readString();
             title = in.readString();
             year = in.readString();
@@ -84,11 +84,11 @@ public abstract class MediaProvider extends BaseProvider {
         public String seeds;
         public String peers;
 
-        protected Torrent() {
+        public Torrent() {
 
         }
 
-        protected Torrent(Parcel in) {
+        public Torrent(Parcel in) {
             url = in.readString();
             magnet = in.readString();
             size = in.readString();
