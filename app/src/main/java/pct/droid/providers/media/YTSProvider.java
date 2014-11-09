@@ -3,6 +3,7 @@ package pct.droid.providers.media;
 import android.accounts.NetworkErrorException;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pct.droid.providers.meta.TraktProvider;
+import pct.droid.utils.LogUtils;
 
 public class YTSProvider extends MediaProvider {
 
@@ -87,16 +89,16 @@ public class YTSProvider extends MediaProvider {
         };
     }
 
-    protected String mApiUrl = "http://yts.im/api/";
+    protected String mApiUrl = "http://yts.re/api/";
     protected String mMirrorApiUrl = "https://yts.wf/api/";
 
     @Override
-    public Call getList(ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
         final ArrayList<MediaProvider.Video> currentList;
         if(existingList == null) {
             currentList = new ArrayList<MediaProvider.Video>();
         } else {
-            currentList = existingList;
+            currentList = (ArrayList<MediaProvider.Video>) existingList.clone();
         }
 
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -134,6 +136,7 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
+        LogUtils.d("YTS query: " + query);
         requestBuilder.url(mApiUrl + "list.json?" + query);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
@@ -177,7 +180,7 @@ public class YTSProvider extends MediaProvider {
                         i++;
                     }
 
-                    callback.onSuccess(formattedData);
+                    callback.onSuccess(currentList);
                 } else {
                     callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
@@ -241,6 +244,7 @@ public class YTSProvider extends MediaProvider {
                         if (meta.certification != null) {
                             video.certification = meta.certification;
                         }
+                        formattedData.set(index, video);
                     }
 
                     callback.onSuccess(formattedData);
