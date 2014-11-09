@@ -80,15 +80,21 @@ public class StreamLoadingActivity extends BaseActivity {
         try {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
             LogUtils.d(status.toString());
-            final int progress = (int)Math.floor(status.progress);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    progressIndicator.setIndeterminate(false);
-                    progressIndicator.setProgress(progress);
-                    progressText.setText(status.progress + "%");
-                }
-            });
+            int calculateProgress = (int)Math.floor(status.progress * 100);
+            if(calculateProgress > 100) calculateProgress = 100;
+            final int progress = calculateProgress;
+            if(progressIndicator.getProgress() < 100) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressIndicator.setIndeterminate(false);
+                        progressIndicator.setProgress(progress);
+                        progressText.setText(progress + "%");
+                    }
+                });
+            } else {
+                progressText.setText("Streaming"); // TODO: translation (by sv244)
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,7 +103,7 @@ public class StreamLoadingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // ask user if he wants to stop streaming or open video player
+        // TODO: ask user if he wants to stop streaming or open video player OR add fixed videplayer using libvlc (by sv244)
     }
 
     @Override
