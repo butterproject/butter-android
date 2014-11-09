@@ -1,6 +1,7 @@
 package pct.droid.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,10 +56,21 @@ public class OverviewActivity extends BaseActivity {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int visiblePosition = mLayoutManager.findFirstCompletelyVisibleItemPosition() == -1 ? mLayoutManager.findFirstVisibleItemPosition() : mLayoutManager.findFirstCompletelyVisibleItemPosition();
+        mColumns = getResources().getInteger(R.integer.overview_cols);
+        mLayoutManager = new GridLayoutManager(this, mColumns);
+        recyclerView.setLayoutManager(mLayoutManager);
+        mLayoutManager.scrollToPosition(visiblePosition);
+    }
+
+    @Override
     public void onBackPressed() {
         if(mLoadingDetails) {
             progressOverlay.setVisibility(View.GONE);
             mCall.cancel();
+            mLoadingDetails = false;
             return;
         }
 
@@ -75,7 +87,8 @@ public class OverviewActivity extends BaseActivity {
             mCall = mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<MediaProvider.Video> items) {
-                    if (items.size() <= 0) return;
+                    if (items.size() <= 0 || !mLoadingDetails) return;
+                    mLoadingDetails = false;
 
                     mHandler.post(new Runnable() {
                         @Override
@@ -85,7 +98,6 @@ public class OverviewActivity extends BaseActivity {
                         }
                     });
 
-                    mLoadingDetails = false;
                     final MediaProvider.Video item = items.get(0);
 
                     mHandler.post(new Runnable() {
@@ -100,9 +112,17 @@ public class OverviewActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(Exception e) {
-                    e.printStackTrace();
-                    Log.e("OverviewActivity", e.getMessage());
-                    Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    if(!e.getMessage().equals("Canceled")) {
+                        e.printStackTrace();
+                        Log.e("OverviewActivity", e.getMessage());
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    mLoadingDetails = false;
                 }
             });
         }
