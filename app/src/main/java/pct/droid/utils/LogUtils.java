@@ -8,7 +8,7 @@ import pct.droid.Constants;
 public class LogUtils {
 
     public static void d(Object message) {
-        d("LogUtils", message);
+        d(Constants.LOG_TAG, message);
     }
 
     public static void d(Object tag, Object message) {
@@ -18,7 +18,7 @@ public class LogUtils {
     }
 
     public static void v(Object message) {
-        v("LogUtils", message);
+        v(Constants.LOG_TAG, message);
     }
 
     public static void v(Object tag, Object message) {
@@ -28,7 +28,7 @@ public class LogUtils {
     }
 
     public static void e(Object message) {
-        e("LogUtils", message);
+        e(Constants.LOG_TAG, message);
     }
 
     public static void e(Object tag, Object message) {
@@ -44,7 +44,7 @@ public class LogUtils {
     }
 
     public static void w(Object message) {
-        w("LogUtils", message);
+        w(Constants.LOG_TAG, message);
     }
 
     public static void w(Object tag, Object message) {

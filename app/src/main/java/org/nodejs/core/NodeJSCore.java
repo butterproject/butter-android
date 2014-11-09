@@ -8,9 +8,9 @@ public class NodeJSCore {
     public static native void run(String mainJS);
 
     static {
-        LogUtils.d(TAG, "Loading libnodeJNI");
+        LogUtils.d("Loading libnodeJNI");
         System.loadLibrary("nodeJNI");
-        LogUtils.d(TAG, "libnodeJNI Loaded");
+        LogUtils.d("libnodeJNI Loaded");
     }
 
 }

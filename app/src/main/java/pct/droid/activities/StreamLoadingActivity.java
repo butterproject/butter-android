@@ -49,10 +49,10 @@ public class StreamLoadingActivity extends BaseActivity {
                 if(path.contains("streamer.json")) {
                     switch (event) {
                         case CREATE:
-                            LogUtils.d("StreamLoadingActivity", "Streamer file created");
+                            LogUtils.d("Streamer file created");
                             break;
                         case MODIFY:
-                            LogUtils.d("StreamLoadingActivity", "Streamer file modified");
+                            LogUtils.d("Streamer file modified");
                             if(!mIntentStarted) {
                                 mIntentStarted = true;
                                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -65,7 +65,7 @@ public class StreamLoadingActivity extends BaseActivity {
                     switch (event) {
                         case CREATE:
                         case MODIFY:
-                            LogUtils.d("StreamLoadingActivity", "Status file changed");
+                            LogUtils.d("Status file changed");
                             updateStatus();
                             break;
                     }
@@ -79,7 +79,7 @@ public class StreamLoadingActivity extends BaseActivity {
     private void updateStatus() {
         try {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
-            LogUtils.d("StreamLoadingActivity", status.toString());
+            LogUtils.d(status.toString());
             final int progress = (int)Math.floor(status.progress);
             mHandler.post(new Runnable() {
                 @Override

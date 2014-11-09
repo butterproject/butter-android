@@ -43,7 +43,7 @@ public class NodeJSService extends Service {
         @Override
         public void handleMessage(Message msg) {
             try {
-                LogUtils.d(TAG, "handleMessage: " + msg.what);
+                LogUtils.d("handleMessage: " + msg.what);
                 switch (msg.what) {
                     case MSG_RUN_SCRIPT:
                         Bundle args = msg.getData();
@@ -69,7 +69,7 @@ public class NodeJSService extends Service {
         ComponentName component = new ComponentName(this, this.getClass());
         ServiceInfo info;
 
-        LogUtils.d(TAG, component.toString());
+        LogUtils.d(component.toString());
 
         try {
             info = pm.getServiceInfo(component, PackageManager.GET_META_DATA);
@@ -141,7 +141,7 @@ public class NodeJSService extends Service {
                 Log.e(TAG, "Error while creating streamer.json", e);
             }
 
-            LogUtils.d(TAG, "run :" + js);
+            LogUtils.d("run :" + js);
             File script = new File(appPath, "main_node_script.js");
             if(script.exists()) {
                 script.delete();
@@ -164,15 +164,15 @@ public class NodeJSService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            LogUtils.d(TAG, "populated script");
+            LogUtils.d("populated script");
             NodeJSCore.run(script.toString());
-            LogUtils.d(TAG, "run end");
+            LogUtils.d("run end");
         }
 
         @Override
         public void interrupt() {
             super.interrupt();
-            LogUtils.d(TAG, "script interrupted");
+            LogUtils.d("script interrupted");
             mRunningScript = false;
         }
     }
@@ -194,7 +194,7 @@ public class NodeJSService extends Service {
                     File path = new File(targetDir, ze.getName());
                     FileOutputStream out = new FileOutputStream(path);
 
-                    LogUtils.d(TAG, "extract " + ze.getName() + " to " + path);
+                    LogUtils.d("extract " + ze.getName() + " to " + path);
 
                     byte[] buf = new byte[4096];
                     int len;

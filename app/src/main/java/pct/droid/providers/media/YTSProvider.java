@@ -87,7 +87,7 @@ public class YTSProvider extends MediaProvider {
         };
     }
 
-    protected String mApiUrl = "https://yts.im/api/";
+    protected String mApiUrl = "http://yts.im/api/";
     protected String mMirrorApiUrl = "https://yts.wf/api/";
 
     @Override
