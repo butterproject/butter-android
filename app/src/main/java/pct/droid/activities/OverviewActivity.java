@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.squareup.okhttp.Call;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,10 +26,11 @@ public class OverviewActivity extends BaseActivity {
 
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
+    private Call mCall;
     private YTSProvider mProvider = new YTSProvider();
     private HashMap<String, String> mFilters = new HashMap<String, String>();
     private Integer mColumns = 2, mRetries = 0, mPage = 1;
-    private boolean mLoading = true;
+    private boolean mLoading = true, mLoadingDetails = false;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 4, mPreviousTotal = 0;
 
     @InjectView(R.id.toolbar)
@@ -51,13 +54,25 @@ public class OverviewActivity extends BaseActivity {
         mPage++;
     }
 
+    @Override
+    public void onBackPressed() {
+        if(mLoadingDetails) {
+            progressOverlay.setVisibility(View.GONE);
+            mCall.cancel();
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, final MediaProvider.Video item, int position) {
             progressOverlay.setBackgroundColor(getResources().getColor(R.color.overlay_bg));
             progressOverlay.setVisibility(View.VISIBLE);
 
-            mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
+            mLoadingDetails = true;
+            mCall = mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<MediaProvider.Video> items) {
                     if (items.size() <= 0) return;
@@ -70,6 +85,7 @@ public class OverviewActivity extends BaseActivity {
                         }
                     });
 
+                    mLoadingDetails = false;
                     final MediaProvider.Video item = items.get(0);
 
                     mHandler.post(new Runnable() {

@@ -110,9 +110,8 @@ public class NodeJSService extends Service {
 
             //File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
             File appPath = NodeJSService.this.getExternalCacheDir();
-            appPath = new File(appPath, NODEJS_PATH);
 
-            File js = new File(appPath, mFileName);
+            File js = new File(appPath, NODEJS_PATH + "/" + mFileName);
             if (!js.exists()) {
                 try {
                     installPackage(assets, mPackageName, appPath);
@@ -144,7 +143,7 @@ public class NodeJSService extends Service {
             }
 
             LogUtils.d("run :" + js);
-            File script = new File(appPath, "main_node_script.js");
+            File script = new File(appPath, NODEJS_PATH + "/" + "main_node_script.js");
             if(script.exists()) {
                 script.delete();
             }
