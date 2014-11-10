@@ -1,4 +1,4 @@
-package org.nodejs.core;
+package pct.droid.services;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +11,6 @@ import java.util.zip.ZipInputStream;
 
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -24,9 +23,11 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 
+import org.nodejs.core.NodeJSCore;
+
 import pct.droid.utils.LogUtils;
 
-public class NodeJSService extends Service {
+public class StreamerService extends Service {
 
     private static final String TAG = "nodejs-service";
     private static final String NODEJS_PATH = "backend";
@@ -106,10 +107,10 @@ public class NodeJSService extends Service {
 
             mRunningScript = true;
 
-            AssetManager assets = NodeJSService.this.getAssets();
+            AssetManager assets = StreamerService.this.getAssets();
 
             //File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
-            File appPath = NodeJSService.this.getExternalCacheDir();
+            File appPath = StreamerService.this.getExternalCacheDir();
 
             File js = new File(appPath, NODEJS_PATH + "/" + mFileName);
             if (!js.exists()) {
