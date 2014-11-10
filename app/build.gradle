@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.1"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "pct.droid"
@@ -31,5 +31,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:5.1.2'
     compile 'com.sothree.slidinguppanel:library:2.0.2'
     compile 'com.github.nirhart:parallaxscroll:1.0'
-    compile 'com.android.support:recyclerview-v7:21.0.+'
+    compile 'com.android.support:recyclerview-v7:21.0.0'
 }
