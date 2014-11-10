@@ -1,13 +1,4 @@
 package pct.droid.services;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -21,15 +12,23 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.util.Log;
 
 import org.nodejs.core.NodeJSCore;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import pct.droid.utils.LogUtils;
 
 public class StreamerService extends Service {
 
-    private static final String TAG = "nodejs-service";
     private static final String NODEJS_PATH = "backend";
     private static final String DEFAULT_PACKAGE = "backend.zip";
 
@@ -117,7 +116,7 @@ public class StreamerService extends Service {
                 try {
                     installPackage(assets, mPackageName, appPath);
                 } catch (IOException e) {
-                    Log.e(TAG, "Error while installing script", e);
+                    LogUtils.e("Error while installing script", e);
                 }
             }
 
@@ -129,7 +128,7 @@ public class StreamerService extends Service {
                     status.setWritable(true);
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Error while creating status.json", e);
+                LogUtils.e("Error while creating status.json", e);
             }
 
             try {
@@ -140,7 +139,7 @@ public class StreamerService extends Service {
                     status.setWritable(true);
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Error while creating streamer.json", e);
+                LogUtils.e("Error while creating streamer.json", e);
             }
 
             LogUtils.d("run :" + js);

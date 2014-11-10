@@ -7,13 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import org.nodejs.core.NodeJSService;
+import pct.droid.services.StreamerService;
 
 import java.io.File;
 import java.util.List;
@@ -30,7 +29,7 @@ public class PopcornApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Intent nodeServiceIntent = new Intent(this, NodeJSService.class);
+        Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         File path = PopcornApplication.this.getExternalCacheDir();
@@ -57,7 +56,7 @@ public class PopcornApplication extends Application {
 
         LogUtils.d("Start streamer: " + streamUrl);
 
-        Message msg = Message.obtain(null, NodeJSService.MSG_RUN_SCRIPT, 0, 0);
+        Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
         Bundle args = new Bundle();
         args.putString("directory", mCacheDir);
@@ -90,7 +89,7 @@ public class PopcornApplication extends Application {
 
     public void startService() {
         if(mBound) return;
-        Intent nodeServiceIntent = new Intent(this, NodeJSService.class);
+        Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
