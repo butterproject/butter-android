@@ -22,12 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:padding="16dp"
-        android:background="@color/overlay_bg">
+        android:background="@color/player_overlay">
+        <SeekBar
+            android:id="@+id/controlBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <Button
             android:id="@+id/playButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_below="@id/controlBar"
             android:text="Play/Pause"
             android:onClick="playPauseClick" />
     </RelativeLayout>
@@ -37,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="@android:color/transparent"
+        android:background="@color/player_overlay"
         android:fitsSystemWindows="true" />
 
 </RelativeLayout>

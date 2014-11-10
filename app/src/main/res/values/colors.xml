@@ -18,4 +18,6 @@
 
     <color name="overlay">#33000000</color>
 
+    <color name="player_overlay">#26000000</color>
+
 </resources>

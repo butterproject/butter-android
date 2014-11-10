@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import org.videolan.libvlc.EventHandler;
@@ -40,6 +41,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
     SurfaceView videoSurface;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    @InjectView(R.id.controlBar)
+    SeekBar controlBar;
 
     private String mFilePath;
     private SurfaceHolder holder;
@@ -47,6 +50,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
     private int mVideoWidth;
     private int mVideoHeight;
     private final static int VideoSizeChanged = -1;
+    private boolean mDragging, mCanSeek = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
 
         holder = videoSurface.getHolder();
         holder.addCallback(this);
+
+        controlBar.setOnSeekBarChangeListener(mOnControlBarListener);
     }
 
     @Override
@@ -159,10 +165,12 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
 
     }
 
+
+
     public void playPauseClick(View v) {
         if (mLibVLC == null)
             return;
-        
+
         if(mLibVLC.isPlaying()) {
             mLibVLC.pause();
         } else {
@@ -172,6 +180,31 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
 
     public void updatePlayerViews() {
 
+    }
+
+    private int setOverlayProgress() {
+        if (mLibVLC == null) {
+            return 0;
+        }
+        int time = (int) mLibVLC.getTime();
+        int length = (int) mLibVLC.getLength();
+
+        LogUtils.d("Progress: " + length + "/" + time);
+
+        // Update all view elements
+        //boolean isSeekable = mEnableJumpButtons && length > 0;
+        //mBackward.setVisibility(isSeekable ? View.VISIBLE : View.GONE);
+        //mForward.setVisibility(isSeekable ? View.VISIBLE : View.GONE);
+        controlBar.setMax(length);
+        controlBar.setProgress(time);
+        /*if (mSysTime != null)
+            mSysTime.setText(DateFormat.getTimeFormat(this).format(new Date(System.currentTimeMillis())));
+        if (time >= 0) mTime.setText(Strings.millisToString(time));
+        if (length >= 0) mLength.setText(mDisplayRemainingTime && length > 0
+                ? "- " + Strings.millisToString(length - time)
+                : Strings.millisToString(length));*/
+
+        return time;
     }
 
     private void createPlayer(String media) {
@@ -241,12 +274,24 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
             // Libvlc events
             Bundle b = msg.getData();
             switch (b.getInt("event")) {
+                case EventHandler.MediaParsedChanged:
+
+                    break;
                 case EventHandler.MediaPlayerEndReached:
                     player.releasePlayer();
                     break;
+                case EventHandler.MediaPlayerTimeChanged:
+                    player.setOverlayProgress();
+                    break;
+                case EventHandler.MediaPlayerPositionChanged:
+                    LogUtils.d("PlayerData: " + b.toString());
+                    break;
                 case EventHandler.MediaPlayerPlaying:
+                    //start playing
                 case EventHandler.MediaPlayerPaused:
+                    //player paused
                 case EventHandler.MediaPlayerStopped:
+                    //player stopped
                     player.updatePlayerViews();
                     break;
                 default:
@@ -254,4 +299,25 @@ public class VideoPlayerActivity extends ActionBarActivity implements SurfaceHol
             }
         }
     }
+
+    SeekBar.OnSeekBarChangeListener mOnControlBarListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            mDragging = true;
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mDragging = false;
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if (fromUser && mCanSeek) {
+                mLibVLC.setTime(progress);
+                setOverlayProgress();
+            }
+
+        }
+    };
 }
