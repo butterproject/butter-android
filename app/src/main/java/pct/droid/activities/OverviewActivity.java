@@ -1,16 +1,20 @@
 package pct.droid.activities;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
@@ -24,6 +28,7 @@ import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
+import pct.droid.utils.PixelUtils;
 
 public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 
@@ -32,9 +37,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private GridLayoutManager mLayoutManager;
     private Call mCall;
     private YTSProvider mProvider = new YTSProvider();
-    private HashMap<String, String> mFilters = new HashMap<String, String>();
-    private Integer mColumns = 2, mRetries = 0, mPage = 1;
-    private boolean mLoading = true, mLoadingDetails = false;
+    private Integer mColumns = 2, mRetries = 0;
+    private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 4, mPreviousTotal = 0;
 
     @InjectView(R.id.toolbar)
@@ -43,11 +47,15 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     LinearLayout progressOverlay;
     @InjectView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @InjectView(R.id.emptyView)
+    TextView emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_overview);
         setSupportActionBar(toolbar);
+
+        toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
 
         recyclerView.setHasFixedSize(true);
         mColumns = getResources().getInteger(R.integer.overview_cols);
@@ -61,15 +69,23 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             mTaskFragment = new OverviewActivityTaskFragment();
             fm.beginTransaction().add(mTaskFragment, OverviewActivityTaskFragment.TAG).commit();
 
-            mProvider.getList(null, mTaskFragment);
-            mPage++;
+            mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
         } else {
             onSuccess(mTaskFragment.getExistingItems());
-            mPage = mTaskFragment.getCurrentPage() - 1;
         }
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_overview, menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        searchViewAction.setQueryHint("Title, year, actors"); //TODO: translation
+        searchViewAction.setOnQueryTextListener(mSearchListener);
+        searchViewAction.setIconifiedByDefault(true);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -86,6 +102,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onSuccess(final ArrayList<MediaProvider.Video> items) {
+        mEndOfListReached = false;
         if(mTotalItemCount <= 0) {
             mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
@@ -96,6 +113,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     recyclerView.setAdapter(mAdapter);
                     recyclerView.setOnScrollListener(mScrollListener);
                     mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+                    emptyView.setVisibility(View.GONE);
                 }
             });
             mLoading = false;
@@ -104,6 +122,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 @Override
                 public void run() {
                     mAdapter.setItems(items);
+                    emptyView.setVisibility(View.GONE);
                 }
             });
         }
@@ -111,19 +130,34 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onFailure(Exception e) {
-        e.printStackTrace();
-        Log.e("OverviewActivity", e.getMessage());
-        if(mRetries > 1) {
+        if(e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
+            mEndOfListReached = true;
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
+                    mAdapter.removeLoading();
+
+                    if(mAdapter.getItemCount() <= 0) {
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         } else {
-            mProvider.getList(null, mTaskFragment);
+            e.printStackTrace();
+            Log.e("OverviewActivity", e.getMessage());
+            if (mRetries > 1) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
+                });
+            } else {
+                mProvider.getList(null, mTaskFragment);
+            }
+            mRetries++;
         }
-        mRetries++;
     }
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
@@ -188,15 +222,48 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 if (mTotalItemCount > mPreviousTotal) {
                     mLoading = false;
                     mPreviousTotal = mTotalItemCount;
-                    mPage++;
+                    mAdapter.removeLoading();
                 }
             }
 
-            if (!mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
+            if (!mEndOfListReached && !mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
                 mLoading = true;
-                mFilters.put("page", Integer.toString(mPage));
-                mProvider.getList(mAdapter.getItems(), mFilters, mTaskFragment);
+                HashMap<String, String> filters = mTaskFragment.getFilters();
+                filters.put("page", Integer.toString(mTaskFragment.getCurrentPage()));
+                mProvider.getList(mAdapter.getItems(), filters, mTaskFragment);
+                mTaskFragment.setFilters(filters);
+                mAdapter.addLoading();
             }
+        }
+    };
+
+    private SearchView.OnQueryTextListener mSearchListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            mEndOfListReached = false;
+            if(mAdapter != null) {
+                mAdapter.clearItems();
+                mAdapter.addLoading();
+            }
+            HashMap<String, String> filters = mTaskFragment.getFilters();
+            if(s.equals("")) {
+                filters.remove("keywords");
+            } else {
+                filters.put("keywords", s);
+            }
+            filters.put("page", "1");
+            mTaskFragment.setCurrentPage(1);
+            mTaskFragment.setFilters(filters);
+            mProvider.getList(filters, mTaskFragment);
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            if(s.equals("")) {
+                onQueryTextSubmit(s);
+            }
+            return false;
         }
     };
 }

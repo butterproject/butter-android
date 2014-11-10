@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pct.droid.providers.media.MediaProvider;
 
@@ -19,6 +20,7 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     private Boolean mLoaded = false;
     private ArrayList<MediaProvider.Video> mItems;
     private int mPage = 1;
+    private HashMap<String, String> mFilters = new HashMap<String, String>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,22 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
         return mPage;
     }
 
+    public void setCurrentPage(int page) {
+        mPage = page;
+    }
+
+    public HashMap<String, String> getFilters() {
+        return mFilters;
+    }
+
+    public void setFilters(HashMap<String, String> filters) {
+        mFilters = filters;
+    }
+
     @Override
     public void onSuccess(ArrayList<MediaProvider.Video> items) {
-        mItems = items;
         mPage++;
+        mItems = items;
         if(mCallback != null) mCallback.onSuccess(items);
     }
 

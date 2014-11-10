@@ -73,7 +73,8 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(getItemViewType(position) == NORMAL) {
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             MediaProvider.Video item = getItem(position);
-            Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
+            if(!item.image.equals(""))
+                Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                     .resize(mItemWidth, mItemHeight)
                     .into(videoViewHolder.coverImage);
         }
@@ -86,7 +87,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if(position == getItemCount() - 1) {
+        if(getItem(position).type.equals("loading")) {
             return LOADING;
         }
         return NORMAL;
@@ -100,6 +101,29 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mItemClickListener = listener;
     }
 
+    public void removeLoading() {
+        if(getItemCount() <= 0) return;
+        MediaProvider.Video item = mItems.get(getItemCount() - 1);
+        if(item.type.equals("loading")) {
+            mItems.remove(getItemCount() - 1);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addLoading() {
+        MediaProvider.Video item = null;
+        if(getItemCount() != 0) {
+            item = mItems.get(getItemCount() - 1);
+        }
+
+        if(getItemCount() == 0 || (item != null && !item.type.equals("loading"))) {
+            MediaProvider.Video loadingItem = new MediaProvider.Video();
+            loadingItem.type = "loading";
+            mItems.add(loadingItem);
+            notifyDataSetChanged();
+        }
+    }
+
     public ArrayList<MediaProvider.Video> getItems() {
         ArrayList<MediaProvider.Video> returnData = (ArrayList<MediaProvider.Video>) mItems.clone();
         returnData.remove(getItemCount() - 1);
@@ -107,9 +131,12 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setItems(ArrayList<MediaProvider.Video> items) {
-        MediaProvider.Video loadingItem = new MediaProvider.Video();
-        items.add(loadingItem);
         mItems = items;
+        notifyDataSetChanged();
+    }
+
+    public void clearItems() {
+        mItems.clear();
         notifyDataSetChanged();
     }
 

@@ -18,6 +18,14 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar" />
 
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_data_found"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/progressOverlay"
         android:layout_width="match_parent"

@@ -9,6 +9,9 @@ import com.squareup.okhttp.Request;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.List;
 
 public abstract class BaseProvider {
@@ -31,13 +34,18 @@ public abstract class BaseProvider {
     protected String buildQuery(List<BasicNameValuePair> valuePairs) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for(int i = 0; i < valuePairs.size(); i++) {
-            NameValuePair pair = valuePairs.get(i);
-            stringBuilder.append(pair.getName());
-            stringBuilder.append("=");
-            stringBuilder.append(pair.getValue());
-            if(i + 1 != valuePairs.size()) stringBuilder.append("&");
+        try {
+            for (int i = 0; i < valuePairs.size(); i++) {
+                NameValuePair pair = valuePairs.get(i);
+                stringBuilder.append(URLEncoder.encode(pair.getName(), "utf-8"));
+                stringBuilder.append("=");
+                stringBuilder.append(URLEncoder.encode(pair.getValue(), "utf-8"));
+                if (i + 1 != valuePairs.size()) stringBuilder.append("&");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+
 
         return stringBuilder.toString();
     }

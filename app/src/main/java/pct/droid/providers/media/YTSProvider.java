@@ -91,6 +91,7 @@ public class YTSProvider extends MediaProvider {
 
     protected String mApiUrl = "http://yts.re/api/";
     protected String mMirrorApiUrl = "https://yts.wf/api/";
+    public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
     public Call getList(final ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
@@ -149,38 +150,42 @@ public class YTSProvider extends MediaProvider {
             public void onResponse(Response response) throws IOException {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
+                    LogUtils.d(responseStr);
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
+                    if(result.status != null && result.status.equals("fail")) {
+                        callback.onFailure(new NetworkErrorException(result.error));
+                    } else {
+                        ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn(currentList);
 
-                    ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn(currentList);
+                        String[] imdbIds = new String[formattedData.size()];
+                        for (MediaProvider.Video item : formattedData) {
+                            int index = formattedData.indexOf(item);
+                            imdbIds[index] = item.imdbId;
+                        }
 
-                    String[] imdbIds = new String[formattedData.size()];
-                    for(MediaProvider.Video item : formattedData) {
-                        int index = formattedData.indexOf(item);
-                        imdbIds[index] = item.imdbId;
+                        TraktProvider traktProvider = new TraktProvider();
+                        TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
+                        int i = 0;
+                        for (TraktProvider.MetaData meta : metaDatas) {
+                            Video video = (Video) formattedData.get(i);
+                            if (meta.images.containsKey("poster")) {
+                                video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                video.fullImage = meta.images.get("poster");
+                            }
+
+                            if (meta.images.containsKey("fanart")) {
+                                video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                            }
+
+                            if (meta.title != null) {
+                                video.title = meta.title;
+                            }
+                            formattedData.set(i, video);
+                            i++;
+                        }
+
+                        callback.onSuccess(currentList);
                     }
-
-                    TraktProvider traktProvider = new TraktProvider();
-                    TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
-                    int i = 0;
-                    for(TraktProvider.MetaData meta : metaDatas) {
-                        Video video = (Video) formattedData.get(i);
-                        if (meta.images.containsKey("poster")) {
-                            video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                            video.fullImage = meta.images.get("poster");
-                        }
-
-                        if (meta.images.containsKey("fanart")) {
-                            video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                        }
-
-                        if (meta.title != null) {
-                            video.title = meta.title;
-                        }
-                        formattedData.set(i, video);
-                        i++;
-                    }
-
-                    callback.onSuccess(currentList);
                 } else {
                     callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
@@ -204,50 +209,54 @@ public class YTSProvider extends MediaProvider {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn();
+                    if(result.status != null && result.status.equals("fail")) {
+                        callback.onFailure(new NetworkErrorException(result.error));
+                    } else {
+                        ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn();
 
-                    TraktProvider traktProvider = new TraktProvider();
-                    for(MediaProvider.Video item : formattedData) {
-                        int index = formattedData.indexOf(item);
-                        Video video = (Video) item;
+                        TraktProvider traktProvider = new TraktProvider();
+                        for (MediaProvider.Video item : formattedData) {
+                            int index = formattedData.indexOf(item);
+                            Video video = (Video) item;
 
-                        TraktProvider.MetaData meta = traktProvider.getSummary(video.imdbId, "movie");
-                        if (meta.images.containsKey("poster")) {
-                            video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                            video.fullImage = meta.images.get("poster");
+                            TraktProvider.MetaData meta = traktProvider.getSummary(video.imdbId, "movie");
+                            if (meta.images.containsKey("poster")) {
+                                video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                video.fullImage = meta.images.get("poster");
+                            }
+
+                            if (meta.images.containsKey("fanart")) {
+                                video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                            }
+
+                            if (meta.title != null) {
+                                video.title = meta.title;
+                            }
+
+                            if (meta.overview != null) {
+                                video.synopsis = meta.overview;
+                            }
+
+                            if (meta.tagline != null) {
+                                video.tagline = meta.tagline;
+                            }
+
+                            if (meta.trailer != null) {
+                                video.trailer = meta.trailer;
+                            }
+
+                            if (meta.runtime != null) {
+                                video.runtime = meta.runtime;
+                            }
+
+                            if (meta.certification != null) {
+                                video.certification = meta.certification;
+                            }
+                            formattedData.set(index, video);
                         }
 
-                        if (meta.images.containsKey("fanart")) {
-                            video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                        }
-
-                        if (meta.title != null) {
-                            video.title = meta.title;
-                        }
-
-                        if (meta.overview != null) {
-                            video.synopsis = meta.overview;
-                        }
-
-                        if (meta.tagline != null) {
-                            video.tagline = meta.tagline;
-                        }
-
-                        if (meta.trailer != null) {
-                            video.trailer = meta.trailer;
-                        }
-
-                        if (meta.runtime != null) {
-                            video.runtime = meta.runtime;
-                        }
-
-                        if (meta.certification != null) {
-                            video.certification = meta.certification;
-                        }
-                        formattedData.set(index, video);
+                        callback.onSuccess(formattedData);
                     }
-
-                    callback.onSuccess(formattedData);
                 } else {
                     callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
@@ -256,6 +265,8 @@ public class YTSProvider extends MediaProvider {
     }
 
     private class YTSReponse {
+        public String status;
+        public String error;
         public ArrayList<LinkedTreeMap<String, Object>> MovieList;
 
         private int isInResults(ArrayList<MediaProvider.Video> results, String id) {
@@ -291,7 +302,7 @@ public class YTSProvider extends MediaProvider {
 
                 int existingItem = isInResults(existingList, video.imdbId);
                 if(existingItem == -1) {
-                    video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
+                    video.image = "";
                     video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
                     video.year = item.get("MovieYear").toString();
                     video.genre = item.get("Genre").toString();
