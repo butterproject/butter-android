@@ -14,11 +14,6 @@
     <string name="minutes">min</string>
     <string name="watch_trailer">Watch trailer</string>
 
-    <string name="left">Left</string>
-    <string name="right">Right</string>
-    <string name="up">Up</string>
-    <string name="down">Down</string>
-    <string name="toggle_tabs">Toggle tabs</string>
     <string name="add_favourite">Add to favourites</string>
     <string name="remove_favourite">Remove from favourites</string>
     <string name="watched">Toggle watched</string>
@@ -34,20 +29,8 @@
     <string name="fastforward">Fast seek forward</string>
     <string name="fastbackward">Fast seek backward</string>
 
-    <string name="no_instances">Add a new instance to start using Popcorn Time Remote</string>
-    <string name="add_instance">Add instance</string>
-    <string name="edit_instance">Edit instance</string>
-    <string name="delete_instance">Delete instance</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
-    <string name="ip">IP Address</string>
-    <string name="name">Name</string>
-    <string name="port">Port</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="enter_manually">Enter settings manually</string>
-    <string name="scan_qr">Scan easy pairing QR</string>
-    <string name="easy_pairing">Easy pairing is available in Popcorn Time v0.3.4 and higher. Open the advanced settings and generate your QR code in the \'remote control\' section.</string>
-
+   
 </resources>

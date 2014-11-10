@@ -33,7 +33,8 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public OverviewGridAdapter(Activity activity, ArrayList<MediaProvider.Video> items, Integer columns) {
         mColumns = columns;
 
-        mItemWidth = (activity.getWindow().getDecorView().getWidth() / columns);
+        int screenWidth = PixelUtils.getScreenWidth(activity);
+        mItemWidth = (screenWidth / columns);
         mItemHeight = (int) (1.5 * (double) mItemWidth);
         mMargin = PixelUtils.getPixelsFromDp(activity, 2);
 
