@@ -55,8 +55,8 @@ public class StreamLoadingActivity extends BaseActivity {
                             LogUtils.d("Streamer file modified");
                             if(!mIntentStarted) {
                                 mIntentStarted = true;
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setDataAndType(Uri.parse("http://localhost:9999"), "video/*");
+                                Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+                                i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
                                 startActivity(i);
                             }
                             break;
