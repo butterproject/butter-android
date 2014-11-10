@@ -17,7 +17,6 @@
         >
         <activity
             android:name=".activities.OverviewActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,11 +25,10 @@
         </activity>
         <activity
             android:name=".activities.MovieDetailActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.StreamLoadingActivity"
-            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" />
         <service android:name="org.nodejs.core.NodeJSService" android:process=":node" />
     </application>

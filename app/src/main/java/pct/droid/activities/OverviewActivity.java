@@ -3,10 +3,12 @@ package pct.droid.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -18,13 +20,14 @@ import java.util.HashMap;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.adapters.OverviewGridAdapter;
+import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
-import pct.droid.adapters.OverviewGridAdapter;
-import pct.droid.utils.LogUtils;
 
-public class OverviewActivity extends BaseActivity {
+public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 
+    private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
     private Call mCall;
@@ -51,18 +54,22 @@ public class OverviewActivity extends BaseActivity {
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mProvider.getList(null, mCallback);
-        mPage++;
+        FragmentManager fm = getSupportFragmentManager();
+        mTaskFragment = (OverviewActivityTaskFragment) fm.findFragmentByTag(OverviewActivityTaskFragment.TAG);
+
+        if (mTaskFragment == null || mTaskFragment.getExistingItems() == null) {
+            mTaskFragment = new OverviewActivityTaskFragment();
+            fm.beginTransaction().add(mTaskFragment, OverviewActivityTaskFragment.TAG).commit();
+
+            mProvider.getList(null, mTaskFragment);
+            mPage++;
+        } else {
+            onSuccess(mTaskFragment.getExistingItems());
+            mPage = mTaskFragment.getCurrentPage() - 1;
+        }
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        int visiblePosition = mLayoutManager.findFirstCompletelyVisibleItemPosition() == -1 ? mLayoutManager.findFirstVisibleItemPosition() : mLayoutManager.findFirstCompletelyVisibleItemPosition();
-        mColumns = getResources().getInteger(R.integer.overview_cols);
-        mLayoutManager = new GridLayoutManager(this, mColumns);
-        recyclerView.setLayoutManager(mLayoutManager);
-        mLayoutManager.scrollToPosition(visiblePosition);
     }
 
     @Override
@@ -75,6 +82,48 @@ public class OverviewActivity extends BaseActivity {
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void onSuccess(final ArrayList<MediaProvider.Video> items) {
+        if(mTotalItemCount <= 0) {
+            mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
+            mAdapter.setOnItemClickListener(mOnItemClickListener);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    progressOverlay.setVisibility(View.GONE);
+                    recyclerView.setAdapter(mAdapter);
+                    recyclerView.setOnScrollListener(mScrollListener);
+                    mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+                }
+            });
+            mLoading = false;
+        } else {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.setItems(items);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        e.printStackTrace();
+        Log.e("OverviewActivity", e.getMessage());
+        if(mRetries > 1) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
+                }
+            });
+        } else {
+            mProvider.getList(null, mTaskFragment);
+        }
+        mRetries++;
     }
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
@@ -128,50 +177,6 @@ public class OverviewActivity extends BaseActivity {
         }
     };
 
-    private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
-        @Override
-        public void onSuccess(final ArrayList<MediaProvider.Video> items) {
-            if(mTotalItemCount <= 0) {
-                mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
-                mAdapter.setOnItemClickListener(mOnItemClickListener);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressOverlay.setVisibility(View.GONE);
-                        recyclerView.setAdapter(mAdapter);
-                        recyclerView.setOnScrollListener(mScrollListener);
-                        mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
-                    }
-                });
-                mLoading = false;
-            } else {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.setItems(items);
-                    }
-                });
-            }
-        }
-
-        @Override
-        public void onFailure(Exception e) {
-            e.printStackTrace();
-            Log.e("OverviewActivity", e.getMessage());
-            if(mRetries > 1) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
-                    }
-                });
-            } else {
-                mProvider.getList(null, mCallback);
-            }
-            mRetries++;
-        }
-    };
-
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -190,9 +195,8 @@ public class OverviewActivity extends BaseActivity {
             if (!mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
                 mLoading = true;
                 mFilters.put("page", Integer.toString(mPage));
-                mProvider.getList(mAdapter.getItems(), mFilters, mCallback);
+                mProvider.getList(mAdapter.getItems(), mFilters, mTaskFragment);
             }
         }
     };
-
 }
