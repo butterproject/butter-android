@@ -66,14 +66,14 @@ public class MovieDetailActivity extends BaseActivity {
     TextView ratingText;
     @InjectView(R.id.synopsisText)
     TextView synopsisText;
-    @InjectView(R.id.favouriteText)
-    TextView favouriteText;
+    //@InjectView(R.id.favouriteText)
+    //TextView favouriteText;
     @InjectView(R.id.synopsisBlock)
     LinearLayout synopsisBlock;
     @InjectView(R.id.qualityBlock)
     LinearLayout qualityBlock;
-    @InjectView(R.id.favouriteBlock)
-    LinearLayout favouriteBlock;
+    //@InjectView(R.id.favouriteBlock)
+    //LinearLayout favouriteBlock;
     @InjectView(R.id.trailerBlock)
     LinearLayout trailerBlock;
     @InjectView(R.id.subtitlesBlock)
@@ -181,7 +181,7 @@ public class MovieDetailActivity extends BaseActivity {
         synopsisBlock.setOnClickListener(mOnClickListener);
         trailerBlock.setOnClickListener(mOnClickListener);
         subtitlesBlock.setOnClickListener(mOnClickListener);
-        favouriteBlock.setOnClickListener(mOnClickListener);
+        //favouriteBlock.setOnClickListener(mOnClickListener);
         qualityBlock.setOnClickListener(mOnClickListener);
 
         mParallaxHeight = PixelUtils.getPixelsFromDp(this, 228);
