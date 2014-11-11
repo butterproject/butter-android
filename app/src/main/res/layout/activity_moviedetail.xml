@@ -224,7 +224,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/divider_margin"
                         android:background="@color/div_white" />
-                    <LinearLayout
+                    <!--<LinearLayout
                         android:id="@+id/favouriteBlock"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
@@ -256,7 +256,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/div_white" />
+                        android:background="@color/div_white" />-->
                     <LinearLayout
                         android:id="@+id/qualityBlock"
                         android:layout_width="match_parent"
