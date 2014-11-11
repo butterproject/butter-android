@@ -84,6 +84,12 @@ public class PopcornApplication extends Application {
             }
         }
 
+        File torrentPath = new File(mCacheDir);
+        File tmpPath = new File(mCacheDir, "/tmp/");
+        torrentPath.delete();
+        torrentPath.mkdirs();
+        tmpPath.mkdirs();
+
         startService();
     }
 
