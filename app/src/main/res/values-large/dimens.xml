@@ -16,4 +16,5 @@
     <dimen name="player_controls_bottom_margin">32dp</dimen>
     <dimen name="player_controls_padding">16dp</dimen>
     <dimen name="player_controls_corners">7dp</dimen>
+    <dimen name="player_controls_distance">8dp</dimen>
 </resources>
