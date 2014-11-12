@@ -21,6 +21,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -69,7 +70,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private int mVideoWidth;
     private int mVideoHeight;
     private final static int VideoSizeChanged = -1;
-    private boolean mCanSeek = true, mOverlayVisible = true;
+    private boolean mCanSeek = false, mOverlayVisible = true;
 
     private static final int TOUCH_NONE = 0;
     private static final int TOUCH_VOLUME = 1;
@@ -86,6 +87,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private float mRestoreAutoBrightness = -1;
 
     private int mLastSystemUIVisibility;
+    private long mLastSystemShowTime = System.currentTimeMillis();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,13 +98,15 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         mHandler = new Handler(Looper.getMainLooper());
         decorView = getWindow().getDecorView();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             decorView.setOnSystemUiVisibilityChangeListener(this);
+        }
 
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
-        } else {
-            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
+            toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(this), toolbar.getPaddingRight(), toolbar.getPaddingBottom());
         }
 
         getSupportActionBar().setTitle("Now Playing");
@@ -434,35 +438,44 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             toolbar.setVisibility(View.VISIBLE);
             toolbar.startAnimation(fadeOutAnim);
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                decorView.setSystemUiVisibility(uiOptions);
+            } else {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
+
+            mLastSystemShowTime = System.currentTimeMillis();
         } else {
             mHandler.removeCallbacks(mOverlayHideRunnable);
         }
+
         mOverlayVisible = true;
         mHandler.postDelayed(mOverlayHideRunnable, 5000);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void hideOverlay() {
-        Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
-        controlLayout.startAnimation(fadeOutAnim);
-        controlLayout.setVisibility(View.GONE);
-        toolbar.startAnimation(fadeOutAnim);
-        toolbar.setVisibility(View.GONE);
+        // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
+        if(mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
+            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
+            controlLayout.startAnimation(fadeOutAnim);
+            controlLayout.setVisibility(View.GONE);
+            toolbar.startAnimation(fadeOutAnim);
+            toolbar.setVisibility(View.GONE);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                decorView.setSystemUiVisibility(uiOptions);
+            } else {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            }
+
+            mHandler.removeCallbacks(mOverlayHideRunnable);
+            mOverlayVisible = false;
         }
-
-        mHandler.removeCallbacks(mOverlayHideRunnable);
-        mOverlayVisible = false;
     }
 
     public boolean isOverlayVisible() {
@@ -488,11 +501,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         int length = (int) mLibVLC.getLength();
 
         LogUtils.d("Progress: " + length + "/" + time);
-
-        // Update all view elements
-        //boolean isSeekable = mEnableJumpButtons && length > 0;
-        //mBackward.setVisibility(isSeekable ? View.VISIBLE : View.GONE);
-        //mForward.setVisibility(isSeekable ? View.VISIBLE : View.GONE);
         controlBar.setMax(length);
         controlBar.setProgress(time);
         /*if (mSysTime != null)
@@ -583,6 +591,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     break;
                 case EventHandler.MediaPlayerPositionChanged:
                     LogUtils.d("PlayerData: " + b.toString());
+                    player.mCanSeek = true;
                     break;
                 case EventHandler.MediaPlayerPlaying:
                     //start playing

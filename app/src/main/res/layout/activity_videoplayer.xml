@@ -25,33 +25,58 @@
         android:layout_marginRight="@dimen/player_controls_margin"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="@dimen/player_controls_bottom_margin">
+        android:layout_marginBottom="@dimen/player_controls_bottom_margin"
+        android:fitsSystemWindows="true">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/player_controls_padding"
             android:background="@drawable/player_controls_background">
-        <SeekBar
-            android:id="@+id/controlBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <ImageButton
-            android:id="@+id/playButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerInParent="true"
-            android:layout_below="@id/controlBar"
-            android:background="@drawable/player_controls_play_bg"
-            android:src="@drawable/ic_av_play"
-            android:scaleType="centerInside"
-            android:onClick="playPauseClick" />
+            <SeekBar
+                android:id="@+id/controlBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/player_controls_distance" />
+                
+            <ImageButton
+                android:id="@+id/playButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/controlBar"
+                android:background="@drawable/player_controls_play_bg"
+                android:src="@drawable/ic_av_play"
+                android:scaleType="centerInside"
+                android:onClick="playPauseClick" />
+
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/controlBar"
+                android:layout_toLeftOf="@id/playButton"
+                android:layout_marginRight="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_rewind"
+                android:scaleType="centerInside"
+                android:onClick="seekForwardClick" />
+            
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/controlBar"
+                android:layout_toRightOf="@id/playButton"
+                android:layout_marginLeft="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_forward"
+                android:scaleType="centerInside"
+                android:onClick="seekForwardClick" />
         </RelativeLayout>
     </RelativeLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/player_overlay"
         android:fitsSystemWindows="true" />
