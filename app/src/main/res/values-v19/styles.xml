@@ -8,6 +8,9 @@
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowBackground">@color/bg</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
+        <item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
     </style>
 
 </resources>

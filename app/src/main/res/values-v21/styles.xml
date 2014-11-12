@@ -11,14 +11,4 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="SeekBar.PopcornTime" parent="android:Widget.Material.SeekBar">
-        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
-        <item name="colorAccent">@android:color/white</item>
-        <item name="android:colorPrimary">@android:color/white</item>
-        <item name="android:colorPrimaryDark">@android:color/white</item>
-        <item name="android:colorAccent">@android:color/white</item>
-    </style>
-
 </resources>

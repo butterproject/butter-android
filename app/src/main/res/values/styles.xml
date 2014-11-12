@@ -25,14 +25,24 @@
         <item name="colorAccent">@color/accent</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@color/bg</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
+        <item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
+    </style>
+
+    <style name="ProgressBar.PopcornTime" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_light</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
     </style>
 
     <style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
-        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
-        <item name="android:thumb">@drawable/scrubber_control_selector_holo_dark</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
         <item name="android:thumbOffset">16dip</item>
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
