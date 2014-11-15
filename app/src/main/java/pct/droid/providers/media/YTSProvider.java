@@ -23,11 +23,11 @@ import pct.droid.utils.LogUtils;
 public class YTSProvider extends MediaProvider {
 
     public static class Video extends MediaProvider.Video implements Parcelable {
-        public String trailer;
-        public Integer runtime;
-        public String tagline;
-        public String synopsis;
-        public String certification;
+        public String trailer = "";
+        public Integer runtime = -1;
+        public String tagline = "";
+        public String synopsis = "No synopsis available";
+        public String certification = "n/a";
         public String fullImage;
         public String headerImage;
         public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
@@ -103,7 +103,7 @@ public class YTSProvider extends MediaProvider {
         }
 
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("limit", "50"));
+        params.add(new BasicNameValuePair("limit", "30"));
 
         if(filters == null) {
             filters = new HashMap<String, String>();
@@ -155,33 +155,43 @@ public class YTSProvider extends MediaProvider {
                     if(result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
+                        int previousSize = currentList.size();
                         ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn(currentList);
+                        int newDataSize = formattedData.size() - previousSize;
 
-                        String[] imdbIds = new String[formattedData.size()];
-                        for (MediaProvider.Video item : formattedData) {
-                            int index = formattedData.indexOf(item);
-                            imdbIds[index] = item.imdbId;
+                        // Only get metdata for new items in list
+                        String[] imdbIds = new String[newDataSize];
+                        for(int i = previousSize, index = 0; i < formattedData.size(); i++, index++) {
+                            Video video = (Video) formattedData.get(i);
+                            imdbIds[index] = video.imdbId;
                         }
 
                         TraktProvider traktProvider = new TraktProvider();
                         TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
-                        int i = 0;
-                        for (TraktProvider.MetaData meta : metaDatas) {
+
+                        for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
                             Video video = (Video) formattedData.get(i);
-                            if (meta.images.containsKey("poster")) {
-                                video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                video.fullImage = meta.images.get("poster");
-                            }
+                            TraktProvider.MetaData meta = metaDatas[index];
+                            if(video.imdbId.equals(meta.imdb_id)) {
+                                if (meta.images.containsKey("poster")) {
+                                    video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                    video.fullImage = meta.images.get("poster");
+                                }
 
-                            if (meta.images.containsKey("fanart")) {
-                                video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                            }
+                                if (meta.images.containsKey("fanart")) {
+                                    video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                }
 
-                            if (meta.title != null) {
-                                video.title = meta.title;
+                                if (meta.title != null) {
+                                    video.title = meta.title;
+                                }
+                                formattedData.set(i, video);
+                                index++;
+                            } else {
+                                video.fullImage = video.image;
+                                video.headerImage = video.image;
+                                formattedData.set(i, video);
                             }
-                            formattedData.set(i, video);
-                            i++;
                         }
 
                         callback.onSuccess(currentList);
@@ -216,17 +226,21 @@ public class YTSProvider extends MediaProvider {
 
                         TraktProvider traktProvider = new TraktProvider();
                         for (MediaProvider.Video item : formattedData) {
-                            int index = formattedData.indexOf(item);
                             Video video = (Video) item;
+                            int index = formattedData.indexOf(item);
 
                             TraktProvider.MetaData meta = traktProvider.getSummary(video.imdbId, "movie");
-                            if (meta.images.containsKey("poster")) {
+                            if (meta.images != null && meta.images.containsKey("poster")) {
                                 video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
                                 video.fullImage = meta.images.get("poster");
+                            } else {
+                                video.fullImage = video.image;
                             }
 
-                            if (meta.images.containsKey("fanart")) {
+                            if (meta.images != null && meta.images.containsKey("fanart")) {
                                 video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                            } else {
+                                video.headerImage = video.image;
                             }
 
                             if (meta.title != null) {
@@ -285,6 +299,7 @@ public class YTSProvider extends MediaProvider {
         public ArrayList<MediaProvider.Video> formatForPopcorn(ArrayList<MediaProvider.Video> existingList) {
             for(LinkedTreeMap<String, Object> item : MovieList) {
                 Video video = new Video();
+
                 video.imdbId = item.get("ImdbCode").toString();
                 String torrentQuality = item.get("Quality").toString();
 
@@ -302,7 +317,7 @@ public class YTSProvider extends MediaProvider {
 
                 int existingItem = isInResults(existingList, video.imdbId);
                 if(existingItem == -1) {
-                    video.image = "";
+                    video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
                     video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
                     video.year = item.get("MovieYear").toString();
                     video.genre = item.get("Genre").toString();

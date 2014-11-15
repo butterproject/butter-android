@@ -73,10 +73,11 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(getItemViewType(position) == NORMAL) {
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             MediaProvider.Video item = getItem(position);
-            if(!item.image.equals(""))
+            if(!item.image.equals("")) {
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                     .resize(mItemWidth, mItemHeight)
                     .into(videoViewHolder.coverImage);
+            }
         }
     }
 
@@ -126,7 +127,10 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public ArrayList<MediaProvider.Video> getItems() {
         ArrayList<MediaProvider.Video> returnData = (ArrayList<MediaProvider.Video>) mItems.clone();
-        returnData.remove(getItemCount() - 1);
+        MediaProvider.Video item = returnData.get(getItemCount() - 1);
+        if(item.type.equals("loading")) {
+            returnData.remove(getItemCount() - 1);
+        }
         return returnData;
     }
 
