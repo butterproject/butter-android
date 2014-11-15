@@ -7,12 +7,12 @@ public class Status {
     public double progress;
     public double downloadSpeed;
     public double eta;
-    public double peers;
-    public double seeds;
-    public double connections;
+    public int peers;
+    public int seeds;
+    public int connections;
     public double uploadSpeed;
 
-    public static Status parseJSON(String json) {
+    public static Status parseJSON(String json) throws IllegalStateException {
         Gson gson = new Gson();
         return gson.fromJson(json, Status.class);
     }

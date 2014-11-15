@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -39,12 +40,16 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaList;
 import org.videolan.libvlc.Strings;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import pct.droid.PopcornApplication;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
+import pct.droid.streamer.Status;
+import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 
@@ -78,6 +83,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private LibVLC mLibVLC;
     private int mVideoWidth;
     private int mVideoHeight;
+    private int mStreamerProgress = 0;
     private final static int VideoSizeChanged = -1;
     private boolean mCanSeek = false, mOverlayVisible = true;
 
@@ -161,6 +167,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     protected void onDestroy() {
         super.onDestroy();
         releasePlayer();
+        ((PopcornApplication) getApplication()).stopStreamer();
         mAudioManager = null;
     }
 
@@ -442,6 +449,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void showOverlay() {
         if(!mOverlayVisible) {
+            setOverlayProgress();
+
             Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_in);
             controlLayout.setVisibility(View.VISIBLE);
             controlLayout.startAnimation(fadeOutAnim);
@@ -513,8 +522,22 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         LogUtils.d("Progress: " + length + "/" + time);
         controlBar.setMax(length);
         controlBar.setProgress(time);
+        controlBar.setSecondaryProgress(mStreamerProgress);
         if (time >= 0) currentTime.setText(Strings.millisToString(time));
         if (length >= 0) lengthTime.setText(Strings.millisToString(length));
+
+        try {
+            Status status = Status.parseJSON(FileUtils.getContentsAsString(((PopcornApplication) getApplication()).getStreamDir() + "/status.json"));
+            if(status != null) {
+                LogUtils.d("Status Progress: " + status.toString());
+                mStreamerProgress = (int) Math.floor(status.progress);
+                mStreamerProgress = (length / 100) * mStreamerProgress;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        LogUtils.d("StreamerProgress: " + mStreamerProgress);
+        controlBar.setSecondaryProgress(mStreamerProgress);
 
         return time;
     }
