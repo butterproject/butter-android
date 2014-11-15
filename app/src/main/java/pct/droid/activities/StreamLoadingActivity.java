@@ -62,6 +62,7 @@ public class StreamLoadingActivity extends BaseActivity {
                                 i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
                                 i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
                                 startActivity(i);
+                                finish();
                             }
                             break;
                     }
@@ -83,6 +84,7 @@ public class StreamLoadingActivity extends BaseActivity {
     private void updateStatus() {
         try {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
+            if(status == null) return;
             LogUtils.d(status.toString());
             int calculateProgress = (int)Math.floor(status.progress * 100);
             if(calculateProgress > 100) calculateProgress = 100;
@@ -107,13 +109,12 @@ public class StreamLoadingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: ask user if he wants to stop streaming or open video player OR add fixed videplayer using libvlc (by sv244)
+        mFileObserver.startWatching();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         mFileObserver.stopWatching();
-        getApp().stopStreamer();
     }
 }
