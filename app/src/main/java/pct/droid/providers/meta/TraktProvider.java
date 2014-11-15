@@ -71,6 +71,7 @@ public class TraktProvider extends BaseProvider {
     public class MetaData {
         public String title;
         public Integer year;
+        public String imdb_id;
         public Integer released;
         public String trailer;
         public Integer runtime;

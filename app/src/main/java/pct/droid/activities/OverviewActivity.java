@@ -40,7 +40,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private YTSProvider mProvider = new YTSProvider();
     private Integer mColumns = 2, mRetries = 0;
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
-    private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 4, mPreviousTotal = 0;
+    private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,6 +56,10 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         super.onCreate(savedInstanceState, R.layout.activity_overview);
         setSupportActionBar(toolbar);
 
+        //Intent i = new Intent(this, VideoPlayerActivity.class);
+        //i.putExtra(VideoPlayerActivity.LOCATION, "http://popcorn.se-bastiaan.eu/files/Grimm/Grimm.S04E03.The.Last.Fight.mp4");
+        //startActivity(i);
+
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
         } else {
@@ -64,6 +68,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         recyclerView.setHasFixedSize(true);
         mColumns = getResources().getInteger(R.integer.overview_cols);
+        mLoadingTreshold = mColumns * 3;
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -127,7 +132,6 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 @Override
                 public void run() {
                     mAdapter.setItems(items);
-                    emptyView.setVisibility(View.GONE);
                 }
             });
         }
@@ -228,16 +232,18 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mLoading = false;
                     mPreviousTotal = mTotalItemCount;
                     mAdapter.removeLoading();
+                    mPreviousTotal = mTotalItemCount = mLayoutManager.getItemCount();
                 }
             }
 
             if (!mEndOfListReached && !mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
-                mLoading = true;
                 HashMap<String, String> filters = mTaskFragment.getFilters();
                 filters.put("page", Integer.toString(mTaskFragment.getCurrentPage()));
                 mProvider.getList(mAdapter.getItems(), filters, mTaskFragment);
                 mTaskFragment.setFilters(filters);
                 mAdapter.addLoading();
+                mPreviousTotal = mTotalItemCount = mLayoutManager.getItemCount();
+                mLoading = true;
             }
         }
     };

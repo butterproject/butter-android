@@ -195,8 +195,10 @@ public class MovieDetailActivity extends BaseActivity {
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
 
-        if(mItem.runtime != null) {
+        if(mItem.runtime != null && mItem.runtime > 0) {
             runtimeText.setText(Integer.toString(mItem.runtime) + " " + getString(R.string.minutes));
+        } else {
+            runtimeText.setText("n/a " + getString(R.string.minutes));
         }
 
         if(mItem.synopsis != null) {
