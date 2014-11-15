@@ -17,6 +17,9 @@ import pct.droid.utils.LogUtils;
 
 public class StreamLoadingActivity extends BaseActivity {
 
+    public final static String STREAM_URL = "stream_url";
+    public final static String DATA = "video_data";
+
     private FileObserver mFileObserver;
     private Boolean mIntentStarted = false;
 
@@ -29,11 +32,11 @@ public class StreamLoadingActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_streamloading);
 
-        if(!getIntent().hasExtra("stream_url")) {
+        if(!getIntent().hasExtra(STREAM_URL) && !getIntent().hasExtra(DATA)) {
             finish();
         }
 
-        String streamUrl = getIntent().getStringExtra("stream_url");
+        String streamUrl = getIntent().getStringExtra(STREAM_URL);
 
         while(!getApp().isServiceBound()) {
             getApp().startService();
@@ -56,6 +59,7 @@ public class StreamLoadingActivity extends BaseActivity {
                             if(!mIntentStarted) {
                                 mIntentStarted = true;
                                 Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+                                i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
                                 i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
                                 startActivity(i);
                             }

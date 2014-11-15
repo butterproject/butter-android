@@ -99,9 +99,9 @@ public class MovieDetailActivity extends BaseActivity {
                     }
 
                     Intent i = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-                    i.putExtra("stream_url", streamUrl);
+                    i.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+                    i.putExtra(StreamLoadingActivity.DATA, mItem);
                     startActivity(i);
-
                     break;
             }
 

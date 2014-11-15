@@ -28,6 +28,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.videolan.libvlc.EventHandler;
@@ -36,20 +37,23 @@ import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcUtil;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaList;
+import org.videolan.libvlc.Strings;
 
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.providers.media.MediaProvider;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer, View.OnSystemUiVisibilityChangeListener {
-    public final static String TAG = "LibVLCAndroidSample/VideoActivity";
 
-    public final static String LOCATION = "pct.droid.activities.VideoPlayerActivity.location";
+    public final static String TAG = "LibVLCAndroidSample/VideoActivity";
+    public final static String LOCATION = "stream_url";
+    public final static String DATA = "video_data";
 
     @InjectView(R.id.videoSurface)
     SurfaceView videoSurface;
@@ -61,8 +65,13 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     SeekBar controlBar;
     @InjectView(R.id.playButton)
     ImageButton playButton;
+    @InjectView(R.id.currentTime)
+    TextView currentTime;
+    @InjectView(R.id.lengthTime)
+    TextView lengthTime;
     View decorView;
 
+    private MediaProvider.Video mVideo;
     private Handler mHandler;
     private String mFilePath;
     private SurfaceHolder mVideoSurfaceHolder;
@@ -109,7 +118,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(this), toolbar.getPaddingRight(), toolbar.getPaddingBottom());
         }
 
-        getSupportActionBar().setTitle("Now Playing");
+        mVideo = getIntent().getParcelableExtra(DATA);
+        getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Receive path to play from intent
@@ -503,12 +513,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         LogUtils.d("Progress: " + length + "/" + time);
         controlBar.setMax(length);
         controlBar.setProgress(time);
-        /*if (mSysTime != null)
-            mSysTime.setText(DateFormat.getTimeFormat(this).format(new Date(System.currentTimeMillis())));
-        if (time >= 0) mTime.setText(Strings.millisToString(time));
-        if (length >= 0) mLength.setText(mDisplayRemainingTime && length > 0
-                ? "- " + Strings.millisToString(length - time)
-                : Strings.millisToString(length));*/
+        if (time >= 0) currentTime.setText(Strings.millisToString(time));
+        if (length >= 0) lengthTime.setText(Strings.millisToString(length));
 
         return time;
     }
@@ -516,13 +522,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private void createPlayer(String media) {
         releasePlayer();
         try {
-            if (media.length() > 0) {
-                Toast toast = Toast.makeText(this, media, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
-                        0);
-                toast.show();
-            }
-
             // Create a new media player
             mLibVLC = LibVLC.getInstance();
             mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_AUTOMATIC);
