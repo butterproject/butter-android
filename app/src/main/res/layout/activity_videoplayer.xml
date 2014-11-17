@@ -87,7 +87,7 @@
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_rewind"
                 android:scaleType="centerInside"
-                android:onClick="seekForwardClick" />
+                android:onClick="seekBackwardClick" />
             
             <ImageButton
                 android:layout_width="48dp"
