@@ -53,4 +53,12 @@ public class LogUtils {
         }
     }
 
+    public static void i(Object message) {
+        i(Constants.LOG_TAG, message);
+    }
+
+    public static void i(Object tag, Object message) {
+        Log.i(tag.toString(), message.toString());
+    }
+
 }

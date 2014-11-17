@@ -137,7 +137,6 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        LogUtils.d("YTS query: " + query);
         requestBuilder.url(mApiUrl + "list.json?" + query);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
@@ -150,7 +149,6 @@ public class YTSProvider extends MediaProvider {
             public void onResponse(Response response) throws IOException {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    LogUtils.d(responseStr);
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
                     if(result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
