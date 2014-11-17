@@ -34,4 +34,10 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
 
+    <string name="volume">Volume</string>
+    <string name="brightness">Brightness</string>
+
+    <string name="hardware_acceleration_error_title">HW acceleration error</string>
+    <string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
+
 </resources>

@@ -1,13 +1,14 @@
 package pct.droid.activities;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -15,14 +16,12 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -40,7 +39,6 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaList;
 import org.videolan.libvlc.Strings;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
@@ -66,6 +64,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     Toolbar toolbar;
     @InjectView(R.id.controlLayout)
     RelativeLayout controlLayout;
+    @InjectView(R.id.playerInfo)
+    TextView playerInfo;
     @InjectView(R.id.controlBar)
     SeekBar controlBar;
     @InjectView(R.id.playButton)
@@ -76,6 +76,9 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     TextView lengthTime;
     View decorView;
 
+    private static final int FADE_OUT_OVERLAY = 5000;
+    private static final int FADE_OUT_INFO = 1000;
+
     private MediaProvider.Video mVideo;
     private Handler mHandler;
     private String mFilePath;
@@ -85,7 +88,10 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private int mVideoHeight;
     private int mStreamerProgress = 0;
     private final static int VideoSizeChanged = -1;
-    private boolean mCanSeek = false, mOverlayVisible = true;
+    private boolean mCanSeek = false;
+    private boolean mOverlayVisible = true;
+    private boolean mDisabledHardwareAcceleration = false;
+    private int mPreviousHardwareAccelerationMode;
 
     private static final int TOUCH_NONE = 0;
     private static final int TOUCH_VOLUME = 1;
@@ -132,7 +138,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         Intent intent = getIntent();
         mFilePath = intent.getExtras().getString(LOCATION);
 
-        LogUtils.d(TAG, "Player started: " + mFilePath);
+        LogUtils.i("Player started: " + mFilePath);
 
         mVideoSurfaceHolder = videoSurface.getHolder();
         mVideoSurfaceHolder.addCallback(mVideoSurfaceCallback);
@@ -167,6 +173,10 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     protected void onDestroy() {
         super.onDestroy();
         releasePlayer();
+
+        if (mDisabledHardwareAcceleration)
+            mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
+
         ((PopcornApplication) getApplication()).stopStreamer();
         mAudioManager = null;
     }
@@ -323,7 +333,34 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
     @Override
     public void eventHardwareAccelerationError() {
-
+        mLibVLC.stop();
+        AlertDialog dialog = new AlertDialog.Builder(VideoPlayerActivity.this)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        mDisabledHardwareAcceleration = true;
+                        mPreviousHardwareAccelerationMode = mLibVLC.getHardwareAcceleration();
+                        mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
+                        createPlayer(mFilePath);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
+                .setTitle(R.string.hardware_acceleration_error_title)
+                .setMessage(R.string.hardware_acceleration_error_message)
+                .create();
+        if(!isFinishing())
+            dialog.show();
     }
 
     private void doSeekTouch(float coef, float gesturesize, boolean seek) {
@@ -352,10 +389,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             mLibVLC.setTime(time + jump);
 
         if (length > 0) {
-            //Show the jump's size
-            //showInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "",  Strings.millisToString(jump), Strings.millisToString(time + jump)), 1000);
-        } else {
-            //showInfo(R.string.unseekable_stream, 1000);
+            showInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "",  Strings.millisToString(jump), Strings.millisToString(time + jump)));
         }
     }
 
@@ -373,7 +407,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private void setAudioVolume(int vol) {
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
         mTouchAction = TOUCH_VOLUME;
-        //showInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol),1000);
+        showInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol));
     }
 
     @TargetApi(android.os.Build.VERSION_CODES.FROYO)
@@ -414,7 +448,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         lp.screenBrightness =  Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
         // Set Brightness
         getWindow().setAttributes(lp);
-        //showInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness*15),1000);
+        showInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness*15));
     }
 
     public void playPauseClick(View v) {
@@ -466,12 +500,11 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             }
 
             mLastSystemShowTime = System.currentTimeMillis();
-        } else {
-            mHandler.removeCallbacks(mOverlayHideRunnable);
         }
 
         mOverlayVisible = true;
-        mHandler.postDelayed(mOverlayHideRunnable, 5000);
+        mHandler.removeCallbacks(mOverlayHideRunnable);
+        mHandler.postDelayed(mOverlayHideRunnable, FADE_OUT_OVERLAY);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -501,6 +534,21 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         return mOverlayVisible;
     }
 
+    private void showInfo(String text) {
+        playerInfo.setVisibility(View.VISIBLE);
+        playerInfo.setText(text);
+        mHandler.removeCallbacks(mInfoHideRunnable);
+        mHandler.postDelayed(mInfoHideRunnable, FADE_OUT_INFO);
+    }
+
+    private void hideInfo() {
+        if (playerInfo.getVisibility() == View.VISIBLE) {
+            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
+            playerInfo.startAnimation(fadeOutAnim);
+        }
+        playerInfo.setVisibility(View.INVISIBLE);
+    }
+
     public void updatePlayerViews() {
         if(mLibVLC == null)
             return;
@@ -519,7 +567,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         int time = (int) mLibVLC.getTime();
         int length = (int) mLibVLC.getLength();
 
-        LogUtils.d("Progress: " + length + "/" + time);
         controlBar.setMax(length);
         controlBar.setProgress(time);
         controlBar.setSecondaryProgress(mStreamerProgress);
@@ -529,14 +576,13 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         try {
             Status status = Status.parseJSON(FileUtils.getContentsAsString(((PopcornApplication) getApplication()).getStreamDir() + "/status.json"));
             if(status != null) {
-                LogUtils.d("Status Progress: " + status.toString());
                 mStreamerProgress = (int) Math.floor(status.progress);
                 mStreamerProgress = (length / 100) * mStreamerProgress;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LogUtils.d("StreamerProgress: " + mStreamerProgress);
+
         controlBar.setSecondaryProgress(mStreamerProgress);
 
         return time;
@@ -612,7 +658,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     if(player.isOverlayVisible()) player.setOverlayProgress();
                     break;
                 case EventHandler.MediaPlayerPositionChanged:
-                    LogUtils.d("PlayerData: " + b.toString());
                     player.mCanSeek = true;
                     break;
                 case EventHandler.MediaPlayerPlaying:
@@ -652,6 +697,13 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         @Override
         public void run() {
             hideOverlay();
+        }
+    };
+
+    private Runnable mInfoHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hideInfo();
         }
     };
 }
