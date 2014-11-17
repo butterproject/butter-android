@@ -110,4 +110,16 @@
         android:background="@color/player_overlay"
         android:fitsSystemWindows="true" />
 
+    <TextView
+        android:id="@+id/playerInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:padding="@dimen/player_controls_distance"
+        android:background="@drawable/player_controls_background"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:visibility="invisible" />
+
 </RelativeLayout>
