@@ -2,14 +2,14 @@ package pct.droid.utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
+import android.os.StatFs;
 
 public class StorageUtils {
 
@@ -17,30 +17,14 @@ public class StorageUtils {
     public static final String EXTERNAL_SD_CARD = "externalSdCard";
 
     /**
-     * @return True if the external storage is available. False otherwise.
+     * @return <code>true</code> if external storage is available and writable. <code>false</code> otherwise.
      */
-    public static boolean isAvailable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static String getSdCardPath() {
-        return Environment.getExternalStorageDirectory().getPath() + "/";
-    }
-
-    /**
-     * @return True if the external storage is writable. False otherwise.
-     */
-    public static boolean isWritable() {
+    public static boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             return true;
         }
         return false;
-
     }
 
     /**
@@ -136,5 +120,97 @@ public class StorageUtils {
             map.put(SD_CARD, Environment.getExternalStorageDirectory());
         }
         return map;
+    }
+
+    /**
+     * @return Available internal memory
+     */
+    public static int getAvailableInternalMemorySize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        int blockSize = stat.getBlockSize();
+        int availableBlocks = stat.getAvailableBlocks();
+        return availableBlocks * blockSize;
+    }
+
+    /**
+     * @return Total internal memory
+     */
+    public static int getTotalInternalMemorySize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        int blockSize = stat.getBlockSize();
+        int totalBlocks = stat.getBlockCount();
+        return totalBlocks * blockSize;
+    }
+
+    /**
+     * @return Available external memory
+     */
+    public static int getAvailableExternalMemorySize() {
+        if (isExternalStorageAvailable()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            int blockSize = stat.getBlockSize();
+            int availableBlocks = stat.getAvailableBlocks();
+            return availableBlocks * blockSize;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @return Total external memory
+     */
+    public static int getTotalExternalMemorySize() {
+        if (isExternalStorageAvailable()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            int blockSize = stat.getBlockSize();
+            int totalBlocks = stat.getBlockCount();
+            return totalBlocks * blockSize;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Get ideal cache directory based on available
+     * @return
+     */
+    public static File getIdealCacheDirectory(Context context) {
+        if(getTotalExternalMemorySize() < getTotalInternalMemorySize()) {
+            return context.getCacheDir();
+        }
+        return context.getExternalCacheDir();
+    }
+
+    /**
+     * Format size in string form
+     * @param size Size in bytes
+     * @return Size in stinrg format with suffix
+     */
+    public static String formatSize(int size) {
+        String suffix = null;
+
+        if (size >= 1024) {
+            suffix = "KB";
+            size /= 1024;
+            if (size >= 1024) {
+                suffix = "MB";
+                size /= 1024;
+            }
+        }
+
+        StringBuilder resultBuffer = new StringBuilder(Long.toString(size));
+
+        int commaOffset = resultBuffer.length() - 3;
+        while (commaOffset > 0) {
+            resultBuffer.insert(commaOffset, ',');
+            commaOffset -= 3;
+        }
+
+        if (suffix != null) resultBuffer.append(suffix);
+        return resultBuffer.toString();
     }
 }
