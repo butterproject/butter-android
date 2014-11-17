@@ -43,7 +43,6 @@ public class StreamerService extends Service {
         @Override
         public void handleMessage(Message msg) {
             try {
-                LogUtils.d("handleMessage: " + msg.what);
                 switch (msg.what) {
                     case MSG_RUN_SCRIPT:
                         Bundle args = msg.getData();

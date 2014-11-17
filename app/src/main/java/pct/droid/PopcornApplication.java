@@ -40,7 +40,7 @@ public class PopcornApplication extends Application {
         mCacheDir = directory.toString() + "/";
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.d("Chosen cache location: " + mCacheDir);
+        LogUtils.i("Chosen cache location: " + mCacheDir);
     }
 
     public Boolean isServiceBound() {
@@ -54,7 +54,7 @@ public class PopcornApplication extends Application {
     public void startStreamer(String streamUrl) {
         if (!mBound) return;
 
-        LogUtils.d("Start streamer: " + streamUrl);
+        LogUtils.i("Start streamer: " + streamUrl);
 
         Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
