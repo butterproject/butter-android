@@ -2,8 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string name="app_name">Popcorn Time</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="disable_subs">Disable subtitles</string>
 
     <string name="no_connection">No connection</string>
     <string name="no_connection_desc">We could not connect to the selected Popcorn Time instance, make sure Popcorn Time (v0.3.3+) is running and check your settings and internet connection.</string>
@@ -20,9 +18,10 @@
     <string name="watched">Toggle watched</string>
     <string name="fullscreen">Toggle fullscreen</string>
     <string name="search">Search</string>
-    <string name="subs">Select subtitles</string>
-    <string name="player">Select video player</string>
-    <string name="quality">Toggle quality</string>
+    <string name="disable_subs">Disable subtitles</string>
+    <string name="subtitles">Subtitles</string>
+    <string name="player">Video player</string>
+    <string name="quality">Quality</string>
     <string name="next_season">Next season</string>
     <string name="prev_season">Previous season</string>
     <string name="forward">Seek forward</string>
@@ -33,7 +32,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
 
     <string name="volume">Volume</string>
     <string name="brightness">Brightness</string>

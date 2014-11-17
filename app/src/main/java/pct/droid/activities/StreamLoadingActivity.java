@@ -19,6 +19,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
     public final static String STREAM_URL = "stream_url";
     public final static String DATA = "video_data";
+    public final static String QUALITY = "quality";
 
     private FileObserver mFileObserver;
     private Boolean mIntentStarted = false;
@@ -61,6 +62,7 @@ public class StreamLoadingActivity extends BaseActivity {
                                 Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
                                 i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
                                 i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
+                                i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
                                 startActivity(i);
                                 finish();
                             }
@@ -99,7 +101,12 @@ public class StreamLoadingActivity extends BaseActivity {
                     }
                 });
             } else {
-                progressText.setText("Streaming"); // TODO: translation (by sv244)
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressText.setText("Streaming"); // TODO: translation (by sv244)
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();

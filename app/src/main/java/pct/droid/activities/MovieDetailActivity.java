@@ -2,15 +2,11 @@ package pct.droid.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -22,29 +18,28 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
-
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.providers.media.YTSProvider;
 import pct.droid.utils.ActionBarBackground;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 
-public class MovieDetailActivity extends BaseActivity {
+public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener {
 
     private YTSProvider.Video mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
+    private String mQuality;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -72,6 +67,8 @@ public class MovieDetailActivity extends BaseActivity {
     LinearLayout synopsisBlock;
     @InjectView(R.id.qualityBlock)
     LinearLayout qualityBlock;
+    @InjectView(R.id.qualityText)
+    TextView qualityText;
     //@InjectView(R.id.favouriteBlock)
     //LinearLayout favouriteBlock;
     @InjectView(R.id.trailerBlock)
@@ -82,24 +79,28 @@ public class MovieDetailActivity extends BaseActivity {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Bundle b;
             switch (v.getId()) {
                 case R.id.synopsisBlock:
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
-                    Bundle b = new Bundle();
+                    b = new Bundle();
                     b.putString("text", mItem.synopsis);
                     synopsisDialogFragment.setArguments(b);
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
+                case R.id.qualityBlock:
+                    QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
+                    b = new Bundle();
+                    b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
+                    qualitySelectorDialogFragment.setArguments(b);
+                    qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    break;
                 case R.id.playButton:
-                    final String streamUrl;
-                    if(mItem.torrents.containsKey("720p")) {
-                        streamUrl = mItem.torrents.get("720p").magnet;
-                    } else {
-                        streamUrl = mItem.torrents.get("1080p").magnet;
-                    }
+                    final String streamUrl = mItem.torrents.get(mQuality).magnet;
 
                     Intent i = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
                     i.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+                    i.putExtra(StreamLoadingActivity.QUALITY, mQuality);
                     i.putExtra(StreamLoadingActivity.DATA, mItem);
                     startActivity(i);
                     break;
@@ -260,6 +261,15 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(mQuality == null) {
+            String[] keys = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
+            onQualitySelected(keys[0]);
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
     }
@@ -278,5 +288,11 @@ public class MovieDetailActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onQualitySelected(String quality) {
+        mQuality = quality;
+        qualityText.setText(mQuality);
     }
 }

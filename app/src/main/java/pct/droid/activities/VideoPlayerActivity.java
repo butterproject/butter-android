@@ -57,6 +57,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     public final static String TAG = "LibVLCAndroidSample/VideoActivity";
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
+    public final static String QUALITY = "quality";
 
     @InjectView(R.id.videoSurface)
     SurfaceView videoSurface;
@@ -131,7 +132,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         }
 
         mVideo = getIntent().getParcelableExtra(DATA);
-        getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title);
+        getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title + " (" + getIntent().getStringExtra(QUALITY) + ")");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Receive path to play from intent

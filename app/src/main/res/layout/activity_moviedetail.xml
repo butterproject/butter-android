@@ -275,6 +275,7 @@
                             android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_action_quality" />
                         <TextView
+                            android:id="@+id/qualityText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/detail_margin"
@@ -307,12 +308,13 @@
                             android:layout_marginRight="@dimen/detail_icon_margin"
                             android:src="@drawable/ic_av_subs" />
                         <TextView
+                            android:id="@+id/subtitlesText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/detail_margin"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            android:text="@string/subs"
+                            android:text="@string/subtitles"
                             android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
                     </LinearLayout>
