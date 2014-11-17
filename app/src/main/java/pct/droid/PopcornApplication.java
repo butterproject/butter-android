@@ -17,6 +17,7 @@ import pct.droid.services.StreamerService;
 import java.io.File;
 import java.util.List;
 
+import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.StorageUtils;
 
@@ -85,8 +86,8 @@ public class PopcornApplication extends Application {
         }
 
         File torrentPath = new File(mCacheDir);
-        File tmpPath = new File(mCacheDir, "/tmp/");
-        torrentPath.delete();
+        File tmpPath = new File(mCacheDir, "tmp");
+        FileUtils.recursiveDelete(torrentPath);
         torrentPath.mkdirs();
         tmpPath.mkdirs();
 
