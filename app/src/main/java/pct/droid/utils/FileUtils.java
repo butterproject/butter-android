@@ -30,4 +30,14 @@ public class FileUtils {
         return sb.toString();
     }
 
+    public static void recursiveDelete(File file) {
+        if(file.isDirectory()) {
+            String[] children = file.list();
+            for (int i = 0; i < children.length; i++) {
+                recursiveDelete(new File(file, children[i]));
+            }
+        }
+        file.delete();
+    }
+
 }
