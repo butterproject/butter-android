@@ -167,24 +167,32 @@ public class YTSProvider extends MediaProvider {
                         TraktProvider traktProvider = new TraktProvider();
                         TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
 
+                        if(metaDatas.length == formattedData.size())
                         for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
                             Video video = (Video) formattedData.get(i);
-                            TraktProvider.MetaData meta = metaDatas[index];
-                            if(video.imdbId.equals(meta.imdb_id)) {
-                                if (meta.images.containsKey("poster")) {
-                                    video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                    video.fullImage = meta.images.get("poster");
-                                }
 
-                                if (meta.images.containsKey("fanart")) {
-                                    video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                                }
+                            if(metaDatas.length > index) {
+                                TraktProvider.MetaData meta = metaDatas[index];
+                                if (video.imdbId.equals(meta.imdb_id)) {
+                                    if (meta.images.containsKey("poster")) {
+                                        video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                        video.fullImage = meta.images.get("poster");
+                                    }
 
-                                if (meta.title != null) {
-                                    video.title = meta.title;
+                                    if (meta.images.containsKey("fanart")) {
+                                        video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                    }
+
+                                    if (meta.title != null) {
+                                        video.title = meta.title;
+                                    }
+                                    formattedData.set(i, video);
+                                    index++;
+                                } else {
+                                    video.fullImage = video.image;
+                                    video.headerImage = video.image;
+                                    formattedData.set(i, video);
                                 }
-                                formattedData.set(i, video);
-                                index++;
                             } else {
                                 video.fullImage = video.image;
                                 video.headerImage = video.image;
