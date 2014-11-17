@@ -26,6 +26,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import pct.droid.utils.LogUtils;
+import pct.droid.utils.StorageUtils;
 
 public class StreamerService extends Service {
 
@@ -108,7 +109,7 @@ public class StreamerService extends Service {
             AssetManager assets = StreamerService.this.getAssets();
 
             //File appPath = NodeJSService.this.getDir(NODEJS_PATH, Context.MODE_PRIVATE);
-            File appPath = StreamerService.this.getExternalCacheDir();
+            File appPath = StorageUtils.getIdealCacheDirectory(StreamerService.this);
 
             File js = new File(appPath, NODEJS_PATH + "/" + mFileName);
             if (!js.exists()) {
