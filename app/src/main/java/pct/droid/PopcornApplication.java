@@ -33,12 +33,13 @@ public class PopcornApplication extends Application {
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
-        File path = PopcornApplication.this.getExternalCacheDir();
+        File path = StorageUtils.getIdealCacheDirectory(this);
         File directory = new File(path, "/torrents/");
-        directory.mkdirs();
         File temp = new File(path, "/torrents/tmp");
-        temp.mkdirs();
         mCacheDir = directory.toString() + "/";
+        FileUtils.recursiveDelete(new File(mCacheDir));
+        directory.mkdirs();
+        temp.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         LogUtils.i("Chosen cache location: " + mCacheDir);
