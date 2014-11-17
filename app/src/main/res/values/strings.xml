@@ -33,6 +33,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
+    <string name="ok">Ok</string>
 
     <string name="volume">Volume</string>
     <string name="brightness">Brightness</string>
