@@ -19,12 +19,12 @@
             <RelativeLayout
                 android:id="@+id/parallax"
                 android:layout_width="match_parent"
-                android:layout_height="228dp"
+                android:layout_height="@dimen/parallax_header_height"
                 android:background="@color/overlay">
                 <ImageView
                     android:id="@+id/popcornLogo"
                     android:layout_width="match_parent"
-                    android:layout_height="228dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
                     android:layout_centerInParent="true"
