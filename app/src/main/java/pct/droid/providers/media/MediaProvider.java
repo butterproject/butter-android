@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pct.droid.providers.BaseProvider;
+import pct.droid.providers.subs.SubsProvider;
 
 public abstract class MediaProvider extends BaseProvider {
 
@@ -20,6 +21,7 @@ public abstract class MediaProvider extends BaseProvider {
         public String rating;
         public String image;
         public String type;
+        public HashMap<String, HashMap<String, String>> subtitles;
 
         public Video() {
 
@@ -33,6 +35,11 @@ public abstract class MediaProvider extends BaseProvider {
             rating = in.readString();
             image = in.readString();
             type = in.readString();
+            if (in.readByte() == 0x01) {
+                in.readMap(subtitles, subtitles.getClass().getClassLoader());
+            } else {
+                subtitles = null;
+            }
         }
 
         @Override
@@ -49,6 +56,12 @@ public abstract class MediaProvider extends BaseProvider {
             dest.writeString(rating);
             dest.writeString(image);
             dest.writeString(type);
+            if (subtitles == null) {
+                dest.writeByte((byte) (0x00));
+            } else {
+                dest.writeByte((byte) (0x01));
+                dest.writeMap(subtitles);
+            }
         }
 
         @SuppressWarnings("unused")
