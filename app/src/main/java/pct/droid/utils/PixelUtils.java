@@ -1,5 +1,6 @@
 package pct.droid.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ public class PixelUtils {
         return statusBarHeight;
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -53,6 +55,7 @@ public class PixelUtils {
         return display.getWidth();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
