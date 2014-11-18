@@ -570,6 +570,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         controlBar.setMax(length);
         controlBar.setProgress(time);
+        controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         controlBar.setSecondaryProgress(mStreamerProgress);
         if (time >= 0) currentTime.setText(Strings.millisToString(time));
         if (length >= 0) lengthTime.setText(Strings.millisToString(length));
@@ -577,13 +578,20 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         try {
             Status status = Status.parseJSON(FileUtils.getContentsAsString(((PopcornApplication) getApplication()).getStreamDir() + "/status.json"));
             if(status != null) {
-                mStreamerProgress = (int) Math.floor(status.progress);
-                mStreamerProgress = (length / 100) * mStreamerProgress;
+                LogUtils.d("status.progress: " + status.progress);
+                int newProgress = (int) Math.floor(status.progress);
+                newProgress = (length / 100) * newProgress;
+                if(mStreamerProgress < newProgress) {
+                    mStreamerProgress = newProgress;
+                }
             }
+            LogUtils.d("StreamerProgress: " + mStreamerProgress);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         controlBar.setSecondaryProgress(mStreamerProgress);
 
         return time;
