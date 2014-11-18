@@ -185,7 +185,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         //favouriteBlock.setOnClickListener(mOnClickListener);
         qualityBlock.setOnClickListener(mOnClickListener);
 
-        mParallaxHeight = PixelUtils.getPixelsFromDp(this, 228);
+        mParallaxHeight = getResources().getDimensionPixelSize(R.dimen.parallax_header_height);
         mToolbarHeight = toolbar.getHeight();
         mHeaderHeight = mParallaxHeight - mToolbarHeight;
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
