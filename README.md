@@ -1,4 +1,4 @@
-Popcorn Time for Android
+Popcorn Time for Android  [![Build Status](http://ci.popcorntime.io/buildStatus/icon?job=Popcorn-Android)](http://ci.popcorntime.io/job/Popcorn-Android/)
 ----
 
 ## TODO
