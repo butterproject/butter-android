@@ -3,12 +3,10 @@ package pct.droid.adapters;
 import android.app.Activity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,7 +17,6 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
-import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 
 

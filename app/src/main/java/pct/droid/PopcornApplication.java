@@ -12,11 +12,10 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import pct.droid.services.StreamerService;
-
 import java.io.File;
 import java.util.List;
 
+import pct.droid.services.StreamerService;
 import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.StorageUtils;

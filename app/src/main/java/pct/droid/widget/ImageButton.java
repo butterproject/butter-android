@@ -2,7 +2,6 @@ package pct.droid.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 
 import pct.droid.utils.CheatSheet;
 

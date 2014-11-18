@@ -3,7 +3,6 @@ package pct.droid.providers.media;
 import android.accounts.NetworkErrorException;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
@@ -13,12 +12,10 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import pct.droid.providers.meta.TraktProvider;
-import pct.droid.utils.LogUtils;
 
 public class YTSProvider extends MediaProvider {
 

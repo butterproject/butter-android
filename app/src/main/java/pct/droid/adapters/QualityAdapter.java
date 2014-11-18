@@ -7,15 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.gson.internal.LinkedTreeMap;
-
-import java.util.ArrayList;
-import java.util.Locale;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.R;
-import pct.droid.utils.LogUtils;
 
 public class QualityAdapter extends BaseAdapter {
 

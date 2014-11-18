@@ -11,7 +11,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.List;
 
 public abstract class BaseProvider {
