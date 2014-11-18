@@ -1,15 +1,15 @@
 package pct.droid.utils;
 
+import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
-import android.content.Context;
-import android.os.Environment;
-import android.os.StatFs;
 
 public class StorageUtils {
 
