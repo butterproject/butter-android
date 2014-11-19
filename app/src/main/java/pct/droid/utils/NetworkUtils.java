@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class NetworkUtils {
 
@@ -59,7 +60,7 @@ public class NetworkUtils {
                     List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
                     for (InetAddress addr : addrs) {
                         if (!addr.isLoopbackAddress()) {
-                            String sAddr = addr.getHostAddress().toUpperCase();
+                            String sAddr = addr.getHostAddress().toUpperCase(Locale.US);
                             boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
                             if (useIPv4) {
                                 if (isIPv4)

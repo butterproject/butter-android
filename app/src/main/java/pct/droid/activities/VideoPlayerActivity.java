@@ -112,6 +112,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private long mLastSystemShowTime = System.currentTimeMillis();
 
     @Override
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoplayer);
@@ -481,7 +482,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         showOverlay();
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void showOverlay() {
         if(!mOverlayVisible) {
             setOverlayProgress();
@@ -508,7 +509,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         mHandler.postDelayed(mOverlayHideRunnable, FADE_OUT_OVERLAY);
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void hideOverlay() {
         // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
         if(mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
