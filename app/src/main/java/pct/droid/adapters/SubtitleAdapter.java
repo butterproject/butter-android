@@ -16,7 +16,7 @@ public class SubtitleAdapter extends StringArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        super.getView(position, convertView, parent);
+        convertView = super.getView(position, convertView, parent);
         ViewHolder holder = (ViewHolder) convertView.getTag();
 
         String language = getItem(position);
