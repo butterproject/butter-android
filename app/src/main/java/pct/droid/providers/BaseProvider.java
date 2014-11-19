@@ -17,6 +17,7 @@ public abstract class BaseProvider {
 
     protected OkHttpClient mClient = new OkHttpClient();
     protected Gson mGson = new Gson();
+    protected Call mCurrentCall;
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
     public static final MediaType MEDIA_TYPE_XML = MediaType.parse("application/xml");
 
@@ -25,9 +26,15 @@ public abstract class BaseProvider {
     }
 
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        Call call = mClient.newCall(request);
-        if(requestCallback != null) call.enqueue(requestCallback);
-        return call;
+        mCurrentCall = mClient.newCall(request);
+        if(requestCallback != null) mCurrentCall.enqueue(requestCallback);
+        return mCurrentCall;
+    }
+
+    public void cancel() {
+        if(mCurrentCall != null) {
+            mCurrentCall.cancel();
+        }
     }
 
     protected String buildQuery(List<BasicNameValuePair> valuePairs) {

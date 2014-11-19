@@ -3,13 +3,10 @@ package pct.droid.providers.media;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.squareup.okhttp.Call;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import pct.droid.providers.BaseProvider;
-import pct.droid.providers.subs.SubsProvider;
 
 public abstract class MediaProvider extends BaseProvider {
 
@@ -128,12 +125,12 @@ public abstract class MediaProvider extends BaseProvider {
         };
     }
 
-    public Call getList(HashMap<String, String> filters, Callback callback) {
-        return getList(null, filters, callback);
+    public void getList(HashMap<String, String> filters, Callback callback) {
+        getList(null, filters, callback);
     }
 
-    public abstract Call getList(ArrayList<MediaProvider.Video> currentList, HashMap<String, String> filters, Callback callback);
-    public abstract Call getDetail(String torrentId, Callback callback);
+    public abstract void getList(ArrayList<MediaProvider.Video> currentList, HashMap<String, String> filters, Callback callback);
+    public abstract void getDetail(String torrentId, Callback callback);
 
     public interface Callback {
         public void onSuccess(ArrayList<Video> items);

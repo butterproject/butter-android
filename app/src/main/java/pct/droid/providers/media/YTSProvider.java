@@ -91,7 +91,7 @@ public class YTSProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public Call getList(final ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
+    public void getList(final ArrayList<MediaProvider.Video> existingList, HashMap<String, String> filters, final Callback callback) {
         final ArrayList<MediaProvider.Video> currentList;
         if(existingList == null) {
             currentList = new ArrayList<MediaProvider.Video>();
@@ -136,10 +136,21 @@ public class YTSProvider extends MediaProvider {
         String query = buildQuery(params);
         requestBuilder.url(mApiUrl + "list.json?" + query);
 
+        fetchList(currentList, requestBuilder, callback);
+    }
+
+    private Call fetchList(final ArrayList<MediaProvider.Video> currentList, final Request.Builder requestBuilder, final Callback callback) {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                callback.onFailure(e);
+                String url = requestBuilder.build().urlString();
+                if(url.equals(mMirrorApiUrl)) {
+                    callback.onFailure(e);
+                } else {
+                    url = url.replace(mApiUrl, mMirrorApiUrl);
+                    requestBuilder.url(url);
+                    fetchList(currentList, requestBuilder, callback);
+                }
             }
 
             @Override
@@ -165,53 +176,53 @@ public class YTSProvider extends MediaProvider {
                         TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
 
                         if(metaDatas.length == formattedData.size())
-                        for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
-                            Video video = (Video) formattedData.get(i);
+                            for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
+                                Video video = (Video) formattedData.get(i);
 
-                            if(metaDatas.length > index) {
-                                TraktProvider.MetaData meta = metaDatas[index];
-                                if (video.imdbId.equals(meta.imdb_id)) {
-                                    if (meta.images.containsKey("poster")) {
-                                        video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                        video.fullImage = meta.images.get("poster");
-                                    }
+                                if(metaDatas.length > index) {
+                                    TraktProvider.MetaData meta = metaDatas[index];
+                                    if (video.imdbId.equals(meta.imdb_id)) {
+                                        if (meta.images.containsKey("poster")) {
+                                            video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                            video.fullImage = meta.images.get("poster");
+                                        }
 
-                                    if (meta.images.containsKey("fanart")) {
-                                        video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                                    }
+                                        if (meta.images.containsKey("fanart")) {
+                                            video.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                        }
 
-                                    if (meta.title != null) {
-                                        video.title = meta.title;
+                                        if (meta.title != null) {
+                                            video.title = meta.title;
+                                        }
+                                        formattedData.set(i, video);
+                                        index++;
+                                    } else {
+                                        video.fullImage = video.image;
+                                        video.headerImage = video.image;
+                                        formattedData.set(i, video);
                                     }
-                                    formattedData.set(i, video);
-                                    index++;
                                 } else {
                                     video.fullImage = video.image;
                                     video.headerImage = video.image;
                                     formattedData.set(i, video);
                                 }
-                            } else {
-                                video.fullImage = video.image;
-                                video.headerImage = video.image;
-                                formattedData.set(i, video);
                             }
-                        }
 
                         callback.onSuccess(currentList);
+                        return;
                     }
-                } else {
-                    callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
+                callback.onFailure(new NetworkErrorException(response.body().string()));
             }
         });
     }
 
     @Override
-    public Call getDetail(String imdbId, final Callback callback) {
+    public void getDetail(String imdbId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
 
-        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 callback.onFailure(e);
@@ -222,7 +233,7 @@ public class YTSProvider extends MediaProvider {
                 if(response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    if(result.status != null && result.status.equals("fail")) {
+                    if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
                         ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn();
@@ -273,10 +284,10 @@ public class YTSProvider extends MediaProvider {
                         }
 
                         callback.onSuccess(formattedData);
+                        return;
                     }
-                } else {
-                    callback.onFailure(new NetworkErrorException(response.body().string()));
                 }
+                callback.onFailure(new NetworkErrorException(response.body().string()));
             }
         });
     }

@@ -1,15 +1,22 @@
 package pct.droid.providers.subs;
 
+import android.accounts.NetworkErrorException;
+
 import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class YSubsProvider extends SubsProvider {
 
     private String mApiUrl = "http://api.yifysubtitles.com/subs/";
-    private String mApiMirror = "http://api.ysubs.com/subs/";
+    private String mMirrorApiUrl = "http://api.ysubs.com/subs/";
     private String mPrefix = "http://www.yifysubtitles.com/";
     private HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
+    private Call mCurrentCall;
     
     public YSubsProvider() {
         mLanguageMapping.put("albanian", "sq");
@@ -56,8 +63,49 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public Call getList(String[] imdbIds, Callback callback) {
-        return null;
+    public void getList(String[] imdbIds, Callback callback) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String imdbId : imdbIds) {
+            stringBuilder.append(imdbId);
+            if(!imdbId.equals(imdbIds[imdbIds.length - 1])) {
+                stringBuilder.append("-");
+            }
+        }
+
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(mApiUrl + stringBuilder.toString());
+
+        fetch(requestBuilder, callback);
+    }
+
+    private void fetch(final Request.Builder requestBuilder, final SubsProvider.Callback callback) {
+        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                String url = requestBuilder.build().urlString();
+                if(url.equals(mMirrorApiUrl)) {
+                    callback.onFailure(e);
+                } else {
+                    url = url.replace(mApiUrl, mMirrorApiUrl);
+                    requestBuilder.url(url);
+                    fetch(requestBuilder, callback);
+                }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
+                    if(result.success) {
+                        callback.onSuccess(result.formatForPopcorn());
+                        return;
+                    }
+                }
+                callback.onFailure(new NetworkErrorException(response.body().string()));
+            }
+        });
     }
 
     private class YSubsResponse {
@@ -81,7 +129,7 @@ public class YSubsProvider extends SubsProvider {
                     for(HashMap<String, Object> sub : subMap) {
                         int itemRating = (Integer)sub.get("rating");
                         if(currentRating < itemRating) {
-                            currentSub = (String) sub.get("url");
+                            currentSub = mPrefix + sub.get("url");
                             currentRating = itemRating;
                         }
                     }

@@ -36,7 +36,6 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
-    private Call mCall;
     private YTSProvider mProvider = new YTSProvider();
     private Integer mColumns = 2, mRetries = 0;
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
@@ -102,7 +101,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     public void onBackPressed() {
         if(mLoadingDetails) {
             progressOverlay.setVisibility(View.GONE);
-            mCall.cancel();
+            mProvider.cancel();
             mLoadingDetails = false;
             return;
         }
@@ -176,7 +175,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             progressOverlay.setVisibility(View.VISIBLE);
 
             mLoadingDetails = true;
-            mCall = mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
+            mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<MediaProvider.Video> items) {
                     if (items.size() <= 0 || !mLoadingDetails) return;
