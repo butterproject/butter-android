@@ -14,8 +14,11 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 
 import pct.droid.providers.meta.TraktProvider;
+import pct.droid.providers.subs.SubsProvider;
+import pct.droid.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
@@ -230,7 +233,7 @@ public class YTSProvider extends MediaProvider {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
                     if (result.status != null && result.status.equals("fail")) {
@@ -238,10 +241,9 @@ public class YTSProvider extends MediaProvider {
                     } else {
                         ArrayList<MediaProvider.Video> formattedData = result.formatForPopcorn();
 
-                        TraktProvider traktProvider = new TraktProvider();
-                        for (MediaProvider.Video item : formattedData) {
-                            Video video = (Video) item;
-                            int index = formattedData.indexOf(item);
+                        if(formattedData.size() > 0) {
+                            TraktProvider traktProvider = new TraktProvider();
+                            Video video = (Video) formattedData.get(0);
 
                             TraktProvider.MetaData meta = traktProvider.getSummary(video.imdbId, "movie");
                             if (meta.images != null && meta.images.containsKey("poster")) {
@@ -280,11 +282,16 @@ public class YTSProvider extends MediaProvider {
                             if (meta.certification != null) {
                                 video.certification = meta.certification;
                             }
-                            formattedData.set(index, video);
-                        }
 
-                        callback.onSuccess(formattedData);
-                        return;
+                            YSubsProvider subsProvider = new YSubsProvider();
+                            video.subtitles = subsProvider.getList(video.imdbId);
+
+                            formattedData.set(0, video);
+
+                            callback.onSuccess(formattedData);
+                            return;
+                        }
+                        callback.onFailure(new IllegalStateException("Empty list"));
                     }
                 }
                 callback.onFailure(new NetworkErrorException(response.body().string()));
