@@ -10,7 +10,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class QualityAdapter extends BaseAdapter {
+public class StringArrayAdapter extends BaseAdapter {
 
     private String[] mData;
     private LayoutInflater mInflater;
@@ -23,7 +23,7 @@ public class QualityAdapter extends BaseAdapter {
         TextView text1;
     }
 
-    public QualityAdapter(Context context, String[] data) {
+    public StringArrayAdapter(Context context, String[] data) {
         mData = data;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

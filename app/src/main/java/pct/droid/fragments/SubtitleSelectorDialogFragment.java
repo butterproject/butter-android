@@ -17,10 +17,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.StringArrayAdapter;
+import pct.droid.adapters.SubtitleAdapter;
 
-public class QualitySelectorDialogFragment extends DialogFragment {
+public class SubtitleSelectorDialogFragment extends DialogFragment {
 
-    public static final String QUALITIES = "qualities";
+    public static final String LANGUAGES = "languages";
 
     @InjectView(R.id.listView)
     ListView listView;
@@ -37,19 +38,26 @@ public class QualitySelectorDialogFragment extends DialogFragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialogselector, null, false);
         ButterKnife.inject(this, view);
 
-        if(getArguments().containsKey(QUALITIES) && getActivity() instanceof Listener) {
+        if(getArguments().containsKey(LANGUAGES) && getActivity() instanceof Listener) {
             progressBar.setVisibility(View.GONE);
 
-            String[] qualities = getArguments().getStringArray(QUALITIES);
-            Arrays.sort(qualities);
+            String[] languages = getArguments().getStringArray(LANGUAGES);
+            Arrays.sort(languages);
+            String[] adapterLanguages = new String[languages.length + 1];
+            adapterLanguages[0] = "no-subs";
+            int i = 1;
+            for(String language : languages) {
+                adapterLanguages[i] = language;
+                i++;
+            }
 
-            StringArrayAdapter adapter = new StringArrayAdapter(getActivity(), qualities);
+            SubtitleAdapter adapter = new SubtitleAdapter(getActivity(), adapterLanguages);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    StringArrayAdapter adapter = (StringArrayAdapter) adapterView.getAdapter();
-                    ((Listener) getActivity()).onQualitySelected(adapter.getItem(position));
+                    SubtitleAdapter adapter = (SubtitleAdapter) adapterView.getAdapter();
+                    ((Listener) getActivity()).onSubtitleLanguageSelected(adapter.getItem(position));
                     dismiss();
                 }
             });
@@ -57,7 +65,7 @@ public class QualitySelectorDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(R.string.quality)
+                .setTitle(R.string.subtitles)
                 .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -76,7 +84,7 @@ public class QualitySelectorDialogFragment extends DialogFragment {
     }
 
     public interface Listener {
-        public void onQualitySelected(String quality);
+        public void onSubtitleLanguageSelected(String language);
     }
 
 }

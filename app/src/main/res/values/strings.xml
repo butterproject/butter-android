@@ -19,6 +19,7 @@
     <string name="fullscreen">Toggle fullscreen</string>
     <string name="search">Search</string>
     <string name="disable_subs">Disable subtitles</string>
+    <string name="no_subs">No subtitles</string>
     <string name="subtitles">Subtitles</string>
     <string name="player">Video player</string>
     <string name="quality">Quality</string>

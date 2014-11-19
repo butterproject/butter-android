@@ -24,22 +24,25 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.Locale;
+
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.fragments.QualitySelectorDialogFragment;
+import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.providers.media.YTSProvider;
 import pct.droid.utils.ActionBarBackground;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 
-public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener {
+public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
 
     private YTSProvider.Video mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
-    private String mQuality;
+    private String mQuality, mSubLanguage;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -75,6 +78,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     LinearLayout trailerBlock;
     @InjectView(R.id.subtitlesBlock)
     LinearLayout subtitlesBlock;
+    @InjectView(R.id.subtitlesText)
+    TextView subtitlesText;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -94,6 +99,13 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
                     qualitySelectorDialogFragment.setArguments(b);
                     qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    break;
+                case R.id.subtitlesBlock:
+                    SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
+                    b = new Bundle();
+                    b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]));
+                    subtitleSelectorDialogFragment.setArguments(b);
+                    subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).magnet;
@@ -294,5 +306,21 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     public void onQualitySelected(String quality) {
         mQuality = quality;
         qualityText.setText(mQuality);
+    }
+
+    @Override
+    public void onSubtitleLanguageSelected(String language) {
+        mSubLanguage = language;
+        if(!language.equals("no-subs")) {
+            Locale locale;
+            if (language.contains("-")) {
+                locale = new Locale(language.substring(0, 2), language.substring(3, 5));
+            } else {
+                locale = new Locale(language);
+            }
+            subtitlesText.setText(locale.getDisplayName());
+        } else {
+            subtitlesText.setText(R.string.no_subs);
+        }
     }
 }
