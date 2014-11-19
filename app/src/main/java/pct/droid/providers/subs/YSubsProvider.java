@@ -14,11 +14,10 @@ import pct.droid.providers.meta.MetaProvider;
 
 public class YSubsProvider extends SubsProvider {
 
-    private String mApiUrl = "http://api.yifysubtitles.com/subs/";
-    private String mMirrorApiUrl = "http://api.ysubs.com/subs/";
-    private String mPrefix = "http://www.yifysubtitles.com/";
-    private HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
-    private Call mCurrentCall;
+    protected String mApiUrl = "http://api.yifysubtitles.com/subs/";
+    protected String mMirrorApiUrl = "http://api.ysubs.com/subs/";
+    protected String mPrefix = "http://www.yifysubtitles.com/";
+    protected HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
     
     public YSubsProvider() {
         mLanguageMapping.put("albanian", "sq");
@@ -100,7 +99,7 @@ public class YSubsProvider extends SubsProvider {
         if(response.isSuccessful()) {
             String responseStr = response.body().string();
             YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-            return result.formatForPopcorn();
+            return result.formatForPopcorn(mPrefix, mLanguageMapping);
         }
         return new HashMap<String, HashMap<String, String>>();
     }
@@ -111,7 +110,7 @@ public class YSubsProvider extends SubsProvider {
         public int lastModified;
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, Object>>>> subs;
 
-        public HashMap<String, HashMap<String, String>> formatForPopcorn() {
+        public HashMap<String, HashMap<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
             HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
             String[] imdbIds = getKeys(subs);
             for (String imdbId : imdbIds) {
@@ -124,13 +123,13 @@ public class YSubsProvider extends SubsProvider {
                     int currentRating = 0;
                     String currentSub = "";
                     for(HashMap<String, Object> sub : subMap) {
-                        int itemRating = (Integer)sub.get("rating");
+                        int itemRating = ((Double)sub.get("rating")).intValue();
                         if(currentRating < itemRating) {
-                            currentSub = mPrefix + sub.get("url");
+                            currentSub = prefix + sub.get("url");
                             currentRating = itemRating;
                         }
                     }
-                    imdbMap.put(mapLanguage(lang), currentSub);
+                    imdbMap.put(mapLanguage(lang, mapping), currentSub);
                 }
                 returnMap.put(imdbId, imdbMap);
             }
@@ -141,11 +140,11 @@ public class YSubsProvider extends SubsProvider {
             return map.keySet().toArray(new String[map.size()]);
         }
         
-        private String mapLanguage(String input) {
-            if(mLanguageMapping.containsKey(input)) {
-                return mLanguageMapping.get(input);
+        private String mapLanguage(String input, HashMap<String, String> mapping) {
+            if(mapping.containsKey(input)) {
+                return mapping.get(input);
             }
-            return "?";
+            return "no-subs";
         }
     }
 

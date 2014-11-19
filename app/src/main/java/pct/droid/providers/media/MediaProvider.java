@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import pct.droid.providers.BaseProvider;
 
@@ -16,9 +17,11 @@ public abstract class MediaProvider extends BaseProvider {
         public String year;
         public String genre;
         public String rating;
-        public String image;
         public String type;
-        public HashMap<String, HashMap<String, String>> subtitles;
+        public String image;
+        public String fullImage;
+        public String headerImage;
+        public Map<String, String> subtitles;
 
         public Video() {
 
@@ -30,12 +33,14 @@ public abstract class MediaProvider extends BaseProvider {
             year = in.readString();
             genre = in.readString();
             rating = in.readString();
-            image = in.readString();
             type = in.readString();
-            if (in.readByte() == 0x01) {
-                in.readMap(subtitles, subtitles.getClass().getClassLoader());
-            } else {
-                subtitles = null;
+            image = in.readString();
+            fullImage = in.readString();
+            headerImage = in.readString();
+            int length = in.readInt();
+            subtitles = new HashMap<String, String>();
+            for(int i = 0; i < length; i++) {
+                subtitles.put(in.readString(), in.readString());
             }
         }
 
@@ -51,13 +56,14 @@ public abstract class MediaProvider extends BaseProvider {
             dest.writeString(year);
             dest.writeString(genre);
             dest.writeString(rating);
-            dest.writeString(image);
             dest.writeString(type);
-            if (subtitles == null) {
-                dest.writeByte((byte) (0x00));
-            } else {
-                dest.writeByte((byte) (0x01));
-                dest.writeMap(subtitles);
+            dest.writeString(image);
+            dest.writeString(fullImage);
+            dest.writeString(headerImage);
+            dest.writeInt(subtitles.size());
+            for(String key : subtitles.keySet()) {
+                dest.writeString(key);
+                dest.writeString(subtitles.get(key));
             }
         }
 

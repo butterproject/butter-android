@@ -28,8 +28,6 @@ public class YTSProvider extends MediaProvider {
         public String tagline = "";
         public String synopsis = "No synopsis available";
         public String certification = "n/a";
-        public String fullImage;
-        public String headerImage;
         public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
 
         protected Video() {
@@ -43,8 +41,6 @@ public class YTSProvider extends MediaProvider {
             tagline = in.readString();
             synopsis = in.readString();
             certification = in.readString();
-            fullImage = in.readString();
-            headerImage = in.readString();
             int size = in.readInt();
             for (int i = 0; i < size; i++) {
                 String key = in.readString();
@@ -66,8 +62,6 @@ public class YTSProvider extends MediaProvider {
             dest.writeString(tagline);
             dest.writeString(synopsis);
             dest.writeString(certification);
-            dest.writeString(fullImage);
-            dest.writeString(headerImage);
             dest.writeInt(torrents.size());
             for (String s: torrents.keySet()) {
                 dest.writeString(s);
@@ -284,7 +278,7 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             YSubsProvider subsProvider = new YSubsProvider();
-                            video.subtitles = subsProvider.getList(video.imdbId);
+                            video.subtitles = subsProvider.getList(video.imdbId).get(video.imdbId);
 
                             formattedData.set(0, video);
 
