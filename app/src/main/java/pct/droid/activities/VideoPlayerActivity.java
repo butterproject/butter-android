@@ -102,6 +102,8 @@ import java.io.OutputStream;
 import java.io.StreamCorruptedException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -478,7 +480,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         import org.videolan.vlc.MediaDatabase;
         import org.videolan.vlc.R;
         import org.videolan.vlc.RemoteControlClientReceiver;
-        import org.videolan.vlc.VLCApplication;
+        import org.videolan.vlc.PopcornApplication;
         import org.videolan.vlc.gui.MainActivity;
         import org.videolan.vlc.gui.audio.AudioUtil;
         import org.videolan.vlc.gui.video.VideoPlayerActivity;
@@ -617,9 +619,9 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                 filter.addAction(ACTION_WIDGET_INIT);
                 filter.addAction(Intent.ACTION_HEADSET_PLUG);
                 filter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-                filter.addAction(VLCApplication.SLEEP_INTENT);
-                filter.addAction(VLCApplication.INCOMING_CALL_INTENT);
-                filter.addAction(VLCApplication.CALL_ENDED_INTENT);
+                filter.addAction(PopcornApplication.SLEEP_INTENT);
+                filter.addAction(PopcornApplication.INCOMING_CALL_INTENT);
+                filter.addAction(PopcornApplication.CALL_ENDED_INTENT);
                 registerReceiver(serviceReceiver, filter);
 
                 final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -642,7 +644,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
              */
             @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             public void setUpRemoteControlClient() {
-                Context context = VLCApplication.getAppContext();
+                Context context = PopcornApplication.getAppContext();
                 AudioManager audioManager = (AudioManager)context.getSystemService(AUDIO_SERVICE);
 
                 if (LibVlcUtil.isICSOrLater()) {
@@ -779,7 +781,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             /*
              * Incoming Call : Pause if VLC is playing audio or video.
              */
-                    if (action.equalsIgnoreCase(VLCApplication.INCOMING_CALL_INTENT)) {
+                    if (action.equalsIgnoreCase(PopcornApplication.INCOMING_CALL_INTENT)) {
                         mWasPlayingAudio = mLibVLC.isPlaying() && mLibVLC.getVideoTracksCount() < 1;
                         if (mLibVLC.isPlaying())
                             pause();
@@ -788,7 +790,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             /*
              * Call ended : Play only if VLC was playing audio.
              */
-                    if (action.equalsIgnoreCase(VLCApplication.CALL_ENDED_INTENT)
+                    if (action.equalsIgnoreCase(PopcornApplication.CALL_ENDED_INTENT)
                             && mWasPlayingAudio) {
                         play();
                     }
@@ -853,7 +855,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             /*
              * Sleep
              */
-                    if (action.equalsIgnoreCase(VLCApplication.SLEEP_INTENT)) {
+                    if (action.equalsIgnoreCase(PopcornApplication.SLEEP_INTENT)) {
                         stop();
                     }
                 }
@@ -1054,7 +1056,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                 hideNotification(false);
 
                 // Switch to the video player & don't lose the currently playing stream
-                VideoPlayerActivity.start(VLCApplication.getAppContext(), MRL, title, index, true);
+                VideoPlayerActivity.start(PopcornApplication.getAppContext(), MRL, title, index, true);
             }
 
             private void executeUpdate() {
@@ -1125,7 +1127,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                             final Bundle bundle = msg.getData();
                             final String text = bundle.getString("text");
                             final int duration = bundle.getInt("duration");
-                            Toast.makeText(VLCApplication.getAppContext(), text, duration).show();
+                            Toast.makeText(PopcornApplication.getAppContext(), text, duration).show();
                             break;
                     }
                 }
@@ -1990,18 +1992,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         mSurfaceView.setKeepScreenOn(false);
 
         SharedPreferences.Editor editor = mSettings.edit();
-        // Save position
-        if (time >= 0 && mCanSeek) {
-            if(MediaDatabase.getInstance().mediaItemExists(mLocation)) {
-                MediaDatabase.getInstance().updateMedia(
-                        mLocation,
-                        MediaDatabase.mediaColumn.MEDIA_TIME,
-                        time);
-            } else {
-                // Video file not in media library, store time just for onResume()
-                editor.putLong(PreferencesActivity.VIDEO_RESUME_TIME, time);
-            }
-        }
+        
         // Save selected subtitles
         String subtitleList_serialized = null;
         if(mSubtitleSelectedFiles.size() > 0) {
@@ -2013,7 +2004,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                 subtitleList_serialized = bos.toString();
             } catch(IOException e) {}
         }
-        editor.putString(PreferencesActivity.VIDEO_SUBTITLE_FILES, subtitleList_serialized);
+        editor.putString("subtitle_file", subtitleList_serialized);
 
         editor.commit();
         AudioServiceController.getInstance().unbindAudioService(this);
@@ -2199,7 +2190,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     mBattery.setTextColor(Color.RED);
                 mBattery.setText(String.format("%d%%", batteryLevel));
             }
-            else if (action.equalsIgnoreCase(VLCApplication.SLEEP_INTENT)) {
+            else if (action.equalsIgnoreCase(PopcornApplication.SLEEP_INTENT)) {
                 finish();
             }
         }
@@ -3826,7 +3817,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             }
 
             // Get possible subtitles
-            String subtitleList_serialized = mSettings.getString(PreferencesActivity.VIDEO_SUBTITLE_FILES, null);
+            String subtitleList_serialized = mSettings.getString("subtitle_file", null);
             ArrayList<String> prefsList = new ArrayList<String>();
             if(subtitleList_serialized != null) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(subtitleList_serialized.getBytes());

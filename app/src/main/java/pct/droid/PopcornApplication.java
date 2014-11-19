@@ -22,6 +22,10 @@ import pct.droid.utils.StorageUtils;
 
 public class PopcornApplication extends Application {
 
+    public final static String SLEEP_INTENT = "org.videolan.vlc.SleepIntent";
+    public final static String INCOMING_CALL_INTENT = "org.videolan.vlc.IncomingCallIntent";
+    public final static String CALL_ENDED_INTENT = "org.videolan.vlc.CallEndedIntent";
+
     private Boolean mBound = false;
     private Messenger mService;
     private String mCacheDir;
