@@ -25,10 +25,13 @@ public class PopcornApplication extends Application {
     private Boolean mBound = false;
     private Messenger mService;
     private String mCacheDir;
+    private static PopcornApplication mInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
+
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
@@ -115,6 +118,9 @@ public class PopcornApplication extends Application {
         }
     };
 
+    public static Context getAppContext() {
+        return mInstance;
+    }
 
 
 }
