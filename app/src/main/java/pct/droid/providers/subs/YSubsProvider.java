@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pct.droid.providers.meta.MetaProvider;
+
 public class YSubsProvider extends SubsProvider {
 
     private String mApiUrl = "http://api.yifysubtitles.com/subs/";
@@ -63,8 +65,7 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public void getList(String[] imdbIds, Callback callback) {
-
+    public HashMap<String, HashMap<String, String>> getList(String[] imdbIds) {
         StringBuilder stringBuilder = new StringBuilder();
         for(String imdbId : imdbIds) {
             stringBuilder.append(imdbId);
@@ -72,40 +73,36 @@ public class YSubsProvider extends SubsProvider {
                 stringBuilder.append("-");
             }
         }
+        String imdbDbStr = stringBuilder.toString();
 
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + stringBuilder.toString());
+        requestBuilder.url(mApiUrl + imdbDbStr);
 
-        fetch(requestBuilder, callback);
+        try {
+            return fetch(requestBuilder);
+        } catch (IOException e) {
+            // eat exception for now TODO
+            try {
+                requestBuilder.url(mApiUrl + imdbDbStr);
+                return fetch(requestBuilder);
+            } catch (IOException e1) {
+                // eat exception for now TODO
+                e.printStackTrace();
+            }
+        }
+
+        return new HashMap<String, HashMap<String, String>>();
     }
 
-    private void fetch(final Request.Builder requestBuilder, final SubsProvider.Callback callback) {
-        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                String url = requestBuilder.build().urlString();
-                if(url.equals(mMirrorApiUrl)) {
-                    callback.onFailure(e);
-                } else {
-                    url = url.replace(mApiUrl, mMirrorApiUrl);
-                    requestBuilder.url(url);
-                    fetch(requestBuilder, callback);
-                }
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-                    if(result.success) {
-                        callback.onSuccess(result.formatForPopcorn());
-                        return;
-                    }
-                }
-                callback.onFailure(new NetworkErrorException(response.body().string()));
-            }
-        });
+    private HashMap<String, HashMap<String, String>> fetch(Request.Builder requestBuilder) throws IOException {
+        Call call = mClient.newCall(requestBuilder.build());
+        Response response = call.execute();
+        if(response.isSuccessful()) {
+            String responseStr = response.body().string();
+            YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
+            return result.formatForPopcorn();
+        }
+        return new HashMap<String, HashMap<String, String>>();
     }
 
     private class YSubsResponse {
