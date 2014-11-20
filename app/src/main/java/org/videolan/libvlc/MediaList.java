@@ -198,15 +198,34 @@ public class MediaList {
     }
 
     public String[] getMediaOptions(int position) {
-        boolean noHardwareAcceleration = false;
+        boolean noHardwareAcceleration = mLibVLC.getHardwareAcceleration() == 0;
         boolean noVideo = false;
         if (isValid(position))
         {
-            noHardwareAcceleration = mInternalList.get(position).noHardwareAcceleration;
+            if (!noHardwareAcceleration)
+                noHardwareAcceleration = mInternalList.get(position).noHardwareAcceleration;
             noVideo = mInternalList.get(position).noVideo;
         }
+        ArrayList<String> options = new ArrayList<String>();
 
-        return mLibVLC.getMediaOptions(noHardwareAcceleration, noVideo);
+        if (!noHardwareAcceleration) {
+            /*
+             * Set higher caching values if using iomx decoding, since some omx
+             * decoders have a very high latency, and if the preroll data isn't
+             * enough to make the decoder output a frame, the playback timing gets
+             * started too soon, and every decoded frame appears to be too late.
+             * On Nexus One, the decoder latency seems to be 25 input packets
+             * for 320x170 H.264, a few packets less on higher resolutions.
+             * On Nexus S, the decoder latency seems to be about 7 packets.
+             */
+            options.add(":file-caching=1500");
+            options.add(":network-caching=1500");
+            options.add(":codec=mediacodec,iomx,all");
+        }
+        if (noVideo)
+            options.add(":no-video");
+
+        return options.toArray(new String[options.size()]);
     }
 
     public EventHandler getEventHandler() {
