@@ -37,6 +37,7 @@ public class LibVLC {
 
     public static final int VOUT_ANDROID_SURFACE = 0;
     public static final int VOUT_OPEGLES2 = 1;
+    public static final int VOUT_ANDROID_WINDOW = 2;
 
     public static final int HW_ACCELERATION_AUTOMATIC = -1;
     public static final int HW_ACCELERATION_DISABLED = 0;
@@ -56,6 +57,7 @@ public class LibVLC {
     public static final int INPUT_NAV_RIGHT = 4;
 
     private static final String DEFAULT_CODEC_LIST = "mediacodec,iomx,all";
+    private static final boolean HAS_WINDOW_VOUT = LibVlcUtil.isGingerbreadOrLater();
 
     private static LibVLC sInstance;
 
@@ -113,17 +115,32 @@ public class LibVLC {
 
     /* Load library before object instantiation */
     static {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
+            try {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR1)
+                    System.loadLibrary("anw.10");
+                else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR2)
+                    System.loadLibrary("anw.13");
+                else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                    System.loadLibrary("anw.14");
+                else
+                    System.loadLibrary("anw.18");
+            } catch (Throwable t) {
+                Log.w(TAG, "Unable to load the anw library: " + t);
+            }
+        }
+
         try {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1)
-                System.loadLibrary("iomx-gingerbread");
+                System.loadLibrary("iomx.10");
             else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR2)
-                System.loadLibrary("iomx-hc");
+                System.loadLibrary("iomx.13");
             else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                System.loadLibrary("iomx-ics");
+                System.loadLibrary("iomx.14");
             else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                System.loadLibrary("iomx-jbmr2");
+                System.loadLibrary("iomx.18");
             else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT)
-                System.loadLibrary("iomx-kk");
+                System.loadLibrary("iomx.19");
         } catch (Throwable t) {
             // No need to warn if it isn't found, when we intentionally don't build these except for debug
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
@@ -330,6 +347,8 @@ public class LibVLC {
     }
 
     public boolean isDirectRendering() {
+        if (!HAS_WINDOW_VOUT)
+            return false;
         if (devHardwareDecoder != DEV_HW_DECODER_AUTOMATIC) {
             return (this.devHardwareDecoder == DEV_HW_DECODER_OMX_DR ||
                     this.devHardwareDecoder == DEV_HW_DECODER_MEDIACODEC_DR);
@@ -394,6 +413,12 @@ public class LibVLC {
             this.vout = VOUT_ANDROID_SURFACE;
         else
             this.vout = vout;
+        if (this.vout == VOUT_ANDROID_SURFACE && HAS_WINDOW_VOUT)
+            this.vout = VOUT_ANDROID_WINDOW;
+    }
+
+    public boolean useCompatSurface() {
+        return this.vout != VOUT_ANDROID_WINDOW;
     }
 
     public boolean timeStretchingEnabled() {

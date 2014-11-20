@@ -325,7 +325,7 @@ public class Media implements Comparable<Media> {
      * Returns the raw picture object. Likely to be NULL in VLC for Android
      * due to lazy-loading.
      *
-     * Use {@link org.videolan.vlc.util.Bitmap#getPictureFromCache(org.videolan.libvlc.Media)} instead.
+     * Use {@link org.videolan.vlc.util.Bitmap#getPictureFromCache(Media)} instead.
      *
      * @return The raw picture or NULL
      */
@@ -336,7 +336,7 @@ public class Media implements Comparable<Media> {
     /**
      * Sets the raw picture object.
      *
-     * In VLC for Android, use {@link org.videolan.vlc.MediaDatabase#setPicture(org.videolan.libvlc.Media, android.graphics.Bitmap)} instead.
+     * In VLC for Android, use {@link org.videolan.vlc.MediaDatabase#setPicture(Media, Bitmap)} instead.
      *
      * @param p
      */

@@ -60,10 +60,14 @@ public abstract class MediaProvider extends BaseProvider {
             dest.writeString(image);
             dest.writeString(fullImage);
             dest.writeString(headerImage);
-            dest.writeInt(subtitles.size());
-            for(String key : subtitles.keySet()) {
-                dest.writeString(key);
-                dest.writeString(subtitles.get(key));
+            if(subtitles != null) {
+                dest.writeInt(subtitles.size());
+                for (String key : subtitles.keySet()) {
+                    dest.writeString(key);
+                    dest.writeString(subtitles.get(key));
+                }
+            } else {
+                dest.writeInt(0);
             }
         }
 

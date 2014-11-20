@@ -41,47 +41,47 @@ public class LibVlcUtil {
 
     public static boolean isFroyoOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO;
     }
 
     public static boolean isGingerbreadOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD;
     }
 
     public static boolean isHoneycombOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
     }
 
     public static boolean isICSOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
     }
 
     public static boolean isJellyBeanOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN;
     }
 
     public static boolean isJellyBeanMR1OrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
     }
 
     public static boolean isJellyBeanMR2OrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
     }
 
     public static boolean isKitKatOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT;
     }
 
     public static boolean isLolliPopOrLater()
     {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP;
     }
 
     private static String errorMsg = null;
@@ -116,11 +116,11 @@ public class LibVlcUtil {
             return true;
         }
 
-        String CPU_ABI = Build.CPU_ABI;
+        String CPU_ABI = android.os.Build.CPU_ABI;
         String CPU_ABI2 = "none";
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) { // CPU_ABI2 since 2.2
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) { // CPU_ABI2 since 2.2
             try {
-                CPU_ABI2 = (String)Build.class.getDeclaredField("CPU_ABI2").get(null);
+                CPU_ABI2 = (String)android.os.Build.class.getDeclaredField("CPU_ABI2").get(null);
             } catch (Exception e) { }
         }
 
