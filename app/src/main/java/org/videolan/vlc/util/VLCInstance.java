@@ -113,7 +113,6 @@ public class VLCInstance {
         instance.setDeblocking(deblocking);
         instance.setNetworkCaching(networkCaching);
         instance.setHardwareAcceleration(hardwareAcceleration);
-        instance.setDevHardwareDecoder(devHardwareDecoder);
     }
 
 
