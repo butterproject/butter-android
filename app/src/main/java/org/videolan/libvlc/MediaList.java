@@ -61,7 +61,7 @@ public class MediaList {
      *
      * @param mrl
      *            The MRL to add. Must be a location and not a path.
-     *            {@link org.videolan.libvlc.LibVLC#PathToURI(String)} can be used to convert a path
+     *            {@link LibVLC#PathToURI(String)} can be used to convert a path
      *            to a MRL.
      */
     public void add(String mrl) {

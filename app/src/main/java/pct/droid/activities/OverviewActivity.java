@@ -82,6 +82,14 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         } else {
             onSuccess(mTaskFragment.getExistingItems());
         }
+
+        Intent i = new Intent(this, VideoPlayerActivity.class);
+        MediaProvider.Video video = new MediaProvider.Video();
+        video.title = "Title";
+        i.putExtra(VideoPlayerActivity.DATA, video);
+        i.putExtra(VideoPlayerActivity.LOCATION, "http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4");
+        i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(VideoPlayerActivity.QUALITY));
+        startActivity(i);
     }
 
     @Override
