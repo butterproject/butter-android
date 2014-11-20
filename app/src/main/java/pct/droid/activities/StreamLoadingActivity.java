@@ -54,15 +54,7 @@ public class StreamLoadingActivity extends BaseActivity {
                             break;
                         case MODIFY:
                             LogUtils.d("Streamer file modified");
-                            if(!mIntentStarted) {
-                                mIntentStarted = true;
-                                Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
-                                i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
-                                i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
-                                i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
-                                startActivity(i);
-                                finish();
-                            }
+                            startPlayer();
                             break;
                     }
                 } else if(path.contains("status.json")) {
@@ -80,12 +72,24 @@ public class StreamLoadingActivity extends BaseActivity {
         mFileObserver.startWatching();
     }
 
+    private void startPlayer() {
+        if(!mIntentStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
+            mIntentStarted = true;
+            Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+            i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+            i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
+            i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
+            startActivity(i);
+            finish();
+        }
+    }
+
     private void updateStatus() {
         try {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
             if(status == null) return;
             LogUtils.d(status.toString());
-            int calculateProgress = (int)Math.floor(status.progress * 100);
+            int calculateProgress = (int)Math.floor(status.progress * 25);
             if(calculateProgress > 100) calculateProgress = 100;
             final int progress = calculateProgress;
             if(progressIndicator.getProgress() < 100) {
@@ -98,6 +102,7 @@ public class StreamLoadingActivity extends BaseActivity {
                     }
                 });
             } else {
+                startPlayer();
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -120,5 +125,11 @@ public class StreamLoadingActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         mFileObserver.stopWatching();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getApp().stopStreamer();
     }
 }
