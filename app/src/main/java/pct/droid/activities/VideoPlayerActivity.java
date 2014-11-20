@@ -50,7 +50,6 @@ import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.WeakHandler;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
@@ -79,6 +78,8 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -112,7 +113,7 @@ import pct.droid.PopcornApplication;
 import pct.droid.R;
 import pct.droid.utils.StringUtils;
 
-public class VideoPlayerActivity extends Activity implements IVideoPlayer {
+public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer {
 
     public final static String TAG = "VLC/VideoPlayerActivity";
     public final static String LOCATION = "location";
@@ -302,7 +303,7 @@ public class VideoPlayerActivity extends Activity implements IVideoPlayer {
 
         /** initialize Views an their Events */
         if (mOverlayUseStatusBar) {
-            mActionBar = getActionBar();
+            mActionBar = getSupportActionBar();
             mActionBar.setDisplayShowHomeEnabled(false);
             mActionBar.setDisplayShowTitleEnabled(false);
             mActionBar.setBackgroundDrawable(null);
