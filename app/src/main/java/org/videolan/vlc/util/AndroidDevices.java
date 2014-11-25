@@ -37,51 +37,6 @@ import java.util.HashSet;
 import pct.droid.PopcornApplication;
 
 public class AndroidDevices {
-    public final static String TAG = "VLC/Util/AndroidDevices";
-
-    final static boolean hasNavBar;
-    final static boolean hasTsp;
-
-    static {
-        HashSet<String> devicesWithoutNavBar = new HashSet<String>();
-        devicesWithoutNavBar.add("HTC One V");
-        devicesWithoutNavBar.add("HTC One S");
-        devicesWithoutNavBar.add("HTC One X");
-        devicesWithoutNavBar.add("HTC One XL");
-        hasNavBar = LibVlcUtil.isJellyBeanMR1OrLater() || (LibVlcUtil.isICSOrLater()
-                && !devicesWithoutNavBar.contains(android.os.Build.MODEL));
-        hasTsp = PopcornApplication.getAppContext().getPackageManager().hasSystemFeature("android.hardware.touchscreen");
-    }
-
-    public static boolean hasExternalStorage() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-    }
-
-    public static boolean hasNavBar()
-    {
-        return hasNavBar;
-    }
-
-    /** hasCombBar test if device has Combined Bar : only for tablet with Honeycomb or ICS */
-    public static boolean hasCombBar() {
-        return (!AndroidDevices.isPhone()
-                && ((VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB) &&
-                    (VERSION.SDK_INT <= VERSION_CODES.JELLY_BEAN)));
-    }
-
-    public static boolean isPhone(){
-        TelephonyManager manager = (TelephonyManager)PopcornApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
-        if(manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
-    public static boolean hasTsp() {
-        return hasTsp;
-    }
-
     @TargetApi(VERSION_CODES.HONEYCOMB_MR1)
     public static float getCenteredAxis(MotionEvent event,
             InputDevice device, int axis) {

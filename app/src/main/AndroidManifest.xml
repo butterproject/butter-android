@@ -38,8 +38,6 @@
             android:theme="@style/Theme.AppCompat"
             android:label="@string/app_name" />
         <service android:name=".services.StreamerService" android:process=":node" />
-
-        <service android:name="org.videolan.vlc.audio.AudioService" />
     </application>
 
 </manifest>

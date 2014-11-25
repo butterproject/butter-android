@@ -2,7 +2,6 @@ package pct.droid.utils;
 
 import org.mozilla.universalchardet.UniversalDetector;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -13,10 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.Writer;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class FileUtils {
 
