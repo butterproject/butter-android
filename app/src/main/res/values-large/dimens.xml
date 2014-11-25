@@ -19,4 +19,6 @@
     <dimen name="player_controls_padding">16dp</dimen>
     <dimen name="player_controls_corners">7dp</dimen>
     <dimen name="player_controls_distance">8dp</dimen>
+    <dimen name="player_subtitles_bottom_margin">48dp</dimen>
+    <dimen name="player_subtitles_default_text_size">24sp</dimen>
 </resources>

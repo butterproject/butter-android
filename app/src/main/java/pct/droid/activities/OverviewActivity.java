@@ -1,6 +1,9 @@
 package pct.droid.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -18,18 +21,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.InjectView;
+import pct.droid.Constants;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
+import pct.droid.providers.subs.SubsProvider;
 import pct.droid.utils.PixelUtils;
+import pct.droid.youtube.YouTubeData;
 
 public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 
@@ -55,10 +64,6 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         super.onCreate(savedInstanceState, R.layout.activity_overview);
         setSupportActionBar(toolbar);
 
-        //Intent i = new Intent(this, VideoPlayerActivity.class);
-        //i.putExtra(VideoPlayerActivity.LOCATION, "http://popcorn.se-bastiaan.eu/files/Grimm/Grimm.S04E03.The.Last.Fight.mp4");
-        //startActivity(i);
-
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
         } else {
@@ -82,16 +87,11 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         } else {
             onSuccess(mTaskFragment.getExistingItems());
         }
+    }
 
-        /*
-        Intent i = new Intent(this, VideoPlayerActivity.class);
-        MediaProvider.Video video = new MediaProvider.Video();
-        video.title = "Title";
-        i.putExtra(VideoPlayerActivity.DATA, video);
-        i.putExtra(VideoPlayerActivity.LOCATION, "http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4");
-        i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(VideoPlayerActivity.QUALITY));
-        startActivity(i);
-        */
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -104,7 +104,20 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         searchViewAction.setOnQueryTextListener(mSearchListener);
         searchViewAction.setIconifiedByDefault(true);
 
+        MenuItem playerTestMenuItem = menu.findItem(R.id.action_playertests);
+        playerTestMenuItem.setVisible(Constants.DEBUG_ENABLED);
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_playertests:
+                openPlayerTestDialog();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -286,4 +299,56 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             return false;
         }
     };
+
+    private void openPlayerTestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final String[] file_types = getResources().getStringArray(R.array.file_types);
+        final String[] files = getResources().getStringArray(R.array.files);
+
+        builder.setTitle("Player Tests")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).setSingleChoiceItems(file_types, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int index) {
+                dialogInterface.dismiss();
+                String location = files[index];
+                if (YouTubeData.isYouTubeUrl(location)) {
+                    Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
+                    MediaProvider.Video video = new MediaProvider.Video();
+                    video.title = file_types[index];
+                    i.putExtra(VideoPlayerActivity.DATA, video);
+                    i.putExtra(VideoPlayerActivity.LOCATION, location);
+                    startActivity(i);
+                } else {
+                    MediaProvider.Video video = new MediaProvider.Video();
+                    final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
+                    i.putExtra(VideoPlayerActivity.DATA, video);
+                    i.putExtra(VideoPlayerActivity.LOCATION, location);
+                    video.imdbId = "bigbucksbunny";
+                    video.title = file_types[index];
+                    video.subtitles = new HashMap<String, String>();
+                    video.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");
+                    SubsProvider.download(OverviewActivity.this, video, "en", new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+                            startActivity(i);
+                        }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+                            i.putExtra(VideoPlayerActivity.SUBTITLES, "en");
+                            startActivity(i);
+                        }
+                    });
+                }
+            }
+        });
+
+        builder.show();
+    }
 }

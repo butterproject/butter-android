@@ -31,10 +31,12 @@ import pct.droid.R;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
 import pct.droid.utils.ActionBarBackground;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
+import pct.droid.youtube.YouTubeData;
 
 public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
 
@@ -87,6 +89,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             Bundle b;
             switch (v.getId()) {
                 case R.id.synopsisBlock:
+                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
                     b = new Bundle();
                     b.putString("text", mItem.synopsis);
@@ -94,6 +97,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.qualityBlock:
+                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
@@ -101,20 +105,30 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.subtitlesBlock:
+                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]));
                     subtitleSelectorDialogFragment.setArguments(b);
                     subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
+                case R.id.trailerBlock:
+                    Intent trailerIntent = new Intent(MovieDetailActivity.this, TrailerPlayerActivity.class);
+                    if (!YouTubeData.isYouTubeUrl(mItem.trailer)) {
+                        trailerIntent = new Intent(MovieDetailActivity.this, VideoPlayerActivity.class);
+                    }
+                    trailerIntent.putExtra(VideoPlayerActivity.DATA, mItem);
+                    trailerIntent.putExtra(VideoPlayerActivity.LOCATION, mItem.trailer);
+                    startActivity(trailerIntent);
+                    break;
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).magnet;
-
-                    Intent i = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-                    i.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
-                    i.putExtra(StreamLoadingActivity.QUALITY, mQuality);
-                    i.putExtra(StreamLoadingActivity.DATA, mItem);
-                    startActivity(i);
+                    Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
+                    streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+                    streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
+                    streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
+                    if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                    startActivity(streamIntent);
                     break;
             }
 
@@ -128,7 +142,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                 mToolbarHeight = toolbar.getHeight();
                 mHeaderHeight = mParallaxHeight - mToolbarHeight;
             }
-            
+
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
 
             if(scrollView.getScrollY() > mHeaderHeight) {

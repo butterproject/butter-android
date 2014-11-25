@@ -6,6 +6,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -18,6 +21,7 @@ import java.util.List;
 import pct.droid.services.StreamerService;
 import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
+import pct.droid.utils.PrefUtils;
 import pct.droid.utils.StorageUtils;
 
 public class PopcornApplication extends Application {
@@ -28,27 +32,42 @@ public class PopcornApplication extends Application {
 
     private Boolean mBound = false;
     private Messenger mService;
-    private String mCacheDir;
+    private String mCacheDir, mShouldBoundUrl = "";
     private static PopcornApplication mInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         mInstance = this;
+
+        Constants.DEBUG_ENABLED = false;
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            int flags = packageInfo.applicationInfo.flags;
+            Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
+
         File path = StorageUtils.getIdealCacheDirectory(this);
         File directory = new File(path, "/torrents/");
-        File temp = new File(path, "/torrents/tmp");
         mCacheDir = directory.toString() + "/";
         FileUtils.recursiveDelete(new File(mCacheDir));
+        FileUtils.recursiveDelete(new File(path + "/subs"));
         directory.mkdirs();
-        temp.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         LogUtils.i("Chosen cache location: " + mCacheDir);
+
+        String versionCode = Integer.toString(BuildConfig.VERSION_CODE);
+        if(!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
+            PrefUtils.save(this, "versionCode", versionCode);
+        }
     }
 
     public Boolean isServiceBound() {
@@ -60,7 +79,12 @@ public class PopcornApplication extends Application {
     }
 
     public void startStreamer(String streamUrl) {
-        if (!mBound) return;
+        if (!mBound) {
+            LogUtils.d("Service not started yet");
+            mShouldBoundUrl = streamUrl;
+            startService();
+            return;
+        }
 
         LogUtils.i("Start streamer: " + streamUrl);
 
@@ -113,6 +137,11 @@ public class PopcornApplication extends Application {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
             mBound = true;
+
+            if(mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
+                startStreamer(mShouldBoundUrl);
+                mShouldBoundUrl = "";
+            }
         }
 
         @Override

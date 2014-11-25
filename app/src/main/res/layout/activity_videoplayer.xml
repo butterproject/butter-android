@@ -9,13 +9,35 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <SurfaceView
-            android:id="@+id/videoSurface"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+        android:layout_height="match_parent">
+        <VideoView
+            android:id="@+id/trailerView"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+        <tv.danmaku.ijk.media.widget.VideoView
+            android:id="@+id/videoView"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center" />
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/subtitleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/player_subtitles_bottom_margin"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/player_subtitles_default_text_size" />
+
+    <ProgressBar
+        android:id="@+id/progressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <RelativeLayout
         android:id="@+id/controlLayout"
@@ -79,6 +101,7 @@
                 android:onClick="playPauseClick" />
 
             <ImageButton
+                android:id="@+id/rewindButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@id/timeBar"
@@ -90,6 +113,7 @@
                 android:onClick="seekBackwardClick" />
             
             <ImageButton
+                android:id="@+id/forwardButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@id/timeBar"
@@ -99,6 +123,18 @@
                 android:src="@drawable/ic_av_forward"
                 android:scaleType="centerInside"
                 android:onClick="seekForwardClick" />
+
+            <ImageButton
+                android:id="@+id/scaleButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/timeBar"
+                android:layout_toLeftOf="@id/rewindButton"
+                android:layout_marginRight="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_aspect_ratio"
+                android:scaleType="centerInside"
+                android:onClick="scaleClick" />
         </RelativeLayout>
     </RelativeLayout>
 
