@@ -3,8 +3,7 @@ package pct.droid.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-import android.view.Window;
+import android.view.MenuItem;
 
 import butterknife.ButterKnife;
 import pct.droid.PopcornApplication;
@@ -26,11 +25,14 @@ public class BaseActivity extends ActionBarActivity {
         getApp().startService();
     }
 
-    protected View getActionBarView() {
-        Window window = getWindow();
-        View decorView = window.getDecorView();
-        int resId = getResources().getIdentifier("toolbar", "id", getPackageName());
-        return decorView.findViewById(resId);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected PopcornApplication getApp() {

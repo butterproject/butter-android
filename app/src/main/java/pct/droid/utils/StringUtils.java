@@ -1,7 +1,7 @@
 /*****************************************************************************
  * Strings.java
  *****************************************************************************
- * Copyright © 2011-2014 VLC authors and VideoLAN
+ * Copyright Â© 2011-2014 VLC authors and VideoLAN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class StringUtils {
-    public final static String TAG = "VLC/Util/Strings";
 
     public static String stripTrailingSlash(String s) {
         if( s.endsWith("/") && s.length() > 1 )
@@ -33,7 +32,7 @@ public class StringUtils {
         return s;
     }
 
-    public static boolean startsWith(String[] array, String text) {
+    static boolean startsWith(String[] array, String text) {
         for (String item : array)
             if (text.startsWith(item))
                 return true;
