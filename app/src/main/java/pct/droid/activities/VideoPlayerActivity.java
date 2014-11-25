@@ -20,118 +20,96 @@
 
 package pct.droid.activities;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.StreamCorruptedException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
+import android.graphics.ImageFormat;
+import android.graphics.PixelFormat;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.provider.Settings;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnSystemUiVisibilityChangeListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.IVideoPlayer;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
-import org.videolan.libvlc.LibVlcUtil;
 import org.videolan.libvlc.Media;
-import org.videolan.vlc.audio.AudioServiceController;
-import org.videolan.vlc.util.AndroidDevices;
 import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.WeakHandler;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.KeyguardManager;
-import android.app.Presentation;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.ImageFormat;
-import android.graphics.PixelFormat;
-import android.media.AudioManager;
-import android.media.AudioManager.OnAudioFocusChangeListener;
-import android.media.MediaRouter;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.provider.Settings.SettingNotFoundException;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.InputDevice;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnSystemUiVisibilityChangeListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Locale;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import pct.droid.PopcornApplication;
 import pct.droid.R;
+import pct.droid.streamer.Status;
+import pct.droid.utils.FileUtils;
 import pct.droid.utils.StringUtils;
 
-public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer {
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
 
-    public final static String TAG = "VLC/VideoPlayerActivity";
+    private final static String TAG = "VLC/VideoPlayerActivity";
+
     public final static String LOCATION = "location";
     public final static String DATA = "data";
     public final static String QUALITY = "quality";
+    public final static String SUBTITLES = "subtitles";
 
-    // Internal intent identifier to distinguish between internal launch and
-    // external intent.
-    private final static String PLAY_FROM_VIDEOGRID = "org.videolan.vlc.gui.video.PLAY_FROM_VIDEOGRID";
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    @InjectView(R.id.videoSurface)
+    SurfaceView videoSurface;
+    @InjectView(R.id.subtitleSurface)
+    SurfaceView subtitleSurface;
+    @InjectView(R.id.controlLayout)
+    RelativeLayout controlLayout;
+    @InjectView(R.id.playerInfo)
+    TextView playerInfo;
+    @InjectView(R.id.controlBar)
+    SeekBar controlBar;
+    @InjectView(R.id.playButton)
+    ImageButton playButton;
+    @InjectView(R.id.currentTime)
+    TextView currentTime;
+    @InjectView(R.id.lengthTime)
+    TextView lengthTime;
+    View decorView;
 
-    private SurfaceView mSurface;
-    private SurfaceView mSubtitlesSurface;
-    private SurfaceHolder mSurfaceHolder;
+    private Handler mDisplayHandler;
+
+    private SurfaceHolder mVideoSurfaceHolder;
     private SurfaceHolder mSubtitlesSurfaceHolder;
     private FrameLayout mSurfaceFrame;
-    private MediaRouter mMediaRouter;
-    private MediaRouter.SimpleCallback mMediaRouterCallback;
-    private SecondaryDisplay mPresentation;
     private LibVLC mLibVLC;
     private String mLocation;
 
@@ -144,58 +122,16 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private static final int SURFACE_ORIGINAL = 6;
     private int mCurrentSize = SURFACE_BEST_FIT;
 
-    private SharedPreferences mSettings;
-
     /** Overlay */
-    private ActionBar mActionBar;
-    private boolean mOverlayUseStatusBar;
-    private View mOverlayHeader;
-    private View mOverlayOption;
-    private View mOverlayProgress;
-    private View mOverlayBackground;
-    private static final int OVERLAY_TIMEOUT = 4000;
-    private static final int OVERLAY_INFINITE = 3600000;
-    private static final int FADE_OUT = 1;
-    private static final int SHOW_PROGRESS = 2;
-    private static final int SURFACE_SIZE = 3;
-    private static final int AUDIO_SERVICE_CONNECTION_SUCCESS = 5;
-    private static final int AUDIO_SERVICE_CONNECTION_FAILED = 6;
-    private static final int FADE_OUT_INFO = 4;
-    private boolean mDragging;
-    private boolean mShowing;
-    private int mUiVisibility = -1;
-    private SeekBar mSeekbar;
-    private TextView mTitle;
-    private TextView mSysTime;
-    private TextView mBattery;
-    private TextView mTime;
-    private TextView mLength;
-    private TextView mInfo;
-    private ImageView mLoading;
-    private TextView mLoadingText;
-    private ImageButton mPlayPause;
-    private ImageButton mBackward;
-    private ImageButton mForward;
-    private boolean mEnableJumpButtons;
-    private boolean mEnableBrightnessGesture;
-    private boolean mEnableCloneMode;
-    private boolean mDisplayRemainingTime = false;
-    private int mScreenOrientation;
-    private ImageButton mAudioTrack;
-    private ImageButton mSubtitle;
-    private ImageButton mLock;
-    private ImageButton mSize;
-    private ImageButton mMenu;
-    private boolean mIsLocked = false;
-    private int mLastAudioTrack = -1;
-    private int mLastSpuTrack = -2;
+    private long mDuration = 0;
+    private long mCurrentTime = 0;
+    private int mStreamerProgress = 0;
+    private boolean mOverlayVisible = true;
+    private int mLastSystemUIVisibility;
+    private long mLastSystemShowTime = System.currentTimeMillis();
 
-    /**
-     * For uninterrupted switching between audio and video mode
-     */
-    private boolean mSwitchingView;
-    private boolean mEndReached;
-    private boolean mCanSeek;
+    private static final int FADE_OUT_OVERLAY = 5000;
+    private static final int FADE_OUT_INFO = 1000;
 
     // Playlist
     private int savedIndexPosition = -1;
@@ -212,8 +148,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private AudioManager mAudioManager;
     private int mAudioMax;
     private OnAudioFocusChangeListener mAudioFocusListener;
-    private boolean mMute = false;
-    private int mVol, mVolSave;
+    private int mVol;
 
     //Touch Events
     private static final int TOUCH_NONE = 0;
@@ -224,148 +159,27 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private int mSurfaceYDisplayRange;
     private float mTouchY, mTouchX;
 
-    //stick event
-    private static final int JOYSTICK_INPUT_DELAY = 300;
-    private long mLastMove;
-
     // Brightness
     private boolean mIsFirstBrightnessGesture = true;
-
-    // Tracks & Subtitles
-    private Map<Integer,String> mAudioTracksList;
-    private Map<Integer,String> mSubtitleTracksList;
-    /**
-     * Used to store a selected subtitle; see onActivityResult.
-     * It is possible to have multiple custom subs in one session
-     * (just like desktop VLC allows you as well.)
-     */
-    private final ArrayList<String> mSubtitleSelectedFiles = new ArrayList<String>();
+    private float mRestoreAutoBrightness = -1f;
 
     // Whether fallback from HW acceleration to SW decoding was done.
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
 
-    // Tips
-    private View mOverlayTips;
-    private static final String PREF_TIPS_SHOWN = "video_player_tips_shown";
-
-    // Navigation handling (DVD, Blu-Ray...)
-    private ImageButton mNavMenu;
-    private boolean mHasMenu = false;
-    private boolean mIsNavMenu = false;
-
     @Override
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (LibVlcUtil.isJellyBeanMR1OrLater()) {
-            // Get the media router service (Miracast)
-            mMediaRouter = (MediaRouter) getSystemService(Context.MEDIA_ROUTER_SERVICE);
-            mMediaRouterCallback = new MediaRouter.SimpleCallback() {
-                @Override
-                public void onRoutePresentationDisplayChanged(
-                        MediaRouter router, MediaRouter.RouteInfo info) {
-                    Log.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);
-                    removePresentation();
-                }
-            };
-            Log.d(TAG, "MediaRouter information : " + mMediaRouter  .toString());
-            mOverlayUseStatusBar = true;
-        } else {
-            mOverlayUseStatusBar = false;
-        }
+        setContentView(R.layout.activity_videoplayer);
+        ButterKnife.inject(this);
 
-        mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        decorView = getWindow().getDecorView();
+
+        mDisplayHandler = new Handler(Looper.getMainLooper());
 
         /* Services and miscellaneous */
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mAudioMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
-        mEnableCloneMode = mSettings.getBoolean("enable_clone_mode", false);
-        createPresentation();
-        setContentView(mPresentation == null ? R.layout.activity_player : R.layout.activity_player_remote_control);
-
-        if (LibVlcUtil.isICSOrLater())
-            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(
-                    new OnSystemUiVisibilityChangeListener() {
-                        @Override
-                        public void onSystemUiVisibilityChange(int visibility) {
-                            if (visibility == mUiVisibility)
-                                return;
-                            setSurfaceSize(mVideoWidth, mVideoHeight, mVideoVisibleWidth, mVideoVisibleHeight, mSarNum, mSarDen);
-                            if (visibility == View.SYSTEM_UI_FLAG_VISIBLE && !mShowing && !isFinishing()) {
-                                showOverlay();
-                            }
-                            mUiVisibility = visibility;
-                        }
-                    }
-            );
-
-        /** initialize Views an their Events */
-        if (mOverlayUseStatusBar) {
-            mActionBar = getSupportActionBar();
-            mActionBar.setDisplayShowHomeEnabled(false);
-            mActionBar.setDisplayShowTitleEnabled(false);
-            mActionBar.setBackgroundDrawable(null);
-            mActionBar.setDisplayShowCustomEnabled(true);
-            mActionBar.setCustomView(R.layout.activity_player_action_bar);
-
-            ViewGroup view = (ViewGroup) mActionBar.getCustomView();
-            /* Dispatch ActionBar touch events to the Activity */
-            view.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    onTouchEvent(event);
-                    return true;
-                }
-            });
-            mTitle = (TextView) view.findViewById(R.id.player_overlay_title);
-        } else {
-            mOverlayHeader = findViewById(R.id.player_overlay_header);
-            /* header */
-            mTitle = (TextView) findViewById(R.id.player_overlay_title);
-            mSysTime = (TextView) findViewById(R.id.player_overlay_systime);
-            mBattery = (TextView) findViewById(R.id.player_overlay_battery);
-        }
-        mOverlayOption = findViewById(R.id.option_overlay);
-        mOverlayProgress = findViewById(R.id.progress_overlay);
-        mOverlayBackground = findViewById(R.id.player_overlay_background);
-
-        // Position and remaining time
-        mTime = (TextView) findViewById(R.id.player_overlay_time);
-        mTime.setOnClickListener(mRemainingTimeListener);
-        mLength = (TextView) findViewById(R.id.player_overlay_length);
-        mLength.setOnClickListener(mRemainingTimeListener);
-
-        // the info textView is not on the overlay
-        mInfo = (TextView) findViewById(R.id.player_overlay_info);
-
-        mEnableBrightnessGesture = mSettings.getBoolean("enable_brightness_gesture", true);
-        mScreenOrientation = Integer.valueOf(
-                mSettings.getString("screen_orientation_value", "4" /*SCREEN_ORIENTATION_SENSOR*/));
-
-        mEnableJumpButtons = mSettings.getBoolean("enable_jump_buttons", false);
-        mPlayPause = (ImageButton) findViewById(R.id.player_overlay_play);
-        mPlayPause.setOnClickListener(mPlayPauseListener);
-        mBackward = (ImageButton) findViewById(R.id.player_overlay_backward);
-        mBackward.setOnClickListener(mBackwardListener);
-        mForward = (ImageButton) findViewById(R.id.player_overlay_forward);
-        mForward.setOnClickListener(mForwardListener);
-
-        mAudioTrack = (ImageButton) findViewById(R.id.player_overlay_audio);
-        mAudioTrack.setVisibility(View.GONE);
-        mSubtitle = (ImageButton) findViewById(R.id.player_overlay_subtitle);
-        mSubtitle.setVisibility(View.GONE);
-        mNavMenu = (ImageButton) findViewById(R.id.player_overlay_navmenu);
-        mNavMenu.setVisibility(View.GONE);
-
-        mLock = (ImageButton) findViewById(R.id.lock_overlay_button);
-        mLock.setOnClickListener(mLockListener);
-
-        mSize = (ImageButton) findViewById(R.id.player_overlay_size);
-        mSize.setOnClickListener(mSizeListener);
-
-        mMenu = (ImageButton) findViewById(R.id.player_overlay_adv_function);
 
         try {
             mLibVLC = VLCInstance.getLibVlcInstance();
@@ -374,43 +188,16 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             return;
         }
 
-        mSurface = (SurfaceView) findViewById(R.id.player_surface);
-        mSurfaceHolder = mSurface.getHolder();
-        mSurfaceFrame = (FrameLayout) findViewById(R.id.player_surface_frame);
-        String chroma = mSettings.getString("chroma_format", "");
-        if(LibVlcUtil.isGingerbreadOrLater() && chroma.equals("YV12")) {
-            mSurfaceHolder.setFormat(ImageFormat.YV12);
-        } else if (chroma.equals("RV16")) {
-            mSurfaceHolder.setFormat(PixelFormat.RGB_565);
+        mVideoSurfaceHolder = videoSurface.getHolder();
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
+            mVideoSurfaceHolder.setFormat(ImageFormat.YV12);
         } else {
-            mSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
+            mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
         }
 
-        mSubtitlesSurface = (SurfaceView) findViewById(R.id.subtitles_surface);
-        mSubtitlesSurfaceHolder = mSubtitlesSurface.getHolder();
+        mSubtitlesSurfaceHolder = subtitleSurface.getHolder();
         mSubtitlesSurfaceHolder.setFormat(PixelFormat.RGBA_8888);
-        mSubtitlesSurface.setZOrderMediaOverlay(true);
-        if (mPresentation == null) {
-            mSurfaceHolder.addCallback(mSurfaceCallback);
-            mSubtitlesSurfaceHolder.addCallback(mSubtitlesSurfaceCallback);
-        }
-
-        mSeekbar = (SeekBar) findViewById(R.id.player_overlay_seekbar);
-        mSeekbar.setOnSeekBarChangeListener(mSeekListener);
-
-        /* Loading view */
-        mLoading = (ImageView) findViewById(R.id.player_overlay_loading);
-        mLoadingText = (TextView) findViewById(R.id.player_overlay_loading_text);
-        startLoadingAnimation();
-
-        mSwitchingView = false;
-        mEndReached = false;
-
-        IntentFilter filter = new IntentFilter();
-        if (!mOverlayUseStatusBar)
-            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        filter.addAction(PopcornApplication.SLEEP_INTENT);
-        registerReceiver(mReceiver, filter);
+        subtitleSurface.setZOrderMediaOverlay(true);
 
         Log.d(TAG,
                 "Hardware acceleration mode: "
@@ -418,7 +205,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         /* Only show the subtitles surface when using "Full Acceleration" mode */
         if (mLibVLC.getHardwareAcceleration() == LibVLC.HW_ACCELERATION_FULL)
-            mSubtitlesSurface.setVisibility(View.VISIBLE);
+            subtitleSurface.setVisibility(View.VISIBLE);
         // Signal to LibVLC that the videoPlayerActivity was created, thus the
         // SurfaceView is now available for MediaCodec direct rendering.
         mLibVLC.eventVideoPlayerActivityCreated(true);
@@ -427,36 +214,12 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         em.addHandler(eventHandler);
 
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        // Extra initialization when no secondary display is detected
-        if (mPresentation == null) {
-            // Orientation
-            // 100 is the value for screen_orientation_start_lock
-            setRequestedOrientation(mScreenOrientation != 100
-                    ? mScreenOrientation
-                    : getScreenOrientation());
-           
-        } else
-            setRequestedOrientation(getScreenOrientation());
-
-        updateNavStatus();
+        loadMedia();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (mMediaRouter != null) {
-            // Stop listening for changes to media routes.
-            mediaRouterAddCallback(false);
-        }
-
-        if(mSwitchingView) {
-            Log.d(TAG, "mLocation = \"" + mLocation + "\"");
-            AudioServiceController.getInstance().showWithoutParse(savedIndexPosition);
-            AudioServiceController.getInstance().unbindAudioService(this);
-            return;
-        }
 
         long time = mLibVLC.getTime();
         long length = mLibVLC.getLength();
@@ -475,29 +238,18 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
          */
         mLibVLC.stop();
 
-        mSurface.setKeepScreenOn(false);
-        
-        AudioServiceController.getInstance().unbindAudioService(this);
+        videoSurface.setKeepScreenOn(false);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onStop() {
         super.onStop();
-
-        // Dismiss the presentation when the activity is not visible.
-        if (mPresentation != null) {
-            Log.i(TAG, "Dismissing presentation because the activity is no longer visible.");
-            mPresentation.dismiss();
-            mPresentation = null;
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
-
         EventHandler em = EventHandler.getInstance();
         em.removeHandler(eventHandler);
 
@@ -508,226 +260,185 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
 
         mAudioManager = null;
+
+        ((PopcornApplication) getApplication()).stopStreamer();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSwitchingView = false;
-        AudioServiceController.getInstance().bindAudioService(this,
-                new AudioServiceController.AudioServiceConnectionListener() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        mHandler.sendEmptyMessage(AUDIO_SERVICE_CONNECTION_SUCCESS);
-                    }
-
-                    @Override
-                    public void onConnectionFailed() {
-                        mHandler.sendEmptyMessage(AUDIO_SERVICE_CONNECTION_FAILED);
-                    }
-                });
-
-        if (mMediaRouter != null) {
-            // Listen for changes to media routes.
-            mediaRouterAddCallback(true);
-        }
-    }
-
-    /**
-     * Add or remove MediaRouter callbacks. This is provided for version targeting.
-     *
-     * @param add true to add, false to remove
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void mediaRouterAddCallback(boolean add) {
-        if(!LibVlcUtil.isJellyBeanMR1OrLater() || mMediaRouter == null) return;
-
-        if(add)
-            mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_LIVE_VIDEO, mMediaRouterCallback);
-        else
-            mMediaRouter.removeCallback(mMediaRouterCallback);
-    }
-
-    private void startPlayback() {
-        loadMedia();
-
-        /*
-         * if the activity has been paused by pressing the power button,
-         * pressing it again will show the lock screen.
-         * But onResume will also be called, even if vlc-android is still in the background.
-         * To workaround that, pause playback if the lockscreen is displayed
-         */
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mLibVLC != null && mLibVLC.isPlaying()) {
-                    KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
-                    if (km.inKeyguardRestrictedInputMode())
-                        mLibVLC.pause();
-                }
-            }}, 500);
-
-        // Add any selected subtitle file from the file picker
-        if(mSubtitleSelectedFiles.size() > 0) {
-            for(String file : mSubtitleSelectedFiles) {
-                Log.i(TAG, "Adding user-selected subtitle " + file);
-                mLibVLC.addSubtitleTrack(file);
-            }
-        }
-    }
-
-    public static void start(Context context, String location) {
-        start(context, location, null, -1, false, false);
-    }
-
-    public static void start(Context context, String location, Boolean fromStart) {
-        start(context, location, null, -1, false, fromStart);
-    }
-
-    public static void start(Context context, String location, String title, Boolean dontParse) {
-        start(context, location, title, -1, dontParse, false);
-    }
-
-    public static void start(Context context, String location, String title, int position, Boolean dontParse) {
-        start(context, location, title, position, dontParse, false);
-    }
-
-    public static void start(Context context, String location, String title, int position, Boolean dontParse, Boolean fromStart) {
-        Intent intent = new Intent(context, VideoPlayerActivity.class);
-        intent.setAction(VideoPlayerActivity.PLAY_FROM_VIDEOGRID);
-        intent.putExtra("itemLocation", location);
-        intent.putExtra("itemTitle", title);
-        intent.putExtra("dontParse", dontParse);
-        intent.putExtra("fromStart", fromStart);
-        intent.putExtra("itemPosition", position);
-
-        if (dontParse)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
-        context.startActivity(intent);
-    }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver()
-    {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            String action = intent.getAction();
-            if (action.equalsIgnoreCase(Intent.ACTION_BATTERY_CHANGED)) {
-                if (mOverlayUseStatusBar)
-                    return;
-                int batteryLevel = intent.getIntExtra("level", 0);
-                if (batteryLevel >= 50)
-                    mBattery.setTextColor(Color.GREEN);
-                else if (batteryLevel >= 30)
-                    mBattery.setTextColor(Color.YELLOW);
-                else
-                    mBattery.setTextColor(Color.RED);
-                mBattery.setText(String.format("%d%%", batteryLevel));
-            }
-            else if (action.equalsIgnoreCase(PopcornApplication.SLEEP_INTENT)) {
-                finish();
-            }
-        }
-    };
-
-    @Override
-    public boolean onTrackballEvent(MotionEvent event) {
-        showOverlay();
-        return true;
-    }
-
-    @TargetApi(12) //only active for Android 3.1+
-    public boolean dispatchGenericMotionEvent(MotionEvent event){
-
-        InputDevice mInputDevice = event.getDevice();
-
-        float x = AndroidDevices.getCenteredAxis(event, mInputDevice,
-                MotionEvent.AXIS_X);
-        float y = AndroidDevices.getCenteredAxis(event, mInputDevice,
-                MotionEvent.AXIS_Y);
-        float z = AndroidDevices.getCenteredAxis(event, mInputDevice,
-                MotionEvent.AXIS_Z);
-        float rz = AndroidDevices.getCenteredAxis(event, mInputDevice,
-                MotionEvent.AXIS_RZ);
-
-        if (System.currentTimeMillis() - mLastMove > JOYSTICK_INPUT_DELAY){
-            if (Math.abs(x) > 0.3){
-                seek(x > 0.0f ? 10000 : -10000);
-                mLastMove = System.currentTimeMillis();
-            } else if (Math.abs(y) > 0.3){
-                if (mIsFirstBrightnessGesture)
-                    initBrightnessTouch();
-                changeBrightness(-y/10f);
-                mLastMove = System.currentTimeMillis();
-            } else if (Math.abs(rz) > 0.3){
-                mVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                int delta = -(int) ((rz / 7) * mAudioMax);
-                int vol = (int) Math.min(Math.max(mVol + delta, 0), mAudioMax);
-                setAudioVolume(vol);
-                mLastMove = System.currentTimeMillis();
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        showOverlay(OVERLAY_TIMEOUT);
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_F:
-            case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-            case KeyEvent.KEYCODE_BUTTON_R1:
-                seek(10000);
-                return true;
-            case KeyEvent.KEYCODE_R:
-            case KeyEvent.KEYCODE_MEDIA_REWIND:
-            case KeyEvent.KEYCODE_BUTTON_L1:
-                seek(-10000);
-                return true;
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-            case KeyEvent.KEYCODE_MEDIA_PLAY:
-            case KeyEvent.KEYCODE_MEDIA_PAUSE:
-            case KeyEvent.KEYCODE_SPACE:
-            case KeyEvent.KEYCODE_BUTTON_A:
-                doPlayPause();
-                return true;
-            case KeyEvent.KEYCODE_V:
-            case KeyEvent.KEYCODE_BUTTON_Y:
-                selectSubtitles();
-                return true;
-            case KeyEvent.KEYCODE_B:
-            case KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK:
-            case KeyEvent.KEYCODE_BUTTON_B:
-                selectAudioTrack();
-                return true;
-            case KeyEvent.KEYCODE_M:
-            case KeyEvent.KEYCODE_MENU:
-                showNavMenu();
-                return true;
-            case KeyEvent.KEYCODE_O:
-                showAdvancedOptions(mMenu);
-                return true;
-            case KeyEvent.KEYCODE_A:
-                resizeVideo();
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_MUTE:
-            case KeyEvent.KEYCODE_BUTTON_X:
-                updateMute();
-                return true;
-            case KeyEvent.KEYCODE_S:
-            case KeyEvent.KEYCODE_MEDIA_STOP:
-                finish();
-                return true;
-            default:
-                return super.onKeyDown(keyCode, event);
-        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         setSurfaceSize(mVideoWidth, mVideoHeight, mVideoVisibleWidth, mVideoVisibleHeight, mSarNum, mSarDen);
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        DisplayMetrics screen = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(screen);
+
+        if (mSurfaceYDisplayRange == 0)
+            mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
+
+        float y_changed = event.getRawY() - mTouchY;
+        float x_changed = event.getRawX() - mTouchX;
+
+        // coef is the gradient's move to determine a neutral zone
+        float coef = Math.abs (y_changed / x_changed);
+        float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
+
+        int[] offset = new int[2];
+        videoSurface.getLocationOnScreen(offset);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // Audio
+                mTouchY = event.getRawY();
+                mVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                mTouchAction = TOUCH_NONE;
+                // Seek
+                mTouchX = event.getRawX();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (coef > 2) {
+                    mTouchY = event.getRawY();
+                    mTouchX = event.getRawX();
+                    if ((int)mTouchX > (screen.widthPixels / 2)){
+                        doVolumeTouch(y_changed);
+                    }
+                    if ((int)mTouchX < (screen.widthPixels / 2)){
+                        doBrightnessTouch(y_changed);
+                    }
+                } else {
+                    // Seek (Right or Left move)
+                    doSeekTouch(coef, xgesturesize, false);
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (mTouchAction == TOUCH_NONE) {
+                    if (!mOverlayVisible) {
+                        showOverlay();
+                    } else {
+                        hideOverlay();
+                    }
+                } else {
+                    showOverlay();
+                }
+
+                doSeekTouch(coef, xgesturesize, true);
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+        if((mLastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0 && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+            showOverlay();
+        }
+
+        mLastSystemUIVisibility = visibility;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void doSeekTouch(float coef, float gesturesize, boolean seek) {
+        // No seek action if coef > 0.5 and gesturesize < 1cm
+        if (coef > 0.5 || Math.abs(gesturesize) < 1)
+            return;
+
+        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK)
+            return;
+        mTouchAction = TOUCH_SEEK;
+
+        // Size of the jump, 10 minutes max (600000), with a bi-cubic progression, for a 8cm gesture
+        int jump = (int) (Math.signum(gesturesize) * ((600000 * Math.pow((gesturesize / 8), 4)) + 3000));
+
+        // Adjust the jump
+        if ((jump > 0) && ((mCurrentTime + jump) > mDuration))
+            jump = (int) (mDuration - mCurrentTime);
+        if ((jump < 0) && ((mCurrentTime + jump) < 0))
+            jump = (int) -mCurrentTime;
+
+        //Jump !
+        if (seek && mDuration > 0)
+            mLibVLC.setTime(jump);
+
+        if (mDuration > 0) {
+            showInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "",  StringUtils.millisToString(jump), StringUtils.millisToString(mCurrentTime + jump)));
+        }
+    }
+
+    private void doVolumeTouch(float y_changed) {
+        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
+            return;
+        float delta = - ((y_changed * 2f / mSurfaceYDisplayRange) * mAudioMax);
+        mVol += delta;
+        int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
+        if (delta != 0f) {
+            setAudioVolume(vol);
+        }
+    }
+
+    private void setAudioVolume(int vol) {
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
+        mTouchAction = TOUCH_VOLUME;
+        showInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol));
+    }
+
+    @TargetApi(android.os.Build.VERSION_CODES.FROYO)
+    private void initBrightnessTouch() {
+        float brightnesstemp = 0.6f;
+        // Initialize the layoutParams screen brightness
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO && Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
+                Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                mRestoreAutoBrightness = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
+            } else {
+                brightnesstemp = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
+            }
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness = brightnesstemp;
+        getWindow().setAttributes(lp);
+        mIsFirstBrightnessGesture = false;
+    }
+
+    private void doBrightnessTouch(float y_changed) {
+        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
+            return;
+        if (mIsFirstBrightnessGesture) initBrightnessTouch();
+        mTouchAction = TOUCH_BRIGHTNESS;
+
+        // Set delta : 2f is arbitrary for now, it possibly will change in the future
+        float delta = - y_changed / mSurfaceYDisplayRange * 2f;
+
+        changeBrightness(delta);
+    }
+
+    private void changeBrightness(float delta) {
+        // Estimate and adjust Brightness
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness =  Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
+        // Set Brightness
+        getWindow().setAttributes(lp);
+        showInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness * 15));
     }
 
     @Override
@@ -742,99 +453,15 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         mVideoVisibleWidth  = visible_width;
         mSarNum = sar_num;
         mSarDen = sar_den;
-        Message msg = mHandler.obtainMessage(SURFACE_SIZE);
-        mHandler.sendMessage(msg);
+        mDisplayHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                changeSurfaceSize();
+            }
+        });
     }
 
-    /**
-     * Lock screen rotation
-     */
-    private void lockScreen() {
-        if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                setRequestedOrientation(14 /* SCREEN_ORIENTATION_LOCKED */);
-            else
-                setRequestedOrientation(getScreenOrientation());
-        }
-        showInfo("Locked", 1000);
-        mLock.setBackgroundResource(R.drawable.ic_action_switch);
-        mTime.setEnabled(false);
-        mSeekbar.setEnabled(false);
-        mLength.setEnabled(false);
-        hideOverlay(true);
-    }
-
-    /**
-     * Remove screen lock
-     */
-    private void unlockScreen() {
-        if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        showInfo("Unlocked", 1000);
-        mLock.setBackgroundResource(R.drawable.ic_action_switch);
-        mTime.setEnabled(true);
-        mSeekbar.setEnabled(true);
-        mLength.setEnabled(true);
-        mShowing = false;
-        showOverlay();
-    }
-
-    /**
-     * Show text in the info view for "duration" milliseconds
-     * @param text
-     * @param duration
-     */
-    private void showInfo(String text, int duration) {
-        mInfo.setVisibility(View.VISIBLE);
-        mInfo.setText(text);
-        mHandler.removeMessages(FADE_OUT_INFO);
-        mHandler.sendEmptyMessageDelayed(FADE_OUT_INFO, duration);
-    }
-
-    private void showInfo(int textid, int duration) {
-        mInfo.setVisibility(View.VISIBLE);
-        mInfo.setText(textid);
-        mHandler.removeMessages(FADE_OUT_INFO);
-        mHandler.sendEmptyMessageDelayed(FADE_OUT_INFO, duration);
-    }
-
-    /**
-     * Show text in the info view
-     * @param text
-     */
-    private void showInfo(String text) {
-        mInfo.setVisibility(View.VISIBLE);
-        mInfo.setText(text);
-        mHandler.removeMessages(FADE_OUT_INFO);
-    }
-
-    /**
-     * hide the info view with "delay" milliseconds delay
-     * @param delay
-     */
-    private void hideInfo(int delay) {
-        mHandler.sendEmptyMessageDelayed(FADE_OUT_INFO, delay);
-    }
-
-    /**
-     * hide the info view
-     */
-    private void hideInfo() {
-        hideInfo(0);
-    }
-
-    private void fadeOutInfo() {
-        if (mInfo.getVisibility() == View.VISIBLE)
-            mInfo.startAnimation(AnimationUtils.loadAnimation(
-                    VideoPlayerActivity.this, android.R.anim.fade_out));
-        mInfo.setVisibility(View.INVISIBLE);
-    }
-
-    @TargetApi(Build.VERSION_CODES.FROYO)
     private int changeAudioFocus(boolean acquire) {
-        if(!LibVlcUtil.isFroyoOrLater()) // NOP if not supported
-            return AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-
         if (mAudioFocusListener == null) {
             mAudioFocusListener = new OnAudioFocusChangeListener() {
                 @Override
@@ -893,28 +520,17 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         public void handleMessage(Message msg) {
             VideoPlayerActivity activity = getOwner();
             if(activity == null) return;
-            // Do not handle events if we are leaving the VideoPlayerActivity
-            if (activity.mSwitchingView) return;
 
             switch (msg.getData().getInt("event")) {
                 case EventHandler.MediaParsedChanged:
                     Log.i(TAG, "MediaParsedChanged");
-                    activity.updateNavStatus();
-                    if (!activity.mHasMenu && activity.mLibVLC.getVideoTracksCount() < 1) {
-                        Log.i(TAG, "No video track, open in audio mode");
-                        activity.switchToAudioMode();
-                    }
                     break;
                 case EventHandler.MediaPlayerPlaying:
                     Log.i(TAG, "MediaPlayerPlaying");
-                    activity.stopLoadingAnimation();
                     activity.showOverlay();
                     /** FIXME: update the track list when it changes during the
                      *  playback. (#7540) */
-                    activity.setESTrackLists(true);
-                    activity.setESTracks();
                     activity.changeAudioFocus(true);
-                    activity.updateNavStatus();
                     break;
                 case EventHandler.MediaPlayerPaused:
                     Log.i(TAG, "MediaPlayerPaused");
@@ -928,16 +544,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     activity.changeAudioFocus(false);
                     activity.endReached();
                     break;
-                case EventHandler.MediaPlayerVout:
-                    activity.updateNavStatus();
-                    if (!activity.mHasMenu)
-                        activity.handleVout(msg);
-                    break;
-                case EventHandler.MediaPlayerPositionChanged:
-                    if (!activity.mCanSeek)
-                        activity.mCanSeek = true;
-                    //don't spam the logs
-                    break;
                 case EventHandler.MediaPlayerEncounteredError:
                     Log.i(TAG, "MediaPlayerEncounteredError");
                     activity.encounteredError();
@@ -949,59 +555,15 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                 case EventHandler.MediaPlayerTimeChanged:
                     // avoid useless error logs
                     break;
+                case EventHandler.MediaPlayerPositionChanged:
+                    activity.setOverlayProgress();
+                    break;
                 default:
                     Log.e(TAG, String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
                     break;
             }
-            activity.updateOverlayPausePlay();
+            activity.updatePlayPause();
         }
-    };
-
-    /**
-     * Handle resize of the surface and the overlay
-     */
-    private final Handler mHandler = new VideoPlayerHandler(this);
-
-    private static class VideoPlayerHandler extends WeakHandler<VideoPlayerActivity> {
-        public VideoPlayerHandler(VideoPlayerActivity owner) {
-            super(owner);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            VideoPlayerActivity activity = getOwner();
-            if(activity == null) // WeakReference could be GC'ed early
-                return;
-
-            switch (msg.what) {
-                case FADE_OUT:
-                    activity.hideOverlay(false);
-                    break;
-                case SHOW_PROGRESS:
-                    int pos = activity.setOverlayProgress();
-                    if (activity.canShowProgress()) {
-                        msg = obtainMessage(SHOW_PROGRESS);
-                        sendMessageDelayed(msg, 1000 - (pos % 1000));
-                    }
-                    break;
-                case SURFACE_SIZE:
-                    activity.changeSurfaceSize();
-                    break;
-                case FADE_OUT_INFO:
-                    activity.fadeOutInfo();
-                    break;
-                case AUDIO_SERVICE_CONNECTION_SUCCESS:
-                    activity.startPlayback();
-                    break;
-                case AUDIO_SERVICE_CONNECTION_FAILED:
-                    activity.finish();
-                    break;
-            }
-        }
-    };
-
-    private boolean canShowProgress() {
-        return !mDragging && mShowing && mLibVLC.isPlaying();
     }
 
     private void endReached() {
@@ -1015,7 +577,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             }, 1000);
         } else {
             /* Exit player when reaching the end */
-            mEndReached = true;
             finish();
         }
     }
@@ -1035,11 +596,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         dialog.show();
     }
 
-    public void eventHardwareAccelerationError() {
-        EventHandler em = EventHandler.getInstance();
-        em.callback(EventHandler.HardwareAccelerationError, new Bundle());
-    }
-
     private void handleHardwareAccelerationError() {
         mLibVLC.stop();
         AlertDialog dialog = new AlertDialog.Builder(VideoPlayerActivity.this)
@@ -1049,7 +605,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                         mDisabledHardwareAcceleration = true;
                         mPreviousHardwareAccelerationMode = mLibVLC.getHardwareAcceleration();
                         mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
-                        mSubtitlesSurface.setVisibility(View.INVISIBLE);
+                        subtitleSurface.setVisibility(View.INVISIBLE);
                         loadMedia();
                     }
                 })
@@ -1066,51 +622,17 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             dialog.show();
     }
 
-    private void handleVout(Message msg) {
-        if (msg.getData().getInt("data") == 0 && !mEndReached) {
-            /* Video track lost, open in audio mode */
-            Log.i(TAG, "Video track lost, switching to audio");
-            mSwitchingView = true;
-            finish();
-        }
-    }
-
-    private void switchToAudioMode() {
-        mSwitchingView = true;
-        // Show the MainActivity if it is not in background.
-        if (getIntent().getAction() != null
-                && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
-            Intent i = new Intent(this, OverviewActivity.class);
-            startActivity(i);
-        }
-        finish();
-    }
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void changeSurfaceSize() {
         int sw;
         int sh;
 
-        // get screen size
-        if (mPresentation == null) {
-            sw = getWindow().getDecorView().getWidth();
-            sh = getWindow().getDecorView().getHeight();
-        } else {
-            sw = mPresentation.getWindow().getDecorView().getWidth();
-            sh = mPresentation.getWindow().getDecorView().getHeight();
-        }
+        sw = getWindow().getDecorView().getWidth();
+        sh = getWindow().getDecorView().getHeight();
 
         double dw = sw, dh = sh;
-        boolean isPortrait;
 
-        if (mPresentation == null) {
-            // getWindow().getDecorView() doesn't always take orientation into account, we have to correct the values
-            isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        } else {
-            isPortrait = false;
-        }
-
-        if (sw > sh && isPortrait || sw < sh && !isPortrait) {
+        if (sw < sh) {
             dw = sh;
             dh = sw;
         }
@@ -1177,19 +699,11 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         SurfaceHolder subtitlesSurfaceHolder;
         FrameLayout surfaceFrame;
 
-        if (mPresentation == null) {
-            surface = mSurface;
-            subtitlesSurface = mSubtitlesSurface;
-            surfaceHolder = mSurfaceHolder;
-            subtitlesSurfaceHolder = mSubtitlesSurfaceHolder;
-            surfaceFrame = mSurfaceFrame;
-        } else {
-            surface = mPresentation.mSurface;
-            subtitlesSurface = mPresentation.mSubtitlesSurface;
-            surfaceHolder = mPresentation.mSurfaceHolder;
-            subtitlesSurfaceHolder = mPresentation.mSubtitlesSurfaceHolder;
-            surfaceFrame = mPresentation.mSurfaceFrame;
-        }
+        surface = videoSurface;
+        subtitlesSurface = subtitleSurface;
+        surfaceHolder = mVideoSurfaceHolder;
+        subtitlesSurfaceHolder = mSubtitlesSurfaceHolder;
+        surfaceFrame = mSurfaceFrame;
 
         // force surface buffer size
         surfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
@@ -1212,393 +726,9 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         subtitlesSurface.invalidate();
     }
 
-    /**
-     * show/hide the overlay
-     */
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (mIsLocked) {
-            // locked, only handle show/hide & ignore all actions
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (!mShowing) {
-                    showOverlay();
-                } else {
-                    hideOverlay(true);
-                }
-            }
-            return false;
-        }
-
-        DisplayMetrics screen = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(screen);
-
-        if (mSurfaceYDisplayRange == 0)
-            mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
-
-        float y_changed = event.getRawY() - mTouchY;
-        float x_changed = event.getRawX() - mTouchX;
-
-        // coef is the gradient's move to determine a neutral zone
-        float coef = Math.abs (y_changed / x_changed);
-        float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
-
-        /* Offset for Mouse Events */
-        int[] offset = new int[2];
-        mSurface.getLocationOnScreen(offset);
-        int xTouch = Math.round((event.getRawX() - offset[0]) * mVideoWidth / mSurface.getWidth());
-        int yTouch = Math.round((event.getRawY() - offset[1]) * mVideoHeight / mSurface.getHeight());
-
-        switch (event.getAction()) {
-
-            case MotionEvent.ACTION_DOWN:
-                // Audio
-                mTouchY = event.getRawY();
-                mVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                mTouchAction = TOUCH_NONE;
-                // Seek
-                mTouchX = event.getRawX();
-                // Mouse events for the core
-                LibVLC.sendMouseEvent(MotionEvent.ACTION_DOWN, 0, xTouch, yTouch);
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                // Mouse events for the core
-                LibVLC.sendMouseEvent(MotionEvent.ACTION_MOVE, 0, xTouch, yTouch);
-
-                // No volume/brightness action if coef < 2 or a secondary display is connected
-                //TODO : Volume action when a secondary display is connected
-                if (coef > 2 && mPresentation == null) {
-                    // Volume (Up or Down - Right side)
-                    if (!mEnableBrightnessGesture || (int)mTouchX > (screen.widthPixels / 2)){
-                        doVolumeTouch(y_changed);
-                    }
-                    // Brightness (Up or Down - Left side)
-                    if (mEnableBrightnessGesture && (int)mTouchX < (screen.widthPixels / 2)){
-                        doBrightnessTouch(y_changed);
-                    }
-                    // Extend the overlay for a little while, so that it doesn't
-                    // disappear on the user if more adjustment is needed. This
-                    // is because on devices with soft navigation (e.g. Galaxy
-                    // Nexus), gestures can't be made without activating the UI.
-                    if(AndroidDevices.hasNavBar())
-                        showOverlay();
-                }
-                // Seek (Right or Left move)
-                doSeekTouch(coef, xgesturesize, false);
-                break;
-
-            case MotionEvent.ACTION_UP:
-                // Mouse events for the core
-                LibVLC.sendMouseEvent(MotionEvent.ACTION_UP, 0, xTouch, yTouch);
-
-                // Audio or Brightness
-                if ( mTouchAction == TOUCH_NONE) {
-                    if (!mShowing) {
-                        showOverlay();
-                    } else {
-                        hideOverlay(true);
-                    }
-                }
-                // Seek
-                doSeekTouch(coef, xgesturesize, true);
-                break;
-        }
-        return mTouchAction != TOUCH_NONE;
-    }
-
-    private void doSeekTouch(float coef, float gesturesize, boolean seek) {
-        // No seek action if coef > 0.5 and gesturesize < 1cm
-        if (coef > 0.5 || Math.abs(gesturesize) < 1 || !mCanSeek)
-            return;
-
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK)
-            return;
-        mTouchAction = TOUCH_SEEK;
-
-        // Always show seekbar when searching
-        if (!mShowing) showOverlay();
-
-        long length = mLibVLC.getLength();
-        long time = mLibVLC.getTime();
-
-        // Size of the jump, 10 minutes max (600000), with a bi-cubic progression, for a 8cm gesture
-        int jump = (int) (Math.signum(gesturesize) * ((600000 * Math.pow((gesturesize / 8), 4)) + 3000));
-
-        // Adjust the jump
-        if ((jump > 0) && ((time + jump) > length))
-            jump = (int) (length - time);
-        if ((jump < 0) && ((time + jump) < 0))
-            jump = (int) -time;
-
-        //Jump !
-        if (seek && length > 0)
-            mLibVLC.setTime(time + jump);
-
-        if (length > 0)
-            //Show the jump's size
-            showInfo(String.format("%s%s (%s)",
-                    jump >= 0 ? "+" : "",
-                    StringUtils.millisToString(jump),
-                    StringUtils.millisToString(time + jump)), 1000);
-        else
-            showInfo("Unseekable stream", 1000);
-    }
-
-    private void doVolumeTouch(float y_changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
-            return;
-        int delta = -(int) ((y_changed / mSurfaceYDisplayRange) * mAudioMax);
-        int vol = (int) Math.min(Math.max(mVol + delta, 0), mAudioMax);
-        if (delta != 0) {
-            setAudioVolume(vol);
-        }
-    }
-
-    private void setAudioVolume(int vol) {
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
-        mTouchAction = TOUCH_VOLUME;
-        showInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol),1000);
-    }
-
-    private void updateMute () {
-        if (!mMute) {
-            mVolSave = mVol;
-            mMute = true;
-            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-            showInfo("Sound off",1000);
-        } else {
-            mVol = mVolSave;
-            mMute = false;
-            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mVol, 0);
-            showInfo("Sound on",1000);
-        }
-    }
-
-    private void initBrightnessTouch() {
-        float brightnesstemp = 0.01f;
-        // Initialize the layoutParams screen brightness
-        try {
-            brightnesstemp = android.provider.Settings.System.getInt(getContentResolver(),
-                    android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
-        } catch (SettingNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.screenBrightness = brightnesstemp;
-        getWindow().setAttributes(lp);
-        mIsFirstBrightnessGesture = false;
-    }
-
-    private void doBrightnessTouch(float y_changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
-            return;
-        if (mIsFirstBrightnessGesture) initBrightnessTouch();
-        mTouchAction = TOUCH_BRIGHTNESS;
-
-        // Set delta : 0.07f is arbitrary for now, it possibly will change in the future
-        float delta = - y_changed / mSurfaceYDisplayRange * 0.07f;
-
-        changeBrightness(delta);
-    }
-
-    private void changeBrightness(float delta) {
-        // Estimate and adjust Brightness
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.screenBrightness =  Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
-        // Set Brightness
-        getWindow().setAttributes(lp);
-        showInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness*15),1000);
-    }
-
-    /**
-     * handle changes of the seekbar (slicer)
-     */
-    private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            mDragging = true;
-            showOverlay(OVERLAY_INFINITE);
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            mDragging = false;
-            showOverlay();
-            hideInfo();
-        }
-
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser && mCanSeek) {
-                mLibVLC.setTime(progress);
-                setOverlayProgress();
-                mTime.setText(StringUtils.millisToString(progress));
-                showInfo(StringUtils.millisToString(progress));
-            }
-
-        }
-    };
-
-    /**
-     *
-     */
-    private final OnClickListener mAudioTrackListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            selectAudioTrack();
-        }
-    };
-
-    private void selectAudioTrack() {
-        if (mAudioTracksList == null) return;
-
-        final String[] arrList = new String[mAudioTracksList.size()];
-        int i = 0;
-        int listPosition = 0;
-        for(Map.Entry<Integer,String> entry : mAudioTracksList.entrySet()) {
-            arrList[i] = entry.getValue();
-            // map the track position to the list position
-            if(entry.getKey() == mLibVLC.getAudioTrack())
-                listPosition = i;
-            i++;
-        }
-        AlertDialog dialog = new AlertDialog.Builder(VideoPlayerActivity.this)
-                .setTitle("Audio track")
-                .setSingleChoiceItems(arrList, listPosition, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int listPosition) {
-                        /*int trackID = -1;
-                        // Reverse map search...
-                        for(Map.Entry<Integer, String> entry : mAudioTracksList.entrySet()) {
-                            if(arrList[listPosition].equals(entry.getValue())) {
-                                trackID = entry.getKey();
-                                break;
-                            }
-                        }
-                        if(trackID < 0) return;
-
-                        MediaDatabase.getInstance().updateMedia(
-                                mLocation,
-                                MediaDatabase.mediaColumn.MEDIA_AUDIOTRACK,
-                                trackID);
-                        mLibVLC.setAudioTrack(trackID);
-                        dialog.dismiss();*/
-                    }
-                })
-                .create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setOwnerActivity(VideoPlayerActivity.this);
-        dialog.show();
-    }
-
-    /**
-     *
-     */
-    private final OnClickListener mSubtitlesListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            selectSubtitles();
-        }
-    };
-
-    private void selectSubtitles() {
-        final String[] arrList = new String[mSubtitleTracksList.size()];
-        int i = 0;
-        int listPosition = 0;
-        for(Map.Entry<Integer,String> entry : mSubtitleTracksList.entrySet()) {
-            arrList[i] = entry.getValue();
-            // map the track position to the list position
-            if(entry.getKey() == mLibVLC.getSpuTrack())
-                listPosition = i;
-            i++;
-        }
-
-        AlertDialog dialog = new AlertDialog.Builder(VideoPlayerActivity.this)
-                .setTitle("Text track")
-                .setSingleChoiceItems(arrList, listPosition, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int listPosition) {
-                        /*int trackID = -2;
-                        // Reverse map search...
-                        for(Map.Entry<Integer, String> entry : mSubtitleTracksList.entrySet()) {
-                            if(arrList[listPosition].equals(entry.getValue())) {
-                                trackID = entry.getKey();
-                                break;
-                            }
-                        }
-                        if(trackID < -1) return;
-
-                        MediaDatabase.getInstance().updateMedia(
-                                mLocation,
-                                MediaDatabase.mediaColumn.MEDIA_SPUTRACK,
-                                trackID);
-                        mLibVLC.setSpuTrack(trackID);
-                        dialog.dismiss();*/
-                    }
-                })
-                .create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setOwnerActivity(VideoPlayerActivity.this);
-        dialog.show();
-    }
-
-    private final OnClickListener mNavMenuListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            showNavMenu();
-        }
-    };
-
-    private void showNavMenu() {
-        /* Try to return to the menu. */
-        /* FIXME: not working correctly in all cases */
-        mLibVLC.setTitle(0);
-    }
-
-    /**
-     *
-     */
-    private final OnClickListener mPlayPauseListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            doPlayPause();
-        }
-    };
-
-    private final void doPlayPause() {
-        if (mLibVLC.isPlaying())
-            pause();
-        else
-            play();
-        showOverlay();
-    }
-
-    /**
-     *
-     */
-    private final OnClickListener mBackwardListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            seek(-10000);
-        }
-    };
-
-    /**
-     *
-     */
-    private final OnClickListener mForwardListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            seek(10000);
-        }
-    };
-
-    public void seek(int delta) {
+    void seek(int delta) {
         // unseekable stream
-        if(mLibVLC.getLength() <= 0 || !mCanSeek) return;
+        if(mLibVLC.getLength() <= 0) return;
 
         long position = mLibVLC.getTime() + delta;
         if (position < 0) position = 0;
@@ -1606,35 +736,45 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         showOverlay();
     }
 
-    /**
-     *
-     */
-    private final OnClickListener mLockListener = new OnClickListener() {
+    private void play() {
+        mLibVLC.play();
+        videoSurface.setKeepScreenOn(true);
+    }
 
-        @Override
-        public void onClick(View v) {
-            if (mIsLocked) {
-                mIsLocked = false;
-                unlockScreen();
-            } else {
-                mIsLocked = true;
-                lockScreen();
+    private void pause() {
+        mLibVLC.pause();
+        videoSurface.setKeepScreenOn(false);
+    }
+
+    public void playPauseClick(View v) {
+        if (mLibVLC == null)
+            return;
+
+        if (mLibVLC.isPlaying()) {
+            mLibVLC.pause();
+        } else {
+            mLibVLC.play();
+            if (mLibVLC != null) {
+                if (mLibVLC.isPlaying()) {
+                    pause();
+                } else {
+                    play();
+                }
+                updatePlayPause();
             }
         }
-    };
+    }
 
-    /**
-     *
-     */
-    private final OnClickListener mSizeListener = new OnClickListener() {
+    public void seekForwardClick(View v) {
+        seek(10000);
+    }
 
-        @Override
-        public void onClick(View v) {
-            resizeVideo();
-        }
-    };
+    public void seekBackwardClick(View v) {
+        seek(10000);
+        seek(-10000);
+    }
 
-    private void resizeVideo() {
+    public void scaleClick(View v) {
         if (mCurrentSize < SURFACE_ORIGINAL) {
             mCurrentSize++;
         } else {
@@ -1644,11 +784,142 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         showOverlay();
     }
 
-    private final OnClickListener mRemainingTimeListener = new OnClickListener() {
+    public void subsClick(View v) {
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void showOverlay() {
+        if(!mOverlayVisible) {
+            updatePlayPause();
+
+            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_in);
+            controlLayout.setVisibility(View.VISIBLE);
+            controlLayout.startAnimation(fadeOutAnim);
+            toolbar.setVisibility(View.VISIBLE);
+            toolbar.startAnimation(fadeOutAnim);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                decorView.setSystemUiVisibility(uiOptions);
+            } else {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+
+            mLastSystemShowTime = System.currentTimeMillis();
+        }
+
+        mOverlayVisible = true;
+        mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
+        mDisplayHandler.postDelayed(mOverlayHideRunnable, FADE_OUT_OVERLAY);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void hideOverlay() {
+        // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
+        if(mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
+            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
+            controlLayout.startAnimation(fadeOutAnim);
+            controlLayout.setVisibility(View.GONE);
+            toolbar.startAnimation(fadeOutAnim);
+            toolbar.setVisibility(View.GONE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                decorView.setSystemUiVisibility(uiOptions);
+            } else {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            }
+
+            mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
+            mOverlayVisible = false;
+        }
+    }
+
+    private void showInfo(String text) {
+        playerInfo.setVisibility(View.VISIBLE);
+        playerInfo.setText(text);
+        mDisplayHandler.removeCallbacks(mInfoHideRunnable);
+        mDisplayHandler.postDelayed(mInfoHideRunnable, FADE_OUT_INFO);
+    }
+
+    private void hideInfo() {
+        if (playerInfo.getVisibility() == View.VISIBLE) {
+            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
+            playerInfo.startAnimation(fadeOutAnim);
+        }
+        playerInfo.setVisibility(View.INVISIBLE);
+    }
+
+    public void updatePlayPause() {
+        if(mLibVLC == null)
+            return;
+
+        if(mLibVLC.isPlaying()) {
+            playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
+        } else {
+            playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
+        }
+    }
+
+    private long setOverlayProgress() {
+        if (mLibVLC == null) {
+            return 0;
+        }
+
+        mDuration = mLibVLC.getLength();
+        mCurrentTime = mLibVLC.getTime();
+
+        if(!mOverlayVisible) {
+            return mCurrentTime;
+        }
+
+        controlBar.setMax((int) mDuration);
+        controlBar.setProgress((int) mCurrentTime);
+        controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+        controlBar.setSecondaryProgress(mStreamerProgress);
+        if (mCurrentTime >= 0) currentTime.setText(StringUtils.millisToString(mCurrentTime));
+        if (mDuration >= 0) lengthTime.setText(StringUtils.millisToString(mDuration));
+
+        try {
+            String filePath = ((PopcornApplication) getApplication()).getStreamDir() + "/status.json";
+            File file = new File(filePath);
+            if(file.exists()) {
+                Status status = Status.parseJSON(FileUtils.getContentsAsString(filePath));
+                if (status != null) {
+                    int newProgress = (int) Math.floor(status.progress);
+                    newProgress = (int) (mDuration / 100) * newProgress;
+                    if (mStreamerProgress < newProgress) {
+                        mStreamerProgress = newProgress;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+        controlBar.setSecondaryProgress(mStreamerProgress);
+
+        return mCurrentTime;
+    }
+
+    private SeekBar.OnSeekBarChangeListener mOnControlBarListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onClick(View v) {
-            mDisplayRemainingTime = !mDisplayRemainingTime;
-            showOverlay();
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if (fromUser) {
+                mLibVLC.setTime(progress);
+            }
         }
     };
 
@@ -1699,210 +970,20 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         }
     };
 
-    /**
-     * show overlay the the default timeout
-     */
-    private void showOverlay() {
-        showOverlay(OVERLAY_TIMEOUT);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setActionBarVisibility(boolean show) {
-        if (show)
-            mActionBar.show();
-        else
-            mActionBar.hide();
-    }
-
-    /**
-     * show overlay
-     */
-    private void showOverlay(int timeout) {
-        if (mIsNavMenu)
-            return;
-        mHandler.sendEmptyMessage(SHOW_PROGRESS);
-        if (!mShowing) {
-            mShowing = true;
-            if (!mIsLocked) {
-                if (mOverlayUseStatusBar)
-                    setActionBarVisibility(true);
-                else
-                    mOverlayHeader.setVisibility(View.VISIBLE);
-                mOverlayOption.setVisibility(View.VISIBLE);
-                mPlayPause.setVisibility(View.VISIBLE);
-                mMenu.setVisibility(View.VISIBLE);
-                dimStatusBar(false);
-            }
-            mOverlayProgress.setVisibility(View.VISIBLE);
-            if (mPresentation != null) mOverlayBackground.setVisibility(View.VISIBLE);
+    private Runnable mOverlayHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hideOverlay();
         }
-        Message msg = mHandler.obtainMessage(FADE_OUT);
-        if (timeout != 0) {
-            mHandler.removeMessages(FADE_OUT);
-            mHandler.sendMessageDelayed(msg, timeout);
+    };
+
+    private Runnable mInfoHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hideInfo();
         }
-        updateOverlayPausePlay();
-    }
+    };
 
-
-    /**
-     * hider overlay
-     */
-    private void hideOverlay(boolean fromUser) {
-        if (mShowing) {
-            mHandler.removeMessages(SHOW_PROGRESS);
-            Log.i(TAG, "remove View!");
-            if (mOverlayTips != null) mOverlayTips.setVisibility(View.INVISIBLE);
-            if (!fromUser && !mIsLocked) {
-                if (!mOverlayUseStatusBar)
-                    mOverlayHeader.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-                mOverlayOption.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-                mOverlayProgress.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-                mPlayPause.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-                mMenu.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-            }
-            if (mPresentation != null) {
-                mOverlayBackground.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-                mOverlayBackground.setVisibility(View.INVISIBLE);
-            }
-            if (mOverlayUseStatusBar)
-                setActionBarVisibility(false);
-            else
-                mOverlayHeader.setVisibility(View.INVISIBLE);
-            mOverlayOption.setVisibility(View.INVISIBLE);
-            mOverlayProgress.setVisibility(View.INVISIBLE);
-            mPlayPause.setVisibility(View.INVISIBLE);
-            mMenu.setVisibility(View.INVISIBLE);
-            mShowing = false;
-            dimStatusBar(true);
-        } else if (!fromUser) {
-            /*
-             * Try to hide the Nav Bar again.
-             * It seems that you can't hide the Nav Bar if you previously
-             * showed it in the last 1-2 seconds.
-             */
-            dimStatusBar(true);
-        }
-    }
-
-    /**
-     * Dim the status bar and/or navigation icons when needed on Android 3.x.
-     * Hide it on Android 4.0 and later
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void dimStatusBar(boolean dim) {
-        if (!LibVlcUtil.isHoneycombOrLater() || !AndroidDevices.hasNavBar() || mIsNavMenu)
-            return;
-        int layout = 0;
-        if (!AndroidDevices.hasCombBar() && LibVlcUtil.isJellyBeanOrLater())
-            layout = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        if (mOverlayUseStatusBar)
-            layout |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-
-        int visibility = layout;
-        if (dim) {
-            visibility |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-            if (!AndroidDevices.hasCombBar()) {
-                visibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-                if (mOverlayUseStatusBar)
-                    visibility |= View.SYSTEM_UI_FLAG_FULLSCREEN;
-            }
-        } else {
-            visibility |= View.SYSTEM_UI_FLAG_VISIBLE;
-        }
-        getWindow().getDecorView().setSystemUiVisibility(visibility);
-    }
-
-    private void updateOverlayPausePlay() {
-        if (mLibVLC == null)
-            return;
-
-        if (mPresentation == null)
-            mPlayPause.setBackgroundResource(mLibVLC.isPlaying() ? R.drawable.ic_av_pause
-                    : R.drawable.ic_av_play);
-        else
-            mPlayPause.setBackgroundResource(mLibVLC.isPlaying() ? R.drawable.play_button_circle
-                    : R.drawable.play_button_circle);
-    }
-
-    /**
-     * update the overlay
-     */
-    private int setOverlayProgress() {
-        if (mLibVLC == null) {
-            return 0;
-        }
-        int time = (int) mLibVLC.getTime();
-        int length = (int) mLibVLC.getLength();
-
-        // Update all view elements
-        boolean isSeekable = mEnableJumpButtons && length > 0;
-        mBackward.setVisibility(isSeekable ? View.VISIBLE : View.GONE);
-        mForward.setVisibility(isSeekable ? View.VISIBLE : View.GONE);
-        mSeekbar.setMax(length);
-        mSeekbar.setProgress(time);
-        if (!mOverlayUseStatusBar)
-            mSysTime.setText(DateFormat.getTimeFormat(this).format(new Date(System.currentTimeMillis())));
-        if (time >= 0) mTime.setText(StringUtils.millisToString(time));
-        if (length >= 0) mLength.setText(mDisplayRemainingTime && length > 0
-                ? "- " + StringUtils.millisToString(length - time)
-                : StringUtils.millisToString(length));
-
-        return time;
-    }
-
-    private void setESTracks() {
-        if (mLastAudioTrack >= 0) {
-            mLibVLC.setAudioTrack(mLastAudioTrack);
-            mLastAudioTrack = -1;
-        }
-        if (mLastSpuTrack >= -1) {
-            mLibVLC.setSpuTrack(mLastSpuTrack);
-            mLastSpuTrack = -2;
-        }
-    }
-
-    private void setESTrackLists(boolean force) {
-        if(mAudioTracksList == null || force) {
-            if (mLibVLC.getAudioTracksCount() > 2) {
-                mAudioTracksList = mLibVLC.getAudioTrackDescription();
-                mAudioTrack.setOnClickListener(mAudioTrackListener);
-                mAudioTrack.setVisibility(View.VISIBLE);
-            }
-            else {
-                mAudioTrack.setVisibility(View.GONE);
-                mAudioTrack.setOnClickListener(null);
-            }
-        }
-        if (mSubtitleTracksList == null || force) {
-            if (mLibVLC.getSpuTracksCount() > 0) {
-                mSubtitleTracksList = mLibVLC.getSpuTrackDescription();
-                mSubtitle.setOnClickListener(mSubtitlesListener);
-                mSubtitle.setVisibility(View.VISIBLE);
-            }
-            else {
-                mSubtitle.setVisibility(View.GONE);
-                mSubtitle.setOnClickListener(null);
-            }
-        }
-    }
-
-
-    /**
-     *
-     */
-    private void play() {
-        mLibVLC.play();
-        mSurface.setKeepScreenOn(true);
-    }
-
-    /**
-     *
-     */
-    private void pause() {
-        mLibVLC.pause();
-        mSurface.setKeepScreenOn(false);
-    }
 
     /**
      * External extras:
@@ -1912,24 +993,19 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private void loadMedia() {
         mLocation = null;
         String title = "Title";
-        boolean dontParse = false;
-        boolean fromStart = false;
-        String itemTitle = null;
-        int itemPosition = -1; // Index in the media list as passed by AudioServer (used only for vout transition internally)
-        long intentPosition = -1; // position passed in by intent (ms)
 
         if(getIntent().getExtras().containsKey(LOCATION)) {
             mLocation = getIntent().getStringExtra(LOCATION);
         }
 
-        mSurface.setKeepScreenOn(true);
+        videoSurface.setKeepScreenOn(true);
 
         if(mLibVLC == null)
             return;
 
         /* WARNING: hack to avoid a crash in mediacodec on KitKat.
          * Disable hardware acceleration if the media has a ts extension. */
-        if (mLocation != null && LibVlcUtil.isKitKatOrLater()) {
+        if (mLocation != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             String locationLC = mLocation.toLowerCase(Locale.ENGLISH);
             if (locationLC.endsWith(".ts")
                     || locationLC.endsWith(".tts")
@@ -1943,292 +1019,15 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         }
 
         /* Start / resume playback */
-        if(dontParse && itemPosition >= 0) {
-            // Provided externally from AudioService
-            Log.d(TAG, "Continuing playback from AudioService at index " + itemPosition);
-            savedIndexPosition = itemPosition;
-            if(!mLibVLC.isPlaying()) {
-                // AudioService-transitioned playback for item after sleep and resume
-                mLibVLC.playIndex(savedIndexPosition);
-                dontParse = false;
-            }
-            else {
-                stopLoadingAnimation();
-                showOverlay();
-            }
-            updateNavStatus();
-        } else if (savedIndexPosition > -1) {
-            AudioServiceController.getInstance().stop(); // Stop the previous playback.
+        if (savedIndexPosition > -1) {
             mLibVLC.setMediaList();
             mLibVLC.playIndex(savedIndexPosition);
-        } else if (mLocation != null && mLocation.length() > 0 && !dontParse) {
-            AudioServiceController.getInstance().stop(); // Stop the previous playback.
+        } else if (mLocation != null && mLocation.length() > 0) {
             mLibVLC.setMediaList();
             mLibVLC.getMediaList().add(new Media(mLibVLC, mLocation));
             savedIndexPosition = mLibVLC.getMediaList().size() - 1;
             mLibVLC.playIndex(savedIndexPosition);
         }
-        mCanSeek = false;
-
-
-        mTitle.setText(title);
     }
 
-    @SuppressWarnings("deprecation")
-    private int getScreenRotation(){
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO /* Android 2.2 has getRotation */) {
-            try {
-                Method m = display.getClass().getDeclaredMethod("getRotation");
-                return (Integer) m.invoke(display);
-            } catch (Exception e) {
-                return Surface.ROTATION_0;
-            }
-        } else {
-            return display.getOrientation();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private int getScreenOrientation(){
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int rot = getScreenRotation();
-        /*
-         * Since getRotation() returns the screen's "natural" orientation,
-         * which is not guaranteed to be SCREEN_ORIENTATION_PORTRAIT,
-         * we have to invert the SCREEN_ORIENTATION value if it is "naturally"
-         * landscape.
-         */
-        @SuppressWarnings("deprecation")
-        boolean defaultWide = display.getWidth() > display.getHeight();
-        if(rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270)
-            defaultWide = !defaultWide;
-        if(defaultWide) {
-            switch (rot) {
-                case Surface.ROTATION_0:
-                    return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                case Surface.ROTATION_90:
-                    return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                case Surface.ROTATION_180:
-                    // SCREEN_ORIENTATION_REVERSE_PORTRAIT only available since API
-                    // Level 9+
-                    return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                            : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                case Surface.ROTATION_270:
-                    // SCREEN_ORIENTATION_REVERSE_LANDSCAPE only available since API
-                    // Level 9+
-                    return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-                            : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                default:
-                    return 0;
-            }
-        } else {
-            switch (rot) {
-                case Surface.ROTATION_0:
-                    return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                case Surface.ROTATION_90:
-                    return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                case Surface.ROTATION_180:
-                    // SCREEN_ORIENTATION_REVERSE_PORTRAIT only available since API
-                    // Level 9+
-                    return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-                            : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                case Surface.ROTATION_270:
-                    // SCREEN_ORIENTATION_REVERSE_LANDSCAPE only available since API
-                    // Level 9+
-                    return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                            : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                default:
-                    return 0;
-            }
-        }
-    }
-
-    public void showAdvancedOptions(View v) {
-        //CommonDialogs.advancedOptions(this, v, MenuType.Video);
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void createPresentation() {
-        if (mMediaRouter == null || mEnableCloneMode)
-            return;
-
-        // Get the current route and its presentation display.
-        MediaRouter.RouteInfo route = mMediaRouter.getSelectedRoute(
-                MediaRouter.ROUTE_TYPE_LIVE_VIDEO);
-
-        Display presentationDisplay = route != null ? route.getPresentationDisplay() : null;
-
-        if (presentationDisplay != null) {
-            // Show a new presentation if possible.
-            Log.i(TAG, "Showing presentation on display: " + presentationDisplay);
-            mPresentation = new SecondaryDisplay(this, presentationDisplay);
-            mPresentation.setOnDismissListener(mOnDismissListener);
-            try {
-                mPresentation.show();
-            } catch (WindowManager.InvalidDisplayException ex) {
-                Log.w(TAG, "Couldn't show presentation!  Display was removed in "
-                        + "the meantime.", ex);
-                mPresentation = null;
-            }
-        } else
-            Log.i(TAG, "No secondary display detected");
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void removePresentation() {
-        if (mMediaRouter == null)
-            return;
-
-        // Dismiss the current presentation if the display has changed.
-        Log.i(TAG, "Dismissing presentation because the current route no longer "
-                + "has a presentation display.");
-        mLibVLC.pause(); // Stop sending frames to avoid a crash.
-        finish(); //TODO restore the video on the new display instead of closing
-        if (mPresentation != null) mPresentation.dismiss();
-        mPresentation = null;
-    }
-
-    /**
-     * Listens for when presentations are dismissed.
-     */
-    private final DialogInterface.OnDismissListener mOnDismissListener = new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            if (dialog == mPresentation) {
-                Log.i(TAG, "Presentation was dismissed.");
-                mPresentation = null;
-            }
-        }
-    };
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private final class SecondaryDisplay extends Presentation {
-        public final static String TAG = "VLC/SecondaryDisplay";
-
-        private SurfaceView mSurface;
-        private SurfaceView mSubtitlesSurface;
-        private SurfaceHolder mSurfaceHolder;
-        private SurfaceHolder mSubtitlesSurfaceHolder;
-        private FrameLayout mSurfaceFrame;
-        private LibVLC mLibVLC;
-
-        public SecondaryDisplay(Context context, Display display) {
-            super(context, display);
-            if (context instanceof Activity) {
-                setOwnerActivity((Activity) context);
-            }
-            try {
-                mLibVLC = VLCInstance.getLibVlcInstance();
-            } catch (LibVlcException e) {
-                Log.d(TAG, "LibVLC initialisation failed");
-                return;
-            }
-        }
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_player_remote);
-
-            mSurface = (SurfaceView) findViewById(R.id.remote_player_surface);
-            mSurfaceHolder = mSurface.getHolder();
-            mSurfaceFrame = (FrameLayout) findViewById(R.id.remote_player_surface_frame);
-            String chroma = mSettings.getString("chroma_format", "");
-            if(LibVlcUtil.isGingerbreadOrLater() && chroma.equals("YV12")) {
-                mSurfaceHolder.setFormat(ImageFormat.YV12);
-            } else if (chroma.equals("RV16")) {
-                mSurfaceHolder.setFormat(PixelFormat.RGB_565);
-            } else {
-                mSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
-            }
-
-            VideoPlayerActivity activity = (VideoPlayerActivity)getOwnerActivity();
-            if (activity == null) {
-                Log.e(TAG, "Failed to get the VideoPlayerActivity instance, secondary display won't work");
-                return;
-            }
-
-            mSurfaceHolder.addCallback(activity.mSurfaceCallback);
-
-            mSubtitlesSurface = (SurfaceView) findViewById(R.id.remote_subtitles_surface);
-            mSubtitlesSurfaceHolder = mSubtitlesSurface.getHolder();
-            mSubtitlesSurfaceHolder.setFormat(PixelFormat.RGBA_8888);
-            mSubtitlesSurface.setZOrderMediaOverlay(true);
-            mSubtitlesSurfaceHolder.addCallback(activity.mSubtitlesSurfaceCallback);
-
-            /* Only show the subtitles surface when using "Full Acceleration" mode */
-            if (mLibVLC != null && mLibVLC.getHardwareAcceleration() == LibVLC.HW_ACCELERATION_FULL)
-                mSubtitlesSurface.setVisibility(View.VISIBLE);
-            Log.i(TAG, "Secondary display created");
-        }
-    }
-
-    /**
-     * Start the video loading animation.
-     */
-    private void startLoadingAnimation() {
-        AnimationSet anim = new AnimationSet(true);
-        RotateAnimation rotate = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(800);
-        rotate.setInterpolator(new DecelerateInterpolator());
-        rotate.setRepeatCount(RotateAnimation.INFINITE);
-        anim.addAnimation(rotate);
-        mLoading.startAnimation(anim);
-        mLoadingText.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Stop the video loading animation.
-     */
-    private void stopLoadingAnimation() {
-        mLoading.setVisibility(View.INVISIBLE);
-        mLoading.clearAnimation();
-        mLoadingText.setVisibility(View.GONE);
-    }
-
-    public void onClickOverlayTips(View v) {
-        mOverlayTips.setVisibility(View.GONE);
-    }
-
-    public void onClickDismissTips(View v) {
-        mOverlayTips.setVisibility(View.GONE);
-        Editor editor = mSettings.edit();
-        editor.putBoolean(PREF_TIPS_SHOWN, true);
-        editor.commit();
-    }
-
-    private void updateNavStatus() {
-        mHasMenu = mLibVLC.getChapterCountForTitle(0) > 1 && mLibVLC.getTitleCount() > 1;
-        mIsNavMenu = mHasMenu && mLibVLC.getTitle() == 0;
-        /***
-         * HACK ALERT: assume that any media with >1 titles = DVD with menus
-         * Should be replaced with a more robust title/chapter selection popup
-         */
-
-        Log.d(TAG,
-                "updateNavStatus: getChapterCountForTitle(0) = "
-                        + mLibVLC.getChapterCountForTitle(0)
-                        + ", getTitleCount() = " + mLibVLC.getTitleCount());
-        if (mIsNavMenu) {
-            /*
-             * Keep the overlay hidden in order to have touch events directly
-             * transmitted to navigation handling.
-             */
-            hideOverlay(false);
-        }
-        else if (mHasMenu) {
-            setESTrackLists(true);
-            setESTracks();
-
-            /* Show the return to menu button. */
-            mNavMenu.setVisibility(View.VISIBLE);
-            mNavMenu.setOnClickListener(mNavMenuListener);
-        }
-        else
-            mNavMenu.setVisibility(View.GONE);
-
-    }
 }
