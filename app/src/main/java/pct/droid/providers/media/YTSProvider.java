@@ -70,7 +70,7 @@ public class YTSProvider extends MediaProvider {
         }
 
         @SuppressWarnings("unused")
-        public static final Parcelable.Creator<Video> CREATOR = new Parcelable.Creator<Video>() {
+        public static final Creator<Video> CREATOR = new Creator<Video>() {
             @Override
             public Video createFromParcel(Parcel in) {
                 return new Video(in);

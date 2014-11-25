@@ -72,7 +72,7 @@ public abstract class MediaProvider extends BaseProvider {
         }
 
         @SuppressWarnings("unused")
-        public static final Parcelable.Creator<Video> CREATOR = new Parcelable.Creator<Video>() {
+        public static final Creator<Video> CREATOR = new Creator<Video>() {
             @Override
             public Video createFromParcel(Parcel in) {
                 return new Video(in);
@@ -122,10 +122,10 @@ public abstract class MediaProvider extends BaseProvider {
         }
 
         @SuppressWarnings("unused")
-        public static final Parcelable.Creator<Torrent> CREATOR = new Parcelable.Creator<Torrent>() {
+        public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
             @Override
             public Torrent createFromParcel(Parcel in) {
-                return new MediaProvider.Torrent(in);
+                return new Torrent(in);
             }
 
             @Override
@@ -139,7 +139,7 @@ public abstract class MediaProvider extends BaseProvider {
         getList(null, filters, callback);
     }
 
-    public abstract void getList(ArrayList<MediaProvider.Video> currentList, HashMap<String, String> filters, Callback callback);
+    public abstract void getList(ArrayList<Video> currentList, HashMap<String, String> filters, Callback callback);
     public abstract void getDetail(String torrentId, Callback callback);
 
     public interface Callback {
