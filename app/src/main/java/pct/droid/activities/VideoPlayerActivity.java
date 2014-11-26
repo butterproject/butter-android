@@ -51,6 +51,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -87,6 +88,10 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    @InjectView(R.id.progressIndicator)
+    ProgressBar progressIndicator;
+    @InjectView(R.id.surfaceFrame)
+    FrameLayout surfaceFrame;
     @InjectView(R.id.videoSurface)
     SurfaceView videoSurface;
     @InjectView(R.id.subtitleSurface)
@@ -109,7 +114,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
     private SurfaceHolder mVideoSurfaceHolder;
     private SurfaceHolder mSubtitlesSurfaceHolder;
-    private FrameLayout mSurfaceFrame;
     private LibVLC mLibVLC;
     private String mLocation;
 
@@ -194,10 +198,12 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         } else {
             mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
         }
+        mVideoSurfaceHolder.addCallback(mSurfaceCallback);
 
         mSubtitlesSurfaceHolder = subtitleSurface.getHolder();
         mSubtitlesSurfaceHolder.setFormat(PixelFormat.RGBA_8888);
         subtitleSurface.setZOrderMediaOverlay(true);
+        mSubtitlesSurfaceHolder.addCallback(mSubtitlesSurfaceCallback);
 
         Log.d(TAG,
                 "Hardware acceleration mode: "
@@ -527,6 +533,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     break;
                 case EventHandler.MediaPlayerPlaying:
                     Log.i(TAG, "MediaPlayerPlaying");
+                    activity.progressIndicator.setVisibility(View.GONE);
                     activity.showOverlay();
                     /** FIXME: update the track list when it changes during the
                      *  playback. (#7540) */
@@ -624,11 +631,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void changeSurfaceSize() {
-        int sw;
-        int sh;
-
-        sw = getWindow().getDecorView().getWidth();
-        sh = getWindow().getDecorView().getHeight();
+        int sw = getWindow().getDecorView().getWidth();
+        int sh = getWindow().getDecorView().getHeight();
 
         double dw = sw, dh = sh;
 
@@ -693,28 +697,16 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                 break;
         }
 
-        SurfaceView surface;
-        SurfaceView subtitlesSurface;
-        SurfaceHolder surfaceHolder;
-        SurfaceHolder subtitlesSurfaceHolder;
-        FrameLayout surfaceFrame;
-
-        surface = videoSurface;
-        subtitlesSurface = subtitleSurface;
-        surfaceHolder = mVideoSurfaceHolder;
-        subtitlesSurfaceHolder = mSubtitlesSurfaceHolder;
-        surfaceFrame = mSurfaceFrame;
-
         // force surface buffer size
-        surfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
-        subtitlesSurfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
+        mVideoSurfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
+        mSubtitlesSurfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
 
         // set display size
-        LayoutParams lp = surface.getLayoutParams();
+        LayoutParams lp = videoSurface.getLayoutParams();
         lp.width  = (int) Math.ceil(dw * mVideoWidth / mVideoVisibleWidth);
         lp.height = (int) Math.ceil(dh * mVideoHeight / mVideoVisibleHeight);
-        surface.setLayoutParams(lp);
-        subtitlesSurface.setLayoutParams(lp);
+        videoSurface.setLayoutParams(lp);
+        subtitleSurface.setLayoutParams(lp);
 
         // set frame size (crop if necessary)
         lp = surfaceFrame.getLayoutParams();
@@ -722,8 +714,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         lp.height = (int) Math.floor(dh);
         surfaceFrame.setLayoutParams(lp);
 
-        surface.invalidate();
-        subtitlesSurface.invalidate();
+        videoSurface.invalidate();
+        subtitleSurface.invalidate();
     }
 
     void seek(int delta) {
