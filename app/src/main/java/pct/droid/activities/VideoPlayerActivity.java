@@ -231,6 +231,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         EventHandler em = EventHandler.getInstance();
         em.addHandler(eventHandler);
 
+        controlBar.setOnSeekBarChangeListener(mOnControlBarListener);
+
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         loadMedia();
     }
