@@ -27,26 +27,26 @@
     </string-array>
 
     <string-array name="files">
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_stereo.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_aac_ac3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_aac.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_mpeg4_mp3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_stereo.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac_ac3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_aac.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mpeg4_mp3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
         <item>http://www.libde265.org/hevc-bitstreams/bbb-1920x1080-cfg02.mkv</item>
         <item>http://www.libde265.org/hevc-bitstreams/bbb-3840x2160-cfg02.mkv</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/Spider-Man_2_720p_24fps_mp3.mp4</item>
-        <item>http://us-chi.cdn.ptn.pm/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_mp3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4</item>
         <item>https://www.youtube.com/watch?v=SvDMZFfwmgo</item>
         <item>http://youtu.be/K22v4xolOsc</item>
     </string-array>
