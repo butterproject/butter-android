@@ -158,6 +158,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoplayer);
         ButterKnife.inject(this);
+        setSupportActionBar(toolbar);
 
         mDisplayHandler = new Handler(Looper.getMainLooper());
 
