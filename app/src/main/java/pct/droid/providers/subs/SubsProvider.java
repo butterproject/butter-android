@@ -22,6 +22,7 @@ import java.util.zip.ZipInputStream;
 import pct.droid.providers.BaseProvider;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.utils.FileUtils;
+import pct.droid.utils.LogUtils;
 import pct.droid.utils.StorageUtils;
 
 public abstract class SubsProvider extends BaseProvider {
@@ -34,71 +35,77 @@ public abstract class SubsProvider extends BaseProvider {
 
     public static Call download(final Context context, final MediaProvider.Video video, final String languageCode, final Callback callback) {
         OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder().url(video.subtitles.get(languageCode)).build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                callback.onFailure(request, e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    FileOutputStream fileOutputStream = null;
-                    InputStream inputStream = null;
-                    boolean failure = false;
-                    try {
-                        File cacheDirectory = StorageUtils.getIdealCacheDirectory(context);
-                        File subsDirectory = new File(cacheDirectory, "subs");
-
-                        String fileName = video.imdbId + "-" + languageCode;
-                        File zipPath = new File(subsDirectory, fileName + ".zip");
-                        File srtPath = new File(subsDirectory, fileName + ".srt");
-
-                        subsDirectory.mkdirs();
-
-                        if(zipPath.exists()) {
-                            File to = new File(subsDirectory, "temp" + System.currentTimeMillis());
-                            zipPath.renameTo(to);
-                            to.delete();
-                        }
-                        if(srtPath.exists()) {
-                            File to = new File(subsDirectory, "temp2" + System.currentTimeMillis());
-                            srtPath.renameTo(to);
-                            to.delete();
-                        }
-
-                        if(response.request().urlString().contains(".zip")) {
-                            SubsProvider.unpack(response.body().byteStream(), srtPath);
-                        } else {
-                            FileUtils.saveStringFile(response.body().byteStream(), srtPath);
-                        }
-                        zipPath.delete();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        callback.onFailure(response.request(), e);
-                        failure = true;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        callback.onFailure(response.request(), e);
-                        failure = true;
-                    } finally {
-                        if(fileOutputStream != null)
-                            fileOutputStream.close();
-                        if(inputStream != null)
-                            inputStream.close();
-
-                        if(!failure) callback.onResponse(response);
+        if(video.subtitles.containsKey(languageCode)) {
+            try {
+                Request request = new Request.Builder().url(video.subtitles.get(languageCode)).build();
+                Call call = client.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Request request, IOException e) {
+                        callback.onFailure(request, e);
                     }
-                } else {
-                    callback.onFailure(response.request(), new IOException("Unknown error"));
-                }
-            }
-        });
 
-        return call;
+                    @Override
+                    public void onResponse(Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            FileOutputStream fileOutputStream = null;
+                            InputStream inputStream = null;
+                            boolean failure = false;
+                            try {
+                                File cacheDirectory = StorageUtils.getIdealCacheDirectory(context);
+                                File subsDirectory = new File(cacheDirectory, "subs");
+
+                                String fileName = video.imdbId + "-" + languageCode;
+                                File zipPath = new File(subsDirectory, fileName + ".zip");
+                                File srtPath = new File(subsDirectory, fileName + ".srt");
+
+                                subsDirectory.mkdirs();
+
+                                if (zipPath.exists()) {
+                                    File to = new File(subsDirectory, "temp" + System.currentTimeMillis());
+                                    zipPath.renameTo(to);
+                                    to.delete();
+                                }
+                                if (srtPath.exists()) {
+                                    File to = new File(subsDirectory, "temp2" + System.currentTimeMillis());
+                                    srtPath.renameTo(to);
+                                    to.delete();
+                                }
+
+                                if (response.request().urlString().contains(".zip")) {
+                                    SubsProvider.unpack(response.body().byteStream(), srtPath);
+                                } else {
+                                    FileUtils.saveStringFile(response.body().byteStream(), srtPath);
+                                }
+                                zipPath.delete();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                                callback.onFailure(response.request(), e);
+                                failure = true;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                callback.onFailure(response.request(), e);
+                                failure = true;
+                            } finally {
+                                if (fileOutputStream != null)
+                                    fileOutputStream.close();
+                                if (inputStream != null)
+                                    inputStream.close();
+
+                                if (!failure) callback.onResponse(response);
+                            }
+                        } else {
+                            callback.onFailure(response.request(), new IOException("Unknown error"));
+                        }
+                    }
+                });
+
+                return call;
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private static void unpack(InputStream is, File srtFile) throws IOException {

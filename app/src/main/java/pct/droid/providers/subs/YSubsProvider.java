@@ -120,7 +120,7 @@ public class YSubsProvider extends SubsProvider {
                 for(String lang : langs) {
                     if(langMap.get(lang).size() <= 0) continue;
                     ArrayList<HashMap<String, Object>> subMap = langMap.get(lang);
-                    int currentRating = 0;
+                    int currentRating = -1;
                     String currentSub = "";
                     for(HashMap<String, Object> sub : subMap) {
                         int itemRating = ((Double)sub.get("rating")).intValue();
