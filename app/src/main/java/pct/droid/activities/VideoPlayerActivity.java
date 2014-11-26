@@ -62,8 +62,8 @@ import pct.droid.utils.StringUtils;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
 
-    public final static String LOCATION = "location";
-    public final static String DATA = "data";
+    public final static String LOCATION = "stream_url";
+    public final static String DATA = "video_data";
     public final static String QUALITY = "quality";
     public final static String SUBTITLES = "subtitles";
 

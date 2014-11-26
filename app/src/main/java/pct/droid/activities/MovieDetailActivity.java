@@ -117,8 +117,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     if (!YouTubeData.isYouTubeUrl(mItem.trailer)) {
                         trailerIntent = new Intent(MovieDetailActivity.this, VideoPlayerActivity.class);
                     }
-                    trailerIntent.putExtra(VideoPlayerActivity.DATA, mItem);
-                    trailerIntent.putExtra(VideoPlayerActivity.LOCATION, mItem.trailer);
+                    trailerIntent.putExtra(TrailerPlayerActivity.DATA, mItem);
+                    trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mItem.trailer);
                     startActivity(trailerIntent);
                     break;
                 case R.id.playButton:
@@ -217,7 +217,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
         mItem = getIntent().getParcelableExtra("item");
-        LogUtils.d(getIntent().getExtras());
+        LogUtils.d(mItem.toString());
         titleText.setText(mItem.title);
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
@@ -232,6 +232,10 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             synopsisText.setText(mItem.synopsis);
         } else {
             synopsisBlock.setClickable(false);
+        }
+
+        if(mItem.trailer == null) {
+            trailerBlock.setVisibility(View.GONE);
         }
 
         Picasso.with(this).load(mItem.image).into(new Target() {

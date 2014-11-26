@@ -321,8 +321,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
                     MediaProvider.Video video = new MediaProvider.Video();
                     video.title = file_types[index];
-                    i.putExtra(VideoPlayerActivity.DATA, video);
-                    i.putExtra(VideoPlayerActivity.LOCATION, location);
+                    i.putExtra(TrailerPlayerActivity.DATA, video);
+                    i.putExtra(TrailerPlayerActivity.LOCATION, location);
                     startActivity(i);
                 } else {
                     MediaProvider.Video video = new MediaProvider.Video();

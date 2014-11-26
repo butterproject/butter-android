@@ -28,7 +28,7 @@ public class StreamLoadingActivity extends BaseActivity {
     public final static String STREAM_URL = "stream_url";
     public final static String DATA = "video_data";
     public final static String QUALITY = "quality";
-    public final static String SUBTITLES = "subs";
+    public final static String SUBTITLES = "subtitles";
 
     private FileObserver mFileObserver;
     private Boolean mIntentStarted = false, mHasSubs = false;
