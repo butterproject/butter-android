@@ -1,23 +1,3 @@
-/*****************************************************************************
- * VideoPlayerActivity.java
- *****************************************************************************
- * Copyright © 2011-2014 VLC authors and VideoLAN
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
- *****************************************************************************/
-
 package pct.droid.activities;
 
 import android.annotation.TargetApi;
@@ -72,14 +52,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.PopcornApplication;
 import pct.droid.R;
+import pct.droid.providers.media.MediaProvider;
 import pct.droid.streamer.Status;
 import pct.droid.utils.FileUtils;
+import pct.droid.utils.LogUtils;
+import pct.droid.utils.PixelUtils;
 import pct.droid.utils.StringUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
-
-    private final static String TAG = "VLC/VideoPlayerActivity";
 
     public final static String LOCATION = "location";
     public final static String DATA = "data";
@@ -127,6 +108,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private int mCurrentSize = SURFACE_BEST_FIT;
 
     /** Overlay */
+    private MediaProvider.Video mVideo;
     private long mDuration = 0;
     private long mCurrentTime = 0;
     private int mStreamerProgress = 0;
@@ -177,9 +159,39 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         setContentView(R.layout.activity_videoplayer);
         ButterKnife.inject(this);
 
-        decorView = getWindow().getDecorView();
-
         mDisplayHandler = new Handler(Looper.getMainLooper());
+
+        decorView = getWindow().getDecorView();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            decorView.setOnSystemUiVisibilityChangeListener(this);
+        }
+
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
+            toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(this), toolbar.getPaddingRight(), toolbar.getPaddingBottom());
+        }
+
+        if(getIntent().hasExtra(DATA)) {
+            mVideo = getIntent().getParcelableExtra(DATA);
+            if(mVideo != null && mVideo.title != null) {
+                if (getIntent().hasExtra(QUALITY)) {
+                    getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title + " (" + getIntent().getStringExtra(QUALITY) + ")");
+                } else {
+                    getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title);
+                }
+            } else {
+                getSupportActionBar().setTitle(getString(R.string.now_playing));
+            }
+
+            if(getIntent().hasExtra(SUBTITLES)) {
+                //startSubtitles();
+            }
+        } else {
+            getSupportActionBar().setTitle(getString(R.string.now_playing));
+        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /* Services and miscellaneous */
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -188,7 +200,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         try {
             mLibVLC = VLCInstance.getLibVlcInstance();
         } catch (LibVlcException e) {
-            Log.d(TAG, "LibVLC initialisation failed");
+            LogUtils.d("LibVLC initialisation failed");
             return;
         }
 
@@ -205,7 +217,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         subtitleSurface.setZOrderMediaOverlay(true);
         mSubtitlesSurfaceHolder.addCallback(mSubtitlesSurfaceCallback);
 
-        Log.d(TAG,
+        LogUtils.d(
                 "Hardware acceleration mode: "
                         + Integer.toString(mLibVLC.getHardwareAcceleration()));
 
@@ -529,10 +541,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
             switch (msg.getData().getInt("event")) {
                 case EventHandler.MediaParsedChanged:
-                    Log.i(TAG, "MediaParsedChanged");
                     break;
                 case EventHandler.MediaPlayerPlaying:
-                    Log.i(TAG, "MediaPlayerPlaying");
                     activity.progressIndicator.setVisibility(View.GONE);
                     activity.showOverlay();
                     /** FIXME: update the track list when it changes during the
@@ -540,23 +550,18 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     activity.changeAudioFocus(true);
                     break;
                 case EventHandler.MediaPlayerPaused:
-                    Log.i(TAG, "MediaPlayerPaused");
                     break;
                 case EventHandler.MediaPlayerStopped:
-                    Log.i(TAG, "MediaPlayerStopped");
                     activity.changeAudioFocus(false);
                     break;
                 case EventHandler.MediaPlayerEndReached:
-                    Log.i(TAG, "MediaPlayerEndReached");
                     activity.changeAudioFocus(false);
                     activity.endReached();
                     break;
                 case EventHandler.MediaPlayerEncounteredError:
-                    Log.i(TAG, "MediaPlayerEncounteredError");
                     activity.encounteredError();
                     break;
                 case EventHandler.HardwareAccelerationError:
-                    Log.i(TAG, "HardwareAccelerationError");
                     activity.handleHardwareAccelerationError();
                     break;
                 case EventHandler.MediaPlayerTimeChanged:
@@ -566,7 +571,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     activity.setOverlayProgress();
                     break;
                 default:
-                    Log.e(TAG, String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
+                    LogUtils.e(String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
                     break;
             }
             activity.updatePlayPause();
@@ -575,7 +580,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
     private void endReached() {
         if(mLibVLC.getMediaList().expandMedia(savedIndexPosition) == 0) {
-            Log.d(TAG, "Found a video playlist, expanding it");
+            LogUtils.d("Found a video playlist, expanding it");
             eventHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -584,7 +589,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             }, 1000);
         } else {
             /* Exit player when reaching the end */
-            finish();
+            // TODO: END, CLOSE DIALOG?
         }
     }
 
@@ -643,7 +648,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         // sanity check
         if (dw * dh == 0 || mVideoWidth * mVideoHeight == 0) {
-            Log.e(TAG, "Invalid surface size");
+            LogUtils.e("Invalid surface size");
             return;
         }
 
@@ -813,9 +818,9 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         if(mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
             Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
             controlLayout.startAnimation(fadeOutAnim);
-            controlLayout.setVisibility(View.GONE);
+            controlLayout.setVisibility(View.INVISIBLE);
             toolbar.startAnimation(fadeOutAnim);
-            toolbar.setVisibility(View.GONE);
+            toolbar.setVisibility(View.INVISIBLE);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -922,13 +927,13 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             if(format == PixelFormat.RGBX_8888)
-                Log.d(TAG, "Pixel format is RGBX_8888");
+                LogUtils.d("Pixel format is RGBX_8888");
             else if(format == PixelFormat.RGB_565)
-                Log.d(TAG, "Pixel format is RGB_565");
+                LogUtils.d("Pixel format is RGB_565");
             else if(format == ImageFormat.YV12)
-                Log.d(TAG, "Pixel format is YV12");
+                LogUtils.d("Pixel format is YV12");
             else
-                Log.d(TAG, "Pixel format is other/unknown");
+                LogUtils.d("Pixel format is other/unknown");
             if(mLibVLC != null)
                 mLibVLC.attachSurface(holder.getSurface(), VideoPlayerActivity.this);
         }
