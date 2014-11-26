@@ -8,8 +8,8 @@ android {
         applicationId "pct.droid"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
+        versionName "0.1"
     }
 
     buildTypes {
@@ -17,10 +17,9 @@ android {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-
-    lintOptions {
-        abortOnError false
+        debug {
+            versionNameSuffix "#"+(System.getenv("BUILD_NUMBER") ?: "dev")
+        }
     }
 }
 
@@ -36,4 +35,5 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:2.0.2'
     compile 'com.github.nirhart:parallaxscroll:1.0'
     compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile project(':vitamio')
 }
