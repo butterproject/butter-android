@@ -74,6 +74,8 @@ public class TrailerPlayerActivity extends ActionBarActivity implements View.OnS
     TextView lengthTime;
     @InjectView(R.id.scaleButton)
     ImageButton scaleButton;
+    @InjectView(R.id.subsButton)
+    ImageButton subsButton;
 
     private static final int FADE_OUT_OVERLAY = 5000;
     private static final int FADE_OUT_INFO = 1000;
@@ -111,6 +113,7 @@ public class TrailerPlayerActivity extends ActionBarActivity implements View.OnS
 
         // Disable buttons in trailer layout
         scaleButton.setVisibility(View.GONE);
+        subsButton.setVisibility(View.GONE);
 
         setSupportActionBar(toolbar);
 
