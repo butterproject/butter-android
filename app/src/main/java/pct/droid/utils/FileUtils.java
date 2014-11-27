@@ -108,7 +108,11 @@ public class FileUtils {
     }
 
     public static void saveStringToFile(String string, File path, String encoding) throws IOException {
-        if(path.getParentFile().mkdirs() && (path.exists() || path.createNewFile())) {
+        if(path.exists()) {
+            path.delete();
+        }
+
+        if((path.getParentFile().mkdirs() || path.getParentFile().exists()) && path.createNewFile()) {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding));
             writer.write(string);
             writer.close();
