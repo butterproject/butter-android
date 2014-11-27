@@ -26,30 +26,39 @@ import java.io.InputStream;
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- * 
- * @author J. David Requejo
  *
+ * @author J. David Requejo
  */
-public interface TimedTextFileFormat {
-	
-	/**
-	 * This methods receives the path to a file, parses it, and returns a TimedTextObject
-	 * 
-	 * @param fileName String that contains the path to the file
-	 * @return TimedTextObject representing the parsed file
-	 * @throws java.io.IOException when having trouble reading the file from the given path
-	 */
-	TimedTextObject parseFile(String fileName, InputStream is) throws IOException, FatalParsingException;
-	
-	/**
-	 * This method transforms a given TimedTextObject into a formated subtitle file
-	 * 
-	 * @param tto the object to transform into a file
-	 * @return NULL if the given TimedTextObject has not been built first,
-	 * 		or String[] where each String is at least a line, if size is 2, then the file has at least two lines.
-	 * 		or byte[] in case the file is a binary (as is the case of STL format) 
-	 */
-	Object toFile(TimedTextObject tto);
-	
+public abstract class TimedTextFileFormat {
+
+    /**
+     * This methods receives the path to a file, parses it, and returns a TimedTextObject
+     *
+     * @param fileName String that contains the path to the file
+     * @return TimedTextObject representing the parsed file
+     * @throws java.io.IOException when having trouble reading the file from the given path
+     */
+    public abstract TimedTextObject parseFile(String fileName, String[] inputString) throws IOException, FatalParsingException;
+    public TimedTextObject parseFile(String fileName, String inputString) throws IOException, FatalParsingException {
+        return parseFile(fileName, inputString.split("\n|\r\n"));
+    }
+
+    /**
+     * This method transforms a given TimedTextObject into a formated subtitle file
+     *
+     * @param tto the object to transform into a file
+     * @return NULL if the given TimedTextObject has not been built first,
+     * or String[] where each String is at least a line, if size is 2, then the file has at least two lines.
+     * or byte[] in case the file is a binary (as is the case of STL format)
+     */
+    public abstract Object toFile(TimedTextObject tto);
+
+    protected String getLine(String[] strArray, int index) {
+        if(index < strArray.length) {
+            return strArray[index];
+        }
+        return null;
+    }
+
 
 }

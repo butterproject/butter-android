@@ -4,6 +4,7 @@ import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 
 public class FileUtils {
 
@@ -46,36 +53,62 @@ public class FileUtils {
         file.delete();
     }
 
-    public static void saveStringFile(InputStream inputStream, File path) throws IOException {
-        if(path.createNewFile()) {
-            UniversalDetector charsetDetector = new UniversalDetector(null);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    /* NEEDS IMPROVEMENTS */
+    public static String inputstreamToCharsetString(InputStream inputStream) throws IOException {
+        UniversalDetector charsetDetector = new UniversalDetector(null);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-            byte data[] = new byte[1024];
-            int count;
-            while ((count = inputStream.read(data)) != -1) {
-                if (!charsetDetector.isDone()) {
-                    charsetDetector.handleData(data, 0, count);
-                }
-                byteArrayOutputStream.write(data, 0, count);
+        byte data[] = new byte[1024];
+        int count;
+        while ((count = inputStream.read(data)) != -1) {
+            if (!charsetDetector.isDone()) {
+                charsetDetector.handleData(data, 0, count);
             }
-            charsetDetector.dataEnd();
+            byteArrayOutputStream.write(data, 0, count);
+        }
+        charsetDetector.dataEnd();
 
-            String charset = charsetDetector.getDetectedCharset();
-            charsetDetector.reset();
-            if (charset == null || charset.isEmpty()) {
-                charset = "UTF-8";
-            } else if("MACCYRILLIC".equals(charset)) {
-                charset = "Windows-1256";
-            }
+        String detectedCharset = charsetDetector.getDetectedCharset();
+        charsetDetector.reset();
+        if (detectedCharset == null || detectedCharset.isEmpty()) {
+            detectedCharset = "UTF-8";
+        } else if("MACCYRILLIC".equals(detectedCharset)) {
+            detectedCharset = "Windows-1256";
+        }
 
-            String outputString = new String(byteArrayOutputStream.toByteArray(), charset);
-            saveStringToFile(outputString, path, "utf-8");
+        byte[] stringBytes = byteArrayOutputStream.toByteArray();
+        String charsetString = new String(byteArrayOutputStream.toByteArray(), detectedCharset);
+        Charset charset = Charset.forName(detectedCharset);
+        CharsetDecoder decoder = charset.newDecoder();
+
+        try {
+            CharBuffer cbuf = decoder.decode(ByteBuffer.wrap(stringBytes));
+            return cbuf.toString();
+        } catch (CharacterCodingException e) {
+            return new String(stringBytes, detectedCharset);
         }
     }
 
+    public static void saveStringFile(InputStream inputStream, File path) throws IOException {
+        String outputString = inputstreamToCharsetString(inputStream);
+        saveStringToFile(outputString, path, "UTF-8");
+    }
+
+    public static void saveStringFile(String inputStr, File path) throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(inputStr.getBytes());
+        saveStringFile(inputStream, path);
+    }
+
+    public static void saveStringFile(String[] inputStr, File path) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String str : inputStr) {
+            stringBuilder.append(str).append("\n");
+        }
+        saveStringFile(stringBuilder.toString(), path);
+    }
+
     public static void saveStringToFile(String string, File path, String encoding) throws IOException {
-        if(path.exists() || path.createNewFile()) {
+        if(path.getParentFile().mkdirs() && (path.exists() || path.createNewFile())) {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding));
             writer.write(string);
             writer.close();
