@@ -9,32 +9,24 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:foregroundGravity="clip_horizontal|clip_vertical">
         <VideoView
             android:id="@+id/trailerView"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />
-        <FrameLayout
-            android:id="@+id/surfaceFrame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:foregroundGravity="clip_horizontal|clip_vertical" >
-            <SurfaceView
-                android:id="@+id/videoSurface"
-                android:layout_width="1dp"
-                android:layout_height="1dp" />
-            <SurfaceView
-                android:id="@+id/subtitleSurface"
-                android:layout_width="1dp"
-                android:layout_height="1dp" />
-        </FrameLayout>
+        <SurfaceView
+            android:id="@+id/videoSurface"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
     </FrameLayout>
 
     <TextView
-        android:id="@+id/subtitleView"
+        android:id="@+id/subtitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

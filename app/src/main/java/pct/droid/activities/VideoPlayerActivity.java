@@ -8,6 +8,7 @@ import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,9 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -45,7 +49,11 @@ import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.WeakHandler;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -54,9 +62,13 @@ import pct.droid.PopcornApplication;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.streamer.Status;
+import pct.droid.subs.Caption;
+import pct.droid.subs.FormatSRT;
+import pct.droid.subs.TimedTextObject;
 import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
+import pct.droid.utils.StorageUtils;
 import pct.droid.utils.StringUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -71,12 +83,10 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     Toolbar toolbar;
     @InjectView(R.id.progressIndicator)
     ProgressBar progressIndicator;
-    @InjectView(R.id.surfaceFrame)
-    FrameLayout surfaceFrame;
     @InjectView(R.id.videoSurface)
     SurfaceView videoSurface;
-    @InjectView(R.id.subtitleSurface)
-    SurfaceView subtitleSurface;
+    @InjectView(R.id.subtitleText)
+    TextView subtitleText;
     @InjectView(R.id.controlLayout)
     RelativeLayout controlLayout;
     @InjectView(R.id.playerInfo)
@@ -94,7 +104,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private Handler mDisplayHandler;
 
     private SurfaceHolder mVideoSurfaceHolder;
-    private SurfaceHolder mSubtitlesSurfaceHolder;
     private LibVLC mLibVLC;
     private String mLocation;
 
@@ -107,8 +116,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private static final int SURFACE_ORIGINAL = 6;
     private int mCurrentSize = SURFACE_BEST_FIT;
 
-    /** Overlay */
-    private MediaProvider.Video mVideo;
     private long mDuration = 0;
     private long mCurrentTime = 0;
     private int mStreamerProgress = 0;
@@ -119,10 +126,13 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private static final int FADE_OUT_OVERLAY = 5000;
     private static final int FADE_OUT_INFO = 1000;
 
-    // Playlist
-    private int savedIndexPosition = -1;
+    private MediaProvider.Video mVideo;
+    private TimedTextObject mSubs;
+    private Caption mLastSub = null;
 
-    // size of the video
+    private int savedIndexPosition = -1;
+    private boolean mSeeking = false;
+
     private int mVideoHeight;
     private int mVideoWidth;
     private int mVideoVisibleHeight;
@@ -130,13 +140,11 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private int mSarNum;
     private int mSarDen;
 
-    //Volume
     private AudioManager mAudioManager;
     private int mAudioMax;
     private OnAudioFocusChangeListener mAudioFocusListener;
     private int mVol;
 
-    //Touch Events
     private static final int TOUCH_NONE = 0;
     private static final int TOUCH_VOLUME = 1;
     private static final int TOUCH_BRIGHTNESS = 2;
@@ -145,11 +153,9 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private int mSurfaceYDisplayRange;
     private float mTouchY, mTouchX;
 
-    // Brightness
     private boolean mIsFirstBrightnessGesture = true;
     private float mRestoreAutoBrightness = -1f;
 
-    // Whether fallback from HW acceleration to SW decoding was done.
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
 
@@ -159,6 +165,15 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         setContentView(R.layout.activity_videoplayer);
         ButterKnife.inject(this);
         setSupportActionBar(toolbar);
+
+        videoSurface.setVisibility(View.VISIBLE);
+        toolbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                onTouchEvent(event);
+                return true;
+            }
+        });
 
         mDisplayHandler = new Handler(Looper.getMainLooper());
 
@@ -187,7 +202,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             }
 
             if(getIntent().hasExtra(SUBTITLES)) {
-                //startSubtitles();
+                startSubtitles();
             }
         } else {
             getSupportActionBar().setTitle(getString(R.string.now_playing));
@@ -213,20 +228,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         }
         mVideoSurfaceHolder.addCallback(mSurfaceCallback);
 
-        mSubtitlesSurfaceHolder = subtitleSurface.getHolder();
-        mSubtitlesSurfaceHolder.setFormat(PixelFormat.RGBA_8888);
-        subtitleSurface.setZOrderMediaOverlay(true);
-        mSubtitlesSurfaceHolder.addCallback(mSubtitlesSurfaceCallback);
+        LogUtils.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
 
-        LogUtils.d(
-                "Hardware acceleration mode: "
-                        + Integer.toString(mLibVLC.getHardwareAcceleration()));
-
-        /* Only show the subtitles surface when using "Full Acceleration" mode */
-        if (mLibVLC.getHardwareAcceleration() == LibVLC.HW_ACCELERATION_FULL)
-            subtitleSurface.setVisibility(View.VISIBLE);
-        // Signal to LibVLC that the videoPlayerActivity was created, thus the
-        // SurfaceView is now available for MediaCodec direct rendering.
         mLibVLC.eventVideoPlayerActivityCreated(true);
 
         EventHandler em = EventHandler.getInstance();
@@ -239,16 +242,24 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(mLibVLC != null) {
+            mLibVLC.setTime(mCurrentTime);
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
-        long time = mLibVLC.getTime();
-        long length = mLibVLC.getLength();
+        mCurrentTime = mLibVLC.getTime();
+        mDuration = mLibVLC.getLength();
         //remove saved position if in the last 5 seconds
-        if (length - time < 5000)
-            time = 0;
+        if (mDuration - mCurrentTime < 5000)
+            mCurrentTime = 0;
         else
-            time -= 5000; // go back 5 seconds, to compensate loading time
+            mCurrentTime -= 5000; // go back 5 seconds, to compensate loading time
 
         /*
          * Pausing here generates errors because the vout is constantly
@@ -262,10 +273,16 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         videoSurface.setKeepScreenOn(false);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onStop() {
         super.onStop();
+        if (mRestoreAutoBrightness != -1f) {
+            int brightness = (int) (mRestoreAutoBrightness * 255f);
+            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightness);
+        } else {
+
+            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+        }
     }
 
     @Override
@@ -286,11 +303,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         setSurfaceSize(mVideoWidth, mVideoHeight, mVideoVisibleWidth, mVideoVisibleHeight, mSarNum, mSarDen);
         super.onConfigurationChanged(newConfig);
@@ -308,7 +320,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         float x_changed = event.getRawX() - mTouchX;
 
         // coef is the gradient's move to determine a neutral zone
-        float coef = Math.abs (y_changed / x_changed);
+        float coef = Math.abs(y_changed / x_changed);
         float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
 
         int[] offset = new int[2];
@@ -390,14 +402,16 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         int jump = (int) (Math.signum(gesturesize) * ((600000 * Math.pow((gesturesize / 8), 4)) + 3000));
 
         // Adjust the jump
-        if ((jump > 0) && ((mCurrentTime + jump) > mDuration))
+        if ((jump > 0) && ((mCurrentTime + jump) > mDuration)) {
             jump = (int) (mDuration - mCurrentTime);
-        if ((jump < 0) && ((mCurrentTime + jump) < 0))
+        }
+        if ((jump < 0) && ((mCurrentTime + jump) < 0)) {
             jump = (int) -mCurrentTime;
+        }
 
-        //Jump !
-        if (seek && mDuration > 0)
-            mLibVLC.setTime(jump);
+        if (seek && mDuration > 0) {
+            seek(jump);
+        }
 
         if (mDuration > 0) {
             showInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "",  StringUtils.millisToString(jump), StringUtils.millisToString(mCurrentTime + jump)));
@@ -572,6 +586,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     break;
                 case EventHandler.MediaPlayerPositionChanged:
                     activity.setOverlayProgress();
+                    activity.checkSubs();
                     break;
                 default:
                     LogUtils.e(String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
@@ -620,7 +635,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                         mDisabledHardwareAcceleration = true;
                         mPreviousHardwareAccelerationMode = mLibVLC.getHardwareAcceleration();
                         mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
-                        subtitleSurface.setVisibility(View.INVISIBLE);
                         loadMedia();
                     }
                 })
@@ -707,28 +721,19 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         // force surface buffer size
         mVideoSurfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
-        mSubtitlesSurfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
 
         // set display size
         LayoutParams lp = videoSurface.getLayoutParams();
         lp.width  = (int) Math.ceil(dw * mVideoWidth / mVideoVisibleWidth);
         lp.height = (int) Math.ceil(dh * mVideoHeight / mVideoVisibleHeight);
         videoSurface.setLayoutParams(lp);
-        subtitleSurface.setLayoutParams(lp);
-
-        // set frame size (crop if necessary)
-        lp = surfaceFrame.getLayoutParams();
-        lp.width = (int) Math.floor(dw);
-        lp.height = (int) Math.floor(dh);
-        surfaceFrame.setLayoutParams(lp);
 
         videoSurface.invalidate();
-        subtitleSurface.invalidate();
     }
 
     void seek(int delta) {
         // unseekable stream
-        if(mLibVLC.getLength() <= 0) return;
+        if(mLibVLC.getLength() <= 0 && !mSeeking) return;
 
         long position = mLibVLC.getTime() + delta;
         if (position < 0) position = 0;
@@ -770,7 +775,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     }
 
     public void seekBackwardClick(View v) {
-        seek(10000);
         seek(-10000);
     }
 
@@ -909,16 +913,19 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
     private SeekBar.OnSeekBarChangeListener mOnControlBarListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
+            mSeeking = true;
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            mSeeking = false;
         }
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser) {
+            if (fromUser && !mSeeking) {
                 mLibVLC.setTime(progress);
+                setOverlayProgress();
             }
         }
     };
@@ -991,10 +998,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
      */
     @SuppressWarnings({ "unchecked" })
     private void loadMedia() {
-        mLocation = null;
-        String title = "Title";
-
-        if(getIntent().getExtras().containsKey(LOCATION)) {
+        if(mLocation == null && getIntent().getExtras().containsKey(LOCATION)) {
             mLocation = getIntent().getStringExtra(LOCATION);
         }
 
@@ -1002,21 +1006,6 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         if(mLibVLC == null)
             return;
-
-        /* WARNING: hack to avoid a crash in mediacodec on KitKat.
-         * Disable hardware acceleration if the media has a ts extension. */
-        if (mLocation != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            String locationLC = mLocation.toLowerCase(Locale.ENGLISH);
-            if (locationLC.endsWith(".ts")
-                    || locationLC.endsWith(".tts")
-                    || locationLC.endsWith(".m2t")
-                    || locationLC.endsWith(".mts")
-                    || locationLC.endsWith(".m2ts")) {
-                mDisabledHardwareAcceleration = true;
-                mPreviousHardwareAccelerationMode = mLibVLC.getHardwareAcceleration();
-                mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
-            }
-        }
 
         /* Start / resume playback */
         if (savedIndexPosition > -1) {
@@ -1027,6 +1016,71 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
             mLibVLC.getMediaList().add(new Media(mLibVLC, mLocation));
             savedIndexPosition = mLibVLC.getMediaList().size() - 1;
             mLibVLC.playIndex(savedIndexPosition);
+        }
+    }
+
+    private void startSubtitles() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    String subLanguage = getIntent().getStringExtra(SUBTITLES);
+                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mVideo.imdbId + "-" + subLanguage + ".srt";
+                    File file = new File(filePath);
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    FormatSRT formatSRT = new FormatSRT();
+                    mSubs = formatSRT.parseFile(filePath, FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
+                    checkSubs();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    public void onTimedText(final Caption text) {
+        mDisplayHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (text == null) {
+                    if(subtitleText.getText().length() > 0) {
+                        subtitleText.setText("");
+                    }
+                    return;
+                }
+                SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
+
+                ForegroundColorSpan[] toRemoveSpans = styledString.getSpans(0, styledString.length(), ForegroundColorSpan.class);
+                for(ForegroundColorSpan remove : toRemoveSpans) {
+                    styledString.removeSpan(remove);
+                }
+
+                if(!subtitleText.getText().toString().equals(styledString.toString())) {
+                    subtitleText.setText(styledString);
+                }
+            }
+        });
+    }
+
+    private void checkSubs() {
+        if (mLibVLC != null && mLibVLC.isPlaying() && mSubs != null) {
+            Collection<Caption> subtitles = mSubs.captions.values();
+            if(mLastSub != null && mCurrentTime >= mLastSub.start.getMilliseconds() && mCurrentTime <= mLastSub.end.getMilliseconds()) {
+                onTimedText(mLastSub);
+            } else {
+                for (Caption caption : subtitles) {
+                    if (mCurrentTime >= caption.start.getMilliseconds() && mCurrentTime <= caption.end.getMilliseconds()) {
+                        mLastSub = caption;
+                        onTimedText(caption);
+                        break;
+                    } else if (mCurrentTime > caption.end.getMilliseconds()) {
+                        onTimedText(null);
+                    }
+                }
+            }
         }
     }
 
