@@ -112,7 +112,7 @@ public class FileUtils {
             path.delete();
         }
 
-        if((path.getParentFile().mkdirs() || path.getParentFile().exists()) && path.createNewFile()) {
+        if((path.getParentFile().mkdirs() || path.getParentFile().exists()) && (path.exists() || path.createNewFile())) {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding));
             writer.write(string);
             writer.close();
