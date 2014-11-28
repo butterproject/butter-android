@@ -47,7 +47,7 @@ public class FormatSRT extends TimedTextFileFormat {
         int stringIndex = 0;
         String line;
         try {
-            line = getLine(inputString, stringIndex);
+            line = getLine(inputString, stringIndex++);
             while (line != null && stringIndex < inputString.length) {
                 line = line.trim();
                 lineCounter++;
