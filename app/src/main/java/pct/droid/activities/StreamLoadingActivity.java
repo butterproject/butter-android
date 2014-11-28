@@ -19,6 +19,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.subs.SubsProvider;
+import pct.droid.streamer.Ready;
 import pct.droid.streamer.Status;
 import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
@@ -96,10 +97,8 @@ public class StreamLoadingActivity extends BaseActivity {
                 if(path.contains("streamer.json")) {
                     switch (event) {
                         case CREATE:
-                            LogUtils.d("Streamer file created");
                             break;
                         case MODIFY:
-                            LogUtils.d("Streamer file modified");
                             startPlayer();
                             break;
                     }
@@ -107,7 +106,6 @@ public class StreamLoadingActivity extends BaseActivity {
                     switch (event) {
                         case CREATE:
                         case MODIFY:
-                            LogUtils.d("Status file changed");
                             updateStatus();
                             break;
                     }
@@ -130,20 +128,25 @@ public class StreamLoadingActivity extends BaseActivity {
         }
 
         if(!mIntentStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
-            mIntentStarted = true;
-            Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
-            if(getIntent().hasExtra(DATA)) {
-                i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+            try {
+                Ready ready = Ready.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/streamer.json"));
+                mIntentStarted = true;
+                Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+                if(getIntent().hasExtra(DATA)) {
+                    i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+                }
+                if(getIntent().hasExtra(QUALITY)) {
+                    i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
+                }
+                if(mSubsStatus == SubsStatus.SUCCESS) {
+                    i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
+                }
+                i.putExtra(VideoPlayerActivity.LOCATION, "file://" + ready.filePath);
+                startActivity(i);
+                finish();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            if(getIntent().hasExtra(QUALITY)) {
-                i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
-            }
-            if(mSubsStatus == SubsStatus.SUCCESS) {
-                i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
-            }
-            i.putExtra(VideoPlayerActivity.LOCATION, "http://localhost:9999");
-            startActivity(i);
-            finish();
         }
     }
 
@@ -152,8 +155,7 @@ public class StreamLoadingActivity extends BaseActivity {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
             if(status == null) return;
             LogUtils.d(status.toString());
-            int calculateProgress = (int)Math.floor(status.progress * 20
-            );
+            int calculateProgress = (int)Math.floor(status.progress * 25);
             if(calculateProgress > 100) calculateProgress = 100;
             final int progress = calculateProgress;
             if(progressIndicator.getProgress() < 100) {

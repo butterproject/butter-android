@@ -582,10 +582,12 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     activity.handleHardwareAccelerationError();
                     break;
                 case EventHandler.MediaPlayerTimeChanged:
-                    // avoid useless error logs
+                    // avoid weird things
                     break;
                 case EventHandler.MediaPlayerPositionChanged:
                     activity.setOverlayProgress();
+                    break;
+                case EventHandler.MediaPlayerVout:
                     activity.checkSubs();
                     break;
                 default:
@@ -876,7 +878,7 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
         mDuration = mLibVLC.getLength();
         mCurrentTime = mLibVLC.getTime();
 
-        if(!mOverlayVisible) {
+        if(!mOverlayVisible || mSeeking) {
             return mCurrentTime;
         }
 
@@ -923,9 +925,10 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser && !mSeeking) {
+            if (fromUser && mSeeking) {
                 mLibVLC.setTime(progress);
                 setOverlayProgress();
+                checkSubs();
             }
         }
     };
