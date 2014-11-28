@@ -14,10 +14,10 @@
         android:logo="@drawable/ic_logo"
         android:label="@string/app_name"
         android:theme="@style/Theme.PopcornTime"
-        android:name=".PopcornApplication"
+        android:name="pct.droid.PopcornApplication"
         >
         <activity
-            android:name=".activities.OverviewActivity"
+            android:name="pct.droid.activities.OverviewActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -26,18 +26,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MovieDetailActivity"
+            android:name="pct.droid.activities.MovieDetailActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.StreamLoadingActivity"
+            android:name="pct.droid.activities.StreamLoadingActivity"
+            android:screenOrientation="sensorLandscape"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="magnet" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="pct.droid.activities.VideoPlayerActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.VideoPlayerActivity"
-            android:screenOrientation="sensorLandscape"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".activities.TrailerPlayerActivity"
+            android:name="pct.droid.activities.TrailerPlayerActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name" />
         <service android:name=".services.StreamerService" android:process=":node" />
