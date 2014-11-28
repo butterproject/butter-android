@@ -3,7 +3,6 @@ package pct.droid.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -198,7 +197,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             progressOverlay.setVisibility(View.VISIBLE);
 
             mLoadingDetails = true;
-            mProvider.getDetail(item.imdbId, new MediaProvider.Callback() {
+            mProvider.getDetail(item.videoId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<MediaProvider.Video> items) {
                     if (items.size() <= 0 || !mLoadingDetails) return;
@@ -329,7 +328,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
                     i.putExtra(VideoPlayerActivity.DATA, video);
                     i.putExtra(VideoPlayerActivity.LOCATION, location);
-                    video.imdbId = "bigbucksbunny";
+                    video.videoId = "bigbucksbunny";
                     video.title = file_types[index];
                     video.subtitles = new HashMap<String, String>();
                     video.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");

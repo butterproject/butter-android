@@ -14,10 +14,8 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IllegalFormatException;
 
 import pct.droid.providers.meta.TraktProvider;
-import pct.droid.providers.subs.SubsProvider;
 import pct.droid.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
@@ -166,7 +164,7 @@ public class YTSProvider extends MediaProvider {
                         String[] imdbIds = new String[newDataSize];
                         for(int i = previousSize, index = 0; i < formattedData.size(); i++, index++) {
                             Video video = (Video) formattedData.get(i);
-                            imdbIds[index] = video.imdbId;
+                            imdbIds[index] = video.videoId;
                         }
 
                         TraktProvider traktProvider = new TraktProvider();
@@ -178,7 +176,7 @@ public class YTSProvider extends MediaProvider {
 
                                 if(metaDatas.length > index) {
                                     TraktProvider.MetaData meta = metaDatas[index];
-                                    if (video.imdbId.equals(meta.imdb_id)) {
+                                    if (video.videoId.equals(meta.imdb_id)) {
                                         if (meta.images.containsKey("poster")) {
                                             video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
                                             video.fullImage = meta.images.get("poster");
@@ -239,7 +237,7 @@ public class YTSProvider extends MediaProvider {
                             TraktProvider traktProvider = new TraktProvider();
                             Video video = (Video) formattedData.get(0);
 
-                            TraktProvider.MetaData meta = traktProvider.getSummary(video.imdbId, "movie");
+                            TraktProvider.MetaData meta = traktProvider.getSummary(video.videoId, "movie");
                             if (meta.images != null && meta.images.containsKey("poster")) {
                                 video.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
                                 video.fullImage = meta.images.get("poster");
@@ -278,7 +276,7 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             YSubsProvider subsProvider = new YSubsProvider();
-                            video.subtitles = subsProvider.getList(video.imdbId).get(video.imdbId);
+                            video.subtitles = subsProvider.getList(video.videoId).get(video.videoId);
 
                             formattedData.set(0, video);
 
@@ -301,7 +299,7 @@ public class YTSProvider extends MediaProvider {
         private int isInResults(ArrayList<MediaProvider.Video> results, String id) {
             int i = 0;
             for(MediaProvider.Video item : results) {
-                if(item.imdbId.equals(id)) return i;
+                if(item.videoId.equals(id)) return i;
                 i++;
             }
             return -1;
@@ -315,7 +313,7 @@ public class YTSProvider extends MediaProvider {
             for(LinkedTreeMap<String, Object> item : MovieList) {
                 Video video = new Video();
 
-                video.imdbId = item.get("ImdbCode").toString();
+                video.videoId = item.get("ImdbCode").toString();
                 String torrentQuality = item.get("Quality").toString();
 
                 if(torrentQuality.equals("3D")) {
@@ -330,7 +328,7 @@ public class YTSProvider extends MediaProvider {
                 torrent.seeds = item.get("TorrentSeeds").toString();
                 torrent.peers = item.get("TorrentPeers").toString();
 
-                int existingItem = isInResults(existingList, video.imdbId);
+                int existingItem = isInResults(existingList, video.videoId);
                 if(existingItem == -1) {
                     video.image = item.get("CoverImage").toString().replace("_med.", "_large.");
                     video.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
