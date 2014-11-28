@@ -15,6 +15,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.bugsnag.android.Bugsnag;
+
 import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
@@ -35,6 +37,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Bugsnag.register(this, Constants.BUGSNAG_KEY);
 
         Constants.DEBUG_ENABLED = false;
         try {
@@ -47,7 +50,6 @@ public class PopcornApplication extends VLCApplication {
 
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
-
 
         File path = StorageUtils.getIdealCacheDirectory(this);
         File directory = new File(path, "/torrents/");
