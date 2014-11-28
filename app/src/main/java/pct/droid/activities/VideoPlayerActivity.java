@@ -582,12 +582,8 @@ public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlay
                     activity.handleHardwareAccelerationError();
                     break;
                 case EventHandler.MediaPlayerTimeChanged:
-                    // avoid weird things
-                    break;
                 case EventHandler.MediaPlayerPositionChanged:
                     activity.setOverlayProgress();
-                    break;
-                case EventHandler.MediaPlayerVout:
                     activity.checkSubs();
                     break;
                 default:

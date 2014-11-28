@@ -172,7 +172,7 @@ public class StreamLoadingActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        progressText.setText("Streaming"); // TODO: translation (by sv244)
+                        if(progressText.getText().toString().equals("Streaming")) progressText.setText("Streaming"); // TODO: translation (by sv244)
                     }
                 });
             }
