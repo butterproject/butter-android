@@ -12,7 +12,7 @@ import pct.droid.providers.BaseProvider;
 public abstract class MediaProvider extends BaseProvider {
 
     public static class Video implements Parcelable {
-        public String imdbId;
+        public String videoId;
         public String title;
         public String year;
         public String genre;
@@ -28,7 +28,7 @@ public abstract class MediaProvider extends BaseProvider {
         }
 
         public Video(Parcel in) {
-            imdbId = in.readString();
+            videoId = in.readString();
             title = in.readString();
             year = in.readString();
             genre = in.readString();
@@ -51,7 +51,7 @@ public abstract class MediaProvider extends BaseProvider {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(imdbId);
+            dest.writeString(videoId);
             dest.writeString(title);
             dest.writeString(year);
             dest.writeString(genre);
