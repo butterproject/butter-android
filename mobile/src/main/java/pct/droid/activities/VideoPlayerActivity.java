@@ -72,7 +72,7 @@ import pct.droid.utils.StorageUtils;
 import pct.droid.utils.StringUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class VideoPlayerActivity extends ActionBarActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
+public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
 
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";

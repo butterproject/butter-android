@@ -45,7 +45,7 @@ import pct.droid.utils.StringUtils;
 import pct.droid.youtube.YouTubeData;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class TrailerPlayerActivity extends ActionBarActivity implements View.OnSystemUiVisibilityChangeListener {
+public class TrailerPlayerActivity extends BaseActivity implements View.OnSystemUiVisibilityChangeListener {
 
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
