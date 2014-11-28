@@ -181,6 +181,9 @@ public class StreamerService extends Service {
     public static void installPackage(AssetManager assets, String packageName, File targetDir) throws IOException {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
+        } else {
+            targetDir.delete();
+            targetDir.mkdirs();
         }
 
         ZipInputStream zin = new ZipInputStream(assets.open(packageName));
