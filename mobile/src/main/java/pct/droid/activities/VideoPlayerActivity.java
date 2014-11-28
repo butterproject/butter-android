@@ -15,13 +15,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -33,7 +31,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -52,9 +49,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,6 +63,7 @@ import pct.droid.subs.TimedTextObject;
 import pct.droid.utils.FileUtils;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
+import pct.droid.utils.PrefUtils;
 import pct.droid.utils.StorageUtils;
 import pct.droid.utils.StringUtils;
 
@@ -78,6 +74,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     public final static String DATA = "video_data";
     public final static String QUALITY = "quality";
     public final static String SUBTITLES = "subtitles";
+    public final static String RESUME_POSITION = "resume_position";
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -244,22 +241,22 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     @Override
     protected void onResume() {
         super.onResume();
-        if(mLibVLC != null) {
-            mLibVLC.setTime(mCurrentTime);
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        mCurrentTime = mLibVLC.getTime();
-        mDuration = mLibVLC.getLength();
+        long currentTime = mLibVLC.getTime();
+        long duration = mLibVLC.getLength();
         //remove saved position if in the last 5 seconds
-        if (mDuration - mCurrentTime < 5000)
-            mCurrentTime = 0;
-        else
-            mCurrentTime -= 5000; // go back 5 seconds, to compensate loading time
+        if (duration - currentTime < 5000) {
+            currentTime = 0;
+        } else {
+            currentTime -= 5000; // go back 5 seconds, to compensate loading time
+        }
+
+        PrefUtils.save(this, RESUME_POSITION, currentTime);
 
         /*
          * Pausing here generates errors because the vout is constantly
@@ -271,6 +268,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         mLibVLC.stop();
 
         videoSurface.setKeepScreenOn(false);
+
+
     }
 
     @Override
@@ -300,6 +299,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         mAudioManager = null;
 
         ((PopcornApplication) getApplication()).stopStreamer();
+        PrefUtils.save(this, RESUME_POSITION, 0);
     }
 
     @Override
@@ -313,8 +313,9 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         DisplayMetrics screen = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(screen);
 
-        if (mSurfaceYDisplayRange == 0)
+        if (mSurfaceYDisplayRange == 0) {
             mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
+        }
 
         float y_changed = event.getRawY() - mTouchY;
         float x_changed = event.getRawX() - mTouchX;
@@ -391,11 +392,13 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
     private void doSeekTouch(float coef, float gesturesize, boolean seek) {
         // No seek action if coef > 0.5 and gesturesize < 1cm
-        if (coef > 0.5 || Math.abs(gesturesize) < 1)
+        if (coef > 0.5 || Math.abs(gesturesize) < 1) {
             return;
+        }
 
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK)
+        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK) {
             return;
+        }
         mTouchAction = TOUCH_SEEK;
 
         // Size of the jump, 10 minutes max (600000), with a bi-cubic progression, for a 8cm gesture
@@ -423,7 +426,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             return;
         float delta = - ((y_changed * 2f / mSurfaceYDisplayRange) * mAudioMax);
         mVol += delta;
-        int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
+        int vol = Math.min(Math.max(mVol, 0), mAudioMax);
         if (delta != 0f) {
             setAudioVolume(vol);
         }
@@ -1020,6 +1023,11 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             savedIndexPosition = mLibVLC.getMediaList().size() - 1;
             mLibVLC.playIndex(savedIndexPosition);
         }
+
+        long resumeTime = PrefUtils.get(this, RESUME_POSITION, 0);
+        if(resumeTime > 0) {
+            mLibVLC.setTime(resumeTime);
+        }
     }
 
     private void startSubtitles() {
@@ -1028,7 +1036,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             protected Void doInBackground(Void... voids) {
                 try {
                     String subLanguage = getIntent().getStringExtra(SUBTITLES);
-                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mVideo.imdbId + "-" + subLanguage + ".srt";
+                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mVideo.videoId + "-" + subLanguage + ".srt";
                     File file = new File(filePath);
                     FileInputStream fileInputStream = new FileInputStream(file);
                     FormatSRT formatSRT = new FormatSRT();
