@@ -59,7 +59,7 @@ public abstract class SubsProvider extends BaseProvider {
                                 File cacheDirectory = StorageUtils.getIdealCacheDirectory(context);
                                 File subsDirectory = new File(cacheDirectory, "subs");
 
-                                String fileName = video.imdbId + "-" + languageCode;
+                                String fileName = video.videoId + "-" + languageCode;
                                 File srtPath = new File(subsDirectory, fileName + ".srt");
 
                                 subsDirectory.mkdirs();

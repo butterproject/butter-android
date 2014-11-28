@@ -2,10 +2,7 @@ Popcorn Time for Android  [![Build Status](http://ci.popcorntime.io/buildStatus/
 ----
 
 ## TODO
-- Videoplayer
-- Subtitles
 - EZTV
-- Trailers
 
 ## Debugging
 
