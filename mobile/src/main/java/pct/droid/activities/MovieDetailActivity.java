@@ -32,7 +32,8 @@ import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.YTSProvider;
+import pct.droid.providers.media.types.Media;
+import pct.droid.providers.media.types.Movie;
 import pct.droid.utils.ActionBarBackground;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
@@ -40,7 +41,7 @@ import pct.droid.youtube.YouTubeData;
 
 public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
 
-    private YTSProvider.Video mItem;
+    private Movie mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;

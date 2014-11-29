@@ -16,18 +16,18 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.YTSProvider;
+import pct.droid.providers.media.types.Media;
 import pct.droid.utils.PixelUtils;
 
 
 public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     int mItemWidth, mItemHeight, mMargin, mColumns;
-    ArrayList<MediaProvider.Video> mItems;
+    ArrayList<Media> mItems;
     OverviewGridAdapter.OnItemClickListener mItemClickListener;
     final int NORMAL = 0, LOADING = 1;
 
-    public OverviewGridAdapter(Activity activity, ArrayList<MediaProvider.Video> items, Integer columns) {
+    public OverviewGridAdapter(Activity activity, ArrayList<Media> items, Integer columns) {
         mColumns = columns;
 
         int screenWidth = PixelUtils.getScreenWidth(activity);
@@ -69,7 +69,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if(getItemViewType(position) == NORMAL) {
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
-            MediaProvider.Video item = getItem(position);
+            Media item = getItem(position);
             if(!item.image.equals("")) {
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                     .resize(mItemWidth, mItemHeight)
@@ -91,7 +91,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return NORMAL;
     }
 
-    public MediaProvider.Video getItem(int position) {
+    public Media getItem(int position) {
         return mItems.get(position);
     }
 
@@ -101,7 +101,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void removeLoading() {
         if(getItemCount() <= 0) return;
-        MediaProvider.Video item = mItems.get(getItemCount() - 1);
+        Media item = mItems.get(getItemCount() - 1);
         if(item.type.equals("loading")) {
             mItems.remove(getItemCount() - 1);
             notifyDataSetChanged();
@@ -109,29 +109,29 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void addLoading() {
-        MediaProvider.Video item = null;
+        Media item = null;
         if(getItemCount() != 0) {
             item = mItems.get(getItemCount() - 1);
         }
 
         if(getItemCount() == 0 || (item != null && !item.type.equals("loading"))) {
-            MediaProvider.Video loadingItem = new MediaProvider.Video();
+            Media loadingItem = new Media();
             loadingItem.type = "loading";
             mItems.add(loadingItem);
             notifyDataSetChanged();
         }
     }
 
-    public ArrayList<MediaProvider.Video> getItems() {
-        ArrayList<MediaProvider.Video> returnData = (ArrayList<MediaProvider.Video>) mItems.clone();
-        MediaProvider.Video item = returnData.get(getItemCount() - 1);
+    public ArrayList<Media> getItems() {
+        ArrayList<Media> returnData = (ArrayList<Media>) mItems.clone();
+        Media item = returnData.get(getItemCount() - 1);
         if(item.type.equals("loading")) {
             returnData.remove(getItemCount() - 1);
         }
         return returnData;
     }
 
-    public void setItems(ArrayList<MediaProvider.Video> items) {
+    public void setItems(ArrayList<Media> items) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -142,7 +142,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View v, MediaProvider.Video item, int position);
+        public void onItemClick(View v, Media item, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -163,7 +163,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void onClick(View view) {
             if (mItemClickListener != null) {
                 int position = getPosition();
-                YTSProvider.Video item = (YTSProvider.Video) getItem(position);
+                Media item = (Media) getItem(position);
                 mItemClickListener.onItemClick(view, item, position);
             }
         }

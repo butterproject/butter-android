@@ -21,6 +21,7 @@ import java.util.zip.ZipInputStream;
 
 import pct.droid.providers.BaseProvider;
 import pct.droid.providers.media.MediaProvider;
+import pct.droid.providers.media.types.Media;
 import pct.droid.subs.FatalParsingException;
 import pct.droid.subs.FormatASS;
 import pct.droid.subs.FormatSRT;
@@ -38,11 +39,11 @@ public abstract class SubsProvider extends BaseProvider {
 
     public abstract HashMap<String, HashMap<String, String>> getList(String[] imdbIds);
 
-    public static Call download(final Context context, final MediaProvider.Video video, final String languageCode, final Callback callback) {
+    public static Call download(final Context context, final Media media, final String languageCode, final Callback callback) {
         OkHttpClient client = new OkHttpClient();
-        if(video.subtitles.containsKey(languageCode)) {
+        if(media.subtitles.containsKey(languageCode)) {
             try {
-                Request request = new Request.Builder().url(video.subtitles.get(languageCode)).build();
+                Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
                 call.enqueue(new Callback() {
                     @Override
@@ -59,7 +60,7 @@ public abstract class SubsProvider extends BaseProvider {
                                 File cacheDirectory = StorageUtils.getIdealCacheDirectory(context);
                                 File subsDirectory = new File(cacheDirectory, "subs");
 
-                                String fileName = video.videoId + "-" + languageCode;
+                                String fileName = media.videoId + "-" + languageCode;
                                 File srtPath = new File(subsDirectory, fileName + ".srt");
 
                                 subsDirectory.mkdirs();

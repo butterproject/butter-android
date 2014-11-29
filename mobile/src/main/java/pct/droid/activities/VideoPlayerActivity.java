@@ -41,7 +41,6 @@ import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.IVideoPlayer;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
-import org.videolan.libvlc.Media;
 import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.WeakHandler;
 
@@ -56,6 +55,7 @@ import butterknife.InjectView;
 import pct.droid.PopcornApplication;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
+import pct.droid.providers.media.types.Media;
 import pct.droid.streamer.Status;
 import pct.droid.subs.Caption;
 import pct.droid.subs.FormatSRT;
@@ -123,7 +123,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     private static final int FADE_OUT_OVERLAY = 5000;
     private static final int FADE_OUT_INFO = 1000;
 
-    private MediaProvider.Video mVideo;
+    private Media mMedia;
     private TimedTextObject mSubs;
     private Caption mLastSub = null;
 
@@ -187,12 +187,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         }
 
         if(getIntent().hasExtra(DATA)) {
-            mVideo = getIntent().getParcelableExtra(DATA);
-            if(mVideo != null && mVideo.title != null) {
+            mMedia = getIntent().getParcelableExtra(DATA);
+            if(mMedia != null && mMedia.title != null) {
                 if (getIntent().hasExtra(QUALITY)) {
-                    getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title + " (" + getIntent().getStringExtra(QUALITY) + ")");
+                    getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title + " (" + getIntent().getStringExtra(QUALITY) + ")");
                 } else {
-                    getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mVideo.title);
+                    getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
                 }
             } else {
                 getSupportActionBar().setTitle(getString(R.string.now_playing));
@@ -880,10 +880,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         mDuration = mLibVLC.getLength();
         mCurrentTime = mLibVLC.getTime();
 
-        if(!mOverlayVisible || mSeeking) {
-            return mCurrentTime;
-        }
-
         controlBar.setMax((int) mDuration);
         controlBar.setProgress((int) mCurrentTime);
         controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
@@ -1019,7 +1015,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             mLibVLC.playIndex(savedIndexPosition);
         } else if (mLocation != null && mLocation.length() > 0) {
             mLibVLC.setMediaList();
-            mLibVLC.getMediaList().add(new Media(mLibVLC, mLocation));
+            mLibVLC.getMediaList().add(new org.videolan.libvlc.Media(mLibVLC, mLocation));
             savedIndexPosition = mLibVLC.getMediaList().size() - 1;
             mLibVLC.playIndex(savedIndexPosition);
         }
@@ -1036,7 +1032,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             protected Void doInBackground(Void... voids) {
                 try {
                     String subLanguage = getIntent().getStringExtra(SUBTITLES);
-                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mVideo.videoId + "-" + subLanguage + ".srt";
+                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mMedia.videoId + "-" + subLanguage + ".srt";
                     File file = new File(filePath);
                     FileInputStream fileInputStream = new FileInputStream(file);
                     FormatSRT formatSRT = new FormatSRT();

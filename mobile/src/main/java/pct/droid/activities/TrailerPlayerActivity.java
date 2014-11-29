@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -39,6 +38,7 @@ import butterknife.InjectView;
 import pct.droid.PopcornApplication;
 import pct.droid.R;
 import pct.droid.providers.media.MediaProvider;
+import pct.droid.providers.media.types.Media;
 import pct.droid.utils.LogUtils;
 import pct.droid.utils.PixelUtils;
 import pct.droid.utils.StringUtils;
@@ -131,9 +131,9 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
         }
 
         if(getIntent().hasExtra(DATA)) {
-            MediaProvider.Video video = getIntent().getParcelableExtra(DATA);
-            if(video != null && video.title != null) {
-                getSupportActionBar().setTitle(getString(R.string.trailer) + ": " + video.title);
+            Media media = getIntent().getParcelableExtra(DATA);
+            if(media != null && media.title != null) {
+                getSupportActionBar().setTitle(getString(R.string.trailer) + ": " + media.title);
             } else {
                 getSupportActionBar().setTitle(getString(R.string.trailer));
             }
