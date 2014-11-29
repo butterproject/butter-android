@@ -8,17 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pct.droid.providers.media.MediaProvider;
+import pct.droid.providers.media.types.Media;
 
-/**
- * Created by Sebastiaan on 10-11-14.
- */
 public class OverviewActivityTaskFragment extends Fragment implements MediaProvider.Callback {
 
     public final static String TAG = "pct.droid.overviewactivitytaskfragment";
 
     private MediaProvider.Callback mCallback;
-    private Boolean mLoaded = false;
-    private ArrayList<MediaProvider.Video> mItems;
+    private ArrayList<Media> mItems;
     private int mPage = 1;
     private HashMap<String, String> mFilters = new HashMap<String, String>();
 
@@ -40,7 +37,7 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
         mCallback = null;
     }
 
-    public ArrayList<MediaProvider.Video> getExistingItems() {
+    public ArrayList<Media> getExistingItems() {
         return mItems;
     }
 
@@ -61,7 +58,7 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     }
 
     @Override
-    public void onSuccess(ArrayList<MediaProvider.Video> items) {
+    public void onSuccess(ArrayList<Media> items) {
         mPage++;
         mItems = items;
         if(mCallback != null) mCallback.onSuccess(items);

@@ -3,6 +3,7 @@ package pct.droid.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,6 +38,7 @@ import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.providers.media.MediaProvider;
 import pct.droid.providers.media.YTSProvider;
+import pct.droid.providers.media.types.Media;
 import pct.droid.providers.subs.SubsProvider;
 import pct.droid.utils.PixelUtils;
 import pct.droid.youtube.YouTubeData;
@@ -86,6 +90,20 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         } else {
             onSuccess(mTaskFragment.getExistingItems());
         }
+
+        String action = getIntent().getAction();
+        if (action != null && !action.equals(Intent.ACTION_VIEW)) {
+            Uri data = getIntent().getData();
+            String streamUrl = data.toString();
+            try {
+                streamUrl = URLDecoder.decode(streamUrl, "utf-8");
+                Intent streamIntent = new Intent(this, StreamLoadingActivity.class);
+                streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+                startActivity(streamIntent);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -132,7 +150,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     }
 
     @Override
-    public void onSuccess(final ArrayList<MediaProvider.Video> items) {
+    public void onSuccess(final ArrayList<Media> items) {
         mEndOfListReached = false;
         if(mTotalItemCount <= 0) {
             mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
@@ -192,14 +210,14 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(View view, final MediaProvider.Video item, int position) {
+        public void onItemClick(View view, final Media item, int position) {
             progressOverlay.setBackgroundColor(getResources().getColor(R.color.overlay_bg));
             progressOverlay.setVisibility(View.VISIBLE);
 
             mLoadingDetails = true;
             mProvider.getDetail(item.videoId, new MediaProvider.Callback() {
                 @Override
-                public void onSuccess(ArrayList<MediaProvider.Video> items) {
+                public void onSuccess(ArrayList<Media> items) {
                     if (items.size() <= 0 || !mLoadingDetails) return;
                     mLoadingDetails = false;
 
@@ -211,7 +229,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                         }
                     });
 
-                    final MediaProvider.Video item = items.get(0);
+                    final Media item = items.get(0);
 
                     mHandler.post(new Runnable() {
                         @Override
@@ -318,21 +336,21 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 String location = files[index];
                 if (YouTubeData.isYouTubeUrl(location)) {
                     Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
-                    MediaProvider.Video video = new MediaProvider.Video();
-                    video.title = file_types[index];
-                    i.putExtra(TrailerPlayerActivity.DATA, video);
+                    Media media = new Media();
+                    media.title = file_types[index];
+                    i.putExtra(TrailerPlayerActivity.DATA, media);
                     i.putExtra(TrailerPlayerActivity.LOCATION, location);
                     startActivity(i);
                 } else {
-                    MediaProvider.Video video = new MediaProvider.Video();
+                    Media media = new Media();
                     final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
-                    i.putExtra(VideoPlayerActivity.DATA, video);
+                    i.putExtra(VideoPlayerActivity.DATA, media);
                     i.putExtra(VideoPlayerActivity.LOCATION, location);
-                    video.videoId = "bigbucksbunny";
-                    video.title = file_types[index];
-                    video.subtitles = new HashMap<String, String>();
-                    video.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");
-                    SubsProvider.download(OverviewActivity.this, video, "en", new Callback() {
+                    media.videoId = "bigbucksbunny";
+                    media.title = file_types[index];
+                    media.subtitles = new HashMap<String, String>();
+                    media.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");
+                    SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
                             startActivity(i);
