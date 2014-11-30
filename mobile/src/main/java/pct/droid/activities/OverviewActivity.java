@@ -92,8 +92,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         }
 
         String action = getIntent().getAction();
-        if (action != null && !action.equals(Intent.ACTION_VIEW)) {
-            Uri data = getIntent().getData();
+        Uri data = getIntent().getData();
+        if (action != null && !action.equals(Intent.ACTION_VIEW) && data != null) {
             String streamUrl = data.toString();
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "utf-8");
