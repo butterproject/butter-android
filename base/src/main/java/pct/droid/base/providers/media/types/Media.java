@@ -12,7 +12,7 @@ public class Media implements Parcelable {
     public String year;
     public String genre;
     public String rating;
-    public String type;
+    public String type = "media";
     public String image;
     public String fullImage;
     public String headerImage;
