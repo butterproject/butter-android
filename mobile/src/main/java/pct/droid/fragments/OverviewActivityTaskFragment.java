@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.types.Media;
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.media.types.Media;
 
 public class OverviewActivityTaskFragment extends Fragment implements MediaProvider.Callback {
 

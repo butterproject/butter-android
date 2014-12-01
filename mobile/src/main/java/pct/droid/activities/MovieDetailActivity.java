@@ -31,13 +31,11 @@ import pct.droid.R;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.types.Media;
-import pct.droid.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.utils.ActionBarBackground;
-import pct.droid.utils.LogUtils;
-import pct.droid.utils.PixelUtils;
-import pct.droid.youtube.YouTubeData;
+import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.youtube.YouTubeData;
 
 public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
 

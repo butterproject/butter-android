@@ -32,16 +32,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.InjectView;
-import pct.droid.Constants;
+import pct.droid.base.Constants;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.fragments.OverviewActivityTaskFragment;
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.YTSProvider;
-import pct.droid.providers.media.types.Media;
-import pct.droid.providers.subs.SubsProvider;
-import pct.droid.utils.PixelUtils;
-import pct.droid.youtube.YouTubeData;
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.media.YTSProvider;
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.youtube.YouTubeData;
 
 public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 

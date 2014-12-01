@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.types.Media;
-import pct.droid.utils.PixelUtils;
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.utils.PixelUtils;
 
 
 public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

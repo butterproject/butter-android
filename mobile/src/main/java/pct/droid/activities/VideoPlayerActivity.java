@@ -52,20 +52,19 @@ import java.util.Collection;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.PopcornApplication;
+import pct.droid.base.PopcornApplication;
 import pct.droid.R;
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.types.Media;
-import pct.droid.streamer.Status;
-import pct.droid.subs.Caption;
-import pct.droid.subs.FormatSRT;
-import pct.droid.subs.TimedTextObject;
-import pct.droid.utils.FileUtils;
-import pct.droid.utils.LogUtils;
-import pct.droid.utils.PixelUtils;
-import pct.droid.utils.PrefUtils;
-import pct.droid.utils.StorageUtils;
-import pct.droid.utils.StringUtils;
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.streamer.Status;
+import pct.droid.base.subs.Caption;
+import pct.droid.base.subs.FormatSRT;
+import pct.droid.base.subs.TimedTextObject;
+import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.StorageUtils;
+import pct.droid.base.utils.StringUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
