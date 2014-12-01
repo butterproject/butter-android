@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.HashMap;
 
 public class Movie extends Media implements Parcelable {
+    public String type = "movie";
     public String trailer = "";
     public Integer runtime = -1;
     public String tagline = "";
