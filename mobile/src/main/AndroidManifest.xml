@@ -17,13 +17,19 @@
         android:name=".base.PopcornApplication"
         >
         <activity
-            android:name="pct.droid.activities.OverviewActivity"
+            android:name="pct.droid.activities.LaunchActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="pct.droid.activities.OverviewActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
