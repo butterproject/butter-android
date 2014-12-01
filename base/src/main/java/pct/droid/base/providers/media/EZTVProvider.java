@@ -9,6 +9,7 @@ import com.squareup.okhttp.Response;
 
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,17 +95,21 @@ public class EZTVProvider extends MediaProvider {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    ArrayList<LinkedTreeMap<String, Object>> list = (ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
-                    EZTVReponse result = new EZTVReponse(list);
-                    if(list == null) {
-                        callback.onFailure(new NetworkErrorException("Empty response"));
-                    } else {
-                        ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
-                        callback.onSuccess(formattedData);
-                        return;
+                try {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+                        ArrayList<LinkedTreeMap<String, Object>> list = (ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
+                        EZTVReponse result = new EZTVReponse(list);
+                        if (list == null) {
+                            callback.onFailure(new NetworkErrorException("Empty response"));
+                        } else {
+                            ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
+                            callback.onSuccess(formattedData);
+                            return;
+                        }
                     }
+                } catch (Exception e) {
+                    callback.onFailure(e);
                 }
                 callback.onFailure(new NetworkErrorException(response.body().string()));
             }
