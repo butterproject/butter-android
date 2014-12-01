@@ -153,7 +153,6 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
         mAudioMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
         videoView.setOnPreparedListener(mOnPreparedListener);
-        videoView.setOnInfoListener(mOnInfoListener);
         videoView.setOnErrorListener(mOnErrorListener);
         videoView.setOnCompletionListener(mOnCompletionListener);
         videoView.setKeepScreenOn(true);
@@ -546,13 +545,6 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
             mp.setOnBufferingUpdateListener(mOnBufferingListener);
             progressIndicator.setVisibility(View.GONE);
             videoView.start();
-        }
-    };
-
-    MediaPlayer.OnInfoListener mOnInfoListener = new MediaPlayer.OnInfoListener() {
-        @Override
-        public boolean onInfo(MediaPlayer mp, int what, int extra) {
-            return false;
         }
     };
 
