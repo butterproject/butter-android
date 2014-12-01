@@ -35,14 +35,13 @@ import android.widget.VideoView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.PopcornApplication;
+import pct.droid.base.PopcornApplication;
 import pct.droid.R;
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.types.Media;
-import pct.droid.utils.LogUtils;
-import pct.droid.utils.PixelUtils;
-import pct.droid.utils.StringUtils;
-import pct.droid.youtube.YouTubeData;
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.StringUtils;
+import pct.droid.base.youtube.YouTubeData;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TrailerPlayerActivity extends BaseActivity implements View.OnSystemUiVisibilityChangeListener {

@@ -14,13 +14,12 @@ import java.io.IOException;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.providers.media.MediaProvider;
-import pct.droid.providers.media.types.Media;
-import pct.droid.providers.subs.SubsProvider;
-import pct.droid.streamer.Ready;
-import pct.droid.streamer.Status;
-import pct.droid.utils.FileUtils;
-import pct.droid.utils.LogUtils;
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.streamer.Ready;
+import pct.droid.base.streamer.Status;
+import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.LogUtils;
 
 public class StreamLoadingActivity extends BaseActivity {
 

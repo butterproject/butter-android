@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.bugsnag.android.Bugsnag;
 
 import butterknife.ButterKnife;
-import pct.droid.PopcornApplication;
+import pct.droid.base.PopcornApplication;
 
 public class BaseActivity extends ActionBarActivity {
 

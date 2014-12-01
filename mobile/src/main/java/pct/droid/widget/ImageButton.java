@@ -5,9 +5,6 @@ import android.util.AttributeSet;
 
 import pct.droid.utils.CheatSheet;
 
-/**
- * Created by Sebastiaan on 21-09-14.
- */
 public class ImageButton extends android.widget.ImageButton {
 
     public ImageButton(Context context) {
