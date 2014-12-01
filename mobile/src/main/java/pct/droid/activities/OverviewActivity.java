@@ -35,6 +35,8 @@ import butterknife.InjectView;
 import pct.droid.base.Constants;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
+import pct.droid.base.providers.media.EZTVProvider;
+import pct.droid.base.utils.LogUtils;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
@@ -48,7 +50,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
-    private YTSProvider mProvider = new YTSProvider();
+    private EZTVProvider mProvider = new EZTVProvider();
     private Integer mColumns = 2, mRetries = 0;
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
@@ -178,7 +180,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onFailure(Exception e) {
-        if(e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
+        if(e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
             mEndOfListReached = true;
             mHandler.post(new Runnable() {
                 @Override
@@ -192,7 +194,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             });
         } else {
             e.printStackTrace();
-            Log.e("OverviewActivity", e.getMessage());
+            LogUtils.e(e.getMessage());
             if (mRetries > 1) {
                 mHandler.post(new Runnable() {
                     @Override
