@@ -25,7 +25,7 @@ public class YTSProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public void getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
         final ArrayList<Media> currentList;
         if(existingList == null) {
             currentList = new ArrayList<Media>();
@@ -70,7 +70,7 @@ public class YTSProvider extends MediaProvider {
         String query = buildQuery(params);
         requestBuilder.url(mApiUrl + "list.json?" + query);
 
-        fetchList(currentList, requestBuilder, callback);
+        return fetchList(currentList, requestBuilder, callback);
     }
 
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
@@ -152,11 +152,11 @@ public class YTSProvider extends MediaProvider {
     }
 
     @Override
-    public void getDetail(String imdbId, final Callback callback) {
+    public Call getDetail(String imdbId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
 
-        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 callback.onFailure(e);
@@ -207,7 +207,7 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             if (meta.runtime != null) {
-                                movie.runtime = meta.runtime;
+                                movie.runtime = Integer.toString(meta.runtime);
                             }
 
                             if (meta.certification != null) {
@@ -260,10 +260,7 @@ public class YTSProvider extends MediaProvider {
                 }
 
                 Media.Torrent torrent = new Media.Torrent();
-                torrent.url = item.get("TorrentUrl").toString();
-                torrent.magnet = item.get("TorrentMagnetUrl").toString();
-                torrent.size = item.get("SizeByte").toString();
-                torrent.fileSize = item.get("Size").toString();
+                torrent.url = item.get("TorrentMagnetUrl").toString();
                 torrent.seeds = item.get("TorrentSeeds").toString();
                 torrent.peers = item.get("TorrentPeers").toString();
 

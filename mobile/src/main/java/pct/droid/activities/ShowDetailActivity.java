@@ -28,18 +28,17 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.PixelUtils;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
-import pct.droid.base.providers.media.types.Movie;
 import pct.droid.utils.ActionBarBackground;
-import pct.droid.base.utils.LogUtils;
-import pct.droid.base.utils.PixelUtils;
-import pct.droid.base.youtube.YouTubeData;
 
-public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
+public class ShowDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
 
-    private Movie mItem;
+    private Show mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
@@ -95,6 +94,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     synopsisDialogFragment.setArguments(b);
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
+                /*
                 case R.id.qualityBlock:
                     if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
@@ -121,7 +121,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     startActivity(trailerIntent);
                     break;
                 case R.id.playButton:
-                    final String streamUrl = mItem.torrents.get(mQuality).url;
+                    final String streamUrl = mItem.torrents.get(mQuality).magnet;
                     Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
                     streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
                     streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
@@ -129,6 +129,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
                     startActivity(streamIntent);
                     break;
+                */
             }
 
         }
@@ -176,12 +177,12 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             if(mParallaxHeight - scrollView.getScrollY() < 0) {
                 if(mTransparentBar) {
                     mTransparentBar = false;
-                    ActionBarBackground.changeColor(MovieDetailActivity.this, mPaletteColor, false);
+                    ActionBarBackground.changeColor(ShowDetailActivity.this, mPaletteColor, false);
                 }
             } else {
                 if(!mTransparentBar) {
                     mTransparentBar = true;
-                    ActionBarBackground.fadeOut(MovieDetailActivity.this);
+                    ActionBarBackground.fadeOut(ShowDetailActivity.this);
                 }
             }
 
@@ -215,7 +216,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         mHeaderHeight = mParallaxHeight - mToolbarHeight;
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
-        mItem = getIntent().getParcelableExtra("item");
+        Intent intent = getIntent();
+        mItem = intent.getParcelableExtra("show");
         LogUtils.d(mItem.toString());
         titleText.setText(mItem.title);
         yearText.setText(mItem.year);
@@ -233,9 +235,9 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             synopsisBlock.setClickable(false);
         }
 
-        if(mItem.trailer == null) {
-            trailerBlock.setVisibility(View.GONE);
-        }
+        trailerBlock.setVisibility(View.GONE);
+        qualityBlock.setVisibility(View.GONE);
+        subtitlesBlock.setVisibility(View.GONE);
 
         Picasso.with(this).load(mItem.image).into(new Target() {
             @Override
@@ -251,18 +253,18 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
 
                 final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), getResources().getColor(R.color.primary), mPaletteColor);
                 mainInfoBlockColorFade.setDuration(500);
-                Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
-                mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
+                Drawable oldDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
+                mPlayButtonDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
                 final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
 
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         playButton.setImageDrawable(td);
-                        Picasso.with(MovieDetailActivity.this).load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
+                        Picasso.with(ShowDetailActivity.this).load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
-                                Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, android.R.anim.fade_in);
+                                Animation fadeInAnim = AnimationUtils.loadAnimation(ShowDetailActivity.this, android.R.anim.fade_in);
 
                                 mainInfoBlockColorFade.start();
                                 td.startTransition(500);
@@ -293,8 +295,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     protected void onResume() {
         super.onResume();
         if(mQuality == null) {
-            String[] keys = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
-            onQualitySelected(keys[0]);
+            //String[] keys = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
+            //onQualitySelected(keys[0]);
         }
     }
 
