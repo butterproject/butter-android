@@ -1,1 +1,1 @@
-include ':mobile', ':vlc', ':node', ':base'
+include ':mobile', ':vlc', ':node', ':base', ':tv'
