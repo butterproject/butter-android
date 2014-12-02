@@ -40,6 +40,9 @@
             android:name="pct.droid.activities.MovieDetailActivity"
             android:label="@string/app_name" />
         <activity
+            android:name="pct.droid.activities.ShowDetailActivity"
+            android:label="@string/app_name" />
+        <activity
             android:name="pct.droid.activities.StreamLoadingActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name" />

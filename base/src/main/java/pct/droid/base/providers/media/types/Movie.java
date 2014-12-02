@@ -6,8 +6,9 @@ import android.os.Parcelable;
 import java.util.HashMap;
 
 public class Movie extends Media implements Parcelable {
+    public String type = "movie";
     public String trailer = "";
-    public Integer runtime = -1;
+    public String runtime = "";
     public String tagline = "";
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
@@ -20,7 +21,7 @@ public class Movie extends Media implements Parcelable {
     protected Movie(Parcel in) {
         super(in);
         trailer = in.readString();
-        runtime = in.readInt();
+        runtime = in.readString();
         tagline = in.readString();
         synopsis = in.readString();
         certification = in.readString();
@@ -41,7 +42,7 @@ public class Movie extends Media implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(trailer);
-        dest.writeInt(runtime);
+        dest.writeString(runtime);
         dest.writeString(tagline);
         dest.writeString(synopsis);
         dest.writeString(certification);
