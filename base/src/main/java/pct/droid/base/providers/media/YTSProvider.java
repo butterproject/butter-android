@@ -109,40 +109,39 @@ public class YTSProvider extends MediaProvider {
                         TraktProvider traktProvider = new TraktProvider();
                         TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
 
-                        if(metaDatas.length == formattedData.size())
-                            for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
-                                Media media = formattedData.get(i);
+                        for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
+                            Media media = formattedData.get(i);
 
-                                if(metaDatas.length > index) {
-                                    TraktProvider.MetaData meta = metaDatas[index];
-                                    if (media.videoId.equals(meta.imdb_id)) {
-                                        if (meta.images.containsKey("poster")) {
-                                            media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                            media.fullImage = meta.images.get("poster");
-                                        }
-
-                                        if (meta.images.containsKey("fanart")) {
-                                            media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                                        }
-
-                                        if (meta.title != null) {
-                                            media.title = meta.title;
-                                        }
-                                        formattedData.set(i, media);
-                                        index++;
-                                    } else {
-                                        media.fullImage = media.image;
-                                        media.headerImage = media.image;
-                                        formattedData.set(i, media);
+                            if(metaDatas.length > index) {
+                                TraktProvider.MetaData meta = metaDatas[index];
+                                if (media.videoId.equals(meta.imdb_id)) {
+                                    if (meta.images.containsKey("poster")) {
+                                        media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                        media.fullImage = meta.images.get("poster");
                                     }
+
+                                    if (meta.images.containsKey("fanart")) {
+                                        media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                    }
+
+                                    if (meta.title != null) {
+                                        media.title = meta.title;
+                                    }
+                                    formattedData.set(i, media);
+                                    index++;
                                 } else {
                                     media.fullImage = media.image;
                                     media.headerImage = media.image;
                                     formattedData.set(i, media);
                                 }
+                            } else {
+                                media.fullImage = media.image;
+                                media.headerImage = media.image;
+                                formattedData.set(i, media);
                             }
+                        }
 
-                        callback.onSuccess(currentList);
+                        callback.onSuccess(formattedData);
                         return;
                     }
                 }
