@@ -142,7 +142,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
 
                             Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
                             streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
-                            streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
+                            streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
                             streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
                             if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
                             startActivity(streamIntent);
@@ -154,6 +154,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                             dialogInterface.dismiss();
                         }
                     });
+                    dialogBuilder.show();
                     break;
             }
 
