@@ -81,9 +81,6 @@ public class Media implements Parcelable {
 
     public static class Torrent implements Parcelable {
         public String url;
-        public String magnet;
-        public String size;
-        public String fileSize;
         public String seeds;
         public String peers;
 
@@ -93,9 +90,6 @@ public class Media implements Parcelable {
 
         public Torrent(Parcel in) {
             url = in.readString();
-            magnet = in.readString();
-            size = in.readString();
-            fileSize = in.readString();
             seeds = in.readString();
             peers = in.readString();
         }
@@ -108,9 +102,6 @@ public class Media implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(url);
-            dest.writeString(magnet);
-            dest.writeString(size);
-            dest.writeString(fileSize);
             dest.writeString(seeds);
             dest.writeString(peers);
         }
