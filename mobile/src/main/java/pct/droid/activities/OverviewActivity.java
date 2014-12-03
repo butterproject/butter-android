@@ -286,7 +286,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                         @Override
                         public void run() {
                             Intent intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
-                            intent.putExtra("show", (Show)item);
+                            intent.putExtra("item", item);
                             startActivity(intent);
                         }
                     });
