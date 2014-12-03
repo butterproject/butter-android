@@ -3,8 +3,6 @@ package pct.droid.base.providers.media.types;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Show extends Media implements Parcelable {
