@@ -1,5 +1,8 @@
 package pct.droid.activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -28,6 +31,7 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -120,16 +124,37 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mItem.trailer);
                     startActivity(trailerIntent);
                     break;
-                case R.id.playButton:
-                    final String streamUrl = mItem.torrents.get(mQuality).magnet;
-                    Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-                    streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
-                    streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
-                    streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
-                    if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-                    startActivity(streamIntent);
-                    break;
                 */
+                case R.id.playButton:
+                    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ShowDetailActivity.this);
+                    final CharSequence[] items = new CharSequence[mItem.episodes.size()];
+                    int i = 0;
+                    for(String key : mItem.episodes.keySet()) {
+                        items[i] = key;
+                        i++;
+                    }
+                    dialogBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String key = (String) items[i];
+                            Show.Episode episode = mItem.episodes.get(key);
+                            Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
+
+                            Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
+                            streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
+                            streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
+                            streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
+                            if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                            startActivity(streamIntent);
+                        }
+                    });
+                    dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    break;
             }
 
         }
