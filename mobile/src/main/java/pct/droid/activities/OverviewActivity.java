@@ -39,6 +39,7 @@ import pct.droid.base.Constants;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.base.providers.media.EZTVProvider;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.fragments.OverviewActivityTaskFragment;
@@ -285,7 +286,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
+                            Intent intent;
+                            if(item instanceof Movie) {
+                                intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
+                            } else {
+                                intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
+                            }
                             intent.putExtra("item", item);
                             startActivity(intent);
                         }
