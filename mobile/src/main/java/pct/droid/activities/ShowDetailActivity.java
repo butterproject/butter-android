@@ -217,7 +217,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
         Intent intent = getIntent();
-        mItem = intent.getParcelableExtra("show");
+        mItem = intent.getParcelableExtra("item");
         LogUtils.d(mItem.toString());
         titleText.setText(mItem.title);
         yearText.setText(mItem.year);
