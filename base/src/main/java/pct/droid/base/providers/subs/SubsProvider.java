@@ -8,6 +8,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.apache.http.MethodNotSupportedException;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,11 +18,14 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.subs.FatalParsingException;
 import pct.droid.base.subs.FormatASS;
 import pct.droid.base.subs.FormatSRT;
@@ -32,12 +37,17 @@ public abstract class SubsProvider extends BaseProvider {
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
-    public HashMap<String, HashMap<String, String>> getList(String imdbId) {
-        return getList(new String[] { imdbId });
-    }
+    public abstract Map<String, Map<String, String>> getList(Movie movie) throws MethodNotSupportedException;
+    public abstract Map<String, Map<String, String>> getList(Show media, Show.Episode episode) throws MethodNotSupportedException;
 
-    public abstract HashMap<String, HashMap<String, String>> getList(String[] imdbIds);
-
+    /**
+     *
+     * @param context Context
+     * @param media Media data
+     * @param languageCode Code of language
+     * @param callback Network callback
+     * @return Call
+     */
     public static Call download(final Context context, final Media media, final String languageCode, final Callback callback) {
         OkHttpClient client = new OkHttpClient();
         if(media.subtitles.containsKey(languageCode)) {
@@ -112,6 +122,13 @@ public abstract class SubsProvider extends BaseProvider {
         return null;
     }
 
+    /**
+     * Unpack ZIP and save SRT
+     * @param is InputStream from network
+     * @param srtPath Path where SRT should be saved
+     * @throws IOException
+     * @throws FatalParsingException
+     */
     private static void unpack(InputStream is, File srtPath) throws IOException, FatalParsingException {
         String filename;
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
@@ -135,6 +152,11 @@ public abstract class SubsProvider extends BaseProvider {
         zis.close();
     }
 
+    /**
+     * Test if file is subtitle format
+     * @param filename Name of file
+     * @return is subtitle?
+     */
     private static boolean isSubFormat(String filename) {
         for(String ext : SUB_EXTENSIONS) {
             if(filename.endsWith("." + ext)) {
@@ -144,6 +166,13 @@ public abstract class SubsProvider extends BaseProvider {
         return false;
     }
 
+    /**
+     * Parse the text, convert and save to SRT file
+     * @param inputUrl Original network location
+     * @param srtPath Place where SRT should be saved
+     * @param inputStream InputStream of data
+     * @throws IOException
+     */
     private static void parseFormatAndSave(String inputUrl, File srtPath, InputStream inputStream) throws IOException {
         TimedTextObject subtitleObject = null;
         String[] inputText = FileUtils.inputstreamToCharsetString(inputStream).split("\n|\r\n");

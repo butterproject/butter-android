@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Movie extends Media implements Parcelable {
     public String type = "movie";
@@ -12,7 +13,7 @@ public class Movie extends Media implements Parcelable {
     public String tagline = "";
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
-    public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
+    public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
 
     public Movie() {
 
@@ -46,10 +47,14 @@ public class Movie extends Media implements Parcelable {
         dest.writeString(tagline);
         dest.writeString(synopsis);
         dest.writeString(certification);
-        dest.writeInt(torrents.size());
-        for (String s: torrents.keySet()) {
-            dest.writeString(s);
-            dest.writeParcelable(torrents.get(s), flags);
+        if(torrents != null) {
+            dest.writeInt(torrents.size());
+            for (String s : torrents.keySet()) {
+                dest.writeString(s);
+                dest.writeParcelable(torrents.get(s), flags);
+            }
+        } else {
+            dest.writeInt(0);
         }
     }
 

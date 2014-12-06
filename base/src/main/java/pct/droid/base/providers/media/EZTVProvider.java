@@ -16,6 +16,7 @@ import java.util.HashMap;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.meta.TraktProvider;
+import pct.droid.base.providers.subs.OpenSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -75,6 +76,13 @@ public class EZTVProvider extends MediaProvider {
         return fetchList(currentList, requestBuilder, callback);
     }
 
+    /**
+     * Fetch the list of movies from EZTV
+     * @param currentList Current shown list to be extended
+     * @param requestBuilder Request to be executed
+     * @param callback Network callback
+     * @return Call
+     */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -145,7 +153,11 @@ public class EZTVProvider extends MediaProvider {
                             }
 
                             // TODO:
-                            // OpenSubsProvider subsProvider = new OpenSubsProvider();
+                            OpenSubsProvider subsProvider = new OpenSubsProvider();
+                            String key = show.episodes.keySet().iterator().next();
+                            Show.Episode episode = show.episodes.get(key);
+                            episode.subtitles = subsProvider.getList(show, show.episodes.get(key)).get(show.videoId);
+                            show.episodes.put(key, episode);
                             // show.subtitles = subsProvider.getList(show.videoId).get(show.videoId);
 
                             formattedData.set(0, show);

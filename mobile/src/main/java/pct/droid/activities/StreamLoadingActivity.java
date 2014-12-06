@@ -15,6 +15,7 @@ import java.io.IOException;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
@@ -56,11 +57,12 @@ public class StreamLoadingActivity extends BaseActivity {
         String streamUrl = getIntent().getStringExtra(STREAM_URL);
         Media data = getIntent().getParcelableExtra(DATA);
 
-        if (getIntent().hasExtra(SUBTITLES)) {
+        if (getIntent().hasExtra(SUBTITLES) && data instanceof Movie) {
+            Movie movie = (Movie) data;
             mHasSubs = true;
             String subtitleLanguage = getIntent().getStringExtra(SUBTITLES);
             if (!subtitleLanguage.equals("no-subs")) {
-                SubsProvider.download(this, data, subtitleLanguage, new Callback() {
+                SubsProvider.download(this, movie, subtitleLanguage, new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
                         mSubsStatus = SubsStatus.FAILURE;

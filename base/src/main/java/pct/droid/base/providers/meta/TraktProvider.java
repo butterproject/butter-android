@@ -13,6 +13,12 @@ public class TraktProvider extends MetaProvider {
     private String mApiUrl = "https://api.trakt.tv/";
     private String mApiKey = "515a27ba95fbd83f20690e5c22bceaff0dfbde7c";
 
+    /**
+     * Get metadata from Trakt
+     * @param imdbId IMDb ids to get metadata for
+     * @param type Type of item
+     * @return MetaData
+     */
     public MetaData getSummary(String imdbId, String type) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + type + "/summary.json/" + mApiKey + "/" + imdbId);
@@ -33,6 +39,13 @@ public class TraktProvider extends MetaProvider {
         return new MetaData();
     }
 
+    /**
+     * Get metadata from Trakt
+     * @param ids IMDb ids to get metadata for
+     * @param type Type of item
+     * @param extended Type of data to get
+     * @return MetaData
+     */
     public MetaData[] getSummaries(String[] ids, String type, String extended) {
         Request.Builder requestBuilder = new Request.Builder();
 

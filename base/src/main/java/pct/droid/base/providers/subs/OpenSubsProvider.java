@@ -1,11 +1,92 @@
 package pct.droid.base.providers.subs;
 
+import android.util.Log;
+
+import org.apache.http.MethodNotSupportedException;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import de.timroes.axmlrpc.XMLRPCClient;
+import de.timroes.axmlrpc.XMLRPCException;
+import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.utils.LogUtils;
 
 public class OpenSubsProvider extends SubsProvider {
 
+    protected String mApiUrl = "http://api.opensubtitles.org/xml-rpc";
+    protected String mUserAgent = "Popcorn Time v1";//"Popcorn Time Android v1";
+
     @Override
-    public HashMap<String, HashMap<String, String>> getList(String[] imdbIds) {
+    public Map<String, Map<String, String>> getList(Movie movie) throws MethodNotSupportedException {
+        throw new MethodNotSupportedException("Movie subtitles not supported");
+    }
+
+    @Override
+    public Map<String, Map<String, String>> getList(Show show, Show.Episode episode) {
+        String token = login();
+        if(!token.isEmpty()) {
+            Map<String, Object> subData = search(show, Integer.toString(episode.season), Integer.toString(episode.episode), token);
+            if(subData == null || subData.get("data") == null) {
+
+            } else {
+                List<Map<String, String>> dataList = (List<Map<String, String>>) subData.get("data");
+                for(Map<String, String> dataItem : dataList) {
+
+                }
+            }
+        }
+        return new HashMap<String, Map<String, String>>();
+    }
+
+    /**
+     * Login to server and get token
+     * @return Token
+     */
+    private String login() {
+        try {
+            XMLRPCClient client = new XMLRPCClient(new URL(mApiUrl), mUserAgent);
+            Map<String, Object> response = (Map<String, Object>) client.call("LogIn", "", "", "en", mUserAgent);
+            return (String) response.get("token");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (XMLRPCException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Search for subtitles by imdbId, season and episode
+     * @param show Show
+     * @param season Season number
+     * @param episode Episode number
+     * @param token Login token
+     * @return SRT URL
+     */
+    private Map<String, Object> search(Show show, String season, String episode, String token) {
+        try {
+            XMLRPCClient client = new XMLRPCClient(new URL(mApiUrl), mUserAgent);
+            ArrayList<Map<String, String>> optionList = new ArrayList<Map<String, String>>();
+            Map<String, String> option = new HashMap<String, String>();
+            option.put("imdbid", show.imdbId.replace("tt", ""));
+            option.put("season", season);
+            option.put("episode", episode);
+            option.put("sublanguageid", "all");
+            optionList.add(option);
+            Map<String, Object> response = (Map<String, Object>) client.call("SearchSubtitles", token, option);
+            LogUtils.d("Return size: " + response.size());
+            return response;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (XMLRPCException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

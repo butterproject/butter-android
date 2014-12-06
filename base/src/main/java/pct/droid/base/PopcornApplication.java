@@ -14,8 +14,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import com.bugsnag.android.Bugsnag;
-
 import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
@@ -36,7 +34,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Bugsnag.register(this, Constants.BUGSNAG_KEY);
+        //Bugsnag.register(this, Constants.BUGSNAG_KEY);
 
         Constants.DEBUG_ENABLED = false;
         try {

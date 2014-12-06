@@ -55,8 +55,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
-    private MediaProvider mProvider = new YTSProvider();
-    private Integer mProviderId = 0;
+    private MediaProvider mProvider = new EZTVProvider();
+    private Integer mProviderId = 1;
     private Integer mColumns = 2, mRetries = 0;
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
@@ -401,7 +401,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     i.putExtra(TrailerPlayerActivity.LOCATION, location);
                     startActivity(i);
                 } else {
-                    Media media = new Media();
+                    Movie media = new Movie();
                     final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
                     i.putExtra(VideoPlayerActivity.DATA, media);
                     i.putExtra(VideoPlayerActivity.LOCATION, location);
