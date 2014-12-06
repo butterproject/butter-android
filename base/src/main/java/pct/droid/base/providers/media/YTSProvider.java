@@ -73,6 +73,13 @@ public class YTSProvider extends MediaProvider {
         return fetchList(currentList, requestBuilder, callback);
     }
 
+    /**
+     * Fetch the list of movies from YTS
+     * @param currentList Current shown list to be extended
+     * @param requestBuilder Request to be executed
+     * @param callback Network callback
+     * @return Call
+     */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -129,15 +136,7 @@ public class YTSProvider extends MediaProvider {
                                     }
                                     formattedData.set(i, media);
                                     index++;
-                                } else {
-                                    media.fullImage = media.image;
-                                    media.headerImage = media.image;
-                                    formattedData.set(i, media);
                                 }
-                            } else {
-                                media.fullImage = media.image;
-                                media.headerImage = media.image;
-                                formattedData.set(i, media);
                             }
                         }
 
@@ -214,7 +213,7 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             YSubsProvider subsProvider = new YSubsProvider();
-                            movie.subtitles = subsProvider.getList(movie.videoId).get(movie.videoId);
+                            movie.subtitles = subsProvider.getList(movie).get(movie.videoId);
 
                             formattedData.set(0, movie);
 
@@ -234,6 +233,12 @@ public class YTSProvider extends MediaProvider {
         public String error;
         public ArrayList<LinkedTreeMap<String, Object>> MovieList;
 
+        /**
+         * Test if there is an item that already exists
+         * @param results List with items
+         * @param id Id of item to check for
+         * @return
+         */
         private int isInResults(ArrayList<Media> results, String id) {
             int i = 0;
             for(Media item : results) {
@@ -243,10 +248,19 @@ public class YTSProvider extends MediaProvider {
             return -1;
         }
 
+        /**
+         * Format data for the application
+         * @return List with items
+         */
         public ArrayList<Media> formatForPopcorn() {
             return formatForPopcorn(new ArrayList<Media>());
         }
 
+        /**
+         * Format data for the application
+         * @param existingList List to be extended
+         * @return List with items
+         */
         public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
             for(LinkedTreeMap<String, Object> item : MovieList) {
                 Movie movie = new Movie();
@@ -265,7 +279,6 @@ public class YTSProvider extends MediaProvider {
 
                 int existingItem = isInResults(existingList, movie.videoId);
                 if(existingItem == -1) {
-                    movie.image = item.get("CoverImage").toString().replace("_med.", "_large.");
                     movie.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
                     movie.year = item.get("MovieYear").toString();
                     movie.genre = item.get("Genre").toString();

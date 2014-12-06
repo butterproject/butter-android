@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Show extends Media implements Parcelable {
     public String type = "show";
@@ -18,7 +19,7 @@ public class Show extends Media implements Parcelable {
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
     public Integer seasons = 0;
-    public HashMap<String, Episode> episodes = new HashMap<String, Episode>();
+    public Map<String, Episode> episodes = new HashMap<String, Episode>();
 
     public Show() {
 
@@ -82,15 +83,15 @@ public class Show extends Media implements Parcelable {
         }
     };
 
-    public static class Episode implements Parcelable {
+    public static class Episode extends Media implements Parcelable {
         public int aired;
         public int episode;
         public int season;
-        public String title;
         public String overview;
         public String tvdbId;
         public boolean dateBased;
-        public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
+        public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
+        public Map<String, String> subtitles = new HashMap<String, String>();
 
         public Episode() {
 
@@ -109,6 +110,11 @@ public class Show extends Media implements Parcelable {
                 String key = in.readString();
                 Torrent torrent = in.readParcelable(Torrent.class.getClassLoader());
                 torrents.put(key, torrent);
+            }
+            int length = in.readInt();
+            subtitles = new HashMap<String, String>();
+            for(int i = 0; i < length; i++) {
+                subtitles.put(in.readString(), in.readString());
             }
         }
 
@@ -130,6 +136,15 @@ public class Show extends Media implements Parcelable {
             for (String s: torrents.keySet()) {
                 dest.writeString(s);
                 dest.writeParcelable(torrents.get(s), flags);
+            }
+            if(subtitles != null) {
+                dest.writeInt(subtitles.size());
+                for (String key : subtitles.keySet()) {
+                    dest.writeString(key);
+                    dest.writeString(subtitles.get(key));
+                }
+            } else {
+                dest.writeInt(0);
             }
         }
 
