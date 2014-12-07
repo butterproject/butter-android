@@ -152,16 +152,6 @@ public class EZTVProvider extends MediaProvider {
                                 show.certification = meta.certification;
                             }
 
-                            // TODO:
-                            OpenSubsProvider subsProvider = new OpenSubsProvider();
-                            String key = show.episodes.keySet().iterator().next();
-                            Show.Episode episode = show.episodes.get(key);
-                            episode.subtitles = subsProvider.getList(show, show.episodes.get(key)).get(show.videoId);
-                            show.episodes.put(key, episode);
-                            // show.subtitles = subsProvider.getList(show.videoId).get(show.videoId);
-
-                            formattedData.set(0, show);
-
                             callback.onSuccess(formattedData);
                             return;
                         }

@@ -37,11 +37,10 @@ public class OpenSubsProvider extends SubsProvider {
         String token = login();
         if(!token.isEmpty()) {
             Map<String, Object> subData = search(show, Integer.toString(episode.season), Integer.toString(episode.episode), token);
-            if(subData == null || subData.get("data") == null) {
-
-            } else {
-                List<Map<String, String>> dataList = (List<Map<String, String>>) subData.get("data");
-                for(Map<String, String> dataItem : dataList) {
+            if(subData != null && subData.get("data") != null) {
+                Object[] dataList = (Object[]) subData.get("data");
+                for(Object dataItem : dataList) {
+                    Map<String, String> item = (Map<String, String>) dataItem;
 
                 }
             }
@@ -83,13 +82,11 @@ public class OpenSubsProvider extends SubsProvider {
     private Map<String, Object> search(Show show, String season, String episode, String token) {
         try {
             XMLRPCClient client = new XMLRPCClient(new URI(mApiUrl), "", "", mUserAgent);
-            ArrayList<Map<String, String>> optionList = new ArrayList<Map<String, String>>();
             Map<String, String> option = new HashMap<String, String>();
             option.put("imdbid", show.imdbId.replace("tt", ""));
             option.put("season", season);
             option.put("episode", episode);
             option.put("sublanguageid", "all");
-            optionList.add(option);
             return (Map<String, Object>) client.call("SearchSubtitles", new Object[] { token, new Object[] { option } });
         } catch (MalformedURLException e) {
             e.printStackTrace();
