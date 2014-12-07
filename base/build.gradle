@@ -27,8 +27,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'com.google.code.gson:gson:2.3'
-    compile 'de.timroes:aXMLRPC:1.8.0'
     compile 'com.android.support:mediarouter-v7:21.0.0'
     compile project(':node')
     compile project(':vlc')
+    compile project(':xmlrpc')
 }
