@@ -20,9 +20,9 @@
  *****************************************************************************/
 package org.videolan.libvlc;
 
-import android.os.Bundle;
-
 import java.util.ArrayList;
+
+import android.os.Bundle;
 
 /**
  * Java/JNI wrapper for the libvlc_media_list_t structure.
