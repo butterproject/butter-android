@@ -686,6 +686,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
+                showInfo("Best fit"); // TODO: Translate
                 if (dar < ar)
                     dh = dw / ar;
                 else
@@ -693,13 +694,17 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 break;
             case SURFACE_FIT_HORIZONTAL:
                 dh = dw / ar;
+                showInfo("Fit horizontal"); // TODO: Translate
                 break;
             case SURFACE_FIT_VERTICAL:
                 dw = dh * ar;
+                showInfo("Fit vertical"); // TODO: Translate
                 break;
             case SURFACE_FILL:
+                showInfo("Fill"); // TODO: Translate
                 break;
             case SURFACE_16_9:
+                showInfo("16:9");
                 ar = 16.0 / 9.0;
                 if (dar < ar)
                     dh = dw / ar;
@@ -707,6 +712,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_4_3:
+                showInfo("4:3");
                 ar = 4.0 / 3.0;
                 if (dar < ar)
                     dh = dw / ar;
@@ -714,6 +720,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_ORIGINAL:
+                showInfo("Original"); // TODO: Translate
                 dh = mVideoVisibleHeight;
                 dw = vw;
                 break;
