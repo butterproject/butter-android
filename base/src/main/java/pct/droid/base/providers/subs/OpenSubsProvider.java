@@ -37,12 +37,52 @@ public class OpenSubsProvider extends SubsProvider {
         String token = login();
         if(!token.isEmpty()) {
             Map<String, Object> subData = search(show, Integer.toString(episode.season), Integer.toString(episode.episode), token);
+            Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
+            Map<String, Integer[]> scoreMap = new HashMap<String, Integer[]>();
+            Map<String, String> episodeMap = new HashMap<String, String>();
             if(subData != null && subData.get("data") != null) {
                 Object[] dataList = (Object[]) subData.get("data");
                 for(Object dataItem : dataList) {
                     Map<String, String> item = (Map<String, String>) dataItem;
+                    if(item.get("SubFormat") != "srt") {
+                        continue;
+                    }
 
+                    // episode check
+                    if(!item.get("SeriesIMDBParent").equals(show.imdbId.replace("tt", ""))) {
+                        continue;
+                    }
+                    if(item.get("SeriesSeason").equals(Integer.toString(episode.season))) {
+                        continue;
+                    }
+                    if(item.get("SeriesEpisode").equals(Integer.toString(episode.episode))) {
+                        continue;
+                    }
+
+                    String url = item.get("SubDownloadLink").replace(".gz", ".srt");
+                    String lang = item.get("ISO639").replace("pb", "pt-BR");
+                    int downloads = Integer.parseInt(item.get("SubDownloadsCnt"));
+                    int score = 0;
+
+                    if(item.get("MatchedBy") == "tag") {
+                        score += 50;
+                    }
+                    if(item.get("UserRank") == "trusted") {
+                        score += 100;
+                    }
+                    if(!episodeMap.containsKey(lang)) {
+                        episodeMap.put(lang, url);
+                        scoreMap.put(lang, new Integer[] { score, downloads });
+                    } else {
+                        // If score is 0 or equal, sort by downloads
+                        if(score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
+                            episodeMap.put(lang, url);
+                            scoreMap.put(lang, new Integer[] { score, downloads });
+                        }
+                    }
                 }
+                returnMap.put(show.imdbId, episodeMap);
+                return returnMap;
             }
         }
         return new HashMap<String, Map<String, String>>();
