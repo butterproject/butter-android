@@ -57,12 +57,11 @@ public class StreamLoadingActivity extends BaseActivity {
         String streamUrl = getIntent().getStringExtra(STREAM_URL);
         Media data = getIntent().getParcelableExtra(DATA);
 
-        if (getIntent().hasExtra(SUBTITLES) && data instanceof Movie) {
-            Movie movie = (Movie) data;
+        if (getIntent().hasExtra(SUBTITLES)) {
             mHasSubs = true;
             String subtitleLanguage = getIntent().getStringExtra(SUBTITLES);
             if (!subtitleLanguage.equals("no-subs")) {
-                SubsProvider.download(this, movie, subtitleLanguage, new Callback() {
+                SubsProvider.download(this, data, subtitleLanguage, new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
                         mSubsStatus = SubsStatus.FAILURE;

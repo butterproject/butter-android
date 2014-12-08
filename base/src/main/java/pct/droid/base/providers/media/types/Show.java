@@ -91,13 +91,13 @@ public class Show extends Media implements Parcelable {
         public String tvdbId;
         public boolean dateBased;
         public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
-        public Map<String, String> subtitles = new HashMap<String, String>();
 
         public Episode() {
 
         }
 
         protected Episode(Parcel in) {
+            super(in);
             aired = in.readInt();
             episode = in.readInt();
             season = in.readInt();
@@ -111,11 +111,6 @@ public class Show extends Media implements Parcelable {
                 Torrent torrent = in.readParcelable(Torrent.class.getClassLoader());
                 torrents.put(key, torrent);
             }
-            int length = in.readInt();
-            subtitles = new HashMap<String, String>();
-            for(int i = 0; i < length; i++) {
-                subtitles.put(in.readString(), in.readString());
-            }
         }
 
         @Override
@@ -125,6 +120,7 @@ public class Show extends Media implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
             dest.writeInt(aired);
             dest.writeInt(episode);
             dest.writeInt(season);
@@ -132,16 +128,11 @@ public class Show extends Media implements Parcelable {
             dest.writeString(overview);
             dest.writeString(tvdbId);
             dest.writeInt(dateBased ? 1 : 0);
-            dest.writeInt(torrents.size());
-            for (String s: torrents.keySet()) {
-                dest.writeString(s);
-                dest.writeParcelable(torrents.get(s), flags);
-            }
-            if(subtitles != null) {
-                dest.writeInt(subtitles.size());
-                for (String key : subtitles.keySet()) {
-                    dest.writeString(key);
-                    dest.writeString(subtitles.get(key));
+            if(torrents != null) {
+                dest.writeInt(torrents.size());
+                for (String s : torrents.keySet()) {
+                    dest.writeString(s);
+                    dest.writeParcelable(torrents.get(s), flags);
                 }
             } else {
                 dest.writeInt(0);

@@ -50,7 +50,7 @@ public abstract class SubsProvider extends BaseProvider {
      */
     public static Call download(final Context context, final Media media, final String languageCode, final Callback callback) {
         OkHttpClient client = new OkHttpClient();
-        if(media.subtitles.containsKey(languageCode)) {
+        if(media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
@@ -119,6 +119,7 @@ public abstract class SubsProvider extends BaseProvider {
                 e.printStackTrace();
             }
         }
+        callback.onFailure(null, new IOException("Wrong media"));
         return null;
     }
 

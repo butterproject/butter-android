@@ -27,6 +27,7 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.Iterator;
 import java.util.Locale;
 
 import butterknife.InjectView;
@@ -107,14 +108,21 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     qualitySelectorDialogFragment.setArguments(b);
                     qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
+                */
                 case R.id.subtitlesBlock:
                     if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
                     b = new Bundle();
-                    b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]));
-                    subtitleSelectorDialogFragment.setArguments(b);
-                    subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    Iterator<String> it = mItem.episodes.keySet().iterator();
+                    String name = it.next();
+                    Show.Episode episode = mItem.episodes.get(name);
+                    if(episode.subtitles != null) {
+                        b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, episode.subtitles.keySet().toArray(new String[episode.subtitles.size()]));
+                        subtitleSelectorDialogFragment.setArguments(b);
+                        subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    }
                     break;
+                /*
                 case R.id.trailerBlock:
                     Intent trailerIntent = new Intent(MovieDetailActivity.this, TrailerPlayerActivity.class);
                     if (!YouTubeData.isYouTubeUrl(mItem.trailer)) {
@@ -143,7 +151,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                             Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
                             streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
                             streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
-                            streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
+                            streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
                             if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
                             startActivity(streamIntent);
                         }
@@ -263,7 +271,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
 
         trailerBlock.setVisibility(View.GONE);
         qualityBlock.setVisibility(View.GONE);
-        subtitlesBlock.setVisibility(View.GONE);
+        //subtitlesBlock.setVisibility(View.GONE);
 
         Picasso.with(this).load(mItem.image).into(new Target() {
             @Override
