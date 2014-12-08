@@ -35,8 +35,10 @@ public class OpenSubsProvider extends SubsProvider {
     @Override
     public Map<String, Map<String, String>> getList(Show show, Show.Episode episode) {
         String token = login();
+        String episodeStr = Integer.toString(episode.episode);
+        String seasonStr = Integer.toString(episode.season);
         if(!token.isEmpty()) {
-            Map<String, Object> subData = search(show, Integer.toString(episode.season), Integer.toString(episode.episode), token);
+            Map<String, Object> subData = search(show, seasonStr, episodeStr, token);
             Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
             Map<String, Integer[]> scoreMap = new HashMap<String, Integer[]>();
             Map<String, String> episodeMap = new HashMap<String, String>();
@@ -44,18 +46,18 @@ public class OpenSubsProvider extends SubsProvider {
                 Object[] dataList = (Object[]) subData.get("data");
                 for(Object dataItem : dataList) {
                     Map<String, String> item = (Map<String, String>) dataItem;
-                    if(item.get("SubFormat") != "srt") {
+                    if(!item.get("SubFormat").equals("srt")) {
                         continue;
                     }
 
                     // episode check
-                    if(!item.get("SeriesIMDBParent").equals(show.imdbId.replace("tt", ""))) {
+                    if(Integer.parseInt(item.get("SeriesIMDBParent")) != Integer.parseInt(show.imdbId.replace("tt", ""))) {
                         continue;
                     }
-                    if(item.get("SeriesSeason").equals(Integer.toString(episode.season))) {
+                    if(!item.get("SeriesSeason").equals(seasonStr)) {
                         continue;
                     }
-                    if(item.get("SeriesEpisode").equals(Integer.toString(episode.episode))) {
+                    if(!item.get("SeriesEpisode").equals(episodeStr)) {
                         continue;
                     }
 
@@ -64,10 +66,10 @@ public class OpenSubsProvider extends SubsProvider {
                     int downloads = Integer.parseInt(item.get("SubDownloadsCnt"));
                     int score = 0;
 
-                    if(item.get("MatchedBy") == "tag") {
+                    if(item.get("MatchedBy").equals("tag")) {
                         score += 50;
                     }
-                    if(item.get("UserRank") == "trusted") {
+                    if(item.get("UserRank").equals("trusted")) {
                         score += 100;
                     }
                     if(!episodeMap.containsKey(lang)) {
