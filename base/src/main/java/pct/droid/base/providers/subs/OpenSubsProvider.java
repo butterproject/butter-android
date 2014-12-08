@@ -83,7 +83,7 @@ public class OpenSubsProvider extends SubsProvider {
                         }
                     }
                 }
-                returnMap.put(show.imdbId, episodeMap);
+                returnMap.put(show.videoId, episodeMap);
                 return returnMap;
             }
         }
