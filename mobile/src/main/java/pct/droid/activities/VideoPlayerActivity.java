@@ -36,6 +36,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.IVideoPlayer;
@@ -55,6 +59,7 @@ import butterknife.InjectView;
 import pct.droid.base.PopcornApplication;
 import pct.droid.R;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
@@ -65,9 +70,10 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 import pct.droid.base.utils.StringUtils;
+import pct.droid.fragments.SubtitleSelectorDialogFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
+public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener, SubtitleSelectorDialogFragment.Listener {
 
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
@@ -799,7 +805,14 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     public void subsClick(View v) {
-
+        if(mMedia != null && mMedia.subtitles != null) {
+            if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+            SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
+            Bundle b = new Bundle();
+            b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]));
+            subtitleSelectorDialogFragment.setArguments(b);
+            subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -1095,6 +1108,24 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 }
             }
         }
+    }
+
+    @Override
+    public void onSubtitleLanguageSelected(final String language) {
+        if(getIntent().hasExtra(SUBTITLES) && getIntent().getStringExtra(SUBTITLES).equals(language)) return;
+        SubsProvider.download(this, mMedia, language, new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                mSubs = null;
+                Toast.makeText(VideoPlayerActivity.this, "Subtitle download failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                getIntent().putExtra(SUBTITLES, language);
+                startSubtitles();
+            }
+        });
     }
 
 }
