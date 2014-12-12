@@ -25,7 +25,7 @@ public class YTSProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public Call getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
         final ArrayList<Media> currentList;
         if(existingList == null) {
             currentList = new ArrayList<Media>();
@@ -37,33 +37,37 @@ public class YTSProvider extends MediaProvider {
         params.add(new BasicNameValuePair("limit", "30"));
 
         if(filters == null) {
-            filters = new HashMap<String, String>();
+            filters = new Filters();
         }
 
-        if (filters.containsKey("keywords")) {
-            String keywords = filters.get("keywords");
-            keywords = keywords.replaceAll("\\s", "% ");
+        if (filters.keywords != null) {
+            String keywords = filters.keywords.replaceAll("\\s", "% ");
             params.add(new BasicNameValuePair("keywords", keywords));
         }
 
-        if (filters.containsKey("genre")) {
-            params.add(new BasicNameValuePair("genre", filters.get("genre")));
+        if (filters.genre != null) {
+            params.add(new BasicNameValuePair("genre", filters.genre));
         }
 
-        if (filters.containsKey("order")) {
-            params.add(new BasicNameValuePair("order", filters.get("order")));
+        if (filters.order == Filters.Order.ASC) {
+            params.add(new BasicNameValuePair("order", "asc"));
         } else {
             params.add(new BasicNameValuePair("order", "desc"));
         }
 
-        if (filters.containsKey("sort") && !filters.get("sort").equals("popularity")) {
-            params.add(new BasicNameValuePair("sort", filters.get("sort")));
-        } else {
-            params.add(new BasicNameValuePair("sort", "seeds"));
+        String sort = "";
+        switch(filters.sort) {
+
+            default:
+            case POPULARITY:
+                sort = "seeds";
+                break;
         }
 
-        if (filters.containsKey("page")) {
-            params.add(new BasicNameValuePair("set", filters.get("page")));
+        params.add(new BasicNameValuePair("sort", sort));
+
+        if (filters.page != null) {
+            params.add(new BasicNameValuePair("set", Integer.toString(filters.page)));
         }
 
         Request.Builder requestBuilder = new Request.Builder();
@@ -237,7 +241,7 @@ public class YTSProvider extends MediaProvider {
          * Test if there is an item that already exists
          * @param results List with items
          * @param id Id of item to check for
-         * @return
+         * @return Return the index of the item in the results
          */
         private int isInResults(ArrayList<Media> results, String id) {
             int i = 0;

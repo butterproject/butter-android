@@ -13,18 +13,32 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
+/**
+ * BaseProvider.java
+ *
+ * Base class for providers, has code to enqueue network requests to the OkHttpClient
+ */
 public abstract class BaseProvider {
 
     protected OkHttpClient mClient = new OkHttpClient();
     protected Gson mGson = new Gson();
     protected Call mCurrentCall;
-    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
-    public static final MediaType MEDIA_TYPE_XML = MediaType.parse("application/xml");
 
+    /**
+     * Enqueue request without callback
+     * @param request Request
+     * @return Call
+     */
     protected Call enqueue(Request request) {
         return enqueue(request, null);
     }
 
+    /**
+     * Enqueue request with callback
+     * @param request Request
+     * @param requestCallback Callback
+     * @return Call
+     */
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
         mCurrentCall = mClient.newCall(request);
         if(requestCallback != null) mCurrentCall.enqueue(requestCallback);
@@ -37,6 +51,11 @@ public abstract class BaseProvider {
         }
     }
 
+    /**
+     * Build URL encoded query
+     * @param valuePairs List with key-value items
+     * @return Query string
+     */
     protected String buildQuery(List<BasicNameValuePair> valuePairs) {
         StringBuilder stringBuilder = new StringBuilder();
 

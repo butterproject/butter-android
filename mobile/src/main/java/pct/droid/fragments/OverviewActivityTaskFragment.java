@@ -17,7 +17,7 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     private MediaProvider.Callback mCallback;
     private ArrayList<Media> mItems;
     private int mPage = 1;
-    private HashMap<String, String> mFilters = new HashMap<String, String>();
+    private MediaProvider.Filters mFilters = new MediaProvider.Filters();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,11 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
         mPage = page;
     }
 
-    public HashMap<String, String> getFilters() {
+    public MediaProvider.Filters getFilters() {
         return mFilters;
     }
 
-    public void setFilters(HashMap<String, String> filters) {
+    public void setFilters(MediaProvider.Filters filters) {
         mFilters = filters;
     }
 
