@@ -12,5 +12,6 @@ public class LaunchActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startActivity(new Intent(this, OverviewActivity.class));
+        finish();
     }
 }

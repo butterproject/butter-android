@@ -121,7 +121,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     startActivity(trailerIntent);
                     break;
                 case R.id.playButton:
-                    final String streamUrl = mItem.torrents.get(mQuality).magnet;
+                    final String streamUrl = mItem.torrents.get(mQuality).url;
                     Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
                     streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
                     streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
@@ -221,8 +221,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
 
-        if(mItem.runtime != null && mItem.runtime > 0) {
-            runtimeText.setText(Integer.toString(mItem.runtime) + " " + getString(R.string.minutes));
+        if(mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
+            runtimeText.setText(mItem.runtime + " " + getString(R.string.minutes));
         } else {
             runtimeText.setText("n/a " + getString(R.string.minutes));
         }

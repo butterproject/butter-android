@@ -20,11 +20,11 @@
 
 package org.videolan.libvlc;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import java.util.ArrayList;
 
 public class EventHandler {
 
