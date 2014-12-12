@@ -14,7 +14,7 @@ android {
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -39,4 +39,5 @@ dependencies {
     compile project(':base')
     compile project(':vlc')
     compile project(':node')
+    compile project(':xmlrpc')
 }

@@ -5,15 +5,13 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "pct.droid.base"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
     }
+
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -30,4 +28,5 @@ dependencies {
     compile 'com.android.support:mediarouter-v7:21.0.0'
     compile project(':node')
     compile project(':vlc')
+    compile project(':xmlrpc')
 }

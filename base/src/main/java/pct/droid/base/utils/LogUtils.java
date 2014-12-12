@@ -12,7 +12,7 @@ public class LogUtils {
     }
 
     public static void d(Object tag, Object message) {
-        if (Constants.DEBUG_ENABLED) {
+        if (Constants.DEBUG_ENABLED && message != null) {
             Log.d(tag.toString(), message.toString());
         }
     }
@@ -22,7 +22,7 @@ public class LogUtils {
     }
 
     public static void v(Object tag, Object message) {
-        if (Constants.DEBUG_ENABLED) {
+        if (Constants.DEBUG_ENABLED && message != null) {
             Log.v(tag.toString(), message.toString());
         }
     }
@@ -32,13 +32,13 @@ public class LogUtils {
     }
 
     public static void e(Object tag, Object message) {
-        if (Constants.DEBUG_ENABLED) {
+        if (Constants.DEBUG_ENABLED && message != null) {
             Log.e(tag.toString(), message.toString());
         }
     }
 
     public static void e(Object tag, Object message, Throwable t) {
-        if (Constants.DEBUG_ENABLED) {
+        if (Constants.DEBUG_ENABLED && message != null) {
             Log.e(tag.toString(), message.toString(), t);
         }
     }
@@ -48,7 +48,7 @@ public class LogUtils {
     }
 
     public static void w(Object tag, Object message) {
-        if (Constants.DEBUG_ENABLED) {
+        if (Constants.DEBUG_ENABLED && message != null) {
             Log.w(tag.toString(), message.toString());
         }
     }

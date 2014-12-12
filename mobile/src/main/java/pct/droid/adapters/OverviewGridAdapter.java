@@ -69,7 +69,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(getItemViewType(position) == NORMAL) {
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             Media item = getItem(position);
-            if(!item.image.equals("")) {
+            if(item.image != null && !item.image.equals("")) {
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                     .resize(mItemWidth, mItemHeight)
                     .into(videoViewHolder.coverImage);

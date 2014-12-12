@@ -1,4 +1,5 @@
 <resources>
+    <!-- By default -->
     <color name="background_gradient_start">#000000</color>
     <color name="background_gradient_end">#DDDDDD</color>
     <color name="fastlane_background">#0096a6</color>
@@ -13,5 +14,21 @@
     <color name="orange_transparent">#AAFADCA7</color>
     <color name="orange">#FADCA7</color>
     <color name="yellow">#EEFF41</color>
-    <color name="default_background">#3d3d3d</color>
+
+    <!-- Popcorn -->
+    <color name="bg">#2F383F</color>
+    <color name="overlay_bg">#BB2F383F</color>
+    <color name="list_selected">#55FFFFFF</color>
+    <color name="primary">#FF1976D2</color>
+    <color name="primary_dark">#FF1668B9</color>
+    <color name="accent">#FF1C84EB</color>
+    <color name="trans_white">#99FFFFFF</color>
+    <color name="div_white">#22FFFFFF</color>
+    <color name="text_color">#FFFFFF</color>
+    <color name="secondary_text_color">#AAFFFFFF</color>
+    <color name="overlay">#33000000</color>
+    <color name="player_overlay">#55000000</color>
+    <color name="default_background">#55000000</color>
+
+
 </resources>

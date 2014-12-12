@@ -4,14 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Movie extends Media implements Parcelable {
+    public String type = "movie";
     public String trailer = "";
-    public Integer runtime = -1;
+    public String runtime = "";
     public String tagline = "";
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
-    public HashMap<String, Torrent> torrents = new HashMap<String, Torrent>();
+    public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
 
     public Movie() {
 
@@ -20,7 +22,7 @@ public class Movie extends Media implements Parcelable {
     protected Movie(Parcel in) {
         super(in);
         trailer = in.readString();
-        runtime = in.readInt();
+        runtime = in.readString();
         tagline = in.readString();
         synopsis = in.readString();
         certification = in.readString();
@@ -41,14 +43,18 @@ public class Movie extends Media implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(trailer);
-        dest.writeInt(runtime);
+        dest.writeString(runtime);
         dest.writeString(tagline);
         dest.writeString(synopsis);
         dest.writeString(certification);
-        dest.writeInt(torrents.size());
-        for (String s: torrents.keySet()) {
-            dest.writeString(s);
-            dest.writeParcelable(torrents.get(s), flags);
+        if(torrents != null) {
+            dest.writeInt(torrents.size());
+            for (String s : torrents.keySet()) {
+                dest.writeString(s);
+                dest.writeParcelable(torrents.get(s), flags);
+            }
+        } else {
+            dest.writeInt(0);
         }
     }
 

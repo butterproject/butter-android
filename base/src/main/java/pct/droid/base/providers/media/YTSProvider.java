@@ -25,7 +25,7 @@ public class YTSProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public void getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
         final ArrayList<Media> currentList;
         if(existingList == null) {
             currentList = new ArrayList<Media>();
@@ -70,9 +70,16 @@ public class YTSProvider extends MediaProvider {
         String query = buildQuery(params);
         requestBuilder.url(mApiUrl + "list.json?" + query);
 
-        fetchList(currentList, requestBuilder, callback);
+        return fetchList(currentList, requestBuilder, callback);
     }
 
+    /**
+     * Fetch the list of movies from YTS
+     * @param currentList Current shown list to be extended
+     * @param requestBuilder Request to be executed
+     * @param callback Network callback
+     * @return Call
+     */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -109,40 +116,31 @@ public class YTSProvider extends MediaProvider {
                         TraktProvider traktProvider = new TraktProvider();
                         TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
 
-                        if(metaDatas.length == formattedData.size())
-                            for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
-                                Media media = formattedData.get(i);
+                        for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
+                            Media media = formattedData.get(i);
 
-                                if(metaDatas.length > index) {
-                                    TraktProvider.MetaData meta = metaDatas[index];
-                                    if (media.videoId.equals(meta.imdb_id)) {
-                                        if (meta.images.containsKey("poster")) {
-                                            media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                            media.fullImage = meta.images.get("poster");
-                                        }
-
-                                        if (meta.images.containsKey("fanart")) {
-                                            media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                                        }
-
-                                        if (meta.title != null) {
-                                            media.title = meta.title;
-                                        }
-                                        formattedData.set(i, media);
-                                        index++;
-                                    } else {
-                                        media.fullImage = media.image;
-                                        media.headerImage = media.image;
-                                        formattedData.set(i, media);
+                            if(metaDatas.length > index) {
+                                TraktProvider.MetaData meta = metaDatas[index];
+                                if (media.videoId.equals(meta.imdb_id)) {
+                                    if (meta.images.containsKey("poster")) {
+                                        media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                        media.fullImage = meta.images.get("poster");
                                     }
-                                } else {
-                                    media.fullImage = media.image;
-                                    media.headerImage = media.image;
+
+                                    if (meta.images.containsKey("fanart")) {
+                                        media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                    }
+
+                                    if (meta.title != null) {
+                                        media.title = meta.title;
+                                    }
                                     formattedData.set(i, media);
+                                    index++;
                                 }
                             }
+                        }
 
-                        callback.onSuccess(currentList);
+                        callback.onSuccess(formattedData);
                         return;
                     }
                 }
@@ -152,11 +150,11 @@ public class YTSProvider extends MediaProvider {
     }
 
     @Override
-    public void getDetail(String imdbId, final Callback callback) {
+    public Call getDetail(String imdbId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
 
-        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 callback.onFailure(e);
@@ -207,7 +205,7 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             if (meta.runtime != null) {
-                                movie.runtime = meta.runtime;
+                                movie.runtime = Integer.toString(meta.runtime);
                             }
 
                             if (meta.certification != null) {
@@ -215,7 +213,7 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             YSubsProvider subsProvider = new YSubsProvider();
-                            movie.subtitles = subsProvider.getList(movie.videoId).get(movie.videoId);
+                            movie.subtitles = subsProvider.getList(movie).get(movie.videoId);
 
                             formattedData.set(0, movie);
 
@@ -235,6 +233,12 @@ public class YTSProvider extends MediaProvider {
         public String error;
         public ArrayList<LinkedTreeMap<String, Object>> MovieList;
 
+        /**
+         * Test if there is an item that already exists
+         * @param results List with items
+         * @param id Id of item to check for
+         * @return
+         */
         private int isInResults(ArrayList<Media> results, String id) {
             int i = 0;
             for(Media item : results) {
@@ -244,10 +248,19 @@ public class YTSProvider extends MediaProvider {
             return -1;
         }
 
+        /**
+         * Format data for the application
+         * @return List with items
+         */
         public ArrayList<Media> formatForPopcorn() {
             return formatForPopcorn(new ArrayList<Media>());
         }
 
+        /**
+         * Format data for the application
+         * @param existingList List to be extended
+         * @return List with items
+         */
         public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
             for(LinkedTreeMap<String, Object> item : MovieList) {
                 Movie movie = new Movie();
@@ -260,16 +273,12 @@ public class YTSProvider extends MediaProvider {
                 }
 
                 Media.Torrent torrent = new Media.Torrent();
-                torrent.url = item.get("TorrentUrl").toString();
-                torrent.magnet = item.get("TorrentMagnetUrl").toString();
-                torrent.size = item.get("SizeByte").toString();
-                torrent.fileSize = item.get("Size").toString();
+                torrent.url = item.get("TorrentMagnetUrl").toString();
                 torrent.seeds = item.get("TorrentSeeds").toString();
                 torrent.peers = item.get("TorrentPeers").toString();
 
                 int existingItem = isInResults(existingList, movie.videoId);
                 if(existingItem == -1) {
-                    movie.image = item.get("CoverImage").toString().replace("_med.", "_large.");
                     movie.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
                     movie.year = item.get("MovieYear").toString();
                     movie.genre = item.get("Genre").toString();

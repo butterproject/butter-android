@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.meta.TraktProvider;
-import pct.droid.base.providers.subs.YSubsProvider;
+import pct.droid.base.providers.subs.OpenSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -25,7 +25,7 @@ public class EZTVProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public void getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
         final ArrayList<Media> currentList;
         if(existingList == null) {
             currentList = new ArrayList<Media>();
@@ -62,17 +62,27 @@ public class EZTVProvider extends MediaProvider {
             params.add(new BasicNameValuePair("sort", "seeds"));
         }
 
+        String url = mApiUrl + "shows/";
         if (filters.containsKey("page")) {
-            params.add(new BasicNameValuePair("set", filters.get("page")));
+            url += filters.get("page");
+        } else {
+            url += "1";
         }
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(mApiUrl + "list.json?" + query);
+        requestBuilder.url(url + "?" + query);
 
-        fetchList(currentList, requestBuilder, callback);
+        return fetchList(currentList, requestBuilder, callback);
     }
 
+    /**
+     * Fetch the list of movies from EZTV
+     * @param currentList Current shown list to be extended
+     * @param requestBuilder Request to be executed
+     * @param callback Network callback
+     * @return Call
+     */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -89,62 +99,21 @@ public class EZTVProvider extends MediaProvider {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    if(result.status != null && result.status.equals("fail")) {
-                        callback.onFailure(new NetworkErrorException(result.error));
-                    } else {
-                        int previousSize = currentList.size();
-                        ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
-                        int newDataSize = formattedData.size() - previousSize;
-
-                        // Only get metdata for new items in list
-                        String[] imdbIds = new String[newDataSize];
-                        for(int i = previousSize, index = 0; i < formattedData.size(); i++, index++) {
-                            Media media = formattedData.get(i);
-                            imdbIds[index] = media.videoId;
+                try {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+                        ArrayList<LinkedTreeMap<String, Object>> list = (ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
+                        EZTVReponse result = new EZTVReponse(list);
+                        if (list == null) {
+                            callback.onFailure(new NetworkErrorException("Empty response"));
+                        } else {
+                            ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
+                            callback.onSuccess(formattedData);
+                            return;
                         }
-
-                        TraktProvider traktProvider = new TraktProvider();
-                        TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
-
-                        if(metaDatas.length == formattedData.size())
-                            for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
-                                Media media = formattedData.get(i);
-
-                                if(metaDatas.length > index) {
-                                    TraktProvider.MetaData meta = metaDatas[index];
-                                    if (media.videoId.equals(meta.imdb_id)) {
-                                        if (meta.images.containsKey("poster")) {
-                                            media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                            media.fullImage = meta.images.get("poster");
-                                        }
-
-                                        if (meta.images.containsKey("fanart")) {
-                                            media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                                        }
-
-                                        if (meta.title != null) {
-                                            media.title = meta.title;
-                                        }
-                                        formattedData.set(i, media);
-                                        index++;
-                                    } else {
-                                        media.fullImage = media.image;
-                                        media.headerImage = media.image;
-                                        formattedData.set(i, media);
-                                    }
-                                } else {
-                                    media.fullImage = media.image;
-                                    media.headerImage = media.image;
-                                    formattedData.set(i, media);
-                                }
-                            }
-
-                        callback.onSuccess(currentList);
-                        return;
                     }
+                } catch (Exception e) {
+                    callback.onFailure(e);
                 }
                 callback.onFailure(new NetworkErrorException(response.body().string()));
             }
@@ -152,11 +121,11 @@ public class EZTVProvider extends MediaProvider {
     }
 
     @Override
-    public void getDetail(String imdbId, final Callback callback) {
+    public Call getDetail(String videoId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
+        requestBuilder.url(mApiUrl + "show/" + videoId);
 
-        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 callback.onFailure(e);
@@ -166,58 +135,22 @@ public class EZTVProvider extends MediaProvider {
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    if (result.status != null && result.status.equals("fail")) {
-                        callback.onFailure(new NetworkErrorException(result.error));
+                    LinkedTreeMap<String, Object> map = mGson.fromJson(responseStr, LinkedTreeMap.class);
+                    EZTVReponse result = new EZTVReponse(map);
+                    if (map == null) {
+                        callback.onFailure(new NetworkErrorException("Empty response"));
                     } else {
                         ArrayList<Media> formattedData = result.formatForPopcorn();
 
                         if(formattedData.size() > 0) {
                             TraktProvider traktProvider = new TraktProvider();
-                            Movie movie = (Movie) formattedData.get(0);
+                            Show show = (Show) formattedData.get(0);
 
-                            TraktProvider.MetaData meta = traktProvider.getSummary(movie.videoId, "movie");
-                            if (meta.images != null && meta.images.containsKey("poster")) {
-                                movie.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
-                                movie.fullImage = meta.images.get("poster");
-                            } else {
-                                movie.fullImage = movie.image;
-                            }
-
-                            if (meta.images != null && meta.images.containsKey("fanart")) {
-                                movie.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
-                            } else {
-                                movie.headerImage = movie.image;
-                            }
-
-                            if (meta.title != null) {
-                                movie.title = meta.title;
-                            }
-
-                            if (meta.overview != null) {
-                                movie.synopsis = meta.overview;
-                            }
-
-                            if (meta.tagline != null) {
-                                movie.tagline = meta.tagline;
-                            }
-
-                            if (meta.trailer != null) {
-                                movie.trailer = meta.trailer;
-                            }
-
-                            if (meta.runtime != null) {
-                                movie.runtime = meta.runtime;
-                            }
+                            TraktProvider.MetaData meta = traktProvider.getSummary(show.videoId, "show");
 
                             if (meta.certification != null) {
-                                movie.certification = meta.certification;
+                                show.certification = meta.certification;
                             }
-
-                            YSubsProvider subsProvider = new YSubsProvider();
-                            movie.subtitles = subsProvider.getList(movie.videoId).get(movie.videoId);
-
-                            formattedData.set(0, movie);
 
                             callback.onSuccess(formattedData);
                             return;
@@ -230,64 +163,93 @@ public class EZTVProvider extends MediaProvider {
         });
     }
 
-    private class YTSReponse {
-        public String status;
-        public String error;
-        public ArrayList<LinkedTreeMap<String, Object>> MovieList;
+    private class EZTVReponse {
+        LinkedTreeMap<String, Object> showData;
+        ArrayList<LinkedTreeMap<String, Object>> showsList;
 
-        private int isInResults(ArrayList<Media> results, String id) {
-            int i = 0;
-            for(Media item : results) {
-                if(item.videoId.equals(id)) return i;
-                i++;
-            }
-            return -1;
+        public EZTVReponse(LinkedTreeMap<String, Object> showData) {
+            this.showData = showData;
         }
 
         public ArrayList<Media> formatForPopcorn() {
-            return formatForPopcorn(new ArrayList<Media>());
+            ArrayList<Media> list = new ArrayList<Media>();
+            try {
+                Show show = new Show();
+
+                show.title = showData.get("title").toString();
+                show.videoId = showData.get("_id").toString();
+                show.imdbId = showData.get("imdb_id").toString();
+                show.tvdbId = showData.get("tvdb_id").toString();
+                show.seasons = ((Double) showData.get("num_seasons")).intValue();
+                show.year = showData.get("year").toString();
+                LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) showData.get("images");
+                show.image = images.get("poster").replace(".jpg", "-300.jpg");
+                show.fullImage = images.get("poster");
+                show.headerImage = images.get("fanart").replace(".jpg", "-940.jpg");
+                show.status = showData.get("status").toString();
+                show.country = showData.get("country").toString();
+                show.network = showData.get("network").toString();
+                show.synopsis = showData.get("synopsis").toString();
+                show.runtime = showData.get("runtime").toString();
+                show.airDay = showData.get("air_day").toString();
+                show.airTime = showData.get("air_time").toString();
+                show.genre = ((ArrayList<String>) showData.get("genres")).get(0);
+                show.rating = Double.toString(((LinkedTreeMap<String, Double>) showData.get("rating")).get("percentage") / 10);
+
+                ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
+                for (LinkedTreeMap<String, Object> episode : episodes) {
+                    Show.Episode episodeObject = new Show.Episode();
+                    LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents = (LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
+                    for (String key : torrents.keySet()) {
+                        if (!key.equals("0")) {
+                            LinkedTreeMap<String, Object> item = torrents.get(key);
+                            Media.Torrent torrent = new Media.Torrent();
+                            torrent.url = item.get("url").toString();
+                            torrent.seeds = item.get("seeds").toString();
+                            torrent.peers = item.get("peers").toString();
+                            episodeObject.torrents.put(key, torrent);
+                        }
+                    }
+
+                    episodeObject.dateBased = (Boolean) episode.get("date_based");
+                    episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
+                    episodeObject.overview = episode.get("overview").toString();
+                    episodeObject.season = ((Double) episode.get("season")).intValue();
+                    episodeObject.episode = ((Double) episode.get("episode")).intValue();
+
+                    show.episodes.put(episodeObject.season + "-" + episodeObject.episode, episodeObject);
+                }
+
+                list.add(show);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return list;
         }
 
-        public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
-            for(LinkedTreeMap<String, Object> item : MovieList) {
-                Movie movie = new Movie();
+        public EZTVReponse(ArrayList<LinkedTreeMap<String, Object>> showsList) {
+            this.showsList = showsList;
+        }
 
-                movie.videoId = item.get("ImdbCode").toString();
-                String torrentQuality = item.get("Quality").toString();
+        public ArrayList<Media> formatListForPopcorn() {
+            return formatListForPopcorn(new ArrayList<Media>());
+        }
 
-                if(torrentQuality.equals("3D")) {
-                    continue;
-                }
+        public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
+            for(LinkedTreeMap<String, Object> item : showsList) {
+                Show show = new Show();
 
-                Media.Torrent torrent = new Media.Torrent();
-                torrent.url = item.get("TorrentUrl").toString();
-                torrent.magnet = item.get("TorrentMagnetUrl").toString();
-                torrent.size = item.get("SizeByte").toString();
-                torrent.fileSize = item.get("Size").toString();
-                torrent.seeds = item.get("TorrentSeeds").toString();
-                torrent.peers = item.get("TorrentPeers").toString();
+                show.title = item.get("title").toString();
+                show.videoId = item.get("_id").toString();
+                show.seasons = (Integer) item.get("seasons");
+                show.tvdbId = item.get("tvdb_id").toString();
+                show.year = item.get("year").toString();
+                LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
+                show.image = images.get("poster").replace(".jpg", "-300.jpg");
+                show.headerImage = images.get("fanart").replace(".jpg", "-940.jpg");
 
-                int existingItem = isInResults(existingList, movie.videoId);
-                if(existingItem == -1) {
-                    movie.image = item.get("CoverImage").toString().replace("_med.", "_large.");
-                    movie.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
-                    movie.year = item.get("MovieYear").toString();
-                    movie.genre = item.get("Genre").toString();
-                    movie.rating = item.get("MovieRating").toString();
-                    movie.type = "movie";
-                } else {
-                    movie = (Movie) existingList.get(existingItem);
-                }
-
-                if(!movie.torrents.containsKey(torrentQuality)) {
-                    movie.torrents.put(torrentQuality, torrent);
-                }
-
-                if(existingItem == -1) {
-                    existingList.add(movie);
-                } else {
-                    existingList.set(existingItem, movie);
-                }
+                existingList.add(show);
             }
             return existingList;
         }

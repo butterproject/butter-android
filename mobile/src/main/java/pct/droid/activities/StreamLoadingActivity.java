@@ -15,6 +15,7 @@ import java.io.IOException;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;

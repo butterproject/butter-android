@@ -4,9 +4,16 @@ import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.apache.http.MethodNotSupportedException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Show;
 
 public class YSubsProvider extends SubsProvider {
 
@@ -60,25 +67,16 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public HashMap<String, HashMap<String, String>> getList(String[] imdbIds) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(String imdbId : imdbIds) {
-            stringBuilder.append(imdbId);
-            if(!imdbId.equals(imdbIds[imdbIds.length - 1])) {
-                stringBuilder.append("-");
-            }
-        }
-        String imdbDbStr = stringBuilder.toString();
-
+    public Map<String, Map<String, String>> getList(Movie media) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + imdbDbStr);
+        requestBuilder.url(mApiUrl + media.videoId);
 
         try {
             return fetch(requestBuilder);
         } catch (IOException e) {
             // eat exception for now TODO
             try {
-                requestBuilder.url(mApiUrl + imdbDbStr);
+                requestBuilder.url(mApiUrl + media.videoId);
                 return fetch(requestBuilder);
             } catch (IOException e1) {
                 // eat exception for now TODO
@@ -86,10 +84,15 @@ public class YSubsProvider extends SubsProvider {
             }
         }
 
-        return new HashMap<String, HashMap<String, String>>();
+        return new HashMap<String, Map<String, String>>();
     }
 
-    private HashMap<String, HashMap<String, String>> fetch(Request.Builder requestBuilder) throws IOException {
+    @Override
+    public Map<String, Map<String, String>> getList(Show media, Show.Episode episode) throws MethodNotSupportedException {
+        throw new MethodNotSupportedException("Show subtitles not supported");
+    }
+
+    private Map<String, Map<String, String>> fetch(Request.Builder requestBuilder) throws IOException {
         Call call = mClient.newCall(requestBuilder.build());
         Response response = call.execute();
         if(response.isSuccessful()) {
@@ -97,37 +100,38 @@ public class YSubsProvider extends SubsProvider {
             YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
             return result.formatForPopcorn(mPrefix, mLanguageMapping);
         }
-        return new HashMap<String, HashMap<String, String>>();
+        return new HashMap<String, Map<String, String>>();
     }
 
     private class YSubsResponse {
         public boolean success;
         public int subtitles;
-        public int lastModified;
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, Object>>>> subs;
 
-        public HashMap<String, HashMap<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
-            HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
-            String[] imdbIds = getKeys(subs);
-            for (String imdbId : imdbIds) {
-                HashMap<String, String> imdbMap = new HashMap<String, String>();
-                HashMap<String, ArrayList<HashMap<String, Object>>> langMap = subs.get(imdbId);
-                String[] langs = getKeys(langMap);
-                for(String lang : langs) {
-                    if(langMap.get(lang).size() <= 0) continue;
-                    ArrayList<HashMap<String, Object>> subMap = langMap.get(lang);
-                    int currentRating = -1;
-                    String currentSub = "";
-                    for(HashMap<String, Object> sub : subMap) {
-                        int itemRating = ((Double)sub.get("rating")).intValue();
-                        if(currentRating < itemRating) {
-                            currentSub = prefix + sub.get("url");
-                            currentRating = itemRating;
+        public Map<String, Map<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
+            Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
+            if(success) {
+                String[] imdbIds = getKeys(subs);
+                for (String imdbId : imdbIds) {
+                    HashMap<String, String> imdbMap = new HashMap<String, String>();
+                    HashMap<String, ArrayList<HashMap<String, Object>>> langMap = subs.get(imdbId);
+                    String[] langs = getKeys(langMap);
+                    for (String lang : langs) {
+                        if (langMap.get(lang).size() <= 0) continue;
+                        ArrayList<HashMap<String, Object>> subMap = langMap.get(lang);
+                        int currentRating = -1;
+                        String currentSub = "";
+                        for (HashMap<String, Object> sub : subMap) {
+                            int itemRating = ((Double) sub.get("rating")).intValue();
+                            if (currentRating < itemRating) {
+                                currentSub = prefix + sub.get("url");
+                                currentRating = itemRating;
+                            }
                         }
+                        imdbMap.put(mapLanguage(lang, mapping), currentSub);
                     }
-                    imdbMap.put(mapLanguage(lang, mapping), currentSub);
+                    returnMap.put(imdbId, imdbMap);
                 }
-                returnMap.put(imdbId, imdbMap);
             }
             return returnMap;
         }

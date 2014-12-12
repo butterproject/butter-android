@@ -7,14 +7,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,6 +38,10 @@ import butterknife.InjectView;
 import pct.droid.base.Constants;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
+import pct.droid.base.providers.media.EZTVProvider;
+import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.utils.LogUtils;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
@@ -48,7 +55,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
-    private YTSProvider mProvider = new YTSProvider();
+    private MediaProvider mProvider = new YTSProvider();
+    private Integer mProviderId = 0;
     private Integer mColumns = 2, mRetries = 0;
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
@@ -72,6 +80,52 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         } else {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
         }
+
+        /* Temporary */
+        final GestureDetectorCompat detector = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener());
+
+        detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent motionEvent) {
+                mProvider.cancel();
+                if(mProviderId == 0) {
+                    mProvider = new EZTVProvider();
+                    mProviderId = 1;
+                } else {
+                    mProvider = new YTSProvider();
+                    mProviderId = 0;
+                }
+
+                mTaskFragment.setFilters(new HashMap<String, String>());
+                mTaskFragment.setCurrentPage(0);
+                mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
+                mAdapter.setOnItemClickListener(mOnItemClickListener);
+                progressOverlay.setVisibility(View.VISIBLE);
+                recyclerView.setAdapter(mAdapter);
+                mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+
+                mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+                return true;
+            }
+
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+                return false;
+            }
+        });
+
+        toolbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return detector.onTouchEvent(motionEvent);
+            }
+        });
+        /* End temporary */
 
         recyclerView.setHasFixedSize(true);
         mColumns = getResources().getInteger(R.integer.overview_cols);
@@ -178,7 +232,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onFailure(Exception e) {
-        if(e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
+        if(e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
             mEndOfListReached = true;
             mHandler.post(new Runnable() {
                 @Override
@@ -192,7 +246,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             });
         } else {
             e.printStackTrace();
-            Log.e("OverviewActivity", e.getMessage());
+            LogUtils.e(e.getMessage());
             if (mRetries > 1) {
                 mHandler.post(new Runnable() {
                     @Override
@@ -234,7 +288,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
+                            Intent intent;
+                            if(item instanceof Movie) {
+                                intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
+                            } else {
+                                intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
+                            }
                             intent.putExtra("item", item);
                             startActivity(intent);
                         }
@@ -342,7 +401,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     i.putExtra(TrailerPlayerActivity.LOCATION, location);
                     startActivity(i);
                 } else {
-                    Media media = new Media();
+                    Movie media = new Movie();
                     final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
                     i.putExtra(VideoPlayerActivity.DATA, media);
                     i.putExtra(VideoPlayerActivity.LOCATION, location);
