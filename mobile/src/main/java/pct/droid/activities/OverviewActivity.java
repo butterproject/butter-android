@@ -101,7 +101,6 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mProviderId = 0;
                 }
 
-                mTaskFragment.setFilters(new HashMap<String, String>());
                 mTaskFragment.setCurrentPage(0);
                 mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
                 mAdapter.setOnItemClickListener(mOnItemClickListener);
@@ -335,8 +334,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             }
 
             if (!mEndOfListReached && !mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
-                HashMap<String, String> filters = mTaskFragment.getFilters();
-                filters.put("page", Integer.toString(mTaskFragment.getCurrentPage()));
+                MediaProvider.Filters filters = mTaskFragment.getFilters();
+                filters.page = mTaskFragment.getCurrentPage();
                 mProvider.getList(mAdapter.getItems(), filters, mTaskFragment);
                 mTaskFragment.setFilters(filters);
                 mAdapter.addLoading();
@@ -354,13 +353,13 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 mAdapter.clearItems();
                 mAdapter.addLoading();
             }
-            HashMap<String, String> filters = mTaskFragment.getFilters();
+            MediaProvider.Filters filters = mTaskFragment.getFilters();
             if(s.equals("")) {
-                filters.remove("keywords");
+                filters.keywords = null;
             } else {
-                filters.put("keywords", s);
+                filters.keywords = s;
             }
-            filters.put("page", "1");
+            filters.page = 1;
             mTaskFragment.setCurrentPage(1);
             mTaskFragment.setFilters(filters);
             mProvider.getList(filters, mTaskFragment);
