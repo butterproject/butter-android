@@ -21,6 +21,28 @@ android {
             versionNameSuffix "#"+(System.getenv("BUILD_NUMBER") ?: "dev")
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    splits {
+        abi {
+            enable true
+            universalApk false
+            reset()
+            include 'armeabi', 'armeabi-v7a'
+        }
+    }
+
+    project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.versionCodeOverride =
+                    project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode
+        }
+    }
 }
 
 dependencies {
