@@ -31,7 +31,7 @@ android {
             enable true
             universalApk false
             reset()
-            include 'armeabi', 'armeabi-v7a'
+            include 'armeabi', 'armeabi-v7a', 'x86'
         }
     }
 
