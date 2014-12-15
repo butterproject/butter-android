@@ -20,6 +20,10 @@ android {
         debug {
             versionNameSuffix "#"+(System.getenv("BUILD_NUMBER") ?: "dev")
         }
+        dev.initWith(buildTypes.release)
+        dev {
+            versionNameSuffix "-development"
+        }
     }
 
     lintOptions {

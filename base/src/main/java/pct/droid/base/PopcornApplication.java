@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.List;
 
 import pct.droid.base.services.StreamerService;
+import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -37,6 +38,7 @@ public class PopcornApplication extends VLCApplication {
     public void onCreate() {
         super.onCreate();
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
+        PopcornUpdater.getInstance(this);
 
         Constants.DEBUG_ENABLED = false;
         try {
