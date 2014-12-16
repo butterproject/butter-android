@@ -20,10 +20,6 @@ android {
         debug {
             versionNameSuffix "#"+(System.getenv("BUILD_NUMBER") ?: "dev")
         }
-        dev.initWith(buildTypes.release)
-        dev {
-            versionNameSuffix "-development"
-        }
     }
 
     lintOptions {
@@ -35,7 +31,7 @@ android {
             enable true
             universalApk false
             reset()
-            include 'armeabi', 'armeabi-v7a', 'x86'
+            include 'armeabi', 'armeabi-v7a', 'x86', 'arm64-v8a'
         }
     }
 
@@ -43,15 +39,14 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.versionCodeOverride =
-                    project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode
+            output.versionCodeOverride = project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode
         }
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:palette-v7:21.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'

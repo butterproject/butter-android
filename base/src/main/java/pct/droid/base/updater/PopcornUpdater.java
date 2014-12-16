@@ -11,29 +11,15 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -68,7 +54,8 @@ public class PopcornUpdater extends Observable {
     private long UPDATE_INTERVAL = 3 * HOURS;
 
     private final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
-    private final String API_URL = "http://sv244.cf/update.json";
+    private final String DATA_URL = "http://sv244.cf/update.json";
+    //private final String DATA_URL = "http://popcorntime.io/android.json";
 
     private final String TAG = "PopcornUpdater";
 
@@ -154,7 +141,7 @@ public class PopcornUpdater extends Observable {
             notifyObservers(STATUS_CHECKING);
 
             Request request = new Request.Builder()
-                    .url(API_URL)
+                    .url(DATA_URL)
                     .build();
 
             mHttpClient.newCall(request).enqueue(new Callback() {
@@ -176,15 +163,20 @@ public class PopcornUpdater extends Observable {
                             variant = data.mobile;
                         }
 
-                        UpdaterData.Arch channel;
+                        UpdaterData.Arch channel = null;
 
-                        if(mVersionName.contains("development")) {
-                            channel = variant.development.get(Build.CPU_ABI);
+                        String abi = Build.CPU_ABI.toLowerCase();
+                        if(mVersionName.contains("dev")) {
+                            if(variant.development.containsKey(abi)) {
+                                channel = variant.development.get(abi);
+                            }
                         } else {
-                            channel = variant.release.get(Build.CPU_ABI);
+                            if(variant.development.containsKey(abi)) {
+                                channel = variant.release.get(abi);
+                            }
                         }
 
-                        if(channel.checksum.equals(mPreferences.getString(SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                        if(channel == null || channel.checksum.equals(mPreferences.getString(SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
                             setChanged();
                             notifyObservers(STATUS_NO_UPDATE);
                         } else {
