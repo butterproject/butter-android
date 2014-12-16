@@ -39,7 +39,19 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.versionCodeOverride = project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode
+            def abi = output.getFilter(com.android.build.OutputFile.ABI);
+            output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + defaultConfig.versionCode
+
+            def alignedOutputFile = output.outputFile
+            def unalignedOutputFile = output.packageApplication.outputFile
+
+            // Customise APK filenames (to include build version)
+            if (variant.buildType.zipAlignEnabled) {
+                // normal APK
+                output.outputFile = new File(alignedOutputFile.parent, alignedOutputFile.name.replace("debug", "development").replace(".apk", "-v" + defaultConfig.versionName + ".apk"))
+            }
+            // 'unaligned' APK
+            output.packageApplication.outputFile = new File(unalignedOutputFile.parent, unalignedOutputFile.name.replace("debug", "development").replace(".apk", "-v" + defaultConfig.versionName + ".apk"))
         }
     }
 }
