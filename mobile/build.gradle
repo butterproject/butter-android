@@ -14,10 +14,10 @@ android {
 
     signingConfigs {
         mainConfig {
-            keyAlias System.getenv("S_ALIAS") as String
-            keyPassword System.getenv("S_KEYPASS") as String
-            storeFile file(System.getenv("S_KEYSTORE") as String)
-            storePassword System.getenv("S_KEYPASS") as String
+            keyAlias System.getenv("S_ALIAS").toString() ?: ""
+            keyPassword System.getenv("S_KEYPASS").toString() ?: ""
+            storeFile file(System.getenv("S_KEYSTORE").toString()) ?: file("")
+            storePassword System.getenv("S_KEYPASS").toString() ?: ""
         }
     }
 
