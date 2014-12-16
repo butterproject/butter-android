@@ -30,6 +30,10 @@ android {
         debug {
             versionNameSuffix "#"+(System.getenv("BUILD_NUMBER") ?: "dev")
         }
+        jnidebug.initWith(buildTypes.debug)
+        jnidebug {
+            jniDebuggable true
+        }
     }
 
     lintOptions {
