@@ -30,10 +30,6 @@ android {
         debug {
             versionNameSuffix "#"+(System.getenv("BUILD_NUMBER") ?: "dev")
         }
-        jnidebug.initWith(buildTypes.debug)
-        jnidebug {
-            jniDebuggable true
-        }
     }
 
     lintOptions {
@@ -45,7 +41,7 @@ android {
             enable true
             universalApk false
             reset()
-            include 'armeabi', 'armeabi-v7a', 'x86', 'arm64-v8a'
+            include 'armeabi', 'armeabi-v7a', 'x86'
         }
     }
 
@@ -54,18 +50,25 @@ android {
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def abi = output.getFilter(com.android.build.OutputFile.ABI);
-            output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + defaultConfig.versionCode
+            output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode
 
             def alignedOutputFile = output.outputFile
             def unalignedOutputFile = output.packageApplication.outputFile
+            def outputFileName = alignedOutputFile.name
 
-            // Customise APK filenames (to include build version)
+            // Customise APK filenames
+            if(outputFileName.contains("debug")) {
+                outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
+            } else {
+                outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
+            }
+
             if (variant.buildType.zipAlignEnabled) {
                 // normal APK
-                output.outputFile = new File(alignedOutputFile.parent, alignedOutputFile.name.replace("debug", "development").replace(".apk", "-v" + defaultConfig.versionName + ".apk"))
+                output.outputFile = new File(alignedOutputFile.parent, outputFileName)
             }
             // 'unaligned' APK
-            output.packageApplication.outputFile = new File(unalignedOutputFile.parent, unalignedOutputFile.name.replace("debug", "development").replace(".apk", "-v" + defaultConfig.versionName + ".apk"))
+            output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
         }
     }
 }
