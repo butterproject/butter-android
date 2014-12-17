@@ -1,6 +1,7 @@
 package pct.droid.base.updater;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -152,42 +153,46 @@ public class PopcornUpdater extends Observable {
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
-                    if(response.isSuccessful()) {
-                        UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
-                        UpdaterData.Variant variant;
+                public void onResponse(Response response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
+                            UpdaterData.Variant variant;
 
-                        if(mPackageName.contains("tv")) {
-                            variant = data.tv;
-                        } else {
-                            variant = data.mobile;
-                        }
-
-                        UpdaterData.Arch channel = null;
-
-                        String abi = Build.CPU_ABI.toLowerCase();
-                        if(mVersionName.contains("dev")) {
-                            if(variant.development.containsKey(abi)) {
-                                channel = variant.development.get(abi);
+                            if (mPackageName.contains("tv")) {
+                                variant = data.tv;
+                            } else {
+                                variant = data.mobile;
                             }
-                        } else {
-                            if(variant.development.containsKey(abi)) {
-                                channel = variant.release.get(abi);
-                            }
-                        }
 
-                        if(channel == null || channel.checksum.equals(mPreferences.getString(SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                            UpdaterData.Arch channel = null;
+
+                            String abi = Build.CPU_ABI.toLowerCase();
+                            if (mVersionName.contains("dev")) {
+                                if (variant.development.containsKey(abi)) {
+                                    channel = variant.development.get(abi);
+                                }
+                            } else {
+                                if (variant.development.containsKey(abi)) {
+                                    channel = variant.release.get(abi);
+                                }
+                            }
+
+                            if (channel == null || channel.checksum.equals(mPreferences.getString(SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                                setChanged();
+                                notifyObservers(STATUS_NO_UPDATE);
+                            } else {
+                                downloadFile(channel.updateUrl);
+                                setChanged();
+                                notifyObservers(STATUS_GOT_UPDATE);
+                            }
+
+                        } else {
                             setChanged();
                             notifyObservers(STATUS_NO_UPDATE);
-                        } else {
-                            downloadFile(channel.updateUrl);
-                            setChanged();
-                            notifyObservers(STATUS_GOT_UPDATE);
                         }
-
-                    } else {
-                        setChanged();
-                        notifyObservers(STATUS_NO_UPDATE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -208,7 +213,7 @@ public class PopcornUpdater extends Observable {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful() && response.header("Content-Type").equals(ANDROID_PACKAGE)) {
+                if(response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
                     FileOutputStream fos = mContext.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
                     fos.write(response.body().bytes());
@@ -255,7 +260,7 @@ public class PopcornUpdater extends Observable {
         }
     };
 
-	protected void sendNotification() {
+	public void sendNotification() {
 		NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		String updateFile = mPreferences.getString(UPDATE_FILE, "");
@@ -264,13 +269,16 @@ public class PopcornUpdater extends Observable {
 			notifyObservers(STATUS_HAVE_UPDATE);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
+                    .setSmallIcon(R.drawable.ic_launcher)
                     .setContentTitle(mContext.getString(R.string.update_available))
                     .setContentText(mContext.getString(R.string.press_install))
                     .setAutoCancel(true)
                     .setDefaults(NotificationCompat.DEFAULT_ALL);
 
-			Intent notificationIntent = new Intent(Intent.ACTION_VIEW );
+			Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
 			notificationIntent.setDataAndType(Uri.parse("file://" + mContext.getFilesDir().getAbsolutePath() + "/" + updateFile), ANDROID_PACKAGE);
+
+            notificationBuilder.setContentIntent(PendingIntent.getActivity(mContext, 0, notificationIntent, 0));
 
 			nm.notify(NOTIFICATION_ID, notificationBuilder.build());
 		} else {
