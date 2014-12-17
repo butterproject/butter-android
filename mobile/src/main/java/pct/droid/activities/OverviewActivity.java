@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -393,7 +394,23 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             public void onClick(DialogInterface dialogInterface, int index) {
                 dialogInterface.dismiss();
                 String location = files[index];
-                if (YouTubeData.isYouTubeUrl(location)) {
+                if(location.equals("dialog")) {
+                    final EditText dialogInput = new EditText(OverviewActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(OverviewActivity.this)
+                            .setView(dialogInput)
+                            .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Movie media = new Movie();
+                                    final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
+                                    i.putExtra(VideoPlayerActivity.DATA, media);
+                                    i.putExtra(VideoPlayerActivity.LOCATION, dialogInput.getText());
+                                    media.videoId = "dialogtestvideo";
+                                    media.title = "User input test video";
+                                    startActivity(i);
+                                }
+                            });
+                } if (YouTubeData.isYouTubeUrl(location)) {
                     Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
                     Media media = new Media();
                     media.title = file_types[index];
