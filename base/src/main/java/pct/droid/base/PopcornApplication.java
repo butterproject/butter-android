@@ -49,6 +49,10 @@ public class PopcornApplication extends VLCApplication {
             e.printStackTrace();
         }
 
+        if(Constants.DEBUG_ENABLED) {
+            PopcornUpdater.getInstance(this).checkUpdatesManually();
+        }
+
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 

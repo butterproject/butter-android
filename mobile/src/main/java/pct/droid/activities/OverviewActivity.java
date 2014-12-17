@@ -41,6 +41,7 @@ import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.base.providers.media.MediaProvider;
