@@ -1,16 +1,10 @@
 package pct.droid.base.updater;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UpdaterData {
-    public Variant mobile;
-    public Variant tv;
-
-    public class Variant {
-        public Map<String, Arch> release;
-        public Map<String, Arch> development;
-    }
+    public Map<String, Map<String, Arch>> mobile;
+    public Map<String, Map<String, Arch>> tv;
 
     public class Arch {
         public int versionCode;
