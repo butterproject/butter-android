@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Map;
 import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -157,7 +158,7 @@ public class PopcornUpdater extends Observable {
                     try {
                         if (response.isSuccessful()) {
                             UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
-                            UpdaterData.Variant variant;
+                            Map<String, Map<String, UpdaterData.Arch>> variant;
 
                             if (mPackageName.contains("tv")) {
                                 variant = data.tv;
@@ -168,13 +169,20 @@ public class PopcornUpdater extends Observable {
                             UpdaterData.Arch channel = null;
 
                             String abi = Build.CPU_ABI.toLowerCase();
+                            if(mVersionName.contains("local")) return;
+
                             if (mVersionName.contains("dev")) {
-                                if (variant.development.containsKey(abi)) {
-                                    channel = variant.development.get(abi);
+                                if (variant.containsKey("development") && variant.get("development").containsKey(abi)) {
+                                    channel = variant.get("development").get(abi);
+                                }
+                            } else if(mVersionName.contains("git")) {
+                                String branch = mVersionName.replaceAll("(.*-git-).*", "");
+                                if (variant.containsKey(branch) && variant.get(branch).containsKey(abi)) {
+                                    channel = variant.get(branch).get(abi);
                                 }
                             } else {
-                                if (variant.development.containsKey(abi)) {
-                                    channel = variant.release.get(abi);
+                                if (variant.containsKey("release") && variant.get("release").containsKey(abi)) {
+                                    channel = variant.get("release").get(abi);
                                 }
                             }
 
@@ -186,7 +194,6 @@ public class PopcornUpdater extends Observable {
                                 setChanged();
                                 notifyObservers(STATUS_GOT_UPDATE);
                             }
-
                         } else {
                             setChanged();
                             notifyObservers(STATUS_NO_UPDATE);
