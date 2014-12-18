@@ -11,7 +11,10 @@ import android.support.v17.leanback.app.BackgroundManager;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.OnItemClickedListener;
 import android.support.v17.leanback.widget.OnItemSelectedListener;
+import android.support.v17.leanback.widget.OnItemViewSelectedListener;
+import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.RowPresenter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +27,7 @@ import com.popcorn.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-public class MainFragment extends BrowseSupportFragment implements MainViewInputInterface {
+public class MainFragment extends BrowseSupportFragment implements MainViewInputInterface, OnItemViewSelectedListener {
     //region Attributes
     private static final String TAG = "MainFragment";
     private DisplayMetrics metrics;
@@ -55,6 +58,7 @@ public class MainFragment extends BrowseSupportFragment implements MainViewInput
         setTitle(getString(R.string.browse_title));
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
+        setOnItemViewSelectedListener(this);
         setBrandColor(getResources().getColor(R.color.bg));
         getView().setBackgroundColor(getResources().getColor(R.color.default_background));
         setSearchAffordanceColor(getResources().getColor(R.color.primary));
@@ -167,6 +171,13 @@ public class MainFragment extends BrowseSupportFragment implements MainViewInput
             });
 
         }
+    }
+    //endregion
+
+    //region - OnItemViewSelectedListener
+    @Override
+    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        presenter.userDidSelectItem(item, row);
     }
     //endregion
 }
