@@ -28,7 +28,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            versionNameSuffix "#" + (System.getenv("BUILD_NUMBER") == null ? "local" : "dev" + System.getenv("BUILD_NUMBER")) + (System.getenv("GIT_BRANCH") == null ?: "-git-" + System.getenv("GIT_BRANCH"))
+            versionNameSuffix "#" + (System.getenv("BUILD_NUMBER") == null ? "local" : "dev" + System.getenv("BUILD_NUMBER")) + (System.getenv("GIT_BRANCH") == null ?: "-git-" + System.getenv("GIT_BRANCH").replace("origin/", ""))
         }
     }
 
