@@ -56,8 +56,7 @@ public class PopcornUpdater extends Observable {
     private long UPDATE_INTERVAL = 3 * HOURS;
 
     private final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
-    private final String DATA_URL = "http://sv244.cf/update.json";
-    //private final String DATA_URL = "http://popcorntime.io/android.json";
+    private final String DATA_URL = "http://ci.popcorntime.io/android";
 
     private final String TAG = "PopcornUpdater";
 
@@ -253,7 +252,7 @@ public class PopcornUpdater extends Observable {
     private BroadcastReceiver mConnectivityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            NetworkInfo currentNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+            NetworkInfo currentNetworkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
             // do application-specific task(s) based on the current network state, such
             // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
@@ -316,7 +315,7 @@ public class PopcornUpdater extends Observable {
 			e.printStackTrace();
 		}
 
-		return "md5bad";
+		return "sha1bad";
 	}
 
 	private static int crc32(String str) {
