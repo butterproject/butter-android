@@ -36,21 +36,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.InjectView;
-import pct.droid.base.Constants;
+import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
+import pct.droid.base.Constants;
 import pct.droid.base.providers.media.EZTVProvider;
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
-import pct.droid.base.updater.PopcornUpdater;
-import pct.droid.base.utils.LogUtils;
-import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.youtube.YouTubeData;
+import pct.droid.fragments.OverviewActivityTaskFragment;
 
 public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 
@@ -172,7 +171,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchViewAction.setQueryHint("Title, year, actors"); //TODO: translation
+        searchViewAction.setQueryHint(getString(R.string.search_hint));
         searchViewAction.setOnQueryTextListener(mSearchListener);
         searchViewAction.setIconifiedByDefault(true);
 
