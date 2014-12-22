@@ -11,12 +11,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.meta.TraktProvider;
-import pct.droid.base.providers.subs.OpenSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 

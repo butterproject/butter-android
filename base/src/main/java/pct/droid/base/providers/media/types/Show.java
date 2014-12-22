@@ -19,7 +19,7 @@ public class Show extends Media implements Parcelable {
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
     public Integer seasons = 0;
-    public Map<String, Episode> episodes = new HashMap<String, Episode>();
+    public Map<String, Episode> episodes = new HashMap<>();
 
     public Show() {
 

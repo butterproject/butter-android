@@ -25,7 +25,11 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.InjectView;
@@ -133,16 +137,26 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                 */
                 case R.id.playButton:
                     final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ShowDetailActivity.this);
-                    final CharSequence[] items = new CharSequence[mItem.episodes.size()];
-                    int i = 0;
+                    final List<String> items = new ArrayList<String>();
                     for(String key : mItem.episodes.keySet()) {
-                        items[i] = key;
-                        i++;
+                        items.add(key);
                     }
-                    dialogBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+
+
+                    // sorting hack
+                    Collections.sort(items, new Comparator<String>() {
+                        @Override
+                        public int compare(String lhs, String rhs) {
+                            Show.Episode lEpisode = mItem.episodes.get(lhs);
+                            Show.Episode rEpisode = mItem.episodes.get(rhs);
+
+                            return lEpisode.season > rEpisode.season || lEpisode.episode > rEpisode.episode ? 1 : -1;
+                        }
+                    });
+                    dialogBuilder.setSingleChoiceItems(items.toArray(new String[0]), -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            String key = (String) items[i];
+                            String key = items.get(i);
                             Show.Episode episode = mItem.episodes.get(key);
                             Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
