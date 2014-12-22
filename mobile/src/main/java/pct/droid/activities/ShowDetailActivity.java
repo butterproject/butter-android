@@ -150,7 +150,13 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                             Show.Episode lEpisode = mItem.episodes.get(lhs);
                             Show.Episode rEpisode = mItem.episodes.get(rhs);
 
-                            return lEpisode.season > rEpisode.season || lEpisode.episode > rEpisode.episode ? 1 : -1;
+                            if (lEpisode.season > rEpisode.season) {
+                                return 1;
+                            } else if (lEpisode.season < rEpisode.season) {
+                                return -1;
+                            } else {
+                                return lEpisode.episode > rEpisode.episode ? 1 : -1;
+                            }
                         }
                     });
                     dialogBuilder.setSingleChoiceItems(items.toArray(new String[0]), -1, new DialogInterface.OnClickListener() {
