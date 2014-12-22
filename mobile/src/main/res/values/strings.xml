@@ -42,5 +42,7 @@
     <string name="hardware_acceleration_error_title">HW acceleration error</string>
     <string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
     <string name="search_hint">Title, year, actors</string>
+    <string name="title_shows">Shows</string>
+    <string name="title_movies">Movies</string>
 
 </resources>

@@ -13,4 +13,9 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_quality"
         android:title="@string/player" />
+
+    <item android:id="@+id/action_switch_mode"
+        android:visible="true"
+        app:showAsAction="never"
+        android:title="@string/title_shows"/>
 </menu>
