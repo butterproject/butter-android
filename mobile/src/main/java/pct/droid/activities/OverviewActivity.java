@@ -7,17 +7,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -36,7 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.InjectView;
-import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.base.Constants;
@@ -51,6 +47,7 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 
+// todo make most of this content a fragment
 public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 
     private OverviewActivityTaskFragment mTaskFragment;
@@ -81,51 +78,6 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         } else {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
         }
-
-        /* Temporary */
-        final GestureDetectorCompat detector = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener());
-
-        detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTap(MotionEvent motionEvent) {
-                mProvider.cancel();
-                if(mProviderId == 0) {
-                    mProvider = new EZTVProvider();
-                    mProviderId = 1;
-                } else {
-                    mProvider = new YTSProvider();
-                    mProviderId = 0;
-                }
-
-                mTaskFragment.setCurrentPage(0);
-                mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
-                mAdapter.setOnItemClickListener(mOnItemClickListener);
-                progressOverlay.setVisibility(View.VISIBLE);
-                recyclerView.setAdapter(mAdapter);
-                mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
-
-                mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
-                return true;
-            }
-
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-                return false;
-            }
-        });
-
-        toolbar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return detector.onTouchEvent(motionEvent);
-            }
-        });
-        /* End temporary */
 
         recyclerView.setHasFixedSize(true);
         mColumns = getResources().getInteger(R.integer.overview_cols);
@@ -160,6 +112,27 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         }
     }
 
+    // todo refactor this out
+    private void switchMoviesShowsMode() {
+        mProvider.cancel();
+        if(mProviderId == 0) {
+            mProvider = new EZTVProvider();
+            mProviderId = 1;
+        } else {
+            mProvider = new YTSProvider();
+            mProviderId = 0;
+        }
+
+        mTaskFragment.setCurrentPage(0);
+        mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
+        mAdapter.setOnItemClickListener(mOnItemClickListener);
+        progressOverlay.setVisibility(View.VISIBLE);
+        recyclerView.setAdapter(mAdapter);
+        mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+
+        mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -182,10 +155,21 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem switchItem = menu.findItem(R.id.action_switch_mode);
+        switchItem.setTitle(mProviderId == 0 ? R.string.title_shows : R.string.title_movies);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_playertests:
                 openPlayerTestDialog();
+                break;
+            case R.id.action_switch_mode:
+                switchMoviesShowsMode();
                 break;
         }
         return super.onOptionsItemSelected(item);
