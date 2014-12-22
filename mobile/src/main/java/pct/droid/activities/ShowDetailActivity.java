@@ -1,7 +1,6 @@
 package pct.droid.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -343,16 +341,6 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     protected void onDestroy() {
         super.onDestroy();
         scrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
