@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "pct.droid"
-        minSdkVersion 10
+        minSdkVersion 15
         targetSdkVersion 21
         versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
         versionName "0.1"
