@@ -7,7 +7,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -28,14 +27,14 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.fragments.QualitySelectorDialogFragment;
-import pct.droid.fragments.SubtitleSelectorDialogFragment;
-import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.base.providers.media.types.Movie;
-import pct.droid.utils.ActionBarBackground;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.youtube.YouTubeData;
+import pct.droid.fragments.QualitySelectorDialogFragment;
+import pct.droid.fragments.SubtitleSelectorDialogFragment;
+import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.utils.ActionBarBackground;
 
 public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
 
@@ -307,16 +306,6 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     protected void onDestroy() {
         super.onDestroy();
         scrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
