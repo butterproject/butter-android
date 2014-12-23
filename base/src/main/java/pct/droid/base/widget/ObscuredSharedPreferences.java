@@ -29,7 +29,7 @@ import javax.crypto.spec.PBEParameterSpec;
  */
 public class ObscuredSharedPreferences implements SharedPreferences {
     protected static final String UTF8 = "utf-8";
-    private static final char[] SEKRIT = new char[] { 0x7B, 0xCC, 0x01, 0xEC, 0xCF, 0x74 }; // INSERT A RANDOM PASSWORD HERE.
+    private static final char[] SEKRIT = new char[] { 0x9D, 0xD9, 0x01, 0xAF, 0xBB, 0x23, 0x12, 0xED }; // INSERT A RANDOM PASSWORD HERE.
     // Don't use anything you wouldn't want to
     // get out there if someone decompiled
     // your app.
