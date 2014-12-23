@@ -23,6 +23,6 @@ public class XMLRPCFault extends XMLRPCException {
     }
 
     public String getMessage() {
-        return super.getMessage() + " [Code: "+this.faultCode+"]";
+        return super.getMessage() + " [Code: " + this.faultCode + "]";
     }
 }

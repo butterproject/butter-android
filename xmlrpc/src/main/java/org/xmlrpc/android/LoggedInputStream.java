@@ -7,10 +7,10 @@ import java.io.InputStream;
 /**
  * A LoggedInputStream adds logging functionality to another input stream.
  * <p>Note that calls on a LoggedInputStream are passed "as-is" to the underlying stream.</p>
- *
- *
+ * <p/>
+ * <p/>
  * <p>We're using a LoggedInputStream in {@code XMLRPClient.java} to log the XML-RPC response document in case of parser errors.<br />
- *
+ * <p/>
  * There are plenty of other ways to log the response, but a {@code XmlPullParser} wants an InputStream as input parameter, and
  * a LoggedInputStream seems the most reliable solution, with the smallest memory footprint.<br />
  * Below are other examples of logging we tried:</p>
@@ -61,7 +61,7 @@ public final class LoggedInputStream extends InputStream {
     @Override
     public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
         int bytesRead = inputStream.read(buffer, byteOffset, byteCount);
-        if (bytesRead != -1 ) {
+        if (bytesRead != -1) {
             log(buffer, byteOffset, bytesRead);
         }
         return bytesRead;
@@ -75,7 +75,7 @@ public final class LoggedInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        int characterRead =  inputStream.read();
+        int characterRead = inputStream.read();
         if (characterRead != -1) {
             log(characterRead);
         }
@@ -94,7 +94,7 @@ public final class LoggedInputStream extends InputStream {
     }
 
     private void log(byte[] inputArray, int byteOffset, int byteCount) {
-        int availableSpace = MAX_LOG_SIZE-loggedStringSize;
+        int availableSpace = MAX_LOG_SIZE - loggedStringSize;
         if (availableSpace <= 0)
             return;
         int bytesLength = Math.min(availableSpace, byteCount);
@@ -109,7 +109,7 @@ public final class LoggedInputStream extends InputStream {
     }
 
     public String getResponseDocument() {
-        if (loggedStringSize==0) {
+        if (loggedStringSize == 0) {
             return "";
         } else {
             return new String(loggedString, 0, loggedStringSize);

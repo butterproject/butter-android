@@ -28,7 +28,7 @@ import android.view.MotionEvent;
 public class AndroidDevices {
     @TargetApi(VERSION_CODES.HONEYCOMB_MR1)
     public static float getCenteredAxis(MotionEvent event,
-            InputDevice device, int axis) {
+                                        InputDevice device, int axis) {
         final InputDevice.MotionRange range =
                 device.getMotionRange(axis, event.getSource());
 
