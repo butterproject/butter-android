@@ -57,6 +57,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.OverviewActivity" />
         </activity>
+        <activity android:name=".activities.TermsActivity"
+            android:label="@string/app_name" />
         <activity
             android:name="pct.droid.activities.StreamLoadingActivity"
             android:screenOrientation="sensorLandscape"
@@ -69,6 +71,7 @@
             android:name="pct.droid.activities.TrailerPlayerActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name" />
+
 
         <service
             android:name=".base.services.StreamerService"

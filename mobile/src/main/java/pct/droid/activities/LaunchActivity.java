@@ -3,15 +3,18 @@ package pct.droid.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-/**
- * Created by Sebastiaan on 01-12-14.
- */
+import pct.droid.base.utils.PrefUtils;
+
 public class LaunchActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(this, OverviewActivity.class));
+        if(PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
+            startActivity(new Intent(this, OverviewActivity.class));
+        } else {
+            startActivity(new Intent(this, TermsActivity.class));
+        }
         finish();
     }
 }
