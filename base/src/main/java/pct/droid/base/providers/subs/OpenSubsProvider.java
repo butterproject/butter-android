@@ -1,8 +1,5 @@
 package pct.droid.base.providers.subs;
 
-import android.net.Uri;
-import android.util.Log;
-
 import org.apache.http.MethodNotSupportedException;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlrpc.android.XMLRPCClient;
@@ -12,15 +9,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
-import pct.droid.base.utils.LogUtils;
 
 public class OpenSubsProvider extends SubsProvider {
 
@@ -37,27 +30,27 @@ public class OpenSubsProvider extends SubsProvider {
         String token = login();
         String episodeStr = Integer.toString(episode.episode);
         String seasonStr = Integer.toString(episode.season);
-        if(!token.isEmpty()) {
+        if (!token.isEmpty()) {
             Map<String, Object> subData = search(show, seasonStr, episodeStr, token);
             Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
             Map<String, Integer[]> scoreMap = new HashMap<String, Integer[]>();
             Map<String, String> episodeMap = new HashMap<String, String>();
-            if(subData != null && subData.get("data") != null) {
+            if (subData != null && subData.get("data") != null) {
                 Object[] dataList = (Object[]) subData.get("data");
-                for(Object dataItem : dataList) {
+                for (Object dataItem : dataList) {
                     Map<String, String> item = (Map<String, String>) dataItem;
-                    if(!item.get("SubFormat").equals("srt")) {
+                    if (!item.get("SubFormat").equals("srt")) {
                         continue;
                     }
 
                     // episode check
-                    if(Integer.parseInt(item.get("SeriesIMDBParent")) != Integer.parseInt(show.imdbId.replace("tt", ""))) {
+                    if (Integer.parseInt(item.get("SeriesIMDBParent")) != Integer.parseInt(show.imdbId.replace("tt", ""))) {
                         continue;
                     }
-                    if(!item.get("SeriesSeason").equals(seasonStr)) {
+                    if (!item.get("SeriesSeason").equals(seasonStr)) {
                         continue;
                     }
-                    if(!item.get("SeriesEpisode").equals(episodeStr)) {
+                    if (!item.get("SeriesEpisode").equals(episodeStr)) {
                         continue;
                     }
 
@@ -66,20 +59,20 @@ public class OpenSubsProvider extends SubsProvider {
                     int downloads = Integer.parseInt(item.get("SubDownloadsCnt"));
                     int score = 0;
 
-                    if(item.get("MatchedBy").equals("tag")) {
+                    if (item.get("MatchedBy").equals("tag")) {
                         score += 50;
                     }
-                    if(item.get("UserRank").equals("trusted")) {
+                    if (item.get("UserRank").equals("trusted")) {
                         score += 100;
                     }
-                    if(!episodeMap.containsKey(lang)) {
+                    if (!episodeMap.containsKey(lang)) {
                         episodeMap.put(lang, url);
-                        scoreMap.put(lang, new Integer[] { score, downloads });
+                        scoreMap.put(lang, new Integer[]{score, downloads});
                     } else {
                         // If score is 0 or equal, sort by downloads
-                        if(score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
+                        if (score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
                             episodeMap.put(lang, url);
-                            scoreMap.put(lang, new Integer[] { score, downloads });
+                            scoreMap.put(lang, new Integer[]{score, downloads});
                         }
                     }
                 }
@@ -92,6 +85,7 @@ public class OpenSubsProvider extends SubsProvider {
 
     /**
      * Login to server and get token
+     *
      * @return Token
      */
     private String login() {
@@ -115,10 +109,11 @@ public class OpenSubsProvider extends SubsProvider {
 
     /**
      * Search for subtitles by imdbId, season and episode
-     * @param show Show
-     * @param season Season number
+     *
+     * @param show    Show
+     * @param season  Season number
      * @param episode Episode number
-     * @param token Login token
+     * @param token   Login token
      * @return SRT URL
      */
     private Map<String, Object> search(Show show, String season, String episode, String token) {
@@ -129,7 +124,7 @@ public class OpenSubsProvider extends SubsProvider {
             option.put("season", season);
             option.put("episode", episode);
             option.put("sublanguageid", "all");
-            return (Map<String, Object>) client.call("SearchSubtitles", new Object[] { token, new Object[] { option } });
+            return (Map<String, Object>) client.call("SearchSubtitles", new Object[]{token, new Object[]{option}});
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (XMLRPCException e) {

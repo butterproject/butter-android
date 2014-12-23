@@ -47,7 +47,7 @@ public class Movie extends Media implements Parcelable {
         dest.writeString(tagline);
         dest.writeString(synopsis);
         dest.writeString(certification);
-        if(torrents != null) {
+        if (torrents != null) {
             dest.writeInt(torrents.size());
             for (String s : torrents.keySet()) {
                 dest.writeString(s);

@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -24,8 +23,8 @@ import java.util.zip.ZipInputStream;
 
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.subs.FatalParsingException;
 import pct.droid.base.subs.FormatASS;
 import pct.droid.base.subs.FormatSRT;
@@ -38,19 +37,19 @@ public abstract class SubsProvider extends BaseProvider {
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
     public abstract Map<String, Map<String, String>> getList(Movie movie) throws MethodNotSupportedException;
+
     public abstract Map<String, Map<String, String>> getList(Show media, Show.Episode episode) throws MethodNotSupportedException;
 
     /**
-     *
-     * @param context Context
-     * @param media Media data
+     * @param context      Context
+     * @param media        Media data
      * @param languageCode Code of language
-     * @param callback Network callback
+     * @param callback     Network callback
      * @return Call
      */
     public static Call download(final Context context, final Media media, final String languageCode, final Callback callback) {
         OkHttpClient client = new OkHttpClient();
-        if(media.subtitles != null && media.subtitles.containsKey(languageCode)) {
+        if (media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
@@ -84,7 +83,7 @@ public abstract class SubsProvider extends BaseProvider {
 
                                 if (urlString.endsWith(".zip")) {
                                     SubsProvider.unpack(inputStream, srtPath);
-                                } else if(SubsProvider.isSubFormat(urlString)) {
+                                } else if (SubsProvider.isSubFormat(urlString)) {
                                     parseFormatAndSave(urlString, srtPath, inputStream);
                                 } else {
                                     callback.onFailure(response.request(), new IOException("FatalParsingException"));
@@ -125,7 +124,8 @@ public abstract class SubsProvider extends BaseProvider {
 
     /**
      * Unpack ZIP and save SRT
-     * @param is InputStream from network
+     *
+     * @param is      InputStream from network
      * @param srtPath Path where SRT should be saved
      * @throws IOException
      * @throws FatalParsingException
@@ -137,9 +137,9 @@ public abstract class SubsProvider extends BaseProvider {
 
         while ((ze = zis.getNextEntry()) != null) {
             filename = ze.getName();
-            if(filename.contains("_MACOSX")) return;
+            if (filename.contains("_MACOSX")) return;
 
-            if(isSubFormat(filename)) {
+            if (isSubFormat(filename)) {
                 parseFormatAndSave(filename, srtPath, zis);
                 try {
                     zis.closeEntry();
@@ -155,12 +155,13 @@ public abstract class SubsProvider extends BaseProvider {
 
     /**
      * Test if file is subtitle format
+     *
      * @param filename Name of file
      * @return is subtitle?
      */
     private static boolean isSubFormat(String filename) {
-        for(String ext : SUB_EXTENSIONS) {
-            if(filename.endsWith("." + ext)) {
+        for (String ext : SUB_EXTENSIONS) {
+            if (filename.endsWith("." + ext)) {
                 return true;
             }
         }
@@ -169,8 +170,9 @@ public abstract class SubsProvider extends BaseProvider {
 
     /**
      * Parse the text, convert and save to SRT file
-     * @param inputUrl Original network location
-     * @param srtPath Place where SRT should be saved
+     *
+     * @param inputUrl    Original network location
+     * @param srtPath     Place where SRT should be saved
      * @param inputStream InputStream of data
      * @throws IOException
      */
@@ -178,15 +180,15 @@ public abstract class SubsProvider extends BaseProvider {
         TimedTextObject subtitleObject = null;
         String[] inputText = FileUtils.inputstreamToCharsetString(inputStream).split("\n|\r\n");
 
-        if(inputUrl.endsWith(".ass") || inputUrl.contains(".ssa")) {
+        if (inputUrl.endsWith(".ass") || inputUrl.contains(".ssa")) {
             FormatASS formatASS = new FormatASS();
             subtitleObject = formatASS.parseFile(inputUrl, inputText);
-        } else if(inputUrl.endsWith(".srt")) {
+        } else if (inputUrl.endsWith(".srt")) {
             FormatSRT formatSRT = new FormatSRT();
             subtitleObject = formatSRT.parseFile(inputUrl, inputText);
         }
 
-        if(subtitleObject != null) {
+        if (subtitleObject != null) {
             FileUtils.saveStringFile(subtitleObject.toSRT(), srtPath);
         }
     }

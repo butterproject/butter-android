@@ -25,8 +25,8 @@ public class EZTVProvider extends MediaProvider {
     @Override
     public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
         final ArrayList<Media> currentList;
-        if(existingList == null) {
-            currentList = new ArrayList<Media>();
+        if (existingList == null) {
+            currentList = new ArrayList<>();
         } else {
             currentList = (ArrayList<Media>) existingList.clone();
         }
@@ -34,7 +34,7 @@ public class EZTVProvider extends MediaProvider {
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("limit", "30"));
 
-        if(filters == null) {
+        if (filters == null) {
             filters = new Filters();
         }
 
@@ -54,7 +54,7 @@ public class EZTVProvider extends MediaProvider {
         }
 
         String sort = "";
-        switch(filters.sort) {
+        switch (filters.sort) {
 
             default:
             case POPULARITY:
@@ -80,9 +80,10 @@ public class EZTVProvider extends MediaProvider {
 
     /**
      * Fetch the list of movies from EZTV
-     * @param currentList Current shown list to be extended
+     *
+     * @param currentList    Current shown list to be extended
      * @param requestBuilder Request to be executed
-     * @param callback Network callback
+     * @param callback       Network callback
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
@@ -90,7 +91,7 @@ public class EZTVProvider extends MediaProvider {
             @Override
             public void onFailure(Request request, IOException e) {
                 String url = requestBuilder.build().urlString();
-                if(url.equals(mMirrorApiUrl)) {
+                if (url.equals(mMirrorApiUrl)) {
                     callback.onFailure(e);
                 } else {
                     url = url.replace(mApiUrl, mMirrorApiUrl);
@@ -144,7 +145,7 @@ public class EZTVProvider extends MediaProvider {
                     } else {
                         ArrayList<Media> formattedData = result.formatForPopcorn();
 
-                        if(formattedData.size() > 0) {
+                        if (formattedData.size() > 0) {
                             TraktProvider traktProvider = new TraktProvider();
                             Show show = (Show) formattedData.get(0);
 
@@ -174,7 +175,7 @@ public class EZTVProvider extends MediaProvider {
         }
 
         public ArrayList<Media> formatForPopcorn() {
-            ArrayList<Media> list = new ArrayList<Media>();
+            ArrayList<Media> list = new ArrayList<>();
             try {
                 Show show = new Show();
 
@@ -234,12 +235,8 @@ public class EZTVProvider extends MediaProvider {
             this.showsList = showsList;
         }
 
-        public ArrayList<Media> formatListForPopcorn() {
-            return formatListForPopcorn(new ArrayList<Media>());
-        }
-
         public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
-            for(LinkedTreeMap<String, Object> item : showsList) {
+            for (LinkedTreeMap<String, Object> item : showsList) {
                 Show show = new Show();
 
                 show.title = item.get("title").toString();

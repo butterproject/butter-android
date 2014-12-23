@@ -15,8 +15,9 @@ public class TraktProvider extends MetaProvider {
 
     /**
      * Get metadata from Trakt
+     *
      * @param imdbId IMDb ids to get metadata for
-     * @param type Type of item
+     * @param type   Type of item
      * @return MetaData
      */
     public MetaData getSummary(String imdbId, String type) {
@@ -26,7 +27,7 @@ public class TraktProvider extends MetaProvider {
         Call call = enqueue(requestBuilder.build());
         try {
             Response response = call.execute();
-            if(response.isSuccessful()) {
+            if (response.isSuccessful()) {
                 String responseStr = response.body().string();
                 MetaData result = mGson.fromJson(responseStr, MetaData.class);
                 return result;
@@ -41,8 +42,9 @@ public class TraktProvider extends MetaProvider {
 
     /**
      * Get metadata from Trakt
-     * @param ids IMDb ids to get metadata for
-     * @param type Type of item
+     *
+     * @param ids      IMDb ids to get metadata for
+     * @param type     Type of item
      * @param extended Type of data to get
      * @return MetaData
      */
@@ -50,9 +52,9 @@ public class TraktProvider extends MetaProvider {
         Request.Builder requestBuilder = new Request.Builder();
 
         String idString = "";
-        for(int i = 0; i < ids.length; i++) {
+        for (int i = 0; i < ids.length; i++) {
             idString += ids[i];
-            if(i != ids.length - 1) {
+            if (i != ids.length - 1) {
                 idString += ",";
             }
         }
@@ -62,7 +64,7 @@ public class TraktProvider extends MetaProvider {
         Call call = enqueue(requestBuilder.build());
         try {
             Response response = call.execute();
-            if(response.isSuccessful()) {
+            if (response.isSuccessful()) {
                 String responseStr = response.body().string();
                 MetaData[] result = mGson.fromJson(responseStr, MetaData[].class);
                 return result;

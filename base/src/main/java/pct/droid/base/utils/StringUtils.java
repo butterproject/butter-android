@@ -28,6 +28,7 @@ public class StringUtils {
 
     /**
      * Convert time to a string
+     *
      * @param millis e.g.time/length from file
      * @return Formatted string (hh:)mm:ss
      */
@@ -43,7 +44,7 @@ public class StringUtils {
         int hours = (int) millis;
 
         String time;
-        DecimalFormat format = (DecimalFormat)NumberFormat.getInstance(Locale.US);
+        DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         format.applyPattern("00");
         if (millis > 0) {
             time = (negative ? "-" : "") + hours + ":" + format.format(min) + ":" + format.format(sec);
