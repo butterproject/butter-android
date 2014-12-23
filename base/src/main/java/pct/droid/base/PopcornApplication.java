@@ -38,7 +38,7 @@ public class PopcornApplication extends VLCApplication {
     public void onCreate() {
         super.onCreate();
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
-        PopcornUpdater.getInstance(this);
+        PopcornUpdater.getInstance(this).checkUpdatesManually();
 
         Constants.DEBUG_ENABLED = false;
         try {
@@ -47,10 +47,6 @@ public class PopcornApplication extends VLCApplication {
             Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-        }
-
-        if (Constants.DEBUG_ENABLED) {
-            PopcornUpdater.getInstance(this).checkUpdatesManually();
         }
 
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
