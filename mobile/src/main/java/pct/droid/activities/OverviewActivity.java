@@ -73,7 +73,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         super.onCreate(savedInstanceState, R.layout.activity_overview);
         setSupportActionBar(toolbar);
 
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
         } else {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
@@ -115,7 +115,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     // todo refactor this out
     private void switchMoviesShowsMode() {
         mProvider.cancel();
-        if(mProviderId == 0) {
+        if (mProviderId == 0) {
             mProvider = new EZTVProvider();
             mProviderId = 1;
         } else {
@@ -177,7 +177,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onBackPressed() {
-        if(mLoadingDetails) {
+        if (mLoadingDetails) {
             progressOverlay.setVisibility(View.GONE);
             mProvider.cancel();
             mLoadingDetails = false;
@@ -190,7 +190,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     @Override
     public void onSuccess(final ArrayList<Media> items) {
         mEndOfListReached = false;
-        if(mTotalItemCount <= 0) {
+        if (mTotalItemCount <= 0) {
             mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
@@ -216,14 +216,14 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onFailure(Exception e) {
-        if(e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
+        if (e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
             mEndOfListReached = true;
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     mAdapter.removeLoading();
 
-                    if(mAdapter.getItemCount() <= 0) {
+                    if (mAdapter.getItemCount() <= 0) {
                         emptyView.setVisibility(View.VISIBLE);
                     }
                 }
@@ -273,7 +273,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                         @Override
                         public void run() {
                             Intent intent;
-                            if(item instanceof Movie) {
+                            if (item instanceof Movie) {
                                 intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
                             } else {
                                 intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
@@ -286,7 +286,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
                 @Override
                 public void onFailure(Exception e) {
-                    if(!e.getMessage().equals("Canceled")) {
+                    if (!e.getMessage().equals("Canceled")) {
                         e.printStackTrace();
                         Log.e("OverviewActivity", e.getMessage());
                         mHandler.post(new Runnable() {
@@ -334,12 +334,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         @Override
         public boolean onQueryTextSubmit(String s) {
             mEndOfListReached = false;
-            if(mAdapter != null) {
+            if (mAdapter != null) {
                 mAdapter.clearItems();
                 mAdapter.addLoading();
             }
             MediaProvider.Filters filters = mTaskFragment.getFilters();
-            if(s.equals("")) {
+            if (s.equals("")) {
                 filters.keywords = null;
             } else {
                 filters.keywords = s;
@@ -353,7 +353,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         @Override
         public boolean onQueryTextChange(String s) {
-            if(s.equals("")) {
+            if (s.equals("")) {
                 onQueryTextSubmit(s);
             }
             return false;
@@ -377,7 +377,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             public void onClick(DialogInterface dialogInterface, int index) {
                 dialogInterface.dismiss();
                 String location = files[index];
-                if(location.equals("dialog")) {
+                if (location.equals("dialog")) {
                     final EditText dialogInput = new EditText(OverviewActivity.this);
                     AlertDialog.Builder builder = new AlertDialog.Builder(OverviewActivity.this)
                             .setView(dialogInput)
@@ -393,7 +393,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                                     startActivity(i);
                                 }
                             });
-                } if (YouTubeData.isYouTubeUrl(location)) {
+                }
+                if (YouTubeData.isYouTubeUrl(location)) {
                     Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
                     Media media = new Media();
                     media.title = file_types[index];

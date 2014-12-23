@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/bg">
+
     <ProgressBar
         android:id="@+id/progressIndicator"
         android:layout_width="match_parent"
@@ -14,8 +15,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:indeterminate="true"
-        style="?android:attr/progressBarStyleHorizontal"
-        />
+        style="?android:attr/progressBarStyleHorizontal" />
 
     <TextView
         android:id="@+id/progressText"

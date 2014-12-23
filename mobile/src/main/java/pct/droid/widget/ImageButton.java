@@ -22,7 +22,7 @@ public class ImageButton extends android.widget.ImageButton {
     @Override
     public void setContentDescription(CharSequence contentDesc) {
         super.setContentDescription(contentDesc);
-        if(contentDesc.length() > 0)
+        if (contentDesc.length() > 0)
             CheatSheet.setup(this, contentDesc);
     }
 

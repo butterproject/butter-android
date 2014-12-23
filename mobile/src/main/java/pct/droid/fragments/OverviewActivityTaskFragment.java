@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.types.Media;
@@ -61,11 +60,11 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     public void onSuccess(ArrayList<Media> items) {
         mPage++;
         mItems = items;
-        if(mCallback != null) mCallback.onSuccess(items);
+        if (mCallback != null) mCallback.onSuccess(items);
     }
 
     @Override
     public void onFailure(Exception e) {
-        if(mCallback != null) mCallback.onFailure(e);
+        if (mCallback != null) mCallback.onFailure(e);
     }
 }

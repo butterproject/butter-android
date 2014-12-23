@@ -57,7 +57,7 @@ android {
             def outputFileName = alignedOutputFile.name
 
             // Customise APK filenames
-            if(outputFileName.contains("debug")) {
+            if (outputFileName.contains("debug")) {
                 outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
             } else {
                 outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
