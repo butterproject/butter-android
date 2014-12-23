@@ -9,6 +9,7 @@ public class PrefUtils {
 
     /**
      * Clear the central {@link ObscuredSharedPreferences}
+     *
      * @param context Context
      */
     public static void clear(Context context) {
@@ -17,9 +18,10 @@ public class PrefUtils {
 
     /**
      * Save a string to the central {@link ObscuredSharedPreferences}
+     *
      * @param context Context
-     * @param key Key of the preference
-     * @param value Value of the preference
+     * @param key     Key of the preference
+     * @param value   Value of the preference
      */
     public static void save(Context context, String key, String value) {
         getPrefs(context).edit().putString(key, value).apply();
@@ -27,8 +29,9 @@ public class PrefUtils {
 
     /**
      * Get a saved string from the central {@link ObscuredSharedPreferences}
-     * @param context Context
-     * @param key Key of the preference
+     *
+     * @param context      Context
+     * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved String
      */
@@ -38,9 +41,10 @@ public class PrefUtils {
 
     /**
      * Save a boolean to the central {@link ObscuredSharedPreferences}
+     *
      * @param context Context
-     * @param key Key of the preference
-     * @param value Value of the preference
+     * @param key     Key of the preference
+     * @param value   Value of the preference
      */
     public static void save(Context context, String key, boolean value) {
         getPrefs(context).edit().putBoolean(key, value).apply();
@@ -48,8 +52,9 @@ public class PrefUtils {
 
     /**
      * Get a saved boolean from the central {@link ObscuredSharedPreferences}
-     * @param context Context
-     * @param key Key of the preference
+     *
+     * @param context      Context
+     * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved bool
      */
@@ -59,9 +64,10 @@ public class PrefUtils {
 
     /**
      * Save a long to the central {@link ObscuredSharedPreferences}
+     *
      * @param context Context
-     * @param key Key of the preference
-     * @param value Value of the preference
+     * @param key     Key of the preference
+     * @param value   Value of the preference
      */
     public static void save(Context context, String key, long value) {
         getPrefs(context).edit().putLong(key, value).apply();
@@ -69,8 +75,9 @@ public class PrefUtils {
 
     /**
      * Get a saved long from the central {@link ObscuredSharedPreferences}
-     * @param context Context
-     * @param key Key of the preference
+     *
+     * @param context      Context
+     * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved long
      */
@@ -80,9 +87,10 @@ public class PrefUtils {
 
     /**
      * Save a int to the central {@link ObscuredSharedPreferences}
+     *
      * @param context Context
-     * @param key Key of the preference
-     * @param value Value of the preference
+     * @param key     Key of the preference
+     * @param value   Value of the preference
      */
     public static void save(Context context, String key, int value) {
         getPrefs(context).edit().putInt(key, value).apply();
@@ -90,8 +98,9 @@ public class PrefUtils {
 
     /**
      * Get a saved integer from the central {@link ObscuredSharedPreferences}
-     * @param context Context
-     * @param key Key of the preference
+     *
+     * @param context      Context
+     * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved integer
      */
@@ -101,8 +110,9 @@ public class PrefUtils {
 
     /**
      * Check if the central {@link ObscuredSharedPreferences} contain a preference that uses that key
+     *
      * @param context Context
-     * @param key Key
+     * @param key     Key
      * @return {@code true} if there exists a preference
      */
     public static Boolean contains(Context context, String key) {
@@ -111,6 +121,7 @@ public class PrefUtils {
 
     /**
      * Get the central {@link ObscuredSharedPreferences}
+     *
      * @param context Context
      * @return {@link ObscuredSharedPreferences}
      */

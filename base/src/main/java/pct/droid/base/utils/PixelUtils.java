@@ -16,8 +16,9 @@ public class PixelUtils {
 
     /**
      * Convert Density pixels to normal pixels
+     *
      * @param context Context
-     * @param dp Density pixels
+     * @param dp      Density pixels
      * @return Integer
      */
     public static int getPixelsFromDp(Context context, int dp) {
@@ -49,7 +50,7 @@ public class PixelUtils {
     public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             Point size = new Point();
             display.getSize(size);
             return size.x;
@@ -61,7 +62,7 @@ public class PixelUtils {
     public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             Point size = new Point();
             display.getSize(size);
             return size.y;

@@ -80,14 +80,16 @@ public class StreamerService extends Service {
 
         Bundle metaData = info.metaData;
 
-        if(metaData.getString("node_package") != null) {
+        if (metaData.getString("node_package") != null) {
             mPackageName = metaData.getString("node_package");
         }
 
         return START_NOT_STICKY;
     }
 
-    /** Important Node stuff below **/
+    /**
+     * Important Node stuff below *
+     */
     private class NodeJSThread extends Thread {
 
         private String mFileName = "app.js", mDirectory = "", mStreamUrl = "";
@@ -144,7 +146,7 @@ public class StreamerService extends Service {
 
             LogUtils.d("run :" + js);
             File script = new File(appPath, NODEJS_PATH + "/" + "main_node_script.js");
-            if(script.exists()) {
+            if (script.exists()) {
                 script.delete();
             }
 
@@ -190,8 +192,8 @@ public class StreamerService extends Service {
         ZipEntry ze = null;
 
         try {
-            while((ze = zin.getNextEntry()) != null) {
-                if(ze.isDirectory()) {
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.isDirectory()) {
                     File path = new File(targetDir, ze.getName());
                     path.mkdirs();
                 } else {
@@ -203,7 +205,7 @@ public class StreamerService extends Service {
                     byte[] buf = new byte[4096];
                     int len;
 
-                    while((len = zin.read(buf)) != -1) {
+                    while ((len = zin.read(buf)) != -1) {
                         out.write(buf, 0, len);
                     }
 
@@ -217,8 +219,8 @@ public class StreamerService extends Service {
     }
 
     public void runScript(String dir, String streamUrl) throws IOException {
-        synchronized(this) {
-            if(mThread == null) {
+        synchronized (this) {
+            if (mThread == null) {
                 mThread = new NodeJSThread();
             }
 

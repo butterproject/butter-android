@@ -13,6 +13,6 @@ public class Ready {
 
     @Override
     public String toString() {
-        return  "url: " + streamUrl + ", path: " + filePath;
+        return "url: " + streamUrl + ", path: " + filePath;
     }
 }

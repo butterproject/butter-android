@@ -1,9 +1,5 @@
 package pct.droid.base.widget;
 
-/**
- * Created by Sebastiaan on 26-05-14.
- */
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,7 +25,7 @@ import javax.crypto.spec.PBEParameterSpec;
  */
 public class ObscuredSharedPreferences implements SharedPreferences {
     protected static final String UTF8 = "utf-8";
-    private static final char[] SEKRIT = new char[] { 0x9D, 0xD9, 0x01, 0xAF, 0xBB, 0x23, 0x12, 0xED }; // INSERT A RANDOM PASSWORD HERE.
+    private static final char[] SEKRIT = new char[]{0x9D, 0xD9, 0x01, 0xAF, 0xBB, 0x23, 0x12, 0xED}; // INSERT A RANDOM PASSWORD HERE.
     // Don't use anything you wouldn't want to
     // get out there if someone decompiled
     // your app.
@@ -123,25 +119,25 @@ public class ObscuredSharedPreferences implements SharedPreferences {
     @Override
     public boolean getBoolean(String key, boolean defValue) {
         final String v = delegate.getString(key, null);
-        return v!=null ? Boolean.parseBoolean(decrypt(v)) : defValue;
+        return v != null ? Boolean.parseBoolean(decrypt(v)) : defValue;
     }
 
     @Override
     public float getFloat(String key, float defValue) {
         final String v = delegate.getString(key, null);
-        return v!=null ? Float.parseFloat(decrypt(v)) : defValue;
+        return v != null ? Float.parseFloat(decrypt(v)) : defValue;
     }
 
     @Override
     public int getInt(String key, int defValue) {
         final String v = delegate.getString(key, null);
-        return v!=null ? Integer.parseInt(decrypt(v)) : defValue;
+        return v != null ? Integer.parseInt(decrypt(v)) : defValue;
     }
 
     @Override
     public long getLong(String key, long defValue) {
         final String v = delegate.getString(key, null);
-        return v!=null ? Long.parseLong(decrypt(v)) : defValue;
+        return v != null ? Long.parseLong(decrypt(v)) : defValue;
     }
 
     @Override
@@ -172,34 +168,32 @@ public class ObscuredSharedPreferences implements SharedPreferences {
     }
 
 
-
-
-    protected String encrypt( String value ) {
+    protected String encrypt(String value) {
 
         try {
-            final byte[] bytes = value!=null ? value.getBytes(UTF8) : new byte[0];
+            final byte[] bytes = value != null ? value.getBytes(UTF8) : new byte[0];
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
             SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
             Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
             pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID).getBytes(UTF8), 20));
-            return new String(Base64.encode(pbeCipher.doFinal(bytes), Base64.NO_WRAP),UTF8);
+            return new String(Base64.encode(pbeCipher.doFinal(bytes), Base64.NO_WRAP), UTF8);
 
-        } catch( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    protected String decrypt(String value){
+    protected String decrypt(String value) {
         try {
-            final byte[] bytes = value!=null ? Base64.decode(value, Base64.DEFAULT) : new byte[0];
+            final byte[] bytes = value != null ? Base64.decode(value, Base64.DEFAULT) : new byte[0];
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
             SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
             Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-            pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(),Settings.System.ANDROID_ID).getBytes(UTF8), 20));
-            return new String(pbeCipher.doFinal(bytes),UTF8);
+            pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID).getBytes(UTF8), 20));
+            return new String(pbeCipher.doFinal(bytes), UTF8);
 
-        } catch( Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

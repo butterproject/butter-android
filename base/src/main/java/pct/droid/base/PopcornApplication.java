@@ -49,7 +49,7 @@ public class PopcornApplication extends VLCApplication {
             e.printStackTrace();
         }
 
-        if(Constants.DEBUG_ENABLED) {
+        if (Constants.DEBUG_ENABLED) {
             PopcornUpdater.getInstance(this).checkUpdatesManually();
         }
 
@@ -67,7 +67,7 @@ public class PopcornApplication extends VLCApplication {
         LogUtils.i("Chosen cache location: " + mCacheDir);
 
         String versionCode = Integer.toString(BuildConfig.VERSION_CODE);
-        if(!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
+        if (!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
             PrefUtils.save(this, "versionCode", versionCode);
         }
     }
@@ -110,10 +110,9 @@ public class PopcornApplication extends VLCApplication {
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
 
-        for(int i = 0; i < runningAppProcesses.size(); i++)
-        {
+        for (int i = 0; i < runningAppProcesses.size(); i++) {
             ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
-            if(info.processName.equalsIgnoreCase("pct.droid:node")){
+            if (info.processName.equalsIgnoreCase("pct.droid:node")) {
                 android.os.Process.killProcess(info.pid);
             }
         }
@@ -128,7 +127,7 @@ public class PopcornApplication extends VLCApplication {
     }
 
     public void startService() {
-        if(mBound) return;
+        if (mBound) return;
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -140,7 +139,7 @@ public class PopcornApplication extends VLCApplication {
             mService = new Messenger(service);
             mBound = true;
 
-            if(mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
+            if (mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
                 startStreamer(mShouldBoundUrl);
                 mShouldBoundUrl = "";
             }

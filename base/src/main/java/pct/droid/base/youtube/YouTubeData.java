@@ -22,24 +22,23 @@ public class YouTubeData {
     static final String YOUTUBE_VIDEO_INFORMATION_URL = "http://www.youtube.com/get_video_info?&video_id=";
 
     public static boolean isYouTubeUrl(String youtubeUrl) {
-        String expression = "^.*((youtu.be"+ "\\/)" + "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+        String expression = "^.*((youtu.be" + "\\/)" + "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
         CharSequence input = youtubeUrl;
-        Pattern pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
     }
 
-    public static String getYouTubeVideoId(String youtubeUrl)
-    {
+    public static String getYouTubeVideoId(String youtubeUrl) {
         String videoId = "";
         if (youtubeUrl != null && youtubeUrl.trim().length() > 0 && youtubeUrl.startsWith("http")) {
-            String expression = "^.*((youtu.be"+ "\\/)" + "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+            String expression = "^.*((youtu.be" + "\\/)" + "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
             CharSequence input = youtubeUrl;
-            Pattern pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(input);
             if (matcher.matches()) {
                 String groupIndex1 = matcher.group(7);
-                if(groupIndex1 != null && groupIndex1.length() == 11)
+                if (groupIndex1 != null && groupIndex1.length() == 11)
                     videoId = groupIndex1;
             }
         }
@@ -50,9 +49,9 @@ public class YouTubeData {
      * Calculate the YouTube URL to load the video.  Includes retrieving a token that YouTube
      * requires to play the video.
      *
-     * @param quality quality of the video.  17=low, 18=high
+     * @param quality  quality of the video.  17=low, 18=high
      * @param fallback whether to fallback to lower quality in case the supplied quality is not available
-     * @param videoId the id of the video
+     * @param videoId  the id of the video
      * @return the url string that will retrieve the video
      * @throws java.io.IOException
      */
@@ -69,7 +68,7 @@ public class YouTubeData {
         String infoStr = response.body().string();
 
         String[] args = infoStr.split("&");
-        Map<String,String> argMap = new HashMap<String, String>();
+        Map<String, String> argMap = new HashMap<String, String>();
         for (String arg : args) {
             String[] valStrArr = arg.split("=");
             if (valStrArr.length >= 2) {
@@ -82,10 +81,10 @@ public class YouTubeData {
         //Populate the list of formats for the video
         String fmtList = URLDecoder.decode(argMap.get("fmt_list"), "utf-8");
         ArrayList<Format> formats = new ArrayList<Format>();
-        if(null != fmtList){
+        if (null != fmtList) {
             String formatStrs[] = fmtList.split(",");
 
-            for(String lFormatStr : formatStrs){
+            for (String lFormatStr : formatStrs) {
                 Format format = new Format(lFormatStr);
                 formats.add(format);
             }
@@ -93,10 +92,10 @@ public class YouTubeData {
 
         //Populate the list of streams for the video
         String streamList = argMap.get("url_encoded_fmt_stream_map");
-        if(null != streamList){
+        if (null != streamList) {
             String streamStrs[] = streamList.split(",");
             ArrayList<VideoStream> streams = new ArrayList<VideoStream>();
-            for(String streamStr : streamStrs){
+            for (String streamStr : streamStrs) {
                 VideoStream lStream = new VideoStream(streamStr);
                 streams.add(lStream);
             }
@@ -107,18 +106,18 @@ public class YouTubeData {
             int formatId = Integer.parseInt(quality);
 
             Format searchFormat = new Format(formatId);
-            while(!formats.contains(searchFormat) && fallback ){
+            while (!formats.contains(searchFormat) && fallback) {
                 int oldId = searchFormat.getId();
                 int newId = getSupportedFallbackId(oldId);
 
-                if(oldId == newId){
+                if (oldId == newId) {
                     break;
                 }
                 searchFormat = new Format(newId);
             }
 
             int index = formats.indexOf(searchFormat);
-            if(index >= 0){
+            if (index >= 0) {
                 VideoStream searchStream = streams.get(index);
                 uriStr = searchStream.getUrl();
             }
@@ -129,7 +128,7 @@ public class YouTubeData {
         return uriStr;
     }
 
-    public static int getSupportedFallbackId(int oldId){
+    public static int getSupportedFallbackId(int oldId) {
         final int supportedFormatIds[] = {13,  //3GPP (MPEG-4 encoded) Low quality
                 17,  //3GPP (MPEG-4 encoded) Medium quality
                 18,  //MP4  (H.264 encoded) Normal quality
@@ -137,8 +136,8 @@ public class YouTubeData {
                 37   //MP4  (H.264 encoded) High quality
         };
         int fallbackId = oldId;
-        for(int i = supportedFormatIds.length - 1; i >= 0; i--){
-            if(oldId == supportedFormatIds[i] && i > 0){
+        for (int i = supportedFormatIds.length - 1; i >= 0; i--) {
+            if (oldId == supportedFormatIds[i] && i > 0) {
                 fallbackId = supportedFormatIds[i - 1];
             }
         }

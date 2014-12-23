@@ -76,8 +76,8 @@ public class PopcornUpdater extends Observable {
     private String mVersionName;
     private Integer mVersionCode;
 
-	private PopcornUpdater(Context context) {
-        if(Constants.DEBUG_ENABLED) {
+    private PopcornUpdater(Context context) {
+        if (Constants.DEBUG_ENABLED) {
             UPDATE_INTERVAL = 3 * HOURS;
         } else {
             UPDATE_INTERVAL = 2 * DAYS;
@@ -100,13 +100,13 @@ public class PopcornUpdater extends Observable {
 
         ApplicationInfo appinfo = context.getApplicationInfo();
 
-        if( new File(appinfo.sourceDir).lastModified() > mPreferences.getLong(SHA1_TIME, 0) ) {
+        if (new File(appinfo.sourceDir).lastModified() > mPreferences.getLong(SHA1_TIME, 0)) {
             mPreferences.edit().putString(SHA1_KEY, SHA1(appinfo.sourceDir)).commit();
             mPreferences.edit().putLong(SHA1_TIME, System.currentTimeMillis()).commit();
 
             String update_file = mPreferences.getString(UPDATE_FILE, "");
-            if( update_file.length() > 0 ) {
-                if( new File( context.getFilesDir().getAbsolutePath() + "/" + update_file ).delete() ) {
+            if (update_file.length() > 0) {
+                if (new File(context.getFilesDir().getAbsolutePath() + "/" + update_file).delete()) {
                     mPreferences.edit().remove(UPDATE_FILE).commit();
                 }
             }
@@ -114,28 +114,28 @@ public class PopcornUpdater extends Observable {
         sendNotification();
 
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-	}
+    }
 
     public static PopcornUpdater getInstance(Context context) {
-        if(sThis == null) {
+        if (sThis == null) {
             sThis = new PopcornUpdater(context);
         }
         sThis.mContext = context;
         return sThis;
     }
 
-	private Runnable periodicUpdate = new Runnable() {
-		@Override
-		public void run() {
-			checkUpdates(false);
-			mUpdateHandler.removeCallbacks(periodicUpdate);
-			mUpdateHandler.postDelayed(this, WAKEUP_INTERVAL);
-		}
-	};
+    private Runnable periodicUpdate = new Runnable() {
+        @Override
+        public void run() {
+            checkUpdates(false);
+            mUpdateHandler.removeCallbacks(periodicUpdate);
+            mUpdateHandler.postDelayed(this, WAKEUP_INTERVAL);
+        }
+    };
 
     private void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
-        if(forced || (lastUpdate + UPDATE_INTERVAL) < now) {
+        if (forced || (lastUpdate + UPDATE_INTERVAL) < now) {
             lastUpdate = System.currentTimeMillis();
             mPreferences.edit().putLong(LAST_UPDATE_KEY, lastUpdate).apply();
             setChanged();
@@ -168,13 +168,13 @@ public class PopcornUpdater extends Observable {
                             UpdaterData.Arch channel = null;
 
                             String abi = Build.CPU_ABI.toLowerCase();
-                            if(mVersionName.contains("local")) return;
+                            if (mVersionName.contains("local")) return;
 
                             if (mVersionName.contains("dev")) {
                                 if (variant.containsKey("development") && variant.get("development").containsKey(abi)) {
                                     channel = variant.get("development").get(abi);
                                 }
-                            } else if(mVersionName.contains("git")) {
+                            } else if (mVersionName.contains("git")) {
                                 String branch = mVersionName.replaceAll("(.*-git-).*", "");
                                 if (variant.containsKey(branch) && variant.get(branch).containsKey(abi)) {
                                     channel = variant.get(branch).get(abi);
@@ -219,7 +219,7 @@ public class PopcornUpdater extends Observable {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
                     FileOutputStream fos = mContext.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
                     fos.write(response.body().bytes());
@@ -257,22 +257,22 @@ public class PopcornUpdater extends Observable {
             // do application-specific task(s) based on the current network state, such
             // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
             boolean notMobile = !currentNetworkInfo.getTypeName().equalsIgnoreCase("MOBILE");
-            if(currentNetworkInfo.isConnected() && notMobile) {
+            if (currentNetworkInfo.isConnected() && notMobile) {
                 checkUpdates(false);
                 mUpdateHandler.postDelayed(periodicUpdate, UPDATE_INTERVAL);
             } else {
-                mUpdateHandler.removeCallbacks(periodicUpdate);	// no network anyway
+                mUpdateHandler.removeCallbacks(periodicUpdate);    // no network anyway
             }
         }
     };
 
-	public void sendNotification() {
-		NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+    public void sendNotification() {
+        NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		String updateFile = mPreferences.getString(UPDATE_FILE, "");
-		if(updateFile.length() > 0) {
-			setChanged();
-			notifyObservers(STATUS_HAVE_UPDATE);
+        String updateFile = mPreferences.getString(UPDATE_FILE, "");
+        if (updateFile.length() > 0) {
+            setChanged();
+            notifyObservers(STATUS_HAVE_UPDATE);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
                     .setSmallIcon(R.drawable.ic_launcher)
@@ -281,48 +281,47 @@ public class PopcornUpdater extends Observable {
                     .setAutoCancel(true)
                     .setDefaults(NotificationCompat.DEFAULT_ALL);
 
-			Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-			notificationIntent.setDataAndType(Uri.parse("file://" + mContext.getFilesDir().getAbsolutePath() + "/" + updateFile), ANDROID_PACKAGE);
+            Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+            notificationIntent.setDataAndType(Uri.parse("file://" + mContext.getFilesDir().getAbsolutePath() + "/" + updateFile), ANDROID_PACKAGE);
 
             notificationBuilder.setContentIntent(PendingIntent.getActivity(mContext, 0, notificationIntent, 0));
 
-			nm.notify(NOTIFICATION_ID, notificationBuilder.build());
-		} else {
-			nm.cancel(NOTIFICATION_ID);
-		}
-	}
+            nm.notify(NOTIFICATION_ID, notificationBuilder.build());
+        } else {
+            nm.cancel(NOTIFICATION_ID);
+        }
+    }
 
-	private String SHA1(String filename)
-	{
-		final int BUFFER_SIZE = 8192;
-		byte[] buf = new byte[BUFFER_SIZE];
-		int length;
-		try {
-			FileInputStream fis = new FileInputStream(filename);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			MessageDigest md = MessageDigest.getInstance("SHA1");
-			while( (length = bis.read(buf)) != -1 ) {
-				md.update(buf, 0, length);
-			}
+    private String SHA1(String filename) {
+        final int BUFFER_SIZE = 8192;
+        byte[] buf = new byte[BUFFER_SIZE];
+        int length;
+        try {
+            FileInputStream fis = new FileInputStream(filename);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            MessageDigest md = MessageDigest.getInstance("SHA1");
+            while ((length = bis.read(buf)) != -1) {
+                md.update(buf, 0, length);
+            }
 
-			byte[] array = md.digest();
-			StringBuilder sb = new StringBuilder();
-            for(byte anArray : array) {
+            byte[] array = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte anArray : array) {
                 sb.append(Integer.toHexString((anArray & 0xFF) | 0x100).substring(1, 3));
             }
-			return sb.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		return "sha1bad";
-	}
+        return "sha1bad";
+    }
 
-	private static int crc32(String str) {
-		byte bytes[] = str.getBytes();
-		Checksum checksum = new CRC32();
-		checksum.update(bytes, 0, bytes.length);
-		return (int) checksum.getValue();
-	}
+    private static int crc32(String str) {
+        byte bytes[] = str.getBytes();
+        Checksum checksum = new CRC32();
+        checksum.update(bytes, 0, bytes.length);
+        return (int) checksum.getValue();
+    }
 
 }

@@ -109,7 +109,7 @@ public class FormatSRT extends TimedTextFileFormat {
                     }
                     caption = new Caption();
                 }
-                if(stringIndex < inputString.length) {
+                if (stringIndex < inputString.length) {
                     line = getLine(inputString, stringIndex++);
                 }
             }

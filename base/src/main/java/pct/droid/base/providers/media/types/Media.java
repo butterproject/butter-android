@@ -34,7 +34,7 @@ public class Media implements Parcelable {
         headerImage = in.readString();
         int length = in.readInt();
         subtitles = new HashMap<String, String>();
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             subtitles.put(in.readString(), in.readString());
         }
     }
@@ -55,7 +55,7 @@ public class Media implements Parcelable {
         dest.writeString(image);
         dest.writeString(fullImage);
         dest.writeString(headerImage);
-        if(subtitles != null) {
+        if (subtitles != null) {
             dest.writeInt(subtitles.size());
             for (String key : subtitles.keySet()) {
                 dest.writeString(key);

@@ -24,6 +24,7 @@ public class FileUtils {
 
     /**
      * Get contents of a file as String
+     *
      * @param filePath File path as String
      * @return Contents of the file
      * @throws IOException
@@ -39,6 +40,7 @@ public class FileUtils {
 
     /**
      * Convert an {@link InputStream} to a String
+     *
      * @param inputStream InputStream
      * @return String contents of the InputStream
      * @throws IOException
@@ -56,10 +58,11 @@ public class FileUtils {
 
     /**
      * Delete every item below the File location
+     *
      * @param file Location
      */
     public static void recursiveDelete(File file) {
-        if(file.isDirectory()) {
+        if (file.isDirectory()) {
             String[] children = file.list();
             for (int i = 0; i < children.length; i++) {
                 recursiveDelete(new File(file, children[i]));
@@ -70,6 +73,7 @@ public class FileUtils {
 
     /**
      * Get the charset of the contents of an {@link InputStream}
+     *
      * @param inputStream {@link InputStream}
      * @return Charset String name
      * @throws IOException
@@ -92,7 +96,7 @@ public class FileUtils {
         charsetDetector.reset();
         if (detectedCharset == null || detectedCharset.isEmpty()) {
             detectedCharset = "UTF-8";
-        } else if("MACCYRILLIC".equals(detectedCharset)) {
+        } else if ("MACCYRILLIC".equals(detectedCharset)) {
             detectedCharset = "Windows-1256";
         }
 
@@ -110,8 +114,9 @@ public class FileUtils {
 
     /**
      * Save {@link InputStream} to {@link File}
+     *
      * @param inputStream InputStream that will be saved
-     * @param path Path of the file
+     * @param path        Path of the file
      * @throws IOException
      */
     public static void saveStringFile(InputStream inputStream, File path) throws IOException {
@@ -121,23 +126,26 @@ public class FileUtils {
 
     /**
      * Save {@link String} to {@link File}
+     *
      * @param inputStr String that will be saved
-     * @param path Path of the file
+     * @param path     Path of the file
      * @throws IOException
      */
     public static void saveStringFile(String inputStr, File path) throws IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(inputStr.getBytes());
         saveStringFile(inputStream, path);
     }
+
     /**
      * Save {@link String} array  to {@link File}
+     *
      * @param inputStr String array that will be saved
-     * @param path {@link File}
+     * @param path     {@link File}
      * @throws IOException
      */
     public static void saveStringFile(String[] inputStr, File path) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-        for(String str : inputStr) {
+        for (String str : inputStr) {
             stringBuilder.append(str).append("\n");
         }
         saveStringFile(stringBuilder.toString(), path);
@@ -145,17 +153,18 @@ public class FileUtils {
 
     /**
      * Save {@link String} to {@link File} witht the specified encoding
+     *
      * @param string {@link String}
-     * @param path Path of the file
+     * @param path   Path of the file
      * @param string Encoding
      * @throws IOException
      */
     public static void saveStringToFile(String string, File path, String encoding) throws IOException {
-        if(path.exists()) {
+        if (path.exists()) {
             path.delete();
         }
 
-        if((path.getParentFile().mkdirs() || path.getParentFile().exists()) && (path.exists() || path.createNewFile())) {
+        if ((path.getParentFile().mkdirs() || path.getParentFile().exists()) && (path.exists() || path.createNewFile())) {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding));
             writer.write(string);
             writer.close();

@@ -40,7 +40,7 @@ public class StorageUtils {
 
         try {
             File mountFile = new File("/proc/mounts");
-            if(mountFile.exists()){
+            if (mountFile.exists()) {
                 Scanner scanner = new Scanner(mountFile);
                 while (scanner.hasNext()) {
                     String line = scanner.nextLine();
@@ -61,7 +61,7 @@ public class StorageUtils {
 
         try {
             File voldFile = new File("/system/etc/vold.fstab");
-            if(voldFile.exists()){
+            if (voldFile.exists()) {
                 Scanner scanner = new Scanner(voldFile);
                 while (scanner.hasNext()) {
                     String line = scanner.nextLine();
@@ -90,18 +90,18 @@ public class StorageUtils {
 
         List<String> mountHash = new ArrayList<String>(10);
 
-        for(String mount : mMounts){
+        for (String mount : mMounts) {
             File root = new File(mount);
             if (root.exists() && root.isDirectory() && root.canWrite()) {
                 File[] list = root.listFiles();
                 String hash = "[";
-                if(list!=null){
-                    for(File f : list){
-                        hash += f.getName().hashCode()+":"+f.length()+", ";
+                if (list != null) {
+                    for (File f : list) {
+                        hash += f.getName().hashCode() + ":" + f.length() + ", ";
                     }
                 }
                 hash += "]";
-                if(!mountHash.contains(hash)){
+                if (!mountHash.contains(hash)) {
                     String key = SD_CARD + "_" + map.size();
                     if (map.size() == 0) {
                         key = SD_CARD;
@@ -116,7 +116,7 @@ public class StorageUtils {
 
         mMounts.clear();
 
-        if(map.isEmpty()){
+        if (map.isEmpty()) {
             map.put(SD_CARD, Environment.getExternalStorageDirectory());
         }
         return map;
@@ -176,10 +176,11 @@ public class StorageUtils {
 
     /**
      * Get ideal cache directory based on available
+     *
      * @return Ideal file location for caching
      */
     public static File getIdealCacheDirectory(Context context) {
-        if(getTotalExternalMemorySize() < getTotalInternalMemorySize()) {
+        if (getTotalExternalMemorySize() < getTotalInternalMemorySize()) {
             return context.getCacheDir();
         }
         return context.getExternalCacheDir();
@@ -187,6 +188,7 @@ public class StorageUtils {
 
     /**
      * Format size in string form
+     *
      * @param size Size in bytes
      * @return Size in stinrg format with suffix
      */

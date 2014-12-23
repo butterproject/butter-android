@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
 
@@ -21,7 +20,7 @@ public class YSubsProvider extends SubsProvider {
     protected String mMirrorApiUrl = "http://api.ysubs.com/subs/";
     protected String mPrefix = "http://www.yifysubtitles.com/";
     protected HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
-    
+
     public YSubsProvider() {
         mLanguageMapping.put("albanian", "sq");
         mLanguageMapping.put("arabic", "ar");
@@ -84,7 +83,7 @@ public class YSubsProvider extends SubsProvider {
             }
         }
 
-        return new HashMap<String, Map<String, String>>();
+        return new HashMap<>();
     }
 
     @Override
@@ -95,12 +94,12 @@ public class YSubsProvider extends SubsProvider {
     private Map<String, Map<String, String>> fetch(Request.Builder requestBuilder) throws IOException {
         Call call = mClient.newCall(requestBuilder.build());
         Response response = call.execute();
-        if(response.isSuccessful()) {
+        if (response.isSuccessful()) {
             String responseStr = response.body().string();
             YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
             return result.formatForPopcorn(mPrefix, mLanguageMapping);
         }
-        return new HashMap<String, Map<String, String>>();
+        return new HashMap<>();
     }
 
     private class YSubsResponse {
@@ -109,11 +108,11 @@ public class YSubsProvider extends SubsProvider {
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, Object>>>> subs;
 
         public Map<String, Map<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
-            Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
-            if(success) {
+            Map<String, Map<String, String>> returnMap = new HashMap<>();
+            if (success) {
                 String[] imdbIds = getKeys(subs);
                 for (String imdbId : imdbIds) {
-                    HashMap<String, String> imdbMap = new HashMap<String, String>();
+                    HashMap<String, String> imdbMap = new HashMap<>();
                     HashMap<String, ArrayList<HashMap<String, Object>>> langMap = subs.get(imdbId);
                     String[] langs = getKeys(langMap);
                     for (String lang : langs) {
@@ -139,9 +138,9 @@ public class YSubsProvider extends SubsProvider {
         private String[] getKeys(HashMap<String, ?> map) {
             return map.keySet().toArray(new String[map.size()]);
         }
-        
+
         private String mapLanguage(String input, HashMap<String, String> mapping) {
-            if(mapping.containsKey(input)) {
+            if (mapping.containsKey(input)) {
                 return mapping.get(input);
             }
             return "no-subs";

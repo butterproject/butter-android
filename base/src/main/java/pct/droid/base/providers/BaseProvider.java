@@ -2,7 +2,6 @@ package pct.droid.base.providers;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 /**
  * BaseProvider.java
- *
+ * <p/>
  * Base class for providers, has code to enqueue network requests to the OkHttpClient
  */
 public abstract class BaseProvider {
@@ -26,6 +25,7 @@ public abstract class BaseProvider {
 
     /**
      * Enqueue request without callback
+     *
      * @param request Request
      * @return Call
      */
@@ -35,24 +35,26 @@ public abstract class BaseProvider {
 
     /**
      * Enqueue request with callback
-     * @param request Request
+     *
+     * @param request         Request
      * @param requestCallback Callback
      * @return Call
      */
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
         mCurrentCall = mClient.newCall(request);
-        if(requestCallback != null) mCurrentCall.enqueue(requestCallback);
+        if (requestCallback != null) mCurrentCall.enqueue(requestCallback);
         return mCurrentCall;
     }
 
     public void cancel() {
-        if(mCurrentCall != null) {
+        if (mCurrentCall != null) {
             mCurrentCall.cancel();
         }
     }
 
     /**
      * Build URL encoded query
+     *
      * @param valuePairs List with key-value items
      * @return Query string
      */

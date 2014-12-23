@@ -128,7 +128,7 @@ public class Show extends Media implements Parcelable {
             dest.writeString(overview);
             dest.writeString(tvdbId);
             dest.writeInt(dateBased ? 1 : 0);
-            if(torrents != null) {
+            if (torrents != null) {
                 dest.writeInt(torrents.size());
                 for (String s : torrents.keySet()) {
                     dest.writeString(s);
