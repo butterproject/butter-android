@@ -17,7 +17,7 @@ public class StorageUtils {
     public static final String EXTERNAL_SD_CARD = "externalSdCard";
 
     /**
-     * @return <code>true</code> if external storage is available and writable. <code>false</code> otherwise.
+     * @return {@code true} if external storage is available and writable. {@code false} otherwise.
      */
     public static boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
@@ -176,7 +176,7 @@ public class StorageUtils {
 
     /**
      * Get ideal cache directory based on available
-     * @return
+     * @return Ideal file location for caching
      */
     public static File getIdealCacheDirectory(Context context) {
         if(getTotalExternalMemorySize() < getTotalInternalMemorySize()) {
