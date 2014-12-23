@@ -16,7 +16,6 @@ import java.util.Arrays;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.adapters.StringArrayAdapter;
 import pct.droid.adapters.SubtitleAdapter;
 
 public class SubtitleSelectorDialogFragment extends DialogFragment {
@@ -38,7 +37,7 @@ public class SubtitleSelectorDialogFragment extends DialogFragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialogselector, null, false);
         ButterKnife.inject(this, view);
 
-        if(getArguments().containsKey(LANGUAGES) && getActivity() instanceof Listener) {
+        if (getArguments().containsKey(LANGUAGES) && getActivity() instanceof Listener) {
             progressBar.setVisibility(View.GONE);
 
             String[] languages = getArguments().getStringArray(LANGUAGES);
@@ -46,7 +45,7 @@ public class SubtitleSelectorDialogFragment extends DialogFragment {
             String[] adapterLanguages = new String[languages.length + 1];
             adapterLanguages[0] = "no-subs";
             int i = 1;
-            for(String language : languages) {
+            for (String language : languages) {
                 adapterLanguages[i] = language;
                 i++;
             }
@@ -63,7 +62,7 @@ public class SubtitleSelectorDialogFragment extends DialogFragment {
             });
         }
 
-        AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.subtitles)
                 .setNegativeButton(R.string.cancel,

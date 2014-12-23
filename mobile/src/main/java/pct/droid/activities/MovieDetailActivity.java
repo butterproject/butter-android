@@ -87,7 +87,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             Bundle b;
             switch (v.getId()) {
                 case R.id.synopsisBlock:
-                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                        return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
                     b = new Bundle();
                     b.putString("text", mItem.synopsis);
@@ -95,7 +96,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.qualityBlock:
-                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                        return;
                     QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
@@ -103,7 +105,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.subtitlesBlock:
-                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                        return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]));
@@ -125,7 +128,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
                     streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
                     streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
-                    if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                    if (mSubLanguage != null)
+                        streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
                     startActivity(streamIntent);
                     break;
             }
@@ -136,14 +140,14 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     private ViewTreeObserver.OnScrollChangedListener mOnScrollListener = new ViewTreeObserver.OnScrollChangedListener() {
         @Override
         public void onScrollChanged() {
-            if(mToolbarHeight == 0) {
+            if (mToolbarHeight == 0) {
                 mToolbarHeight = toolbar.getHeight();
                 mHeaderHeight = mParallaxHeight - mToolbarHeight;
             }
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
 
-            if(scrollView.getScrollY() > mHeaderHeight) {
+            if (scrollView.getScrollY() > mHeaderHeight) {
                 if (mLastScrollLocation > scrollView.getScrollY()) {
                     // scroll up
                     if ((mOpenBarPos == null || !mOpenBar) && layoutParams.topMargin <= -mToolbarHeight)
@@ -165,20 +169,20 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                 }
             }
 
-            if(layoutParams.topMargin < 0) {
+            if (layoutParams.topMargin < 0) {
                 scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
             } else {
                 scrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
             }
 
                 /* Fade out when over header */
-            if(mParallaxHeight - scrollView.getScrollY() < 0) {
-                if(mTransparentBar) {
+            if (mParallaxHeight - scrollView.getScrollY() < 0) {
+                if (mTransparentBar) {
                     mTransparentBar = false;
                     ActionBarBackground.changeColor(MovieDetailActivity.this, mPaletteColor, false);
                 }
             } else {
-                if(!mTransparentBar) {
+                if (!mTransparentBar) {
                     mTransparentBar = true;
                     ActionBarBackground.fadeOut(MovieDetailActivity.this);
                 }
@@ -200,7 +204,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         ActionBarBackground.fadeOut(this);
 
         Drawable playButtonDrawable = PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
-        if(mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
+        if (mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
 
         playButton.setOnClickListener(mOnClickListener);
         synopsisBlock.setOnClickListener(mOnClickListener);
@@ -220,19 +224,19 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
 
-        if(mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
+        if (mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
             runtimeText.setText(mItem.runtime + " " + getString(R.string.minutes));
         } else {
             runtimeText.setText("n/a " + getString(R.string.minutes));
         }
 
-        if(mItem.synopsis != null) {
+        if (mItem.synopsis != null) {
             synopsisText.setText(mItem.synopsis);
         } else {
             synopsisBlock.setClickable(false);
         }
 
-        if(mItem.trailer == null) {
+        if (mItem.trailer == null) {
             trailerBlock.setVisibility(View.GONE);
         }
 
@@ -291,7 +295,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     @Override
     protected void onResume() {
         super.onResume();
-        if(mQuality == null) {
+        if (mQuality == null) {
             String[] keys = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
             onQualitySelected(keys[0]);
         }
@@ -317,7 +321,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     @Override
     public void onSubtitleLanguageSelected(String language) {
         mSubLanguage = language;
-        if(!language.equals("no-subs")) {
+        if (!language.equals("no-subs")) {
             Locale locale;
             if (language.contains("-")) {
                 locale = new Locale(language.substring(0, 2), language.substring(3, 5));

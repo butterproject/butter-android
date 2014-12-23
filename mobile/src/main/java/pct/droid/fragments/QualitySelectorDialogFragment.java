@@ -37,7 +37,7 @@ public class QualitySelectorDialogFragment extends DialogFragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialogselector, null, false);
         ButterKnife.inject(this, view);
 
-        if(getArguments().containsKey(QUALITIES) && getActivity() instanceof Listener) {
+        if (getArguments().containsKey(QUALITIES) && getActivity() instanceof Listener) {
             progressBar.setVisibility(View.GONE);
 
             String[] qualities = getArguments().getStringArray(QUALITIES);
@@ -55,7 +55,7 @@ public class QualitySelectorDialogFragment extends DialogFragment {
             });
         }
 
-        AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.quality)
                 .setNegativeButton(R.string.cancel,

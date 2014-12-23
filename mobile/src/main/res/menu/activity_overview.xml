@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_action_search"
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:title="@string/search"/>
+        android:title="@string/search" />
 
     <item
         android:id="@+id/action_playertests"
@@ -14,8 +15,9 @@
         android:icon="@drawable/ic_action_quality"
         android:title="@string/player" />
 
-    <item android:id="@+id/action_switch_mode"
+    <item
+        android:id="@+id/action_switch_mode"
         android:visible="true"
         app:showAsAction="never"
-        android:title="@string/title_shows"/>
+        android:title="@string/title_shows" />
 </menu>

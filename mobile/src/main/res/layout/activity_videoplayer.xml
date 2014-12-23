@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -11,12 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foregroundGravity="clip_horizontal|clip_vertical">
+
         <VideoView
             android:id="@+id/trailerView"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />
+
         <SurfaceView
             android:id="@+id/videoSurface"
             android:visibility="gone"
@@ -50,6 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/player_controls_bottom_margin"
         android:fitsSystemWindows="true">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="@dimen/player_controls_distance">
+
                 <TextView
                     android:id="@+id/currentTime"
                     android:layout_width="55dp"
@@ -89,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
-                
+
             <ImageButton
                 android:id="@+id/playButton"
                 android:layout_width="48dp"
@@ -112,7 +116,7 @@
                 android:src="@drawable/ic_av_rewind"
                 android:scaleType="centerInside"
                 android:onClick="seekBackwardClick" />
-            
+
             <ImageButton
                 android:id="@+id/forwardButton"
                 android:layout_width="48dp"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pct.droid" android:installLocation="auto">
+    package="pct.droid"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -8,14 +9,14 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:logo="@drawable/ic_logo"
         android:label="@string/app_name"
         android:theme="@style/Theme.PopcornTime"
-        android:name=".base.PopcornApplication"
-        >
+        android:name=".base.PopcornApplication">
         <activity
             android:name="pct.droid.activities.LaunchActivity"
             android:label="@string/app_name"
@@ -31,24 +32,26 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="magnet" />
             </intent-filter>
         </activity>
         <activity
             android:name="pct.droid.activities.MovieDetailActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activities.OverviewActivity" >
-        <!-- Parent activity meta-data to support 4.0 and lower -->
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".activities.OverviewActivity" />
+            android:parentActivityName=".activities.OverviewActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.OverviewActivity" />
         </activity>
         <activity
             android:name="pct.droid.activities.ShowDetailActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activities.OverviewActivity" >
+            android:parentActivityName=".activities.OverviewActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -66,7 +69,10 @@
             android:name="pct.droid.activities.TrailerPlayerActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name" />
-        <service android:name=".base.services.StreamerService" android:process=":node" />
+
+        <service
+            android:name=".base.services.StreamerService"
+            android:process=":node" />
     </application>
 
 </manifest>

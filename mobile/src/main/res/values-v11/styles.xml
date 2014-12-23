@@ -3,12 +3,17 @@
 
     <style name="ProgressBar.PopcornTime" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
-        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">
+            @drawable/progress_indeterminate_horizontal_holo_light
+        </item>
     </style>
 
     <style name="SeekBar.PopcornTime" parent="android:Widget.Holo.Light.SeekBar">
-        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
-        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/scrubber_progress_horizontal_holo_light
+        </item>
         <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
     </style>
 

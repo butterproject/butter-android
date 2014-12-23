@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple android:color="#FFFFFF" xmlns:android="http://schemas.android.com/apk/res/android">
+<ripple
+    android:color="#FFFFFF"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <selector xmlns:android="http://schemas.android.com/apk/res/android"
-            android:exitFadeDuration="@android:integer/config_mediumAnimTime" >
-            <item android:state_pressed="false" android:state_focused="true" android:drawable="@drawable/list_focused" />
-            <item android:state_pressed="true" android:drawable="@drawable/list_pressed" />
+            android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+            <item
+                android:state_pressed="false"
+                android:state_focused="true"
+                android:drawable="@drawable/list_focused" />
+            <item
+                android:state_pressed="true"
+                android:drawable="@drawable/list_pressed" />
             <item android:drawable="@android:color/transparent" />
         </selector>
     </item>
