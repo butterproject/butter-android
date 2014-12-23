@@ -12,17 +12,20 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 
-/**
- * Created by Sebastiaan on 11-06-14.
- */
 public class PixelUtils {
 
-    public static int getPixelsFromDp(Context context, Integer dp) {
+    /**
+     * Convert Density pixels to normal pixels
+     * @param context Context
+     * @param dp Density pixels
+     * @return Integer
+     */
+    public static int getPixelsFromDp(Context context, int dp) {
         Resources r = context.getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 
-    public static int getPixelsFromSp(Context context, Integer sp) {
+    public static int getPixelsFromSp(Context context, int sp) {
         Resources r = context.getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, r.getDisplayMetrics());
     }
