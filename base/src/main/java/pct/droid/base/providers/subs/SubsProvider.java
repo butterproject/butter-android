@@ -86,7 +86,7 @@ public abstract class SubsProvider extends BaseProvider {
                                 inputStream = response.body().byteStream();
                                 String urlString = response.request().urlString();
 
-                                if (urlString.endsWith(".zip")) {
+                                if (urlString.contains(".zip") || urlString.contains(".gz")) {
                                     SubsProvider.unpack(inputStream, srtPath);
                                 } else if (SubsProvider.isSubFormat(urlString)) {
                                     parseFormatAndSave(urlString, srtPath, inputStream);
@@ -142,7 +142,7 @@ public abstract class SubsProvider extends BaseProvider {
 
         while ((ze = zis.getNextEntry()) != null) {
             filename = ze.getName();
-            if (filename.contains("_MACOSX")) return;
+            if (filename.contains("_MACOSX")) continue;
 
             if (isSubFormat(filename)) {
                 parseFormatAndSave(filename, srtPath, zis);
