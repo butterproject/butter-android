@@ -185,10 +185,10 @@ public abstract class SubsProvider extends BaseProvider {
         TimedTextObject subtitleObject = null;
         String[] inputText = FileUtils.inputstreamToCharsetString(inputStream).split("\n|\r\n");
 
-        if (inputUrl.endsWith(".ass") || inputUrl.contains(".ssa")) {
+        if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {
             FormatASS formatASS = new FormatASS();
             subtitleObject = formatASS.parseFile(inputUrl, inputText);
-        } else if (inputUrl.endsWith(".srt")) {
+        } else if (inputUrl.contains(".srt")) {
             FormatSRT formatSRT = new FormatSRT();
             subtitleObject = formatSRT.parseFile(inputUrl, inputText);
         }
