@@ -1038,6 +1038,9 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     mSubs = formatSRT.parseFile(filePath, FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
                     checkSubs();
                 } catch (FileNotFoundException e) {
+                    if(e.getMessage().contains("EBUSY")) {
+                        startSubtitles();
+                    }
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -1096,10 +1099,11 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             return;
         }
 
+        onTimedText(null);
+
         if (language.equals("no-subs")) {
             mSubs = null;
             mCurrentSubsLang = "";
-            onTimedText(null);
             return;
         }
 
