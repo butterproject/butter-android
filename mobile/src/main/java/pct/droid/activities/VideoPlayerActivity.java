@@ -129,6 +129,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     private static final int FADE_OUT_INFO = 1000;
 
     private Media mMedia;
+    private String mCurrentSubsLang = "";
     private TimedTextObject mSubs;
     private Caption mLastSub = null;
 
@@ -204,6 +205,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             }
 
             if (getIntent().hasExtra(SUBTITLES)) {
+                mCurrentSubsLang = getIntent().getStringExtra(SUBTITLES);
                 startSubtitles();
             }
         } else {
@@ -977,24 +979,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         }
     };
 
-    private final SurfaceHolder.Callback mSubtitlesSurfaceCallback = new Callback() {
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            if (mLibVLC != null)
-                mLibVLC.attachSubtitlesSurface(holder.getSurface());
-        }
-
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            if (mLibVLC != null)
-                mLibVLC.detachSubtitlesSurface();
-        }
-    };
-
     private Runnable mOverlayHideRunnable = new Runnable() {
         @Override
         public void run() {
@@ -1047,8 +1031,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String subLanguage = getIntent().getStringExtra(SUBTITLES);
-                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mMedia.videoId + "-" + subLanguage + ".srt";
+                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mMedia.videoId + "-" + mCurrentSubsLang + ".srt";
                     File file = new File(filePath);
                     FileInputStream fileInputStream = new FileInputStream(file);
                     FormatSRT formatSRT = new FormatSRT();
@@ -1108,26 +1091,29 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     @Override
-    public void onSubtitleLanguageSelected(final String language) {
-        if (getIntent().hasExtra(SUBTITLES) && getIntent().getStringExtra(SUBTITLES).equals(language)) {
+    public void onSubtitleLanguageSelected(String language) {
+        if (mCurrentSubsLang != null && (language == null || mCurrentSubsLang.equals(language))) {
             return;
         }
 
-        if(language.equals("no-subs")) {
+        if (language.equals("no-subs")) {
             mSubs = null;
+            mCurrentSubsLang = "";
+            onTimedText(null);
             return;
         }
 
+        mCurrentSubsLang = language;
         SubsProvider.download(this, mMedia, language, new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 mSubs = null;
+                mCurrentSubsLang = "";
                 Toast.makeText(VideoPlayerActivity.this, "Subtitle download failed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
-                getIntent().putExtra(SUBTITLES, language);
                 startSubtitles();
             }
         });

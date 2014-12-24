@@ -166,7 +166,7 @@ public abstract class SubsProvider extends BaseProvider {
      */
     private static boolean isSubFormat(String filename) {
         for (String ext : SUB_EXTENSIONS) {
-            if (filename.endsWith("." + ext)) {
+            if (filename.contains("." + ext)) {
                 return true;
             }
         }
