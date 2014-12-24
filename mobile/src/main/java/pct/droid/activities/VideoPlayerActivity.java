@@ -1109,8 +1109,15 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
     @Override
     public void onSubtitleLanguageSelected(final String language) {
-        if (getIntent().hasExtra(SUBTITLES) && getIntent().getStringExtra(SUBTITLES).equals(language))
+        if (getIntent().hasExtra(SUBTITLES) && getIntent().getStringExtra(SUBTITLES).equals(language)) {
             return;
+        }
+
+        if(language.equals("no-subs")) {
+            mSubs = null;
+            return;
+        }
+
         SubsProvider.download(this, mMedia, language, new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
