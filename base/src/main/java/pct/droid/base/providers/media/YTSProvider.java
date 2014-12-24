@@ -11,10 +11,12 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.meta.TraktProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
@@ -171,11 +173,11 @@ public class YTSProvider extends MediaProvider {
                     if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
-                        ArrayList<Media> formattedData = result.formatForPopcorn();
+                        final ArrayList<Media> formattedData = result.formatForPopcorn();
 
                         if (formattedData.size() > 0) {
                             TraktProvider traktProvider = new TraktProvider();
-                            Movie movie = (Movie) formattedData.get(0);
+                            final Movie movie = (Movie) formattedData.get(0);
 
                             TraktProvider.MetaData meta = traktProvider.getSummary(movie.videoId, "movie");
                             if (meta.images != null && meta.images.containsKey("poster")) {
@@ -216,11 +218,20 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             YSubsProvider subsProvider = new YSubsProvider();
-                            movie.subtitles = subsProvider.getList(movie).get(movie.videoId);
+                            subsProvider.getList(movie, new SubsProvider.Callback() {
+                                @Override
+                                public void onSuccess(Map<String, String> items) {
+                                    movie.subtitles = items;
+                                    formattedData.set(0, movie);
+                                    callback.onSuccess(formattedData);
+                                }
 
-                            formattedData.set(0, movie);
+                                @Override
+                                public void onFailure(Exception e) {
+                                    callback.onSuccess(formattedData);
+                                }
+                            });
 
-                            callback.onSuccess(formattedData);
                             return;
                         }
                         callback.onFailure(new IllegalStateException("Empty list"));

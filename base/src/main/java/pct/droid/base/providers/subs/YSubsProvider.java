@@ -66,40 +66,47 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public Map<String, Map<String, String>> getList(Movie media) {
-        Request.Builder requestBuilder = new Request.Builder();
+    public void getList(final Movie media, final Callback callback) {
+        final Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + media.videoId);
 
-        try {
-            return fetch(requestBuilder);
-        } catch (IOException e) {
-            // eat exception for now TODO
-            try {
-                requestBuilder.url(mApiUrl + media.videoId);
-                return fetch(requestBuilder);
-            } catch (IOException e1) {
-                // eat exception for now TODO
-                e.printStackTrace();
+        fetch(requestBuilder, media, new Callback() {
+            @Override
+            public void onSuccess(Map<String, String> items) {
+                callback.onSuccess(items);
             }
-        }
 
-        return new HashMap<>();
+            @Override
+            public void onFailure(Exception e) {
+                requestBuilder.url(mMirrorApiUrl + media.videoId);
+                fetch(requestBuilder, media, callback);
+            }
+        });
     }
 
     @Override
-    public Map<String, Map<String, String>> getList(Show media, Show.Episode episode) throws MethodNotSupportedException {
-        throw new MethodNotSupportedException("Show subtitles not supported");
+    public void getList(Show media, Show.Episode episode, Callback callback) {
+        // Show subtitles not supported
+        callback.onFailure(new MethodNotSupportedException("Show subtitles not supported"));
     }
 
-    private Map<String, Map<String, String>> fetch(Request.Builder requestBuilder) throws IOException {
+    private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
         Call call = mClient.newCall(requestBuilder.build());
-        Response response = call.execute();
-        if (response.isSuccessful()) {
-            String responseStr = response.body().string();
-            YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-            return result.formatForPopcorn(mPrefix, mLanguageMapping);
-        }
-        return new HashMap<>();
+        call.enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
+                    callback.onSuccess(result.formatForPopcorn(mPrefix, mLanguageMapping).get(media.videoId));
+                }
+            }
+        });
     }
 
     private class YSubsResponse {

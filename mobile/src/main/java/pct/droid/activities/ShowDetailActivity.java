@@ -144,7 +144,6 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                         items.add(key);
                     }
 
-
                     // sorting hack
                     Collections.sort(items, new Comparator<String>() {
                         @Override
@@ -161,7 +160,8 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                             }
                         }
                     });
-                    dialogBuilder.setSingleChoiceItems(items.toArray(new String[0]), -1, new DialogInterface.OnClickListener() {
+
+                    dialogBuilder.setSingleChoiceItems(items.toArray(new String[items.size()]), -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             String key = items.get(i);
@@ -171,6 +171,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                             Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
                             streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
                             streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
+                            streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
                             streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
                             if (mSubLanguage != null)
                                 streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
@@ -292,7 +293,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
 
         trailerBlock.setVisibility(View.GONE);
         qualityBlock.setVisibility(View.GONE);
-        //subtitlesBlock.setVisibility(View.GONE);
+        subtitlesBlock.setVisibility(View.GONE);
 
         Picasso.with(this).load(mItem.image).into(new Target() {
             @Override

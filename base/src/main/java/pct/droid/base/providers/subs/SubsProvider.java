@@ -3,7 +3,6 @@ package pct.droid.base.providers.subs;
 import android.content.Context;
 
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -36,9 +35,15 @@ public abstract class SubsProvider extends BaseProvider {
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
-    public abstract Map<String, Map<String, String>> getList(Movie movie) throws MethodNotSupportedException;
+    public abstract void getList(Movie movie, Callback callback);
 
-    public abstract Map<String, Map<String, String>> getList(Show media, Show.Episode episode) throws MethodNotSupportedException;
+    public abstract void getList(Show media, Show.Episode episode, Callback callback);
+
+    public interface Callback {
+        public void onSuccess(Map<String, String> items);
+
+        public void onFailure(Exception e);
+    }
 
     /**
      * @param context      Context
@@ -47,13 +52,13 @@ public abstract class SubsProvider extends BaseProvider {
      * @param callback     Network callback
      * @return Call
      */
-    public static Call download(final Context context, final Media media, final String languageCode, final Callback callback) {
+    public static Call download(final Context context, final Media media, final String languageCode, final com.squareup.okhttp.Callback callback) {
         OkHttpClient client = new OkHttpClient();
         if (media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
-                call.enqueue(new Callback() {
+                call.enqueue(new com.squareup.okhttp.Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
                         callback.onFailure(request, e);
