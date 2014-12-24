@@ -34,6 +34,7 @@ public class Show extends Media implements Parcelable {
         network = in.readString();
         country = in.readString();
         tvdbId = in.readString();
+        imdbId = in.readString();
         synopsis = in.readString();
         certification = in.readString();
         seasons = in.readInt();
@@ -60,6 +61,7 @@ public class Show extends Media implements Parcelable {
         dest.writeString(network);
         dest.writeString(country);
         dest.writeString(tvdbId);
+        dest.writeString(imdbId);
         dest.writeString(synopsis);
         dest.writeString(certification);
         dest.writeInt(seasons == null ? 0 : seasons);

@@ -3,6 +3,7 @@ package pct.droid.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.FileObserver;
+import android.provider.MediaStore;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -11,11 +12,16 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.Map;
 
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.utils.FileUtils;
@@ -25,15 +31,15 @@ public class StreamLoadingActivity extends BaseActivity {
 
     public final static String STREAM_URL = "stream_url";
     public final static String DATA = "video_data";
+    public final static String SHOW = "show";
     public final static String QUALITY = "quality";
     public final static String SUBTITLES = "subtitles";
 
     private FileObserver mFileObserver;
+    private SubsProvider mSubsProvider;
     private Boolean mIntentStarted = false, mHasSubs = false;
 
-    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
-
-    ;
+    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING};
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
 
     @InjectView(R.id.progressIndicator)
@@ -54,7 +60,7 @@ public class StreamLoadingActivity extends BaseActivity {
         }
 
         String streamUrl = getIntent().getStringExtra(STREAM_URL);
-        Media data = getIntent().getParcelableExtra(DATA);
+        final Media data = getIntent().getParcelableExtra(DATA);
 
         if (getIntent().hasExtra(SUBTITLES)) {
             mHasSubs = true;
@@ -69,6 +75,38 @@ public class StreamLoadingActivity extends BaseActivity {
                     @Override
                     public void onResponse(Response response) throws IOException {
                         mSubsStatus = SubsStatus.SUCCESS;
+                    }
+                });
+            }
+        } else {
+            if(data instanceof Movie) {
+                mSubsProvider = new YSubsProvider();
+                mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
+                    @Override
+                    public void onSuccess(Map<String, String> items) {
+                        data.subtitles = items;
+                        mSubsStatus = SubsStatus.SUCCESS;
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mSubsStatus = SubsStatus.FAILURE;
+                    }
+                });
+            } else {
+                mSubsProvider = new OpenSubsProvider();
+                Show.Episode episode = (Show.Episode) data;
+                Show show = getIntent().getParcelableExtra(SHOW);
+                mSubsProvider.getList(show, episode, new SubsProvider.Callback() {
+                    @Override
+                    public void onSuccess(Map<String, String> items) {
+                        data.subtitles = items;
+                        mSubsStatus = SubsStatus.SUCCESS;
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mSubsStatus = SubsStatus.FAILURE;
                     }
                 });
             }
