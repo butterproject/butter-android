@@ -82,7 +82,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.jakewharton:butterknife:5.1.2'
-    compile 'com.sothree.slidinguppanel:library:2.0.2'
     compile 'com.github.nirhart:parallaxscroll:1.0'
     compile 'com.android.support:recyclerview-v7:21.0.0'
     compile 'com.android.support:mediarouter-v7:21.0.0'
