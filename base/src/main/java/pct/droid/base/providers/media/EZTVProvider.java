@@ -180,7 +180,7 @@ public class EZTVProvider extends MediaProvider {
                 Show show = new Show();
 
                 show.title = showData.get("title").toString();
-                show.videoId = showData.get("_id").toString();
+                show.videoId = showData.get("imdb_id").toString();
                 show.imdbId = showData.get("imdb_id").toString();
                 show.tvdbId = showData.get("tvdb_id").toString();
                 show.seasons = ((Double) showData.get("num_seasons")).intValue();
@@ -219,6 +219,7 @@ public class EZTVProvider extends MediaProvider {
                     episodeObject.overview = episode.get("overview").toString();
                     episodeObject.season = ((Double) episode.get("season")).intValue();
                     episodeObject.episode = ((Double) episode.get("episode")).intValue();
+                    episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
 
                     show.episodes.put(episodeObject.season + "-" + episodeObject.episode, episodeObject);
                 }
@@ -240,7 +241,7 @@ public class EZTVProvider extends MediaProvider {
                 Show show = new Show();
 
                 show.title = item.get("title").toString();
-                show.videoId = item.get("_id").toString();
+                show.videoId = item.get("imdb_id").toString();
                 show.seasons = (Integer) item.get("seasons");
                 show.tvdbId = item.get("tvdb_id").toString();
                 show.year = item.get("year").toString();
