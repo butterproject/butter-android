@@ -20,6 +20,8 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
+import pct.droid.base.io.UnicodeBOMInputStream;
+
 public class FileUtils {
 
     /**
@@ -83,9 +85,11 @@ public class FileUtils {
         UniversalDetector charsetDetector = new UniversalDetector(null);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
+        UnicodeBOMInputStream bomInputStream = new UnicodeBOMInputStream(inputStream);
+        bomInputStream.skipBOM();
         byte data[] = new byte[1024];
         int count;
-        while ((count = inputStream.read(data)) != -1) {
+        while ((count = bomInputStream.read(data)) != -1) {
             if (!charsetDetector.isDone()) {
                 charsetDetector.handleData(data, 0, count);
             }
