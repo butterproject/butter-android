@@ -1,9 +1,13 @@
 package com.popcorn.tv.presenters;
 
+import android.content.Intent;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.Row;
+import android.util.Log;
+
+import com.popcorn.tv.activities.DetailsActivity;
 import com.popcorn.tv.interactors.MainInteractor;
 import com.popcorn.tv.interfaces.main.MainInteractorInputInterface;
 import com.popcorn.tv.interfaces.main.MainInteractorOutputInterface;
@@ -74,17 +78,12 @@ public class MainPresenter implements MainPresenterInputInterface, MainInteracto
 
     @Override
     public void userDidClickMedia(Object object) {
-        //TODO - Decide what to do here
-//                if (item instanceof Movie) {
-//                    Movie movie = (Movie) item;
-//                    Log.d(TAG, "Item: " + item.toString());
-//                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                    intent.putExtra(getString(R.string.movie), movie);
-//                    startActivity(intent);
-//                } else if (item instanceof String) {
-//                    Toast.makeText(getActivity(), (String) item, Toast.LENGTH_SHORT)
-//                            .show();
-//                }
+        if (object instanceof MainMedia) {
+            MainMedia media = (MainMedia) object;
+            router.openMediaDetail(media, view.getActivity());
+        } else if (object instanceof String) {
+            //TODO - Settings?
+        }
     }
     //endregion
 }

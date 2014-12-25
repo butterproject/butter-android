@@ -27,6 +27,29 @@ import com.popcorn.tv.utils.Utils;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/*
+Movie media = new Movie();
+final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
+i.putExtra(VideoPlayerActivity.DATA, media);
+i.putExtra(VideoPlayerActivity.LOCATION, "http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4");
+media.videoId = "bigbucksbunny";
+media.title = "Big Bugs Bunny";
+media.subtitles = new HashMap<String, String>();
+media.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");
+SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
+    @Override
+    public void onFailure(Request request, IOException e) {
+        startActivity(i);
+    }
+
+    @Override
+    public void onResponse(Response response) throws IOException {
+        i.putExtra(VideoPlayerActivity.SUBTITLES, "en");
+        startActivity(i);
+    }
+});
+ */
+
 public class PlayerActivity extends Activity {
 
     private static final String TAG = "PlayerActivity";
