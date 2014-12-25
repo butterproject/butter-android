@@ -35,8 +35,8 @@ import android.widget.VideoView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.base.PopcornApplication;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -118,20 +118,20 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
 
         mHandler = new Handler(Looper.getMainLooper());
         decorView = getWindow().getDecorView();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             decorView.setOnSystemUiVisibilityChangeListener(this);
         }
 
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
             toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(this), toolbar.getPaddingRight(), toolbar.getPaddingBottom());
         }
 
-        if(getIntent().hasExtra(DATA)) {
+        if (getIntent().hasExtra(DATA)) {
             Media media = getIntent().getParcelableExtra(DATA);
-            if(media != null && media.title != null) {
+            if (media != null && media.title != null) {
                 getSupportActionBar().setTitle(getString(R.string.trailer) + ": " + media.title);
             } else {
                 getSupportActionBar().setTitle(getString(R.string.trailer));
@@ -174,7 +174,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     @Override
     protected void onResume() {
         super.onResume();
-        if(videoView != null && videoView.getDuration() > 0) {
+        if (videoView != null && videoView.getDuration() > 0) {
             mProgressRunnable.run();
             showOverlay();
             hideInfo();
@@ -191,7 +191,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     protected void onStop() {
         super.onStop();
         if (mRestoreAutoBrightness != -1f) {
-            int brightness = (int) (mRestoreAutoBrightness*255f);
+            int brightness = (int) (mRestoreAutoBrightness * 255f);
             Settings.System.putInt(getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS,
                     brightness);
@@ -219,7 +219,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
         float x_changed = event.getRawX() - mTouchX;
 
         // coef is the gradient's move to determine a neutral zone
-        float coef = Math.abs (y_changed / x_changed);
+        float coef = Math.abs(y_changed / x_changed);
         float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
 
         int[] offset = new int[2];
@@ -239,10 +239,10 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
                 if (coef > 2) {
                     mTouchY = event.getRawY();
                     mTouchX = event.getRawX();
-                    if ((int)mTouchX > (screen.widthPixels / 2)){
+                    if ((int) mTouchX > (screen.widthPixels / 2)) {
                         doVolumeTouch(y_changed);
                     }
-                    if ((int)mTouchX < (screen.widthPixels / 2)){
+                    if ((int) mTouchX < (screen.widthPixels / 2)) {
                         doBrightnessTouch(y_changed);
                     }
                 } else {
@@ -271,7 +271,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
-        if((mLastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0 && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+        if ((mLastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0 && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
             showOverlay();
         }
 
@@ -311,14 +311,14 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
             seek(mCurrentTime + jump);
 
         if (mDuration > 0) {
-            showInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "",  StringUtils.millisToString(jump), StringUtils.millisToString(mCurrentTime + jump)));
+            showInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(mCurrentTime + jump)));
         }
     }
 
     private void doVolumeTouch(float y_changed) {
         if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
             return;
-        float delta = - ((y_changed * 2f / mSurfaceYDisplayRange) * mAudioMax);
+        float delta = -((y_changed * 2f / mSurfaceYDisplayRange) * mAudioMax);
         mVol += delta;
         int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
         if (delta != 0f) {
@@ -359,7 +359,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
         mTouchAction = TOUCH_BRIGHTNESS;
 
         // Set delta : 2f is arbitrary for now, it possibly will change in the future
-        float delta = - y_changed / mSurfaceYDisplayRange * 2f;
+        float delta = -y_changed / mSurfaceYDisplayRange * 2f;
 
         changeBrightness(delta);
     }
@@ -367,15 +367,15 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     private void changeBrightness(float delta) {
         // Estimate and adjust Brightness
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.screenBrightness =  Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
+        lp.screenBrightness = Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
         // Set Brightness
         getWindow().setAttributes(lp);
         showInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness * 15));
     }
 
     public void playPauseClick(View v) {
-        if(videoView != null && videoView.canPause()) {
-            if(videoView.isPlaying()) {
+        if (videoView != null && videoView.canPause()) {
+            if (videoView.isPlaying()) {
                 videoView.pause();
             } else {
                 videoView.start();
@@ -393,17 +393,17 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     }
 
     public void seek(long delta) {
-        if(mDuration <= 0) return;
+        if (mDuration <= 0) return;
 
         long position = mCurrentTime + delta;
         if (position < 0) position = 0;
-        videoView.seekTo((int)position);
+        videoView.seekTo((int) position);
         showOverlay();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void showOverlay() {
-        if(!mOverlayVisible) {
+        if (!mOverlayVisible) {
             updatePlayPause();
 
             Animation fadeOutAnim = AnimationUtils.loadAnimation(TrailerPlayerActivity.this, android.R.anim.fade_in);
@@ -412,7 +412,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
             toolbar.setVisibility(View.VISIBLE);
             toolbar.startAnimation(fadeOutAnim);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
                 decorView.setSystemUiVisibility(uiOptions);
             } else {
@@ -431,7 +431,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void hideOverlay() {
         // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
-        if(mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
+        if (mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
             Animation fadeOutAnim = AnimationUtils.loadAnimation(TrailerPlayerActivity.this, android.R.anim.fade_out);
             controlLayout.startAnimation(fadeOutAnim);
             controlLayout.setVisibility(View.GONE);
@@ -467,10 +467,10 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     }
 
     public void updatePlayPause() {
-        if(videoView == null)
+        if (videoView == null)
             return;
 
-        if(videoView.isPlaying()) {
+        if (videoView.isPlaying()) {
             playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
         } else {
             playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
@@ -485,7 +485,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
         mDuration = videoView.getDuration();
         mCurrentTime = videoView.getCurrentPosition();
 
-        if(!mOverlayVisible) {
+        if (!mOverlayVisible) {
             return mCurrentTime;
         }
 
@@ -580,7 +580,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
             String quality = "17";   // 3gpp medium quality, which should be fast enough to view over EDGE connection
             String videoId = params[0];
 
-            if(isCancelled())
+            if (isCancelled())
                 return null;
 
             try {
@@ -588,36 +588,36 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
                 TelephonyManager telephonyManager = (TelephonyManager) TrailerPlayerActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
 
                 // if we have a fast connection (wifi or 3g), then we'll get a high quality YouTube video
-                if(wifiManager.isWifiEnabled() && wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getIpAddress() != 0) {
+                if (wifiManager.isWifiEnabled() && wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getIpAddress() != 0) {
                     quality = "22";
-                } else if(telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED &&
-                                (
-                                        telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS ||
-                                                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA ||
-                                                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA ||
-                                                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
-                                                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_EVDO_0 ||
-                                                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_EVDO_A
-                                )
+                } else if (telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED &&
+                        (
+                                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS ||
+                                        telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA ||
+                                        telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA ||
+                                        telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
+                                        telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_EVDO_0 ||
+                                        telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_EVDO_A
+                        )
                         ) {
                     quality = "18";
                 }
 
-                if(isCancelled())
+                if (isCancelled())
                     return null;
 
                 ////////////////////////////////////
                 // calculate the actual URL of the video, encoded with proper YouTube token
                 uriStr = YouTubeData.calculateYouTubeUrl(quality, true, videoId);
 
-                if(isCancelled())
+                if (isCancelled())
                     return null;
 
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Error occurred while retrieving information from YouTube.", e);
             }
 
-            if(uriStr != null){
+            if (uriStr != null) {
                 return Uri.parse(uriStr);
             } else {
                 return null;
@@ -629,19 +629,19 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
             super.onPostExecute(result);
 
             try {
-                if(isCancelled())
+                if (isCancelled())
                     return;
 
-                if(result == null){
+                if (result == null) {
                     throw new RuntimeException("Invalid NULL Url.");
                 }
 
                 videoView.setVideoURI(result);
                 videoView.start();
-            } catch(Exception e){
+            } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Error playing video!", e);
 
-                if(!mShowedError){
+                if (!mShowedError) {
                     showErrorAlert();
                 }
             }
@@ -654,7 +654,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
                 lBuilder.setCancelable(false);
                 lBuilder.setMessage(mMsgError);
 
-                lBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                lBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface pDialog, int pWhich) {
                         TrailerPlayerActivity.this.finish();
@@ -663,7 +663,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
 
                 AlertDialog lDialog = lBuilder.create();
                 lDialog.show();
-            } catch(Exception e){
+            } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Problem showing error dialog.", e);
             }
         }

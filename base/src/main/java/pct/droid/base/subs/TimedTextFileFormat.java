@@ -38,6 +38,7 @@ public abstract class TimedTextFileFormat {
      * @throws java.io.IOException when having trouble reading the file from the given path
      */
     public abstract TimedTextObject parseFile(String fileName, String[] inputString) throws IOException, FatalParsingException;
+
     public TimedTextObject parseFile(String fileName, String inputString) throws IOException, FatalParsingException {
         return parseFile(fileName, inputString.split("\n|\r\n"));
     }
@@ -53,7 +54,7 @@ public abstract class TimedTextFileFormat {
     public abstract Object toFile(TimedTextObject tto);
 
     protected String getLine(String[] strArray, int index) {
-        if(index < strArray.length) {
+        if (index < strArray.length) {
             return strArray[index];
         }
         return null;

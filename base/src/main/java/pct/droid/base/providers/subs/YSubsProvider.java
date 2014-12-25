@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
 
@@ -21,7 +20,7 @@ public class YSubsProvider extends SubsProvider {
     protected String mMirrorApiUrl = "http://api.ysubs.com/subs/";
     protected String mPrefix = "http://www.yifysubtitles.com/";
     protected HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
-    
+
     public YSubsProvider() {
         mLanguageMapping.put("albanian", "sq");
         mLanguageMapping.put("arabic", "ar");
@@ -67,40 +66,46 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public Map<String, Map<String, String>> getList(Movie media) {
-        Request.Builder requestBuilder = new Request.Builder();
+    public void getList(final Movie media, final Callback callback) {
+        final Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + media.videoId);
 
-        try {
-            return fetch(requestBuilder);
-        } catch (IOException e) {
-            // eat exception for now TODO
-            try {
-                requestBuilder.url(mApiUrl + media.videoId);
-                return fetch(requestBuilder);
-            } catch (IOException e1) {
-                // eat exception for now TODO
-                e.printStackTrace();
+        fetch(requestBuilder, media, new Callback() {
+            @Override
+            public void onSuccess(Map<String, String> items) {
+                callback.onSuccess(items);
             }
-        }
 
-        return new HashMap<String, Map<String, String>>();
+            @Override
+            public void onFailure(Exception e) {
+                requestBuilder.url(mMirrorApiUrl + media.videoId);
+                fetch(requestBuilder, media, callback);
+            }
+        });
     }
 
     @Override
-    public Map<String, Map<String, String>> getList(Show media, Show.Episode episode) throws MethodNotSupportedException {
-        throw new MethodNotSupportedException("Show subtitles not supported");
+    public void getList(Show media, Show.Episode episode, Callback callback) {
+        // Show subtitles not supported
+        callback.onFailure(new MethodNotSupportedException("Show subtitles not supported"));
     }
 
-    private Map<String, Map<String, String>> fetch(Request.Builder requestBuilder) throws IOException {
-        Call call = mClient.newCall(requestBuilder.build());
-        Response response = call.execute();
-        if(response.isSuccessful()) {
-            String responseStr = response.body().string();
-            YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-            return result.formatForPopcorn(mPrefix, mLanguageMapping);
-        }
-        return new HashMap<String, Map<String, String>>();
+    private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
+        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
+                    callback.onSuccess(result.formatForPopcorn(mPrefix, mLanguageMapping).get(media.videoId));
+                }
+            }
+        });
     }
 
     private class YSubsResponse {
@@ -109,11 +114,11 @@ public class YSubsProvider extends SubsProvider {
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, Object>>>> subs;
 
         public Map<String, Map<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
-            Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
-            if(success) {
+            Map<String, Map<String, String>> returnMap = new HashMap<>();
+            if (success) {
                 String[] imdbIds = getKeys(subs);
                 for (String imdbId : imdbIds) {
-                    HashMap<String, String> imdbMap = new HashMap<String, String>();
+                    HashMap<String, String> imdbMap = new HashMap<>();
                     HashMap<String, ArrayList<HashMap<String, Object>>> langMap = subs.get(imdbId);
                     String[] langs = getKeys(langMap);
                     for (String lang : langs) {
@@ -139,9 +144,9 @@ public class YSubsProvider extends SubsProvider {
         private String[] getKeys(HashMap<String, ?> map) {
             return map.keySet().toArray(new String[map.size()]);
         }
-        
+
         private String mapLanguage(String input, HashMap<String, String> mapping) {
-            if(mapping.containsKey(input)) {
+            if (mapping.containsKey(input)) {
                 return mapping.get(input);
             }
             return "no-subs";

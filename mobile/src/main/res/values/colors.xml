@@ -20,4 +20,7 @@
 
     <color name="player_overlay">#55000000</color>
 
+    <color name="green">#00CC00</color>
+    <color name="red">#CC0000</color>
+
 </resources>

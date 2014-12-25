@@ -29,7 +29,7 @@ public class AudioOutput {
     /**
      * Java side of the audio output module for Android.
      * Uses an AudioTrack to play decoded audio buffers.
-     *
+     * <p/>
      * TODO Use MODE_STATIC instead of MODE_STREAM with a MemoryFile (ashmem)
      */
 
@@ -42,14 +42,14 @@ public class AudioOutput {
     public void init(int sampleRateInHz, int channels, int samples) {
         Log.d(TAG, sampleRateInHz + ", " + channels + ", " + samples + "=>" + channels * samples);
         int minBufferSize = AudioTrack.getMinBufferSize(sampleRateInHz,
-                                                        AudioFormat.CHANNEL_OUT_STEREO,
-                                                        AudioFormat.ENCODING_PCM_16BIT);
+                AudioFormat.CHANNEL_OUT_STEREO,
+                AudioFormat.ENCODING_PCM_16BIT);
         mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                                     sampleRateInHz,
-                                     AudioFormat.CHANNEL_OUT_STEREO,
-                                     AudioFormat.ENCODING_PCM_16BIT,
-                                     Math.max(minBufferSize, channels * samples * 2),
-                                     AudioTrack.MODE_STREAM);
+                sampleRateInHz,
+                AudioFormat.CHANNEL_OUT_STEREO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                Math.max(minBufferSize, channels * samples * 2),
+                AudioTrack.MODE_STREAM);
     }
 
     public void release() {

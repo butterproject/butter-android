@@ -4,7 +4,9 @@ import android.util.Log;
 
 import pct.droid.base.Constants;
 
-
+/**
+ * Class to simplify logging
+ */
 public class LogUtils {
 
     public static void d(Object message) {

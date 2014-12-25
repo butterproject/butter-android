@@ -7,18 +7,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,21 +33,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.InjectView;
-import pct.droid.base.Constants;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
+import pct.droid.base.Constants;
 import pct.droid.base.providers.media.EZTVProvider;
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
-import pct.droid.base.utils.LogUtils;
-import pct.droid.fragments.OverviewActivityTaskFragment;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.youtube.YouTubeData;
+import pct.droid.fragments.OverviewActivityTaskFragment;
 
+// todo make most of this content a fragment
 public class OverviewActivity extends BaseActivity implements MediaProvider.Callback {
 
     private OverviewActivityTaskFragment mTaskFragment;
@@ -75,57 +73,11 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         super.onCreate(savedInstanceState, R.layout.activity_overview);
         setSupportActionBar(toolbar);
 
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
         } else {
             toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
         }
-
-        /* Temporary */
-        final GestureDetectorCompat detector = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener());
-
-        detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTap(MotionEvent motionEvent) {
-                mProvider.cancel();
-                if(mProviderId == 0) {
-                    mProvider = new EZTVProvider();
-                    mProviderId = 1;
-                } else {
-                    mProvider = new YTSProvider();
-                    mProviderId = 0;
-                }
-
-                mTaskFragment.setFilters(new HashMap<String, String>());
-                mTaskFragment.setCurrentPage(0);
-                mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
-                mAdapter.setOnItemClickListener(mOnItemClickListener);
-                progressOverlay.setVisibility(View.VISIBLE);
-                recyclerView.setAdapter(mAdapter);
-                mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
-
-                mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
-                return true;
-            }
-
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-                return false;
-            }
-        });
-
-        toolbar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return detector.onTouchEvent(motionEvent);
-            }
-        });
-        /* End temporary */
 
         recyclerView.setHasFixedSize(true);
         mColumns = getResources().getInteger(R.integer.overview_cols);
@@ -160,6 +112,27 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         }
     }
 
+    // todo refactor this out
+    private void switchMoviesShowsMode() {
+        mProvider.cancel();
+        if (mProviderId == 0) {
+            mProvider = new EZTVProvider();
+            mProviderId = 1;
+        } else {
+            mProvider = new YTSProvider();
+            mProviderId = 0;
+        }
+
+        mTaskFragment.setCurrentPage(0);
+        mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
+        mAdapter.setOnItemClickListener(mOnItemClickListener);
+        progressOverlay.setVisibility(View.VISIBLE);
+        recyclerView.setAdapter(mAdapter);
+        mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+
+        mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -171,7 +144,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchViewAction.setQueryHint("Title, year, actors"); //TODO: translation
+        searchViewAction.setQueryHint(getString(R.string.search_hint));
         searchViewAction.setOnQueryTextListener(mSearchListener);
         searchViewAction.setIconifiedByDefault(true);
 
@@ -182,10 +155,21 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem switchItem = menu.findItem(R.id.action_switch_mode);
+        switchItem.setTitle(mProviderId == 0 ? R.string.title_shows : R.string.title_movies);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_playertests:
                 openPlayerTestDialog();
+                break;
+            case R.id.action_switch_mode:
+                switchMoviesShowsMode();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -193,7 +177,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onBackPressed() {
-        if(mLoadingDetails) {
+        if (mLoadingDetails) {
             progressOverlay.setVisibility(View.GONE);
             mProvider.cancel();
             mLoadingDetails = false;
@@ -206,7 +190,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     @Override
     public void onSuccess(final ArrayList<Media> items) {
         mEndOfListReached = false;
-        if(mTotalItemCount <= 0) {
+        if (mTotalItemCount <= 0) {
             mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
@@ -232,14 +216,14 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     @Override
     public void onFailure(Exception e) {
-        if(e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
+        if (e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
             mEndOfListReached = true;
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     mAdapter.removeLoading();
 
-                    if(mAdapter.getItemCount() <= 0) {
+                    if (mAdapter.getItemCount() <= 0) {
                         emptyView.setVisibility(View.VISIBLE);
                     }
                 }
@@ -289,7 +273,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                         @Override
                         public void run() {
                             Intent intent;
-                            if(item instanceof Movie) {
+                            if (item instanceof Movie) {
                                 intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
                             } else {
                                 intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
@@ -302,7 +286,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
                 @Override
                 public void onFailure(Exception e) {
-                    if(!e.getMessage().equals("Canceled")) {
+                    if (!e.getMessage().equals("Canceled")) {
                         e.printStackTrace();
                         Log.e("OverviewActivity", e.getMessage());
                         mHandler.post(new Runnable() {
@@ -335,8 +319,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             }
 
             if (!mEndOfListReached && !mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
-                HashMap<String, String> filters = mTaskFragment.getFilters();
-                filters.put("page", Integer.toString(mTaskFragment.getCurrentPage()));
+                MediaProvider.Filters filters = mTaskFragment.getFilters();
+                filters.page = mTaskFragment.getCurrentPage();
                 mProvider.getList(mAdapter.getItems(), filters, mTaskFragment);
                 mTaskFragment.setFilters(filters);
                 mAdapter.addLoading();
@@ -350,17 +334,17 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         @Override
         public boolean onQueryTextSubmit(String s) {
             mEndOfListReached = false;
-            if(mAdapter != null) {
+            if (mAdapter != null) {
                 mAdapter.clearItems();
                 mAdapter.addLoading();
             }
-            HashMap<String, String> filters = mTaskFragment.getFilters();
-            if(s.equals("")) {
-                filters.remove("keywords");
+            MediaProvider.Filters filters = mTaskFragment.getFilters();
+            if (s.equals("")) {
+                filters.keywords = null;
             } else {
-                filters.put("keywords", s);
+                filters.keywords = s;
             }
-            filters.put("page", "1");
+            filters.page = 1;
             mTaskFragment.setCurrentPage(1);
             mTaskFragment.setFilters(filters);
             mProvider.getList(filters, mTaskFragment);
@@ -369,7 +353,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         @Override
         public boolean onQueryTextChange(String s) {
-            if(s.equals("")) {
+            if (s.equals("")) {
                 onQueryTextSubmit(s);
             }
             return false;
@@ -393,6 +377,23 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             public void onClick(DialogInterface dialogInterface, int index) {
                 dialogInterface.dismiss();
                 String location = files[index];
+                if (location.equals("dialog")) {
+                    final EditText dialogInput = new EditText(OverviewActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(OverviewActivity.this)
+                            .setView(dialogInput)
+                            .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Movie media = new Movie();
+                                    final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
+                                    i.putExtra(VideoPlayerActivity.DATA, media);
+                                    i.putExtra(VideoPlayerActivity.LOCATION, dialogInput.getText());
+                                    media.videoId = "dialogtestvideo";
+                                    media.title = "User input test video";
+                                    startActivity(i);
+                                }
+                            });
+                }
                 if (YouTubeData.isYouTubeUrl(location)) {
                     Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
                     Media media = new Media();

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,14 +14,17 @@
 -->
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/background"
-            android:drawable="@drawable/scrubber_track_holo_light" />
+    <item
+        android:id="@android:id/background"
+        android:drawable="@drawable/scrubber_track_holo_light" />
     <item android:id="@android:id/secondaryProgress">
-        <scale android:scaleWidth="100%"
-                android:drawable="@drawable/scrubber_secondary_holo" />
+        <scale
+            android:scaleWidth="100%"
+            android:drawable="@drawable/scrubber_secondary_holo" />
     </item>
     <item android:id="@android:id/progress">
-        <scale android:scaleWidth="100%"
-                android:drawable="@drawable/scrubber_primary_holo" />
+        <scale
+            android:scaleWidth="100%"
+            android:drawable="@drawable/scrubber_primary_holo" />
     </item>
 </layer-list>

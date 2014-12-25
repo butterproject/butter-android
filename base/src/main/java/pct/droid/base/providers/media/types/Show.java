@@ -19,7 +19,7 @@ public class Show extends Media implements Parcelable {
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
     public Integer seasons = 0;
-    public Map<String, Episode> episodes = new HashMap<String, Episode>();
+    public Map<String, Episode> episodes = new HashMap<>();
 
     public Show() {
 
@@ -34,6 +34,7 @@ public class Show extends Media implements Parcelable {
         network = in.readString();
         country = in.readString();
         tvdbId = in.readString();
+        imdbId = in.readString();
         synopsis = in.readString();
         certification = in.readString();
         seasons = in.readInt();
@@ -60,6 +61,7 @@ public class Show extends Media implements Parcelable {
         dest.writeString(network);
         dest.writeString(country);
         dest.writeString(tvdbId);
+        dest.writeString(imdbId);
         dest.writeString(synopsis);
         dest.writeString(certification);
         dest.writeInt(seasons == null ? 0 : seasons);
@@ -128,7 +130,7 @@ public class Show extends Media implements Parcelable {
             dest.writeString(overview);
             dest.writeString(tvdbId);
             dest.writeInt(dateBased ? 1 : 0);
-            if(torrents != null) {
+            if (torrents != null) {
                 dest.writeInt(torrents.size());
                 for (String s : torrents.keySet()) {
                     dest.writeString(s);

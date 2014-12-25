@@ -66,13 +66,13 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         viewHolder.itemView.setLayoutParams(layoutParams);
 
-        if(getItemViewType(position) == NORMAL) {
+        if (getItemViewType(position) == NORMAL) {
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             Media item = getItem(position);
-            if(item.image != null && !item.image.equals("")) {
+            if (item.image != null && !item.image.equals("")) {
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
-                    .resize(mItemWidth, mItemHeight)
-                    .into(videoViewHolder.coverImage);
+                        .resize(mItemWidth, mItemHeight)
+                        .into(videoViewHolder.coverImage);
             }
         }
     }
@@ -84,7 +84,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if(getItem(position).type.equals("loading")) {
+        if (getItem(position).type.equals("loading")) {
             return LOADING;
         }
         return NORMAL;
@@ -99,9 +99,9 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void removeLoading() {
-        if(getItemCount() <= 0) return;
+        if (getItemCount() <= 0) return;
         Media item = mItems.get(getItemCount() - 1);
-        if(item.type.equals("loading")) {
+        if (item.type.equals("loading")) {
             mItems.remove(getItemCount() - 1);
             notifyDataSetChanged();
         }
@@ -109,11 +109,11 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void addLoading() {
         Media item = null;
-        if(getItemCount() != 0) {
+        if (getItemCount() != 0) {
             item = mItems.get(getItemCount() - 1);
         }
 
-        if(getItemCount() == 0 || (item != null && !item.type.equals("loading"))) {
+        if (getItemCount() == 0 || (item != null && !item.type.equals("loading"))) {
             Media loadingItem = new Media();
             loadingItem.type = "loading";
             mItems.add(loadingItem);
@@ -124,7 +124,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public ArrayList<Media> getItems() {
         ArrayList<Media> returnData = (ArrayList<Media>) mItems.clone();
         Media item = returnData.get(getItemCount() - 1);
-        if(item.type.equals("loading")) {
+        if (item.type.equals("loading")) {
             returnData.remove(getItemCount() - 1);
         }
         return returnData;
@@ -172,6 +172,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class LoadingHolder extends RecyclerView.ViewHolder {
 
         View itemView;
+
         public LoadingHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;

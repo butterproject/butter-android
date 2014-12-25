@@ -11,12 +11,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.meta.TraktProvider;
-import pct.droid.base.providers.subs.OpenSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -25,10 +23,10 @@ public class EZTVProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public Call getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
         final ArrayList<Media> currentList;
-        if(existingList == null) {
-            currentList = new ArrayList<Media>();
+        if (existingList == null) {
+            currentList = new ArrayList<>();
         } else {
             currentList = (ArrayList<Media>) existingList.clone();
         }
@@ -36,35 +34,39 @@ public class EZTVProvider extends MediaProvider {
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("limit", "30"));
 
-        if(filters == null) {
-            filters = new HashMap<String, String>();
+        if (filters == null) {
+            filters = new Filters();
         }
 
-        if (filters.containsKey("keywords")) {
-            String keywords = filters.get("keywords");
-            keywords = keywords.replaceAll("\\s", "% ");
+        if (filters.keywords != null) {
+            String keywords = filters.keywords.replaceAll("\\s", "% ");
             params.add(new BasicNameValuePair("keywords", keywords));
         }
 
-        if (filters.containsKey("genre")) {
-            params.add(new BasicNameValuePair("genre", filters.get("genre")));
+        if (filters.genre != null) {
+            params.add(new BasicNameValuePair("genre", filters.genre));
         }
 
-        if (filters.containsKey("order")) {
-            params.add(new BasicNameValuePair("order", filters.get("order")));
+        if (filters.order == Filters.Order.ASC) {
+            params.add(new BasicNameValuePair("order", "asc"));
         } else {
             params.add(new BasicNameValuePair("order", "desc"));
         }
 
-        if (filters.containsKey("sort") && !filters.get("sort").equals("popularity")) {
-            params.add(new BasicNameValuePair("sort", filters.get("sort")));
-        } else {
-            params.add(new BasicNameValuePair("sort", "seeds"));
+        String sort = "";
+        switch (filters.sort) {
+
+            default:
+            case POPULARITY:
+                sort = "seeds";
+                break;
         }
 
+        params.add(new BasicNameValuePair("sort", sort));
+
         String url = mApiUrl + "shows/";
-        if (filters.containsKey("page")) {
-            url += filters.get("page");
+        if (filters.page != null) {
+            url += filters.page;
         } else {
             url += "1";
         }
@@ -78,9 +80,10 @@ public class EZTVProvider extends MediaProvider {
 
     /**
      * Fetch the list of movies from EZTV
-     * @param currentList Current shown list to be extended
+     *
+     * @param currentList    Current shown list to be extended
      * @param requestBuilder Request to be executed
-     * @param callback Network callback
+     * @param callback       Network callback
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
@@ -88,7 +91,7 @@ public class EZTVProvider extends MediaProvider {
             @Override
             public void onFailure(Request request, IOException e) {
                 String url = requestBuilder.build().urlString();
-                if(url.equals(mMirrorApiUrl)) {
+                if (url.equals(mMirrorApiUrl)) {
                     callback.onFailure(e);
                 } else {
                     url = url.replace(mApiUrl, mMirrorApiUrl);
@@ -142,7 +145,7 @@ public class EZTVProvider extends MediaProvider {
                     } else {
                         ArrayList<Media> formattedData = result.formatForPopcorn();
 
-                        if(formattedData.size() > 0) {
+                        if (formattedData.size() > 0) {
                             TraktProvider traktProvider = new TraktProvider();
                             Show show = (Show) formattedData.get(0);
 
@@ -172,12 +175,12 @@ public class EZTVProvider extends MediaProvider {
         }
 
         public ArrayList<Media> formatForPopcorn() {
-            ArrayList<Media> list = new ArrayList<Media>();
+            ArrayList<Media> list = new ArrayList<>();
             try {
                 Show show = new Show();
 
                 show.title = showData.get("title").toString();
-                show.videoId = showData.get("_id").toString();
+                show.videoId = showData.get("imdb_id").toString();
                 show.imdbId = showData.get("imdb_id").toString();
                 show.tvdbId = showData.get("tvdb_id").toString();
                 show.seasons = ((Double) showData.get("num_seasons")).intValue();
@@ -216,6 +219,7 @@ public class EZTVProvider extends MediaProvider {
                     episodeObject.overview = episode.get("overview").toString();
                     episodeObject.season = ((Double) episode.get("season")).intValue();
                     episodeObject.episode = ((Double) episode.get("episode")).intValue();
+                    episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
 
                     show.episodes.put(episodeObject.season + "-" + episodeObject.episode, episodeObject);
                 }
@@ -232,16 +236,12 @@ public class EZTVProvider extends MediaProvider {
             this.showsList = showsList;
         }
 
-        public ArrayList<Media> formatListForPopcorn() {
-            return formatListForPopcorn(new ArrayList<Media>());
-        }
-
         public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
-            for(LinkedTreeMap<String, Object> item : showsList) {
+            for (LinkedTreeMap<String, Object> item : showsList) {
                 Show show = new Show();
 
                 show.title = item.get("title").toString();
-                show.videoId = item.get("_id").toString();
+                show.videoId = item.get("imdb_id").toString();
                 show.seasons = (Integer) item.get("seasons");
                 show.tvdbId = item.get("tvdb_id").toString();
                 show.year = item.get("year").toString();

@@ -38,7 +38,7 @@ public class ActionBarBackground {
         mActivity = actionBarActivity;
 
         getToolbar(actionBarActivity);
-        if(mToolbar == null || mToolbar.getBackground() == null) {
+        if (mToolbar == null || mToolbar.getBackground() == null) {
             mOldBackground = getColoredBackground(R.color.primary);
         } else {
             mOldBackground = mToolbar.getBackground();
@@ -57,10 +57,11 @@ public class ActionBarBackground {
 
     /**
      * Change color of ActionBar to mNewColor
+     *
      * @return Instance of this class
      */
     private ActionBarBackground changeColor(Boolean fade) {
-        if(fade) {
+        if (fade) {
             fadeBackground(mOldBackground, getColoredBackground(mNewColor));
         } else {
             mActionBar.setBackgroundDrawable(getColoredBackground(mNewColor));
@@ -70,6 +71,7 @@ public class ActionBarBackground {
 
     /**
      * Fade the ActionBar background to zero opacity
+     *
      * @return Instance of this class
      */
     private ActionBarBackground fadeOut() {
@@ -81,6 +83,7 @@ public class ActionBarBackground {
 
     /**
      * Fade the ActionBar background to solid opacity
+     *
      * @return Instance of this class
      */
     private ActionBarBackground fadeIn(Integer color) {
@@ -93,6 +96,7 @@ public class ActionBarBackground {
 
     /**
      * Fade the ActionBar background to the provided newDrawable
+     *
      * @param newDrawable New background of ActionBar
      * @return Instance of this class
      */
@@ -103,6 +107,7 @@ public class ActionBarBackground {
 
     /**
      * Fade the ActionBar background from oldDrawable to newDrawable
+     *
      * @param oldDrawable Drawable to be faded from
      * @param newDrawable Drawable to be faded to
      * @return Instance of this class
@@ -115,7 +120,7 @@ public class ActionBarBackground {
                 mActionBar.setBackgroundDrawable(newDrawable);
             }
         } else {
-            TransitionDrawable td = new TransitionDrawable(new Drawable[] { oldDrawable, newDrawable });
+            TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, newDrawable});
             td.setCrossFadeEnabled(true);
 
             // workaround for broken ActionBarContainer drawable handling on
@@ -160,6 +165,7 @@ public class ActionBarBackground {
 
     /**
      * Get new drawable with provided color.
+     *
      * @param color Color of the new drawable
      * @return Drawable with provided color
      */
@@ -169,6 +175,7 @@ public class ActionBarBackground {
 
     /**
      * Fade the ActionBar background to zero opacity
+     *
      * @param activity Activity where the ActionBar has to change
      * @return Instance of this class
      */
@@ -180,6 +187,7 @@ public class ActionBarBackground {
 
     /**
      * Fade the ActionBar background to solid opacity
+     *
      * @param activity Activity where the ActionBar has to change
      * @return Instance of this class
      */
@@ -191,6 +199,7 @@ public class ActionBarBackground {
 
     /**
      * Change the background color of the ActionBar to newColor
+     *
      * @param activity Activity where the ActionBar has to change
      * @param newColor New background color of the ActionBar
      * @return Instance of this class
@@ -201,6 +210,7 @@ public class ActionBarBackground {
 
     /**
      * Change the background color of the ActionBar to newColor, fading or not
+     *
      * @param activity Activity where the ActionBar has to change
      * @param newColor New background color of the ActionBar
      * @return Instance of this class
@@ -213,7 +223,8 @@ public class ActionBarBackground {
 
     /**
      * Fade background of the ActionBar to newDrawable
-     * @param activity Activity where the ActionBar has to change
+     *
+     * @param activity    Activity where the ActionBar has to change
      * @param newDrawable New background color of the ActionBar
      * @return Instance of this class
      */

@@ -19,6 +19,7 @@ public class StringArrayAdapter extends BaseAdapter {
         public ViewHolder(View v) {
             ButterKnife.inject(this, v);
         }
+
         @InjectView(android.R.id.text1)
         TextView text1;
     }
@@ -46,7 +47,7 @@ public class StringArrayAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             convertView = mInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             holder = new ViewHolder(convertView);
             holder.text1.setPadding(32, 0, 0, 0);
