@@ -1,10 +1,11 @@
 package com.popcorn.tv.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.Map;
-
 import pct.droid.base.providers.media.types.Media;
 
-public class MainMedia
+public class MainMedia implements Parcelable
 {
     //region Attributes
 
@@ -33,5 +34,15 @@ public class MainMedia
         this.fullImage = media.fullImage;
         this.headerImage = media.headerImage;
         this.subtitles = media.subtitles;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }
