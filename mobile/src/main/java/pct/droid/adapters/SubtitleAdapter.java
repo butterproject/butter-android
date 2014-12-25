@@ -20,7 +20,7 @@ public class SubtitleAdapter extends StringArrayAdapter {
         ViewHolder holder = (ViewHolder) convertView.getTag();
 
         String language = getItem(position);
-        if(!language.equals("no-subs")) {
+        if (!language.equals("no-subs")) {
             Locale locale;
             if (language.contains("-")) {
                 locale = new Locale(language.substring(0, 2), language.substring(3, 5));

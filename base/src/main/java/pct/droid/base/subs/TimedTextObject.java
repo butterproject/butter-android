@@ -96,7 +96,7 @@ public class TimedTextObject {
     public String[] toASS() {
         return new FormatASS().toFile(this);
     }
-	
+
 	/* 
 	 * PROTECTED METHODS 
 	 * 

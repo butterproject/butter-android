@@ -518,7 +518,7 @@ public class FormatASS extends TimedTextFileFormat {
      * returns a string with the correctly formated options
      *
      * @param useASSInsteadOfSSA Use ASS or SSA?
-     * @param style ASS styles
+     * @param style              ASS styles
      * @return Options
      */
     private String getOptionsForASS(boolean useASSInsteadOfSSA, Style style) {
@@ -545,7 +545,7 @@ public class FormatASS extends TimedTextFileFormat {
      * converts the string explaining the alignment into the ASS equivalent integer offering bottom-center as default value
      *
      * @param useASSInsteadOfSSA Use Use ASS or SSA?
-     * @param align String alignment
+     * @param align              String alignment
      * @return Placement
      */
     private int getAlignForASS(boolean useASSInsteadOfSSA, String align) {

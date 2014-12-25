@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_available">New update available</string>
+    <string name="press_install">Press to install</string>
+</resources>

@@ -32,7 +32,9 @@ import org.videolan.vlc.VLCCrashHandler;
 public class VLCInstance {
     public final static String TAG = "VLC/Util/VLCInstance";
 
-    /** A set of utility functions for the VLC application */
+    /**
+     * A set of utility functions for the VLC application
+     */
     public static LibVLC getLibVlcInstance() throws LibVlcException {
         LibVLC instance = LibVLC.getExistingInstance();
         if (instance == null) {
@@ -70,42 +72,37 @@ public class VLCInstance {
         int aout;
         try {
             aout = Integer.parseInt(pref.getString("aout", "-1"));
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             aout = -1;
         }
         int vout;
         try {
             vout = Integer.parseInt(pref.getString("vout", "-1"));
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             vout = -1;
         }
         int deblocking;
         try {
             deblocking = Integer.parseInt(pref.getString("deblocking", "-1"));
-        }
-        catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             deblocking = -1;
         }
         int hardwareAcceleration;
         try {
             hardwareAcceleration = Integer.parseInt(pref.getString("hardware_acceleration", "-1"));
-        }
-        catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             hardwareAcceleration = -1;
         }
         int devHardwareDecoder;
         try {
             devHardwareDecoder = Integer.parseInt(pref.getString("dev_hardware_decoder", "-1"));
-        }
-        catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             devHardwareDecoder = -1;
         }
         int networkCaching = pref.getInt("network_caching_value", 0);
-        if(networkCaching > 60000)
+        if (networkCaching > 60000)
             networkCaching = 60000;
-        else if(networkCaching < 0)
+        else if (networkCaching < 0)
             networkCaching = 0;
         instance.setAout(aout);
         instance.setVout(vout);

@@ -10,7 +10,6 @@ import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -74,7 +73,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
     public static final String BROADCAST_ACTION_XMLRPC_TWO_FA_AUTH = "TWO_FA_AUTH";
     public static final String BROADCAST_ACTION_XMLRPC_LOGIN_LIMIT = "LOGIN_LIMIT";
 
-    private Map<Long,Caller> backgroundCalls = new HashMap<Long, Caller>();
+    private Map<Long, Caller> backgroundCalls = new HashMap<Long, Caller>();
 
     private DefaultHttpClient mClient;
     private OnBytesUploadedListener mOnBytesUploadedListener;
@@ -85,6 +84,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
 
     /**
      * XMLRPCClient constructor. Creates new instance based on server URI
+     *
      * @param uri xml-rpc server URI
      */
     public XMLRPCClient(URI uri, String httpuser, String httppasswd) {
@@ -166,6 +166,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
 
     /**
      * Convenience constructor. Creates new instance based on server String address
+     *
      * @param url server url
      */
     public XMLRPCClient(String url, String httpuser, String httppasswd) {
@@ -174,6 +175,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
 
     /**
      * Convenience XMLRPCClient constructor. Creates new instance based on server URL
+     *
      * @param url server URL
      */
     public XMLRPCClient(URL url, String httpuser, String httppasswd) {
@@ -182,10 +184,11 @@ public class XMLRPCClient implements XMLRPCClientInterface {
 
     /**
      * Set WP.com auth header
+     *
      * @param authToken authorization token
      */
     public void setAuthorizationHeader(String authToken) {
-        if( authToken != null)
+        if (authToken != null)
             mPostMethod.addHeader("Authorization", String.format("Bearer %s", authToken));
         else
             mPostMethod.removeHeaders("Authorization");
@@ -408,10 +411,10 @@ public class XMLRPCClient implements XMLRPCClientInterface {
         /**
          * Create a new Caller for asynchronous use.
          *
-         * @param listener The listener to notice about the response or an error.
-         * @param threadId An id that will be send to the listener.
+         * @param listener   The listener to notice about the response or an error.
+         * @param threadId   An id that will be send to the listener.
          * @param methodName The method name to call.
-         * @param params The parameters of the call or null.
+         * @param params     The parameters of the call or null.
          */
         public Caller(XMLRPCCallback listener, long threadId, String methodName, Object[] params, File tempFile) {
             this.listener = listener;
@@ -427,7 +430,8 @@ public class XMLRPCClient implements XMLRPCClientInterface {
          * start method to start it as a thread. But you can call the call method
          * on it for synchronous use.
          */
-        public Caller() { }
+        public Caller() {
+        }
 
         /**
          * The run method is invoked when the thread gets started.
@@ -436,14 +440,14 @@ public class XMLRPCClient implements XMLRPCClientInterface {
          */
         @Override
         public void run() {
-            if(listener == null)
+            if (listener == null)
                 return;
 
             try {
                 backgroundCalls.put(threadId, this);
                 Object o = this.callXMLRPC(methodName, params, tempFile);
                 listener.onSuccess(threadId, o);
-            } catch(CancelException ex) {
+            } catch (CancelException ex) {
                 // Don't notify the listener, if the call has been canceled.
             } catch (Exception ex) {
                 listener.onFailure(threadId, ex);
@@ -471,14 +475,14 @@ public class XMLRPCClient implements XMLRPCClientInterface {
                 HttpResponse response = mClient.execute(mPostMethod);
 
                 if (response.getStatusLine() == null) // StatusLine is null. We can't read the response code.
-                    throw new XMLRPCException( "HTTP Status code is missing!" );
+                    throw new XMLRPCException("HTTP Status code is missing!");
 
                 int statusCode = response.getStatusLine().getStatusCode();
                 HttpEntity entity = response.getEntity();
 
                 if (entity == null) {
                     //This is an error since the parser will fail here.
-                    throw new XMLRPCException( "HTTP status code: " + statusCode + " was returned AND no response from the server." );
+                    throw new XMLRPCException("HTTP status code: " + statusCode + " was returned AND no response from the server.");
                 }
 
                 if (statusCode == HttpStatus.SC_OK) {
@@ -487,7 +491,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
                 }
 
                 String statusLineReasonPhrase = response.getStatusLine().getReasonPhrase();
-                if(statusLineReasonPhrase == null) statusLineReasonPhrase = "";
+                if (statusLineReasonPhrase == null) statusLineReasonPhrase = "";
 
                 try {
                     String responseString = EntityUtils.toString(entity, "UTF-8");
@@ -509,7 +513,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
                                 newErrorMsg =
                                         "The server doesn't have enough memory to fulfill the request. You may need to increase the PHP memory limit on your site.";
                             }
-                            throw new XMLRPCException( statusLineReasonPhrase + ".\n\n" + newErrorMsg);
+                            throw new XMLRPCException(statusLineReasonPhrase + ".\n\n" + newErrorMsg);
                         }
                     }
 
@@ -517,9 +521,9 @@ public class XMLRPCClient implements XMLRPCClientInterface {
                     // eat all the exceptions here, we dont want to crash the app when trying to show a
                     // better error message.
                 }
-                throw new XMLRPCException( "HTTP status code: " + statusCode + " was returned. " + statusLineReasonPhrase);
+                throw new XMLRPCException("HTTP status code: " + statusCode + " was returned. " + statusLineReasonPhrase);
             } catch (XMLRPCFault e) {
-                if (loggedInputStream!=null) {
+                if (loggedInputStream != null) {
                     Log.w("XMLRPC", "Response document received from the server: " + loggedInputStream.getResponseDocument());
                 }
                 // Detect login issues and broadcast a message if the error is known
@@ -537,7 +541,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
                 throw e;
             } catch (XmlPullParserException e) {
                 Log.e("XMLRPC", "Error while parsing the XML-RPC response document received from the server.", e);
-                if (loggedInputStream!=null) {
+                if (loggedInputStream != null) {
                     Log.e("XMLRPC", "Response document received from the server: " + loggedInputStream.getResponseDocument());
                 }
                 checkXMLRPCErrorMessage(e);
@@ -546,12 +550,12 @@ public class XMLRPCClient implements XMLRPCClientInterface {
                 //we can catch NumberFormatException here and re-throw an XMLRPCException.
                 //The response document is not a valid XML-RPC document after all.
                 Log.e("XMLRPC", "Error while parsing the XML-RPC response document received from the server.", e);
-                if (loggedInputStream!=null) {
+                if (loggedInputStream != null) {
                     Log.e("XMLRPC", "Response document received from the server: " + loggedInputStream.getResponseDocument());
                 }
                 throw new XMLRPCException("The response received contains an invalid number. " + e.getMessage());
             } catch (XMLRPCException e) {
-                if (loggedInputStream!=null) {
+                if (loggedInputStream != null) {
                     Log.e("XMLRPC", "Response document received from the server: " + loggedInputStream.getResponseDocument());
                 }
                 checkXMLRPCErrorMessage(e);
@@ -575,7 +579,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
             } finally {
                 deleteTempFile(method, tempFile);
                 try {
-                    if (loggedInputStream!=null) {
+                    if (loggedInputStream != null) {
                         loggedInputStream.close();
                     }
                 } catch (Exception e) {
@@ -594,8 +598,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
         String errorMessage = exception.getMessage().toLowerCase();
         if ((errorMessage.contains("code: 503") || errorMessage.contains("code 503"))//TODO Not sure 503 is the correct error code returned by wpcom
                 &&
-            (errorMessage.contains("limit reached") || errorMessage.contains("login limit")))
-        {
+                (errorMessage.contains("limit reached") || errorMessage.contains("login limit"))) {
             broadcastAction(BROADCAST_ACTION_XMLRPC_LOGIN_LIMIT);
             return true;
         }
@@ -608,7 +611,7 @@ public class XMLRPCClient implements XMLRPCClientInterface {
 
     private void deleteTempFile(String method, File tempFile) {
         if (tempFile != null) {
-            if ((method.equals("wp.uploadFile"))){ //get rid of the temp file
+            if ((method.equals("wp.uploadFile"))) { //get rid of the temp file
                 tempFile.delete();
             }
         }

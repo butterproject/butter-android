@@ -23,17 +23,17 @@ public class SynopsisDialogFragment extends DialogFragment {
         ButterKnife.inject(this, view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-        .setView(view)
-        .setNeutralButton(R.string.close,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }
-        );
+                .setView(view)
+                .setNeutralButton(R.string.close,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
 
-        if(getArguments().containsKey("text")) {
+        if (getArguments().containsKey("text")) {
             synopsisText.setText(getArguments().getString("text"));
         }
 

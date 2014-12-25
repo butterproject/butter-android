@@ -1,7 +1,8 @@
 package pct.droid.activities;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +11,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -21,13 +21,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nineoldandroids.animation.ArgbEvaluator;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.InjectView;
@@ -92,7 +94,8 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
             Bundle b;
             switch (v.getId()) {
                 case R.id.synopsisBlock:
-                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                        return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
                     b = new Bundle();
                     b.putString("text", mItem.synopsis);
@@ -110,13 +113,14 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     break;
                 */
                 case R.id.subtitlesBlock:
-                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                        return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
                     b = new Bundle();
                     Iterator<String> it = mItem.episodes.keySet().iterator();
                     String name = it.next();
                     Show.Episode episode = mItem.episodes.get(name);
-                    if(episode.subtitles != null) {
+                    if (episode.subtitles != null) {
                         b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, episode.subtitles.keySet().toArray(new String[episode.subtitles.size()]));
                         subtitleSelectorDialogFragment.setArguments(b);
                         subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
@@ -135,24 +139,42 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                 */
                 case R.id.playButton:
                     final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ShowDetailActivity.this);
-                    final CharSequence[] items = new CharSequence[mItem.episodes.size()];
-                    int i = 0;
-                    for(String key : mItem.episodes.keySet()) {
-                        items[i] = key;
-                        i++;
+                    final List<String> items = new ArrayList<String>();
+                    for (String key : mItem.episodes.keySet()) {
+                        items.add(key);
                     }
-                    dialogBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+
+                    // sorting hack
+                    Collections.sort(items, new Comparator<String>() {
+                        @Override
+                        public int compare(String lhs, String rhs) {
+                            Show.Episode lEpisode = mItem.episodes.get(lhs);
+                            Show.Episode rEpisode = mItem.episodes.get(rhs);
+
+                            if (lEpisode.season > rEpisode.season) {
+                                return 1;
+                            } else if (lEpisode.season < rEpisode.season) {
+                                return -1;
+                            } else {
+                                return lEpisode.episode > rEpisode.episode ? 1 : -1;
+                            }
+                        }
+                    });
+
+                    dialogBuilder.setSingleChoiceItems(items.toArray(new String[items.size()]), -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            String key = (String) items[i];
+                            String key = items.get(i);
                             Show.Episode episode = mItem.episodes.get(key);
                             Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
                             Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
                             streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
                             streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
+                            streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
                             streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
-                            if(mSubLanguage != null) streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                            if (mSubLanguage != null)
+                                streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
                             startActivity(streamIntent);
                         }
                     });
@@ -172,14 +194,14 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     private ViewTreeObserver.OnScrollChangedListener mOnScrollListener = new ViewTreeObserver.OnScrollChangedListener() {
         @Override
         public void onScrollChanged() {
-            if(mToolbarHeight == 0) {
+            if (mToolbarHeight == 0) {
                 mToolbarHeight = toolbar.getHeight();
                 mHeaderHeight = mParallaxHeight - mToolbarHeight;
             }
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
 
-            if(scrollView.getScrollY() > mHeaderHeight) {
+            if (scrollView.getScrollY() > mHeaderHeight) {
                 if (mLastScrollLocation > scrollView.getScrollY()) {
                     // scroll up
                     if ((mOpenBarPos == null || !mOpenBar) && layoutParams.topMargin <= -mToolbarHeight)
@@ -201,20 +223,20 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                 }
             }
 
-            if(layoutParams.topMargin < 0) {
+            if (layoutParams.topMargin < 0) {
                 scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
             } else {
                 scrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
             }
 
                 /* Fade out when over header */
-            if(mParallaxHeight - scrollView.getScrollY() < 0) {
-                if(mTransparentBar) {
+            if (mParallaxHeight - scrollView.getScrollY() < 0) {
+                if (mTransparentBar) {
                     mTransparentBar = false;
                     ActionBarBackground.changeColor(ShowDetailActivity.this, mPaletteColor, false);
                 }
             } else {
-                if(!mTransparentBar) {
+                if (!mTransparentBar) {
                     mTransparentBar = true;
                     ActionBarBackground.fadeOut(ShowDetailActivity.this);
                 }
@@ -236,7 +258,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         ActionBarBackground.fadeOut(this);
 
         Drawable playButtonDrawable = PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
-        if(mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
+        if (mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
 
         playButton.setOnClickListener(mOnClickListener);
         synopsisBlock.setOnClickListener(mOnClickListener);
@@ -257,13 +279,13 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
 
-        if(mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
+        if (mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
             runtimeText.setText(mItem.runtime + " " + getString(R.string.minutes));
         } else {
             runtimeText.setText("n/a " + getString(R.string.minutes));
         }
 
-        if(mItem.synopsis != null) {
+        if (mItem.synopsis != null) {
             synopsisText.setText(mItem.synopsis);
         } else {
             synopsisBlock.setClickable(false);
@@ -271,7 +293,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
 
         trailerBlock.setVisibility(View.GONE);
         qualityBlock.setVisibility(View.GONE);
-        //subtitlesBlock.setVisibility(View.GONE);
+        subtitlesBlock.setVisibility(View.GONE);
 
         Picasso.with(this).load(mItem.image).into(new Target() {
             @Override
@@ -328,7 +350,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     @Override
     protected void onResume() {
         super.onResume();
-        if(mQuality == null) {
+        if (mQuality == null) {
             //String[] keys = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
             //onQualitySelected(keys[0]);
         }
@@ -346,16 +368,6 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onQualitySelected(String quality) {
         mQuality = quality;
         qualityText.setText(mQuality);
@@ -364,7 +376,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     @Override
     public void onSubtitleLanguageSelected(String language) {
         mSubLanguage = language;
-        if(!language.equals("no-subs")) {
+        if (!language.equals("no-subs")) {
             Locale locale;
             if (language.contains("-")) {
                 locale = new Locale(language.substring(0, 2), language.substring(3, 5));

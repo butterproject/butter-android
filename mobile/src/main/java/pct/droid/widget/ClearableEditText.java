@@ -28,7 +28,7 @@ import pct.droid.R;
 
 /**
  * To change clear icon, set
- *
+ * <p/>
  * <pre>
  * android:drawableRight="@drawable/custom_icon"
  * </pre>
@@ -45,7 +45,7 @@ public class ClearableEditText extends EditText implements OnTouchListener, OnFo
 
     public void setIconAlwaysVisible(Boolean iconAlwaysVisible) {
         this.iconAlwaysVisible = iconAlwaysVisible;
-        if(iconAlwaysVisible) setClearIconVisible(true);
+        if (iconAlwaysVisible) setClearIconVisible(true);
     }
 
     private Drawable xD;

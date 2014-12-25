@@ -25,7 +25,6 @@ package org.videolan.libvlc;
 
 /**
  * @author jpeg
- *
  */
 public class LibVlcException extends Exception {
     private static final long serialVersionUID = -1909522348226924189L;

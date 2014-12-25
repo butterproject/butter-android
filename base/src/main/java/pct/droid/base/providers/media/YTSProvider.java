@@ -11,11 +11,12 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.meta.TraktProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
@@ -25,45 +26,48 @@ public class YTSProvider extends MediaProvider {
     public static final String NO_MOVIES_ERROR = "No movies found";
 
     @Override
-    public Call getList(final ArrayList<Media> existingList, HashMap<String, String> filters, final Callback callback) {
+    public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
         final ArrayList<Media> currentList;
-        if(existingList == null) {
-            currentList = new ArrayList<Media>();
+        if (existingList == null) {
+            currentList = new ArrayList<>();
         } else {
             currentList = (ArrayList<Media>) existingList.clone();
         }
 
-        ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        ArrayList<BasicNameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("limit", "30"));
 
-        if(filters == null) {
-            filters = new HashMap<String, String>();
+        if (filters == null) {
+            filters = new Filters();
         }
 
-        if (filters.containsKey("keywords")) {
-            String keywords = filters.get("keywords");
-            keywords = keywords.replaceAll("\\s", "% ");
+        if (filters.keywords != null) {
+            String keywords = filters.keywords.replaceAll("\\s", "% ");
             params.add(new BasicNameValuePair("keywords", keywords));
         }
 
-        if (filters.containsKey("genre")) {
-            params.add(new BasicNameValuePair("genre", filters.get("genre")));
+        if (filters.genre != null) {
+            params.add(new BasicNameValuePair("genre", filters.genre));
         }
 
-        if (filters.containsKey("order")) {
-            params.add(new BasicNameValuePair("order", filters.get("order")));
+        if (filters.order == Filters.Order.ASC) {
+            params.add(new BasicNameValuePair("order", "asc"));
         } else {
             params.add(new BasicNameValuePair("order", "desc"));
         }
 
-        if (filters.containsKey("sort") && !filters.get("sort").equals("popularity")) {
-            params.add(new BasicNameValuePair("sort", filters.get("sort")));
-        } else {
-            params.add(new BasicNameValuePair("sort", "seeds"));
+        String sort;
+        switch (filters.sort) {
+            default:
+            case POPULARITY:
+                sort = "seeds";
+                break;
         }
 
-        if (filters.containsKey("page")) {
-            params.add(new BasicNameValuePair("set", filters.get("page")));
+        params.add(new BasicNameValuePair("sort", sort));
+
+        if (filters.page != null) {
+            params.add(new BasicNameValuePair("set", Integer.toString(filters.page)));
         }
 
         Request.Builder requestBuilder = new Request.Builder();
@@ -75,9 +79,10 @@ public class YTSProvider extends MediaProvider {
 
     /**
      * Fetch the list of movies from YTS
-     * @param currentList Current shown list to be extended
+     *
+     * @param currentList    Current shown list to be extended
      * @param requestBuilder Request to be executed
-     * @param callback Network callback
+     * @param callback       Network callback
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
@@ -85,7 +90,7 @@ public class YTSProvider extends MediaProvider {
             @Override
             public void onFailure(Request request, IOException e) {
                 String url = requestBuilder.build().urlString();
-                if(url.equals(mMirrorApiUrl)) {
+                if (url.equals(mMirrorApiUrl)) {
                     callback.onFailure(e);
                 } else {
                     url = url.replace(mApiUrl, mMirrorApiUrl);
@@ -96,10 +101,10 @@ public class YTSProvider extends MediaProvider {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
-                    if(result.status != null && result.status.equals("fail")) {
+                    if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
                         int previousSize = currentList.size();
@@ -108,7 +113,7 @@ public class YTSProvider extends MediaProvider {
 
                         // Only get metdata for new items in list
                         String[] imdbIds = new String[newDataSize];
-                        for(int i = previousSize, index = 0; i < formattedData.size(); i++, index++) {
+                        for (int i = previousSize, index = 0; i < formattedData.size(); i++, index++) {
                             Media media = formattedData.get(i);
                             imdbIds[index] = media.videoId;
                         }
@@ -116,10 +121,10 @@ public class YTSProvider extends MediaProvider {
                         TraktProvider traktProvider = new TraktProvider();
                         TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
 
-                        for(int i = previousSize, index = 0; i < formattedData.size(); i++) {
+                        for (int i = previousSize, index = 0; i < formattedData.size(); i++) {
                             Media media = formattedData.get(i);
 
-                            if(metaDatas.length > index) {
+                            if (metaDatas.length > index) {
                                 TraktProvider.MetaData meta = metaDatas[index];
                                 if (media.videoId.equals(meta.imdb_id)) {
                                     if (meta.images.containsKey("poster")) {
@@ -168,11 +173,11 @@ public class YTSProvider extends MediaProvider {
                     if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
-                        ArrayList<Media> formattedData = result.formatForPopcorn();
+                        final ArrayList<Media> formattedData = result.formatForPopcorn();
 
-                        if(formattedData.size() > 0) {
+                        if (formattedData.size() > 0) {
                             TraktProvider traktProvider = new TraktProvider();
-                            Movie movie = (Movie) formattedData.get(0);
+                            final Movie movie = (Movie) formattedData.get(0);
 
                             TraktProvider.MetaData meta = traktProvider.getSummary(movie.videoId, "movie");
                             if (meta.images != null && meta.images.containsKey("poster")) {
@@ -213,11 +218,20 @@ public class YTSProvider extends MediaProvider {
                             }
 
                             YSubsProvider subsProvider = new YSubsProvider();
-                            movie.subtitles = subsProvider.getList(movie).get(movie.videoId);
+                            subsProvider.getList(movie, new SubsProvider.Callback() {
+                                @Override
+                                public void onSuccess(Map<String, String> items) {
+                                    movie.subtitles = items;
+                                    formattedData.set(0, movie);
+                                    callback.onSuccess(formattedData);
+                                }
 
-                            formattedData.set(0, movie);
+                                @Override
+                                public void onFailure(Exception e) {
+                                    callback.onSuccess(formattedData);
+                                }
+                            });
 
-                            callback.onSuccess(formattedData);
                             return;
                         }
                         callback.onFailure(new IllegalStateException("Empty list"));
@@ -235,14 +249,15 @@ public class YTSProvider extends MediaProvider {
 
         /**
          * Test if there is an item that already exists
+         *
          * @param results List with items
-         * @param id Id of item to check for
-         * @return
+         * @param id      Id of item to check for
+         * @return Return the index of the item in the results
          */
         private int isInResults(ArrayList<Media> results, String id) {
             int i = 0;
-            for(Media item : results) {
-                if(item.videoId.equals(id)) return i;
+            for (Media item : results) {
+                if (item.videoId.equals(id)) return i;
                 i++;
             }
             return -1;
@@ -250,6 +265,7 @@ public class YTSProvider extends MediaProvider {
 
         /**
          * Format data for the application
+         *
          * @return List with items
          */
         public ArrayList<Media> formatForPopcorn() {
@@ -258,17 +274,18 @@ public class YTSProvider extends MediaProvider {
 
         /**
          * Format data for the application
+         *
          * @param existingList List to be extended
          * @return List with items
          */
         public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
-            for(LinkedTreeMap<String, Object> item : MovieList) {
+            for (LinkedTreeMap<String, Object> item : MovieList) {
                 Movie movie = new Movie();
 
                 movie.videoId = item.get("ImdbCode").toString();
                 String torrentQuality = item.get("Quality").toString();
 
-                if(torrentQuality.equals("3D")) {
+                if (torrentQuality.equals("3D")) {
                     continue;
                 }
 
@@ -278,7 +295,7 @@ public class YTSProvider extends MediaProvider {
                 torrent.peers = item.get("TorrentPeers").toString();
 
                 int existingItem = isInResults(existingList, movie.videoId);
-                if(existingItem == -1) {
+                if (existingItem == -1) {
                     movie.title = item.get("MovieTitleClean").toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
                     movie.year = item.get("MovieYear").toString();
                     movie.genre = item.get("Genre").toString();
@@ -288,11 +305,11 @@ public class YTSProvider extends MediaProvider {
                     movie = (Movie) existingList.get(existingItem);
                 }
 
-                if(!movie.torrents.containsKey(torrentQuality)) {
+                if (!movie.torrents.containsKey(torrentQuality)) {
                     movie.torrents.put(torrentQuality, torrent);
                 }
 
-                if(existingItem == -1) {
+                if (existingItem == -1) {
                     existingList.add(movie);
                 } else {
                     existingList.set(existingItem, movie);

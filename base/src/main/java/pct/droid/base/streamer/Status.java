@@ -19,6 +19,6 @@ public class Status {
 
     @Override
     public String toString() {
-        return  "eta: " + eta + ", downloaded: " + downloaded + ", progress: " + progress + ", downloadSpeed: " + downloadSpeed + ", peers: " + peers + ", seeds: " + seeds  + ", uploadSpeed: " + uploadSpeed + ", connections: " + connections;
+        return "eta: " + eta + ", downloaded: " + downloaded + ", progress: " + progress + ", downloadSpeed: " + downloadSpeed + ", peers: " + peers + ", seeds: " + seeds + ", uploadSpeed: " + uploadSpeed + ", connections: " + connections;
     }
 }

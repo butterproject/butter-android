@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.types.Media;
@@ -17,7 +16,7 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     private MediaProvider.Callback mCallback;
     private ArrayList<Media> mItems;
     private int mPage = 1;
-    private HashMap<String, String> mFilters = new HashMap<String, String>();
+    private MediaProvider.Filters mFilters = new MediaProvider.Filters();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,11 +48,11 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
         mPage = page;
     }
 
-    public HashMap<String, String> getFilters() {
+    public MediaProvider.Filters getFilters() {
         return mFilters;
     }
 
-    public void setFilters(HashMap<String, String> filters) {
+    public void setFilters(MediaProvider.Filters filters) {
         mFilters = filters;
     }
 
@@ -61,11 +60,11 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     public void onSuccess(ArrayList<Media> items) {
         mPage++;
         mItems = items;
-        if(mCallback != null) mCallback.onSuccess(items);
+        if (mCallback != null) mCallback.onSuccess(items);
     }
 
     @Override
     public void onFailure(Exception e) {
-        if(mCallback != null) mCallback.onFailure(e);
+        if (mCallback != null) mCallback.onFailure(e);
     }
 }

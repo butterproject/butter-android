@@ -33,13 +33,13 @@
         android:layout_below="@id/toolbar"
         android:orientation="vertical"
         android:gravity="center">
+
         <ProgressBar
             android:id="@+id/progressIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            style="?android:attr/progressBarStyleLarge"
-            />
+            style="?android:attr/progressBarStyleLarge" />
 
         <TextView
             android:layout_width="wrap_content"

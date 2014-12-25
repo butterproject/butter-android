@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.List;
 
 import pct.droid.base.services.StreamerService;
+import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -31,12 +32,14 @@ public class PopcornApplication extends VLCApplication {
 
     private Boolean mBound = false;
     private Messenger mService;
-    private String mCacheDir, mShouldBoundUrl = "";
+    private static String sCacheDir;
+    private String mShouldBoundUrl = "";
 
     @Override
     public void onCreate() {
         super.onCreate();
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
+        PopcornUpdater.getInstance(this).checkUpdatesManually();
 
         Constants.DEBUG_ENABLED = false;
         try {
@@ -52,16 +55,16 @@ public class PopcornApplication extends VLCApplication {
 
         File path = StorageUtils.getIdealCacheDirectory(this);
         File directory = new File(path, "/torrents/");
-        mCacheDir = directory.toString() + "/";
-        FileUtils.recursiveDelete(new File(mCacheDir));
+        sCacheDir = directory.toString() + "/";
+        FileUtils.recursiveDelete(new File(sCacheDir));
         FileUtils.recursiveDelete(new File(path + "/subs"));
         directory.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.i("Chosen cache location: " + mCacheDir);
+        LogUtils.i("Chosen cache location: " + sCacheDir);
 
         String versionCode = Integer.toString(BuildConfig.VERSION_CODE);
-        if(!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
+        if (!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
             PrefUtils.save(this, "versionCode", versionCode);
         }
     }
@@ -70,8 +73,8 @@ public class PopcornApplication extends VLCApplication {
         return mBound;
     }
 
-    public String getStreamDir() {
-        return mCacheDir;
+    public static String getStreamDir() {
+        return sCacheDir;
     }
 
     public void startStreamer(String streamUrl) {
@@ -87,7 +90,7 @@ public class PopcornApplication extends VLCApplication {
         Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
         Bundle args = new Bundle();
-        args.putString("directory", mCacheDir);
+        args.putString("directory", sCacheDir);
         args.putString("stream_url", streamUrl);
         msg.setData(args);
 
@@ -104,16 +107,15 @@ public class PopcornApplication extends VLCApplication {
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
 
-        for(int i = 0; i < runningAppProcesses.size(); i++)
-        {
+        for (int i = 0; i < runningAppProcesses.size(); i++) {
             ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
-            if(info.processName.equalsIgnoreCase("pct.droid:node")){
+            if (info.processName.equalsIgnoreCase("pct.droid:node")) {
                 android.os.Process.killProcess(info.pid);
             }
         }
 
-        File torrentPath = new File(mCacheDir);
-        File tmpPath = new File(mCacheDir, "tmp");
+        File torrentPath = new File(sCacheDir);
+        File tmpPath = new File(sCacheDir, "tmp");
         FileUtils.recursiveDelete(torrentPath);
         torrentPath.mkdirs();
         tmpPath.mkdirs();
@@ -122,7 +124,7 @@ public class PopcornApplication extends VLCApplication {
     }
 
     public void startService() {
-        if(mBound) return;
+        if (mBound) return;
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -134,7 +136,7 @@ public class PopcornApplication extends VLCApplication {
             mService = new Messenger(service);
             mBound = true;
 
-            if(mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
+            if (mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
                 startStreamer(mShouldBoundUrl);
                 mShouldBoundUrl = "";
             }
