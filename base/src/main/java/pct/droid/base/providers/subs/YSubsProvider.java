@@ -91,8 +91,7 @@ public class YSubsProvider extends SubsProvider {
     }
 
     private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
-        Call call = mClient.newCall(requestBuilder.build());
-        call.enqueue(new com.squareup.okhttp.Callback() {
+        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 callback.onFailure(e);
