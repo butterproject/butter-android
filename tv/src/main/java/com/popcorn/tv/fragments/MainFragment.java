@@ -100,7 +100,8 @@ public class MainFragment extends BrowseSupportFragment implements MainViewInput
 
     @Override
     public void setBackgroundWithUri(String uri) {
-
+        if (uri == null) return;
+        updateBackground(URI.create(uri));
     }
     //endregion
 

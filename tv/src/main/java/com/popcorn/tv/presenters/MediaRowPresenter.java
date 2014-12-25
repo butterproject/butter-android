@@ -77,7 +77,7 @@ public class MediaRowPresenter extends Presenter {
         ((ViewHolder) viewHolder).mCardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
         //((ViewHolder) viewHolder).mCardView.setBadgeImage(mContext.getResources().getDrawable(
         //        R.drawable.videos_by_google_icon));
-        ((ViewHolder) viewHolder).updateCardViewImage(URI.create(media.fullImage));
+        ((ViewHolder) viewHolder).updateCardViewImage(URI.create(media.image));
     }
 
     @Override

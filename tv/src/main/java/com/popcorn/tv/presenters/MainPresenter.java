@@ -10,6 +10,7 @@ import com.popcorn.tv.interfaces.main.MainInteractorOutputInterface;
 import com.popcorn.tv.interfaces.main.MainPresenterInputInterface;
 import com.popcorn.tv.interfaces.main.MainRouterInputInterface;
 import com.popcorn.tv.interfaces.main.MainViewInputInterface;
+import com.popcorn.tv.models.MainMedia;
 import com.popcorn.tv.routers.MainRouter;
 import com.popcorn.tv.utils.MediaListRow;
 
@@ -53,6 +54,9 @@ public class MainPresenter implements MainPresenterInputInterface, MainInteracto
     public void userDidSelectItem(Object item, Row row)
     {
         if (!(row instanceof MediaListRow)) return;
+        if (item instanceof MainMedia) {
+            view.setBackgroundWithUri(((MainMedia)item).headerImage);
+        }
         int rightItems = interactor.getRightItemsNextTo(item, (MediaListRow)row);
         if (rightItems > 2) { return; }
         //interactor.getMore((MediaListRow)row); //TODO
