@@ -4,15 +4,22 @@ import android.content.Context;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.Row;
+import android.util.Log;
 
 import com.popcorn.tv.Movie;
 import com.popcorn.tv.MovieList;
 import com.popcorn.tv.R;
+import com.popcorn.tv.adapters.MediaObjectAdapter;
+import com.popcorn.tv.datamanagers.YTSDataManager;
+import com.popcorn.tv.interfaces.main.MainDataManagerCallback;
+import com.popcorn.tv.interfaces.main.MainDataManagerInputInterface;
 import com.popcorn.tv.interfaces.main.MainInteractorInputInterface;
 import com.popcorn.tv.interfaces.main.MainInteractorOutputInterface;
+import com.popcorn.tv.models.MainMedia;
 import com.popcorn.tv.presenters.BasicRowPresenter;
 import com.popcorn.tv.presenters.MediaRowPresenter;
 import com.popcorn.tv.utils.Capitalize;
+import com.popcorn.tv.utils.MediaListRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +27,9 @@ import java.util.List;
 public class MainInteractor implements MainInteractorInputInterface
 {
     //region Attributes
-    MainInteractorOutputInterface presenter;
+    private static String TAG = "MainInteractorInputInterface";
+    private MainInteractorOutputInterface presenter;
+    private MainDataManagerInputInterface ytsDataManager;
     private List<ArrayObjectAdapter> adapters;
     private List<HeaderItem> headers;
     private List<Integer> activeRowsUpdates = new ArrayList<>();
@@ -30,6 +39,7 @@ public class MainInteractor implements MainInteractorInputInterface
     public MainInteractor(MainInteractorOutputInterface presenter)
     {
         this.presenter = presenter;
+        this.ytsDataManager = new YTSDataManager();
     }
     //endregion
 
@@ -51,15 +61,49 @@ public class MainInteractor implements MainInteractorInputInterface
     }
 
     @Override
-    public int getRightItemsNextTo(Object item, Row row) {
-        //TODO
-        return 0;
+    public int getRightItemsNextTo(Object item, MediaListRow row) {
+        ArrayObjectAdapter adapter = adapters.get(row.getRowIndex());
+        if (adapter instanceof MediaObjectAdapter) return ((MediaObjectAdapter)adapter).getCount();
+        return -1;
     }
 
     @Override
-    public void getMore(Row row) {
-        //TODO
+    public void getMore(MediaListRow row, Context context) {
+        getMore(row.getRowIndex(), context);
     }
+
+    private void getMore(int index, Context context)
+    {
+        ArrayObjectAdapter adapter = adapters.get(index);
+        if (!(adapter instanceof MediaObjectAdapter)) { return; }
+        final MediaObjectAdapter mediaAdapter = ((MediaObjectAdapter)adapter);
+        if (mediaAdapter.getIsUpdating()) { return; }
+        mediaAdapter.setIsUpdating(true);
+
+        final String genre = context.getResources().getStringArray(R.array.categories)[index];
+        int lastPage = mediaAdapter.getLastPage();
+        ytsDataManager.getList(genre, lastPage + 1, new MainDataManagerCallback() {
+            @Override
+            public void onSuccess(ArrayList<MainMedia> items) {
+                mediaAdapter.setIsUpdating(false);
+                mediaAdapter.addAll(mediaAdapter.getCount(), items);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                mediaAdapter.setIsUpdating(false);
+                Log.e(TAG, "Error getting more media items of genre: "+ genre);
+            }
+        });
+    }
+
+    @Override
+    public void synchronize(Context context) {
+        for (int i=0; i < getAdapters(context).size() ; i++) {
+            getMore(i, context);
+        }
+    }
+
     //endregion
 
     //region Custom Getters
@@ -108,7 +152,7 @@ public class MainInteractor implements MainInteractorInputInterface
 
     private void addRowMediaAdapter(Context context, int index, MediaRowPresenter mediaRowPresenter)
     {
-        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(mediaRowPresenter);
+        MediaObjectAdapter listRowAdapter = new MediaObjectAdapter(mediaRowPresenter);
         adapters.add(listRowAdapter);
     }
 
