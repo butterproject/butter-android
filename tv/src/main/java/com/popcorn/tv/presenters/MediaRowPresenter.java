@@ -9,8 +9,8 @@ import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import com.popcorn.tv.Movie;
 import com.popcorn.tv.R;
+import com.popcorn.tv.models.MainMedia;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import java.net.URI;
@@ -22,7 +22,7 @@ public class MediaRowPresenter extends Presenter {
     private static int CARD_HEIGHT = 213;
 
     static class ViewHolder extends Presenter.ViewHolder {
-        private Movie mMovie;
+        private MainMedia media;
         private ImageCardView mCardView;
         private Drawable mDefaultCardImage;
         private PicassoImageCardViewTarget mImageCardViewTarget;
@@ -34,12 +34,12 @@ public class MediaRowPresenter extends Presenter {
             mDefaultCardImage = mContext.getResources().getDrawable(R.drawable.movie);
         }
 
-        public void setMovie(Movie m) {
-            mMovie = m;
+        public void setMedia(MainMedia m) {
+            media = m;
         }
 
-        public Movie getMovie() {
-            return mMovie;
+        public MainMedia getMedia() {
+            return media;
         }
 
         public ImageCardView getCardView() {
@@ -60,7 +60,6 @@ public class MediaRowPresenter extends Presenter {
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.d(TAG, "onCreateViewHolder");
         mContext = parent.getContext();
-
         ImageCardView cardView = new ImageCardView(mContext);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
@@ -70,18 +69,15 @@ public class MediaRowPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-        Movie movie = (Movie) item;
-        ((ViewHolder) viewHolder).setMovie(movie);
-
+        MainMedia media = (MainMedia) item;
+        ((ViewHolder) viewHolder).setMedia(media);
         Log.d(TAG, "onBindViewHolder");
-        if (movie.getCardImageUrl() != null) {
-            ((ViewHolder) viewHolder).mCardView.setTitleText(movie.getTitle());
-            ((ViewHolder) viewHolder).mCardView.setContentText(movie.getStudio());
-            ((ViewHolder) viewHolder).mCardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
-            //((ViewHolder) viewHolder).mCardView.setBadgeImage(mContext.getResources().getDrawable(
-            //        R.drawable.videos_by_google_icon));
-            ((ViewHolder) viewHolder).updateCardViewImage(movie.getCardImageURI());
-        }
+        ((ViewHolder) viewHolder).mCardView.setTitleText(media.title);
+        //((ViewHolder) viewHolder).mCardView.setContentText(movie.getStudio());
+        ((ViewHolder) viewHolder).mCardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
+        //((ViewHolder) viewHolder).mCardView.setBadgeImage(mContext.getResources().getDrawable(
+        //        R.drawable.videos_by_google_icon));
+        ((ViewHolder) viewHolder).updateCardViewImage(URI.create(media.fullImage));
     }
 
     @Override
