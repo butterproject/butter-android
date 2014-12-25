@@ -32,7 +32,8 @@ public class PopcornApplication extends VLCApplication {
 
     private Boolean mBound = false;
     private Messenger mService;
-    private String mCacheDir, mShouldBoundUrl = "";
+    private static String sCacheDir;
+    private String mShouldBoundUrl = "";
 
     @Override
     public void onCreate() {
@@ -54,13 +55,13 @@ public class PopcornApplication extends VLCApplication {
 
         File path = StorageUtils.getIdealCacheDirectory(this);
         File directory = new File(path, "/torrents/");
-        mCacheDir = directory.toString() + "/";
-        FileUtils.recursiveDelete(new File(mCacheDir));
+        sCacheDir = directory.toString() + "/";
+        FileUtils.recursiveDelete(new File(sCacheDir));
         FileUtils.recursiveDelete(new File(path + "/subs"));
         directory.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.i("Chosen cache location: " + mCacheDir);
+        LogUtils.i("Chosen cache location: " + sCacheDir);
 
         String versionCode = Integer.toString(BuildConfig.VERSION_CODE);
         if (!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
@@ -72,8 +73,8 @@ public class PopcornApplication extends VLCApplication {
         return mBound;
     }
 
-    public String getStreamDir() {
-        return mCacheDir;
+    public static String getStreamDir() {
+        return sCacheDir;
     }
 
     public void startStreamer(String streamUrl) {
@@ -89,7 +90,7 @@ public class PopcornApplication extends VLCApplication {
         Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
         Bundle args = new Bundle();
-        args.putString("directory", mCacheDir);
+        args.putString("directory", sCacheDir);
         args.putString("stream_url", streamUrl);
         msg.setData(args);
 
@@ -113,8 +114,8 @@ public class PopcornApplication extends VLCApplication {
             }
         }
 
-        File torrentPath = new File(mCacheDir);
-        File tmpPath = new File(mCacheDir, "tmp");
+        File torrentPath = new File(sCacheDir);
+        File tmpPath = new File(sCacheDir, "tmp");
         FileUtils.recursiveDelete(torrentPath);
         torrentPath.mkdirs();
         tmpPath.mkdirs();

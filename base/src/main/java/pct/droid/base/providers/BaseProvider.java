@@ -1,6 +1,7 @@
 package pct.droid.base.providers;
 
 import com.google.gson.Gson;
+import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -8,9 +9,14 @@ import com.squareup.okhttp.Request;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+
+import pct.droid.base.PopcornApplication;
+import pct.droid.base.utils.StorageUtils;
 
 /**
  * BaseProvider.java
@@ -19,9 +25,24 @@ import java.util.List;
  */
 public abstract class BaseProvider {
 
-    protected OkHttpClient mClient = new OkHttpClient();
+    private OkHttpClient mClient;
     protected Gson mGson = new Gson();
     protected Call mCurrentCall;
+
+    protected OkHttpClient getClient() {
+        if(mClient == null) {
+            mClient = new OkHttpClient();
+
+            int cacheSize = 10 * 1024 * 1024;
+            try {
+                Cache cache = new Cache(new File(PopcornApplication.getStreamDir()), cacheSize);
+                mClient.setCache(cache);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mClient;
+    }
 
     /**
      * Enqueue request without callback
@@ -41,7 +62,7 @@ public abstract class BaseProvider {
      * @return Call
      */
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        mCurrentCall = mClient.newCall(request);
+        mCurrentCall = getClient().newCall(request);
         if (requestCallback != null) mCurrentCall.enqueue(requestCallback);
         return mCurrentCall;
     }
