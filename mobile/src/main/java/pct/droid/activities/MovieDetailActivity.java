@@ -224,7 +224,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         yearText.setText(mItem.year);
         ratingText.setText(mItem.rating + "/10");
 
-        if (mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
+        if (mItem.runtime != null && !mItem.runtime.isEmpty() && Integer.parseInt(mItem.runtime) > 0) {
             runtimeText.setText(mItem.runtime + " " + getString(R.string.minutes));
         } else {
             runtimeText.setText("n/a " + getString(R.string.minutes));

@@ -79,6 +79,7 @@ public class StreamLoadingActivity extends BaseActivity {
                 });
             }
         } else {
+            // TODO: make more generic
             if(data instanceof Movie) {
                 mSubsProvider = new YSubsProvider();
                 mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {

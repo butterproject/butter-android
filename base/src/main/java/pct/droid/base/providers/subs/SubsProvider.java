@@ -183,7 +183,9 @@ public abstract class SubsProvider extends BaseProvider {
      */
     private static void parseFormatAndSave(String inputUrl, File srtPath, InputStream inputStream) throws IOException {
         TimedTextObject subtitleObject = null;
-        String[] inputText = FileUtils.inputstreamToCharsetString(inputStream).split("\n|\r\n");
+        
+        String inputString = FileUtils.inputstreamToCharsetString(inputStream);
+        String[] inputText = inputString.split("\n|\r\n");
 
         if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {
             FormatASS formatASS = new FormatASS();

@@ -221,6 +221,10 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    if(mAdapter == null) {
+                        return;
+                    }
+
                     mAdapter.removeLoading();
 
                     if (mAdapter.getItemCount() <= 0) {
