@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <string name="app_name">Popcorn Time</string>
+    <string name="app_name" translatable="false">Popcorn Time</string>
 
-    <string name="no_connection">No connection</string>
-    <string name="no_connection_desc">We could not connect to the selected Popcorn Time instance, make sure Popcorn Time (v0.3.3+) is running and check your settings and internet connection.</string>
-    <string name="retry">Retry</string>
     <string name="now_playing">Now playing</string>
     <string name="trailer">Trailer</string>
     <string name="loading">Loading data…</string>
@@ -14,22 +11,11 @@
     <string name="minutes">min</string>
     <string name="watch_trailer">Watch trailer</string>
 
-    <string name="add_favourite">Add to favourites</string>
-    <string name="remove_favourite">Remove from favourites</string>
-    <string name="watched">Toggle watched</string>
-    <string name="fullscreen">Toggle fullscreen</string>
     <string name="search">Search</string>
     <string name="disable_subs">Disable subtitles</string>
     <string name="no_subs">No subtitles</string>
     <string name="subtitles">Subtitles</string>
-    <string name="player">Video player</string>
     <string name="quality">Quality</string>
-    <string name="next_season">Next season</string>
-    <string name="prev_season">Previous season</string>
-    <string name="forward">Seek forward</string>
-    <string name="backward">Seek backward</string>
-    <string name="fastforward">Fast seek forward</string>
-    <string name="fastbackward">Fast seek backward</string>
 
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
