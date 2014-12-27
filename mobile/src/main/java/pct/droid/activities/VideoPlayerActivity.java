@@ -253,22 +253,24 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     @Override
     protected void onResume() {
         super.onResume();
+        loadMedia();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        long currentTime = mLibVLC.getTime();
-        long duration = mLibVLC.getLength();
-        //remove saved position if in the last 5 seconds
-        if (duration - currentTime < 5000) {
-            currentTime = 0;
-        } else {
-            currentTime -= 5000; // go back 5 seconds, to compensate loading time
-        }
+        if(mLibVLC != null) {
+            long currentTime = mLibVLC.getTime();
+            long duration = mLibVLC.getLength();
+            //remove saved position if in the last 5 seconds
+            if (duration - currentTime < 5000) {
+                currentTime = 0;
+            } else {
+                currentTime -= 5000; // go back 5 seconds, to compensate loading time
+            }
 
-        PrefUtils.save(this, RESUME_POSITION, currentTime);
+            PrefUtils.save(this, RESUME_POSITION, currentTime);
 
         /*
          * Pausing here generates errors because the vout is constantly
@@ -277,7 +279,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
          * To workaround that, we keep the last known position in the playlist
          * in savedIndexPosition to be able to restore it during onResume().
          */
-        mLibVLC.stop();
+            mLibVLC.stop();
+        }
 
         videoSurface.setKeepScreenOn(false);
 
@@ -551,6 +554,11 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         }
 
         return result;
+    }
+
+    public void eventHardwareAccelerationError() {
+        EventHandler em = EventHandler.getInstance();
+        em.callback(EventHandler.HardwareAccelerationError, new Bundle());
     }
 
     /**
@@ -1118,7 +1126,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             public void onFailure(Request request, IOException e) {
                 mSubs = null;
                 mCurrentSubsLang = "";
-                Toast.makeText(VideoPlayerActivity.this, "Subtitle download failed", Toast.LENGTH_SHORT).show();
+
+                try {
+                    Toast.makeText(getApplicationContext(), "Subtitle download failed", Toast.LENGTH_SHORT).show();
+                } catch (RuntimeException runtimeException) {
+                    runtimeException.printStackTrace();
+                }
             }
 
             @Override

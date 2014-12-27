@@ -10,6 +10,7 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -102,13 +103,20 @@ public class YTSProvider extends MediaProvider {
             @Override
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
 
-                    YTSReponse result = null;
+                    YTSReponse result;
                     try {
                         result = mGson.fromJson(responseStr, YTSReponse.class);
                     } catch (IllegalStateException e) {
                         onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
                     }
 
                     if (result.status != null && result.status.equals("fail")) {
@@ -156,7 +164,7 @@ public class YTSProvider extends MediaProvider {
                         return;
                     }
                 }
-                callback.onFailure(new NetworkErrorException(response.body().string()));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
             }
         });
     }
@@ -175,8 +183,22 @@ public class YTSProvider extends MediaProvider {
             @Override
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
+
+                    YTSReponse result;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
+
                     if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
