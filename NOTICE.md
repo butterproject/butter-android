@@ -23,3 +23,7 @@ This product includes the following libraries:
 * OkHttp - An HTTP & SPDY client for Android and Java applications
 
   <[http://square.github.io/okhttp/](http://square.github.io/okhttp/)>
+
+* VLC - The mediaplayer that outrules everyone
+
+  <[http://git.videolan.org/?p=vlc-ports/android.git;a=tree]](http://git.videolan.org/?p=vlc-ports/android.git;a=tree)>
