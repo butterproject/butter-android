@@ -13,7 +13,7 @@
         android:visible="false"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_quality"
-        android:title="@string/player" />
+        android:title="Player tests" />
 
     <item
         android:id="@+id/action_switch_mode"
