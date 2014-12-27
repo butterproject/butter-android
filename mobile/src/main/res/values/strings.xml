@@ -45,7 +45,7 @@
     <string name="title_shows">Shows</string>
     <string name="title_movies">Movies</string>
 
-    <string name="terms">Your Acceptance\n\n
+    <string name="terms" translatable="false">Your Acceptance\n\n
 By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
 Privacy Policy\n\n
 You understand that by using \'POPCORN TIME\' you may encounter material that you may deem to be offensive, indecent, or objectionable, and that such content may or may not be identified as having explicit material. \'POPCORN TIME\' will have no liability to you for such material – you agree that your use of \'POPCORN TIME\' is at your sole risk.\n\n
