@@ -219,17 +219,22 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         try {
             mLibVLC = VLCInstance.getLibVlcInstance();
+            mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_AUTOMATIC);
         } catch (LibVlcException e) {
             LogUtils.d("LibVLC initialisation failed");
             return;
         }
 
         mVideoSurfaceHolder = videoSurface.getHolder();
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-            mVideoSurfaceHolder.setFormat(ImageFormat.YV12);
-        } else {
-            mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
-        }
+        // Comment Chroma code out, experimental: will not work on all devices. To be added in settings later.
+        //String chroma = mSettings.getString("chroma_format", "");
+        //if(chroma.equals("YV12")) {
+        //    mSurfaceHolder.setFormat(ImageFormat.YV12);
+        //} else if (chroma.equals("RV16")) {
+        //    mSurfaceHolder.setFormat(PixelFormat.RGB_565);
+        //} else {
+        mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
+        //}
         mVideoSurfaceHolder.addCallback(mSurfaceCallback);
 
         LogUtils.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
