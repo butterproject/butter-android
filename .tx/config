@@ -1,5 +1,5 @@
 [main]
-host = https://www.transifex.com/
+host = https://www.transifex.com
 
 [popcorn-time-for-android.mobile-strings]
 file_filter = mobile/src/main/res/values-<lang>/strings.xml
