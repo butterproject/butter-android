@@ -21,7 +21,7 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-    protected String mApiUrl = "http://yts.re/api/";
+    protected String mApiUrl = "https://yts.re/api/";
     protected String mMirrorApiUrl = "https://yts.wf/api/";
     public static final String NO_MOVIES_ERROR = "No movies found";
 
@@ -103,7 +103,14 @@ public class YTSProvider extends MediaProvider {
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
+
+                    YTSReponse result = null;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                    }
+
                     if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
