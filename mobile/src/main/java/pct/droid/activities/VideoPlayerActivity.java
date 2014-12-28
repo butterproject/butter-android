@@ -133,7 +133,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     private TimedTextObject mSubs;
     private Caption mLastSub = null;
 
-    private int savedIndexPosition = -1;
+    private int mSavedIndexPosition = -1;
     private boolean mSeeking = false;
 
     private int mVideoHeight;
@@ -253,7 +253,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     @Override
     protected void onResume() {
         super.onResume();
-        loadMedia();
+
+        resumeVideo();
     }
 
     @Override
@@ -262,29 +263,18 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         if(mLibVLC != null) {
             long currentTime = mLibVLC.getTime();
-            long duration = mLibVLC.getLength();
-            //remove saved position if in the last 5 seconds
-            if (duration - currentTime < 5000) {
-                currentTime = 0;
-            } else {
-                currentTime -= 5000; // go back 5 seconds, to compensate loading time
-            }
-
             PrefUtils.save(this, RESUME_POSITION, currentTime);
 
-        /*
-         * Pausing here generates errors because the vout is constantly
-         * trying to refresh itself every 80ms while the surface is not
-         * accessible anymore.
-         * To workaround that, we keep the last known position in the playlist
-         * in savedIndexPosition to be able to restore it during onResume().
-         */
+            /*
+             * Pausing here generates errors because the vout is constantly
+             * trying to refresh itself every 80ms while the surface is not
+             * accessible anymore.
+             * To workaround that, we keep the last known position in the preferences
+             */
             mLibVLC.stop();
         }
 
         videoSurface.setKeepScreenOn(false);
-
-
     }
 
     @Override
@@ -509,7 +499,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         mDisplayHandler.post(new Runnable() {
             @Override
             public void run() {
-                changeSurfaceSize();
+                changeSurfaceSize(false);
             }
         });
     }
@@ -580,6 +570,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 case EventHandler.MediaParsedChanged:
                     break;
                 case EventHandler.MediaPlayerPlaying:
+                    activity.resumeVideo();
                     activity.progressIndicator.setVisibility(View.GONE);
                     activity.showOverlay();
                     /** FIXME: update the track list when it changes during the
@@ -615,7 +606,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     private void endReached() {
-        if (mLibVLC.getMediaList().expandMedia(savedIndexPosition) == 0) {
+        if (mLibVLC.getMediaList().expandMedia(mSavedIndexPosition) == 0) {
             LogUtils.d("Found a video playlist, expanding it");
             eventHandler.postDelayed(new Runnable() {
                 @Override
@@ -670,7 +661,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void changeSurfaceSize() {
+    private void changeSurfaceSize(boolean message) {
         int sw = getWindow().getDecorView().getWidth();
         int sh = getWindow().getDecorView().getHeight();
 
@@ -702,9 +693,10 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         // compute the display aspect ratio
         double dar = dw / dh;
 
+
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
-                showInfo("Best fit"); // TODO: Translate
+                if(message) showInfo("Best fit"); // TODO: Translate
                 if (dar < ar)
                     dh = dw / ar;
                 else
@@ -712,17 +704,17 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 break;
             case SURFACE_FIT_HORIZONTAL:
                 dh = dw / ar;
-                showInfo("Fit horizontal"); // TODO: Translate
+                if(message) showInfo("Fit horizontal"); // TODO: Translate
                 break;
             case SURFACE_FIT_VERTICAL:
                 dw = dh * ar;
-                showInfo("Fit vertical"); // TODO: Translate
+                if(message) showInfo("Fit vertical"); // TODO: Translate
                 break;
             case SURFACE_FILL:
-                showInfo("Fill"); // TODO: Translate
+                if(message) showInfo("Fill"); // TODO: Translate
                 break;
             case SURFACE_16_9:
-                showInfo("16:9");
+                if(message) showInfo("16:9");
                 ar = 16.0 / 9.0;
                 if (dar < ar)
                     dh = dw / ar;
@@ -730,7 +722,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_4_3:
-                showInfo("4:3");
+                if(message) showInfo("4:3");
                 ar = 4.0 / 3.0;
                 if (dar < ar)
                     dh = dw / ar;
@@ -738,7 +730,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_ORIGINAL:
-                showInfo("Original"); // TODO: Translate
+                if(message) showInfo("Original"); // TODO: Translate
                 dh = mVideoVisibleHeight;
                 dw = vw;
                 break;
@@ -757,7 +749,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     void seek(int delta) {
-        // unseekable stream
         if (mLibVLC.getLength() <= 0 && !mSeeking) return;
 
         long position = mLibVLC.getTime() + delta;
@@ -769,9 +760,23 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         checkSubs();
     }
 
+    private void resumeVideo() {
+        if(mLibVLC == null)
+            return;
+
+        long resumePosition = PrefUtils.get(this, RESUME_POSITION, 0);
+        long length = mLibVLC.getLength();
+        if(length > resumePosition && resumePosition > 0) {
+            mLibVLC.setTime(resumePosition);
+            PrefUtils.save(this, RESUME_POSITION, 0);
+        }
+    }
+
     private void play() {
         mLibVLC.play();
         videoSurface.setKeepScreenOn(true);
+
+        resumeVideo();
     }
 
     private void pause() {
@@ -784,18 +789,11 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             return;
 
         if (mLibVLC.isPlaying()) {
-            mLibVLC.pause();
+            pause();
         } else {
-            mLibVLC.play();
-            if (mLibVLC != null) {
-                if (mLibVLC.isPlaying()) {
-                    pause();
-                } else {
-                    play();
-                }
-                updatePlayPause();
-            }
+            play();
         }
+        updatePlayPause();
     }
 
     public void seekForwardClick(View v) {
@@ -812,7 +810,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         } else {
             mCurrentSize = 0;
         }
-        changeSurfaceSize();
+        changeSurfaceSize(true);
         showOverlay();
     }
 
@@ -1023,14 +1021,14 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             return;
 
         /* Start / resume playback */
-        if (savedIndexPosition > -1) {
+        if (mSavedIndexPosition > -1) {
             mLibVLC.setMediaList();
-            mLibVLC.playIndex(savedIndexPosition);
+            mLibVLC.playIndex(mSavedIndexPosition);
         } else if (mLocation != null && mLocation.length() > 0) {
             mLibVLC.setMediaList();
             mLibVLC.getMediaList().add(new org.videolan.libvlc.Media(mLibVLC, mLocation));
-            savedIndexPosition = mLibVLC.getMediaList().size() - 1;
-            mLibVLC.playIndex(savedIndexPosition);
+            mSavedIndexPosition = mLibVLC.getMediaList().size() - 1;
+            mLibVLC.playIndex(mSavedIndexPosition);
         }
 
         long resumeTime = PrefUtils.get(this, RESUME_POSITION, 0);
