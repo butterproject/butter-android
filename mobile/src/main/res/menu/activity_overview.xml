@@ -20,4 +20,10 @@
         android:visible="true"
         app:showAsAction="never"
         android:title="@string/title_shows" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:visible="true"
+        app:showAsAction="never"
+        android:title="@string/settings" />
 </menu>
