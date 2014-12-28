@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
+    <!-- General strings -->
     <string name="app_name" translatable="false">Popcorn Time</string>
-
-    <string name="now_playing">Now playing</string>
-    <string name="trailer">Trailer</string>
-    <string name="loading">Loading data…</string>
-    <string name="no_data_found">No data found</string>
-
-    <string name="minutes">min</string>
-    <string name="watch_trailer">Watch trailer</string>
-
-    <string name="search">Search</string>
-    <string name="disable_subs">Disable subtitles</string>
-    <string name="no_subs">No subtitles</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="quality">Quality</string>
-
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
 
-    <string name="volume">Volume</string>
-    <string name="brightness">Brightness</string>
-
-    <string name="hardware_acceleration_error_title">HW acceleration error</string>
-    <string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
+    <!-- OverviewActivity strings -->
     <string name="search_hint">Title, year, actors</string>
     <string name="title_shows">Shows</string>
     <string name="title_movies">Movies</string>
+    <string name="search">Search</string>
+    <string name="loading">Loading data…</string>
+    <string name="no_data_found">No data found</string>
 
+    <!-- DetailActivity strings -->
+    <string name="minutes">min</string>
+    <string name="watch_trailer">Watch trailer</string>
+    <string name="disable_subs">Disable subtitles</string>
+    <string name="no_subs">No subtitles</string>
+    <string name="subtitles">Subtitles</string>
+    <string name="quality">Quality</string>
+    <string name="trailer">Trailer</string>
+
+    <!-- VideoPlayerActivity strings -->
+    <string name="now_playing">Now playing</string>
+    <string name="volume">Volume</string>
+    <string name="brightness">Brightness</string>
+    <string name="hardware_acceleration_error_title">HW acceleration error</string>
+    <string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
+
+    <!-- TermsActivity strings -->
     <string name="terms" translatable="false">Your Acceptance\n\n
 By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
 Privacy Policy\n\n
