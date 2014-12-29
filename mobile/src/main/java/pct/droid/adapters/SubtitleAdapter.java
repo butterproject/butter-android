@@ -3,6 +3,7 @@ package pct.droid.adapters;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import java.util.Locale;
 
@@ -27,7 +28,7 @@ public class SubtitleAdapter extends StringArrayAdapter {
             } else {
                 locale = new Locale(language);
             }
-            holder.text1.setText(locale.getDisplayName());
+            holder.text1.setText(locale.getDisplayName(locale));
         } else {
             holder.text1.setText(R.string.disable_subs);
         }

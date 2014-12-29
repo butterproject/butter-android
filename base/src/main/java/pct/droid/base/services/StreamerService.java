@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.StorageUtils;
 

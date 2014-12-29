@@ -27,9 +27,12 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.StringUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
@@ -87,31 +90,31 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             Bundle b;
             switch (v.getId()) {
                 case R.id.synopsisBlock:
-                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                    if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
                     b = new Bundle();
                     b.putString("text", mItem.synopsis);
                     synopsisDialogFragment.setArguments(b);
-                    synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.qualityBlock:
-                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                    if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
                     qualitySelectorDialogFragment.setArguments(b);
-                    qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    qualitySelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.subtitlesBlock:
-                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                    if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]));
                     subtitleSelectorDialogFragment.setArguments(b);
-                    subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    subtitleSelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
                 case R.id.trailerBlock:
                     Intent trailerIntent = new Intent(MovieDetailActivity.this, TrailerPlayerActivity.class);
@@ -240,6 +243,10 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             trailerBlock.setVisibility(View.GONE);
         }
 
+        if(mItem.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+            onSubtitleLanguageSelected(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
+        }
+
         Picasso.with(this).load(mItem.image).into(new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -328,7 +335,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             } else {
                 locale = new Locale(language);
             }
-            subtitlesText.setText(locale.getDisplayName());
+            subtitlesText.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
         } else {
             subtitlesText.setText(R.string.no_subs);
         }

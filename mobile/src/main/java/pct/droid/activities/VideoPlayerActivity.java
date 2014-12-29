@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -20,6 +21,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -58,6 +60,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.streamer.Status;
@@ -219,11 +222,14 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         try {
             mLibVLC = VLCInstance.getLibVlcInstance();
-            mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_AUTOMATIC);
+            mLibVLC.setHardwareAcceleration(PrefUtils.get(this, Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
         } catch (LibVlcException e) {
             LogUtils.d("LibVLC initialisation failed");
             return;
         }
+
+        subtitleText.setTextColor(PrefUtils.get(this, Prefs.SUBTITLE_COLOR, Color.WHITE));
+        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(this, Prefs.SUBTITLE_SIZE, 16));
 
         mVideoSurfaceHolder = videoSurface.getHolder();
         // Comment Chroma code out, experimental: will not work on all devices. To be added in settings later.
@@ -247,6 +253,9 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         controlBar.setOnSeekBarChangeListener(mOnControlBarListener);
 
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        PrefUtils.save(this, RESUME_POSITION, 0);
+
         loadMedia();
     }
 
@@ -816,12 +825,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
     public void subsClick(View v) {
         if (mMedia != null && mMedia.subtitles != null) {
-            if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+            if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
             SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
             Bundle b = new Bundle();
             b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]));
             subtitleSelectorDialogFragment.setArguments(b);
-            subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+            subtitleSelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
         }
     }
 
@@ -1042,7 +1051,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String filePath = StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mMedia.videoId + "-" + mCurrentSubsLang + ".srt";
+                    String filePath = Prefs.getCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mMedia.videoId + "-" + mCurrentSubsLang + ".srt";
                     File file = new File(filePath);
                     FileInputStream fileInputStream = new FileInputStream(file);
                     FormatSRT formatSRT = new FormatSRT();

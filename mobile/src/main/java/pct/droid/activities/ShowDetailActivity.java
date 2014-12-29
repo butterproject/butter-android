@@ -94,26 +94,26 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
             Bundle b;
             switch (v.getId()) {
                 case R.id.synopsisBlock:
-                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                    if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
                     b = new Bundle();
                     b.putString("text", mItem.synopsis);
                     synopsisDialogFragment.setArguments(b);
-                    synopsisDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
                 /*
                 case R.id.qualityBlock:
-                    if(getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+                    if(getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
                     b = new Bundle();
                     b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
                     qualitySelectorDialogFragment.setArguments(b);
-                    qualitySelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                    qualitySelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
                 */
                 case R.id.subtitlesBlock:
-                    if (getSupportFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                    if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
                     b = new Bundle();
@@ -123,7 +123,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     if (episode.subtitles != null) {
                         b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, episode.subtitles.keySet().toArray(new String[episode.subtitles.size()]));
                         subtitleSelectorDialogFragment.setArguments(b);
-                        subtitleSelectorDialogFragment.show(getSupportFragmentManager(), "overlay_fragment");
+                        subtitleSelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     }
                     break;
                 /*

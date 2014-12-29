@@ -50,7 +50,7 @@ public class StringArrayAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             holder = new ViewHolder(convertView);
-            holder.text1.setPadding(32, 0, 0, 0);
+            holder.text1.setPadding(32, 0, 32, 0);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

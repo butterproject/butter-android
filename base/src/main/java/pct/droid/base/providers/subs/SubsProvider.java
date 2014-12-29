@@ -15,11 +15,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
@@ -70,7 +72,7 @@ public abstract class SubsProvider extends BaseProvider {
                             InputStream inputStream = null;
                             boolean failure = false;
                             try {
-                                File cacheDirectory = StorageUtils.getIdealCacheDirectory(context);
+                                File cacheDirectory = Prefs.getCacheDirectory(context);
                                 File subsDirectory = new File(cacheDirectory, "subs");
 
                                 String fileName = media.videoId + "-" + languageCode;
