@@ -21,9 +21,9 @@ import pct.droid.base.utils.PixelUtils;
 
 public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    int mItemWidth, mItemHeight, mMargin, mColumns;
-    ArrayList<Media> mItems;
-    OverviewGridAdapter.OnItemClickListener mItemClickListener;
+    private int mItemWidth, mItemHeight, mMargin, mColumns;
+    private ArrayList<Media> mItems;
+    private OverviewGridAdapter.OnItemClickListener mItemClickListener;
     final int NORMAL = 0, LOADING = 1;
 
     public OverviewGridAdapter(Activity activity, ArrayList<Media> items, Integer columns) {
@@ -162,7 +162,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void onClick(View view) {
             if (mItemClickListener != null) {
                 int position = getPosition();
-                Media item = (Media) getItem(position);
+                Media item = getItem(position);
                 mItemClickListener.onItemClick(view, item, position);
             }
         }

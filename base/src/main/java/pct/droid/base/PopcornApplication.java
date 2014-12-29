@@ -21,6 +21,7 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.util.List;
 
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.services.StreamerService;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
@@ -53,7 +54,7 @@ public class PopcornApplication extends VLCApplication {
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
-        File path = StorageUtils.getIdealCacheDirectory(this);
+        File path = Prefs.getCacheDirectory(this);
         File directory = new File(path, "/torrents/");
         sCacheDir = directory.toString() + "/";
         FileUtils.recursiveDelete(new File(sCacheDir));
@@ -78,6 +79,9 @@ public class PopcornApplication extends VLCApplication {
     }
 
     public void startStreamer(String streamUrl) {
+        File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
+        torrentPath.mkdirs();
+
         if (!mBound) {
             LogUtils.d("Service not started yet");
             mShouldBoundUrl = streamUrl;
@@ -90,7 +94,7 @@ public class PopcornApplication extends VLCApplication {
         Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
         Bundle args = new Bundle();
-        args.putString("directory", sCacheDir);
+        args.putString("directory", PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
         args.putString("stream_url", streamUrl);
         msg.setData(args);
 
@@ -114,11 +118,9 @@ public class PopcornApplication extends VLCApplication {
             }
         }
 
-        File torrentPath = new File(sCacheDir);
-        File tmpPath = new File(sCacheDir, "tmp");
+        File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
         FileUtils.recursiveDelete(torrentPath);
         torrentPath.mkdirs();
-        tmpPath.mkdirs();
 
         startService();
     }

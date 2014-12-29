@@ -60,8 +60,9 @@
 
         <activity android:name=".activities.TermsActivity"
             android:label="@string/app_name" />
-        <activity android:name=".activities.SettingsActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".activities.PreferencesActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".activities.OverviewActivity" />
 
         <activity
             android:name="pct.droid.activities.StreamLoadingActivity"

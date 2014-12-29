@@ -7,6 +7,8 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
 
     <!-- OverviewActivity strings -->
     <string name="search_hint">Title, year, actors</string>
@@ -45,5 +47,26 @@ Ability to Accept Terms of Service\n\n
 By using \'POPCORN TIME\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
     <string name="accept">Accept</string>
     <string name="leave">Leave</string>
+
+    <!-- SettingsActivity strings -->
+    <string name="preferences">Preferences</string>
+    <string name="general">General</string>
+    <string name="default_view">Default overview</string>
+    <string name="subtitle_color">Color</string>
+    <string name="subtitle_size">Size</string>
+    <string name="subtitle_language">Default language</string>
+    <string name="no_default_set">No default language</string>
+    <string name="advanced">Advanced</string>
+    <string name="storage_location">Storage location</string>
+    <string name="storage_automatic">Automatically based on free space</string>
+    <string name="storage_choose">Choose location</string>
+    <string name="not_writable">Location not writable</string>
+    <string name="hw_acceleration">Hardware acceleration</string>
+    <string name="hw_automatic">Automatic</string>
+    <string name="hw_full">Full</string>
+    <string name="hw_decoding">Decoding only</string>
+    <string name="updates">Updates</string>
+    <string name="auto_updates">Automatic updates</string>
+    <string name="check_for_updates">Check for updates</string>
 
 </resources>

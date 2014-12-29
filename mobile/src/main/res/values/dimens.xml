@@ -3,6 +3,19 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="list_vertical_padding">8dp</dimen>
+
+    <dimen name="iconlist_item_height">56dp</dimen>
+    <dimen name="iconlist_icon_width">24dp</dimen>
+    <dimen name="iconlist_icon_margin_left">16dp</dimen>
+    <dimen name="iconlist_text_margin_left">72dp</dimen>
+    <dimen name="iconlist_text_size">16sp</dimen>
+    <dimen name="iconlist_text_padding_top">16dp</dimen>
+    <dimen name="iconlist_text_padding_bottom">20dp</dimen>
+    <dimen name="iconlist_secondary_text_size">14sp</dimen>
+    <dimen name="iconlist_item_twolines_height">72dp</dimen>
+    <dimen name="iconlist_text_twolines_padding">10dp</dimen>
+
     <dimen name="detail_icon_margin">32dp</dimen>
     <dimen name="detail_margin">16dp</dimen>
     <dimen name="detail_margin_right">32dp</dimen>
@@ -21,4 +34,6 @@
     <dimen name="player_controls_distance">8dp</dimen>
     <dimen name="player_subtitles_bottom_margin">32dp</dimen>
     <dimen name="player_subtitles_default_text_size">16sp</dimen>
+
+    <dimen name="settings_subheader_text_size">14sp</dimen>
 </resources>

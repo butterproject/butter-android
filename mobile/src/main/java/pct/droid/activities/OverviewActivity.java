@@ -1,12 +1,12 @@
 package pct.droid.activities;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +36,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.base.Constants;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
@@ -44,6 +45,7 @@ import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 
@@ -85,7 +87,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        FragmentManager fm = getSupportFragmentManager();
+        mProviderId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
+        if(mProviderId == 1) {
+            mProvider = new EZTVProvider();
+        }
+
+        FragmentManager fm = getFragmentManager();
         mTaskFragment = (OverviewActivityTaskFragment) fm.findFragmentByTag(OverviewActivityTaskFragment.TAG);
 
         if (mTaskFragment == null || mTaskFragment.getExistingItems() == null) {
@@ -170,6 +177,10 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 break;
             case R.id.action_switch_mode:
                 switchMoviesShowsMode();
+                break;
+            case R.id.action_preferences:
+                Intent intent = new Intent(this, PreferencesActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

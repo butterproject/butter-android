@@ -16,6 +16,8 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
@@ -26,6 +28,7 @@ import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.PrefUtils;
 
 public class StreamLoadingActivity extends BaseActivity {
 
@@ -62,21 +65,29 @@ public class StreamLoadingActivity extends BaseActivity {
         String streamUrl = getIntent().getStringExtra(STREAM_URL);
         final Media data = getIntent().getParcelableExtra(DATA);
 
-        if (getIntent().hasExtra(SUBTITLES)) {
-            mHasSubs = true;
-            String subtitleLanguage = getIntent().getStringExtra(SUBTITLES);
-            if (!subtitleLanguage.equals("no-subs")) {
-                SubsProvider.download(this, data, subtitleLanguage, new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-                        mSubsStatus = SubsStatus.FAILURE;
-                    }
+        if (!getIntent().hasExtra(SUBTITLES) && data.subtitles != null && data.subtitles.size() > 0) {
+            if(data.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+                getIntent().putExtra(SUBTITLES, PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
+            }
+        }
 
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        mSubsStatus = SubsStatus.SUCCESS;
-                    }
-                });
+        if (data.subtitles != null && data.subtitles.size() > 0) {
+            if(getIntent().hasExtra(SUBTITLES)) {
+                mHasSubs = true;
+                String subtitleLanguage = getIntent().getStringExtra(SUBTITLES);
+                if (!subtitleLanguage.equals("no-subs")) {
+                    SubsProvider.download(this, data, subtitleLanguage, new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
+                    });
+                }
             }
         } else {
             // TODO: make more generic
@@ -115,7 +126,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
         getApp().startStreamer(streamUrl);
 
-        String directory = getApp().getStreamDir();
+        String directory = PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir());
         mFileObserver = new FileObserver(directory) {
             @Override
             public void onEvent(int event, String path) {
@@ -155,7 +166,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
         if (!mIntentStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
             try {
-                Ready ready = Ready.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/streamer.json"));
+                Ready ready = Ready.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/streamer.json"));
                 mIntentStarted = true;
                 Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
                 if (getIntent().hasExtra(DATA)) {
@@ -178,7 +189,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
     private void updateStatus() {
         try {
-            final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
+            final Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
             if (status == null) return;
             LogUtils.d(status.toString());
             int calculateProgress = (int) Math.floor(status.progress * 25);

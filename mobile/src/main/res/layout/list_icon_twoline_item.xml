@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_background_selectable">
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/iconlist_icon_width"
+        android:layout_height="@dimen/iconlist_icon_width"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/iconlist_icon_margin_left"
+        android:layout_marginStart="@dimen/iconlist_icon_margin_left"
+        android:scaleType="centerInside" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/iconlist_text_margin_left"
+        android:layout_marginStart="@dimen/iconlist_text_margin_left"
+        android:paddingTop="@dimen/iconlist_text_twolines_padding"
+        android:paddingBottom="@dimen/iconlist_text_twolines_padding">
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/iconlist_text_size"
+            android:textColor="@color/text_color"
+            android:text="" />
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2sp"
+            android:textSize="@dimen/iconlist_secondary_text_size"
+            android:textColor="@color/secondary_text_color"
+            android:text=""  />
+    </LinearLayout>
+</RelativeLayout>
