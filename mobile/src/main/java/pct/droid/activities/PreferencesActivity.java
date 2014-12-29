@@ -244,7 +244,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
-                        String[] items = { getString(R.string.storage_automatic), getString(R.string.storage_choose) };
+                        String[] items = { getString(R.string.storage_automatic_short), getString(R.string.storage_choose) };
 
                         openListSelectionDialog(item.getTitle(), items, new DialogInterface.OnClickListener() {
                             @Override
@@ -252,7 +252,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                                 if (position == 0) {
                                     item.clearValue();
                                 } else {
-                                    mDirectoryChooserFragment = DirectoryChooserFragment.newInstance("pref_fragment", null);
+                                    mDirectoryChooserFragment = DirectoryChooserFragment.newInstance("pct.droid", null);
                                     mDirectoryChooserFragment.show(getFragmentManager(), "pref_fragment");
                                     dialog.dismiss();
                                 }
@@ -268,6 +268,20 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         } else {
                             return getString(R.string.storage_automatic);
                         }
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_remove_cache, R.string.remove_cache, Prefs.REMOVE_CACHE, true,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+                        PrefUtils.save(PreferencesActivity.this, Prefs.REMOVE_CACHE, !(boolean) item.getValue());
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        boolean enabled = (boolean) item.getValue();
+                        return enabled ? getString(R.string.enabled) : getString(R.string.disabled);
                     }
                 }));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_hw_accel, R.string.hw_acceleration, Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC,

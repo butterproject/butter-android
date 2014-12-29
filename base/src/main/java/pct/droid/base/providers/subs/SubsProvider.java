@@ -31,6 +31,7 @@ import pct.droid.base.subs.FormatASS;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 
 public abstract class SubsProvider extends BaseProvider {
@@ -72,7 +73,7 @@ public abstract class SubsProvider extends BaseProvider {
                             InputStream inputStream = null;
                             boolean failure = false;
                             try {
-                                File cacheDirectory = Prefs.getCacheDirectory(context);
+                                File cacheDirectory = new File(PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()));
                                 File subsDirectory = new File(cacheDirectory, "subs");
 
                                 String fileName = media.videoId + "-" + languageCode;

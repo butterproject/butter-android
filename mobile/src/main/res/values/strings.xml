@@ -59,8 +59,10 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="advanced">Advanced</string>
     <string name="storage_location">Storage location</string>
     <string name="storage_automatic">Automatically based on free space</string>
+    <string name="storage_automatic_short">Automatic</string>
     <string name="storage_choose">Choose location</string>
     <string name="not_writable">Location not writable</string>
+    <string name="remove_cache">Remove cache on player close</string>
     <string name="hw_acceleration">Hardware acceleration</string>
     <string name="hw_automatic">Automatic</string>
     <string name="hw_full">Full</string>

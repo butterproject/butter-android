@@ -54,7 +54,7 @@ public class PopcornApplication extends VLCApplication {
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
-        File path = Prefs.getCacheDirectory(this);
+        File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
         File directory = new File(path, "/torrents/");
         sCacheDir = directory.toString() + "/";
         FileUtils.recursiveDelete(new File(sCacheDir));
@@ -118,9 +118,11 @@ public class PopcornApplication extends VLCApplication {
             }
         }
 
-        File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
-        FileUtils.recursiveDelete(torrentPath);
-        torrentPath.mkdirs();
+        if(PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
+            File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
+            FileUtils.recursiveDelete(torrentPath);
+            torrentPath.mkdirs();
+        }
 
         startService();
     }
