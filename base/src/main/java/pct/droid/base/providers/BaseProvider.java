@@ -17,6 +17,7 @@ import java.util.List;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 
 /**
@@ -36,7 +37,7 @@ public abstract class BaseProvider {
 
             int cacheSize = 10 * 1024 * 1024;
             try {
-                Cache cache = new Cache(Prefs.getCacheDirectory(PopcornApplication.getAppContext()), cacheSize);
+                Cache cache = new Cache(new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString())), cacheSize);
                 mClient.setCache(cache);
             } catch (IOException e) {
                 e.printStackTrace();

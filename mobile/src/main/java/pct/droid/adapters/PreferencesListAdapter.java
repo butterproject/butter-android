@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,13 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             itemViewHolder.icon.setImageResource(item.getIconResource());
             itemViewHolder.text1.setText(item.getTitle());
             itemViewHolder.text2.setText(item.getSubTitle());
+
+            if(item.getDefaultValue() instanceof Boolean) {
+                itemViewHolder.checkBox.setVisibility(View.VISIBLE);
+                itemViewHolder.checkBox.setChecked((boolean) item.getValue());
+            } else {
+                itemViewHolder.checkBox.setVisibility(View.GONE);
+            }
         } else if(getItemViewType(position) == HEADER) {
             HeaderHolder headerViewHolder = (HeaderHolder) viewHolder;
             headerViewHolder.itemView.setText((String) mItems.get(position));
@@ -73,6 +81,8 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TextView text1;
         @InjectView(R.id.text2)
         TextView text2;
+        @InjectView(R.id.checkbox)
+        CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);

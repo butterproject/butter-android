@@ -22,7 +22,7 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-    protected String mApiUrl = "https://yts.re/api/";
+    protected String mApiUrl = "https://yts.pm/api/";
     protected String mMirrorApiUrl = "https://yts.wf/api/";
     public static final String NO_MOVIES_ERROR = "No movies found";
 
@@ -319,7 +319,7 @@ public class YTSProvider extends MediaProvider {
                 }
 
                 Media.Torrent torrent = new Media.Torrent();
-                torrent.url = item.get("TorrentMagnetUrl").toString();
+                torrent.url = item.get("TorrentUrl").toString();
                 torrent.seeds = item.get("TorrentSeeds").toString();
                 torrent.peers = item.get("TorrentPeers").toString();
 

@@ -1051,7 +1051,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String filePath = Prefs.getCacheDirectory(VideoPlayerActivity.this) + "/subs/" + mMedia.videoId + "-" + mCurrentSubsLang + ".srt";
+                    String filePath = new File(PrefUtils.get(VideoPlayerActivity.this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this).toString())) + "/subs/" + mMedia.videoId + "-" + mCurrentSubsLang + ".srt";
                     File file = new File(filePath);
                     FileInputStream fileInputStream = new FileInputStream(file);
                     FormatSRT formatSRT = new FormatSRT();
