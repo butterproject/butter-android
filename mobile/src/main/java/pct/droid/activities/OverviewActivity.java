@@ -55,8 +55,6 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
-    private MediaProvider mProvider = new YTSProvider();
-    private Integer mProviderId = 0;
     private Integer mColumns = 2, mRetries = 0;
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false, mPaused = true;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
@@ -87,9 +85,9 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mProviderId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
-        if(mProviderId == 1) {
-            mProvider = new EZTVProvider();
+        int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
+        if(providerId == 1) {
+            mTaskFragment.setProvider(new EZTVProvider());
         }
 
         FragmentManager fm = getFragmentManager();
@@ -99,7 +97,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             mTaskFragment = new OverviewActivityTaskFragment();
             fm.beginTransaction().add(mTaskFragment, OverviewActivityTaskFragment.TAG).commit();
 
-            mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+            mTaskFragment.getProvider().getList(mTaskFragment.getFilters(), mTaskFragment);
         } else {
             onSuccess(mTaskFragment.getExistingItems());
         }
@@ -121,13 +119,11 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     // todo refactor this out
     private void switchMoviesShowsMode() {
-        mProvider.cancel();
-        if (mProviderId == 0) {
-            mProvider = new EZTVProvider();
-            mProviderId = 1;
+        mTaskFragment.getProvider().cancel();
+        if (mTaskFragment.getProvider() instanceof YTSProvider) {
+            mTaskFragment.setProvider(new EZTVProvider());
         } else {
-            mProvider = new YTSProvider();
-            mProviderId = 0;
+            mTaskFragment.setProvider(new YTSProvider());
         }
 
         mTaskFragment.setCurrentPage(0);
@@ -138,7 +134,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         recyclerView.setAdapter(mAdapter);
         mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
 
-        mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+        mTaskFragment.getProvider().getList(mTaskFragment.getFilters(), mTaskFragment);
     }
 
     @Override
@@ -150,7 +146,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     @Override
     protected void onPause() {
         super.onPause();
-        mProvider.cancel();
+        mTaskFragment.getProvider().cancel();
         mPaused = true;
     }
 
@@ -173,7 +169,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem switchItem = menu.findItem(R.id.action_switch_mode);
-        switchItem.setTitle(mProviderId == 0 ? R.string.title_shows : R.string.title_movies);
+        switchItem.setTitle(mTaskFragment.getProvider() instanceof YTSProvider ? R.string.title_shows : R.string.title_movies);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -199,7 +195,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     public void onBackPressed() {
         if (mLoadingDetails) {
             progressOverlay.setVisibility(View.GONE);
-            mProvider.cancel();
+            mTaskFragment.getProvider().cancel();
             mLoadingDetails = false;
             return;
         }
@@ -265,7 +261,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     }
                 });
             } else {
-                mProvider.getList(null, mTaskFragment);
+                mTaskFragment.getProvider().getList(null, mTaskFragment);
             }
             mRetries++;
         }
@@ -278,7 +274,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             progressOverlay.setVisibility(View.VISIBLE);
 
             mLoadingDetails = true;
-            mProvider.getDetail(item.videoId, new MediaProvider.Callback() {
+            mTaskFragment.getProvider().getDetail(item.videoId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<Media> items) {
                     if (items.size() <= 0 || !mLoadingDetails) return;
@@ -297,7 +293,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if(mPaused)
+                            if (mPaused)
                                 return;
 
                             Intent intent;
@@ -349,7 +345,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             if (!mEndOfListReached && !mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
                 MediaProvider.Filters filters = mTaskFragment.getFilters();
                 filters.page = mTaskFragment.getCurrentPage();
-                mProvider.getList(mAdapter.getItems(), filters, mTaskFragment);
+                mTaskFragment.getProvider().getList(mAdapter.getItems(), filters, mTaskFragment);
                 mTaskFragment.setFilters(filters);
                 mAdapter.addLoading();
                 mPreviousTotal = mTotalItemCount = mLayoutManager.getItemCount();
@@ -375,7 +371,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             filters.page = 1;
             mTaskFragment.setCurrentPage(1);
             mTaskFragment.setFilters(filters);
-            mProvider.getList(filters, mTaskFragment);
+            mTaskFragment.getProvider().getList(filters, mTaskFragment);
             return true;
         }
 
