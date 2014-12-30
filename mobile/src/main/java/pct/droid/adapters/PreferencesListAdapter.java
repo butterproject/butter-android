@@ -47,13 +47,13 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             itemViewHolder.text1.setText(item.getTitle());
             itemViewHolder.text2.setText(item.getSubTitle());
 
-            if(item.getDefaultValue() instanceof Boolean) {
+            if (item.getDefaultValue() instanceof Boolean) {
                 itemViewHolder.checkBox.setVisibility(View.VISIBLE);
                 itemViewHolder.checkBox.setChecked((boolean) item.getValue());
             } else {
                 itemViewHolder.checkBox.setVisibility(View.GONE);
             }
-        } else if(getItemViewType(position) == HEADER) {
+        } else if (getItemViewType(position) == HEADER) {
             HeaderHolder headerViewHolder = (HeaderHolder) viewHolder;
             headerViewHolder.itemView.setText((String) mItems.get(position));
         }

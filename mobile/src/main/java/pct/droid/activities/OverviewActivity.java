@@ -86,7 +86,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         recyclerView.setLayoutManager(mLayoutManager);
 
         int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
-        if(providerId == 1) {
+        if (providerId == 1) {
             mTaskFragment.setProvider(new EZTVProvider());
         }
 
@@ -239,7 +239,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mAdapter == null) {
+                    if (mAdapter == null) {
                         return;
                     }
 

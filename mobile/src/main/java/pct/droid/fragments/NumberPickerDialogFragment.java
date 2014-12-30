@@ -28,7 +28,7 @@ public class NumberPickerDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if(getArguments() == null || !getArguments().containsKey(MAX_VALUE) || !getArguments().containsKey(MIN_VALUE) || !getArguments().containsKey(TITLE) || mOnResultListener == null) {
+        if (getArguments() == null || !getArguments().containsKey(MAX_VALUE) || !getArguments().containsKey(MIN_VALUE) || !getArguments().containsKey(TITLE) || mOnResultListener == null) {
             return builder.create();
         }
 
@@ -41,24 +41,24 @@ public class NumberPickerDialogFragment extends DialogFragment {
         numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         builder
-            .setView(numberPicker)
-            .setTitle(getArguments().getString(TITLE))
-            .setPositiveButton(R.string.ok,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mOnResultListener.onNewValue(numberPicker.getValue());
-                            dialog.dismiss();
+                .setView(numberPicker)
+                .setTitle(getArguments().getString(TITLE))
+                .setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mOnResultListener.onNewValue(numberPicker.getValue());
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
                         }
-                    })
-            .setNegativeButton(R.string.cancel,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }
-            );
+                );
 
         return builder.create();
     }

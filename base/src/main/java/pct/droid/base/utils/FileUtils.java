@@ -66,7 +66,7 @@ public class FileUtils {
     public static void recursiveDelete(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
-            if(children == null) return;
+            if (children == null) return;
             for (int i = 0; i < children.length; i++) {
                 recursiveDelete(new File(file, children[i]));
             }

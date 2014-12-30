@@ -270,7 +270,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     protected void onPause() {
         super.onPause();
 
-        if(mLibVLC != null) {
+        if (mLibVLC != null) {
             long currentTime = mLibVLC.getTime();
             PrefUtils.save(this, RESUME_POSITION, currentTime);
 
@@ -656,7 +656,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
-                if(message) showInfo(getString(R.string.best_fit));
+                if (message) showInfo(getString(R.string.best_fit));
                 if (dar < ar)
                     dh = dw / ar;
                 else
@@ -664,17 +664,17 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 break;
             case SURFACE_FIT_HORIZONTAL:
                 dh = dw / ar;
-                if(message) showInfo(getString(R.string.fit_horizontal));
+                if (message) showInfo(getString(R.string.fit_horizontal));
                 break;
             case SURFACE_FIT_VERTICAL:
                 dw = dh * ar;
-                if(message) showInfo(getString(R.string.fit_vertical));
+                if (message) showInfo(getString(R.string.fit_vertical));
                 break;
             case SURFACE_FILL:
-                if(message) showInfo(getString(R.string.fill));
+                if (message) showInfo(getString(R.string.fill));
                 break;
             case SURFACE_16_9:
-                if(message) showInfo("16:9");
+                if (message) showInfo("16:9");
                 ar = 16.0 / 9.0;
                 if (dar < ar)
                     dh = dw / ar;
@@ -682,7 +682,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_4_3:
-                if(message) showInfo("4:3");
+                if (message) showInfo("4:3");
                 ar = 4.0 / 3.0;
                 if (dar < ar)
                     dh = dw / ar;
@@ -690,7 +690,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_ORIGINAL:
-                if(message) showInfo(getString(R.string.original_size));
+                if (message) showInfo(getString(R.string.original_size));
                 dh = mVideoVisibleHeight;
                 dw = vw;
                 break;
@@ -721,12 +721,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     private void resumeVideo() {
-        if(mLibVLC == null)
+        if (mLibVLC == null)
             return;
 
         long resumePosition = PrefUtils.get(this, RESUME_POSITION, 0);
         long length = mLibVLC.getLength();
-        if(length > resumePosition && resumePosition > 0) {
+        if (length > resumePosition && resumePosition > 0) {
             mLibVLC.setTime(resumePosition);
             PrefUtils.save(this, RESUME_POSITION, 0);
         }
@@ -969,7 +969,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
      * External extras:
      * - position (long) - position of the video to start with (in ms)
      */
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({"unchecked" })
     private void loadMedia() {
         if (mLocation == null && getIntent().getExtras().containsKey(LOCATION)) {
             mLocation = getIntent().getStringExtra(LOCATION);
@@ -1009,7 +1009,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     mSubs = formatSRT.parseFile(filePath, FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
                     checkSubs();
                 } catch (FileNotFoundException e) {
-                    if(e.getMessage().contains("EBUSY")) {
+                    if (e.getMessage().contains("EBUSY")) {
                         startSubtitles();
                     }
                     e.printStackTrace();

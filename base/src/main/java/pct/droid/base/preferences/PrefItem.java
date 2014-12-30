@@ -34,11 +34,11 @@ public class PrefItem {
     }
 
     public Object getValue() {
-        if(mDefaultValue instanceof Integer) {
+        if (mDefaultValue instanceof Integer) {
             return PrefUtils.get(mContext, mPrefKey, (Integer) mDefaultValue);
-        } else if(mDefaultValue instanceof Long) {
+        } else if (mDefaultValue instanceof Long) {
             return PrefUtils.get(mContext, mPrefKey, (Long) mDefaultValue);
-        } else if(mDefaultValue instanceof Boolean) {
+        } else if (mDefaultValue instanceof Boolean) {
             return PrefUtils.get(mContext, mPrefKey, (Boolean) mDefaultValue);
         } else {
             return PrefUtils.get(mContext, mPrefKey, mDefaultValue.toString());
@@ -46,11 +46,11 @@ public class PrefItem {
     }
 
     public void saveValue(Object value) {
-        if(mDefaultValue instanceof Integer) {
+        if (mDefaultValue instanceof Integer) {
             PrefUtils.save(mContext, mPrefKey, (Integer) value);
-        } else if(mDefaultValue instanceof Long) {
+        } else if (mDefaultValue instanceof Long) {
             PrefUtils.save(mContext, mPrefKey, (Long) value);
-        } else if(mDefaultValue instanceof Boolean) {
+        } else if (mDefaultValue instanceof Boolean) {
             PrefUtils.save(mContext, mPrefKey, (Boolean) value);
         } else {
             PrefUtils.save(mContext, mPrefKey, value.toString());
@@ -90,14 +90,14 @@ public class PrefItem {
     }
 
     public String getSubTitle() {
-        if(mSubTitleGenerator != null) {
+        if (mSubTitleGenerator != null) {
             return mSubTitleGenerator.get(this);
         }
         return "";
     }
 
     public void onClick() {
-        if(mOnClickListener != null)
+        if (mOnClickListener != null)
             mOnClickListener.onClick(this);
     }
 

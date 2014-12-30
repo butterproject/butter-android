@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_background_selectable">
+
     <ImageView
         android:id="@+id/icon"
         android:layout_width="@dimen/iconlist_icon_width"
@@ -11,6 +12,7 @@
         android:layout_marginLeft="@dimen/iconlist_icon_margin_horizontal"
         android:layout_marginStart="@dimen/iconlist_icon_margin_horizontal"
         android:scaleType="centerInside" />
+
     <CheckBox
         android:id="@+id/checkbox"
         android:visibility="gone"
@@ -22,6 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/iconlist_icon_margin_horizontal"
         android:layout_marginEnd="@dimen/iconlist_icon_margin_horizontal" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,6 +37,7 @@
         android:layout_marginEnd="@dimen/iconlist_text_margin_horizontal"
         android:paddingTop="@dimen/iconlist_text_twolines_padding"
         android:paddingBottom="@dimen/iconlist_text_twolines_padding">
+
         <TextView
             android:id="@+id/text1"
             android:layout_width="match_parent"
@@ -41,6 +45,7 @@
             android:textSize="@dimen/iconlist_text_size"
             android:textColor="@color/text_color"
             android:text="" />
+
         <TextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
@@ -48,6 +53,6 @@
             android:layout_marginTop="2sp"
             android:textSize="@dimen/iconlist_secondary_text_size"
             android:textColor="@color/secondary_text_color"
-            android:text=""  />
+            android:text="" />
     </LinearLayout>
 </RelativeLayout>

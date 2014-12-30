@@ -246,7 +246,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             trailerBlock.setVisibility(View.GONE);
         }
 
-        if(mItem.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+        if (mItem.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
             onSubtitleLanguageSelected(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
         }
 
