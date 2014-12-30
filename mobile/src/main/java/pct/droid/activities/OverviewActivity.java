@@ -131,6 +131,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         }
 
         mTaskFragment.setCurrentPage(0);
+        mTaskFragment.setFilters(new MediaProvider.Filters());
         mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
         mAdapter.setOnItemClickListener(mOnItemClickListener);
         progressOverlay.setVisibility(View.VISIBLE);
