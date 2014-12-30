@@ -16,6 +16,7 @@ import java.util.Map;
 
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
@@ -268,7 +269,7 @@ public class YTSProvider extends MediaProvider {
                         callback.onFailure(new IllegalStateException("Empty list"));
                     }
                 }
-                callback.onFailure(new NetworkErrorException(response.body().string()));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
             }
         });
     }
@@ -331,7 +332,7 @@ public class YTSProvider extends MediaProvider {
                     movie.year = item.get("MovieYear").toString();
                     movie.genre = item.get("Genre").toString();
                     movie.rating = item.get("MovieRating").toString();
-                    movie.type = "movie";
+                    movie.image = movie.fullImage = movie.headerImage = item.get("CoverImage").toString();
                 } else {
                     movie = (Movie) existingList.get(existingItem);
                 }
