@@ -58,7 +58,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private MediaProvider mProvider = new YTSProvider();
     private Integer mProviderId = 0;
     private Integer mColumns = 2, mRetries = 0;
-    private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
+    private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false, mPaused = true;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
     @InjectView(R.id.toolbar)
@@ -144,12 +144,14 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     @Override
     protected void onResume() {
         super.onResume();
+        mPaused = false;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mProvider.cancel();
+        mPaused = true;
     }
 
     @Override
@@ -209,6 +211,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     public void onSuccess(final ArrayList<Media> items) {
         mEndOfListReached = false;
         if (mTotalItemCount <= 0) {
+            mTaskFragment.setCurrentPage(mTaskFragment.getCurrentPage() + 1);
             mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
@@ -294,6 +297,9 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if(mPaused)
+                                return;
+
                             Intent intent;
                             if (item instanceof Movie) {
                                 intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
