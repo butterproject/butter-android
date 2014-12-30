@@ -263,11 +263,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.SubTitleGenerator() {
                     @Override
                     public String get(PrefItem item) {
-                        if(PrefUtils.contains(PreferencesActivity.this, Prefs.STORAGE_LOCATION)) {
-                            return item.getValue().toString();
-                        } else {
-                            return getString(R.string.storage_automatic);
-                        }
+                        return item.getValue().toString();
                     }
                 }));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_remove_cache, R.string.remove_cache, Prefs.REMOVE_CACHE, true,
