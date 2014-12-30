@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,6 +54,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     ParallaxScrollView scrollView;
     @InjectView(R.id.coverImage)
     ImageView coverImage;
+    @InjectView(R.id.headerProgress)
+    ProgressBar headerProgress;
     @InjectView(R.id.mainInfoBlock)
     RelativeLayout mainInfoBlock;
     @InjectView(R.id.playButton)
@@ -282,7 +285,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
 
                             @Override
                             public void onError() {
-
+                                headerProgress.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -291,6 +294,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
+                headerProgress.setVisibility(View.GONE);
             }
 
             @Override
