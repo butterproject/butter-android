@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import pct.droid.base.preferences.Prefs;
-
 public class StorageUtils {
 
     public static final String SD_CARD = "sdCard";

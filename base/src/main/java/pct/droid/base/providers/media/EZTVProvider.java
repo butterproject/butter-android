@@ -10,8 +10,6 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import pct.droid.base.providers.media.types.Media;
