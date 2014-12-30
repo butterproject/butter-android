@@ -10,8 +10,10 @@ import android.widget.TextView;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Map;
 
 import butterknife.InjectView;
@@ -49,6 +51,10 @@ public class StreamLoadingActivity extends BaseActivity {
     ProgressBar progressIndicator;
     @InjectView(R.id.progressText)
     TextView progressText;
+    @InjectView(R.id.downloadSpeedText)
+    TextView downloadSpeedText;
+    @InjectView(R.id.seedsText)
+    TextView seedsText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -189,6 +195,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
     private void updateStatus() {
         try {
+            final DecimalFormat df = new DecimalFormat("#############0.00");
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
             if (status == null) return;
             LogUtils.d(status.toString());
@@ -202,6 +209,9 @@ public class StreamLoadingActivity extends BaseActivity {
                         progressIndicator.setIndeterminate(false);
                         progressIndicator.setProgress(progress);
                         progressText.setText(progress + "%");
+
+                        downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
+                        seedsText.setText(status.seeds + " seeds");
                     }
                 });
             } else {
@@ -210,6 +220,10 @@ public class StreamLoadingActivity extends BaseActivity {
                     @Override
                     public void run() {
                         progressText.setText(R.string.streaming_started);
+
+
+                        downloadSpeedText.setText(df.format((status.downloadSpeed / 1048576)) + " MB/s");
+                        seedsText.setText(status.seeds + " seeds");
                     }
                 });
             }
