@@ -41,11 +41,11 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if(getArguments() == null || !getArguments().containsKey(TITLE) || mOnResultListener == null) {
+        if (getArguments() == null || !getArguments().containsKey(TITLE) || mOnResultListener == null) {
             return builder.create();
         }
 
-        if(getArguments().containsKey(DEFAULT_VALUE)) {
+        if (getArguments().containsKey(DEFAULT_VALUE)) {
             int color = getArguments().getInt(DEFAULT_VALUE);
             colorPicker.setColor(color);
             colorPicker.setOldCenterColor(color);
@@ -53,24 +53,24 @@ public class ColorPickerDialogFragment extends DialogFragment {
         }
 
         builder
-            .setView(view)
-            .setTitle(getArguments().getString(TITLE))
-            .setPositiveButton(R.string.ok,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mOnResultListener.onNewValue(colorPicker.getColor());
-                            dialog.dismiss();
+                .setView(view)
+                .setTitle(getArguments().getString(TITLE))
+                .setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mOnResultListener.onNewValue(colorPicker.getColor());
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
                         }
-                    })
-            .setNegativeButton(R.string.cancel,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }
-            );
+                );
 
         return builder.create();
     }

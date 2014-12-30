@@ -57,6 +57,7 @@ public class StringUtils {
 
     /**
      * Uppercase first character
+     *
      * @param str Input string
      * @return Output string
      */

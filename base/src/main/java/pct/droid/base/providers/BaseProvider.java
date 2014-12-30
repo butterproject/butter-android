@@ -37,7 +37,7 @@ public abstract class BaseProvider {
     protected Call mCurrentCall;
 
     protected OkHttpClient getClient() {
-        if(mClient == null) {
+        if (mClient == null) {
             mClient = new OkHttpClient();
 
             int cacheSize = 10 * 1024 * 1024;

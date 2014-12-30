@@ -23,10 +23,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/loading" />
+
     <TextView
         android:id="@+id/downloadSpeedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/seedsText"
         android:layout_width="wrap_content"

@@ -85,9 +85,9 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
-                        String[] items = { getString(R.string.title_movies), getString(R.string.title_shows) };
+                        String[] items = {getString(R.string.title_movies), getString(R.string.title_shows)};
 
-                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, (int)item.getValue(), new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, (int) item.getValue(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 item.saveValue(position);
@@ -114,7 +114,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     public void onClick(final PrefItem item) {
                         Bundle args = new Bundle();
                         args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
-                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int)item.getValue());
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
 
                         ColorPickerDialogFragment dialogFragment = new ColorPickerDialogFragment();
                         dialogFragment.setArguments(args);
@@ -141,7 +141,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
                         args.putInt(NumberPickerDialogFragment.MAX_VALUE, 30);
                         args.putInt(NumberPickerDialogFragment.MIN_VALUE, 10);
-                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int)item.getValue());
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
 
                         NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
                         dialogFragment.setArguments(args);
@@ -170,7 +170,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         final String[] languages = getResources().getStringArray(R.array.subtitle_languages);
                         String[] items = new String[languages.length + 1];
                         items[0] = getString(R.string.no_default_set);
-                        for(int i = 0; i < languages.length; i++) {
+                        for (int i = 0; i < languages.length; i++) {
                             Locale locale;
                             if (languages[i].contains("-")) {
                                 locale = new Locale(languages[i].substring(0, 2), languages[i].substring(3, 5));
@@ -178,7 +178,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                                 locale = new Locale(languages[i]);
                             }
                             items[i + 1] = locale.getDisplayName(locale);
-                            if(languages[i].equals(currentValue)) {
+                            if (languages[i].equals(currentValue)) {
                                 currentPosition = i + 1;
                             }
                         }
@@ -186,7 +186,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, currentPosition, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
-                                if(position == 0) {
+                                if (position == 0) {
                                     item.clearValue();
                                 } else {
                                     item.saveValue(languages[position - 1]);
@@ -200,7 +200,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     @Override
                     public String get(PrefItem item) {
                         String langCode = item.getValue().toString();
-                        if(langCode.isEmpty())
+                        if (langCode.isEmpty())
                             return getString(R.string.no_default_set);
 
                         Locale locale;
@@ -240,7 +240,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         long timeStamp = Long.parseLong(PrefUtils.get(PreferencesActivity.this, PopcornUpdater.LAST_UPDATE_CHECK, "0"));
                         Calendar cal = Calendar.getInstance(Locale.getDefault());
                         cal.setTimeInMillis(timeStamp);
-                        String time = SimpleDateFormat .getTimeInstance(SimpleDateFormat.MEDIUM, Locale.getDefault()) .format(timeStamp);
+                        String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM, Locale.getDefault()).format(timeStamp);
                         String date = DateFormat.format("dd-MM-yyy", cal).toString();
                         return "Last check: " + date + " " + time;
                     }
@@ -250,7 +250,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
-                        String[] items = { getString(R.string.storage_automatic), getString(R.string.storage_choose) };
+                        String[] items = {getString(R.string.storage_automatic), getString(R.string.storage_choose)};
 
                         openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1, new DialogInterface.OnClickListener() {
                             @Override
@@ -290,9 +290,9 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
-                        String[] items = { getString(R.string.hw_automatic), getString(R.string.disabled), getString(R.string.hw_decoding), getString(R.string.hw_full) };
+                        String[] items = {getString(R.string.hw_automatic), getString(R.string.disabled), getString(R.string.hw_decoding), getString(R.string.hw_full)};
 
-                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, (int)item.getValue() + 1, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, (int) item.getValue() + 1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 item.saveValue(position - 1);
@@ -318,11 +318,11 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     }
                 }));
 
-        if(recyclerView.getAdapter() != null && mLayoutManager != null) {
+        if (recyclerView.getAdapter() != null && mLayoutManager != null) {
             int position = mLayoutManager.findFirstVisibleItemPosition();
             View v = mLayoutManager.findViewByPosition(position);
             recyclerView.setAdapter(new PreferencesListAdapter(mPrefItems));
-            if(v != null) {
+            if (v != null) {
                 int offset = v.getTop();
                 mLayoutManager.scrollToPositionWithOffset(position, offset);
             } else {
@@ -335,17 +335,17 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(isUseChangeablePref(key)) {
+        if (isUseChangeablePref(key)) {
             refreshItems();
         }
     }
 
     private boolean isUseChangeablePref(String key) {
         boolean b = false;
-        for(Object item : mPrefItems) {
-            if(item instanceof PrefItem) {
-                PrefItem pref = (PrefItem)item;
-                if(pref.getPrefKey().equals(key))
+        for (Object item : mPrefItems) {
+            if (item instanceof PrefItem) {
+                PrefItem pref = (PrefItem) item;
+                if (pref.getPrefKey().equals(key))
                     b = true;
             }
         }
@@ -368,7 +368,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
     @Override
     public void onSelectDirectory(@NonNull String s) {
         File f = new File(s);
-        if(f.canWrite()) {
+        if (f.canWrite()) {
             PrefUtils.save(this, Prefs.STORAGE_LOCATION, s + "/pct.droid");
         } else {
             Toast.makeText(this, R.string.not_writable, Toast.LENGTH_SHORT).show();

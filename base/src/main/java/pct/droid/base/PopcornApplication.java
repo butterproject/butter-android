@@ -118,7 +118,7 @@ public class PopcornApplication extends VLCApplication {
             }
         }
 
-        if(PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
+        if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
             File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
             FileUtils.recursiveDelete(torrentPath);
             torrentPath.mkdirs();

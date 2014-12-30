@@ -98,7 +98,7 @@ public class TimedTextObject {
     }
 
 	/* 
-	 * PROTECTED METHODS 
+     * PROTECTED METHODS
 	 * 
 	 */
 

@@ -43,7 +43,9 @@ public class StreamLoadingActivity extends BaseActivity {
     private SubsProvider mSubsProvider;
     private Boolean mIntentStarted = false, mHasSubs = false;
 
-    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING};
+    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
+
+    ;
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
 
     @InjectView(R.id.progressIndicator)
@@ -73,13 +75,13 @@ public class StreamLoadingActivity extends BaseActivity {
         final Media data = getIntent().getParcelableExtra(DATA);
 
         if (!getIntent().hasExtra(SUBTITLES) && data.subtitles != null && data.subtitles.size() > 0) {
-            if(data.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+            if (data.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
                 getIntent().putExtra(SUBTITLES, PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
             }
         }
 
         if (data.subtitles != null && data.subtitles.size() > 0) {
-            if(getIntent().hasExtra(SUBTITLES)) {
+            if (getIntent().hasExtra(SUBTITLES)) {
                 mHasSubs = true;
                 String subtitleLanguage = getIntent().getStringExtra(SUBTITLES);
                 if (!subtitleLanguage.equals("no-subs")) {
@@ -98,7 +100,7 @@ public class StreamLoadingActivity extends BaseActivity {
             }
         } else {
             // TODO: make more generic
-            if(data instanceof Movie) {
+            if (data instanceof Movie) {
                 mSubsProvider = new YSubsProvider();
                 mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
                     @Override
