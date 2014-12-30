@@ -147,6 +147,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mProvider.cancel();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_overview, menu);
 

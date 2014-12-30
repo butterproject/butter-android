@@ -74,6 +74,7 @@ public class YTSProvider extends MediaProvider {
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
         requestBuilder.url(mApiUrl + "list.json?" + query);
+        requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, callback);
     }
@@ -173,6 +174,7 @@ public class YTSProvider extends MediaProvider {
     public Call getDetail(String imdbId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
+        requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override

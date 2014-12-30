@@ -17,6 +17,9 @@ import java.util.List;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.meta.MetaProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 
@@ -70,9 +73,9 @@ public abstract class BaseProvider {
     }
 
     public void cancel() {
-        if (mCurrentCall != null) {
-            mCurrentCall.cancel();
-        }
+        mClient.cancel(MediaProvider.MEDIA_CALL);
+        mClient.cancel(MetaProvider.META_CALL);
+        mClient.cancel(SubsProvider.SUBS_CALL);
     }
 
     /**

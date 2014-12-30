@@ -35,6 +35,7 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 
 public abstract class SubsProvider extends BaseProvider {
+    public static final String SUBS_CALL = "subs_http_call";
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
