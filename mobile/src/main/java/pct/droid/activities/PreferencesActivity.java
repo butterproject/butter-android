@@ -87,7 +87,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     public void onClick(final PrefItem item) {
                         String[] items = { getString(R.string.title_movies), getString(R.string.title_shows) };
 
-                        openListSelectionDialog(item.getTitle(), items, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 item.saveValue(position);
@@ -177,7 +177,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                             items[i + 1] = locale.getDisplayName(locale);
                         }
 
-                        openListSelectionDialog(item.getTitle(), items, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 if(position == 0) {
@@ -246,7 +246,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     public void onClick(final PrefItem item) {
                         String[] items = { getString(R.string.storage_automatic), getString(R.string.storage_choose) };
 
-                        openListSelectionDialog(item.getTitle(), items, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 if (position == 0) {
@@ -286,7 +286,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     public void onClick(final PrefItem item) {
                         String[] items = { getString(R.string.hw_automatic), getString(R.string.disabled), getString(R.string.hw_decoding), getString(R.string.hw_full) };
 
-                        openListSelectionDialog(item.getTitle(), items, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, (int)item.getValue() + 1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 item.saveValue(position - 1);
@@ -346,10 +346,12 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
         return b;
     }
 
-    private void openListSelectionDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
+    private void openListSelectionDialog(String title, String[] items, int mode, int defaultPosition, DialogInterface.OnClickListener onClickListener) {
         Bundle args = new Bundle();
         args.putString(StringArraySelectorDialogFragment.TITLE, title);
         args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
+        args.putInt(StringArraySelectorDialogFragment.MODE, mode);
+        args.putInt(StringArraySelectorDialogFragment.POSITION, defaultPosition);
 
         StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
         dialogFragment.setArguments(args);
