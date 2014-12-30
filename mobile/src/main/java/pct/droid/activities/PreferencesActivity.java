@@ -244,7 +244,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
-                        String[] items = { getString(R.string.storage_automatic_short), getString(R.string.storage_choose) };
+                        String[] items = { getString(R.string.storage_automatic), getString(R.string.storage_choose) };
 
                         openListSelectionDialog(item.getTitle(), items, new DialogInterface.OnClickListener() {
                             @Override
