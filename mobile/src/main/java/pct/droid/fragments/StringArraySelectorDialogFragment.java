@@ -12,7 +12,8 @@ import pct.droid.R;
 
 public class StringArraySelectorDialogFragment extends DialogFragment {
 
-    public static final String ARRAY = "array", TITLE = "title";
+    public static final String ARRAY = "array", TITLE = "title", MODE = "mode", POSITION = "position";
+    public static final int NORMAL = 0, SINGLE_CHOICE = 1;
 
     private DialogInterface.OnClickListener mOnClickListener;
 
@@ -35,16 +36,25 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
         if(array instanceof List) {
             stringArray = (String[]) ((List)array).toArray(new String[((List)array).size()]);
         } else if(array instanceof String[]) {
-            stringArray = getArguments().getStringArray(ARRAY);
+            stringArray = b.getStringArray(ARRAY);
         } else {
             return builder.create();
         }
         String title = b.getString(TITLE);
 
+        if(b.containsKey(MODE) && b.getInt(MODE) == SINGLE_CHOICE) {
+            int defaultPosition = -1;
+            if(b.containsKey(POSITION)) {
+                defaultPosition = b.getInt(POSITION);
+            }
+            builder.setSingleChoiceItems(stringArray, defaultPosition, mOnClickListener);
+        } else {
+            builder.setItems(stringArray, mOnClickListener);
+        }
+
         builder
             .setTitle(title)
-            .setItems(stringArray, mOnClickListener)
-            .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
