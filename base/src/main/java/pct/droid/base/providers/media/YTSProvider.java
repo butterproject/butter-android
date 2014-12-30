@@ -319,7 +319,7 @@ public class YTSProvider extends MediaProvider {
                 }
 
                 Media.Torrent torrent = new Media.Torrent();
-                torrent.url = item.get("TorrentUrl").toString();
+                torrent.url = item.get("TorrentMagnetUrl").toString();
                 torrent.seeds = item.get("TorrentSeeds").toString();
                 torrent.peers = item.get("TorrentPeers").toString();
 
