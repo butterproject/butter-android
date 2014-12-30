@@ -87,7 +87,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     public void onClick(final PrefItem item) {
                         String[] items = { getString(R.string.title_movies), getString(R.string.title_shows) };
 
-                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, (int)item.getValue(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 item.saveValue(position);
@@ -164,6 +164,9 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
+                        int currentPosition = 0;
+                        String currentValue = item.getValue().toString();
+
                         final String[] languages = getResources().getStringArray(R.array.subtitle_languages);
                         String[] items = new String[languages.length + 1];
                         items[0] = getString(R.string.no_default_set);
@@ -175,9 +178,12 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                                 locale = new Locale(languages[i]);
                             }
                             items[i + 1] = locale.getDisplayName(locale);
+                            if(languages[i].equals(currentValue)) {
+                                currentPosition = i + 1;
+                            }
                         }
 
-                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1, new DialogInterface.OnClickListener() {
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, currentPosition, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
                                 if(position == 0) {
