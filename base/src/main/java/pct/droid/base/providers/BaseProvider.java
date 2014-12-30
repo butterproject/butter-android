@@ -1,5 +1,7 @@
 package pct.droid.base.providers;
 
+import android.os.AsyncTask;
+
 import com.google.gson.Gson;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Call;
@@ -73,9 +75,16 @@ public abstract class BaseProvider {
     }
 
     public void cancel() {
-        mClient.cancel(MediaProvider.MEDIA_CALL);
-        mClient.cancel(MetaProvider.META_CALL);
-        mClient.cancel(SubsProvider.SUBS_CALL);
+        // Cancel in asynctask to prevent networkOnMainThreadException
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                mClient.cancel(MediaProvider.MEDIA_CALL);
+                mClient.cancel(MetaProvider.META_CALL);
+                mClient.cancel(SubsProvider.SUBS_CALL);
+                return null;
+            }
+        }.execute();
     }
 
     /**
