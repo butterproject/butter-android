@@ -158,7 +158,7 @@ public class StreamLoadingActivity extends BaseActivity {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    progressText.setText("Waiting for subtitles"); // TODO: translation (by sv244)
+                    progressText.setText(R.string.waiting_for_subtitles);
                 }
             });
             return;
@@ -209,8 +209,7 @@ public class StreamLoadingActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (progressText.getText().toString().equals("Streaming"))
-                            progressText.setText("Streaming"); // TODO: translation (by sv244)
+                        progressText.setText(R.string.streaming_started);
                     }
                 });
             }
