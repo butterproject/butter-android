@@ -10,6 +10,8 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import pct.droid.base.providers.media.types.Media;
@@ -39,8 +41,7 @@ public class EZTVProvider extends MediaProvider {
         }
 
         if (filters.keywords != null) {
-            String keywords = filters.keywords.replaceAll("\\s", "% ");
-            params.add(new BasicNameValuePair("keywords", keywords));
+            params.add(new BasicNameValuePair("keywords", filters.keywords));
         }
 
         if (filters.genre != null) {
