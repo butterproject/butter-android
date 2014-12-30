@@ -160,7 +160,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     private float mTouchY, mTouchX;
 
     private boolean mIsFirstBrightnessGesture = true;
-    private float mRestoreAutoBrightness = -1f;
+    private float mRestoreBrightness = -1f;
 
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
@@ -289,11 +289,10 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     @Override
     protected void onStop() {
         super.onStop();
-        if (mRestoreAutoBrightness != -1f) {
-            int brightness = (int) (mRestoreAutoBrightness * 255f);
+        if (mRestoreBrightness != -1f) {
+            int brightness = (int) (mRestoreBrightness * 255f);
             Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightness);
         } else {
-
             Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
         }
     }
@@ -455,13 +454,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     @TargetApi(android.os.Build.VERSION_CODES.FROYO)
     private void initBrightnessTouch() {
         float brightnesstemp = 0.6f;
-        // Initialize the layoutParams screen brightness
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO && Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
                 Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-                mRestoreAutoBrightness = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
+                mRestoreBrightness = -1f;
             } else {
-                brightnesstemp = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
+                mRestoreBrightness = brightnesstemp = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
             }
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
