@@ -226,6 +226,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 @Override
                 public void run() {
                     mAdapter.setItems(items);
+                    emptyView.setVisibility(View.GONE);
                 }
             });
         }
