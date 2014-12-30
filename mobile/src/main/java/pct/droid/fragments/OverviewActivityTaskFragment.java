@@ -7,12 +7,14 @@ import android.os.Bundle;
 import java.util.ArrayList;
 
 import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.types.Media;
 
 public class OverviewActivityTaskFragment extends Fragment implements MediaProvider.Callback {
 
     public final static String TAG = "pct.droid.overviewactivitytaskfragment";
 
+    private MediaProvider mProvider = new YTSProvider();
     private MediaProvider.Callback mCallback;
     private ArrayList<Media> mItems;
     private int mPage = 1;
@@ -34,6 +36,14 @@ public class OverviewActivityTaskFragment extends Fragment implements MediaProvi
     public void onDetach() {
         super.onDetach();
         mCallback = null;
+    }
+
+    public void setProvider(MediaProvider provider) {
+        mProvider = provider;
+    }
+
+    public MediaProvider getProvider() {
+        return mProvider;
     }
 
     public ArrayList<Media> getExistingItems() {
