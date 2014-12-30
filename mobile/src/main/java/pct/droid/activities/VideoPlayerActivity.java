@@ -513,48 +513,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         });
     }
 
-    private int changeAudioFocus(boolean acquire) {
-        if (mAudioFocusListener == null) {
-            mAudioFocusListener = new OnAudioFocusChangeListener() {
-                @Override
-                public void onAudioFocusChange(int focusChange) {
-                    /*
-                     * Pause playback during alerts and notifications
-                     */
-                    switch (focusChange) {
-                        case AudioManager.AUDIOFOCUS_LOSS:
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                            if (mLibVLC.isPlaying())
-                                mLibVLC.pause();
-                            break;
-                        case AudioManager.AUDIOFOCUS_GAIN:
-                        case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT:
-                        case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK:
-                            if (!mLibVLC.isPlaying())
-                                mLibVLC.play();
-                            break;
-                    }
-                }
-            };
-        }
-
-        int result;
-        if (acquire) {
-            result = mAudioManager.requestAudioFocus(mAudioFocusListener,
-                    AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-            mAudioManager.setParameters("bgm_state=true");
-        } else {
-            if (mAudioManager != null) {
-                result = mAudioManager.abandonAudioFocus(mAudioFocusListener);
-                mAudioManager.setParameters("bgm_state=false");
-            } else
-                result = AudioManager.AUDIOFOCUS_REQUEST_FAILED;
-        }
-
-        return result;
-    }
-
     public void eventHardwareAccelerationError() {
         EventHandler em = EventHandler.getInstance();
         em.callback(EventHandler.HardwareAccelerationError, new Bundle());
@@ -582,17 +540,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     activity.resumeVideo();
                     activity.progressIndicator.setVisibility(View.GONE);
                     activity.showOverlay();
-                    /** FIXME: update the track list when it changes during the
-                     *  playback. (#7540) */
-                    activity.changeAudioFocus(true);
                     break;
                 case EventHandler.MediaPlayerPaused:
                     break;
                 case EventHandler.MediaPlayerStopped:
-                    activity.changeAudioFocus(false);
                     break;
                 case EventHandler.MediaPlayerEndReached:
-                    activity.changeAudioFocus(false);
                     activity.endReached();
                     break;
                 case EventHandler.MediaPlayerEncounteredError:
@@ -625,7 +578,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             }, 1000);
         } else {
             /* Exit player when reaching the end */
-            // TODO: END, CLOSE DIALOG?
+            // TODO: END, ASK USER TO CLOSE PLAYER?
         }
     }
 
@@ -705,7 +658,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
-                if(message) showInfo("Best fit"); // TODO: Translate
+                if(message) showInfo(getString(R.string.best_fit));
                 if (dar < ar)
                     dh = dw / ar;
                 else
@@ -713,14 +666,14 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 break;
             case SURFACE_FIT_HORIZONTAL:
                 dh = dw / ar;
-                if(message) showInfo("Fit horizontal"); // TODO: Translate
+                if(message) showInfo(getString(R.string.fit_horizontal));
                 break;
             case SURFACE_FIT_VERTICAL:
                 dw = dh * ar;
-                if(message) showInfo("Fit vertical"); // TODO: Translate
+                if(message) showInfo(getString(R.string.fit_vertical));
                 break;
             case SURFACE_FILL:
-                if(message) showInfo("Fill"); // TODO: Translate
+                if(message) showInfo(getString(R.string.fill));
                 break;
             case SURFACE_16_9:
                 if(message) showInfo("16:9");
@@ -739,7 +692,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                     dw = dh * ar;
                 break;
             case SURFACE_ORIGINAL:
-                if(message) showInfo("Original"); // TODO: Translate
+                if(message) showInfo(getString(R.string.original_size));
                 dh = mVideoVisibleHeight;
                 dw = vw;
                 break;
