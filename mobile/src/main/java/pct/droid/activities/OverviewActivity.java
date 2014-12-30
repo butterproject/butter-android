@@ -250,7 +250,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
+                        Toast.makeText(OverviewActivity.this, R.string.unknown_error, Toast.LENGTH_SHORT).show();
                         emptyView.setVisibility(View.VISIBLE);
                     }
                 });
