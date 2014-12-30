@@ -3,7 +3,6 @@ package pct.droid.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.FileObserver;
-import android.provider.MediaStore;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

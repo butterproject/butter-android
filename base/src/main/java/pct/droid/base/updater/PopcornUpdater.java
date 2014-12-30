@@ -37,7 +37,6 @@ import pct.droid.base.Constants;
 import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.widget.ObscuredSharedPreferences;
 
 public class PopcornUpdater extends Observable {
 
