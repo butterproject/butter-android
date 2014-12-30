@@ -74,6 +74,7 @@ public class EZTVProvider extends MediaProvider {
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
         requestBuilder.url(url + "?" + query);
+        requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, callback);
     }
@@ -127,6 +128,7 @@ public class EZTVProvider extends MediaProvider {
     public Call getDetail(String videoId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + "show/" + videoId);
+        requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override

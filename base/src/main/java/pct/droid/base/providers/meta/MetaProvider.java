@@ -5,6 +5,8 @@ import java.util.HashMap;
 import pct.droid.base.providers.BaseProvider;
 
 public abstract class MetaProvider extends BaseProvider {
+    public static final String META_CALL = "meta_http_call";
+
     public class MetaData {
         public String title;
         public Integer year;
