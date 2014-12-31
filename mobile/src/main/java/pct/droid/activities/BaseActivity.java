@@ -1,6 +1,7 @@
 package pct.droid.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
@@ -10,8 +11,12 @@ import android.view.MenuItem;
 
 import com.bugsnag.android.Bugsnag;
 
+import java.util.Locale;
+
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.PrefUtils;
 
 public class BaseActivity extends ActionBarActivity {
 
@@ -30,6 +35,13 @@ public class BaseActivity extends ActionBarActivity {
         super.onResume();
         Bugsnag.onActivityResume(this);
         getApp().startService();
+
+        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
     @Override

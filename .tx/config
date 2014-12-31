@@ -7,6 +7,8 @@ source_lang = en
 source_file = mobile/src/main/res/values/strings.xml
 type = ANDROID
 minimum_perc = 95
+trans.zh_CN = mobile/src/main/res/values-zh-rCN/strings.xml
+trans.pt_BR = mobile/src/main/res/values-pt-rBR/strings.xml
 
 [popcorn-time-app.tv-strings]
 file_filter = tv/src/main/res/values-<lang>/strings.xml

@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -24,6 +25,7 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.services.StreamerService;
@@ -40,17 +42,25 @@ public class PopcornApplication extends VLCApplication {
     private String mShouldBoundUrl = "";
     private static OkHttpClient sHttpClient;
     private static Picasso sPicasso;
+    private static String sDefSystemLanguage;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sDefSystemLanguage = Locale.getDefault().getLanguage();
+        if(!Locale.getDefault().getCountry().isEmpty()) {
+            sDefSystemLanguage += "-" + Locale.getDefault().getCountry();
+        }
+
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
         PopcornUpdater.getInstance(this).checkUpdatesManually();
 
         Constants.DEBUG_ENABLED = false;
+        int versionCode = 0;
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             int flags = packageInfo.applicationInfo.flags;
+            versionCode = packageInfo.versionCode;
             Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -75,11 +85,24 @@ public class PopcornApplication extends VLCApplication {
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         LogUtils.i("Chosen cache location: " + directory);
 
-        int versionCode = BuildConfig.VERSION_CODE;
+
         if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
             PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
             FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        sDefSystemLanguage = newConfig.locale.getLanguage();
+        if(!newConfig.locale.getCountry().isEmpty()) {
+            sDefSystemLanguage += "-" + newConfig.locale.getCountry();
+        }
+    }
+
+    public static String getSystemLanguage() {
+        return sDefSystemLanguage;
     }
 
     public static OkHttpClient getHttpClient() {

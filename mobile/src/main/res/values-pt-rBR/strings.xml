@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Salvar</string>
+  <string name="cancel">Cancelar</string>
+  <string name="close">Fechar</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Habilitado</string>
+  <string name="disabled">Desabilitado</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Título, ano, atores</string>
+  <string name="title_shows">Séries</string>
+  <string name="title_movies">Filmes</string>
+  <string name="search">Procurar</string>
+  <string name="loading">Carregando os dados...</string>
+  <string name="no_data_found">Nenhum dado encontrado</string>
+  <string name="unknown_error">Algo deu errado</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">minutos</string>
+  <string name="watch_trailer">Assistir trailer</string>
+  <string name="disable_subs">Desabilitar legendas</string>
+  <string name="no_subs">Sem legendas</string>
+  <string name="subtitles">Legendas</string>
+  <string name="quality">Qualidade</string>
+  <string name="trailer">Trailer</string>
+  <string name="season">Temporada</string>
+  <string name="episode">Episódio</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">Streaming iniciada</string>
+  <string name="waiting_for_subtitles">Esperando por legendas</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Reproduzindo agora</string>
+  <string name="volume">Volume</string>
+  <string name="brightness">Brilho</string>
+  <string name="hardware_acceleration_error_title">Erro de aceleração de Hardware</string>
+  <string name="hardware_acceleration_error_message">Ocorreu um erro com a aceleração de hardware. Gostaria de desabilitá-la e tentar novamente?</string>
+  <string name="best_fit">Melhor ajuste</string>
+  <string name="fill">Preencher</string>
+  <string name="fit_horizontal">Ajustar horizontalmente</string>
+  <string name="fit_vertical">Ajustar verticalmente</string>
+  <string name="original_size">Original</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Aceitar</string>
+  <string name="leave">Sair</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Preferências</string>
+  <string name="general">Geral</string>
+  <string name="default_view">Visão geral padrão</string>
+  <string name="default_player">Player de vídeo padrão</string>
+  <string name="internal_player">Interno</string>
+  <string name="subtitle_color">Cor</string>
+  <string name="subtitle_size">Tamanho</string>
+  <string name="subtitle_language">Língua padrão</string>
+  <string name="no_default_set">Sem língua padrão</string>
+  <string name="advanced">Avançado</string>
+  <string name="storage_location">Localização do armazenamento</string>
+  <string name="storage_automatic">Automático</string>
+  <string name="storage_choose">Escolha a localização</string>
+  <string name="not_writable">Localização não pode ser escrita</string>
+  <string name="remove_cache">Remover cache ao fechar o player</string>
+  <string name="hw_acceleration">Aceleração de Hardware</string>
+  <string name="hw_automatic">Automático</string>
+  <string name="hw_full">Total</string>
+  <string name="hw_decoding">Somente Decoding</string>
+  <string name="updates">Atualizações</string>
+  <string name="auto_updates">Atualizações automáticas</string>
+  <string name="check_for_updates">Verificar atualizações</string>
+  <string name="about">Sobre</string>
+  <string name="version">Versão</string>
+  <string name="changelog">Atualizações</string>
+  <string name="tap_to_open">Clique para abrir</string>
+  <string name="report_a_bug">Informe um erro</string>
+  <string name="open_source_licenses">Licença de código aberto</string>
+</resources>
