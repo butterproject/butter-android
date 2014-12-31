@@ -6,11 +6,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class DefaultPlayer {
@@ -58,13 +63,30 @@ public class DefaultPlayer {
      * @param location Video location
      * @return {@code true} if activity started, {@code false} otherwise
      */
-    public static boolean start(Context context, String location) {
+    public static boolean start(Context context, Media media, String subLanguage, String location) {
         String[] playerData = PrefUtils.get(context, Prefs.DEFAULT_PLAYER, "").split(DELIMITER);
         if(playerData.length > 0) {
+            if(media.subtitles.size() > 0) {
+                File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
+                File newLocation = new File(location.replace("." + FileUtils.getFileExtension(location), ".srt"));
+
+                if(subLanguage != null && !subLanguage.equals("no-subs")) {
+                    try {
+                        newLocation.getParentFile().mkdirs();
+                        newLocation.createNewFile();
+                        FileUtils.copy(subsLocation, newLocation);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    newLocation.delete();
+                }
+            }
+
             Intent intent = new Intent();
             intent.setClassName(playerData[1], playerData[0]);
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(location), "video/mp4");
+            intent.setDataAndType(Uri.parse("file://" + location), "video/mp4");
             context.startActivity(intent);
             return true;
         }

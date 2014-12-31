@@ -1002,11 +1002,10 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String filePath = new File(PrefUtils.get(VideoPlayerActivity.this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(VideoPlayerActivity.this).toString())) + "/subs/" + mMedia.videoId + "-" + mCurrentSubsLang + ".srt";
-                    File file = new File(filePath);
+                    File file = new File(SubsProvider.getStorageLocation(VideoPlayerActivity.this), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
                     FileInputStream fileInputStream = new FileInputStream(file);
                     FormatSRT formatSRT = new FormatSRT();
-                    mSubs = formatSRT.parseFile(filePath, FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
+                    mSubs = formatSRT.parseFile(file.toString(), FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
                     checkSubs();
                 } catch (FileNotFoundException e) {
                     if (e.getMessage().contains("EBUSY")) {
