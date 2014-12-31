@@ -212,14 +212,14 @@ public class YTSProvider extends MediaProvider {
 
                             TraktProvider.MetaData meta = traktProvider.getSummary(movie.videoId, "movie");
                             if (meta.images != null && meta.images.containsKey("poster")) {
-                                movie.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                movie.image = meta.images.get("poster").replace("/original/", "/medium/");
                                 movie.fullImage = meta.images.get("poster");
                             } else {
                                 movie.fullImage = movie.image;
                             }
 
                             if (meta.images != null && meta.images.containsKey("fanart")) {
-                                movie.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
                             } else {
                                 movie.headerImage = movie.image;
                             }
