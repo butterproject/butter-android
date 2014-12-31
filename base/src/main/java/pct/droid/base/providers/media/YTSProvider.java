@@ -144,12 +144,12 @@ public class YTSProvider extends MediaProvider {
                                 TraktProvider.MetaData meta = metaDatas[index];
                                 if (media.videoId.equals(meta.imdb_id)) {
                                     if (meta.images.containsKey("poster")) {
-                                        media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                        media.image = meta.images.get("poster").replace("/original/", "/medium/");
                                         media.fullImage = meta.images.get("poster");
                                     }
 
                                     if (meta.images.containsKey("fanart")) {
-                                        media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                        media.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
                                     }
 
                                     if (meta.title != null) {
