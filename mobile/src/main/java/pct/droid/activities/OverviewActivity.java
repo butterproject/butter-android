@@ -85,17 +85,17 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
-        if (providerId == 1) {
-            mTaskFragment.setProvider(new EZTVProvider());
-        }
-
         FragmentManager fm = getFragmentManager();
         mTaskFragment = (OverviewActivityTaskFragment) fm.findFragmentByTag(OverviewActivityTaskFragment.TAG);
 
         if (mTaskFragment == null || mTaskFragment.getExistingItems() == null) {
             mTaskFragment = new OverviewActivityTaskFragment();
             fm.beginTransaction().add(mTaskFragment, OverviewActivityTaskFragment.TAG).commit();
+
+            int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
+            if (providerId == 1) {
+                mTaskFragment.setProvider(new EZTVProvider());
+            }
 
             mTaskFragment.getProvider().getList(mTaskFragment.getFilters(), mTaskFragment);
         } else {
