@@ -18,6 +18,7 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
@@ -41,7 +42,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
     private FileObserver mFileObserver;
     private SubsProvider mSubsProvider;
-    private Boolean mIntentStarted = false, mHasSubs = false;
+    private Boolean mPlayerStarted = false, mHasSubs = false;
 
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
 
@@ -173,23 +174,26 @@ public class StreamLoadingActivity extends BaseActivity {
             return;
         }
 
-        if (!mIntentStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
+        if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
             try {
                 Ready ready = Ready.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/streamer.json"));
-                mIntentStarted = true;
-                Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
-                if (getIntent().hasExtra(DATA)) {
-                    i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+                mPlayerStarted = true;
+                String location = "file://" + ready.filePath;
+                if(!DefaultPlayer.start(this, location)) {
+                    Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+                    if (getIntent().hasExtra(DATA)) {
+                        i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+                    }
+                    if (getIntent().hasExtra(QUALITY)) {
+                        i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
+                    }
+                    if (mSubsStatus == SubsStatus.SUCCESS) {
+                        i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
+                    }
+                    i.putExtra(VideoPlayerActivity.LOCATION, location);
+                    startActivity(i);
+                    finish();
                 }
-                if (getIntent().hasExtra(QUALITY)) {
-                    i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
-                }
-                if (mSubsStatus == SubsStatus.SUCCESS) {
-                    i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
-                }
-                i.putExtra(VideoPlayerActivity.LOCATION, "file://" + ready.filePath);
-                startActivity(i);
-                finish();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -239,6 +243,9 @@ public class StreamLoadingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mFileObserver.startWatching();
+        if(mPlayerStarted) {
+            onBackPressed();
+        }
     }
 
     @Override

@@ -9,4 +9,6 @@ public class Prefs {
     public static final String HW_ACCELERATION = "hw_acceleration";
     public static final String AUTOMATIC_UPDATES = "auto_updates";
     public static final String DEFAULT_VIEW = "default_view";
+    public static final String DEFAULT_PLAYER = "default_player";
+    public static final String DEFAULT_PLAYER_NAME = "default_player_name";
 }
