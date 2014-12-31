@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.updater.PopcornUpdater;
@@ -103,6 +105,48 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                             return getString(R.string.title_shows);
                         }
                         return getString(R.string.title_movies);
+                    }
+                }));
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.default_player, Prefs.DEFAULT_PLAYER, "",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        int currentPosition = 0;
+                        String currentValue = item.getValue().toString();
+
+                        final Map<String, String> players = DefaultPlayer.getVideoPlayerApps();
+                        final String[] playerDatas = players.keySet().toArray(new String[players.size()]);
+                        String[] items = new String[players.size() + 1];
+                        items[0] = getString(R.string.internal_player);
+                        for (int i = 0; i < playerDatas.length; i++) {
+                            String playerData = playerDatas[i];
+                            String playerName = players.get(playerData);
+
+                            items[i + 1] = playerName;
+                            if (playerData.equals(currentValue)) {
+                                currentPosition = i + 1;
+                            }
+                        }
+
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, currentPosition, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int position) {
+                                if (position == 0) {
+                                    DefaultPlayer.set("", "");
+                                } else {
+                                    String playerData = playerDatas[position - 1];
+                                    DefaultPlayer.set(players.get(playerData), playerData);
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return PrefUtils.get(PreferencesActivity.this, Prefs.DEFAULT_PLAYER_NAME, getString(R.string.internal_player));
                     }
                 }));
 
