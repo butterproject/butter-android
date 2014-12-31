@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -60,6 +61,8 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
     Toolbar toolbar;
     @InjectView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @InjectView(R.id.rootLayout)
+    ViewGroup rootLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +94,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
 
     private void refreshItems() {
         mPrefItems = new ArrayList<>();
-        mPrefItems.add(getString(R.string.general));
+        mPrefItems.add(getResources().getString(R.string.general));
 
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.default_view, Prefs.DEFAULT_VIEW, 0,
                 new PrefItem.OnClickListener() {
@@ -159,7 +162,8 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         return PrefUtils.get(PreferencesActivity.this, Prefs.DEFAULT_PLAYER_NAME, getString(R.string.internal_player));
                     }
                 }));
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.i18n_language, Prefs.LOCALE, "", new PrefItem.OnClickListener() {
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.i18n_language, Prefs.LOCALE, "",
+                new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
                         int currentPosition = 0;
@@ -191,16 +195,9 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                                     item.saveValue(languages[position - 1]);
                                 }
 
-                                String language = PrefUtils.get(PreferencesActivity.this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-                                Locale locale = new Locale(language);
-                                Locale.setDefault(locale);
-                                Configuration config = new Configuration();
-                                config.locale = locale;
-                                getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
-                                getSupportActionBar().setTitle(getString(R.string.preferences));
-
                                 dialog.dismiss();
+
+                                Toast.makeText(PreferencesActivity.this, R.string.restart_effect, Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -209,7 +206,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     @Override
                     public String get(PrefItem item) {
                         String language = item.getValue().toString();
-                        if(language.isEmpty()) {
+                        if(!language.isEmpty()) {
                             Locale locale;
                             if (language.contains("-")) {
                                 locale = new Locale(language.substring(0, 2), language.substring(3, 5));
@@ -221,8 +218,22 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         return getString(R.string.device_language);
                     }
                 }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.stream_over_wifi_only, Prefs.WIFI_ONLY, true,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+                        item.saveValue(!(boolean) item.getValue());
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        boolean enabled = (boolean) item.getValue();
+                        return enabled ? getString(R.string.enabled) : getString(R.string.disabled);
+                    }
+                }));
 
-        mPrefItems.add(getString(R.string.subtitles));
+        mPrefItems.add(getResources().getString(R.string.subtitles));
 
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_subtitle_color, R.string.subtitle_color, Prefs.SUBTITLE_COLOR, Color.WHITE,
                 new PrefItem.OnClickListener() {
@@ -328,12 +339,12 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         return locale.getDisplayName(locale);
                     }
                 }));
-        mPrefItems.add(getString(R.string.updates));
+        mPrefItems.add(getResources().getString(R.string.updates));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_auto_update, R.string.auto_updates, Prefs.AUTOMATIC_UPDATES, true,
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(PrefItem item) {
-                        PrefUtils.save(PreferencesActivity.this, Prefs.AUTOMATIC_UPDATES, !(boolean) item.getValue());
+                        item.saveValue(!(boolean) item.getValue());
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -361,7 +372,8 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         return "Last check: " + date + " " + time;
                     }
                 }));
-        mPrefItems.add(getString(R.string.advanced));
+
+        mPrefItems.add(getResources().getString(R.string.advanced));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_storage_location, R.string.storage_location, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this),
                 new PrefItem.OnClickListener() {
                     @Override
@@ -434,7 +446,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     }
                 }));
 
-        mPrefItems.add(getString(R.string.about));
+        mPrefItems.add(getResources().getString(R.string.about));
 
         if(!Constants.DEBUG_ENABLED) {
             mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_report_bug, R.string.report_a_bug, "", "",
@@ -517,6 +529,12 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
         } else {
             recyclerView.setAdapter(new PreferencesListAdapter(mPrefItems));
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        refreshItems();
     }
 
     @Override

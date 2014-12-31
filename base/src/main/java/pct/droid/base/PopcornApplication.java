@@ -53,7 +53,7 @@ public class PopcornApplication extends VLCApplication {
         }
 
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
-        PopcornUpdater.getInstance(this).checkUpdatesManually();
+        PopcornUpdater.getInstance(this).checkUpdates(false);
 
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;

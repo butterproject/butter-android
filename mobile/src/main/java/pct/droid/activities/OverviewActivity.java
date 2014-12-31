@@ -59,6 +59,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false, mPaused = true;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
+    @InjectView(R.id.rootLayout)
+    RelativeLayout rootLayout;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
     @InjectView(R.id.progressOverlay)
@@ -141,6 +143,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     protected void onResume() {
         super.onResume();
         mPaused = false;
+        rootLayout.invalidate();
     }
 
     @Override
@@ -156,7 +159,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchViewAction.setQueryHint(getString(R.string.search_hint));
+        searchViewAction.setQueryHint(getResources().getString(R.string.search_hint));
         searchViewAction.setOnQueryTextListener(mSearchListener);
         searchViewAction.setIconifiedByDefault(true);
 
