@@ -16,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -174,6 +175,42 @@ public class FileUtils {
             writer.write(string);
             writer.close();
         }
+    }
+
+    /**
+     * Get the extension of the file
+     *
+     * @param fileName Name (and location) of the file
+     * @return Extension
+     */
+    public static String getFileExtension(String fileName) {
+        String extension = "";
+
+        int i = fileName.lastIndexOf('.');
+        int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+
+        if (i > p) {
+            extension = fileName.substring(i+1);
+        }
+
+        return extension;
+    }
+
+    /**
+     * Copy file (only use for files smaller than 2GB)
+     *
+     * @param src Source
+     * @param dst Destionation
+     * @throws IOException
+     */
+    public static void copy(File src, File dst) throws IOException {
+        FileInputStream inStream = new FileInputStream(src);
+        FileOutputStream outStream = new FileOutputStream(dst);
+        FileChannel inChannel = inStream.getChannel();
+        FileChannel outChannel = outStream.getChannel();
+        inChannel.transferTo(0, inChannel.size(), outChannel);
+        inStream.close();
+        outStream.close();
     }
 
 }

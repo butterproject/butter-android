@@ -43,6 +43,7 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (getItemViewType(position) == NORMAL) {
             ViewHolder itemViewHolder = (ViewHolder) viewHolder;
             PrefItem item = (PrefItem) mItems.get(position);
+            itemViewHolder.itemView.setClickable(item.isClickable());
             itemViewHolder.icon.setImageResource(item.getIconResource());
             itemViewHolder.text1.setText(item.getTitle());
             itemViewHolder.text2.setText(item.getSubTitle());

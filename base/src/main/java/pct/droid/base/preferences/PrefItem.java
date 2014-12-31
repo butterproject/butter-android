@@ -20,9 +20,9 @@ public class PrefItem {
         mSubTitleGenerator = subTitleGenerator;
     }
 
-    public PrefItem(Context context, int iconRes, int titleRes, String prefKey, Object defaultValue, OnClickListener clickListener) {
+    public PrefItem(Context context, int iconRes, int titleRes, String prefKey, Object defaultValue, SubTitleGenerator subTitleGenerator) {
         this(context, iconRes, titleRes, prefKey, defaultValue);
-        mOnClickListener = clickListener;
+        mSubTitleGenerator = subTitleGenerator;
     }
 
     public PrefItem(Context context, int iconRes, int titleRes, String prefKey, Object defaultValue) {
@@ -94,6 +94,10 @@ public class PrefItem {
             return mSubTitleGenerator.get(this);
         }
         return "";
+    }
+
+    public boolean isClickable() {
+        return mOnClickListener != null;
     }
 
     public void onClick() {

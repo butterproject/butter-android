@@ -46,6 +46,10 @@ public abstract class SubsProvider extends BaseProvider {
         public void onFailure(Exception e);
     }
 
+    public static File getStorageLocation(Context context) {
+        return new File(PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()) + "/subs/");
+    }
+
     /**
      * @param context      Context
      * @param media        Media data
@@ -59,6 +63,16 @@ public abstract class SubsProvider extends BaseProvider {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
+
+                final File subsDirectory = getStorageLocation(context);
+                final String fileName = media.videoId + "-" + languageCode;
+                final File srtPath = new File(subsDirectory, fileName + ".srt");
+
+                if(srtPath.exists()) {
+                    callback.onResponse(null);
+                    return call;
+                }
+
                 call.enqueue(new com.squareup.okhttp.Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
@@ -71,11 +85,7 @@ public abstract class SubsProvider extends BaseProvider {
                             InputStream inputStream = null;
                             boolean failure = false;
                             try {
-                                File cacheDirectory = new File(PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()));
-                                File subsDirectory = new File(cacheDirectory, "subs");
 
-                                String fileName = media.videoId + "-" + languageCode;
-                                File srtPath = new File(subsDirectory, fileName + ".srt");
 
                                 subsDirectory.mkdirs();
                                 if (srtPath.exists()) {
@@ -121,6 +131,8 @@ public abstract class SubsProvider extends BaseProvider {
 
                 return call;
             } catch (RuntimeException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
