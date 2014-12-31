@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -251,7 +253,45 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             onSubtitleLanguageSelected(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
         }
 
-        PopcornApplication.getPicasso().load(mItem.image).into(new Target() {
+        PopcornApplication.getPicasso().load(mItem.image).into(coverImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                Palette palette = Palette.generate(((BitmapDrawable)coverImage.getDrawable()).getBitmap());
+
+                int vibrantColor = palette.getVibrantColor(R.color.primary);
+                if (vibrantColor == R.color.primary) {
+                    mPaletteColor = palette.getMutedColor(R.color.primary);
+                } else {
+                    mPaletteColor = vibrantColor;
+                }
+
+                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), getResources().getColor(R.color.primary), mPaletteColor);
+                mainInfoBlockColorFade.setDuration(500);
+                Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
+                mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
+                final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
+
+                // Delay to make sure transition is smooth
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        playButton.setImageDrawable(td);
+                        Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, android.R.anim.fade_in);
+                        mainInfoBlockColorFade.start();
+                        td.startTransition(500);
+                        coverImage.setVisibility(View.VISIBLE);
+                        coverImage.startAnimation(fadeInAnim);
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onError() {
+                headerProgress.setVisibility(View.GONE);
+            }
+        });
+
+        /*PopcornApplication.getPicasso().load(mItem.image).into(new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 Palette palette = Palette.generate(bitmap);
@@ -301,7 +341,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
             }
-        });
+        });*/
     }
 
     @Override
