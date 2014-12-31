@@ -75,9 +75,10 @@ public class PopcornApplication extends VLCApplication {
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         LogUtils.i("Chosen cache location: " + directory);
 
-        String versionCode = Integer.toString(BuildConfig.VERSION_CODE);
-        if (!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
-            PrefUtils.save(this, "versionCode", versionCode);
+        int versionCode = BuildConfig.VERSION_CODE;
+        if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
+            PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
+            FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
         }
     }
 

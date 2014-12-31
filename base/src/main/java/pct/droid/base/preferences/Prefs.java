@@ -11,4 +11,6 @@ public class Prefs {
     public static final String DEFAULT_VIEW = "default_view";
     public static final String DEFAULT_PLAYER = "default_player";
     public static final String DEFAULT_PLAYER_NAME = "default_player_name";
+    public static final String INSTALLED_VERSION = "installed_version";
+    public static final String LOCALE = "locale";
 }

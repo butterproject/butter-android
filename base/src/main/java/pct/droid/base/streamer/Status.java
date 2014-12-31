@@ -11,6 +11,7 @@ public class Status {
     public int seeds;
     public int connections;
     public double uploadSpeed;
+    public String filePath;
 
     public static Status parseJSON(String json) throws IllegalStateException {
         Gson gson = new Gson();

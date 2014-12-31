@@ -33,6 +33,7 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
+import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.JiraClient;
 import pct.droid.base.preferences.DefaultPlayer;
@@ -429,13 +430,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.SubTitleGenerator() {
                     @Override
                     public String get(PrefItem item) {
-                        try {
-                            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                            return packageInfo.versionName + " - " + Build.CPU_ABI;
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        return "?.? (?) - ?";
+                        return BuildConfig.VERSION_NAME + " - " + Build.CPU_ABI;
                     }
                 }));
 
