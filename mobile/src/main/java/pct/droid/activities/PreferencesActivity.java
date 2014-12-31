@@ -371,7 +371,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
 
         mPrefItems.add(getString(R.string.about));
 
-        //if(!Constants.DEBUG_ENABLED) {
+        if(!Constants.DEBUG_ENABLED) {
             mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_report_bug, R.string.report_a_bug, "", "",
                     new PrefItem.OnClickListener() {
                         @Override
@@ -392,7 +392,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                             return getString(R.string.tap_to_open);
                         }
                     }));
-        //}
+        }
 
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_changelog, R.string.changelog, "", "",
                 new PrefItem.OnClickListener() {
@@ -409,7 +409,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     }
                 }));
 
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_open_source, R.string.report_a_bug, "", "",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_open_source, R.string.open_source_licenses, "", "",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(PrefItem item) {
