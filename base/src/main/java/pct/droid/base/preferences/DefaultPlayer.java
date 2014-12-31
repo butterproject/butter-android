@@ -65,7 +65,7 @@ public class DefaultPlayer {
      */
     public static boolean start(Context context, Media media, String subLanguage, String location) {
         String[] playerData = PrefUtils.get(context, Prefs.DEFAULT_PLAYER, "").split(DELIMITER);
-        if(playerData.length > 0) {
+        if(playerData.length > 1) {
             if(media.subtitles.size() > 0) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
                 File newLocation = new File(location.replace("." + FileUtils.getFileExtension(location), ".srt"));
