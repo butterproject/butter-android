@@ -83,5 +83,9 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="updates">Updates</string>
     <string name="auto_updates">Automatic updates</string>
     <string name="check_for_updates">Check for updates</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="changelog">Changelog</string>
+    <string name="tap_to_open">Tap to open</string>
 
 </resources>

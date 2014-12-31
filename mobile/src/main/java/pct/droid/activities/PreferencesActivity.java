@@ -2,6 +2,8 @@ package pct.droid.activities;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -108,7 +110,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     }
                 }));
 
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.default_player, Prefs.DEFAULT_PLAYER, "",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_player, R.string.default_player, Prefs.DEFAULT_PLAYER, "",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
@@ -359,6 +361,38 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                             case LibVLC.HW_ACCELERATION_AUTOMATIC:
                                 return getString(R.string.hw_automatic);
                         }
+                    }
+                }));
+
+        mPrefItems.add(getString(R.string.about));
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.changelog, "", "",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return getString(R.string.tap_to_open);
+                    }
+                }));
+
+
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.version, "", "",
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        try {
+                            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                            return packageInfo.versionName + " - " + Build.CPU_ABI;
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        return "?.? (?) - ?";
                     }
                 }));
 
