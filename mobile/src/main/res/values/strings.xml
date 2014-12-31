@@ -87,5 +87,7 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="version">Version</string>
     <string name="changelog">Changelog</string>
     <string name="tap_to_open">Tap to open</string>
+    <string name="report_a_bug">Report a bug</string>
+    <string name="open_source_licenses">Open-source licenses</string>
 
 </resources>

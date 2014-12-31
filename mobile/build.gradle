@@ -87,6 +87,7 @@ dependencies {
     compile 'com.github.nirhart:parallaxscroll:1.0'
     compile 'com.larswerkman:HoloColorPicker:1.4'
     compile 'net.rdrei.android.dirchooser:library:2.1@aar'
+    compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
     compile project(':base')
     compile project(':vlc')
     compile project(':node')

@@ -1,10 +1,12 @@
 package pct.droid.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +33,8 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
+import pct.droid.base.Constants;
+import pct.droid.base.JiraClient;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
@@ -38,6 +42,7 @@ import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import pct.droid.fragments.ChangeLogDialogFragment;
 import pct.droid.fragments.ColorPickerDialogFragment;
 import pct.droid.fragments.NumberPickerDialogFragment;
 import pct.droid.fragments.StringArraySelectorDialogFragment;
@@ -366,11 +371,35 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
 
         mPrefItems.add(getString(R.string.about));
 
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.changelog, "", "",
+        //if(!Constants.DEBUG_ENABLED) {
+            mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_report_bug, R.string.report_a_bug, "", "",
+                    new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(PrefItem item) {
+                            JiraClient.getVersionId(new JiraClient.VersionCallback() {
+                                @Override
+                                public void onResult(String result) {
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse("https://git.popcorntime.io/jira/CreateIssueDetails!init.jspa?pid=10200&issuetype=1&priority=4&versions=" + result));
+                                    startActivity(i);
+                                }
+                            });
+                        }
+                    },
+                    new PrefItem.SubTitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            return getString(R.string.tap_to_open);
+                        }
+                    }));
+        //}
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_changelog, R.string.changelog, "", "",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(PrefItem item) {
-
+                        ChangeLogDialogFragment changeLogDialogFragment = new ChangeLogDialogFragment();
+                        changeLogDialogFragment.show(getSupportFragmentManager(), "prefs_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -380,9 +409,23 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     }
                 }));
 
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_open_source, R.string.report_a_bug, "", "",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(Constants.GIT_URL + "stash/projects/PA/repos/popcorn-android/browse/NOTICE.md"));
+                        startActivity(i);
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return getString(R.string.tap_to_open);
+                    }
+                }));
 
-
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.version, "", "",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_version, R.string.version, "", "",
                 new PrefItem.SubTitleGenerator() {
                     @Override
                     public String get(PrefItem item) {
