@@ -33,7 +33,6 @@ public class PopcornApplication extends VLCApplication {
 
     private Boolean mBound = false;
     private Messenger mService;
-    private static String sCacheDir;
     private String mShouldBoundUrl = "";
 
     @Override
@@ -56,13 +55,19 @@ public class PopcornApplication extends VLCApplication {
 
         File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
         File directory = new File(path, "/torrents/");
-        sCacheDir = directory.toString() + "/";
-        FileUtils.recursiveDelete(new File(sCacheDir));
-        FileUtils.recursiveDelete(new File(path + "/subs"));
+        if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
+            FileUtils.recursiveDelete(directory);
+            FileUtils.recursiveDelete(new File(path + "/subs"));
+        } else {
+            File statusFile = new File(directory, "status.json");
+            File streamerFile = new File(directory, "streamer.json");
+            statusFile.delete();
+            streamerFile.delete();
+        }
         directory.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.i("Chosen cache location: " + sCacheDir);
+        LogUtils.i("Chosen cache location: " + directory);
 
         String versionCode = Integer.toString(BuildConfig.VERSION_CODE);
         if (!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
@@ -75,11 +80,13 @@ public class PopcornApplication extends VLCApplication {
     }
 
     public static String getStreamDir() {
-        return sCacheDir;
+        File path = new File(PrefUtils.get(getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(getAppContext()).toString()));
+        File directory = new File(path, "/torrents/");
+        return directory.toString();
     }
 
     public void startStreamer(String streamUrl) {
-        File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
+        File torrentPath = new File(getStreamDir());
         torrentPath.mkdirs();
 
         if (!mBound) {
@@ -94,7 +101,7 @@ public class PopcornApplication extends VLCApplication {
         Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
         Bundle args = new Bundle();
-        args.putString("directory", PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
+        args.putString("directory", getStreamDir());
         args.putString("stream_url", streamUrl);
         msg.setData(args);
 
@@ -118,11 +125,16 @@ public class PopcornApplication extends VLCApplication {
             }
         }
 
+        File torrentPath = new File(getStreamDir());
         if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
-            File torrentPath = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, sCacheDir));
             FileUtils.recursiveDelete(torrentPath);
-            torrentPath.mkdirs();
+        } else {
+            File statusFile = new File(torrentPath, "status.json");
+            File streamerFile = new File(torrentPath, "streamer.json");
+            statusFile.delete();
+            streamerFile.delete();
         }
+        torrentPath.mkdirs();
 
         startService();
     }
