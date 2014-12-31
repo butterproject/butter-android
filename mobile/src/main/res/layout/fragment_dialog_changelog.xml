@@ -3,7 +3,7 @@
     class="it.gmariotti.changelibs.library.view.ChangeLogListView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:chg="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg"
+    android:background="@android:color/white"
     android:clipToPadding="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
