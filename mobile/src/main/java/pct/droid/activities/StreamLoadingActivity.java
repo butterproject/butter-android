@@ -179,9 +179,9 @@ public class StreamLoadingActivity extends BaseActivity {
 
         if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
             try {
-                Ready ready = Ready.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/streamer.json"));
+                Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
                 mPlayerStarted = true;
-                String location = ready.filePath;
+                String location = status.filePath;
                 if(!DefaultPlayer.start(this, (Media)getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
                     Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
                     if (getIntent().hasExtra(DATA)) {
