@@ -65,6 +65,9 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="general">General</string>
     <string name="default_view">Default overview</string>
     <string name="default_player">Default video player</string>
+    <string name="i18n_language">App language</string>
+    <string name="device_language">Device language</string>
+    <string name="stream_over_wifi_only">Only stream over Wi-Fi</string>
     <string name="internal_player">Internal</string>
     <string name="subtitle_color">Color</string>
     <string name="subtitle_size">Size</string>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,9 +35,9 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
-import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.JiraClient;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
@@ -155,6 +157,68 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     @Override
                     public String get(PrefItem item) {
                         return PrefUtils.get(PreferencesActivity.this, Prefs.DEFAULT_PLAYER_NAME, getString(R.string.internal_player));
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.i18n_language, Prefs.LOCALE, "", new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        int currentPosition = 0;
+                        String currentValue = item.getValue().toString();
+
+                        final String[] languages = getResources().getStringArray(R.array.translation_languages);
+
+                        String[] items = new String[languages.length + 1];
+                        items[0] = getString(R.string.device_language);
+                        for (int i = 0; i < languages.length; i++) {
+                            Locale locale;
+                            if (languages[i].contains("-")) {
+                                locale = new Locale(languages[i].substring(0, 2), languages[i].substring(3, 5));
+                            } else {
+                                locale = new Locale(languages[i]);
+                            }
+                            items[i + 1] = locale.getDisplayName(locale);
+                            if (languages[i].equals(currentValue)) {
+                                currentPosition = i + 1;
+                            }
+                        }
+
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE, currentPosition, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int position) {
+                                if (position == 0) {
+                                    item.clearValue();
+                                } else {
+                                    item.saveValue(languages[position - 1]);
+                                }
+
+                                String language = PrefUtils.get(PreferencesActivity.this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+                                Locale locale = new Locale(language);
+                                Locale.setDefault(locale);
+                                Configuration config = new Configuration();
+                                config.locale = locale;
+                                getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+                                getSupportActionBar().setTitle(getString(R.string.preferences));
+
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        String language = item.getValue().toString();
+                        if(language.isEmpty()) {
+                            Locale locale;
+                            if (language.contains("-")) {
+                                locale = new Locale(language.substring(0, 2), language.substring(3, 5));
+                            } else {
+                                locale = new Locale(language);
+                            }
+                            return locale.getDisplayName(locale);
+                        }
+                        return getString(R.string.device_language);
                     }
                 }));
 
@@ -430,7 +494,13 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.SubTitleGenerator() {
                     @Override
                     public String get(PrefItem item) {
-                        return BuildConfig.VERSION_NAME + " - " + Build.CPU_ABI;
+                        try {
+                            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                            return packageInfo.versionName + " - " + Build.CPU_ABI;
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        return "?.? (?) - ?";
                     }
                 }));
 
