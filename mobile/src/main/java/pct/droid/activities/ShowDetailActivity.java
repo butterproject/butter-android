@@ -41,6 +41,7 @@ import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.fragments.QualitySelectorDialogFragment;
+import pct.droid.fragments.StringArraySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
@@ -142,35 +143,41 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     break;
                 */
                 case R.id.playButton:
-                    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ShowDetailActivity.this);
-                    //final List<String> items = new ArrayList<String>();
-                    final List<String> items = new ArrayList<String>();
-                    final List<String> availableSeasonsStringList = new ArrayList<String>();
-                    final List<Integer> availableSeasons = new ArrayList<Integer>();
+                    if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
+                        return;
+
+                    List<String> availableSeasonsStringList = new ArrayList<>();
+                    final List<Integer> availableSeasons = new ArrayList<>();
                     for(String key : mItem.episodes.keySet()) {
-                        items.add(key);
                         if(!availableSeasons.contains(mItem.episodes.get(key).season)) {
                             availableSeasons.add(mItem.episodes.get(key).season);
                             availableSeasonsStringList.add(getString(R.string.season) + " " + ((Integer) mItem.episodes.get(key).season).toString());
                         }
                     }
-
-                    // sorting hack
                     Collections.sort(availableSeasonsStringList);
                     Collections.sort(availableSeasons);
 
-                    dialogBuilder.setSingleChoiceItems(availableSeasonsStringList.toArray(new String[availableSeasons.size()]), -1, new DialogInterface.OnClickListener() {
+                    final Bundle args = new Bundle();
+                    args.putString(StringArraySelectorDialogFragment.TITLE, getString(R.string.season));
+                    args.putStringArray(StringArraySelectorDialogFragment.ARRAY, availableSeasonsStringList.toArray(new String[availableSeasonsStringList.size()]));
+                    args.putInt(StringArraySelectorDialogFragment.MODE, StringArraySelectorDialogFragment.NORMAL);
+
+                    StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
+                    dialogFragment.setArguments(args);
+                    dialogFragment.setDialogClickListener(new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(final DialogInterface dialogInterface, int i) {
-                            final int selectedSeason = availableSeasons.get(i);
-                            final List<String> availableChapters = new ArrayList<String>();
-                            List<String> availableChaptersStringList = new ArrayList<String>();
+                        public void onClick(DialogInterface dialog, int position) {
+                            final int selectedSeason = availableSeasons.get(position);
+                            final List<String> availableChapters = new ArrayList<>();
+                            List<String> availableChaptersStringList = new ArrayList<>();
                             for(String key : mItem.episodes.keySet()) {
                                 if (mItem.episodes.get(key).season == selectedSeason) {
                                     availableChapters.add(key);
                                     availableChaptersStringList.add(((Integer) mItem.episodes.get(key).episode).toString());
                                 }
                             }
+
+                            // sorting hack
                             Collections.sort(availableChapters);
                             Collections.sort(availableChaptersStringList, new Comparator<String>() {
                                 @Override
@@ -186,39 +193,22 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                                     }
                                 }
                             });
+
                             for (final ListIterator<String> iter = availableChaptersStringList.listIterator(); iter.hasNext();) {
                                 final String element = iter.next();
-                                iter.set(getString(R.string.chapter) + " " + element);
+                                iter.set(getString(R.string.episode) + " " + element);
                             }
-                            dialogInterface.dismiss();
-                            dialogBuilder.setSingleChoiceItems(availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]), -1, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int j) {
-                                    dialog.dismiss();
-                                    String key = availableChapters.get(j);
-                                    Show.Episode episode = mItem.episodes.get(key);
-                                    Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
-                                    Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
-                                    streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
-                                    streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
-                                    streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
-                                    streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
-                                    if (mSubLanguage != null)
-                                        streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-                                    startActivity(streamIntent);
-                                }
-                            });
-                            dialogBuilder.show();
+                            dialog.dismiss();
+
+                            args.putString(StringArraySelectorDialogFragment.TITLE, getString(R.string.episode));
+                            args.putStringArray(StringArraySelectorDialogFragment.ARRAY, availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]));
+                            StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
+                            dialogFragment.setArguments(args);
+                            dialogFragment.show(getFragmentManager(), "overlay_fragment");
                         }
                     });
-                    dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    dialogBuilder.show();
+                    dialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
             }
 
