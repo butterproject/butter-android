@@ -15,7 +15,7 @@ import java.io.IOException;
 public class JiraClient {
 
     public static void getVersionId(final VersionCallback callback) {
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = PopcornApplication.getHttpClient();
         Request request = new Request.Builder()
                 .url(Constants.JIRA_API + "project/" + Constants.JIRA_PROJECT + "/versions")
                 .build();

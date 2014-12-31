@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.types.Media;
@@ -58,7 +59,7 @@ public abstract class SubsProvider extends BaseProvider {
      * @return Call
      */
     public static Call download(final Context context, final Media media, final String languageCode, final com.squareup.okhttp.Callback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = PopcornApplication.getHttpClient();
         if (media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();

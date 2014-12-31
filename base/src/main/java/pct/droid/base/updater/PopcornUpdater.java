@@ -34,6 +34,7 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 import pct.droid.base.Constants;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
@@ -64,7 +65,7 @@ public class PopcornUpdater extends Observable {
     private static final String SHA1_TIME = "sha1_update_time";
     private static final String SHA1_KEY = "sha1_update";
 
-    private final OkHttpClient mHttpClient = new OkHttpClient();
+    private final OkHttpClient mHttpClient = PopcornApplication.getHttpClient();
     private final Gson mGson = new Gson();
     private final Handler mUpdateHandler = new Handler();
 
