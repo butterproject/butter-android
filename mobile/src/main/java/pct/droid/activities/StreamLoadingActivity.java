@@ -220,7 +220,11 @@ public class StreamLoadingActivity extends BaseActivity {
                         progressIndicator.setProgress(progress);
                         progressText.setText(progress + "%");
 
-                        downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
+                        if(status.downloadSpeed < 1048576) {
+                            downloadSpeedText.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
+                        } else {
+                            downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
+                        }
                         seedsText.setText(status.seeds + " seeds");
                     }
                 });
