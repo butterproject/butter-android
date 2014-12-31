@@ -157,14 +157,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     Collections.sort(availableSeasonsStringList);
                     Collections.sort(availableSeasons);
 
-                    final Bundle args = new Bundle();
-                    args.putString(StringArraySelectorDialogFragment.TITLE, getString(R.string.season));
-                    args.putStringArray(StringArraySelectorDialogFragment.ARRAY, availableSeasonsStringList.toArray(new String[availableSeasonsStringList.size()]));
-                    args.putInt(StringArraySelectorDialogFragment.MODE, StringArraySelectorDialogFragment.NORMAL);
-
-                    StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
-                    dialogFragment.setArguments(args);
-                    dialogFragment.setDialogClickListener(new DialogInterface.OnClickListener() {
+                    openDialog(getString(R.string.season), availableSeasonsStringList.toArray(new String[availableSeasonsStringList.size()]), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
                             final int selectedSeason = availableSeasons.get(position);
@@ -201,14 +194,26 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
 
                             dialog.dismiss();
 
-                            args.putString(StringArraySelectorDialogFragment.TITLE, getString(R.string.episode));
-                            args.putStringArray(StringArraySelectorDialogFragment.ARRAY, availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]));
-                            StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
-                            dialogFragment.setArguments(args);
-                            dialogFragment.show(getFragmentManager(), "overlay_fragment");
+                            openDialog(getString(R.string.episode), availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int position) {
+                                    String key = availableChapters.get(position);
+                                    Show.Episode episode = mItem.episodes.get(key);
+                                    Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
+
+                                    Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
+                                    streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
+                                    streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
+                                    streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
+                                    streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
+                                    if (mSubLanguage != null)
+                                        streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                                    startActivity(streamIntent);
+                                }
+                            });
                         }
                     });
-                    dialogFragment.show(getFragmentManager(), "overlay_fragment");
+
                     break;
             }
 
@@ -412,5 +417,16 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         } else {
             subtitlesText.setText(R.string.no_subs);
         }
+    }
+
+    public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
+        Bundle args = new Bundle();
+        args.putString(StringArraySelectorDialogFragment.TITLE, title);
+        args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
+        args.putInt(StringArraySelectorDialogFragment.MODE, StringArraySelectorDialogFragment.NORMAL);
+        StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
+        dialogFragment.setDialogClickListener(onClickListener);
+        dialogFragment.setArguments(args);
+        dialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 }
