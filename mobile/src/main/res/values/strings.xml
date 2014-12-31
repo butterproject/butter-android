@@ -28,7 +28,7 @@
     <string name="quality">Quality</string>
     <string name="trailer">Trailer</string>
     <string name="season">Season</string>
-    <string name="chapter">Chapter</string>
+    <string name="episode">Episode</string>
 
     <!-- StreamLoadingActivity strings -->
     <string name="streaming_started">Streaming started</string>
