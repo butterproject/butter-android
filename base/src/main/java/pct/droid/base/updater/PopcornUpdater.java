@@ -131,12 +131,12 @@ public class PopcornUpdater extends Observable {
         }
     };
 
-    private void checkUpdates(boolean forced) {
+    public void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
 
-        if (!PrefUtils.get(mContext, Prefs.AUTOMATIC_UPDATES, true))
+        if (!PrefUtils.get(mContext, Prefs.AUTOMATIC_UPDATES, true) && !forced) {
             return;
-
+        }
 
         PrefUtils.save(mContext, LAST_UPDATE_CHECK, now);
 

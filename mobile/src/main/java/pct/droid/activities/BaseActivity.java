@@ -35,13 +35,6 @@ public class BaseActivity extends ActionBarActivity {
         super.onResume();
         Bugsnag.onActivityResume(this);
         getApp().startService();
-
-        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
     @Override
@@ -54,6 +47,23 @@ public class BaseActivity extends ActionBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         Bugsnag.onActivityDestroy(this);
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        super.setContentView(layoutResID);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        supportInvalidateOptionsMenu();
     }
 
     @Override

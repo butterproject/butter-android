@@ -12,6 +12,6 @@ public class Prefs {
     public static final String DEFAULT_PLAYER = "default_player";
     public static final String DEFAULT_PLAYER_NAME = "default_player_name";
     public static final String INSTALLED_VERSION = "installed_version";
-    public static final String STREAMING_OVER_CELL = "streaming_cell";
+    public static final String WIFI_ONLY = "wifi_only";
     public static final String LOCALE = "locale";
 }
