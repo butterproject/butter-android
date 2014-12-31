@@ -15,10 +15,14 @@ import android.os.Messenger;
 import android.os.RemoteException;
 
 import com.bugsnag.android.Bugsnag;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 
 import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import pct.droid.base.preferences.Prefs;
@@ -34,6 +38,8 @@ public class PopcornApplication extends VLCApplication {
     private Boolean mBound = false;
     private Messenger mService;
     private String mShouldBoundUrl = "";
+    private static OkHttpClient sHttpClient;
+    private static Picasso sPicasso;
 
     @Override
     public void onCreate() {
@@ -73,6 +79,31 @@ public class PopcornApplication extends VLCApplication {
         if (!PrefUtils.get(this, "versionCode", "0").equals(versionCode)) {
             PrefUtils.save(this, "versionCode", versionCode);
         }
+    }
+
+    public static OkHttpClient getHttpClient() {
+        if (sHttpClient == null) {
+            sHttpClient = new OkHttpClient();
+
+            int cacheSize = 10 * 1024 * 1024;
+            try {
+                com.squareup.okhttp.Cache cache = new com.squareup.okhttp.Cache(new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString())), cacheSize);
+                sHttpClient.setCache(cache);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sHttpClient;
+    }
+
+    public static Picasso getPicasso() {
+        if(sPicasso == null) {
+            Picasso.Builder builder = new Picasso.Builder(getAppContext());
+            OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
+            builder.downloader(downloader);
+            sPicasso = builder.build();
+        }
+        return sPicasso;
     }
 
     public Boolean isServiceBound() {

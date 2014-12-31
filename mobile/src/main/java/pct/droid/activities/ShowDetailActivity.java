@@ -36,6 +36,7 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.utils.LogUtils;
@@ -324,7 +325,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         qualityBlock.setVisibility(View.GONE);
         subtitlesBlock.setVisibility(View.GONE);
 
-        Picasso.with(this).load(mItem.image).into(new Target() {
+        PopcornApplication.getPicasso().load(mItem.image).into(new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 Palette palette = Palette.generate(bitmap);
@@ -346,7 +347,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     @Override
                     public void run() {
                         playButton.setImageDrawable(td);
-                        Picasso.with(ShowDetailActivity.this).load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
+                        PopcornApplication.getPicasso().load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
                                 Animation fadeInAnim = AnimationUtils.loadAnimation(ShowDetailActivity.this, android.R.anim.fade_in);

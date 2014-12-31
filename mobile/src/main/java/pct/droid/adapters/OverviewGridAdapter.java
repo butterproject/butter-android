@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.utils.PixelUtils;
 
@@ -70,7 +71,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             Media item = getItem(position);
             if (item.image != null && !item.image.equals("")) {
-                Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
+                PopcornApplication.getPicasso().with(videoViewHolder.coverImage.getContext()).load(item.image)
                         .resize(mItemWidth, mItemHeight)
                         .into(videoViewHolder.coverImage);
             }
