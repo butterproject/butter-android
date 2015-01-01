@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,8 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
     Toolbar toolbar;
     @InjectView(R.id.scrollView)
     ParallaxScrollView scrollView;
+    @InjectView(R.id.parallax)
+    RelativeLayout parallax;
     @InjectView(R.id.coverImage)
     ImageView coverImage;
     @InjectView(R.id.headerProgress)
@@ -229,7 +232,9 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         //favouriteBlock.setOnClickListener(mOnClickListener);
         qualityBlock.setOnClickListener(mOnClickListener);
 
-        mParallaxHeight = getResources().getDimensionPixelSize(R.dimen.parallax_header_height);
+        mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3) * 2;
+        parallax.getLayoutParams().height = mParallaxHeight;
+
         mToolbarHeight = toolbar.getHeight();
         mHeaderHeight = mParallaxHeight - mToolbarHeight;
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
