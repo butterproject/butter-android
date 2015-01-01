@@ -65,6 +65,8 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     Toolbar toolbar;
     @InjectView(R.id.scrollView)
     ParallaxScrollView scrollView;
+    @InjectView(R.id.parallax)
+    RelativeLayout parallax;
     @InjectView(R.id.coverImage)
     ImageView coverImage;
     @InjectView(R.id.headerProgress)
@@ -308,7 +310,8 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         //favouriteBlock.setOnClickListener(mOnClickListener);
         qualityBlock.setOnClickListener(mOnClickListener);
 
-        mParallaxHeight = getResources().getDimensionPixelSize(R.dimen.parallax_header_height);
+        mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3) * 2;
+        parallax.getLayoutParams().height = mParallaxHeight;
         mToolbarHeight = toolbar.getHeight();
         mHeaderHeight = mParallaxHeight - mToolbarHeight;
         scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
