@@ -47,6 +47,9 @@
   <string name="general">Γενικά</string>
   <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
   <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>
+  <string name="i18n_language">Γλώσσα εφαρμογής</string>
+  <string name="device_language">Γλώσσα συσκευής</string>
+  <string name="stream_over_wifi_only">Ροή δεδομένων μόνο με Wi-Fi</string>
   <string name="internal_player">Εσωτερικό</string>
   <string name="subtitle_color">Χρώμα</string>
   <string name="subtitle_size">Μέγεθος</string>

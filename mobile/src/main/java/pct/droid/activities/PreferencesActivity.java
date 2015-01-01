@@ -28,7 +28,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +37,6 @@ import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
 import pct.droid.base.Constants;
 import pct.droid.base.JiraClient;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
@@ -162,7 +160,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         return PrefUtils.get(PreferencesActivity.this, Prefs.DEFAULT_PLAYER_NAME, getString(R.string.internal_player));
                     }
                 }));
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.i18n_language, Prefs.LOCALE, "",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_app_language, R.string.i18n_language, Prefs.LOCALE, "",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
@@ -218,7 +216,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         return getString(R.string.device_language);
                     }
                 }));
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.stream_over_wifi_only, Prefs.WIFI_ONLY, true,
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_wifi_only, R.string.stream_over_wifi_only, Prefs.WIFI_ONLY, true,
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(PrefItem item) {

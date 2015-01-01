@@ -47,6 +47,9 @@
   <string name="general">Allmänt</string>
   <string name="default_view">Förvald vy</string>
   <string name="default_player">Standardvideospelare</string>
+  <string name="i18n_language">Applikation språk</string>
+  <string name="device_language">Enhets språk</string>
+  <string name="stream_over_wifi_only">Endast strömma över Wi-Fi</string>
   <string name="internal_player">Intern</string>
   <string name="subtitle_color">Färg</string>
   <string name="subtitle_size">Storlek</string>

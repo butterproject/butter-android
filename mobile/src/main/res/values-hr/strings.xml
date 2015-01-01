@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Spremi</string>
-  <string name="cancel">Prekini</string>
+  <string name="cancel">Zatvori</string>
   <string name="close">Zatvori</string>
   <string name="ok">U redu</string>
   <string name="enabled">Omogućeno</string>
@@ -45,8 +45,11 @@
   <!--SettingsActivity strings-->
   <string name="preferences">Osobitosti</string>
   <string name="general">Općenito</string>
-  <string name="default_view">Zadani prikaz</string>
+  <string name="default_view">Početni prikaz</string>
   <string name="default_player">Zadani video reproduktor</string>
+  <string name="i18n_language">Jezik aplikacije</string>
+  <string name="device_language">Jezik uređaja</string>
+  <string name="stream_over_wifi_only">Samo stremaj putem Wi-Fi</string>
   <string name="internal_player">Unutrašnji</string>
   <string name="subtitle_color">Boja</string>
   <string name="subtitle_size">Veličina</string>

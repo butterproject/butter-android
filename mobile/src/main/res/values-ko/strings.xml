@@ -47,6 +47,9 @@
   <string name="general">일반</string>
   <string name="default_view">기본 개요</string>
   <string name="default_player">기본 비디오 재생기</string>
+  <string name="i18n_language">앱 언어</string>
+  <string name="device_language">장치 언어</string>
+  <string name="stream_over_wifi_only">Wi-Fi에서만 스트리밍 허용</string>
   <string name="internal_player">내부</string>
   <string name="subtitle_color">색상</string>
   <string name="subtitle_size">크기</string>
