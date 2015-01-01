@@ -48,6 +48,7 @@
   <string name="default_view">Начален изглед</string>
   <string name="default_player">Начален видео плейър</string>
   <string name="i18n_language">Език</string>
+  <string name="device_language">Език на устройството</string>
   <string name="stream_over_wifi_only">Стриймвай само при Wi-Fi</string>
   <string name="internal_player">Вътрешно</string>
   <string name="subtitle_color">Цвят</string>

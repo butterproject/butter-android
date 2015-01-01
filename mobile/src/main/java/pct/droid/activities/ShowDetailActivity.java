@@ -39,14 +39,18 @@ import java.util.Locale;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.StringArraySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.fragments.WifiOnlyDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class ShowDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
@@ -204,14 +208,19 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                                     Show.Episode episode = mItem.episodes.get(key);
                                     Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
-                                    Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
-                                    streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
-                                    streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
-                                    streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
-                                    streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
-                                    if (mSubLanguage != null)
-                                        streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-                                    startActivity(streamIntent);
+                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
+                                        WifiOnlyDialogFragment dialogFragment = new WifiOnlyDialogFragment();
+                                        dialogFragment.show(getFragmentManager(), "overlay_fragment");
+                                    } else {
+                                        Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
+                                        streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
+                                        streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
+                                        streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
+                                        streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
+                                        if (mSubLanguage != null)
+                                            streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                                        startActivity(streamIntent);
+                                    }
                                 }
                             });
                         }

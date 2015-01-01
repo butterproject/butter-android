@@ -30,7 +30,9 @@ import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.fragments.WifiOnlyDialogFragment;
 
 public class StreamLoadingActivity extends BaseActivity {
 
@@ -60,7 +62,6 @@ public class StreamLoadingActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_streamloading);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         while (!getApp().isServiceBound()) {

@@ -47,6 +47,9 @@
   <string name="general">General</string>
   <string name="default_view">Presentación predeterminada</string>
   <string name="default_player">Reproductor predeterminado</string>
+  <string name="i18n_language">Idioma de la aplicación</string>
+  <string name="device_language">Idioma del dispositivo </string>
+  <string name="stream_over_wifi_only">Solo transmitir contenido a través de Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Color</string>
   <string name="subtitle_size">Tamaño</string>

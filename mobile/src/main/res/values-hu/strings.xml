@@ -47,6 +47,9 @@
   <string name="general">Általános</string>
   <string name="default_view">Kezdőképernyő</string>
   <string name="default_player">Alapértelmezett videó lejátszó</string>
+  <string name="i18n_language">Alkalmazás nyelve</string>
+  <string name="device_language">Készülék nyelve</string>
+  <string name="stream_over_wifi_only">Stream csak Wi-Fi-n</string>
   <string name="internal_player">Belső</string>
   <string name="subtitle_color">Szín</string>
   <string name="subtitle_size">Méret</string>

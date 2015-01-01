@@ -48,6 +48,8 @@
   <string name="default_view">Startscherm</string>
   <string name="default_player">Standaard videospeler</string>
   <string name="i18n_language">Taal</string>
+  <string name="restart_effect">Herstart de applicatie om de wijzigingen door te voeren</string>
+  <string name="device_language">Standaardtaal</string>
   <string name="stream_over_wifi_only">Alleen streamen over Wi-Fi</string>
   <string name="internal_player">Interne</string>
   <string name="subtitle_color">Kleur</string>

@@ -34,6 +34,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
@@ -41,6 +42,7 @@ import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.fragments.WifiOnlyDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
@@ -133,13 +135,18 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                     break;
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
-                    Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-                    streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
-                    streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
-                    streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
-                    if (mSubLanguage != null)
-                        streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-                    startActivity(streamIntent);
+                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
+                        WifiOnlyDialogFragment dialogFragment = new WifiOnlyDialogFragment();
+                        dialogFragment.show(getFragmentManager(), "overlay_fragment");
+                    } else {
+                        Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
+                        streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+                        streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
+                        streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
+                        if (mSubLanguage != null)
+                            streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+                        startActivity(streamIntent);
+                    }
                     break;
             }
 

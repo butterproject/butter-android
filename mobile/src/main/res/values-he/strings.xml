@@ -47,6 +47,9 @@
   <string name="general">כללי</string>
   <string name="default_view">מסך ברירית מחדל</string>
   <string name="default_player">נגן ברירית מחדל</string>
+  <string name="i18n_language">שפת אפליקציה</string>
+  <string name="device_language">שפת מכשיר</string>
+  <string name="stream_over_wifi_only">הזרם רק דרך Wi-Fi</string>
   <string name="internal_player">פנימי</string>
   <string name="subtitle_color">צבע</string>
   <string name="subtitle_size">גודל</string>
