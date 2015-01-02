@@ -39,7 +39,7 @@ public class PopcornApplication extends VLCApplication {
 
     private Boolean mBound = false;
     private Messenger mService;
-    private String mShouldBoundUrl = "";
+    private String mShouldBoundUrl = "", mPackageName = "pct.droid";
     private static OkHttpClient sHttpClient;
     private static Picasso sPicasso;
     private static String sDefSystemLanguage;
@@ -55,7 +55,8 @@ public class PopcornApplication extends VLCApplication {
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
         try {
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            mPackageName = getPackageName();
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(mPackageName, 0);
             int flags = packageInfo.applicationInfo.flags;
             versionCode = packageInfo.versionCode;
             Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
@@ -169,7 +170,7 @@ public class PopcornApplication extends VLCApplication {
 
         for (int i = 0; i < runningAppProcesses.size(); i++) {
             ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
-            if (info.processName.equalsIgnoreCase("pct.droid:node")) {
+            if (info.processName.equalsIgnoreCase(mPackageName + ":node")) {
                 android.os.Process.killProcess(info.pid);
             }
         }
