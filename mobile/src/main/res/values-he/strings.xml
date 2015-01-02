@@ -2,9 +2,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">שמור</string>
-  <string name="cancel">בטל</string>
+  <string name="cancel">ביטול</string>
   <string name="close">סגור</string>
-  <string name="ok">Ok</string>
+  <string name="ok">אישור</string>
   <string name="enabled">מופעל</string>
   <string name="disabled">מבוטל</string>
   <!--OverviewActivity strings-->
@@ -26,21 +26,21 @@
   <string name="season">עונה</string>
   <string name="episode">פרק</string>
   <!--StreamLoadingActivity strings-->
-  <string name="streaming_started">הזרמת החלה</string>
+  <string name="streaming_started">הזרמת מדיה החלה</string>
   <string name="waiting_for_subtitles">ממתין לכתוביות</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">פועל עכשיו</string>
-  <string name="volume">ווליום</string>
+  <string name="volume">שמע</string>
   <string name="brightness">בהירות</string>
-  <string name="hardware_acceleration_error_title">שגיאת האצת חומרה</string>
-  <string name="hardware_acceleration_error_message">יש שגיאה עם האצת חומרה. אתה רוצה לבטל ולנסות שוב?</string>
-  <string name="best_fit">הכי מתאים</string>
-  <string name="fill">מלא</string>
+  <string name="hardware_acceleration_error_title">שגיאה בהאצת חומרה</string>
+  <string name="hardware_acceleration_error_message">קיימת שגיאה בהאצת חומרה. האם ברצונך לבטל ולנסות שוב?</string>
+  <string name="best_fit">התאמה מלאה</string>
+  <string name="fill">למלא</string>
   <string name="fit_horizontal">אופקי מלא</string>
   <string name="fit_vertical">התאם אנכי</string>
   <string name="original_size">מקורי</string>
   <!--TermsActivity strings-->
-  <string name="accept">אשר</string>
+  <string name="accept">אישור</string>
   <string name="leave">צא</string>
   <!--SettingsActivity strings-->
   <string name="preferences">העדפות</string>
@@ -48,6 +48,7 @@
   <string name="default_view">מסך ברירית מחדל</string>
   <string name="default_player">נגן ברירית מחדל</string>
   <string name="i18n_language">שפת אפליקציה</string>
+  <string name="restart_effect">יש צורך בהפעלת האפליקציה מחדש לשמירת השינויים</string>
   <string name="device_language">שפת מכשיר</string>
   <string name="stream_over_wifi_only">הזרם רק דרך Wi-Fi</string>
   <string name="internal_player">פנימי</string>
@@ -64,7 +65,7 @@
   <string name="hw_acceleration">האצת חומרה</string>
   <string name="hw_automatic">אוטומטי</string>
   <string name="hw_full">מלא</string>
-  <string name="hw_decoding">אך ורק פענוח</string>
+  <string name="hw_decoding">קידוד בלבד</string>
   <string name="updates">עדכונים</string>
   <string name="auto_updates">עדכונים אוטומטים</string>
   <string name="check_for_updates">בדוק אם יש עדכונים</string>
@@ -72,7 +73,9 @@
   <string name="version">גירסה</string>
   <string name="changelog">יומן שינויים</string>
   <string name="tap_to_open">גע לפתיחה</string>
-  <string name="report_a_bug">דווח על תקלה</string>
-  <string name="open_source_licenses">רישיון קוד פתוח</string>
+  <string name="report_a_bug">דיווח על תקלה</string>
+  <string name="open_source_licenses">רישיונות קוד פתוח</string>
   <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi בלבד</string>
+  <string name="wifi_only_message">צפייה בזרימת מדיה דרך Wi-Fi בלבד. באפשרותך לשנות העדפות לצפייה של תזרים דרך אינטרנט רשת סלולרית.</string>
 </resources>
