@@ -7,8 +7,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.MethodNotSupportedException;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +18,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
@@ -29,9 +29,11 @@ import pct.droid.base.subs.FormatASS;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 
 public abstract class SubsProvider extends BaseProvider {
+    public static final String SUBS_CALL = "subs_http_call";
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
@@ -45,6 +47,10 @@ public abstract class SubsProvider extends BaseProvider {
         public void onFailure(Exception e);
     }
 
+    public static File getStorageLocation(Context context) {
+        return new File(PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()) + "/subs/");
+    }
+
     /**
      * @param context      Context
      * @param media        Media data
@@ -53,11 +59,21 @@ public abstract class SubsProvider extends BaseProvider {
      * @return Call
      */
     public static Call download(final Context context, final Media media, final String languageCode, final com.squareup.okhttp.Callback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = PopcornApplication.getHttpClient();
         if (media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
+
+                final File subsDirectory = getStorageLocation(context);
+                final String fileName = media.videoId + "-" + languageCode;
+                final File srtPath = new File(subsDirectory, fileName + ".srt");
+
+                if (srtPath.exists()) {
+                    callback.onResponse(null);
+                    return call;
+                }
+
                 call.enqueue(new com.squareup.okhttp.Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
@@ -70,11 +86,7 @@ public abstract class SubsProvider extends BaseProvider {
                             InputStream inputStream = null;
                             boolean failure = false;
                             try {
-                                File cacheDirectory = StorageUtils.getIdealCacheDirectory(context);
-                                File subsDirectory = new File(cacheDirectory, "subs");
 
-                                String fileName = media.videoId + "-" + languageCode;
-                                File srtPath = new File(subsDirectory, fileName + ".srt");
 
                                 subsDirectory.mkdirs();
                                 if (srtPath.exists()) {
@@ -120,6 +132,8 @@ public abstract class SubsProvider extends BaseProvider {
 
                 return call;
             } catch (RuntimeException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -183,7 +197,9 @@ public abstract class SubsProvider extends BaseProvider {
      */
     private static void parseFormatAndSave(String inputUrl, File srtPath, InputStream inputStream) throws IOException {
         TimedTextObject subtitleObject = null;
-        String[] inputText = FileUtils.inputstreamToCharsetString(inputStream).split("\n|\r\n");
+
+        String inputString = FileUtils.inputstreamToCharsetString(inputStream);
+        String[] inputText = inputString.split("\n|\r\n");
 
         if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {
             FormatASS formatASS = new FormatASS();

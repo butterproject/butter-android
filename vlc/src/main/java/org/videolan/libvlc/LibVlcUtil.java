@@ -301,7 +301,7 @@ public class LibVlcUtil {
     private static String[] CPU_archs = {"*Pre-v4", "*v4", "*v4T",
             "v5T", "v5TE", "v5TEJ",
             "v6", "v6KZ", "v6T2", "v6K", "v7",
-            "*v6-M", "*v6S-M", "*v7E-M", "*v8"};
+            "*v6-M", "*v6S-M", "*v7E-M", "*v8" };
 
     private static ElfData readLib(String path) {
         File file = new File(path);

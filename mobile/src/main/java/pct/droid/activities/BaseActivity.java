@@ -12,6 +12,9 @@ import com.bugsnag.android.Bugsnag;
 
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.LocaleUtils;
+import pct.droid.base.utils.PrefUtils;
 
 public class BaseActivity extends ActionBarActivity {
 
@@ -42,6 +45,13 @@ public class BaseActivity extends ActionBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         Bugsnag.onActivityDestroy(this);
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
+        super.setContentView(layoutResID);
     }
 
     @Override

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Spara</string>
+  <string name="cancel">Avbryt</string>
+  <string name="close">Stäng</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Aktiverad</string>
+  <string name="disabled">Inaktiverad</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Titel, år, skådespelare</string>
+  <string name="title_shows">Shows</string>
+  <string name="title_movies">Filmer</string>
+  <string name="search">Sök</string>
+  <string name="loading">Laddar data...</string>
+  <string name="no_data_found">Ingen data hittades</string>
+  <string name="unknown_error">Något gick fel</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="watch_trailer">Se trailer</string>
+  <string name="disable_subs">Inaktivera undertexter</string>
+  <string name="no_subs">Inga undertexter</string>
+  <string name="subtitles">Undertexter</string>
+  <string name="quality">Kvalité </string>
+  <string name="trailer">Trailer</string>
+  <string name="season">Säsong</string>
+  <string name="episode">Avsnitt</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">Streaming startade</string>
+  <string name="waiting_for_subtitles">Väntar på undertexter</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Nu spelas</string>
+  <string name="volume">Volym</string>
+  <string name="brightness">Ljusstyrka</string>
+  <string name="hardware_acceleration_error_title">Hårdvaruaccelerations fel</string>
+  <string name="hardware_acceleration_error_message">Ett fel inträffade med hårdvaruaccelerationen. Vill du inaktivera den och försöka igen?</string>
+  <string name="best_fit">Bästa passform</string>
+  <string name="fill">Fyll</string>
+  <string name="fit_horizontal">Passa horisontellt </string>
+  <string name="fit_vertical">Passa vertikalt </string>
+  <string name="original_size">Original</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Accept</string>
+  <string name="leave">Lämna</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Inställningar</string>
+  <string name="general">Allmänt</string>
+  <string name="default_view">Förvald vy</string>
+  <string name="default_player">Standardvideospelare</string>
+  <string name="i18n_language">Applikation språk</string>
+  <string name="restart_effect">Starta om applikationen för ändringarna ska börja gälla</string>
+  <string name="device_language">Enhets språk</string>
+  <string name="stream_over_wifi_only">Endast strömma över Wi-Fi</string>
+  <string name="internal_player">Intern</string>
+  <string name="subtitle_color">Färg</string>
+  <string name="subtitle_size">Storlek</string>
+  <string name="subtitle_language">Standardspråk</string>
+  <string name="no_default_set">Inget standardspråk</string>
+  <string name="advanced">Avancerat</string>
+  <string name="storage_location">Lagringsplats</string>
+  <string name="storage_automatic">Automatisk</string>
+  <string name="storage_choose">Välj plats</string>
+  <string name="not_writable">Plats inte skrivbar</string>
+  <string name="remove_cache">Ta bort cache om spelaren stäng</string>
+  <string name="hw_acceleration">Hårdvaruacceleration</string>
+  <string name="hw_automatic">Automatisk</string>
+  <string name="hw_full">Full</string>
+  <string name="hw_decoding">Endast avkodning</string>
+  <string name="updates">Uppdateringar</string>
+  <string name="auto_updates">Automatiska uppdateringar</string>
+  <string name="check_for_updates">Leta uppdateringar</string>
+  <string name="about">About</string>
+  <string name="version">Version</string>
+  <string name="changelog">Changelog</string>
+  <string name="tap_to_open">Tryck för att öppna</string>
+  <string name="report_a_bug">Rapportera ett fel</string>
+  <string name="open_source_licenses">Öppen källkod-licenser</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Endast Wi-Fi</string>
+  <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>
+</resources>

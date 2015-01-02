@@ -10,6 +10,7 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-    protected String mApiUrl = "http://yts.re/api/";
+    protected String mApiUrl = "https://yts.pm/api/";
     protected String mMirrorApiUrl = "https://yts.wf/api/";
     public static final String NO_MOVIES_ERROR = "No movies found";
 
@@ -73,6 +74,7 @@ public class YTSProvider extends MediaProvider {
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
         requestBuilder.url(mApiUrl + "list.json?" + query);
+        requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, callback);
     }
@@ -102,8 +104,22 @@ public class YTSProvider extends MediaProvider {
             @Override
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
+
+                    YTSReponse result;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
+
                     if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
@@ -128,12 +144,12 @@ public class YTSProvider extends MediaProvider {
                                 TraktProvider.MetaData meta = metaDatas[index];
                                 if (media.videoId.equals(meta.imdb_id)) {
                                     if (meta.images.containsKey("poster")) {
-                                        media.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                        media.image = meta.images.get("poster").replace("/original/", "/medium/");
                                         media.fullImage = meta.images.get("poster");
                                     }
 
                                     if (meta.images.containsKey("fanart")) {
-                                        media.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                        media.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
                                     }
 
                                     if (meta.title != null) {
@@ -149,7 +165,7 @@ public class YTSProvider extends MediaProvider {
                         return;
                     }
                 }
-                callback.onFailure(new NetworkErrorException(response.body().string()));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
             }
         });
     }
@@ -158,6 +174,7 @@ public class YTSProvider extends MediaProvider {
     public Call getDetail(String imdbId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
+        requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -168,8 +185,22 @@ public class YTSProvider extends MediaProvider {
             @Override
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    YTSReponse result = mGson.fromJson(responseStr, YTSReponse.class);
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
+
+                    YTSReponse result;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
+
                     if (result.status != null && result.status.equals("fail")) {
                         callback.onFailure(new NetworkErrorException(result.error));
                     } else {
@@ -181,14 +212,14 @@ public class YTSProvider extends MediaProvider {
 
                             TraktProvider.MetaData meta = traktProvider.getSummary(movie.videoId, "movie");
                             if (meta.images != null && meta.images.containsKey("poster")) {
-                                movie.image = meta.images.get("poster").replace(".jpg", "-300.jpg");
+                                movie.image = meta.images.get("poster").replace("/original/", "/medium/");
                                 movie.fullImage = meta.images.get("poster");
                             } else {
                                 movie.fullImage = movie.image;
                             }
 
                             if (meta.images != null && meta.images.containsKey("fanart")) {
-                                movie.headerImage = meta.images.get("fanart").replace(".jpg", "-940.jpg");
+                                movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
                             } else {
                                 movie.headerImage = movie.image;
                             }
@@ -237,7 +268,7 @@ public class YTSProvider extends MediaProvider {
                         callback.onFailure(new IllegalStateException("Empty list"));
                     }
                 }
-                callback.onFailure(new NetworkErrorException(response.body().string()));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
             }
         });
     }
@@ -300,7 +331,6 @@ public class YTSProvider extends MediaProvider {
                     movie.year = item.get("MovieYear").toString();
                     movie.genre = item.get("Genre").toString();
                     movie.rating = item.get("MovieRating").toString();
-                    movie.type = "movie";
                 } else {
                     movie = (Movie) existingList.get(existingItem);
                 }

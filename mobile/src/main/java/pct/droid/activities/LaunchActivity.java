@@ -10,7 +10,7 @@ public class LaunchActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
+        if (PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
             startActivity(new Intent(this, OverviewActivity.class));
         } else {
             startActivity(new Intent(this, TermsActivity.class));
