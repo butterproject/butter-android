@@ -225,7 +225,7 @@ public class StreamLoadingActivity extends BaseActivity {
                         } else {
                             downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
                         }
-                        seedsText.setText(status.seeds + " seeds");
+                        seedsText.setText(status.seeds + " " + getString(R.string.seeds));
                     }
                 });
             } else {
@@ -241,7 +241,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
 
                         downloadSpeedText.setText(df.format((status.downloadSpeed / 1048576)) + " MB/s");
-                        seedsText.setText(status.seeds + " seeds");
+                        seedsText.setText(status.seeds + " " + getString(R.string.seeds));
                     }
                 });
             }
