@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,7 +34,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         int screenWidth = PixelUtils.getScreenWidth(activity);
         mItemWidth = (screenWidth / columns);
-        mItemHeight = (int) (1.5 * (double) mItemWidth);
+        mItemHeight = (int) ((double) mItemWidth / 0.677);
         mMargin = PixelUtils.getPixelsFromDp(activity, 2);
 
         setItems(items);
@@ -58,6 +60,8 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int top_margin = (position < mColumns) ? mMargin * 2 : mMargin;
 
         GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
+        layoutParams.height = mItemHeight;
+        layoutParams.width = mItemWidth;
         if (position % mColumns == 0) {
             layoutParams.setMargins(double_margin, top_margin, mMargin, mMargin);
         } else if (position % mColumns == mColumns - 1) {
@@ -70,8 +74,9 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (getItemViewType(position) == NORMAL) {
             ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             Media item = getItem(position);
+            videoViewHolder.title.setText(item.title.toUpperCase(Locale.getDefault()));
             if (item.image != null && !item.image.equals("")) {
-                PopcornApplication.getPicasso().with(videoViewHolder.coverImage.getContext()).load(item.image)
+                PopcornApplication.getPicasso().load(item.image)
                         .resize(mItemWidth, mItemHeight)
                         .into(videoViewHolder.coverImage);
             }
@@ -145,11 +150,13 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void onItemClick(View v, Media item, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View itemView;
         @InjectView(R.id.coverImage)
         ImageView coverImage;
+        @InjectView(R.id.title)
+        TextView title;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -170,7 +177,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
-    public class LoadingHolder extends RecyclerView.ViewHolder {
+    class LoadingHolder extends RecyclerView.ViewHolder {
 
         View itemView;
 
