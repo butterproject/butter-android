@@ -78,7 +78,6 @@ public class PopcornApplication extends VLCApplication {
             statusFile.delete();
             streamerFile.delete();
         }
-        directory.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         LogUtils.i("Chosen cache location: " + directory);
@@ -184,7 +183,6 @@ public class PopcornApplication extends VLCApplication {
             statusFile.delete();
             streamerFile.delete();
         }
-        torrentPath.mkdirs();
 
         startService();
     }
