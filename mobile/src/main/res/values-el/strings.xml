@@ -48,6 +48,7 @@
   <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
   <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>
   <string name="i18n_language">Γλώσσα εφαρμογής</string>
+  <string name="restart_effect">Επανεκκινήστε την εφαρμογή για να ισχύσουν οι αλλαγές</string>
   <string name="device_language">Γλώσσα συσκευής</string>
   <string name="stream_over_wifi_only">Ροή δεδομένων μόνο με Wi-Fi</string>
   <string name="internal_player">Εσωτερικό</string>
@@ -74,4 +75,7 @@
   <string name="tap_to_open">Πατήστε για άνοιγμα</string>
   <string name="report_a_bug">Αναφορά προβλήματος</string>
   <string name="open_source_licenses">Άδειες ανοιχτού κώδικα</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Μόνο Wi-Fi</string>
+  <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>
 </resources>

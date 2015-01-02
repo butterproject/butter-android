@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="translation_languages">
+        <item>en</item>
         <item>el</item>
         <item>fr</item>
         <item>bg</item>
-        <item>nl</item>
         <item>pt-BR</item>
-        <item>pt</item>
-        <item>zh-CN</item>
         <item>hr</item>
         <item>de</item>
-        <item>ko</item>
         <item>it</item>
+        <item>iw</item>
+        <item>da</item>
         <item>hu</item>
-        <item>pl</item>
-        <item>sv</item>
         <item>es</item>
         <item>he</item>
-        <item>en</item>
+        <item>nl</item>
+        <item>pt</item>
+        <item>zh-CN</item>
+        <item>ko</item>
+        <item>sv</item>
+        <item>sl</item>
+        <item>pl</item>
     </string-array>
 </resources>

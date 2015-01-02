@@ -48,6 +48,7 @@
   <string name="default_view">Presentación predeterminada</string>
   <string name="default_player">Reproductor predeterminado</string>
   <string name="i18n_language">Idioma de la aplicación</string>
+  <string name="restart_effect">Reiniciar la aplicación para que los cambios tengan efecto</string>
   <string name="device_language">Idioma del dispositivo </string>
   <string name="stream_over_wifi_only">Solo transmitir contenido a través de Wi-Fi</string>
   <string name="internal_player">Interno</string>
@@ -74,4 +75,7 @@
   <string name="tap_to_open">Pulse para abrir</string>
   <string name="report_a_bug">Reportar un error</string>
   <string name="open_source_licenses">Licencias de código abierto</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Sólo Wi-Fi</string>
+  <string name="wifi_only_message">Sólo puedes transmitir vídeos a través de Wi-Fi. Puedes desactivar ésto en preferencias si quieres transmitir a través de una conexión de datos.</string>
 </resources>

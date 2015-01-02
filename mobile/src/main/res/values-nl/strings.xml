@@ -75,4 +75,7 @@
   <string name="tap_to_open">Tik om te openen</string>
   <string name="report_a_bug">Meld een fout</string>
   <string name="open_source_licenses">Open-source licenties</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Alleen Wi-Fi</string>
+  <string name="wifi_only_message">Je kunt alleen streamen over een Wi-Fi-verbinding. Als je wilt streamen over een mobiele verbinding kun je deze instelling veranderen in de instellingen.</string>
 </resources>

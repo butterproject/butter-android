@@ -47,6 +47,10 @@
   <string name="general">一般</string>
   <string name="default_view">默认概述</string>
   <string name="default_player">默认视频播放器</string>
+  <string name="i18n_language">程序语言</string>
+  <string name="restart_effect">重新启动应用软件程序的更改生效</string>
+  <string name="device_language">设备语言</string>
+  <string name="stream_over_wifi_only">只有数据流过无线网络</string>
   <string name="internal_player">内部</string>
   <string name="subtitle_color">颜色</string>
   <string name="subtitle_size">尺寸</string>
@@ -71,4 +75,5 @@
   <string name="tap_to_open">点击打开</string>
   <string name="report_a_bug">报告故障</string>
   <string name="open_source_licenses">开放源码许可证</string>
+  <!--WifiOnlyDialogFragment-->
 </resources>

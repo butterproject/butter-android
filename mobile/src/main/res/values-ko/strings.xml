@@ -74,4 +74,5 @@
   <string name="tap_to_open">탭해서 열기</string>
   <string name="report_a_bug">버그 보고</string>
   <string name="open_source_licenses">오픈소스 라이센스</string>
+  <!--WifiOnlyDialogFragment-->
 </resources>
