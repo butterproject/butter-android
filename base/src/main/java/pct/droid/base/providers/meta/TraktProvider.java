@@ -23,6 +23,7 @@ public class TraktProvider extends MetaProvider {
     public MetaData getSummary(String imdbId, String type) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + type + "/summary.json/" + mApiKey + "/" + imdbId);
+        requestBuilder.tag(META_CALL);
 
         Call call = enqueue(requestBuilder.build());
         try {
@@ -50,6 +51,7 @@ public class TraktProvider extends MetaProvider {
      */
     public MetaData[] getSummaries(String[] ids, String type, String extended) {
         Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.tag(META_CALL);
 
         String idString = "";
         for (int i = 0; i < ids.length; i++) {

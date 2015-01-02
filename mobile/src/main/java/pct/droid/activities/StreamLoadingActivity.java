@@ -3,7 +3,7 @@ package pct.droid.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.FileObserver;
-import android.provider.MediaStore;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -12,20 +12,24 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Map;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.DefaultPlayer;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
-import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
+import pct.droid.base.utils.PrefUtils;
 
 public class StreamLoadingActivity extends BaseActivity {
 
@@ -37,19 +41,27 @@ public class StreamLoadingActivity extends BaseActivity {
 
     private FileObserver mFileObserver;
     private SubsProvider mSubsProvider;
-    private Boolean mIntentStarted = false, mHasSubs = false;
+    private Boolean mPlayerStarted = false, mHasSubs = false;
 
-    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING};
+    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
+
+    ;
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
+    private String mSubtitleLanguage = null;
 
     @InjectView(R.id.progressIndicator)
     ProgressBar progressIndicator;
     @InjectView(R.id.progressText)
     TextView progressText;
+    @InjectView(R.id.downloadSpeedText)
+    TextView downloadSpeedText;
+    @InjectView(R.id.seedsText)
+    TextView seedsText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_streamloading);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         while (!getApp().isServiceBound()) {
             getApp().startService();
@@ -62,24 +74,37 @@ public class StreamLoadingActivity extends BaseActivity {
         String streamUrl = getIntent().getStringExtra(STREAM_URL);
         final Media data = getIntent().getParcelableExtra(DATA);
 
-        if (getIntent().hasExtra(SUBTITLES)) {
-            mHasSubs = true;
-            String subtitleLanguage = getIntent().getStringExtra(SUBTITLES);
-            if (!subtitleLanguage.equals("no-subs")) {
-                SubsProvider.download(this, data, subtitleLanguage, new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-                        mSubsStatus = SubsStatus.FAILURE;
-                    }
+        if (!getIntent().hasExtra(SUBTITLES) && data.subtitles != null && data.subtitles.size() > 0) {
+            if (data.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+                getIntent().putExtra(SUBTITLES, PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
+            }
+        }
 
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        mSubsStatus = SubsStatus.SUCCESS;
-                    }
-                });
+        if (data.subtitles != null && data.subtitles.size() > 0) {
+            if (getIntent().hasExtra(SUBTITLES)) {
+                mHasSubs = true;
+                mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
+                if (!mSubtitleLanguage.equals("no-subs")) {
+                    SubsProvider.download(this, data, mSubtitleLanguage, new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
+                    });
+                } else {
+                    mSubsStatus = SubsStatus.SUCCESS;
+                }
+            } else {
+                mSubsStatus = SubsStatus.SUCCESS;
             }
         } else {
-            if(data instanceof Movie) {
+            // TODO: make more generic
+            if (data instanceof Movie) {
                 mSubsProvider = new YSubsProvider();
                 mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
                     @Override
@@ -114,7 +139,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
         getApp().startStreamer(streamUrl);
 
-        String directory = getApp().getStreamDir();
+        String directory = PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir());
         mFileObserver = new FileObserver(directory) {
             @Override
             public void onEvent(int event, String path) {
@@ -146,29 +171,32 @@ public class StreamLoadingActivity extends BaseActivity {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    progressText.setText("Waiting for subtitles"); // TODO: translation (by sv244)
+                    progressText.setText(R.string.waiting_for_subtitles);
                 }
             });
             return;
         }
 
-        if (!mIntentStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
+        if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
             try {
-                Ready ready = Ready.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/streamer.json"));
-                mIntentStarted = true;
-                Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
-                if (getIntent().hasExtra(DATA)) {
-                    i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+                Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
+                mPlayerStarted = true;
+                String location = status.filePath;
+                if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
+                    Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+                    if (getIntent().hasExtra(DATA)) {
+                        i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+                    }
+                    if (getIntent().hasExtra(QUALITY)) {
+                        i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
+                    }
+                    if (mSubsStatus == SubsStatus.SUCCESS) {
+                        i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
+                    }
+                    i.putExtra(VideoPlayerActivity.LOCATION, "file://" + location);
+                    startActivity(i);
+                    finish();
                 }
-                if (getIntent().hasExtra(QUALITY)) {
-                    i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
-                }
-                if (mSubsStatus == SubsStatus.SUCCESS) {
-                    i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
-                }
-                i.putExtra(VideoPlayerActivity.LOCATION, "file://" + ready.filePath);
-                startActivity(i);
-                finish();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -177,7 +205,8 @@ public class StreamLoadingActivity extends BaseActivity {
 
     private void updateStatus() {
         try {
-            final Status status = Status.parseJSON(FileUtils.getContentsAsString(getApp().getStreamDir() + "/status.json"));
+            final DecimalFormat df = new DecimalFormat("#############0.00");
+            final Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
             if (status == null) return;
             LogUtils.d(status.toString());
             int calculateProgress = (int) Math.floor(status.progress * 25);
@@ -190,6 +219,13 @@ public class StreamLoadingActivity extends BaseActivity {
                         progressIndicator.setIndeterminate(false);
                         progressIndicator.setProgress(progress);
                         progressText.setText(progress + "%");
+
+                        if (status.downloadSpeed < 1048576) {
+                            downloadSpeedText.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
+                        } else {
+                            downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
+                        }
+                        seedsText.setText(status.seeds + " " + getString(R.string.seeds));
                     }
                 });
             } else {
@@ -197,8 +233,15 @@ public class StreamLoadingActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (progressText.getText().toString().equals("Streaming"))
-                            progressText.setText("Streaming"); // TODO: translation (by sv244)
+                        if (mSubsStatus == SubsStatus.DOWNLOADING) {
+                            progressText.setText(R.string.waiting_for_subtitles);
+                        } else {
+                            progressText.setText(R.string.streaming_started);
+                        }
+
+
+                        downloadSpeedText.setText(df.format((status.downloadSpeed / 1048576)) + " MB/s");
+                        seedsText.setText(status.seeds + " " + getString(R.string.seeds));
                     }
                 });
             }
@@ -211,6 +254,9 @@ public class StreamLoadingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mFileObserver.startWatching();
+        if (mPlayerStarted) {
+            onBackPressed();
+        }
     }
 
     @Override

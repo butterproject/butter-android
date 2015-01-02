@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Enregistrer</string>
+  <string name="cancel">Annuler</string>
+  <string name="close">Fermer</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Activé</string>
+  <string name="disabled">Désactivé</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Titre, année, acteurs</string>
+  <string name="title_shows">Séries</string>
+  <string name="title_movies">Films</string>
+  <string name="search">Recherche</string>
+  <string name="loading">Chargement des données...</string>
+  <string name="no_data_found">Aucune donnée trouvée</string>
+  <string name="unknown_error">Quelque chose n\'a pas fonctionné</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="watch_trailer">Visionner la bande-annonce</string>
+  <string name="disable_subs">Désactiver les sous-titres</string>
+  <string name="no_subs">Aucuns sous-titres</string>
+  <string name="subtitles">Sous-titres</string>
+  <string name="quality">Qualité</string>
+  <string name="trailer">Bande-annonce</string>
+  <string name="season">Saison</string>
+  <string name="episode">Épisode</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">La lecture a commencé</string>
+  <string name="waiting_for_subtitles">En attente des sous-titres…</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">En cours de lecture</string>
+  <string name="volume">Volume</string>
+  <string name="brightness">Luminosité</string>
+  <string name="hardware_acceleration_error_title">Erreur d\'accélération matérielle</string>
+  <string name="hardware_acceleration_error_message">Une erreur s\'est produite avec l\'accélération matérielle. Souhaitez-vous la désactiver et réessayer ?</string>
+  <string name="best_fit">Adapter</string>
+  <string name="fill">Remplir</string>
+  <string name="fit_horizontal">Ajuster horizontalement</string>
+  <string name="fit_vertical">Ajuster verticalement</string>
+  <string name="original_size">Original</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Accepter</string>
+  <string name="leave">Quitter</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Préférences</string>
+  <string name="general">Général</string>
+  <string name="default_view">Aperçu par défaut</string>
+  <string name="default_player">Lecteur vidéo par défaut</string>
+  <string name="i18n_language">Langue de l\'application</string>
+  <string name="restart_effect">Relancez l\'application pour que les modifications soient prises en compte </string>
+  <string name="device_language">Langue de l\'appareil</string>
+  <string name="stream_over_wifi_only">Lire seulement lorsque le Wi-Fi est activé</string>
+  <string name="internal_player">Interne</string>
+  <string name="subtitle_color">Couleur</string>
+  <string name="subtitle_size">Taille</string>
+  <string name="subtitle_language">Langue par défaut</string>
+  <string name="no_default_set">Il n\'y a pas de langue par défaut</string>
+  <string name="advanced">Avancé</string>
+  <string name="storage_location">Emplacement du stockage</string>
+  <string name="storage_automatic">Automatique</string>
+  <string name="storage_choose">Choisir un emplacement</string>
+  <string name="not_writable">Emplacement non accessible en écriture</string>
+  <string name="remove_cache">Vider le cache à la fin de la lecture</string>
+  <string name="hw_acceleration">Accélération matérielle</string>
+  <string name="hw_automatic">Automatique</string>
+  <string name="hw_full">Maximale</string>
+  <string name="hw_decoding">Décodage uniquement</string>
+  <string name="updates">Mises à jour</string>
+  <string name="auto_updates">Mises à jour automatiques</string>
+  <string name="check_for_updates">Rechercher des mises à jour</string>
+  <string name="about">À propos</string>
+  <string name="version">Version</string>
+  <string name="changelog">Historique des modifications</string>
+  <string name="tap_to_open">Appuyez pour ouvrir</string>
+  <string name="report_a_bug">Soumettre un rapport de bug</string>
+  <string name="open_source_licenses">Licences Open-Source</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi uniquement </string>
+  <string name="wifi_only_message">Vous ne pouvez lire de vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences si vous souhaitez utiliser une connexion de données mobiles.</string>
+</resources>

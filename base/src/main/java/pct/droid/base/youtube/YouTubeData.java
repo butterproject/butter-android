@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pct.droid.base.PopcornApplication;
+
 public class YouTubeData {
 
     static final String YOUTUBE_VIDEO_INFORMATION_URL = "http://www.youtube.com/get_video_info?&video_id=";
@@ -58,7 +60,7 @@ public class YouTubeData {
     public static String calculateYouTubeUrl(String quality, boolean fallback, String videoId) throws IOException {
 
         String uriStr = null;
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = PopcornApplication.getHttpClient();
 
         Request.Builder request = new Request.Builder();
         request.url(YOUTUBE_VIDEO_INFORMATION_URL + videoId);

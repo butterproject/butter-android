@@ -55,4 +55,14 @@ public class StringUtils {
         return time;
     }
 
+    /**
+     * Uppercase first character
+     *
+     * @param str Input string
+     * @return Output string
+     */
+    public static String uppercaseFirst(String str) {
+        return str.substring(0, 1).toUpperCase(Locale.getDefault()) + str.substring(1, str.length());
+    }
+
 }

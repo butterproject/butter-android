@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Shrani</string>
+  <string name="cancel">Prekliči</string>
+  <string name="close">Zapri</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Omogočeno</string>
+  <string name="disabled">Onemogočeno</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Naslov, leto, igralci</string>
+  <string name="title_shows">Oddaje</string>
+  <string name="title_movies">Filmi</string>
+  <string name="search">Iskanje</string>
+  <string name="loading">Nalaganje podatkov...</string>
+  <string name="no_data_found">Ni najdenih podatkov</string>
+  <string name="unknown_error">Nekaj ​​je šlo narobe</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="watch_trailer">Napovednik</string>
+  <string name="disable_subs">Onemogoči podnapise</string>
+  <string name="no_subs">Ni podnapisov</string>
+  <string name="subtitles">Podnapisi</string>
+  <string name="quality">Kvaliteta</string>
+  <string name="trailer">Napovednik</string>
+  <string name="season">Sezona</string>
+  <string name="episode">Epizoda</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">Začetek prenosa</string>
+  <string name="waiting_for_subtitles">Čakam na podnapise</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Trenutno se predvaja</string>
+  <string name="volume">Glasnost</string>
+  <string name="brightness">Svetlost</string>
+  <string name="hardware_acceleration_error_title">Napaka HW pospeška</string>
+  <string name="hardware_acceleration_error_message">Prišlo je do napake pri strojnem pospeševanju. Bi ga radi onemogočili in poskusili znova?</string>
+  <string name="best_fit">Najboljša prilagodljivost</string>
+  <string name="fill">Zapolni</string>
+  <string name="fit_horizontal">Prilagodi vodoravno </string>
+  <string name="fit_vertical">Prilagodi navpično</string>
+  <string name="original_size">Originalno</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Sprejmi</string>
+  <string name="leave">Zapusti</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Nastavitve</string>
+  <string name="general">Splošno</string>
+  <string name="default_view">Privzeto večnamenski pogled</string>
+  <string name="default_player">Privzeto video predvajalnik</string>
+  <string name="i18n_language">Jezik aplikacije</string>
+  <string name="restart_effect">Ponovno zaženi aplikacijo da spremembe začnejo veljati</string>
+  <string name="device_language">Jezik naprave</string>
+  <string name="stream_over_wifi_only">Prenašaj samo preko Wi-Fi</string>
+  <string name="internal_player">Notranji</string>
+  <string name="subtitle_color">Barva</string>
+  <string name="subtitle_size">Velikost</string>
+  <string name="subtitle_language">Privzeti jezik</string>
+  <string name="no_default_set">Brez privzetega jezika</string>
+  <string name="advanced">Napredno</string>
+  <string name="storage_location">Lokacija za shranjevanje</string>
+  <string name="storage_automatic">Samodejno</string>
+  <string name="storage_choose">Izberi lokacijo</string>
+  <string name="not_writable">Lokacija ni zapisljiva</string>
+  <string name="remove_cache">Odstrani cache ob zaprtju predvajalnika</string>
+  <string name="hw_acceleration">Strojno pospeševanje</string>
+  <string name="hw_automatic">Samodejno</string>
+  <string name="hw_full">Polno</string>
+  <string name="hw_decoding">Samo dekodiranje</string>
+  <string name="updates">Posodobitve</string>
+  <string name="auto_updates">Samodejno posodabljanje</string>
+  <string name="check_for_updates">Preveri za posodobitvami</string>
+  <string name="about">Info</string>
+  <string name="version">Različica</string>
+  <string name="changelog">Dnevnik Sprememb</string>
+  <string name="tap_to_open">Odpri z dotikom</string>
+  <string name="report_a_bug">Prijavi napako</string>
+  <string name="open_source_licenses">Odprto-kodne licence</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Samo Wi-Fi</string>
+  <string name="wifi_only_message">Video vsebine lahko prenašaš samo preko Wi-Fi. Lahko pa to tudi onemogočiš v nastavitvah, če želiš prenašat preko mobilne povezave.</string>
+</resources>

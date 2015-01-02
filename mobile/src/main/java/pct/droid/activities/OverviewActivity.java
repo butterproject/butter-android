@@ -1,13 +1,16 @@
 package pct.droid.activities;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,6 +40,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.adapters.OverviewGridAdapter;
 import pct.droid.base.Constants;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
@@ -44,6 +49,7 @@ import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 
@@ -53,12 +59,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     private OverviewActivityTaskFragment mTaskFragment;
     private OverviewGridAdapter mAdapter;
     private GridLayoutManager mLayoutManager;
-    private MediaProvider mProvider = new YTSProvider();
-    private Integer mProviderId = 0;
     private Integer mColumns = 2, mRetries = 0;
-    private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false;
+    private boolean mLoading = true, mEndOfListReached = false, mLoadingDetails = false, mPaused = true;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
+    @InjectView(R.id.rootLayout)
+    RelativeLayout rootLayout;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
     @InjectView(R.id.progressOverlay)
@@ -85,14 +91,19 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         mLayoutManager = new GridLayoutManager(this, mColumns);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getFragmentManager();
         mTaskFragment = (OverviewActivityTaskFragment) fm.findFragmentByTag(OverviewActivityTaskFragment.TAG);
 
         if (mTaskFragment == null || mTaskFragment.getExistingItems() == null) {
             mTaskFragment = new OverviewActivityTaskFragment();
             fm.beginTransaction().add(mTaskFragment, OverviewActivityTaskFragment.TAG).commit();
 
-            mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+            int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
+            if (providerId == 1) {
+                mTaskFragment.setProvider(new EZTVProvider());
+            }
+
+            mTaskFragment.getProvider().getList(mTaskFragment.getFilters(), mTaskFragment);
         } else {
             onSuccess(mTaskFragment.getExistingItems());
         }
@@ -114,28 +125,36 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     // todo refactor this out
     private void switchMoviesShowsMode() {
-        mProvider.cancel();
-        if (mProviderId == 0) {
-            mProvider = new EZTVProvider();
-            mProviderId = 1;
+        mTaskFragment.getProvider().cancel();
+        if (mTaskFragment.getProvider() instanceof YTSProvider) {
+            mTaskFragment.setProvider(new EZTVProvider());
         } else {
-            mProvider = new YTSProvider();
-            mProviderId = 0;
+            mTaskFragment.setProvider(new YTSProvider());
         }
 
         mTaskFragment.setCurrentPage(0);
+        mTaskFragment.setFilters(new MediaProvider.Filters());
         mAdapter = new OverviewGridAdapter(OverviewActivity.this, new ArrayList<Media>(), mColumns);
         mAdapter.setOnItemClickListener(mOnItemClickListener);
         progressOverlay.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(mAdapter);
         mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
 
-        mProvider.getList(mTaskFragment.getFilters(), mTaskFragment);
+        mTaskFragment.getProvider().getList(mTaskFragment.getFilters(), mTaskFragment);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mPaused = false;
+        rootLayout.invalidate();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mTaskFragment.getProvider().cancel();
+        mPaused = true;
     }
 
     @Override
@@ -144,7 +163,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchViewAction.setQueryHint(getString(R.string.search_hint));
+        searchViewAction.setQueryHint(getResources().getString(R.string.search_hint));
         searchViewAction.setOnQueryTextListener(mSearchListener);
         searchViewAction.setIconifiedByDefault(true);
 
@@ -157,7 +176,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem switchItem = menu.findItem(R.id.action_switch_mode);
-        switchItem.setTitle(mProviderId == 0 ? R.string.title_shows : R.string.title_movies);
+        switchItem.setTitle(mTaskFragment.getProvider() instanceof YTSProvider ? R.string.title_shows : R.string.title_movies);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -171,6 +190,10 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             case R.id.action_switch_mode:
                 switchMoviesShowsMode();
                 break;
+            case R.id.action_preferences:
+                Intent intent = new Intent(this, PreferencesActivity.class);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,7 +202,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     public void onBackPressed() {
         if (mLoadingDetails) {
             progressOverlay.setVisibility(View.GONE);
-            mProvider.cancel();
+            mTaskFragment.getProvider().cancel();
             mLoadingDetails = false;
             return;
         }
@@ -191,6 +214,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
     public void onSuccess(final ArrayList<Media> items) {
         mEndOfListReached = false;
         if (mTotalItemCount <= 0) {
+            mTaskFragment.setCurrentPage(mTaskFragment.getCurrentPage() + 1);
             mAdapter = new OverviewGridAdapter(OverviewActivity.this, items, mColumns);
             mAdapter.setOnItemClickListener(mOnItemClickListener);
             mHandler.post(new Runnable() {
@@ -209,6 +233,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 @Override
                 public void run() {
                     mAdapter.setItems(items);
+                    emptyView.setVisibility(View.GONE);
                 }
             });
         }
@@ -221,6 +246,10 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    if (mAdapter == null) {
+                        return;
+                    }
+
                     mAdapter.removeLoading();
 
                     if (mAdapter.getItemCount() <= 0) {
@@ -235,12 +264,12 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show(); //TODO: translation (by sv244)
+                        Toast.makeText(OverviewActivity.this, R.string.unknown_error, Toast.LENGTH_SHORT).show();
                         emptyView.setVisibility(View.VISIBLE);
                     }
                 });
             } else {
-                mProvider.getList(null, mTaskFragment);
+                mTaskFragment.getProvider().getList(null, mTaskFragment);
             }
             mRetries++;
         }
@@ -248,16 +277,31 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(View view, final Media item, int position) {
+        public void onItemClick(final View view, final Media item, final int position) {
             progressOverlay.setBackgroundColor(getResources().getColor(R.color.overlay_bg));
             progressOverlay.setVisibility(View.VISIBLE);
 
             mLoadingDetails = true;
-            mProvider.getDetail(item.videoId, new MediaProvider.Callback() {
+            mTaskFragment.getProvider().getDetail(item.videoId, new MediaProvider.Callback() {
                 @Override
                 public void onSuccess(ArrayList<Media> items) {
                     if (items.size() <= 0 || !mLoadingDetails) return;
                     mLoadingDetails = false;
+
+                    ImageView coverImage = (ImageView) view.findViewById(R.id.coverImage);
+                    final int paletteColor;
+                    if (coverImage.getDrawable() != null) {
+                        Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
+                        Palette palette = Palette.generate(cover, 5);
+                        int vibrantColor = palette.getVibrantColor(-1);
+                        if (vibrantColor == -1) {
+                            paletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
+                        } else {
+                            paletteColor = vibrantColor;
+                        }
+                    } else {
+                        paletteColor = -1;
+                    }
 
                     mHandler.post(new Runnable() {
                         @Override
@@ -272,12 +316,17 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (mPaused)
+                                return;
+
                             Intent intent;
                             if (item instanceof Movie) {
                                 intent = new Intent(OverviewActivity.this, MovieDetailActivity.class);
                             } else {
                                 intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
                             }
+                            if (paletteColor != -1)
+                                intent.putExtra("palette", paletteColor);
                             intent.putExtra("item", item);
                             startActivity(intent);
                         }
@@ -292,7 +341,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(OverviewActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OverviewActivity.this, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                                progressOverlay.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -321,7 +371,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             if (!mEndOfListReached && !mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mLoadingTreshold)) {
                 MediaProvider.Filters filters = mTaskFragment.getFilters();
                 filters.page = mTaskFragment.getCurrentPage();
-                mProvider.getList(mAdapter.getItems(), filters, mTaskFragment);
+                mTaskFragment.getProvider().getList(mAdapter.getItems(), filters, mTaskFragment);
                 mTaskFragment.setFilters(filters);
                 mAdapter.addLoading();
                 mPreviousTotal = mTotalItemCount = mLayoutManager.getItemCount();
@@ -347,7 +397,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
             filters.page = 1;
             mTaskFragment.setCurrentPage(1);
             mTaskFragment.setFilters(filters);
-            mProvider.getList(filters, mTaskFragment);
+            mTaskFragment.getProvider().getList(filters, mTaskFragment);
             return true;
         }
 
