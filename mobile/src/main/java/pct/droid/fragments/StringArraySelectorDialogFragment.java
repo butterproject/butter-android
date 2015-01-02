@@ -3,12 +3,14 @@ package pct.droid.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import java.util.List;
 
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
 
 public class StringArraySelectorDialogFragment extends DialogFragment {
 
@@ -66,6 +68,53 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
 
     public void setDialogClickListener(DialogInterface.OnClickListener dialogClickListener) {
         mOnClickListener = dialogClickListener;
+    }
+
+    public static void show(FragmentManager fm, int titleRes, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, PopcornApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
+    }
+
+    public static void show(FragmentManager fm, int titleRes, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, PopcornApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
+    }
+
+    public static void show(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        String[] itemsArray = items.toArray(new String[items.size()]);
+        show(fm, title, itemsArray, defaultPosition, dialogClickListener);
+    }
+
+    public static void show(FragmentManager fm, String title, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, title, items, defaultPosition, NORMAL, dialogClickListener);
+    }
+
+    public static void showSingleChoice(FragmentManager fm, int titleRes, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        showSingleChoice(fm, PopcornApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
+    }
+
+    public static void showSingleChoice(FragmentManager fm, int titleRes, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        showSingleChoice(fm, PopcornApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
+    }
+
+    public static void showSingleChoice(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        String[] itemsArray = items.toArray(new String[items.size()]);
+        showSingleChoice(fm, title, itemsArray, defaultPosition, dialogClickListener);
+    }
+
+    public static void showSingleChoice(FragmentManager fm, String title, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, title, items, defaultPosition, SINGLE_CHOICE, dialogClickListener);
+    }
+
+    private static void show(FragmentManager fm, String title, String[] items, int defaultPosition, int mode, DialogInterface.OnClickListener dialogClickListener) {
+        Bundle args = new Bundle();
+        args.putString(StringArraySelectorDialogFragment.TITLE, title);
+        args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
+        args.putInt(StringArraySelectorDialogFragment.MODE, mode);
+        args.putInt(StringArraySelectorDialogFragment.POSITION, defaultPosition);
+
+        StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
+        dialogFragment.setArguments(args);
+        dialogFragment.setDialogClickListener(dialogClickListener);
+        dialogFragment.show(fm, "overlay_fragment");
     }
 
 }

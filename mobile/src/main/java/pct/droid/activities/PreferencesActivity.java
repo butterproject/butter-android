@@ -539,16 +539,11 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
     }
 
     private void openListSelectionDialog(String title, String[] items, int mode, int defaultPosition, DialogInterface.OnClickListener onClickListener) {
-        Bundle args = new Bundle();
-        args.putString(StringArraySelectorDialogFragment.TITLE, title);
-        args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
-        args.putInt(StringArraySelectorDialogFragment.MODE, mode);
-        args.putInt(StringArraySelectorDialogFragment.POSITION, defaultPosition);
-
-        StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
-        dialogFragment.setArguments(args);
-        dialogFragment.setDialogClickListener(onClickListener);
-        dialogFragment.show(getFragmentManager(), "pref_fragment");
+        if(mode == StringArraySelectorDialogFragment.NORMAL) {
+            StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, defaultPosition, onClickListener);
+        } else if(mode == StringArraySelectorDialogFragment.SINGLE_CHOICE) {
+            StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), title, items, defaultPosition, onClickListener);
+        }
     }
 
     @Override
