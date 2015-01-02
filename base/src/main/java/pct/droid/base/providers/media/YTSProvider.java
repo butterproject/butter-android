@@ -331,7 +331,6 @@ public class YTSProvider extends MediaProvider {
                     movie.year = item.get("MovieYear").toString();
                     movie.genre = item.get("Genre").toString();
                     movie.rating = item.get("MovieRating").toString();
-                    movie.image = movie.fullImage = movie.headerImage = item.get("CoverImage").toString();
                 } else {
                     movie = (Movie) existingList.get(existingItem);
                 }
