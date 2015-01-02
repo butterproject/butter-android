@@ -48,6 +48,7 @@
   <string name="default_view">Kezdőképernyő</string>
   <string name="default_player">Alapértelmezett videó lejátszó</string>
   <string name="i18n_language">Alkalmazás nyelve</string>
+  <string name="restart_effect">Indítsa újra az alkalmazást a változtatások érvénybe léptetéséhez</string>
   <string name="device_language">Készülék nyelve</string>
   <string name="stream_over_wifi_only">Stream csak Wi-Fi-n</string>
   <string name="internal_player">Belső</string>
@@ -74,4 +75,7 @@
   <string name="tap_to_open">Érintse meg a megnyitáshoz</string>
   <string name="report_a_bug">Hiba jelentése</string>
   <string name="open_source_licenses">Nyílt forráskódú engedélyek</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">csak Wi-Fi</string>
+  <string name="wifi_only_message">Csak Wi-Fi-n tud videót streamelni. Kikapcsolhatja a beállításoknál ha mobil hálózaton keresztűl akar streamelni.</string>
 </resources>

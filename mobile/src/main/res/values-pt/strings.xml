@@ -48,8 +48,9 @@
   <string name="default_view">Vista predefinida</string>
   <string name="default_player">Leitor de vídeo predefinido</string>
   <string name="i18n_language">Idioma da aplicação</string>
+  <string name="restart_effect">Reinicia a aplicação para as alterações serem aplicadas</string>
   <string name="device_language">Idioma do dispositivo</string>
-  <string name="stream_over_wifi_only">Reproduzir apenas através de Wi-Fi</string>
+  <string name="stream_over_wifi_only">Reproduzir apenas por Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Cor</string>
   <string name="subtitle_size">Tamanho</string>
@@ -73,5 +74,8 @@
   <string name="changelog">Lista de alterações</string>
   <string name="tap_to_open">Toca para abrir</string>
   <string name="report_a_bug">Comunicar um erro</string>
-  <string name="open_source_licenses">Licensas de código aberto</string>
+  <string name="open_source_licenses">Licenças de código aberto</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Apenas Wi-Fi</string>
+  <string name="wifi_only_message">Apenas podes reproduzir vídeo através de Wi-Fi. Desativa esta opção nas Definições se quiseres reproduzir através de uma rede móvel.</string>
 </resources>

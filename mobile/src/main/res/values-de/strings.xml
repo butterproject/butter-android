@@ -47,6 +47,9 @@
   <string name="general">Allgemein</string>
   <string name="default_view">Standardübersicht</string>
   <string name="default_player">Standard-Videoabspieler</string>
+  <string name="i18n_language">Appsprache</string>
+  <string name="device_language">Gerätesprache</string>
+  <string name="stream_over_wifi_only">Nur über Wi-Fi streamen</string>
   <string name="internal_player">Intern</string>
   <string name="subtitle_color">Farbe</string>
   <string name="subtitle_size">Größe</string>
@@ -71,4 +74,6 @@
   <string name="tap_to_open">Tippen Sie zum Öffnen</string>
   <string name="report_a_bug">Einen Fehler melden</string>
   <string name="open_source_licenses">Open-Source-Lizenzen</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Nur Wi-Fi</string>
 </resources>

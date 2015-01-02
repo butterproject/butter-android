@@ -6,7 +6,7 @@
   <string name="close">Chiudi</string>
   <string name="ok">OK</string>
   <string name="enabled">Attivo</string>
-  <string name="disabled">Disattivo</string>
+  <string name="disabled">Disattivato</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Titolo, Anno, Attori</string>
   <string name="title_shows">Serie</string>
@@ -17,7 +17,7 @@
   <string name="unknown_error">Qualcosa è andato storto</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
-  <string name="watch_trailer">Guarda Trailer</string>
+  <string name="watch_trailer">Guarda il Trailer</string>
   <string name="disable_subs">Disattiva sottotitoli</string>
   <string name="no_subs">Niente sottotitoli</string>
   <string name="subtitles">Sottotitoli</string>
@@ -47,9 +47,13 @@
   <string name="general">Generali</string>
   <string name="default_view">Visualizzazione predefinita</string>
   <string name="default_player">Riproduttore predefinito</string>
+  <string name="i18n_language">Lingua dell\'applicazione</string>
+  <string name="restart_effect">Devi riavviare l\'applicazione perché i cambiamenti abbiano effetto</string>
+  <string name="device_language">Lingua del dispositivo</string>
+  <string name="stream_over_wifi_only">Attiva lo stream solo quando connesso al wifi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Colore</string>
-  <string name="subtitle_size">Dimenzione</string>
+  <string name="subtitle_size">Dimensione</string>
   <string name="subtitle_language">Lingua predefinita</string>
   <string name="no_default_set">Nessuna lingua predefinita</string>
   <string name="advanced">Avanzate</string>
@@ -71,4 +75,7 @@
   <string name="tap_to_open">Tocca per aprire</string>
   <string name="report_a_bug">Segnala un Bug</string>
   <string name="open_source_licenses">License Open-Source</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Solo wifi</string>
+  <string name="wifi_only_message">Puoi visualizzare i video solo da una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>
 </resources>

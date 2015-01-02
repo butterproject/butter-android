@@ -74,4 +74,5 @@
   <string name="tap_to_open">גע לפתיחה</string>
   <string name="report_a_bug">דווח על תקלה</string>
   <string name="open_source_licenses">רישיון קוד פתוח</string>
+  <!--WifiOnlyDialogFragment-->
 </resources>

@@ -2,14 +2,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Spremi</string>
-  <string name="cancel">Zatvori</string>
+  <string name="cancel">Odustani</string>
   <string name="close">Zatvori</string>
   <string name="ok">U redu</string>
   <string name="enabled">Omogućeno</string>
   <string name="disabled">Onemogućeno</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Naslov, godina, glumci</string>
-  <string name="title_shows">Serije</string>
+  <string name="title_shows">TV serije</string>
   <string name="title_movies">Filmovi</string>
   <string name="search">Pretraži</string>
   <string name="loading">Učitavanje podataka…</string>
@@ -48,6 +48,7 @@
   <string name="default_view">Početni prikaz</string>
   <string name="default_player">Zadani video reproduktor</string>
   <string name="i18n_language">Jezik aplikacije</string>
+  <string name="restart_effect">Ponvno pokrenite aplikaciju za primjenu promjena</string>
   <string name="device_language">Jezik uređaja</string>
   <string name="stream_over_wifi_only">Samo stremaj putem Wi-Fi</string>
   <string name="internal_player">Unutrašnji</string>
@@ -74,4 +75,7 @@
   <string name="tap_to_open">Dodirni za otvaranje</string>
   <string name="report_a_bug">Prijavi grešku</string>
   <string name="open_source_licenses">Licenca otvorenog kôda</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Samo Wi-Fi</string>
+  <string name="wifi_only_message">Samo možete streamati video snimke putem Wi-Fi. Ovo možete onemogućiti u osobitostima ako želite streamati putem mobilne mreže.</string>
 </resources>

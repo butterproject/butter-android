@@ -48,6 +48,7 @@
   <string name="default_view">Начален изглед</string>
   <string name="default_player">Начален видео плейър</string>
   <string name="i18n_language">Език</string>
+  <string name="restart_effect">Рестартирайте приложението,за да видите промените</string>
   <string name="device_language">Език на устройството</string>
   <string name="stream_over_wifi_only">Стриймвай само при Wi-Fi</string>
   <string name="internal_player">Вътрешно</string>
@@ -74,4 +75,7 @@
   <string name="tap_to_open">Цъкни,за да отвориш</string>
   <string name="report_a_bug">Докладвай за бъг</string>
   <string name="open_source_licenses">Лицензи с отворен код</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Само чрез Wi-Fi</string>
+  <string name="wifi_only_message">Може да стриймвате видеа само чрез Wi-Fi.Може да изключите това в \"предпочитания\" в случай,че искате да стриймвате чрез клетъчна връзка.</string>
 </resources>

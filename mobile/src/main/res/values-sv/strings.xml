@@ -48,6 +48,7 @@
   <string name="default_view">Förvald vy</string>
   <string name="default_player">Standardvideospelare</string>
   <string name="i18n_language">Applikation språk</string>
+  <string name="restart_effect">Starta om applikationen för ändringarna ska börja gälla</string>
   <string name="device_language">Enhets språk</string>
   <string name="stream_over_wifi_only">Endast strömma över Wi-Fi</string>
   <string name="internal_player">Intern</string>
@@ -74,4 +75,7 @@
   <string name="tap_to_open">Tryck för att öppna</string>
   <string name="report_a_bug">Rapportera ett fel</string>
   <string name="open_source_licenses">Öppen källkod-licenser</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Endast Wi-Fi</string>
+  <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>
 </resources>
