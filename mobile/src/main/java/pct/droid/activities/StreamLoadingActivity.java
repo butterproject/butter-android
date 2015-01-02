@@ -26,13 +26,10 @@ import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
-import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
-import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.fragments.WifiOnlyDialogFragment;
 
 public class StreamLoadingActivity extends BaseActivity {
 

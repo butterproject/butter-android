@@ -3,7 +3,6 @@ package pct.droid.activities;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +22,6 @@ import android.widget.TextView;
 
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.Locale;
 
@@ -40,10 +36,10 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.youtube.YouTubeData;
+import pct.droid.fragments.MessageDialogFragment;
 import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
-import pct.droid.fragments.WifiOnlyDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
@@ -139,8 +135,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
                     if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
-                        WifiOnlyDialogFragment dialogFragment = new WifiOnlyDialogFragment();
-                        dialogFragment.show(getFragmentManager(), "overlay_fragment");
+                        MessageDialogFragment.showMessageDialog(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
                         Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
                         streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
