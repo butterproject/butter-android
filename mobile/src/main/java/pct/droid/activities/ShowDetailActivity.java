@@ -38,6 +38,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -364,11 +365,9 @@ public class ShowDetailActivity extends BaseActivity {
                     @Override
                     public void run() {
                         playButton.setImageDrawable(td);
-                        Animation fadeInAnim = AnimationUtils.loadAnimation(ShowDetailActivity.this, android.R.anim.fade_in);
                         mainInfoBlockColorFade.start();
                         td.startTransition(500);
-                        coverImage.setVisibility(View.VISIBLE);
-                        coverImage.startAnimation(fadeInAnim);
+                        AnimUtils.fadeIn(coverImage);
                     }
                 }, 1000);
             }

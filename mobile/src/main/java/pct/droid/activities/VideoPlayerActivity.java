@@ -69,6 +69,7 @@ import pct.droid.base.streamer.Status;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
+import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
@@ -807,11 +808,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         if (!mOverlayVisible) {
             updatePlayPause();
 
-            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_in);
-            controlLayout.setVisibility(View.VISIBLE);
-            controlLayout.startAnimation(fadeOutAnim);
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar.startAnimation(fadeOutAnim);
+            AnimUtils.fadeIn(controlLayout);
+            AnimUtils.fadeIn(toolbar);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
@@ -833,11 +831,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     public void hideOverlay() {
         // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
         if (mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
-            Animation fadeOutAnim = AnimationUtils.loadAnimation(VideoPlayerActivity.this, android.R.anim.fade_out);
-            controlLayout.startAnimation(fadeOutAnim);
-            controlLayout.setVisibility(View.INVISIBLE);
-            toolbar.startAnimation(fadeOutAnim);
-            toolbar.setVisibility(View.INVISIBLE);
+            AnimUtils.fadeOut(controlLayout);
+            AnimUtils.fadeOut(toolbar);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
