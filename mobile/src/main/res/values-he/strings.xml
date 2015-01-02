@@ -28,6 +28,7 @@
   <!--StreamLoadingActivity strings-->
   <string name="streaming_started">הזרמת מדיה החלה</string>
   <string name="waiting_for_subtitles">ממתין לכתוביות</string>
+  <string name="seeds">מעלים</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">פועל עכשיו</string>
   <string name="volume">שמע</string>
@@ -69,6 +70,7 @@
   <string name="updates">עדכונים</string>
   <string name="auto_updates">עדכונים אוטומטים</string>
   <string name="check_for_updates">בדוק אם יש עדכונים</string>
+  <string name="last_check">בדיקה אחרונה</string>
   <string name="about">אודות</string>
   <string name="version">גירסה</string>
   <string name="changelog">יומן שינויים</string>

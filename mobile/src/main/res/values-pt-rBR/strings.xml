@@ -77,5 +77,5 @@
   <string name="open_source_licenses">Licença de código aberto</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi somente</string>
-  <string name="wifi_only_message">Você só pode carregar vídeos através do Wi-Fi. Você pode desabilitar isso nas preferências se quiser carregar através de uma conexão móvel.</string>
+  <string name="wifi_only_message">Você pode reproduzir videos apenas por Wi-Fi. Desabilite esta opção em Preferências para poder reproduzir vídeos utilizando redes móveis.</string>
 </resources>

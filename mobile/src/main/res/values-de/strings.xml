@@ -28,6 +28,7 @@
   <!--StreamLoadingActivity strings-->
   <string name="streaming_started">Streaming gestartet</string>
   <string name="waiting_for_subtitles">Auf Untertitel wird gewartet</string>
+  <string name="seeds">seeds</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Läuft jetzt</string>
   <string name="volume">Lautstärke</string>
@@ -68,6 +69,7 @@
   <string name="updates">Aktualisierungen</string>
   <string name="auto_updates">Automatische Aktualisierungen</string>
   <string name="check_for_updates">Nach Aktualisierungen suchen</string>
+  <string name="last_check">Letzte Prüfung</string>
   <string name="about">Über</string>
   <string name="version">Version</string>
   <string name="changelog">Änderungsprotokoll</string>
