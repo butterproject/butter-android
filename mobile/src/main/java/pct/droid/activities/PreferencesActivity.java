@@ -202,7 +202,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                     @Override
                     public String get(PrefItem item) {
                         String langCode = item.getValue().toString();
-                        if(langCode.isEmpty())
+                        if (langCode.isEmpty())
                             return getString(R.string.device_language);
 
                         Locale locale = LocaleUtils.toLocale(langCode);
@@ -430,7 +430,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
 
         mPrefItems.add(getResources().getString(R.string.about));
 
-        if(!Constants.DEBUG_ENABLED) {
+        if (!Constants.DEBUG_ENABLED) {
             mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_report_bug, R.string.report_a_bug, "", "",
                     new PrefItem.OnClickListener() {
                         @Override
@@ -539,9 +539,9 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
     }
 
     private void openListSelectionDialog(String title, String[] items, int mode, int defaultPosition, DialogInterface.OnClickListener onClickListener) {
-        if(mode == StringArraySelectorDialogFragment.NORMAL) {
+        if (mode == StringArraySelectorDialogFragment.NORMAL) {
             StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, defaultPosition, onClickListener);
-        } else if(mode == StringArraySelectorDialogFragment.SINGLE_CHOICE) {
+        } else if (mode == StringArraySelectorDialogFragment.SINGLE_CHOICE) {
             StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), title, items, defaultPosition, onClickListener);
         }
     }

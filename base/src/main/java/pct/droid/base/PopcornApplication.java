@@ -25,7 +25,6 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.services.StreamerService;
@@ -116,7 +115,7 @@ public class PopcornApplication extends VLCApplication {
     }
 
     public static Picasso getPicasso() {
-        if(sPicasso == null) {
+        if (sPicasso == null) {
             Picasso.Builder builder = new Picasso.Builder(getAppContext());
             OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
             builder.downloader(downloader);

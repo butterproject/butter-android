@@ -12,5 +12,4 @@
     android:paddingTop="8dp"
     android:scrollbarStyle="outsideOverlay"
     chg:rowHeaderLayoutId="@layout/changelogrowheader_material_layout"
-    chg:rowLayoutId="@layout/changelogrow_material_layout"
-    />
+    chg:rowLayoutId="@layout/changelogrow_material_layout" />

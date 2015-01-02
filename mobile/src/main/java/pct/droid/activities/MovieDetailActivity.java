@@ -12,8 +12,6 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,7 +32,6 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LocaleUtils;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -133,7 +130,7 @@ public class MovieDetailActivity extends BaseActivity {
                     String[] readableNames = new String[adapterLanguages.length];
                     for (int i = 0; i < readableNames.length; i++) {
                         String language = adapterLanguages[i];
-                        if(language.equals("no-subs")) {
+                        if (language.equals("no-subs")) {
                             readableNames[i] = getString(R.string.no_subs);
                         } else {
                             Locale locale = LocaleUtils.toLocale(language);
@@ -296,7 +293,7 @@ public class MovieDetailActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 int oldColor = mPaletteColor;
-                if(mPaletteColor == getResources().getColor(R.color.primary)) {
+                if (mPaletteColor == getResources().getColor(R.color.primary)) {
                     Palette palette = Palette.generate(((BitmapDrawable) coverImage.getDrawable()).getBitmap());
 
                     int vibrantColor = palette.getVibrantColor(-1);

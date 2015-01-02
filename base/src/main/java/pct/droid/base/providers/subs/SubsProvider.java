@@ -69,7 +69,7 @@ public abstract class SubsProvider extends BaseProvider {
                 final String fileName = media.videoId + "-" + languageCode;
                 final File srtPath = new File(subsDirectory, fileName + ".srt");
 
-                if(srtPath.exists()) {
+                if (srtPath.exists()) {
                     callback.onResponse(null);
                     return call;
                 }
