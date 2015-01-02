@@ -4,10 +4,13 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -273,7 +277,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
     private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(View view, final Media item, int position) {
+        public void onItemClick(final View view, final Media item, final int position) {
             progressOverlay.setBackgroundColor(getResources().getColor(R.color.overlay_bg));
             progressOverlay.setVisibility(View.VISIBLE);
 
@@ -283,6 +287,22 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 public void onSuccess(ArrayList<Media> items) {
                     if (items.size() <= 0 || !mLoadingDetails) return;
                     mLoadingDetails = false;
+
+                    ImageView coverImage = (ImageView) view.findViewById(R.id.coverImage);
+                    final int paletteColor;
+                    if(coverImage.getDrawable() != null) {
+                        Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
+                        Palette palette = Palette.generate(cover);
+
+                        int vibrantColor = palette.getVibrantColor(-1);
+                        if (vibrantColor == -1) {
+                            paletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
+                        } else {
+                            paletteColor = vibrantColor;
+                        }
+                    } else {
+                        paletteColor = -1;
+                    }
 
                     mHandler.post(new Runnable() {
                         @Override
@@ -306,6 +326,8 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                             } else {
                                 intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
                             }
+                            if(paletteColor != -1)
+                                intent.putExtra("palette", paletteColor);
                             intent.putExtra("item", item);
                             startActivity(intent);
                         }

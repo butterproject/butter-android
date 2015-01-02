@@ -51,7 +51,7 @@ public class ShowDetailActivity extends BaseActivity {
 
     private Show mItem;
     private Drawable mPlayButtonDrawable;
-    private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
+    private Integer mLastScrollLocation = 0, mPaletteColor, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
     private String mQuality, mSubLanguage;
 
@@ -311,6 +311,12 @@ public class ShowDetailActivity extends BaseActivity {
 
         Intent intent = getIntent();
         mItem = intent.getParcelableExtra("item");
+
+        mPaletteColor = intent.getIntExtra("palette", getResources().getColor(R.color.primary));
+        mainInfoBlock.setBackgroundColor(mPaletteColor);
+        mPlayButtonDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
+        playButton.setImageDrawable(mPlayButtonDrawable);
+
         LogUtils.d(mItem.toString());
         titleText.setText(mItem.title);
         yearText.setText(mItem.year);
@@ -335,18 +341,21 @@ public class ShowDetailActivity extends BaseActivity {
         PopcornApplication.getPicasso().load(mItem.image).into(coverImage, new Callback() {
             @Override
             public void onSuccess() {
-                Palette palette = Palette.generate(((BitmapDrawable)coverImage.getDrawable()).getBitmap());
+                int oldColor = mPaletteColor;
+                if(mPaletteColor == getResources().getColor(R.color.primary)) {
+                    Palette palette = Palette.generate(((BitmapDrawable) coverImage.getDrawable()).getBitmap());
 
-                int vibrantColor = palette.getVibrantColor(R.color.primary);
-                if (vibrantColor == R.color.primary) {
-                    mPaletteColor = palette.getMutedColor(R.color.primary);
-                } else {
-                    mPaletteColor = vibrantColor;
+                    int vibrantColor = palette.getVibrantColor(-1);
+                    if (vibrantColor == -1) {
+                        mPaletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
+                    } else {
+                        mPaletteColor = vibrantColor;
+                    }
                 }
 
-                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), getResources().getColor(R.color.primary), mPaletteColor);
+                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), oldColor, mPaletteColor);
                 mainInfoBlockColorFade.setDuration(500);
-                Drawable oldDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
+                Drawable oldDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, oldColor);
                 mPlayButtonDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
                 final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
 
