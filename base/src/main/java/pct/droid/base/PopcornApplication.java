@@ -31,6 +31,7 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.services.StreamerService;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
@@ -47,10 +48,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        sDefSystemLanguage = Locale.getDefault().getLanguage();
-        if(!Locale.getDefault().getCountry().isEmpty()) {
-            sDefSystemLanguage += "-" + Locale.getDefault().getCountry();
-        }
+        sDefSystemLanguage = LocaleUtils.getCurrent();
 
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
         PopcornUpdater.getInstance(this).checkUpdates(false);
@@ -95,10 +93,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        sDefSystemLanguage = newConfig.locale.getLanguage();
-        if(!newConfig.locale.getCountry().isEmpty()) {
-            sDefSystemLanguage += "-" + newConfig.locale.getCountry();
-        }
+        sDefSystemLanguage = LocaleUtils.getCurrent();
     }
 
     public static String getSystemLanguage() {

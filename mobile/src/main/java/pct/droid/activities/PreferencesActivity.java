@@ -27,6 +27,7 @@ import org.videolan.libvlc.LibVLC;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -41,6 +42,7 @@ import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.updater.PopcornUpdater;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
@@ -168,16 +170,12 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         String currentValue = item.getValue().toString();
 
                         final String[] languages = getResources().getStringArray(R.array.translation_languages);
+                        Arrays.sort(languages);
 
                         String[] items = new String[languages.length + 1];
                         items[0] = getString(R.string.device_language);
                         for (int i = 0; i < languages.length; i++) {
-                            Locale locale;
-                            if (languages[i].contains("-")) {
-                                locale = new Locale(languages[i].substring(0, 2), languages[i].substring(3, 5));
-                            } else {
-                                locale = new Locale(languages[i]);
-                            }
+                            Locale locale = LocaleUtils.toLocale(languages[i]);
                             items[i + 1] = locale.getDisplayName(locale);
                             if (languages[i].equals(currentValue)) {
                                 currentPosition = i + 1;
@@ -203,17 +201,13 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                 new PrefItem.SubTitleGenerator() {
                     @Override
                     public String get(PrefItem item) {
-                        String language = item.getValue().toString();
-                        if(!language.isEmpty()) {
-                            Locale locale;
-                            if (language.contains("-")) {
-                                locale = new Locale(language.substring(0, 2), language.substring(3, 5));
-                            } else {
-                                locale = new Locale(language);
-                            }
-                            return locale.getDisplayName(locale);
-                        }
-                        return getString(R.string.device_language);
+                        String langCode = item.getValue().toString();
+                        if(langCode.isEmpty())
+                            return getString(R.string.device_language);
+
+                        Locale locale = LocaleUtils.toLocale(langCode);
+                        return locale.getDisplayName(locale);
+
                     }
                 }));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_wifi_only, R.string.stream_over_wifi_only, Prefs.WIFI_ONLY, true,
@@ -296,12 +290,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         String[] items = new String[languages.length + 1];
                         items[0] = getString(R.string.no_default_set);
                         for (int i = 0; i < languages.length; i++) {
-                            Locale locale;
-                            if (languages[i].contains("-")) {
-                                locale = new Locale(languages[i].substring(0, 2), languages[i].substring(3, 5));
-                            } else {
-                                locale = new Locale(languages[i]);
-                            }
+                            Locale locale = LocaleUtils.toLocale(languages[i]);
                             items[i + 1] = locale.getDisplayName(locale);
                             if (languages[i].equals(currentValue)) {
                                 currentPosition = i + 1;
@@ -328,12 +317,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         if (langCode.isEmpty())
                             return getString(R.string.no_default_set);
 
-                        Locale locale;
-                        if (langCode.contains("-")) {
-                            locale = new Locale(langCode.substring(0, 2), langCode.substring(3, 5));
-                        } else {
-                            locale = new Locale(langCode);
-                        }
+                        Locale locale = LocaleUtils.toLocale(langCode);
                         return locale.getDisplayName(locale);
                     }
                 }));

@@ -16,6 +16,7 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class BaseActivity extends ActionBarActivity {
@@ -52,18 +53,8 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     public void setContentView(int layoutResID) {
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
         super.setContentView(layoutResID);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        supportInvalidateOptionsMenu();
     }
 
     @Override

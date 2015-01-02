@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import java.util.Locale;
 
 import pct.droid.R;
+import pct.droid.base.utils.LocaleUtils;
 
 public class SubtitleAdapter extends StringArrayAdapter {
 
@@ -21,12 +22,7 @@ public class SubtitleAdapter extends StringArrayAdapter {
 
         String language = getItem(position);
         if (!language.equals("no-subs")) {
-            Locale locale;
-            if (language.contains("-")) {
-                locale = new Locale(language.substring(0, 2), language.substring(3, 5));
-            } else {
-                locale = new Locale(language);
-            }
+            Locale locale = LocaleUtils.toLocale(language);
             holder.text1.setText(locale.getDisplayName(locale));
         } else {
             holder.text1.setText(R.string.disable_subs);
