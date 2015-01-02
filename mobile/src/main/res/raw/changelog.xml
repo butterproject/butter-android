@@ -3,13 +3,17 @@
 
     <changelogversion versionName="0.1.1" changeDate="Dec 31, 2014">
         <changelogtext>[b]New![/b] Preferences</changelogtext>
+        <changelogtext>[b]New![/b] Translations</changelogtext>
         <changelogtext>[b]New![/b] More information while buffering</changelogtext>
-        <changelogtext>[b]New![/b] Fallback to YTS covers when Trakt can't be reached</changelogtext>
+        <changelogtext>[b]New![/b] Fallback to title when Trakt image can't be reached</changelogtext>
+        <changelogtext>[b]New![/b] Improved episode selection for TV shows</changelogtext>
         <changelogtext>Fixed green screen in video player</changelogtext>
         <changelogtext>Fixed issue with player not opening when subtitles disabled</changelogtext>
         <changelogtext>Fixed tv shows search</changelogtext>
-        <changelogtext>Fix crash on YTS network error</changelogtext>
-        <changelogtext>And more..!</changelogtext>
+        <changelogtext>Fixed Trakt images loading</changelogtext>
+        <changelogtext>Fixed brightness restore in videoplayer</changelogtext>
+        <changelogtext>Fixed crash on YTS network error</changelogtext>
+        <changelogtext>And more..</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.1.0" changeDate="Dec 25, 2014">
