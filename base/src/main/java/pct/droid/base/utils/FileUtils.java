@@ -190,7 +190,7 @@ public class FileUtils {
         int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
 
         if (i > p) {
-            extension = fileName.substring(i+1);
+            extension = fileName.substring(i + 1);
         }
 
         return extension;

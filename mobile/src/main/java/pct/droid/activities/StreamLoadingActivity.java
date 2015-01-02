@@ -43,7 +43,9 @@ public class StreamLoadingActivity extends BaseActivity {
     private SubsProvider mSubsProvider;
     private Boolean mPlayerStarted = false, mHasSubs = false;
 
-    private enum SubsStatus { SUCCESS, FAILURE, DOWNLOADING };
+    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
+
+    ;
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
     private String mSubtitleLanguage = null;
 
@@ -180,7 +182,7 @@ public class StreamLoadingActivity extends BaseActivity {
                 Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
                 mPlayerStarted = true;
                 String location = status.filePath;
-                if(!DefaultPlayer.start(this, (Media)getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
+                if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
                     Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
                     if (getIntent().hasExtra(DATA)) {
                         i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
@@ -218,7 +220,7 @@ public class StreamLoadingActivity extends BaseActivity {
                         progressIndicator.setProgress(progress);
                         progressText.setText(progress + "%");
 
-                        if(status.downloadSpeed < 1048576) {
+                        if (status.downloadSpeed < 1048576) {
                             downloadSpeedText.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
                         } else {
                             downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
@@ -231,7 +233,7 @@ public class StreamLoadingActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if(mSubsStatus == SubsStatus.DOWNLOADING) {
+                        if (mSubsStatus == SubsStatus.DOWNLOADING) {
                             progressText.setText(R.string.waiting_for_subtitles);
                         } else {
                             progressText.setText(R.string.streaming_started);
@@ -252,7 +254,7 @@ public class StreamLoadingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mFileObserver.startWatching();
-        if(mPlayerStarted) {
+        if (mPlayerStarted) {
             onBackPressed();
         }
     }

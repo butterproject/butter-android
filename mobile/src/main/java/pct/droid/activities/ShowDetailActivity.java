@@ -12,8 +12,6 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,7 +25,6 @@ import com.squareup.picasso.Callback;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -152,8 +149,8 @@ public class ShowDetailActivity extends BaseActivity {
 
                     List<String> availableSeasonsStringList = new ArrayList<>();
                     final List<Integer> availableSeasons = new ArrayList<>();
-                    for(String key : mItem.episodes.keySet()) {
-                        if(!availableSeasons.contains(mItem.episodes.get(key).season)) {
+                    for (String key : mItem.episodes.keySet()) {
+                        if (!availableSeasons.contains(mItem.episodes.get(key).season)) {
                             availableSeasons.add(mItem.episodes.get(key).season);
                             availableSeasonsStringList.add(getString(R.string.season) + " " + ((Integer) mItem.episodes.get(key).season).toString());
                         }
@@ -167,7 +164,7 @@ public class ShowDetailActivity extends BaseActivity {
                             final int selectedSeason = availableSeasons.get(position);
                             final List<String> availableChapters = new ArrayList<>();
                             List<String> availableChaptersStringList = new ArrayList<>();
-                            for(String key : mItem.episodes.keySet()) {
+                            for (String key : mItem.episodes.keySet()) {
                                 if (mItem.episodes.get(key).season == selectedSeason) {
                                     availableChapters.add(key);
                                     availableChaptersStringList.add(((Integer) mItem.episodes.get(key).episode).toString());
@@ -191,7 +188,7 @@ public class ShowDetailActivity extends BaseActivity {
                                 }
                             });
 
-                            for (final ListIterator<String> iter = availableChaptersStringList.listIterator(); iter.hasNext();) {
+                            for (final ListIterator<String> iter = availableChaptersStringList.listIterator(); iter.hasNext(); ) {
                                 final String element = iter.next();
                                 iter.set(getString(R.string.episode) + " " + element);
                             }
@@ -343,7 +340,7 @@ public class ShowDetailActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 int oldColor = mPaletteColor;
-                if(mPaletteColor == getResources().getColor(R.color.primary)) {
+                if (mPaletteColor == getResources().getColor(R.color.primary)) {
                     Palette palette = Palette.generate(((BitmapDrawable) coverImage.getDrawable()).getBitmap());
 
                     int vibrantColor = palette.getVibrantColor(-1);

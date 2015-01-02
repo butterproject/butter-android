@@ -785,7 +785,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             String[] readableNames = new String[subtitles.length];
             for (int i = 0; i < readableNames.length; i++) {
                 String language = subtitles[i];
-                if(language.equals("no-subs")) {
+                if (language.equals("no-subs")) {
                     readableNames[i] = getString(R.string.no_subs);
                 } else {
                     Locale locale = LocaleUtils.toLocale(language);
@@ -981,7 +981,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
      * External extras:
      * - position (long) - position of the video to start with (in ms)
      */
-    @SuppressWarnings({"unchecked" })
+    @SuppressWarnings({"unchecked"})
     private void loadMedia() {
         if (mLocation == null && getIntent().getExtras().containsKey(LOCATION)) {
             mLocation = getIntent().getStringExtra(LOCATION);

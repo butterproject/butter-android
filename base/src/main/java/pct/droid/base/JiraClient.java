@@ -2,7 +2,6 @@ package pct.droid.base;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
@@ -28,7 +27,7 @@ public class JiraClient {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     JiraVersionResponse[] result = new Gson().fromJson(response.body().string(), JiraVersionResponse[].class);
                     String versionId = "";
 
@@ -40,9 +39,9 @@ public class JiraClient {
                         e.printStackTrace();
                     }
 
-                    if(!versionName.isEmpty()) {
-                        for(JiraVersionResponse version : result) {
-                            if(version.name.equals(versionName)) {
+                    if (!versionName.isEmpty()) {
+                        for (JiraVersionResponse version : result) {
+                            if (version.name.equals(versionName)) {
                                 callback.onResult(version.id);
                                 return;
                             }

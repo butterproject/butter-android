@@ -290,7 +290,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
 
                     ImageView coverImage = (ImageView) view.findViewById(R.id.coverImage);
                     final int paletteColor;
-                    if(coverImage.getDrawable() != null) {
+                    if (coverImage.getDrawable() != null) {
                         Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
                         Palette palette = Palette.generate(cover, 5);
                         int vibrantColor = palette.getVibrantColor(-1);
@@ -325,7 +325,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                             } else {
                                 intent = new Intent(OverviewActivity.this, ShowDetailActivity.class);
                             }
-                            if(paletteColor != -1)
+                            if (paletteColor != -1)
                                 intent.putExtra("palette", paletteColor);
                             intent.putExtra("item", item);
                             startActivity(intent);
