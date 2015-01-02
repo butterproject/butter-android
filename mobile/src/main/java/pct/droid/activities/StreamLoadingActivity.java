@@ -18,6 +18,7 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.RecursiveFileObserver;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
@@ -139,8 +140,8 @@ public class StreamLoadingActivity extends BaseActivity {
 
         getApp().startStreamer(streamUrl);
 
-        String directory = PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir());
-        mFileObserver = new FileObserver(directory) {
+        String directory = PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/";
+        mFileObserver = new RecursiveFileObserver(directory) {
             @Override
             public void onEvent(int event, String path) {
                 if (path == null) return;
