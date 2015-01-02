@@ -48,7 +48,7 @@
   <string name="default_view">Aperçu par défaut</string>
   <string name="default_player">Lecteur vidéo par défaut</string>
   <string name="i18n_language">Langue de l\'application</string>
-  <string name="restart_effect">Relancer l\'application pour que les modifications soient prises en compte </string>
+  <string name="restart_effect">Relancez l\'application pour que les modifications soient prises en compte </string>
   <string name="device_language">Langue de l\'appareil</string>
   <string name="stream_over_wifi_only">Lire seulement lorsque le Wi-Fi est activé</string>
   <string name="internal_player">Interne</string>
@@ -76,6 +76,6 @@
   <string name="report_a_bug">Soumettre un rapport de bug</string>
   <string name="open_source_licenses">Licences Open-Source</string>
   <!--WifiOnlyDialogFragment-->
-  <string name="wifi_only">Wi-Fi Uniquement </string>
-  <string name="wifi_only_message">Vous ne pouvez lire les vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences, si vous voulez utiliser la connexion de données mobiles.</string>
+  <string name="wifi_only">Wi-Fi uniquement </string>
+  <string name="wifi_only_message">Vous ne pouvez lire de vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences si vous souhaitez utiliser une connexion de données mobiles.</string>
 </resources>
