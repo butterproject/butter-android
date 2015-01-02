@@ -32,6 +32,7 @@ import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
@@ -317,11 +318,9 @@ public class MovieDetailActivity extends BaseActivity {
                     @Override
                     public void run() {
                         playButton.setImageDrawable(td);
-                        Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, android.R.anim.fade_in);
                         mainInfoBlockColorFade.start();
                         td.startTransition(500);
-                        coverImage.setVisibility(View.VISIBLE);
-                        coverImage.startAnimation(fadeInAnim);
+                        AnimUtils.fadeIn(coverImage);
                     }
                 }, 1000);
             }
