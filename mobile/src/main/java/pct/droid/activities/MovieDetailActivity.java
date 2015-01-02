@@ -2,6 +2,7 @@ package pct.droid.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import butterknife.InjectView;
@@ -30,6 +32,7 @@ import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -37,18 +40,17 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MessageDialogFragment;
-import pct.droid.fragments.QualitySelectorDialogFragment;
-import pct.droid.fragments.SubtitleSelectorDialogFragment;
+import pct.droid.fragments.StringArraySelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
-public class MovieDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
+public class MovieDetailActivity extends BaseActivity {
 
     private Movie mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor = R.color.primary, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
-    private String mQuality, mSubLanguage;
+    private String mQuality, mSubLanguage = "no-subs";
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -108,20 +110,43 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                 case R.id.qualityBlock:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
-                    QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
-                    b = new Bundle();
-                    b.putStringArray(QualitySelectorDialogFragment.QUALITIES, mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]));
-                    qualitySelectorDialogFragment.setArguments(b);
-                    qualitySelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
+                    final String[] qualities = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
+                    Arrays.sort(qualities);
+                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position) {
+                            onQualitySelected(qualities[position]);
+                            dialog.dismiss();
+                        }
+                    });
                     break;
                 case R.id.subtitlesBlock:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
-                    SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
-                    b = new Bundle();
-                    b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]));
-                    subtitleSelectorDialogFragment.setArguments(b);
-                    subtitleSelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
+                    String[] languages = mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]);
+                    Arrays.sort(languages);
+                    final String[] adapterLanguages = new String[languages.length + 1];
+                    adapterLanguages[0] = "no-subs";
+                    System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
+
+                    String[] readableNames = new String[adapterLanguages.length];
+                    for (int i = 0; i < readableNames.length; i++) {
+                        String language = adapterLanguages[i];
+                        if(language.equals("no-subs")) {
+                            readableNames[i] = getString(R.string.no_subs);
+                        } else {
+                            Locale locale = LocaleUtils.toLocale(language);
+                            readableNames[i] = locale.getDisplayName(locale);
+                        }
+                    }
+
+                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames, Arrays.asList(adapterLanguages).indexOf(mSubLanguage), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position) {
+                            onSubtitleLanguageSelected(adapterLanguages[position]);
+                            dialog.dismiss();
+                        }
+                    });
                     break;
                 case R.id.trailerBlock:
                     Intent trailerIntent = new Intent(MovieDetailActivity.this, TrailerPlayerActivity.class);
@@ -297,58 +322,6 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                 headerProgress.setVisibility(View.GONE);
             }
         });
-
-        /*PopcornApplication.getPicasso().load(mItem.image).into(new Target() {
-            @Override
-            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                Palette palette = Palette.generate(bitmap);
-
-                int vibrantColor = palette.getVibrantColor(R.color.primary);
-                if (vibrantColor == R.color.primary) {
-                    mPaletteColor = palette.getMutedColor(R.color.primary);
-                } else {
-                    mPaletteColor = vibrantColor;
-                }
-
-                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), getResources().getColor(R.color.primary), mPaletteColor);
-                mainInfoBlockColorFade.setDuration(500);
-                Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
-                mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
-                final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
-
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        playButton.setImageDrawable(td);
-                        PopcornApplication.getPicasso().load(mItem.headerImage).into(coverImage, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-                                Animation fadeInAnim = AnimationUtils.loadAnimation(MovieDetailActivity.this, android.R.anim.fade_in);
-
-                                mainInfoBlockColorFade.start();
-                                td.startTransition(500);
-                                coverImage.setVisibility(View.VISIBLE);
-                                coverImage.startAnimation(fadeInAnim);
-                            }
-
-                            @Override
-                            public void onError() {
-                                headerProgress.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                headerProgress.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-            }
-        });*/
     }
 
     @Override
@@ -371,22 +344,15 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
         scrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
     }
 
-    @Override
     public void onQualitySelected(String quality) {
         mQuality = quality;
         qualityText.setText(mQuality);
     }
 
-    @Override
-    public void onSubtitleLanguageSelected(String language) {
+    private void onSubtitleLanguageSelected(String language) {
         mSubLanguage = language;
-        if (!language.equals("no-subs")) {
-            Locale locale;
-            if (language.contains("-")) {
-                locale = new Locale(language.substring(0, 2), language.substring(3, 5));
-            } else {
-                locale = new Locale(language);
-            }
+        if (!mSubLanguage.equals("no-subs")) {
+            Locale locale = LocaleUtils.toLocale(mSubLanguage);
             subtitlesText.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
         } else {
             subtitlesText.setText(R.string.no_subs);
