@@ -351,7 +351,7 @@ public class PreferencesActivity extends BaseActivity implements SharedPreferenc
                         cal.setTimeInMillis(timeStamp);
                         String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM, Locale.getDefault()).format(timeStamp);
                         String date = DateFormat.format("dd-MM-yyy", cal).toString();
-                        return "Last check: " + date + " " + time;
+                        return getString(R.string.last_check) + " :" + date + " " + time;
                     }
                 }));
 
