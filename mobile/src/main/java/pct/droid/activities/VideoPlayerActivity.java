@@ -54,7 +54,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,15 +70,15 @@ import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.StorageUtils;
 import pct.droid.base.utils.StringUtils;
-import pct.droid.fragments.SubtitleSelectorDialogFragment;
+import pct.droid.fragments.StringArraySelectorDialogFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener, SubtitleSelectorDialogFragment.Listener {
+public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
 
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
@@ -132,7 +134,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     private static final int FADE_OUT_INFO = 1000;
 
     private Media mMedia;
-    private String mCurrentSubsLang = "";
+    private String mCurrentSubsLang = "no-subs";
     private TimedTextObject mSubs;
     private Caption mLastSub = null;
 
@@ -777,11 +779,26 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     public void subsClick(View v) {
         if (mMedia != null && mMedia.subtitles != null) {
             if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
-            SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
-            Bundle b = new Bundle();
-            b.putStringArray(SubtitleSelectorDialogFragment.LANGUAGES, mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]));
-            subtitleSelectorDialogFragment.setArguments(b);
-            subtitleSelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
+            final String[] subtitles = mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]);
+            Arrays.sort(subtitles);
+            String[] readableNames = new String[subtitles.length];
+            for (int i = 0; i < readableNames.length; i++) {
+                String language = subtitles[i];
+                if(language.equals("no-subs")) {
+                    readableNames[i] = getString(R.string.no_subs);
+                } else {
+                    Locale locale = LocaleUtils.toLocale(language);
+                    readableNames[i] = locale.getDisplayName(locale);
+                }
+            }
+
+            StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames, Arrays.asList(subtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int position) {
+                    onSubtitleLanguageSelected(subtitles[position]);
+                    dialog.dismiss();
+                }
+            });
         }
     }
 
@@ -1063,7 +1080,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         }
     }
 
-    @Override
     public void onSubtitleLanguageSelected(String language) {
         if (mCurrentSubsLang != null && (language == null || mCurrentSubsLang.equals(language))) {
             return;
@@ -1073,7 +1089,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         if (language.equals("no-subs")) {
             mSubs = null;
-            mCurrentSubsLang = "";
             return;
         }
 
@@ -1082,7 +1097,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
             @Override
             public void onFailure(Request request, IOException e) {
                 mSubs = null;
-                mCurrentSubsLang = "";
+                mCurrentSubsLang = "no-subs";
 
                 try {
                     Toast.makeText(getApplicationContext(), "Subtitle download failed", Toast.LENGTH_SHORT).show();

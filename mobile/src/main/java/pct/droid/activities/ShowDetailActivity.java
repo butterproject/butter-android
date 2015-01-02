@@ -43,13 +43,11 @@ import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.fragments.MessageDialogFragment;
-import pct.droid.fragments.QualitySelectorDialogFragment;
 import pct.droid.fragments.StringArraySelectorDialogFragment;
-import pct.droid.fragments.SubtitleSelectorDialogFragment;
 import pct.droid.fragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
-public class ShowDetailActivity extends BaseActivity implements QualitySelectorDialogFragment.Listener, SubtitleSelectorDialogFragment.Listener {
+public class ShowDetailActivity extends BaseActivity {
 
     private Show mItem;
     private Drawable mPlayButtonDrawable;
@@ -121,7 +119,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                     qualitySelectorDialogFragment.setArguments(b);
                     qualitySelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
-                */
+
                 case R.id.subtitlesBlock:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
@@ -393,13 +391,11 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
         scrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
     }
 
-    @Override
     public void onQualitySelected(String quality) {
         mQuality = quality;
         qualityText.setText(mQuality);
     }
 
-    @Override
     public void onSubtitleLanguageSelected(String language) {
         mSubLanguage = language;
         if (!language.equals("no-subs")) {
