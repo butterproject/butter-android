@@ -35,7 +35,7 @@ public class MessageDialogFragment extends DialogFragment {
                 .create();
     }
 
-    public static void showMessageDialog(FragmentManager fm, String title, String message) {
+    public static void show(FragmentManager fm, String title, String message) {
         MessageDialogFragment dialogFragment = new MessageDialogFragment();
         Bundle args = new Bundle();
         args.putString(TITLE, title);
@@ -44,7 +44,7 @@ public class MessageDialogFragment extends DialogFragment {
         dialogFragment.show(fm, "overlay_fragment");
     }
 
-    public static void showMessageDialog(FragmentManager fm, int titleRes, int messageRes) {
-        showMessageDialog(fm, PopcornApplication.getAppContext().getString(titleRes), PopcornApplication.getAppContext().getString(messageRes));
+    public static void show(FragmentManager fm, int titleRes, int messageRes) {
+        show(fm, PopcornApplication.getAppContext().getString(titleRes), PopcornApplication.getAppContext().getString(messageRes));
     }
 }

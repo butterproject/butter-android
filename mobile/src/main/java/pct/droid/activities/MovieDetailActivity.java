@@ -135,7 +135,7 @@ public class MovieDetailActivity extends BaseActivity implements QualitySelector
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
                     if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
-                        MessageDialogFragment.showMessageDialog(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
+                        MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
                         Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
                         streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);

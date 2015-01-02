@@ -207,7 +207,7 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
                                     Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
                                     if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
-                                        MessageDialogFragment.showMessageDialog(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
+                                        MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                                     } else {
                                         Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
                                         streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
@@ -416,13 +416,6 @@ public class ShowDetailActivity extends BaseActivity implements QualitySelectorD
     }
 
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
-        Bundle args = new Bundle();
-        args.putString(StringArraySelectorDialogFragment.TITLE, title);
-        args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
-        args.putInt(StringArraySelectorDialogFragment.MODE, StringArraySelectorDialogFragment.NORMAL);
-        StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
-        dialogFragment.setDialogClickListener(onClickListener);
-        dialogFragment.setArguments(args);
-        dialogFragment.show(getFragmentManager(), "overlay_fragment");
+        StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, -1, onClickListener);
     }
 }
