@@ -292,8 +292,7 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                     final int paletteColor;
                     if(coverImage.getDrawable() != null) {
                         Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
-                        Palette palette = Palette.generate(cover);
-
+                        Palette palette = Palette.generate(cover, 5);
                         int vibrantColor = palette.getVibrantColor(-1);
                         if (vibrantColor == -1) {
                             paletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
