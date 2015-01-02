@@ -47,6 +47,10 @@
   <string name="general">Geral</string>
   <string name="default_view">Visão geral padrão</string>
   <string name="default_player">Player de vídeo padrão</string>
+  <string name="i18n_language">Língua do aplicativo</string>
+  <string name="restart_effect">Reinicie a aplicação para as mudanças terem efeito</string>
+  <string name="device_language">Língua do dispositivo</string>
+  <string name="stream_over_wifi_only">Reproduzir apenas por Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Cor</string>
   <string name="subtitle_size">Tamanho</string>
@@ -71,4 +75,7 @@
   <string name="tap_to_open">Clique para abrir</string>
   <string name="report_a_bug">Informe um erro</string>
   <string name="open_source_licenses">Licença de código aberto</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi somente</string>
+  <string name="wifi_only_message">Você só pode carregar vídeos através do Wi-Fi. Você pode desabilitar isso nas preferências se quiser carregar através de uma conexão móvel.</string>
 </resources>

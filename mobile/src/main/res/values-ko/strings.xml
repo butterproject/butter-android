@@ -48,6 +48,7 @@
   <string name="default_view">기본 개요</string>
   <string name="default_player">기본 비디오 재생기</string>
   <string name="i18n_language">앱 언어</string>
+  <string name="restart_effect">변경 사항을 적용하려면 어플리케이션을 다시 실행하세요</string>
   <string name="device_language">장치 언어</string>
   <string name="stream_over_wifi_only">Wi-Fi에서만 스트리밍 허용</string>
   <string name="internal_player">내부</string>
@@ -75,4 +76,6 @@
   <string name="report_a_bug">버그 보고</string>
   <string name="open_source_licenses">오픈소스 라이센스</string>
   <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi만</string>
+  <string name="wifi_only_message">Wi-Fi만을 통해서 비디오를 스트리밍할 수 있습니다. 셀룰러 연결에서도 스트리밍을 하길 원한다면 설정에서 이 항목을 비활성화하세요.</string>
 </resources>
