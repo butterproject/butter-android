@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="caption"
+    android:summary="Summary">
+
+    <PreferenceCategory android:title="@string/caption">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/prefs_caption_enabled_title"
+            android:key="@string/ccl_key_caption_enabled"/>
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_font_scale_value_default"
+            android:dialogTitle="@string/prefs_caption_font_scale_title"
+            android:entries="@array/prefs_caption_font_scale_names"
+            android:entryValues="@array/prefs_caption_font_scale_values"
+            android:key="@string/ccl_key_caption_font_scale"
+            android:title="@string/prefs_caption_font_scale_title" />
+
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_font_family_value_default"
+            android:dialogTitle="@string/prefs_caption_font_family_title"
+            android:entries="@array/prefs_caption_font_family_names"
+            android:entryValues="@array/prefs_caption_font_family_values"
+            android:key="@string/ccl_key_caption_font_family"
+            android:title="@string/prefs_caption_font_family_title" />
+
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_text_color_value_default"
+            android:dialogTitle="@string/prefs_caption_text_color_title"
+            android:entries="@array/prefs_caption_color_names"
+            android:entryValues="@array/prefs_caption_color_values"
+            android:key="@string/ccl_key_caption_text_color"
+            android:title="@string/prefs_caption_text_color_title" />
+
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_text_opacity_value_default"
+            android:dialogTitle="@string/prefs_caption_text_opacity_title"
+            android:entries="@array/prefs_caption_opacity_names"
+            android:entryValues="@array/prefs_caption_opacity_values"
+            android:key="@string/ccl_key_caption_text_opacity"
+            android:title="@string/prefs_caption_text_opacity_title" />
+
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_edge_type_value_default"
+            android:dialogTitle="@string/prefs_caption_edge_type_title"
+            android:entries="@array/prefs_caption_edge_type_names"
+            android:entryValues="@array/prefs_caption_edge_type_values"
+            android:key="@string/ccl_key_caption_edge_type"
+            android:title="@string/prefs_caption_edge_type_title" />
+
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_background_color_value_default"
+            android:dialogTitle="@string/prefs_caption_background_color_title"
+            android:entries="@array/prefs_caption_color_names"
+            android:entryValues="@array/prefs_caption_color_values"
+            android:key="@string/ccl_key_caption_background_color"
+            android:title="@string/prefs_caption_background_color_title" />
+
+        <ListPreference
+            android:defaultValue="@string/prefs_caption_background_opacity_value_default"
+            android:dialogTitle="@string/prefs_caption_background_opacity_title"
+            android:entries="@array/prefs_caption_opacity_names"
+            android:entryValues="@array/prefs_caption_opacity_values"
+            android:key="@string/ccl_key_caption_background_opacity"
+            android:title="@string/prefs_caption_background_opacity_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
