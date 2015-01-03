@@ -140,7 +140,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
         getApp().startStreamer(streamUrl);
 
-        String directory = PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/";
+        String directory = PopcornApplication.getStreamDir();
         mFileObserver = new RecursiveFileObserver(directory) {
             @Override
             public void onEvent(int event, String path) {
