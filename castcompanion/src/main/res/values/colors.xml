@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="soft_opaque">#30000000</color>
+    <color name="black_opaque">#AA000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="orange_transparent">#AAFADCA7</color>
+    <color name="orange">#FADCA7</color>
+    <color name="casting_media_control_bg">#2c393d</color>
+    <color name="dark_grey">#2d3134</color>
+
+    <!-- Custom Media Router Dialog -->
+    <color name="mr_custom_line_1">#FFFFFF</color>
+    <color name="mr_custom_line_2">#AAFFFFFF</color>
+    <color name="mr_custom_title">#33b5e5</color>
+
+</resources>

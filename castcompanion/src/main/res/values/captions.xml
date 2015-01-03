@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="caption">Caption</string>
+
+    <string name="prefs_caption_enabled_title">Caption Availability</string>
+    <string name="prefs_caption_font_scale_title">Text Size</string>
+    <string name="prefs_caption_font_family_title">Font Family</string>
+    <string name="prefs_caption_text_color_title">Text Color</string>
+    <string name="prefs_caption_text_opacity_title">Text Opacity</string>
+    <string name="prefs_caption_edge_type_title">Edge Type</string>
+    <string name="prefs_caption_edge_color_title">Edge Color</string>
+    <string name="prefs_caption_background_color_title">Background Color</string>
+    <string name="prefs_caption_background_opacity_title">Background Opacity</string>
+    <string name="prefs_caption_enabled">Enabled</string>
+    <string name="prefs_caption_disabled">Disabled</string>
+
+    <!-- Prefs keys -->
+    <string name="ccl_key_caption_enabled">ccl_caption_enabled</string>
+    <string name="ccl_key_caption_font_family">ccl_caption_font_family</string>
+    <string name="ccl_key_caption_font_scale">ccl_caption_font_scale</string>
+    <string name="ccl_key_caption_text_color">ccl_caption_text_color</string>
+    <string name="ccl_key_caption_text_opacity">ccl_caption_text_opacity</string>
+    <string name="ccl_key_caption_edge_type">ccl_caption_edge_type</string>
+    <string name="ccl_key_caption_background_color">ccl_caption_background_color</string>
+    <string name="ccl_key_caption_background_opacity">ccl_caption_font_background_opacity</string>
+
+    <!-- Default Values -->
+    <string name="prefs_caption_font_scale_value_default">1.0</string>
+    <string name="prefs_caption_font_family_value_default">FONT_FAMILY_SERIF</string>
+    <string name="prefs_caption_text_color_value_default">#FFFFFF</string>
+    <string name="prefs_caption_text_opacity_value_default">FF</string>
+    <string name="prefs_caption_edge_type_value_default">EDGE_TYPE_NONE</string>
+    <string name="prefs_caption_background_color_value_default">#000000</string>
+    <string name="prefs_caption_background_opacity_value_default">FF</string>
+    <string name="pick_tracks">Tracks</string>
+
+    <string name="caption_subtitles">Subtitles</string>
+    <string name="caption_audio">Audio</string>
+    <string name="caption_no_text_tracks">No Text Tracks Available</string>
+    <string name="caption_no_audio_tracks">No Audio Tracks Available</string>
+    <string name="caption_no_tracks_available"> No tracks available</string>
+
+</resources>
