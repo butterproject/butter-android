@@ -9,8 +9,10 @@ import java.io.IOException;
 
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
+import pct.droid.base.utils.PrefUtils;
 
 public class CastingServerService extends Service {
 
@@ -26,7 +28,7 @@ public class CastingServerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.i("CastingServer", "Starting CastingServer");
-        mServer = new CastingServer(NetworkUtils.getWifiIPAddress(this), Constants.SERVER_PORT, new File(((PopcornApplication) getApplication()).getStreamDir()), true);
+        mServer = new CastingServer(NetworkUtils.getWifiIPAddress(), Constants.SERVER_PORT, new File(PopcornApplication.getStreamDir()), true);
         try {
             mServer.start();
         } catch (IOException e) {
