@@ -37,6 +37,10 @@ android {
         abortOnError false
     }
 
+    packagingOptions {
+        exclude 'META-INF/beans.xml'
+    }
+
     splits {
         abi {
             enable true
