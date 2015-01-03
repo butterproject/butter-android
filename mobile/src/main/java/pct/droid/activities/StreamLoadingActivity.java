@@ -18,7 +18,6 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.RecursiveFileObserver;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
