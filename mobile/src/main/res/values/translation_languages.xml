@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="translation_languages" translatable="false">
-        <item>en</item>
         <item>el</item>
         <item>fr</item>
         <item>bg</item>
-        <item>pt-BR</item>
+        <item>pt_BR</item>
         <item>hr</item>
         <item>de</item>
         <item>it</item>
@@ -17,10 +16,12 @@
         <item>he</item>
         <item>nl</item>
         <item>pt</item>
-        <item>zh-CN</item>
+        <item>zh_CN</item>
         <item>ko</item>
         <item>sv</item>
         <item>sl</item>
         <item>pl</item>
+        <item>sk</item>
+        <item>et</item>
     </string-array>
 </resources>
