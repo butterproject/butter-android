@@ -27,11 +27,12 @@ public class GoogleCastClient extends BaseCastingClient {
     private GoogleDevice mCurrentDevice;
 
     public GoogleCastClient(Context context, GoogleCastCallback callback) {
+        mContext = context;
         mCallback = callback;
         mHandler = new Handler(context.getApplicationContext().getMainLooper());
         mMediaRouter = MediaRouter.getInstance(context.getApplicationContext());
 
-        mMediaRouteSelector = new MediaRouteSelector.Builder().addControlCategory(CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID).build();
+        mMediaRouteSelector = new MediaRouteSelector.Builder().addControlCategory(CastMediaControlIntent.categoryForCast(CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID)).build();
         mMediaRouter.addCallback(mMediaRouteSelector, mMediaRouterCallback,  MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
     }
 
