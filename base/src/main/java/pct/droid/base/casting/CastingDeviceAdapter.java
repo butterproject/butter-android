@@ -1,6 +1,9 @@
 package pct.droid.base.casting;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import pct.droid.base.Constants;
 import pct.droid.base.R;
 import pct.droid.base.casting.airplay.AirPlayDevice;
 import pct.droid.base.casting.dlna.DLNADevice;
@@ -132,7 +136,13 @@ public class CastingDeviceAdapter extends BaseAdapter {
         } else {
             holder.icon.setImageResource(R.drawable.ic_launcher);
             holder.text1.setText("Local");
-            holder.text2.setText("");
+            try {
+                PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+                holder.text2.setText("Popcorn Time");
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                holder.text2.setText("");
+            }
         }
 
         return convertView;

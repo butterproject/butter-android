@@ -48,7 +48,7 @@ public class CastingManager {
         mContext = context;
 
         mGoogleCastClient = new GoogleCastClient(context, googleCastCallback);
-        //mAirPlayClient = new AirPlayClient(context, airPlayCallback);
+        mAirPlayClient = new AirPlayClient(context, airPlayCallback);
         mDLNAClient = new DLNAClient(context, dlnaCallback);
 
         Intent castServerService = new Intent(context, CastingServerService.class);
@@ -60,7 +60,7 @@ public class CastingManager {
             sInstance = new CastingManager(context);
         }
         sInstance.mGoogleCastClient.setContext(context);
-        //sInstance.mAirPlayClient.setContext(context);
+        sInstance.mAirPlayClient.setContext(context);
         sInstance.mDLNAClient.setContext(context);
 
         return sInstance;
@@ -71,7 +71,7 @@ public class CastingManager {
     }
 
     public void onDestroy() {
-        //mAirPlayClient.destroy();
+        mAirPlayClient.destroy();
         mDLNAClient.destroy();
         mGoogleCastClient.destroy();
 
