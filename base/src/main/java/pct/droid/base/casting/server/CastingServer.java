@@ -7,20 +7,20 @@ import pct.droid.base.Constants;
 
 public class CastingServer extends SimpleWebServer {
 
-    private String mHost;
-    private Integer mPort;
-    private static File mCurrentVideo = null, mCurrentSubs = null;
+    private static String sHost;
+    private static Integer sPort;
+    private static File sCurrentVideo = null, sCurrentSubs = null;
 
     public CastingServer(String host, int port, File wwwroot, boolean quiet) {
         super(host, port, wwwroot, quiet);
-        mHost = host;
-        mPort = port;
+        sHost = host;
+        sPort = port;
     }
 
     public CastingServer(String host, int port, List<File> wwwroots, boolean quiet) {
         super(host, port, wwwroots, quiet);
-        mHost = host;
-        mPort = port;
+        sHost = host;
+        sPort = port;
     }
 
     @Override
@@ -28,17 +28,17 @@ public class CastingServer extends SimpleWebServer {
         String uri = session.getUri();
 
         Response response;
-        if(uri.contains("video")) {
-            if(mCurrentVideo != null) {
-                String mimeTypeForFile = getMimeTypeForFile(mCurrentVideo.getAbsolutePath());
-                response =  serveFile(uri, session.getHeaders(), mCurrentVideo, mimeTypeForFile);
+        if(uri.contains("video.mp4")) {
+            if(sCurrentVideo != null) {
+                String mimeTypeForFile = getMimeTypeForFile(sCurrentVideo.getAbsolutePath());
+                response =  serveFile(uri, session.getHeaders(), sCurrentVideo, mimeTypeForFile);
             } else {
                 response = getNotFoundResponse();
             }
-        } else if(uri.contains("subs")) {
-            if(mCurrentSubs != null) {
-                String mimeTypeForFile = getMimeTypeForFile(mCurrentSubs.getAbsolutePath());
-                response =  serveFile(uri, session.getHeaders(), mCurrentSubs, mimeTypeForFile);
+        } else if(uri.contains("video.srt")) {
+            if(sCurrentSubs != null) {
+                String mimeTypeForFile = getMimeTypeForFile(sCurrentSubs.getAbsolutePath());
+                response =  serveFile(uri, session.getHeaders(), sCurrentSubs, mimeTypeForFile);
             } else {
                 response = getNotFoundResponse();
             }
@@ -51,18 +51,26 @@ public class CastingServer extends SimpleWebServer {
         // Extra headers for DLNA
         response.addHeader("transferMode.dlna.org", "Streaming");
         response.addHeader("contentFeatures.dlna.org", "DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=017000 00000000000000000000000000");
-        if(mCurrentSubs != null) {
-            response.addHeader("CaptionInfo.sec", "http://" + mHost + ":" + mPort + "/subs.srt");
+        if(sCurrentSubs != null) {
+            response.addHeader("CaptionInfo.sec", "http://" + sHost + ":" + sPort + "/subs.srt");
         }
 
         return response;
     }
 
     public static void setCurrentVideo(File file) {
-        mCurrentVideo = file;
+        sCurrentVideo = file;
     }
     public static void setCurrentSubs(File file) {
-        mCurrentSubs = file;
+        sCurrentSubs = file;
+    }
+
+    public static String getVideoURL() {
+        return "http://" + sHost + ":" + sPort + "/video.mp4";
+    }
+
+    public static String getSubsURL() {
+        return "http://" + sHost + ":" + sPort + "/video.srt";
     }
 
 }

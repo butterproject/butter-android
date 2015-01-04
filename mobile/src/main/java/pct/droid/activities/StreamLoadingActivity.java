@@ -11,6 +11,7 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -18,6 +19,9 @@ import java.util.Map;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.casting.CastingManager;
+import pct.droid.base.casting.server.CastingServer;
+import pct.droid.base.casting.server.CastingServerService;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
@@ -182,10 +186,18 @@ public class StreamLoadingActivity extends BaseActivity {
                 Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
                 mPlayerStarted = true;
                 String location = status.filePath;
-                if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
+                Media media = getIntent().getParcelableExtra(DATA);
+
+                if(CastingManager.getInstance(this).isConnected()) {
+                    CastingServer.setCurrentVideo(new File(location));
+                    CastingManager.getInstance(this).loadMedia(media, CastingServer.getVideoURL());
+                    return;
+                }
+
+                if (!DefaultPlayer.start(this, media, mSubtitleLanguage, location)) {
                     Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
                     if (getIntent().hasExtra(DATA)) {
-                        i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
+                        i.putExtra(VideoPlayerActivity.DATA, media);
                     }
                     if (getIntent().hasExtra(QUALITY)) {
                         i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));

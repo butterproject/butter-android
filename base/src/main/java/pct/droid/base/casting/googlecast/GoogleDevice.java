@@ -1,5 +1,8 @@
 package pct.droid.base.casting.googlecast;
 
+
+import android.support.v7.media.MediaRouter;
+
 import com.google.android.gms.cast.CastDevice;
 
 import pct.droid.base.casting.CastingDevice;
@@ -7,13 +10,14 @@ import pct.droid.base.casting.CastingDevice;
 /**
  * GoogleDevice.java
  * <p/>
- * Wraps a {@link com.google.android.gms.cast.CastDevice} in a more general class that represents a Google Cast Device
+ * Wraps a {@link android.support.v7.media.MediaRouter.RouteInfo} in a more general class that represents a Google Cast Device
  */
 public class GoogleDevice extends CastingDevice {
-    public CastDevice device;
+    public MediaRouter.RouteInfo routeInfo;
 
-    public GoogleDevice(CastDevice device) {
-        this.device = device;
+    public GoogleDevice(MediaRouter.RouteInfo routeInfo) {
+        this.routeInfo = routeInfo;
+        CastDevice device = CastDevice.getFromBundle(routeInfo.getExtras());
         this.name = device.getFriendlyName();
         this.model = device.getModelName();
         this.id = device.getDeviceId();

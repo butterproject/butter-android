@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.graphics.Palette;
+import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -26,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.cast.CastMediaControlIntent;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -51,6 +54,7 @@ import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
+import pct.droid.fragments.CastDeviceSelectorDialogFragment;
 import pct.droid.fragments.OverviewActivityTaskFragment;
 
 // todo make most of this content a fragment
@@ -148,6 +152,23 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
         super.onResume();
         mPaused = false;
         rootLayout.invalidate();
+
+
+
+        MediaRouter mediaRouter = MediaRouter.getInstance(getApplicationContext());
+
+        MediaRouteSelector mediaRouteSelector = new MediaRouteSelector.Builder().addControlCategory(CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID).build();
+        mediaRouter.addCallback(mediaRouteSelector, new MediaRouter.Callback() {
+            @Override
+            public void onRouteAdded(MediaRouter router, MediaRouter.RouteInfo route) {
+                super.onRouteAdded(router, route);
+            }
+
+            @Override
+            public void onRouteRemoved(MediaRouter router, MediaRouter.RouteInfo route) {
+                super.onRouteRemoved(router, route);
+            }
+        },  MediaRouter.CALLBACK_FLAG_FORCE_DISCOVERY);
     }
 
     @Override
@@ -189,6 +210,9 @@ public class OverviewActivity extends BaseActivity implements MediaProvider.Call
                 break;
             case R.id.action_switch_mode:
                 switchMoviesShowsMode();
+                break;
+            case R.id.action_casting:
+                CastDeviceSelectorDialogFragment.show(getFragmentManager());
                 break;
             case R.id.action_preferences:
                 Intent intent = new Intent(this, PreferencesActivity.class);

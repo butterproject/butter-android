@@ -2,7 +2,7 @@ package pct.droid.base.casting;
 
 
 public interface CastingListener {
-    public void onConnected();
+    public void onConnected(CastingDevice device);
 
     public void onDisconnected();
 

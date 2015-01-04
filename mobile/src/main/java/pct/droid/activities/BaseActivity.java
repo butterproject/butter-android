@@ -12,11 +12,14 @@ import com.bugsnag.android.Bugsnag;
 
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.casting.CastingDevice;
+import pct.droid.base.casting.CastingListener;
+import pct.droid.base.casting.CastingManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 
-public class BaseActivity extends ActionBarActivity {
+public class BaseActivity extends ActionBarActivity implements CastingListener {
 
     protected Handler mHandler;
 
@@ -33,6 +36,7 @@ public class BaseActivity extends ActionBarActivity {
         super.onResume();
         Bugsnag.onActivityResume(this);
         getApp().startService();
+        CastingManager.getInstance(this).setListener(this);
     }
 
     @Override
@@ -81,4 +85,48 @@ public class BaseActivity extends ActionBarActivity {
         return (PopcornApplication) getApplication();
     }
 
+    @Override
+    public void onConnected(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onConnectionFailed() {
+
+    }
+
+    @Override
+    public void onDeviceDetected(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onDeviceSelected(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onDeviceRemoved(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onVolumeChanged(double value, boolean isMute) {
+
+    }
+
+    @Override
+    public void onReady() {
+
+    }
+
+    @Override
+    public void onPlayBackChanged(boolean isPlaying, float position) {
+
+    }
 }

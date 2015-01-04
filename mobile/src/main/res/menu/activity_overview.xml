@@ -7,6 +7,11 @@
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:title="@string/search" />
+    <item
+        android:id="@+id/action_casting"
+        android:icon="@drawable/ic_av_player"
+        app:showAsAction="always"
+        android:title="@string/casting" />
 
     <item
         android:id="@+id/action_playertests"
