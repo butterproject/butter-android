@@ -179,7 +179,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
         if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
             try {
-                Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
+                Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
                 mPlayerStarted = true;
                 String location = status.filePath;
                 if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
@@ -206,7 +206,7 @@ public class StreamLoadingActivity extends BaseActivity {
     private void updateStatus() {
         try {
             final DecimalFormat df = new DecimalFormat("#############0.00");
-            final Status status = Status.parseJSON(FileUtils.getContentsAsString(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()) + "/status.json"));
+            final Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
             if (status == null) return;
             LogUtils.d(status.toString());
             int calculateProgress = (int) Math.floor(status.progress * 25);
