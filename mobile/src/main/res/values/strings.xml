@@ -9,6 +9,7 @@
     <string name="ok">OK</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
+    <string name="casting">Casting</string>
 
     <!-- OverviewActivity strings -->
     <string name="search_hint">Title, year, actors</string>

@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import pct.droid.base.casting.CastingManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.services.StreamerService;
 import pct.droid.base.updater.PopcornUpdater;
@@ -43,6 +44,7 @@ public class PopcornApplication extends VLCApplication {
     private static OkHttpClient sHttpClient;
     private static Picasso sPicasso;
     private static String sDefSystemLanguage;
+    private static CastingManager sCastingManager;
 
     @Override
     public void onCreate() {
@@ -93,6 +95,12 @@ public class PopcornApplication extends VLCApplication {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         sDefSystemLanguage = LocaleUtils.getCurrent();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        CastingManager.getInstance(getAppContext()).onDestroy();
     }
 
     public static String getSystemLanguage() {

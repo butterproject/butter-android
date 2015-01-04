@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -80,11 +82,18 @@
             android:name="pct.droid.activities.TrailerPlayerActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name" />
+        <activity
+            android:name="com.google.sample.castcompanionlibrary.cast.player.VideoCastControllerActivity"
+            android:label="@string/app_name" />
 
 
         <service
             android:name=".base.services.StreamerService"
             android:process=":node" />
+        <service android:name=".base.casting.server.CastingServerService" />
+        <service android:name=".base.casting.dlna.DLNAService" />
+
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

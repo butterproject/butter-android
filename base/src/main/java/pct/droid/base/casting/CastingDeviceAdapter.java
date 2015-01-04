@@ -38,9 +38,11 @@ public class CastingDeviceAdapter extends BaseAdapter {
         mContext = context;
         mCastingManager = CastingManager.getInstance(context);
 
+        mCastingManager.getDevices();
+
         mCastingManager.setListener(new CastingListener() {
             @Override
-            public void onConnected() {
+            public void onConnected(CastingDevice device) {
 
             }
 
