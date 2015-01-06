@@ -12,5 +12,6 @@ public class Constants {
     public static final String GIT_URL = "https://git.popcorntime.io/";
     public static final String JIRA_API = GIT_URL + "jira/rest/api/2/";
     public static final String JIRA_PROJECT = "10200";
+    public static final String CAST_ID = "9A435985";
 
 }

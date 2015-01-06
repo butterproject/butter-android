@@ -14,12 +14,17 @@ import pct.droid.base.casting.CastingDevice;
  */
 public class GoogleDevice extends CastingDevice {
     public MediaRouter.RouteInfo routeInfo;
+    private CastDevice device;
 
     public GoogleDevice(MediaRouter.RouteInfo routeInfo) {
         this.routeInfo = routeInfo;
-        CastDevice device = CastDevice.getFromBundle(routeInfo.getExtras());
+        device = CastDevice.getFromBundle(routeInfo.getExtras());
         this.name = device.getFriendlyName();
         this.model = device.getModelName();
         this.id = device.getDeviceId();
+    }
+
+    public CastDevice getCastDevice() {
+        return device;
     }
 }

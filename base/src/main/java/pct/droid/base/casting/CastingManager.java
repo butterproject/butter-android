@@ -161,6 +161,11 @@ public class CastingManager {
         }
 
         @Override
+        public void onConnectionFailed() {
+
+        }
+
+        @Override
         public void onDeviceDetected(GoogleDevice device) {
             if(!mDiscoveredDevices.contains(device)) {
                 mDiscoveredDevices.add(device);
@@ -188,6 +193,11 @@ public class CastingManager {
             if(mCallback != null) {
                 mCallback.onVolumeChanged(value, isMute);
             }
+        }
+
+        @Override
+        public void onPlayBackChanged(boolean isPlaying, float position) {
+
         }
     };
 
