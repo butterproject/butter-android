@@ -5,6 +5,8 @@ public interface GoogleCastCallback {
 
     public void onDisconnected();
 
+    public void onConnectionFailed();
+
     public void onDeviceDetected(GoogleDevice device);
 
     public void onDeviceSelected(GoogleDevice device);
@@ -12,4 +14,6 @@ public interface GoogleCastCallback {
     public void onDeviceRemoved(GoogleDevice device);
 
     public void onVolumeChanged(double value, boolean isMute);
+
+    public void onPlayBackChanged(boolean isPlaying, float position);
 }
