@@ -52,7 +52,7 @@
   <string name="restart_effect">Uruchom aplikację ponownie aby zmiany zostały zastosowane</string>
   <string name="device_language">Język systemu</string>
   <string name="stream_over_wifi_only">Streamuj tylko przez Wi-Fi</string>
-  <string name="internal_player">Wewnętrzny</string>
+  <string name="internal_player">Wbudowany</string>
   <string name="subtitle_color">Kolor</string>
   <string name="subtitle_size">Rozmiar</string>
   <string name="subtitle_language">Język domyślny</string>
