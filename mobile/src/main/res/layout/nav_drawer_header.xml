@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>    <!-- Currently there is no content to show in the navigation header, so elements are hidden -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:background="@color/primary"
+	android:clickable="true"
+	android:padding="16dp"
+	android:layout_height="172dp">
+
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/profile_imageview"
+		android:layout_width="60dp"
+		android:visibility="invisible"
+		tools:visibility="visible"
+		android:src="@color/trans_white"
+		android:layout_above="@+id/title_textview"
+		android:layout_marginBottom="16dp"
+		android:layout_height="60dp"
+		android:layout_gravity="center_vertical" />
+	<!-- A border can be added to the circle image view:-->
+	<!--app:border_width="1dp"-->
+	<!--app:border_color="#E4E4E4"-->
+
+	<TextView
+		android:id="@+id/title_textview"
+		tools:text="Lauren Ipsum"
+		android:text="Lauren Ipsum"
+		android:visibility="invisible"
+		tools:visibility="visible"
+		android:singleLine="true"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		android:layout_above="@+id/subtitle_textview"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		android:id="@+id/subtitle_textview"
+		tools:text="524 hours watched"
+		android:visibility="invisible"
+		tools:visibility="visible"
+		android:text="524 hours watched"
+		android:singleLine="true"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:layout_alignParentBottom="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+</RelativeLayout>

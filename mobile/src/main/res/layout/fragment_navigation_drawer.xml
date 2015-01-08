@@ -1,0 +1,7 @@
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@android:id/list"
+	android:layout_width="match_parent"
+	android:background="@color/nav_drawer_color"
+	android:layout_height="match_parent"
+	android:divider="@null"
+	android:choiceMode="singleChoice" />
