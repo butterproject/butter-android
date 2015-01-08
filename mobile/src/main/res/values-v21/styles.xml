@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.PopcornTime" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@color/bg</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-    </style>
+	<style name="Theme.PopcornTime" parent="Theme.Base">
+		<!-- v21 specific customisations here -->
+	</style>
+
+	<style name="Theme.PopcornTime.NavigationDrawer" parent="Theme.PopcornTime">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+	</style>
+
+	<style name="Theme.PopcornTime.TransparentStatusBar" parent="Theme.PopcornTime">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+	</style>
 
 </resources>
