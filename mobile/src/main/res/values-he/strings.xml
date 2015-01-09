@@ -44,7 +44,7 @@
   <string name="accept">מסכים</string>
   <string name="leave">לא מסכים</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">הגדרות</string>
+  <string name="settings">הגדרות</string>
   <string name="general">כללי</string>
   <string name="default_view">מסך פתיחה</string>
   <string name="default_player">נגן</string>

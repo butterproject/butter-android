@@ -135,8 +135,11 @@ public class MediaFragment extends Fragment implements MediaProvider.Callback {
 			case 1:
 				mProvider = new EZTVProvider();
 				break;
-		}
+			default:
+				throw new IllegalArgumentException("No provider set");
 
+
+		}
 		if (mode == Mode.SEARCH) emptyView.setText(getString(R.string.no_search_results));
 
 		//don't load initial data in search mode
@@ -159,7 +162,7 @@ public class MediaFragment extends Fragment implements MediaProvider.Callback {
 
 		if (mAdapter.isLoading() && mState != State.LOADING_PAGE) mAdapter.removeLoading();
 
-//		//animate recyclerview to full alpha
+		//		//animate recyclerview to full alpha
 		if (recyclerView.getAlpha() != 1.0f)
 			recyclerView.animate().alpha(1.0f).setDuration(100).start();
 

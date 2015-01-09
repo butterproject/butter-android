@@ -44,7 +44,7 @@
   <string name="accept">Akcpetuj</string>
   <string name="leave">Wyjdź</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Ustawienia</string>
+  <string name="settings">Ustawienia</string>
   <string name="general">Ogólne</string>
   <string name="default_view">Domyślny widok</string>
   <string name="default_player">Domyślny odtwarzacz wideo</string>

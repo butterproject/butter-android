@@ -44,7 +44,7 @@
   <string name="accept">Accepteren</string>
   <string name="leave">Sluiten</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Voorkeuren</string>
+  <string name="settings">Voorkeuren</string>
   <string name="general">Algemeen</string>
   <string name="default_view">Startscherm</string>
   <string name="default_player">Standaard videospeler</string>

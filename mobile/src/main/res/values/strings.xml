@@ -62,7 +62,7 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="leave">Leave</string>
 
     <!-- SettingsActivity strings -->
-    <string name="preferences">Preferences</string>
+    <string name="settings">Settings</string>
     <string name="general">General</string>
     <string name="default_view">Default overview</string>
     <string name="default_player">Default video player</string>
@@ -103,6 +103,20 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <!-- NavigationDrawer -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-	<string name="no_search_results">No search results found</string>
+    <string name="no_search_results">No search results found</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- About fragment -->
+    <string name="about_message">Popcorn Time is the result of many developers and designers putting a bunch of APIs together to make the
+		experience of watching torrent movies as simple as possible.\n\nWe are an open source project. We are from all over the world. We
+		love our movies. And boy, do we love popcorn.</string>
+	<string name="website">Website</string>
+	<string name="discuss">Discuss</string>
+	<string name="google_plus">Google+</string>
+	<string name="facebook">Facebook</string>
+	<string name="git">Git</string>
+	<string name="blog">Blog</string>
+	<string name="twitter">Twitter</string>
 
 </resources>

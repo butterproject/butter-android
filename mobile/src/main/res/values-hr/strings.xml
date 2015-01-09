@@ -44,7 +44,7 @@
   <string name="accept">Prihvaćam</string>
   <string name="leave">Napusti</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Postavke</string>
+  <string name="settings">Postavke</string>
   <string name="general">Općenito</string>
   <string name="default_view">Početni prikaz</string>
   <string name="default_player">Zadani video reproduktor</string>

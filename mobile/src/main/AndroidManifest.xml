@@ -68,6 +68,11 @@
 		</activity>
 
 		<activity android:name=".activities.TermsActivity" />
+
+		<activity
+			android:name=".activities.AboutActivity"
+			android:label="@string/about" />
+
 		<activity
 			android:name=".activities.PreferencesActivity"
 			android:parentActivityName=".activities.OverviewActivity" />
