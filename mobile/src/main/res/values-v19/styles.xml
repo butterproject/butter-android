@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="Theme.PopcornTime" parent="Theme.Base">
+	<style name="Theme.PopcornTime" parent="">
 		<item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
 		<item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
 	</style>

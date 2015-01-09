@@ -55,7 +55,9 @@
 				android:value=".activities.OverviewActivity" />
 		</activity>
 
-		<activity android:name="pct.droid.activities.SearchActivity" />
+		<activity
+			android:name="pct.droid.activities.SearchActivity"
+			android:theme="@style/Theme.PopcornTime.Search" />
 
 		<activity
 			android:name="pct.droid.activities.ShowDetailActivity"

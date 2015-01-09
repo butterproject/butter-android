@@ -34,6 +34,7 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import timber.log.Timber;
 
 public class PopcornApplication extends VLCApplication {
 
@@ -52,6 +53,7 @@ public class PopcornApplication extends VLCApplication {
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
         PopcornUpdater.getInstance(this).checkUpdates(false);
 
+
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
         try {
@@ -63,6 +65,11 @@ public class PopcornApplication extends VLCApplication {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+		//initialise logging
+		if (BuildConfig.DEBUG) {
+			Timber.plant(new Timber.DebugTree());
+		}
 
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
