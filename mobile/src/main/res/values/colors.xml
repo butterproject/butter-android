@@ -13,7 +13,8 @@
 	<color name="trans_white">#99FFFFFF</color>
 	<color name="div_white">#22FFFFFF</color>
 
-    <color name="nav_drawer_color">#16171a</color>
+    <color name="nav_drawer_color">#16171A</color>
+    <color name="nav_drawer_selected_bg">#1D1E21</color>
 	<color name="nav_drawer_deselected">#CFFF</color>
 	<color name="nav_drawer_highlight">#1FFF</color>
 
