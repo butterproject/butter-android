@@ -13,6 +13,9 @@
 	<color name="trans_white">#99FFFFFF</color>
 	<color name="div_white">#22FFFFFF</color>
 
+	<color name="nav_drawer_deselected">#6FFF</color>
+	<color name="nav_drawer_highlight">#1FFF</color>
+
 	<color name="text_color">#FFFFFF</color>
 	<color name="secondary_text_color">#AAFFFFFF</color>
 

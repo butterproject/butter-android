@@ -80,7 +80,7 @@ public class PreferencesActivity extends BaseActivity
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle(R.string.preferences);
+		getSupportActionBar().setTitle(R.string.settings);
 
 		ToolbarUtils.updateToolbarHeight(this,toolbar);
 

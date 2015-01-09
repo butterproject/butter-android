@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +30,6 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaFragment;
@@ -49,8 +47,6 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 	@InjectView(R.id.toolbar) Toolbar mToolbar;
 	@InjectView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
 	NavigationDrawerFragment mNavigationDrawerFragment;
-
-	private HashMap<Integer, Fragment> mFragmentCache = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +125,6 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 		Fragment fragment = fragmentManager.findFragmentByTag(tag);
 		if (null == fragment) {
 			fragment = MediaFragment.newInstance(MediaFragment.Mode.NORMAL, position); //create new fragment instance
-
-			//I would have thought we could retrieve a previous fragment by its tag through the fragment manager
-			//but this seems to return null. So to cache the fragments and not recreate them each time, we maintain our
-			//own cache
-			mFragmentCache.put(position, fragment);
 		}
 		fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
 	}

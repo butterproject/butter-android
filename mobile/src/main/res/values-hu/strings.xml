@@ -43,7 +43,7 @@
   <string name="accept">Elfogad</string>
   <string name="leave">Kilépés</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Beállítások</string>
+  <string name="settings">Beállítások</string>
   <string name="general">Általános</string>
   <string name="default_view">Kezdőképernyő</string>
   <string name="default_player">Alapértelmezett videó lejátszó</string>

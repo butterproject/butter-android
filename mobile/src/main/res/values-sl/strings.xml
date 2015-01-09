@@ -44,7 +44,7 @@
   <string name="accept">Sprejmi</string>
   <string name="leave">Zapusti</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Nastavitve</string>
+  <string name="settings">Nastavitve</string>
   <string name="general">Splošno</string>
   <string name="default_view">Privzeto večnamenski pogled</string>
   <string name="default_player">Privzeto video predvajalnik</string>

@@ -1,7 +1,6 @@
 package pct.droid.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,24 +9,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.activities.AboutActivity;
 import pct.droid.activities.PreferencesActivity;
+import pct.droid.adapters.NavigationAdapter;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
 
-public class NavigationDrawerFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback,
+		NavigationAdapter.OnItemClickListener {
 
 	/**
 	 * Remember the position of the selected item.
@@ -38,7 +39,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 	 * views
 	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-	ListView mListView;
+	RecyclerView mRecyclerView;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private ViewGroup mNavigationDrawerContainer;
@@ -50,15 +51,12 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-	private NavDrawAdapter mAdapter;
+	private NavigationAdapter mAdapter;
 
 	/**
 	 * A pointer to the current callbacks instance (the Activity).
 	 */
 	private Callbacks mCallbacks;
-	private View mHeaderView;
-	private View mFooterView;
-	private TextView mPreferencesTextView;
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 * life cycle methods
@@ -96,36 +94,42 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 	}
 
 	@Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		mListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-		mHeaderView = inflater.inflate(R.layout.nav_drawer_header, mListView, false);
-		mFooterView = inflater.inflate(R.layout.nav_drawer_footer, mListView, false);
-		mPreferencesTextView = (TextView) mFooterView.findViewById(R.id.settings_button);
-		return mListView;
+		mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+		return mRecyclerView;
 	}
 
 	@Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		ButterKnife.inject(this, view);
 
-		mListView.setOnItemClickListener(this);
-
 		//todo: make list items dynamic
-		mAdapter = new NavDrawAdapter(getActivity(), new NavDrawerItem[]{
-				new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies),
-				new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv)});
+		List<NavDrawerItem> navItems = new ArrayList<>();
+		navItems.add(new NavDrawerItem(true));
+		navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies));
+		navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv));
+		navItems.add(new NavDrawerItem(getString(R.string.settings), R.drawable.ic_nav_settings, mOnSettingsClickListener));
+		navItems.add(new NavDrawerItem(getString(R.string.about), R.drawable.ic_nav_about, mOnAboutClickListener));
 
-		mListView.addHeaderView(mHeaderView);
-		mListView.addFooterView(mFooterView);
-		mListView.setAdapter(mAdapter);
+		mAdapter = new NavigationAdapter(getActivity(), this, navItems);
+		mAdapter.setOnItemClickListener(this);
 
-
-		mPreferencesTextView.setOnClickListener(new View.OnClickListener() {
-			@Override public void onClick(View v) {
-				PreferencesActivity.startActivity(getActivity());
-				mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
-			}
-		});
+		mRecyclerView.setHasFixedSize(true);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		mRecyclerView.setAdapter(mAdapter);
 	}
+
+	private View.OnClickListener mOnAboutClickListener = new View.OnClickListener() {
+		@Override public void onClick(View v) {
+			AboutActivity.startActivity(getActivity());
+		}
+	};
+
+	private View.OnClickListener mOnSettingsClickListener = new View.OnClickListener() {
+		@Override public void onClick(View v) {
+			PreferencesActivity.startActivity(getActivity());
+			mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
+		}
+	};
 
 	@Override public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -212,8 +216,13 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		selectItem(mAdapter.getPosition((NavDrawerItem) parent.getItemAtPosition(position)));
+	@Override public void onItemClick(View v, NavDrawerItem item, int position) {
+		if (null != item.getClickListener()) {
+			item.getClickListener().onClick(v);
+			return;
+		}
+
+		selectItem(mAdapter.getCorrectPosition(position));
 	}
 
 	/**
@@ -235,82 +244,38 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 	 */
 	public void selectItem(int position) {
 		mCurrentSelectedPosition = position;
-		if (mListView != null) {
-			mListView.setItemChecked(position, true);
-		}
+
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
 		}
 		if (mCallbacks != null) {
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
-	}
 
-		/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		 * List adapter
-		 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-	protected class NavDrawAdapter extends ArrayAdapter<NavDrawerItem> {
-
-		private final int mNormalColor;
-		private final int mCheckedColor;
-		private final int mNormalIconColor;
-
-		public NavDrawAdapter(Context context, NavDrawerItem[] objects) {
-			super(context, R.layout.nav_drawer_row, objects);
-			mNormalColor = getContext().getResources().getColor(R.color.text_color);
-			mCheckedColor = getContext().getResources().getColor(R.color.primary);
-			mNormalIconColor = getContext().getResources().getColor(R.color.secondary_text_color);
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			NavRowWrapper vh = NavRowWrapper.get(convertView, parent);
-			NavDrawerItem item = getItem(position);
-
-			vh.title.setText(item.getTitle());
-
-			boolean isSelected = position == mCurrentSelectedPosition;
-			vh.title.setTextColor(isSelected ? mCheckedColor : mNormalColor);
-
-			if (item.getIcon() > 0) {
-				vh.icon.setImageResource(item.getIcon());
-				if (isSelected) vh.icon.setColorFilter(mCheckedColor);
-				else vh.icon.setColorFilter(mNormalIconColor);
-			}
-
-			return vh.root;
-		}
-	}
-
-	public static class NavRowWrapper {
-		public final View root;
-		@InjectView(android.R.id.text1) public TextView title;
-		@InjectView(android.R.id.icon1) public ImageView icon;
-
-		private NavRowWrapper(ViewGroup parent) {
-			root = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_row, parent, false);
-			root.setTag(this);
-			ButterKnife.inject(this, root);
-		}
-
-		public static NavRowWrapper get(View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				return new NavRowWrapper(parent);
-			}
-			return (NavRowWrapper) convertView.getTag();
-		}
+		mAdapter.notifyDataSetChanged();
 	}
 
 	/**
 	 * Describes an item to be displayed in the navigation list
 	 */
 	public static class NavDrawerItem {
-		private final String title;
-		private final int icon;
+		private View.OnClickListener clickListener;
+		public boolean isHeader = false;
+		private String title;
+		private int icon;
 
 		public NavDrawerItem(String title, int icon) {
+			this(title, icon, null);
+		}
+
+		public NavDrawerItem(String title, int icon, View.OnClickListener listener) {
 			this.title = title;
 			this.icon = icon;
+			this.clickListener = listener;
+		}
+
+		public NavDrawerItem(boolean isHeader) {
+			this.isHeader = true;
 		}
 
 		public String getTitle() {
@@ -320,6 +285,11 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 		public int getIcon() {
 			return icon;
 		}
+
+		public View.OnClickListener getClickListener() {
+			return clickListener;
+		}
 	}
+
 
 }

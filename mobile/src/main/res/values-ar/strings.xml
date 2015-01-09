@@ -44,7 +44,7 @@
   <string name="accept">قبول</string>
   <string name="leave">مغادرة</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">الإعدادات</string>
+  <string name="settings">الإعدادات</string>
   <string name="general">عام</string>
   <string name="default_view">الشاشة الرئيسية</string>
   <string name="default_player">مشغل الفيديو الإفتراضي</string>

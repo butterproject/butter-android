@@ -44,7 +44,7 @@
   <string name="accept">Aceptar</string>
   <string name="leave">Abandonar</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Preferencias</string>
+  <string name="settings">Preferencias</string>
   <string name="general">General</string>
   <string name="default_view">Presentación predeterminada</string>
   <string name="default_player">Reproductor predeterminado</string>

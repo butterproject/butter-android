@@ -44,7 +44,7 @@
   <string name="accept">Accept</string>
   <string name="leave">Lämna</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Inställningar</string>
+  <string name="settings">Inställningar</string>
   <string name="general">Allmänt</string>
   <string name="default_view">Förvald vy</string>
   <string name="default_player">Standardvideospelare</string>

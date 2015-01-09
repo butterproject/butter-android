@@ -44,7 +44,7 @@
   <string name="accept">Nõustu</string>
   <string name="leave">Lahku</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Seaded</string>
+  <string name="settings">Seaded</string>
   <string name="general">Üldine</string>
   <string name="default_view">Vaikimisi vaade</string>
   <string name="default_player">Vaikimisi video esitaja</string>
