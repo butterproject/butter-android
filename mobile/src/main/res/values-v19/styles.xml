@@ -4,15 +4,6 @@
 	<style name="Theme.PopcornTime" parent="Theme.Base">
 		<item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
 		<item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
-		<item name="android:windowTranslucentStatus">true</item>
-	</style>
-
-	<style name="Theme.PopcornTime.NavigationDrawer" parent="Theme.PopcornTime">
-		<item name="android:windowTranslucentStatus">true</item>
-	</style>
-
-	<style name="Theme.PopcornTime.TransparentStatusBar" parent="Theme.PopcornTime">
-		<item name="android:windowTranslucentStatus">true</item>
 	</style>
 
 </resources>
