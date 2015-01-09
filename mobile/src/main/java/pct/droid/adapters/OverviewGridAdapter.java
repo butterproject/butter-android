@@ -152,14 +152,10 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		return getItemViewType(getItemCount() - 1) == LOADING;
 	}
 
-
-	//	public ArrayList<Media> getItems() {
-	//		return mData;
-	//	}
-
 	public void setItems(ArrayList<Media> items) {
-		mItems.clear();//clear out any current items
-		//		mData.clear();
+        // Clear items
+		mItems.clear();
+        // Add new items, if available
 		if (null != items) {
 			for (Media item : items) {
 				mItems.add(new OverviewItem(item));
