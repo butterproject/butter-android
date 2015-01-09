@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/navlist_item_height"
     android:background="@drawable/selectable_background">
 
     <ImageView
@@ -15,37 +15,19 @@
         android:scaleType="centerInside"
         tools:src="@drawable/ic_launcher" />
 
-    <LinearLayout
+    <TextView
+        android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="@dimen/iconlist_text_margin_horizontal"
         android:layout_marginStart="@dimen/iconlist_text_margin_horizontal"
         android:layout_marginRight="@dimen/iconlist_text_margin_horizontal"
         android:layout_marginEnd="@dimen/iconlist_text_margin_horizontal"
-        android:paddingTop="@dimen/iconlist_text_twolines_padding"
-        android:paddingBottom="@dimen/iconlist_text_twolines_padding">
-
-        <TextView
-            android:id="@android:id/text1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textSize="@dimen/iconlist_text_size"
-            android:textColor="@color/text_color"
-            tools:text="Title Text" />
-
-        <TextView
-            android:id="@android:id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2sp"
-            android:textSize="@dimen/iconlist_secondary_text_size"
-            android:textColor="@color/secondary_text_color"
-            tools:text="Subtitle Text" />
-
-    </LinearLayout>
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textSize="@dimen/iconlist_text_size"
+        android:textColor="@color/text_color"
+        tools:text="Title Text" />
 
     <CheckBox
         android:id="@android:id/checkbox"

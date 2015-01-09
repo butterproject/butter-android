@@ -44,7 +44,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_header, parent, false);
 				return new HeaderHolder(v);
 			case ITEM:
-				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_row, parent, false);
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_icon_singleline_item, parent, false);
 				return new ItemRowHolder(v);
 		}
 		return null;
@@ -67,19 +67,19 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		//do nothing for now
 	}
 
-	private void onBindItemViewHolder(ItemRowHolder vh, int position) {
+	private void onBindItemViewHolder(ItemRowHolder viewHolder, int position) {
 		NavigationDrawerFragment.NavDrawerItem item = getItem(position);
 
-		vh.title.setText(item.getTitle());
+		viewHolder.title.setText(item.getTitle());
 
 		boolean isSelected = (getCorrectPosition(position)) == mCallback.getSelectedPosition();
-		vh.title.setTextColor(isSelected ? mCheckedColor : mNormalColor);
+		viewHolder.title.setTextColor(isSelected ? mCheckedColor : mNormalColor);
 		//		vh.itemView.setBackgroundResource(isSelected ? R.color.nav_drawer_highlight : 0);
 
 		if (item.getIcon() > 0) {
-			vh.icon.setImageResource(item.getIcon());
-			if (isSelected) vh.icon.setColorFilter(mCheckedColor, PorterDuff.Mode.SRC_IN);
-			else vh.icon.setColorFilter(mNormalColor, PorterDuff.Mode.SRC_IN);
+			viewHolder.icon.setImageResource(item.getIcon());
+			if (isSelected) viewHolder.icon.setColorFilter(mCheckedColor, PorterDuff.Mode.SRC_IN);
+			else viewHolder.icon.setColorFilter(mNormalColor, PorterDuff.Mode.SRC_IN);
 		}
 
 
@@ -124,8 +124,10 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 	public class ItemRowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-		@InjectView(android.R.id.icon1) ImageView icon;
-		@InjectView(android.R.id.text1) TextView title;
+		@InjectView(android.R.id.icon)
+        ImageView icon;
+		@InjectView(android.R.id.text1)
+        TextView title;
 
 		public ItemRowHolder(View itemView) {
 			super(itemView);
@@ -133,7 +135,8 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 			itemView.setOnClickListener(this);
 		}
 
-		@Override public void onClick(View view) {
+		@Override
+        public void onClick(View view) {
 			if (mItemClickListener != null) {
 				int position = getPosition();
 				NavigationDrawerFragment.NavDrawerItem item = getItem(position);
@@ -144,9 +147,12 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 	public static class HeaderHolder extends RecyclerView.ViewHolder {
 
-		@InjectView(R.id.profile_imageview) CircleImageView mProfileImageView;
-		@InjectView(R.id.title_textview) TextView mTitleTextView;
-		@InjectView(R.id.subtitle_textview) TextView mSubtitleTextView;
+		@InjectView(R.id.profile_imageview)
+        CircleImageView mProfileImageView;
+		@InjectView(R.id.title_textview)
+        TextView mTitleTextView;
+		@InjectView(R.id.subtitle_textview)
+        TextView mSubtitleTextView;
 
 		public HeaderHolder(View itemView) {
 			super(itemView);

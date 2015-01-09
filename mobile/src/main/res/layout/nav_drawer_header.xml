@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:background="@color/primary"
+	android:background="@color/primary_dark"
 	android:clickable="true"
-	android:padding="16dp"
-	android:layout_height="172dp">
+	android:padding="@dimen/navlist_item_header_padding"
+    android:layout_marginBottom="@dimen/navlist_item_header_margin"
+	android:layout_height="@dimen/navlist_item_header">
 
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/profile_imageview"
@@ -24,7 +25,6 @@
 	<TextView
 		android:id="@+id/title_textview"
 		tools:text="Lauren Ipsum"
-		android:text="Lauren Ipsum"
 		android:visibility="invisible"
 		tools:visibility="visible"
 		android:singleLine="true"
