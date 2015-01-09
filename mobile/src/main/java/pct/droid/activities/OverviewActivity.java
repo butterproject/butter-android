@@ -59,7 +59,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 
 		setSupportActionBar(mToolbar);
 
-		ToolbarUtils.setKitKatTranslucentStatus(this, mToolbar);
+		ToolbarUtils.updateToolbarHeight(this, mToolbar);
 
 
 		// Set up the drawer.
