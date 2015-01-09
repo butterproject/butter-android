@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.fragments.MediaFragment;
+import pct.droid.fragments.MediaListFragment;
 import pct.droid.utils.ToolbarUtils;
 
 
@@ -27,7 +27,7 @@ public class SearchActivity extends BaseActivity {
 	@InjectView(R.id.searchview)
 	SearchView searchview;
 
-	private MediaFragment mFragment;
+	private MediaListFragment mFragment;
 
 	public static Intent startActivity(Activity activity, int provider) {
 		Intent intent = new Intent(activity, SearchActivity.class);
@@ -52,13 +52,13 @@ public class SearchActivity extends BaseActivity {
 
 		//dont re add the fragment if it exists
 		if (null != savedInstanceState) {
-			mFragment = (MediaFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+			mFragment = (MediaListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 			return;
 		}
 
 		//create and add the media fragment
 		mFragment =
-				MediaFragment.newInstance(MediaFragment.Mode.SEARCH, provider);
+				MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider);
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
 	}
 

@@ -48,7 +48,7 @@ import pct.droid.base.utils.ThreadUtils;
  *
  * This fragment can be instantiated with ether a SEARCH mode, or a NORMAL mode. SEARCH mode simply does not load any initial data.
  */
-public class MediaFragment extends Fragment implements MediaProvider.Callback {
+public class MediaListFragment extends Fragment implements MediaProvider.Callback {
 
 	public static final String EXTRA_ARGS = "extra_args";
 	public static final String EXTRA_MODE = "extra_mode";
@@ -88,8 +88,8 @@ public class MediaFragment extends Fragment implements MediaProvider.Callback {
 
 
 	//todo: a better way to passing a provider to this fragment
-	public static MediaFragment newInstance(Mode mode, int provider) {
-		MediaFragment frag = new MediaFragment();
+	public static MediaListFragment newInstance(Mode mode, int provider) {
+		MediaListFragment frag = new MediaListFragment();
 		Bundle args = new Bundle();
 		args.putInt(EXTRA_ARGS, provider);
 		args.putSerializable(EXTRA_MODE, mode);
@@ -162,16 +162,16 @@ public class MediaFragment extends Fragment implements MediaProvider.Callback {
 
 		if (mAdapter.isLoading() && mState != State.LOADING_PAGE) mAdapter.removeLoading();
 
-		//		//animate recyclerview to full alpha
-		if (recyclerView.getAlpha() != 1.0f)
-			recyclerView.animate().alpha(1.0f).setDuration(100).start();
+		// animate recyclerview to full alpha
+        if (recyclerView.getAlpha() != 1.0f)
+            recyclerView.animate().alpha(1.0f).setDuration(100).start();
 
 		switch (mState) {
 			case LOADING:
 			case LOADING_DETAIL:
 				//show the progress bar
 				recyclerView.setVisibility(View.VISIBLE);
-				recyclerView.animate().alpha(0.5f).setDuration(1000).start();
+				recyclerView.animate().alpha(0.5f).setDuration(500).start();
 				emptyView.setVisibility(View.GONE);
 				progressOverlay.setVisibility(View.VISIBLE);
 				break;
@@ -230,28 +230,15 @@ public class MediaFragment extends Fragment implements MediaProvider.Callback {
 
 		mEndOfListReached = false;
 
-		//whats this?
-		if (mTotalItemCount <= 0) {
-			mPage = mPage + 1;
-			ThreadUtils.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					mAdapter.setItems(items);
-
-					mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
-					setState(State.LOADED);
-				}
-			});
-		} else {
-			ThreadUtils.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					mAdapter.setItems(items);
-					emptyView.setVisibility(View.GONE);
-					setState(State.LOADED);
-				}
-			});
-		}
+        mPage = mPage + 1;
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.setItems(items);
+                mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+                setState(State.LOADED);
+            }
+        });
 	}
 
 	@Override
@@ -374,7 +361,7 @@ public class MediaFragment extends Fragment implements MediaProvider.Callback {
 					mLoadingTreshold)) {
 				MediaProvider.Filters filters = mFilters;
 				filters.page = mPage;
-				mProvider.getList(mItems, filters, MediaFragment.this);
+				mProvider.getList(mItems, filters, MediaListFragment.this);
 
 				mFilters = filters;
 

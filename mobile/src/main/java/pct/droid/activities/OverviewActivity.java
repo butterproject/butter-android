@@ -32,7 +32,7 @@ import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
-import pct.droid.fragments.MediaFragment;
+import pct.droid.fragments.MediaListFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
 import pct.droid.utils.ToolbarUtils;
 import pct.droid.widget.ScrimInsetsFrameLayout;
@@ -124,7 +124,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 		//		Fragment fragment = mFragmentCache.get(position);
 		Fragment fragment = fragmentManager.findFragmentByTag(tag);
 		if (null == fragment) {
-			fragment = MediaFragment.newInstance(MediaFragment.Mode.NORMAL, position); //create new fragment instance
+			fragment = MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, position); //create new fragment instance
 		}
 		fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
 	}

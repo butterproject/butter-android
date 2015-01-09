@@ -13,6 +13,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:scaleType="centerInside"
+        android:alpha="0.4"
         android:src="@drawable/popcorn_logo" />
 
     <TextView
