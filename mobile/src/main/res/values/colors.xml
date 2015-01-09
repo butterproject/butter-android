@@ -13,15 +13,14 @@
 	<color name="trans_white">#99FFFFFF</color>
 	<color name="div_white">#22FFFFFF</color>
 
-	<color name="nav_drawer_deselected">#6FFF</color>
+    <color name="nav_drawer_color">#16171a</color>
+	<color name="nav_drawer_deselected">#CFFF</color>
 	<color name="nav_drawer_highlight">#1FFF</color>
 
 	<color name="text_color">#FFFFFF</color>
 	<color name="secondary_text_color">#AAFFFFFF</color>
 
 	<color name="overlay">#33000000</color>
-
-	<color name="nav_drawer_color">#272E34</color>
 
 	<color name="player_overlay">#55000000</color>
 

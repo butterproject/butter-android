@@ -16,6 +16,11 @@
     <dimen name="iconlist_item_twolines_height">72dp</dimen>
     <dimen name="iconlist_text_twolines_padding">10dp</dimen>
 
+    <dimen name="navlist_item_height">48dp</dimen>
+    <dimen name="navlist_item_header">172dp</dimen>
+    <dimen name="navlist_item_header_padding">16dp</dimen>
+    <dimen name="navlist_item_header_margin">8dp</dimen>
+
     <dimen name="detail_icon_margin">32dp</dimen>
     <dimen name="detail_margin">16dp</dimen>
     <dimen name="detail_margin_right">32dp</dimen>

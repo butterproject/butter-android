@@ -76,13 +76,13 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View itemView;
-        @InjectView(R.id.icon)
+        @InjectView(android.R.id.icon)
         ImageView icon;
-        @InjectView(R.id.text1)
+        @InjectView(android.R.id.text1)
         TextView text1;
-        @InjectView(R.id.text2)
+        @InjectView(android.R.id.text2)
         TextView text2;
-        @InjectView(R.id.checkbox)
+        @InjectView(android.R.id.checkbox)
         CheckBox checkBox;
 
         public ViewHolder(View itemView) {
