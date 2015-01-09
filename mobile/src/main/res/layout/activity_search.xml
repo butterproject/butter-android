@@ -10,6 +10,7 @@
 		android:layout_height="?attr/actionBarSize"
 		android:layout_width="match_parent"
 		android:layout_gravity="center_vertical"
+		app:theme="@style/Theme.PopcornTime.Toolbar.SearchView"
 		android:fitsSystemWindows="true"
 		android:background="?attr/colorPrimary">
 

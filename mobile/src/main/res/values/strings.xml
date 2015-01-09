@@ -15,7 +15,9 @@
     <string name="title_shows">Shows</string>
     <string name="title_movies">Movies</string>
     <string name="search">Search</string>
+    <string name="searching">Searching…</string>
     <string name="loading">Loading data…</string>
+    <string name="loading_details">Loading details…</string>
     <string name="no_data_found">No data found</string>
     <string name="unknown_error">Something went wrong</string>
 

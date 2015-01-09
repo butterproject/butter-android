@@ -22,10 +22,11 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MovieDetailActivity;
 import pct.droid.activities.ShowDetailActivity;
-import pct.droid.adapters.OverviewGridAdapter;
+import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
@@ -53,9 +54,12 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	public static final String EXTRA_ARGS = "extra_args";
 	public static final String EXTRA_MODE = "extra_mode";
 
-	private OverviewGridAdapter mAdapter;
+	private MediaGridAdapter mAdapter;
 	private GridLayoutManager mLayoutManager;
 	private Integer mColumns = 2, mRetries = 0;
+
+	//overrides the default loading message
+	private int mLoadingMessage = R.string.loading;
 
 	private State mState = State.UNINITIALISED;
 	private Mode mode;
@@ -65,7 +69,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	}
 
 	private enum State {
-		UNINITIALISED, LOADING, LOADING_PAGE, LOADED, LOADING_DETAIL
+		UNINITIALISED, LOADING, SEARCHING, LOADING_PAGE, LOADED, LOADING_DETAIL
 	}
 
 	private ArrayList<Media> mItems = new ArrayList<>();
@@ -85,6 +89,8 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	RecyclerView recyclerView;
 	@InjectView(R.id.emptyView)
 	TextView emptyView;
+	@InjectView(R.id.progress_textview)
+	TextView progressTextView;
 
 
 	//todo: a better way to passing a provider to this fragment
@@ -117,7 +123,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		recyclerView.setLayoutManager(mLayoutManager);
 		recyclerView.setOnScrollListener(mScrollListener);
 		//adapter should only ever be created once on fragment initialise.
-		mAdapter = new OverviewGridAdapter(getActivity(), mItems, mColumns);
+		mAdapter = new MediaGridAdapter(getActivity(), mItems, mColumns);
 		mAdapter.setOnItemClickListener(mOnItemClickListener);
 		recyclerView.setAdapter(mAdapter);
 	}
@@ -160,38 +166,57 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	private void updateUI() {
 		if (!isAdded()) return;
 
-		if (mAdapter.isLoading() && mState != State.LOADING_PAGE) mAdapter.removeLoading();
+		//animate recyclerview to full alpha
+		//		if (recyclerView.getAlpha() != 1.0f)
+		//			recyclerView.animate().alpha(1.0f).setDuration(100).start();
 
-		// animate recyclerview to full alpha
-        if (recyclerView.getAlpha() != 1.0f)
-            recyclerView.animate().alpha(1.0f).setDuration(100).start();
+		//update loading message based on state
+		switch (mState) {
+			case LOADING_DETAIL:
+				mLoadingMessage = R.string.loading_details;
+				break;
+			case SEARCHING:
+				mLoadingMessage = R.string.searching;
+				break;
+			default:
+				mLoadingMessage = R.string.loading;
+				break;
+		}
 
 		switch (mState) {
-			case LOADING:
 			case LOADING_DETAIL:
+			case SEARCHING:
+			case LOADING:
+				if (mAdapter.isLoading()) mAdapter.removeLoading();
 				//show the progress bar
 				recyclerView.setVisibility(View.VISIBLE);
-				recyclerView.animate().alpha(0.5f).setDuration(500).start();
+				//				recyclerView.animate().alpha(0.5f).setDuration(500).start();
 				emptyView.setVisibility(View.GONE);
 				progressOverlay.setVisibility(View.VISIBLE);
 				break;
 			case LOADED:
+				if (mAdapter.isLoading()) mAdapter.removeLoading();
 				progressOverlay.setVisibility(View.GONE);
-
 				boolean hasItems = mItems.size() > 0;
 				//show either the recyclerview or the empty view
 				recyclerView.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
 				emptyView.setVisibility(hasItems ? View.GONE : View.VISIBLE);
 				break;
 			case LOADING_PAGE:
-				emptyView.setVisibility(View.GONE);
-				recyclerView.setVisibility(View.VISIBLE);
 				//add a loading view to the adapter
 				if (!mAdapter.isLoading()) mAdapter.addLoading();
+				emptyView.setVisibility(View.GONE);
+				recyclerView.setVisibility(View.VISIBLE);
+				break;
 		}
-
+		updateLoadingMessage();
 	}
 
+	private void updateLoadingMessage() {
+		progressTextView.setText(mLoadingMessage);
+	}
+
+	@DebugLog
 	private void setState(State state) {
 		if (mState == state) return;//do nothing
 		mState = state;
@@ -212,7 +237,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 			return; //don't do a search for empty queries
 		}
 
-		setState(State.LOADING_PAGE);
+		setState(State.SEARCHING);
 		mFilters.keywords = searchQuery;
 		mFilters.page = 1;
 		mPage = 1;
@@ -221,6 +246,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 
 	@Override
+	@DebugLog
 	public void onSuccess(final ArrayList<Media> items) {
 		mItems.clear();
 		if (null != items) mItems.addAll(items);
@@ -230,18 +256,19 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 		mEndOfListReached = false;
 
-        mPage = mPage + 1;
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.setItems(items);
-                mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
-                setState(State.LOADED);
-            }
-        });
+		mPage = mPage + 1;
+		ThreadUtils.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				mAdapter.setItems(items);
+				mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+				setState(State.LOADED);
+			}
+		});
 	}
 
 	@Override
+	@DebugLog
 	public void onFailure(Exception e) {
 		if (e.getMessage() != null && e.getMessage().equals(YTSProvider.NO_MOVIES_ERROR)) {
 			mEndOfListReached = true;
@@ -276,7 +303,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	}
 
 
-	private OverviewGridAdapter.OnItemClickListener mOnItemClickListener = new OverviewGridAdapter.OnItemClickListener() {
+	private MediaGridAdapter.OnItemClickListener mOnItemClickListener = new MediaGridAdapter.OnItemClickListener() {
 		@Override
 		public void onItemClick(final View view, final Media item, final int position) {
 			setState(State.LOADING_DETAIL);

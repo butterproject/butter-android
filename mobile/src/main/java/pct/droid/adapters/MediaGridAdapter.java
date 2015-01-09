@@ -16,22 +16,24 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
+import timber.log.Timber;
 
 
-public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private int mItemWidth, mItemHeight, mMargin, mColumns;
 	private ArrayList<OverviewItem> mItems = new ArrayList<>();
 	//	private ArrayList<Media> mData = new ArrayList<>();
-	private OverviewGridAdapter.OnItemClickListener mItemClickListener;
+	private MediaGridAdapter.OnItemClickListener mItemClickListener;
 	final int NORMAL = 0, LOADING = 1;
 
-	public OverviewGridAdapter(Activity activity, ArrayList<Media> items, Integer columns) {
+	public MediaGridAdapter(Activity activity, ArrayList<Media> items, Integer columns) {
 		mColumns = columns;
 
 		int screenWidth = PixelUtils.getScreenWidth(activity);
@@ -48,11 +50,11 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		switch (viewType) {
 			case LOADING:
 				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_overview_griditem_loading, parent, false);
-				return new OverviewGridAdapter.LoadingHolder(v);
+				return new MediaGridAdapter.LoadingHolder(v);
 			case NORMAL:
 			default:
 				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_overview_griditem, parent, false);
-				return new OverviewGridAdapter.ViewHolder(v);
+				return new MediaGridAdapter.ViewHolder(v);
 		}
 	}
 
@@ -122,10 +124,11 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		return mItems.get(position);
 	}
 
-	public void setOnItemClickListener(OverviewGridAdapter.OnItemClickListener listener) {
+	public void setOnItemClickListener(MediaGridAdapter.OnItemClickListener listener) {
 		mItemClickListener = listener;
 	}
 
+	@DebugLog
 	public void removeLoading() {
 		if (getItemCount() <= 0) return;
 		OverviewItem item = mItems.get(getItemCount() - 1);
@@ -135,6 +138,7 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		}
 	}
 
+	@DebugLog
 	public void addLoading() {
 		OverviewItem item = null;
 		if (getItemCount() != 0) {
@@ -147,11 +151,13 @@ public class OverviewGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		}
 	}
 
+	@DebugLog
 	public boolean isLoading() {
 		if (getItemCount()<=0)return false;
 		return getItemViewType(getItemCount() - 1) == LOADING;
 	}
 
+	@DebugLog
 	public void setItems(ArrayList<Media> items) {
         // Clear items
 		mItems.clear();

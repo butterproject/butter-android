@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import butterknife.InjectView;
 import pct.droid.R;
@@ -25,7 +26,7 @@ public class SearchActivity extends BaseActivity {
 	Toolbar toolbar;
 
 	@InjectView(R.id.searchview)
-	SearchView searchview;
+	SearchView mSearchview;
 
 	private MediaListFragment mFragment;
 
@@ -33,7 +34,7 @@ public class SearchActivity extends BaseActivity {
 		Intent intent = new Intent(activity, SearchActivity.class);
 		intent.putExtra(EXTRA_PROVIDER, provider);
 		activity.startActivity(intent);
-		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out,);
 		return intent;
 	}
 
@@ -44,11 +45,10 @@ public class SearchActivity extends BaseActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		ToolbarUtils.updateToolbarHeight(this, toolbar);
-
 		int provider = getIntent().getExtras().getInt(EXTRA_PROVIDER);
 
-		searchview.setOnQueryTextListener(mSearchListener);
-		searchview.onActionViewExpanded();
+		mSearchview.onActionViewExpanded();
+		mSearchview.setOnQueryTextListener(mSearchListener);
 
 		//dont re add the fragment if it exists
 		if (null != savedInstanceState) {
@@ -59,6 +59,7 @@ public class SearchActivity extends BaseActivity {
 		//create and add the media fragment
 		mFragment =
 				MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider);
+
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
 	}
 
@@ -78,4 +79,18 @@ public class SearchActivity extends BaseActivity {
 			return false;
 		}
 	};
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				onHomePressed();
+				//to fade out the activity
+				overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+				return true;
+
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }
