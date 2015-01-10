@@ -182,10 +182,19 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		View itemView;
+        @InjectView(R.id.focusOverlay)
+        View focusOverlay;
 		@InjectView(R.id.coverImage)
 		ImageView coverImage;
 		@InjectView(R.id.title)
 		TextView title;
+
+        private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
+            }
+        };
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -193,6 +202,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			this.itemView = itemView;
 			itemView.setOnClickListener(this);
 			coverImage.setMinimumHeight(mItemHeight);
+
+            itemView.setOnFocusChangeListener(mOnFocusChangeListener);
 		}
 
 		public ImageView getCoverImage() {

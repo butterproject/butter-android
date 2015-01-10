@@ -2,6 +2,7 @@ package pct.droid.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 	private final List<NavigationDrawerFragment.NavDrawerItem> mItems;
 	private Context mContext;
 	final int HEADER = 0, ITEM = 1;
-	final int mNormalColor, mCheckedColor, mNormalBackground, mCheckedBackground;
+	final int mNormalColor, mCheckedColor, mCheckedBackgroundRes, mNormalBackgroundRes;
 	private Callback mCallback;
 
 	public NavigationAdapter(@NonNull Context context, @NonNull Callback callback,
@@ -34,8 +35,8 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		mCallback = callback;
 		mNormalColor = context.getResources().getColor(R.color.nav_drawer_deselected);
 		mCheckedColor = context.getResources().getColor(R.color.primary);
-        mNormalBackground = context.getResources().getColor(android.R.color.transparent);
-        mCheckedBackground= context.getResources().getColor(R.color.nav_drawer_selected_bg);
+        mNormalBackgroundRes = R.drawable.selectable_nav_background;
+        mCheckedBackgroundRes = R.color.nav_drawer_selected_bg;
 	}
 
 
@@ -79,7 +80,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 		boolean isSelected = (getCorrectPosition(position)) == mCallback.getSelectedPosition();
 		viewHolder.title.setTextColor(isSelected ? mCheckedColor : mNormalColor);
-        viewHolder.itemView.setBackgroundColor(isSelected ? mCheckedBackground : mNormalBackground);
+        viewHolder.itemView.setBackgroundResource(isSelected ? mCheckedBackgroundRes : mNormalBackgroundRes);
 		//		vh.itemView.setBackgroundResource(isSelected ? R.color.nav_drawer_highlight : 0);
 
 		if (item.getIcon() > 0) {

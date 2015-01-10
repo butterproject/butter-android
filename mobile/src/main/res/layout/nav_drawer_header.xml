@@ -4,12 +4,12 @@
 	android:layout_width="match_parent"
 	tools:layout_width="@dimen/nav_drawer_width"
 	android:clickable="true"
-	android:layout_height="@dimen/navlist_item_header">
+	android:layout_height="@dimen/navlist_item_header"
+    android:layout_marginBottom="@dimen/list_vertical_padding">
 
 	<ImageView
 		android:id="@+id/bg_imageview"
 		android:layout_width="match_parent"
-		tools:src="@drawable/nav_drawer_header"
 		android:scaleType="centerCrop"
 		android:layout_height="match_parent" />
 
