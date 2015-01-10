@@ -5,41 +5,36 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.text.format.Formatter;
-
-import org.apache.http.conn.util.InetAddressUtils;
-
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 
 import pct.droid.base.PopcornApplication;
 
 public class NetworkUtils {
 
-    /**
-     * Test if connected to Wifi
-     *
-     * @return {@code true} if connected
-     */
-    public static boolean isConnectedToWifi() {
-        ConnectivityManager connManager = (ConnectivityManager) PopcornApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return networkInfo.isConnected();
-    }
+	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	 * is wifi connected
+	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    /**
-     * Test if connected to cellular
-     *
-     * @return {@code true} if connected
-     */
-    public static boolean isConnectedToCellular() {
-        ConnectivityManager connManager = (ConnectivityManager) PopcornApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        return networkInfo.isConnected();
-    }
+	/** Get whether or not a wifi connection is currently connected. */
+	public static boolean isWifiConnected(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivityManager == null) return false;
+		return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+	}
+
+	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	 * is network connected
+	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+	/** Get whether or not any network connection is present (eg. wifi, 3G, etc.). */
+	public static boolean isNetworkConnected(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivityManager == null) return false;
+		NetworkInfo[] info = connectivityManager.getAllNetworkInfo();
+		if (info == null) return false;
+		for (int i = 0; i < info.length; i++)
+			if (info[i].getState() == NetworkInfo.State.CONNECTED) return true;
+		return false;
+	}
 
     /**
      * Get ip address of the Wifi service

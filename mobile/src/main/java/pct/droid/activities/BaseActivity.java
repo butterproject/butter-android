@@ -21,69 +21,73 @@ import pct.droid.base.utils.PrefUtils;
 
 public class BaseActivity extends ActionBarActivity implements CastingListener {
 
-    protected Handler mHandler;
+	protected Handler mHandler;
 
-    public void onCreate(Bundle savedInstanceState, int layoutId) {
-        super.onCreate(savedInstanceState);
-        Bugsnag.onActivityCreate(this);
-        setContentView(layoutId);
-        ButterKnife.inject(this);
-        mHandler = new Handler(getMainLooper());
-    }
+	public void onCreate(Bundle savedInstanceState, int layoutId) {
+		super.onCreate(savedInstanceState);
+		Bugsnag.onActivityCreate(this);
+		setContentView(layoutId);
+		ButterKnife.inject(this);
+		mHandler = new Handler(getMainLooper());
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Bugsnag.onActivityResume(this);
-        getApp().startService();
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Bugsnag.onActivityResume(this);
+		getApp().startService();
         CastingManager.getInstance(this).setListener(this);
-    }
+	}
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Bugsnag.onActivityPause(this);
-    }
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Bugsnag.onActivityPause(this);
+	}
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Bugsnag.onActivityDestroy(this);
-    }
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Bugsnag.onActivityDestroy(this);
+	}
 
-    @Override
-    public void setContentView(int layoutResID) {
-        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
-        super.setContentView(layoutResID);
-    }
+	@Override
+	public void setContentView(int layoutResID) {
+		String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+		LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
+		super.setContentView(layoutResID);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (upIntent != null && NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is NOT part of this app's task, so create a new task
-                    // when navigating up, with a synthesized back stack.
-                    TaskStackBuilder.create(this)
-                            // Add all of this activity's parents to the back stack
-                            .addNextIntentWithParentStack(upIntent)
-                                    // Navigate up to the closest parent
-                            .startActivities();
-                } else {
-                    finish();
-                }
+	protected void onHomePressed() {
+		Intent upIntent = NavUtils.getParentActivityIntent(this);
+		if (upIntent != null && NavUtils.shouldUpRecreateTask(this, upIntent)) {
+			// This activity is NOT part of this app's task, so create a new task
+			// when navigating up, with a synthesized back stack.
+			TaskStackBuilder.create(this)
+					// Add all of this activity's parents to the back stack
+					.addNextIntentWithParentStack(upIntent)
+							// Navigate up to the closest parent
+					.startActivities();
+		} else {
+			finish();
+		}
+	}
 
-                return true;
 
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				onHomePressed();
+				return true;
 
-    protected PopcornApplication getApp() {
-        return (PopcornApplication) getApplication();
-    }
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	protected PopcornApplication getApp() {
+		return (PopcornApplication) getApplication();
+	}
 
     @Override
     public void onConnected(CastingDevice device) {

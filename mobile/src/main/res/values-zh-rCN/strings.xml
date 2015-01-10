@@ -12,7 +12,7 @@
   <string name="title_shows">电视剧</string>
   <string name="title_movies">电影</string>
   <string name="search">搜索</string>
-  <string name="loading">载入数据</string>
+  <string name="loading_data">载入数据</string>
   <string name="no_data_found">发现没有数据</string>
   <string name="unknown_error">出事了</string>
   <!--DetailActivity strings-->
@@ -43,7 +43,7 @@
   <string name="accept">接受</string>
   <string name="leave">离开</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">设置</string>
+  <string name="settings">设置</string>
   <string name="general">一般</string>
   <string name="default_view">默认概述</string>
   <string name="default_player">默认视频播放器</string>
