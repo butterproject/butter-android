@@ -71,7 +71,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 		/* view a magnet link directly */
 		String action = getIntent().getAction();
 		Uri data = getIntent().getData();
-		if (action != null && !action.equals(Intent.ACTION_VIEW) && data != null) {
+		if (action != null && action.equals(Intent.ACTION_VIEW) && data != null) {
 			String streamUrl = data.toString();
 			try {
 				streamUrl = URLDecoder.decode(streamUrl, "utf-8");
