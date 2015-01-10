@@ -202,7 +202,9 @@ public class ShowDetailActivity extends BaseActivity {
                                     Show.Episode episode = mItem.episodes.get(key);
                                     Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
-                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
+                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY,
+											true) && !NetworkUtils.isWifiConnected(ShowDetailActivity.this) && NetworkUtils
+											.isNetworkConnected(ShowDetailActivity.this)) {
                                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                                     } else {
                                         Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);

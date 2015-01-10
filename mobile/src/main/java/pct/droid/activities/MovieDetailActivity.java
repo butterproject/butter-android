@@ -157,7 +157,9 @@ public class MovieDetailActivity extends BaseActivity {
                     break;
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
-                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
+                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&
+							NetworkUtils
+							.isNetworkConnected(MovieDetailActivity.this)) {
                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
                         Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
