@@ -12,7 +12,7 @@
   <string name="title_shows">쇼</string>
   <string name="title_movies">영화</string>
   <string name="search">찾기</string>
-  <string name="loading">데이터 불러오는 중...</string>
+  <string name="loading_data">데이터 불러오는 중...</string>
   <string name="no_data_found">발견된 데이터 없음</string>
   <string name="unknown_error">무언가 잘못됐습니다</string>
   <!--DetailActivity strings-->

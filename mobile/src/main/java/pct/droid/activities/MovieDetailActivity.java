@@ -37,9 +37,9 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.youtube.YouTubeData;
-import pct.droid.fragments.MessageDialogFragment;
-import pct.droid.fragments.StringArraySelectorDialogFragment;
-import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.dialogfragments.MessageDialogFragment;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class MovieDetailActivity extends BaseActivity {

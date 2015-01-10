@@ -12,7 +12,7 @@
   <string name="title_shows">Seriály</string>
   <string name="title_movies">Filmy</string>
   <string name="search">Vyhľadávať</string>
-  <string name="loading">Načítavam dáta...</string>
+  <string name="loading_data">Načítavam dáta...</string>
   <string name="no_data_found">Neboli nájdené žiadne dáta</string>
   <string name="unknown_error">Niečo sa pokazilo</string>
   <!--DetailActivity strings-->

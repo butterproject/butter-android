@@ -12,7 +12,7 @@
 	<string name="title_shows">Serier</string>
 	<string name="title_movies">Film</string>
 	<string name="search">Søg</string>
-	<string name="loading">Indlæser data...</string>
+	<string name="loading_data">Indlæser data...</string>
 	<string name="no_data_found">Ingen data fundet</string>
 	<string name="unknown_error">Noget gik galt</string>
 	<!--DetailActivity strings-->

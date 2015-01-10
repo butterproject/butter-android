@@ -12,7 +12,7 @@
   <string name="title_shows">المسلسلات</string>
   <string name="title_movies">الأفلام</string>
   <string name="search">بحث</string>
-  <string name="loading">جاري تحميل البيانات...</string>
+  <string name="loading_data">جاري تحميل البيانات...</string>
   <string name="no_data_found">لم يتم العثور على بيانات</string>
   <string name="unknown_error">حدث خطأ ما</string>
   <!--DetailActivity strings-->

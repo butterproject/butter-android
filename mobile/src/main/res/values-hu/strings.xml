@@ -12,7 +12,7 @@
   <string name="title_shows">Műsorok</string>
   <string name="title_movies">Filmek</string>
   <string name="search">Keresés</string>
-  <string name="loading">Adatok betöltése...</string>
+  <string name="loading_data">Adatok betöltése...</string>
   <string name="no_data_found">Nem található adat</string>
   <string name="unknown_error">Valami rosszul sült el</string>
   <!--DetailActivity strings-->

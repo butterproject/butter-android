@@ -179,7 +179,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 		public void onItemClick(View v, Media item, int position);
 	}
 
-	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		View itemView;
 		@InjectView(R.id.coverImage)
@@ -193,6 +193,10 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			this.itemView = itemView;
 			itemView.setOnClickListener(this);
 			coverImage.setMinimumHeight(mItemHeight);
+		}
+
+		public ImageView getCoverImage() {
+			return coverImage;
 		}
 
 		@Override

@@ -40,9 +40,9 @@ import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.fragments.MessageDialogFragment;
-import pct.droid.fragments.StringArraySelectorDialogFragment;
-import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.dialogfragments.MessageDialogFragment;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class ShowDetailActivity extends BaseActivity {

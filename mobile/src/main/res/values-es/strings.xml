@@ -12,7 +12,7 @@
   <string name="title_shows">Programas</string>
   <string name="title_movies">Películas</string>
   <string name="search">Buscar</string>
-  <string name="loading">Cargando datos...</string>
+  <string name="loading_data">Cargando datos...</string>
   <string name="no_data_found">No se encontraron datos</string>
   <string name="unknown_error">Algo salió mal</string>
   <!--DetailActivity strings-->

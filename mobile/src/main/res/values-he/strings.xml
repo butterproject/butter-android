@@ -12,7 +12,7 @@
   <string name="title_shows">סדרות</string>
   <string name="title_movies">סרטים</string>
   <string name="search">חיפוש</string>
-  <string name="loading">טוען מידע...</string>
+  <string name="loading_data">טוען מידע...</string>
   <string name="no_data_found">לא נמצא מידע</string>
   <string name="unknown_error">משהו השתבש</string>
   <!--DetailActivity strings-->
