@@ -172,7 +172,15 @@ public class ShowDetailActivity extends BaseActivity {
                             }
 
                             // sorting hack
-                            Collections.sort(availableChapters);
+                            Collections.sort(availableChapters, new Comparator<String>() {
+                                @Override
+                                public int compare(String lhs, String rhs) {
+                                    Show.Episode lEpisode = mItem.episodes.get(lhs);
+                                    Show.Episode rEpisode = mItem.episodes.get(rhs);
+
+                                    return lEpisode.episode > rEpisode.episode ? 1 : -1;
+                                }
+                            });
                             Collections.sort(availableChaptersStringList, new Comparator<String>() {
                                 @Override
                                 public int compare(String lhs, String rhs) {
