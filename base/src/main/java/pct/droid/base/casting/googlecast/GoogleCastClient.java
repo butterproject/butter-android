@@ -261,7 +261,7 @@ public class GoogleCastClient extends BaseCastingClient {
         @Override
         public void onRouteUnselected(MediaRouter router, MediaRouter.RouteInfo route) {
             super.onRouteUnselected(router, route);
-            if (mCurrentDevice.equals(new GoogleDevice(route))) {
+            if (mCurrentDevice != null && mCurrentDevice.equals(new GoogleDevice(route))) {
                 mCurrentDevice = null;
                 mCallback.onDisconnected();
             }

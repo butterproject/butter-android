@@ -152,12 +152,25 @@ public class CastingManager {
     GoogleCastCallback googleCastCallback = new GoogleCastCallback() {
         @Override
         public void onConnected() {
+            if (mCurrentDevice instanceof GoogleDevice) {
+                if (!mConnected && mCallback != null) {
+                    mCallback.onConnected(mCurrentDevice);
+                }
 
+                mConnected = true;
+            }
         }
 
         @Override
         public void onDisconnected() {
+            if (mCurrentDevice instanceof GoogleDevice) {
+                mConnected = false;
+                mCurrentDevice = null;
 
+                if (mCallback != null) {
+                    mCallback.onDisconnected();
+                }
+            }
         }
 
         @Override
@@ -177,7 +190,7 @@ public class CastingManager {
 
         @Override
         public void onDeviceSelected(GoogleDevice device) {
-
+            mCurrentDevice = device;
         }
 
         @Override
