@@ -31,7 +31,7 @@ import pct.droid.base.utils.LogUtils;
 
 public class GoogleCastClient extends BaseCastingClient {
 
-    private final Set<GoogleDevice> mDiscoveredDevices = new HashSet<>();
+    private final Set<MediaRouter.RouteInfo> mDiscoveredDevices = new HashSet<>();
 
     private Context mContext;
     private Handler mHandler;
@@ -271,15 +271,15 @@ public class GoogleCastClient extends BaseCastingClient {
         public void onRouteAdded(MediaRouter router, MediaRouter.RouteInfo route) {
             super.onRouteAdded(router, route);
             GoogleDevice device = new GoogleDevice(route);
-            mDiscoveredDevices.add(device);
-            mCallback.onDeviceDetected(device);
+            if(mDiscoveredDevices.add(route))
+                mCallback.onDeviceDetected(device);
         }
 
         @Override
         public void onRouteRemoved(MediaRouter router, MediaRouter.RouteInfo route) {
             super.onRouteRemoved(router, route);
             GoogleDevice device = new GoogleDevice(route);
-            mDiscoveredDevices.remove(device);
+            mDiscoveredDevices.remove(route);
             mCallback.onDeviceRemoved(device);
         }
 
