@@ -12,7 +12,7 @@
   <string name="title_shows">Saated</string>
   <string name="title_movies">Filmid</string>
   <string name="search">Otsi</string>
-  <string name="loading">Laen andmeid...</string>
+  <string name="loading_data">Laen andmeid...</string>
   <string name="no_data_found">Andmeid ei leitud</string>
   <string name="unknown_error">Midagi läks valesti</string>
   <!--DetailActivity strings-->

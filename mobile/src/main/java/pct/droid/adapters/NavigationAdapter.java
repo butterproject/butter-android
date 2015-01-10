@@ -67,6 +67,9 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 	private void onBindHeaderViewHolder(HeaderHolder holder, int position) {
 		//do nothing for now
+		holder.mBackgroundImageView.setBackgroundResource(R.color.primary_dark);
+		holder.mProfileImageView.setVisibility(View.VISIBLE);
+		holder.mProfileImageView.setImageResource(R.drawable.popcorn_profile);
 	}
 
 	private void onBindItemViewHolder(ItemRowHolder viewHolder, int position) {
@@ -128,9 +131,9 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 	public class ItemRowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		@InjectView(android.R.id.icon)
-        ImageView icon;
+		ImageView icon;
 		@InjectView(android.R.id.text1)
-        TextView title;
+		TextView title;
 
 		public ItemRowHolder(View itemView) {
 			super(itemView);
@@ -139,7 +142,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		}
 
 		@Override
-        public void onClick(View view) {
+		public void onClick(View view) {
 			if (mItemClickListener != null) {
 				int position = getPosition();
 				NavigationDrawerFragment.NavDrawerItem item = getItem(position);
@@ -150,12 +153,14 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 	public static class HeaderHolder extends RecyclerView.ViewHolder {
 
+		@InjectView(R.id.bg_imageview)
+		ImageView mBackgroundImageView;
 		@InjectView(R.id.profile_imageview)
-        CircleImageView mProfileImageView;
+		CircleImageView mProfileImageView;
 		@InjectView(R.id.title_textview)
-        TextView mTitleTextView;
+		TextView mTitleTextView;
 		@InjectView(R.id.subtitle_textview)
-        TextView mSubtitleTextView;
+		TextView mSubtitleTextView;
 
 		public HeaderHolder(View itemView) {
 			super(itemView);

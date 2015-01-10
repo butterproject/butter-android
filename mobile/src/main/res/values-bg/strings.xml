@@ -12,7 +12,7 @@
   <string name="title_shows">Сериали</string>
   <string name="title_movies">Филми</string>
   <string name="search">Търси</string>
-  <string name="loading">Зареждане на данни...</string>
+  <string name="loading_data">Зареждане на данни...</string>
   <string name="no_data_found">Не са открити данни</string>
   <string name="unknown_error">Нещо се обърка</string>
   <!--DetailActivity strings-->

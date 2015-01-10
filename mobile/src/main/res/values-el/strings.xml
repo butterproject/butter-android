@@ -12,7 +12,7 @@
   <string name="title_shows">Σειρές</string>
   <string name="title_movies">Ταινίες</string>
   <string name="search">Αναζήτηση</string>
-  <string name="loading">Φόρτωση δεδομένων...</string>
+  <string name="loading_data">Φόρτωση δεδομένων...</string>
   <string name="no_data_found">Δεν βρέθηκαν δεδομένα</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
   <!--DetailActivity strings-->

@@ -76,7 +76,7 @@ import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
-import pct.droid.fragments.StringArraySelectorDialogFragment;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {

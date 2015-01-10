@@ -12,7 +12,7 @@
   <string name="title_shows">Oddaje</string>
   <string name="title_movies">Filmi</string>
   <string name="search">Iskanje</string>
-  <string name="loading">Nalaganje podatkov...</string>
+  <string name="loading_data">Nalaganje podatkov...</string>
   <string name="no_data_found">Ni najdenih podatkov</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
   <!--DetailActivity strings-->

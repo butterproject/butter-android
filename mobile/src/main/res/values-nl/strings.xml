@@ -12,7 +12,7 @@
   <string name="title_shows">Series</string>
   <string name="title_movies">Films</string>
   <string name="search">Zoeken</string>
-  <string name="loading">Gegevens laden…</string>
+  <string name="loading_data">Gegevens laden…</string>
   <string name="no_data_found">Geen gegevens gevonden</string>
   <string name="unknown_error">Er is een fout opgetreden</string>
   <!--DetailActivity strings-->

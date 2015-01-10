@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
@@ -44,14 +43,13 @@ import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LocaleUtils;
-import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ResourceUtil;
 import pct.droid.base.utils.StorageUtils;
-import pct.droid.fragments.ChangeLogDialogFragment;
-import pct.droid.fragments.ColorPickerDialogFragment;
-import pct.droid.fragments.NumberPickerDialogFragment;
-import pct.droid.fragments.StringArraySelectorDialogFragment;
+import pct.droid.dialogfragments.ChangeLogDialogFragment;
+import pct.droid.dialogfragments.ColorPickerDialogFragment;
+import pct.droid.dialogfragments.NumberPickerDialogFragment;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.utils.ToolbarUtils;
 
 public class PreferencesActivity extends BaseActivity

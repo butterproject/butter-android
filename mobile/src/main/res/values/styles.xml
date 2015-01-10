@@ -30,11 +30,12 @@
 		<item name="android:activityCloseEnterAnimation">@null</item>
 	</style>
 
+	<!-- These customisations apply to all platforms -->
 	<style name="Theme.Base" parent="Theme.AppCompat.NoActionBar">
-		<!-- These customisations apply to all platforms -->
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/accent</item>
+		<item name="android:listDivider">@drawable/list_divider</item>
 		<!--<item name="windowActionBarOverlay">true</item>-->
 		<item name="android:windowBackground">@color/bg</item>
 	</style>
@@ -46,6 +47,13 @@
 
 	<style name="Theme.PopcornTime.Search" parent="Theme.PopcornTime">
 		<item name="android:windowAnimationStyle">@style/ActivityFadeAnimation</item>
+	</style>
+
+	<style name="Theme.Dialog.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:backgroundDimEnabled">true</item>
 	</style>
 
 	<style name="ActivityFadeAnimation" parent="@android:style/Animation.Activity">

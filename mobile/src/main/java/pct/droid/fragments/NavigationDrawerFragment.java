@@ -24,7 +24,10 @@ import pct.droid.R;
 import pct.droid.activities.AboutActivity;
 import pct.droid.activities.PreferencesActivity;
 import pct.droid.adapters.NavigationAdapter;
+import pct.droid.adapters.decorators.OneShotDividerDecorator;
+import pct.droid.base.Constants;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.IntentUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback,
@@ -107,12 +110,14 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		navItems.add(new NavDrawerItem(true));
 		navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies));
 		navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv));
+		navItems.add(new NavDrawerItem(getString(R.string.share), R.drawable.ic_nav_share, mOnShareClickListener));
 		navItems.add(new NavDrawerItem(getString(R.string.settings), R.drawable.ic_nav_settings, mOnSettingsClickListener));
 		navItems.add(new NavDrawerItem(getString(R.string.about), R.drawable.ic_nav_about, mOnAboutClickListener));
 
 		mAdapter = new NavigationAdapter(getActivity(), this, navItems);
 		mAdapter.setOnItemClickListener(this);
 
+		mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 2));
 		mRecyclerView.setHasFixedSize(true);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		mRecyclerView.setAdapter(mAdapter);
@@ -128,6 +133,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		@Override public void onClick(View v) {
 			PreferencesActivity.startActivity(getActivity());
 			mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
+		}
+	};
+
+	private View.OnClickListener mOnShareClickListener = new View.OnClickListener() {
+		@Override public void onClick(View v) {
+			String text = getString(R.string.share_text);
+
+			startActivity(IntentUtils.getSendIntent(getActivity(), getString(R.string.share_dialog_title), String.format("%s %s", text,
+					Constants.POPCORN_URL)));
 		}
 	};
 

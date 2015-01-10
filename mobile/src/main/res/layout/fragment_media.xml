@@ -37,9 +37,10 @@
 		<TextView
 			android:id="@+id/progress_textview"
 			android:layout_width="wrap_content"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body2"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/activity_vertical_margin"
-			android:text="@string/loading" />
+			android:text="@string/loading_data" />
 	</LinearLayout>
 
 </FrameLayout>
