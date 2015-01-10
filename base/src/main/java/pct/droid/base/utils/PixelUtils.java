@@ -8,9 +8,14 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+
+import pct.droid.base.R;
 
 public class PixelUtils {
 
@@ -69,5 +74,7 @@ public class PixelUtils {
         }
         return display.getHeight();
     }
+
+
 
 }

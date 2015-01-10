@@ -12,7 +12,7 @@
   <string name="title_shows">Séries</string>
   <string name="title_movies">Films</string>
   <string name="search">Recherche</string>
-  <string name="loading">Chargement des données...</string>
+  <string name="loading_data">Chargement des données...</string>
   <string name="no_data_found">Aucune donnée trouvée</string>
   <string name="unknown_error">Quelque chose n\'a pas fonctionné</string>
   <!--DetailActivity strings-->
@@ -44,7 +44,7 @@
   <string name="accept">Accepter</string>
   <string name="leave">Quitter</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Préférences</string>
+  <string name="settings">Préférences</string>
   <string name="general">Général</string>
   <string name="default_view">Aperçu par défaut</string>
   <string name="default_player">Lecteur vidéo par défaut</string>

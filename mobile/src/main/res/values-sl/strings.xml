@@ -12,7 +12,7 @@
   <string name="title_shows">Oddaje</string>
   <string name="title_movies">Filmi</string>
   <string name="search">Iskanje</string>
-  <string name="loading">Nalaganje podatkov...</string>
+  <string name="loading_data">Nalaganje podatkov...</string>
   <string name="no_data_found">Ni najdenih podatkov</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
   <!--DetailActivity strings-->
@@ -44,7 +44,7 @@
   <string name="accept">Sprejmi</string>
   <string name="leave">Zapusti</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Nastavitve</string>
+  <string name="settings">Nastavitve</string>
   <string name="general">Splošno</string>
   <string name="default_view">Privzeto večnamenski pogled</string>
   <string name="default_player">Privzeto video predvajalnik</string>

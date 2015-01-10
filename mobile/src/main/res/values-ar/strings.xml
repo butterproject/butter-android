@@ -12,7 +12,7 @@
   <string name="title_shows">المسلسلات</string>
   <string name="title_movies">الأفلام</string>
   <string name="search">بحث</string>
-  <string name="loading">جاري تحميل البيانات...</string>
+  <string name="loading_data">جاري تحميل البيانات...</string>
   <string name="no_data_found">لم يتم العثور على بيانات</string>
   <string name="unknown_error">حدث خطأ ما</string>
   <!--DetailActivity strings-->
@@ -44,7 +44,7 @@
   <string name="accept">قبول</string>
   <string name="leave">مغادرة</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">الإعدادات</string>
+  <string name="settings">الإعدادات</string>
   <string name="general">عام</string>
   <string name="default_view">الشاشة الرئيسية</string>
   <string name="default_player">مشغل الفيديو الإفتراضي</string>

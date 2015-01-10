@@ -12,7 +12,7 @@
   <string name="title_shows">TV serije</string>
   <string name="title_movies">Filmovi</string>
   <string name="search">Pretraži</string>
-  <string name="loading">Učitavanje podataka…</string>
+  <string name="loading_data">Učitavanje podataka…</string>
   <string name="no_data_found">Nema pronađenih podataka</string>
   <string name="unknown_error">Nešto je pošlo po krivu</string>
   <!--DetailActivity strings-->
@@ -44,7 +44,7 @@
   <string name="accept">Prihvaćam</string>
   <string name="leave">Napusti</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Postavke</string>
+  <string name="settings">Postavke</string>
   <string name="general">Općenito</string>
   <string name="default_view">Početni prikaz</string>
   <string name="default_player">Zadani video reproduktor</string>

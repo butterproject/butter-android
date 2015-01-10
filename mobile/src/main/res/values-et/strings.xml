@@ -12,7 +12,7 @@
   <string name="title_shows">Saated</string>
   <string name="title_movies">Filmid</string>
   <string name="search">Otsi</string>
-  <string name="loading">Laen andmeid...</string>
+  <string name="loading_data">Laen andmeid...</string>
   <string name="no_data_found">Andmeid ei leitud</string>
   <string name="unknown_error">Midagi läks valesti</string>
   <!--DetailActivity strings-->
@@ -44,7 +44,7 @@
   <string name="accept">Nõustu</string>
   <string name="leave">Lahku</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Seaded</string>
+  <string name="settings">Seaded</string>
   <string name="general">Üldine</string>
   <string name="default_view">Vaikimisi vaade</string>
   <string name="default_player">Vaikimisi video esitaja</string>
