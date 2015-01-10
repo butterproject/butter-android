@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <!-- General strings -->
-    <string name="app_name" translatable="false">Popcorn Time</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="ok">OK</string>
-    <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
+	<!-- General strings -->
+	<string name="app_name" translatable="false">Popcorn Time</string>
+	<string name="save">Save</string>
+	<string name="cancel">Cancel</string>
+	<string name="close">Close</string>
+	<string name="ok">OK</string>
+	<string name="enabled">Enabled</string>
+	<string name="disabled">Disabled</string>
 
-    <!-- OverviewActivity strings -->
-    <string name="search_hint">Title, year, actors</string>
-    <string name="title_shows">Shows</string>
-    <string name="title_movies">Movies</string>
-    <string name="search">Search</string>
-    <string name="loading">Loading data…</string>
-    <string name="no_data_found">No data found</string>
-    <string name="unknown_error">Something went wrong</string>
+	<!-- OverviewActivity strings -->
+	<string name="search_hint">Title, year, actors</string>
+	<string name="title_shows">Shows</string>
+	<string name="title_movies">Movies</string>
+	<string name="search">Search</string>
+	<string name="searching">Searching…</string>
+	<string name="loading_data">Loading data…</string>
+	<string name="loading_details">Loading details…</string>
+	<string name="no_data_found">No data found</string>
+	<string name="unknown_error">Something went wrong</string>
 
-    <!-- DetailActivity strings -->
-    <string name="minutes">min</string>
-    <string name="watch_trailer">Watch trailer</string>
-    <string name="disable_subs">Disable subtitles</string>
-    <string name="no_subs">No subtitles</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="quality">Quality</string>
-    <string name="trailer">Trailer</string>
-    <string name="season">Season</string>
-    <string name="episode">Episode</string>
+	<!-- DetailActivity strings -->
+	<string name="minutes">min</string>
+	<string name="watch_trailer">Watch trailer</string>
+	<string name="disable_subs">Disable subtitles</string>
+	<string name="no_subs">No subtitles</string>
+	<string name="subtitles">Subtitles</string>
+	<string name="quality">Quality</string>
+	<string name="trailer">Trailer</string>
+	<string name="season">Season</string>
+	<string name="episode">Episode</string>
 
-    <!-- StreamLoadingActivity strings -->
-    <string name="streaming_started">Streaming started</string>
-    <string name="waiting_for_subtitles">Waiting for subtitles</string>
-    <string name="seeds">seeds</string>
+	<!-- StreamLoadingActivity strings -->
+	<string name="streaming_started">Streaming started</string>
+	<string name="waiting_for_subtitles">Waiting for subtitles</string>
+	<string name="seeds">seeds</string>
 
-    <!-- VideoPlayerActivity strings -->
-    <string name="now_playing">Now playing</string>
-    <string name="volume">Volume</string>
-    <string name="brightness">Brightness</string>
-    <string name="hardware_acceleration_error_title">HW acceleration error</string>
-    <string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
-    <string name="best_fit">Best fit</string>
-    <string name="fill">Fill</string>
-    <string name="fit_horizontal">Fit horizontal</string>
-    <string name="fit_vertical">Fit vertical</string>
-    <string name="original_size">Original</string>
+	<!-- VideoPlayerActivity strings -->
+	<string name="now_playing">Now playing</string>
+	<string name="volume">Volume</string>
+	<string name="brightness">Brightness</string>
+	<string name="hardware_acceleration_error_title">HW acceleration error</string>
+	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
+	<string name="best_fit">Best fit</string>
+	<string name="fill">Fill</string>
+	<string name="fit_horizontal">Fit horizontal</string>
+	<string name="fit_vertical">Fit vertical</string>
+	<string name="original_size">Original</string>
 
-    <!-- TermsActivity strings -->
+	<!-- TermsActivity strings -->
     <string name="terms" translatable="false">Your Acceptance\n\n
 By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
 Privacy Policy\n\n
@@ -58,46 +60,69 @@ LIMITATION OF LIABILITY\n\n
 \'POPCORN TIME\' IS NOT RESPONSIBLE FOR ANY PROBLEMS OR TECHNICAL MALFUNCTION OF ANY WEBSITE, NETWORK, COMPUTER SYSTEMS, SERVERS, PROVIDERS, COMPUTER EQUIPMENT, OR SOFTWARE, OR FOR ANY FAILURE DUE TO TECHNICAL PROBLEMS OR TRAFFIC CONGESTION ON THE INTERNET OR \'POPCORN TIME\' OR COMBINATION THEREOF, INCLUDING ANY INJURY OR DAMAGE TO USERS OR TO ANY COMPUTER OR OTHER DEVICE ON OR THROUGH WHICH \'POPCORN TIME\' IS PROVIDED. UNDER NO CIRCUMSTANCES WILL \'POPCORN TIME\' BE LIABLE FOR ANY LOSS OR DAMAGE, INCLUDING PERSONAL INJURY OR DEATH, RESULTING FROM YOUR USE OF \'POPCORN TIME\'.\n\nSOURCE MATERIAL\n\nALL MOVIES ARE NOT HOSTED IN ANY SERVER AND ARE STREAMED USING THE P2P BIT TORRENT PROTOCOL. ALL MOVIES ARE PULLED IN FROM THE OPEN PUBLIC APIS. BY WATCHING A MOVIE WITH THIS APPLICATION YOU MIGHT BE COMMITING COPYRIGHT VIOLATIONS DEPENDING ON YOUR COUNTRIE\'S LAWS. WE DO NOT TAKE ANY RESPONSABILITIES.\n\n
 Ability to Accept Terms of Service\n\n
 By using \'POPCORN TIME\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
-    <string name="accept">Accept</string>
-    <string name="leave">Leave</string>
+	<string name="accept">Accept</string>
+	<string name="leave">Leave</string>
 
-    <!-- SettingsActivity strings -->
-    <string name="preferences">Preferences</string>
-    <string name="general">General</string>
-    <string name="default_view">Default overview</string>
-    <string name="default_player">Default video player</string>
-    <string name="i18n_language">App language</string>
-    <string name="restart_effect">Restart application for changes to take effect</string>
-    <string name="device_language">Device language</string>
-    <string name="stream_over_wifi_only">Only stream over Wi-Fi</string>
-    <string name="internal_player">Internal</string>
-    <string name="subtitle_color">Color</string>
-    <string name="subtitle_size">Size</string>
-    <string name="subtitle_language">Default language</string>
-    <string name="no_default_set">No default language</string>
-    <string name="advanced">Advanced</string>
-    <string name="storage_location">Storage location</string>
-    <string name="storage_automatic">Automatic</string>
-    <string name="storage_choose">Choose location</string>
-    <string name="not_writable">Location not writable</string>
-    <string name="remove_cache">Remove cache on player close</string>
-    <string name="hw_acceleration">Hardware acceleration</string>
-    <string name="hw_automatic">Automatic</string>
-    <string name="hw_full">Full</string>
-    <string name="hw_decoding">Decoding only</string>
-    <string name="updates">Updates</string>
-    <string name="auto_updates">Automatic updates</string>
-    <string name="check_for_updates">Check for updates</string>
-    <string name="last_check">Last check</string>
-    <string name="about">About</string>
-    <string name="version">Version</string>
-    <string name="changelog">Changelog</string>
-    <string name="tap_to_open">Tap to open</string>
-    <string name="report_a_bug">Report a bug</string>
-    <string name="open_source_licenses">Open-source licenses</string>
+	<!-- SettingsActivity strings -->
 
-    <!-- WifiOnlyDialogFragment -->
-    <string name="wifi_only">Wi-Fi only</string>
-    <string name="wifi_only_message">You can only stream videos over Wi-Fi. You can disable this in preferences if you want to stream over a cellular connection.</string>
+	<string name="settings">Settings</string>
+	<string name="general">General</string>
+	<string name="default_view">Default overview</string>
+	<string name="default_player">Default video player</string>
+	<string name="i18n_language">App language</string>
+	<string name="restart_effect">Restart application for changes to take effect</string>
+	<string name="device_language">Device language</string>
+	<string name="stream_over_wifi_only">Only stream over Wi-Fi</string>
+	<string name="internal_player">Internal</string>
+	<string name="subtitle_color">Color</string>
+	<string name="subtitle_size">Size</string>
+	<string name="subtitle_language">Default language</string>
+	<string name="no_default_set">No default language</string>
+	<string name="advanced">Advanced</string>
+	<string name="storage_location">Storage location</string>
+	<string name="storage_automatic">Automatic</string>
+	<string name="storage_choose">Choose location</string>
+	<string name="not_writable">Location not writable</string>
+	<string name="remove_cache">Remove cache on player close</string>
+	<string name="hw_acceleration">Hardware acceleration</string>
+	<string name="hw_automatic">Automatic</string>
+	<string name="hw_full">Full</string>
+	<string name="hw_decoding">Decoding only</string>
+	<string name="updates">Updates</string>
+	<string name="auto_updates">Automatic updates</string>
+	<string name="check_for_updates">Check for updates</string>
+	<string name="last_check">Last check</string>
+	<string name="about">About</string>
+	<string name="version">Version</string>
+	<string name="changelog">Changelog</string>
+	<string name="tap_to_open">Tap to open</string>
+	<string name="report_a_bug">Report a bug</string>
+	<string name="open_source_licenses">Open-source licenses</string>
+
+	<!-- WifiOnlyDialogFragment -->
+	<string name="wifi_only">Wi-Fi only</string>
+	<string name="wifi_only_message">You can only stream videos over Wi-Fi. You can disable this in preferences if you want to stream over a cellular connection.</string>
+
+	<!-- NavigationDrawer -->
+	<string name="share">Share</string>
+	<string name="drawer_open">Open navigation drawer</string>
+	<string name="drawer_close">Close navigation drawer</string>
+	<string name="no_search_results">No search results found</string>
+
+	<!-- About fragment -->
+    <string name="about_message">Popcorn Time is the result of many developers and designers putting a bunch of APIs together to make the
+		experience of watching torrent movies as simple as possible.\n\nWe are an open source project. We are from all over the world. We
+		love our movies. And boy, do we love popcorn.</string>
+	<string name="website">Website</string>
+	<string name="discuss">Discuss</string>
+	<string name="google_plus">Google+</string>
+	<string name="facebook">Facebook</string>
+	<string name="git">Git</string>
+	<string name="blog">Blog</string>
+	<string name="twitter">Twitter</string>
+
+	<!-- Share dialog -->
+	<string name="share_text">Have you tried Popcorn Time for Android? It\'s awesome! https://popcorntime.io/</string>
+	<string name="share_dialog_title">Share with</string>
 
 </resources>
