@@ -74,66 +74,68 @@ public class StreamLoadingActivity extends BaseActivity {
         String streamUrl = getIntent().getStringExtra(STREAM_URL);
         final Media data = getIntent().getParcelableExtra(DATA);
 
-        if (!getIntent().hasExtra(SUBTITLES) && data.subtitles != null && data.subtitles.size() > 0) {
-            if (data.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
-                getIntent().putExtra(SUBTITLES, PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
+        if(null != data) {
+            if (!getIntent().hasExtra(SUBTITLES) && data.subtitles != null && data.subtitles.size() > 0) {
+                if (data.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+                    getIntent().putExtra(SUBTITLES, PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
+                }
             }
-        }
 
-        if (data.subtitles != null && data.subtitles.size() > 0) {
-            if (getIntent().hasExtra(SUBTITLES)) {
-                mHasSubs = true;
-                mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
-                if (!mSubtitleLanguage.equals("no-subs")) {
-                    SubsProvider.download(this, data, mSubtitleLanguage, new Callback() {
-                        @Override
-                        public void onFailure(Request request, IOException e) {
-                            mSubsStatus = SubsStatus.FAILURE;
-                        }
+            if (data.subtitles != null && data.subtitles.size() > 0) {
+                if (getIntent().hasExtra(SUBTITLES)) {
+                    mHasSubs = true;
+                    mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
+                    if (!mSubtitleLanguage.equals("no-subs")) {
+                        SubsProvider.download(this, data, mSubtitleLanguage, new Callback() {
+                            @Override
+                            public void onFailure(Request request, IOException e) {
+                                mSubsStatus = SubsStatus.FAILURE;
+                            }
 
-                        @Override
-                        public void onResponse(Response response) throws IOException {
-                            mSubsStatus = SubsStatus.SUCCESS;
-                        }
-                    });
+                            @Override
+                            public void onResponse(Response response) throws IOException {
+                                mSubsStatus = SubsStatus.SUCCESS;
+                            }
+                        });
+                    } else {
+                        mSubsStatus = SubsStatus.SUCCESS;
+                    }
                 } else {
                     mSubsStatus = SubsStatus.SUCCESS;
                 }
             } else {
-                mSubsStatus = SubsStatus.SUCCESS;
-            }
-        } else {
-            // TODO: make more generic
-            if (data instanceof Movie) {
-                mSubsProvider = new YSubsProvider();
-                mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
-                    @Override
-                    public void onSuccess(Map<String, String> items) {
-                        data.subtitles = items;
-                        mSubsStatus = SubsStatus.SUCCESS;
-                    }
+                // TODO: make more generic
+                if (data instanceof Movie) {
+                    mSubsProvider = new YSubsProvider();
+                    mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
+                        @Override
+                        public void onSuccess(Map<String, String> items) {
+                            data.subtitles = items;
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        mSubsStatus = SubsStatus.FAILURE;
-                    }
-                });
-            } else {
-                mSubsProvider = new OpenSubsProvider();
-                Show.Episode episode = (Show.Episode) data;
-                Show show = getIntent().getParcelableExtra(SHOW);
-                mSubsProvider.getList(show, episode, new SubsProvider.Callback() {
-                    @Override
-                    public void onSuccess(Map<String, String> items) {
-                        data.subtitles = items;
-                        mSubsStatus = SubsStatus.SUCCESS;
-                    }
+                        @Override
+                        public void onFailure(Exception e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+                    });
+                } else {
+                    mSubsProvider = new OpenSubsProvider();
+                    Show.Episode episode = (Show.Episode) data;
+                    Show show = getIntent().getParcelableExtra(SHOW);
+                    mSubsProvider.getList(show, episode, new SubsProvider.Callback() {
+                        @Override
+                        public void onSuccess(Map<String, String> items) {
+                            data.subtitles = items;
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        mSubsStatus = SubsStatus.FAILURE;
-                    }
-                });
+                        @Override
+                        public void onFailure(Exception e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+                    });
+                }
             }
         }
 
