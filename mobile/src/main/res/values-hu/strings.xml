@@ -12,7 +12,7 @@
   <string name="title_shows">Műsorok</string>
   <string name="title_movies">Filmek</string>
   <string name="search">Keresés</string>
-  <string name="loading">Adatok betöltése...</string>
+  <string name="loading_data">Adatok betöltése...</string>
   <string name="no_data_found">Nem található adat</string>
   <string name="unknown_error">Valami rosszul sült el</string>
   <!--DetailActivity strings-->
@@ -43,7 +43,7 @@
   <string name="accept">Elfogad</string>
   <string name="leave">Kilépés</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Beállítások</string>
+  <string name="settings">Beállítások</string>
   <string name="general">Általános</string>
   <string name="default_view">Kezdőképernyő</string>
   <string name="default_player">Alapértelmezett videó lejátszó</string>

@@ -12,7 +12,7 @@
   <string name="title_shows">Séries</string>
   <string name="title_movies">Filmes</string>
   <string name="search">Procurar</string>
-  <string name="loading">Carregando os dados...</string>
+  <string name="loading_data">Carregando os dados...</string>
   <string name="no_data_found">Nenhum dado encontrado</string>
   <string name="unknown_error">Algo deu errado</string>
   <!--DetailActivity strings-->
@@ -43,7 +43,7 @@
   <string name="accept">Aceitar</string>
   <string name="leave">Sair</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Preferências</string>
+  <string name="settings">Preferências</string>
   <string name="general">Geral</string>
   <string name="default_view">Visão geral padrão</string>
   <string name="default_player">Player de vídeo padrão</string>

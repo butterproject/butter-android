@@ -1,81 +1,81 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <!--General strings-->
-  <string name="save">Gem</string>
-  <string name="cancel">Annullér</string>
-  <string name="close">Luk</string>
-  <string name="ok">OK</string>
-  <string name="enabled">Aktiveret</string>
-  <string name="disabled">Deaktiveret</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Titel, år, skuespillere</string>
-  <string name="title_shows">Serier</string>
-  <string name="title_movies">Film</string>
-  <string name="search">Søg</string>
-  <string name="loading">Indlæser data...</string>
-  <string name="no_data_found">Ingen data fundet</string>
-  <string name="unknown_error">Noget gik galt</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min.</string>
-  <string name="watch_trailer">Se trailer</string>
-  <string name="disable_subs">Deaktivér undertekster</string>
-  <string name="no_subs">Ingen undertekster</string>
-  <string name="subtitles">Undertekster</string>
-  <string name="quality">Kvalitet</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Sæson</string>
-  <string name="episode">Episode</string>
-  <!--StreamLoadingActivity strings-->
-  <string name="streaming_started">Streaming startet</string>
-  <string name="waiting_for_subtitles">Venter på undertekster</string>
-  <!--VideoPlayerActivity strings-->
-  <string name="now_playing">Afspilles nu</string>
-  <string name="volume">Lydstyrke</string>
-  <string name="brightness">Lysstyrke</string>
-  <string name="hardware_acceleration_error_title">HW-accelerations fejl</string>
-  <string name="hardware_acceleration_error_message">En fejl opstod med hardwareacceleration. Vil du deaktivere det og prøve igen?</string>
-  <string name="best_fit">Tilpasset</string>
-  <string name="fill">Fyld</string>
-  <string name="fit_horizontal">Tilpasset vandret</string>
-  <string name="fit_vertical">Tilpasset lodret</string>
-  <string name="original_size">Oprindelig </string>
-  <!--TermsActivity strings-->
-  <string name="accept">Accepter</string>
-  <string name="leave">Forlad</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Indstillinger</string>
-  <string name="general">Generelt</string>
-  <string name="default_view">Standard oversigt</string>
-  <string name="default_player">Standard videoafspiller</string>
-  <string name="i18n_language">App sprog</string>
-  <string name="restart_effect">Genstart applikationen for at anvende ændringer</string>
-  <string name="device_language">Systemsprog</string>
-  <string name="stream_over_wifi_only">Stream kun via Wi-Fi</string>
-  <string name="internal_player">Indbygget</string>
-  <string name="subtitle_color">Farve</string>
-  <string name="subtitle_size">Størrelse</string>
-  <string name="subtitle_language">Standardsprog</string>
-  <string name="no_default_set">Intet standardsprog</string>
-  <string name="advanced">Avanceret</string>
-  <string name="storage_location">Placering af filer</string>
-  <string name="storage_automatic">Automatisk</string>
-  <string name="storage_choose">Vælg placering</string>
-  <string name="not_writable">Placering ikke skrivbar</string>
-  <string name="remove_cache">Ryd cache når afspiller lukkes</string>
-  <string name="hw_acceleration">Hardwareacceleration</string>
-  <string name="hw_automatic">Automatisk</string>
-  <string name="hw_full">Fuld</string>
-  <string name="hw_decoding">Kun dekoder</string>
-  <string name="updates">Opdateringer</string>
-  <string name="auto_updates">Automatiske opdateringer</string>
-  <string name="check_for_updates">Tjek for opdateringer</string>
-  <string name="about">Om</string>
-  <string name="version">Version</string>
-  <string name="changelog">Ændringslog</string>
-  <string name="tap_to_open">Tryk for at åbne</string>
-  <string name="report_a_bug">Reportér en fejl</string>
-  <string name="open_source_licenses">Open-source licenser</string>
-  <!--WifiOnlyDialogFragment-->
-  <string name="wifi_only">Kun Wi-Fi</string>
-  <string name="wifi_only_message">Du kan kun streame videoer via Wi-Fi. Du kan deaktivere dette i indstillinger, hvis du vil streame via mobilnetværk</string>
+<resources>
+	<!--General strings-->
+	<string name="save">Gem</string>
+	<string name="cancel">Annullér</string>
+	<string name="close">Luk</string>
+	<string name="ok">OK</string>
+	<string name="enabled">Aktiveret</string>
+	<string name="disabled">Deaktiveret</string>
+	<!--OverviewActivity strings-->
+	<string name="search_hint">Titel, år, skuespillere</string>
+	<string name="title_shows">Serier</string>
+	<string name="title_movies">Film</string>
+	<string name="search">Søg</string>
+	<string name="loading_data">Indlæser data...</string>
+	<string name="no_data_found">Ingen data fundet</string>
+	<string name="unknown_error">Noget gik galt</string>
+	<!--DetailActivity strings-->
+	<string name="minutes">min.</string>
+	<string name="watch_trailer">Se trailer</string>
+	<string name="disable_subs">Deaktivér undertekster</string>
+	<string name="no_subs">Ingen undertekster</string>
+	<string name="subtitles">Undertekster</string>
+	<string name="quality">Kvalitet</string>
+	<string name="trailer">Trailer</string>
+	<string name="season">Sæson</string>
+	<string name="episode">Episode</string>
+	<!--StreamLoadingActivity strings-->
+	<string name="streaming_started">Streaming startet</string>
+	<string name="waiting_for_subtitles">Venter på undertekster</string>
+	<!--VideoPlayerActivity strings-->
+	<string name="now_playing">Afspilles nu</string>
+	<string name="volume">Lydstyrke</string>
+	<string name="brightness">Lysstyrke</string>
+	<string name="hardware_acceleration_error_title">HW-accelerations fejl</string>
+	<string name="hardware_acceleration_error_message">En fejl opstod med hardwareacceleration. Vil du deaktivere det og prøve igen?</string>
+	<string name="best_fit">Tilpasset</string>
+	<string name="fill">Fyld</string>
+	<string name="fit_horizontal">Tilpasset vandret</string>
+	<string name="fit_vertical">Tilpasset lodret</string>
+	<string name="original_size">Oprindelig </string>
+	<!--TermsActivity strings-->
+	<string name="accept">Accepter</string>
+	<string name="leave">Forlad</string>
+	<!--SettingsActivity strings-->
+	<string name="settings">Indstillinger</string>
+	<string name="general">Generelt</string>
+	<string name="default_view">Standard oversigt</string>
+	<string name="default_player">Standard videoafspiller</string>
+	<string name="i18n_language">App sprog</string>
+	<string name="restart_effect">Genstart applikationen for at anvende ændringer</string>
+	<string name="device_language">Systemsprog</string>
+	<string name="stream_over_wifi_only">Stream kun via Wi-Fi</string>
+	<string name="internal_player">Indbygget</string>
+	<string name="subtitle_color">Farve</string>
+	<string name="subtitle_size">Størrelse</string>
+	<string name="subtitle_language">Standardsprog</string>
+	<string name="no_default_set">Intet standardsprog</string>
+	<string name="advanced">Avanceret</string>
+	<string name="storage_location">Placering af filer</string>
+	<string name="storage_automatic">Automatisk</string>
+	<string name="storage_choose">Vælg placering</string>
+	<string name="not_writable">Placering ikke skrivbar</string>
+	<string name="remove_cache">Ryd cache når afspiller lukkes</string>
+	<string name="hw_acceleration">Hardwareacceleration</string>
+	<string name="hw_automatic">Automatisk</string>
+	<string name="hw_full">Fuld</string>
+	<string name="hw_decoding">Kun dekoder</string>
+	<string name="updates">Opdateringer</string>
+	<string name="auto_updates">Automatiske opdateringer</string>
+	<string name="check_for_updates">Tjek for opdateringer</string>
+	<string name="about">Om</string>
+	<string name="version">Version</string>
+	<string name="changelog">Ændringslog</string>
+	<string name="tap_to_open">Tryk for at åbne</string>
+	<string name="report_a_bug">Reportér en fejl</string>
+	<string name="open_source_licenses">Open-source licenser</string>
+	<!--WifiOnlyDialogFragment-->
+	<string name="wifi_only">Kun Wi-Fi</string>
+	<string name="wifi_only_message">Du kan kun streame videoer via Wi-Fi. Du kan deaktivere dette i indstillinger, hvis du vil streame via mobilnetværk</string>
 </resources>
