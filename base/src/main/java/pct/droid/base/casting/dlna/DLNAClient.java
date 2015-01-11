@@ -21,28 +21,28 @@ import org.fourthline.cling.support.avtransport.callback.Seek;
 import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
 import org.fourthline.cling.support.avtransport.callback.Stop;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import pct.droid.base.casting.BaseCastingClient;
 import pct.droid.base.casting.CastingDevice;
+import pct.droid.base.casting.CastingListener;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.utils.LogUtils;
 
 public class DLNAClient extends BaseCastingClient {
 
     private Context mContext;
-    private DLNACallback mCallback;
+    private CastingListener mListener;
     private AndroidUpnpService mUpnpService;
     private DlnaRegistryListener mRegistryListener = new DlnaRegistryListener();
     private List<DLNADevice> mDiscoveredDevices;
     private DLNADevice mCurrentDevice;
 
-    public DLNAClient(Context context, DLNACallback callback) {
+    public DLNAClient(Context context, CastingListener listener) {
         mContext = context;
         mDiscoveredDevices = new ArrayList<>();
-        mCallback = callback;
+        mListener = listener;
 
         Intent serviceIntent = new Intent(context, DLNAService.class);
         context.getApplicationContext().bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -171,14 +171,14 @@ public class DLNAClient extends BaseCastingClient {
             disconnect();
         }
         mCurrentDevice = (DLNADevice) device;
-        mCallback.onConnected();
+        mListener.onConnected(mCurrentDevice);
     }
 
     @Override
     public void disconnect() {
         stop();
         mCurrentDevice = null;
-        mCallback.onDisconnected();
+        mListener.onDisconnected();
     }
 
     @Override
@@ -250,13 +250,13 @@ public class DLNAClient extends BaseCastingClient {
             } else {
                 mDiscoveredDevices.add(dlnaDevice);
             }
-            mCallback.onDeviceDetected(dlnaDevice);
+            mListener.onDeviceDetected(dlnaDevice);
         }
 
         public void deviceRemoved(final Device device) {
             DLNADevice dlnaDevice = new DLNADevice(device);
             mDiscoveredDevices.remove(dlnaDevice);
-            mCallback.onDeviceRemoved(dlnaDevice);
+            mListener.onDeviceRemoved(dlnaDevice);
         }
     }
 }

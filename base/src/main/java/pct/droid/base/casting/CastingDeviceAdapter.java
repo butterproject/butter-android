@@ -24,6 +24,7 @@ public class CastingDeviceAdapter extends BaseAdapter {
 
     private Context mContext;
     private CastingManager mCastingManager;
+    private CastingDevice[] mDevices = new CastingDevice[0];
 
     class ViewHolder {
         public ViewHolder(View v) {
@@ -42,59 +43,18 @@ public class CastingDeviceAdapter extends BaseAdapter {
         mContext = context;
         mCastingManager = CastingManager.getInstance(context);
 
-        mCastingManager.getDevices();
+        mDevices = mCastingManager.getDevices();
 
-        mCastingManager.setListener(new CastingListener() {
-            @Override
-            public void onConnected(CastingDevice device) {
+        mCastingManager.addListener(mListener);
+    }
 
-            }
-
-            @Override
-            public void onDisconnected() {
-
-            }
-
-            @Override
-            public void onConnectionFailed() {
-
-            }
-
-            @Override
-            public void onDeviceDetected(CastingDevice device) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onDeviceSelected(CastingDevice device) {
-
-            }
-
-            @Override
-            public void onDeviceRemoved(CastingDevice device) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onVolumeChanged(double value, boolean isMute) {
-
-            }
-
-            @Override
-            public void onReady() {
-
-            }
-
-            @Override
-            public void onPlayBackChanged(boolean isPlaying, float position) {
-
-            }
-        });
+    public void destroy() {
+        mCastingManager.removeListener(mListener);
     }
 
     @Override
     public int getCount() {
-        return mCastingManager.getDevices().length + 1;
+        return mDevices.length + 1;
     }
 
     @Override
@@ -102,7 +62,7 @@ public class CastingDeviceAdapter extends BaseAdapter {
         if(position == 0) {
             return null;
         }
-        return mCastingManager.getDevices()[position - 1];
+        return mDevices[position - 1];
     }
 
     @Override
@@ -136,15 +96,63 @@ public class CastingDeviceAdapter extends BaseAdapter {
         } else {
             holder.icon.setImageResource(R.drawable.ic_launcher);
             holder.text1.setText("Local");
-            try {
-                PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-                holder.text2.setText("Popcorn Time");
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-                holder.text2.setText("");
-            }
+            holder.text2.setText("Popcorn Time");
         }
 
         return convertView;
     }
+
+    private CastingListener mListener = new CastingListener() {
+        @Override
+        public void onConnected(CastingDevice device) {
+
+        }
+
+        @Override
+        public void onDisconnected() {
+
+        }
+
+        @Override
+        public void onCommandFailed(String command, String message) {
+
+        }
+
+        @Override
+        public void onConnectionFailed() {
+
+        }
+
+        @Override
+        public void onDeviceDetected(CastingDevice device) {
+            mDevices = mCastingManager.getDevices();
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onDeviceSelected(CastingDevice device) {
+
+        }
+
+        @Override
+        public void onDeviceRemoved(CastingDevice device) {
+            mDevices = mCastingManager.getDevices();
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onVolumeChanged(double value, boolean isMute) {
+
+        }
+
+        @Override
+        public void onReady() {
+
+        }
+
+        @Override
+        public void onPlayBackChanged(boolean isPlaying, float position) {
+
+        }
+    };
 }

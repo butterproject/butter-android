@@ -7,18 +7,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import pct.droid.base.casting.airplay.AirPlayCallback;
 import pct.droid.base.casting.airplay.AirPlayClient;
 import pct.droid.base.casting.airplay.AirPlayDevice;
-import pct.droid.base.casting.dlna.DLNACallback;
 import pct.droid.base.casting.dlna.DLNAClient;
 import pct.droid.base.casting.dlna.DLNADevice;
-import pct.droid.base.casting.googlecast.GoogleCastCallback;
 import pct.droid.base.casting.googlecast.GoogleCastClient;
 import pct.droid.base.casting.googlecast.GoogleDevice;
 import pct.droid.base.casting.server.CastingServerService;
@@ -39,7 +34,7 @@ public class CastingManager {
     private GoogleCastClient mGoogleCastClient;
     private AirPlayClient mAirPlayClient;
     private DLNAClient mDLNAClient;
-    private CastingListener mCallback = null;
+    private Set<CastingListener> mListeners = null;
     private CastingDevice mCurrentDevice;
     private Boolean mConnected = false;
     private Set<CastingDevice> mDiscoveredDevices = new HashSet<>();
@@ -47,9 +42,11 @@ public class CastingManager {
     private CastingManager(Context context) {
         mContext = context;
 
-        mGoogleCastClient = new GoogleCastClient(context, googleCastCallback);
-        mAirPlayClient = new AirPlayClient(context, airPlayCallback);
-        mDLNAClient = new DLNAClient(context, dlnaCallback);
+        mListeners = new HashSet<>();
+
+        mGoogleCastClient = new GoogleCastClient(context, mInternalListener);
+        mAirPlayClient = new AirPlayClient(context, mInternalListener);
+        mDLNAClient = new DLNAClient(context, mInternalListener);
 
         Intent castServerService = new Intent(context, CastingServerService.class);
         context.startService(castServerService);
@@ -66,8 +63,12 @@ public class CastingManager {
         return sInstance;
     }
 
-    public void setListener(CastingListener callback) {
-        mCallback = callback;
+    public boolean addListener(CastingListener listener) {
+        return mListeners.add(listener);
+    }
+
+    public boolean removeListener(CastingListener listener) {
+        return mListeners.remove(listener);
     }
 
     public void onDestroy() {
@@ -149,188 +150,88 @@ public class CastingManager {
         }
     }
 
-    GoogleCastCallback googleCastCallback = new GoogleCastCallback() {
+    private CastingListener mInternalListener = new CastingListener() {
         @Override
-        public void onConnected() {
-            if (mCurrentDevice instanceof GoogleDevice) {
-                if (!mConnected && mCallback != null) {
-                    mCallback.onConnected(mCurrentDevice);
-                }
+        public void onConnected(CastingDevice device) {
+            if(!device.equals(mCurrentDevice) && !mConnected) return;
 
-                mConnected = true;
+            mConnected = true;
+            for(CastingListener listener: mListeners) {
+                listener.onConnected(mCurrentDevice);
             }
         }
 
         @Override
         public void onDisconnected() {
-            if (mCurrentDevice instanceof GoogleDevice) {
-                mConnected = false;
-                mCurrentDevice = null;
+            if(!mConnected) return;
 
-                if (mCallback != null) {
-                    mCallback.onDisconnected();
-                }
+            mConnected = false;
+            mCurrentDevice = null;
+
+            for(CastingListener listener: mListeners) {
+                listener.onDisconnected();
+            }
+        }
+
+        @Override
+        public void onCommandFailed(String command, String message) {
+            for(CastingListener listener: mListeners) {
+                listener.onCommandFailed(command, message);
             }
         }
 
         @Override
         public void onConnectionFailed() {
-
+            for(CastingListener listener: mListeners) {
+                listener.onConnectionFailed();
+            }
         }
 
         @Override
-        public void onDeviceDetected(GoogleDevice device) {
-            if(!mDiscoveredDevices.contains(device)) {
-                mDiscoveredDevices.add(device);
-                if (mCallback != null) {
-                    mCallback.onDeviceDetected(device);
+        public void onDeviceDetected(CastingDevice device) {
+            if(mDiscoveredDevices.add(device)) {
+                for(CastingListener listener: mListeners) {
+                    listener.onDeviceDetected(device);
                 }
             }
         }
 
         @Override
-        public void onDeviceSelected(GoogleDevice device) {
+        public void onDeviceSelected(CastingDevice device) {
             mCurrentDevice = device;
+            for(CastingListener listener: mListeners) {
+                listener.onDeviceSelected(device);
+            }
         }
 
         @Override
-        public void onDeviceRemoved(GoogleDevice device) {
-            mDiscoveredDevices.remove(device);
-            if (mCallback != null) {
-                mCallback.onDeviceRemoved(device);
+        public void onDeviceRemoved(CastingDevice device) {
+            if(mDiscoveredDevices.remove(device)) {
+                for (CastingListener listener : mListeners) {
+                    listener.onDeviceRemoved(device);
+                }
             }
         }
 
         @Override
         public void onVolumeChanged(double value, boolean isMute) {
-            if(mCallback != null) {
-                mCallback.onVolumeChanged(value, isMute);
+            for(CastingListener listener: mListeners) {
+                listener.onVolumeChanged(value, isMute);
+            }
+        }
+
+        @Override
+        public void onReady() {
+            for(CastingListener listener: mListeners) {
+                listener.onReady();
             }
         }
 
         @Override
         public void onPlayBackChanged(boolean isPlaying, float position) {
-
-        }
-    };
-
-    AirPlayCallback airPlayCallback = new AirPlayCallback() {
-        @Override
-        public void onConnected() {
-            if (mCurrentDevice instanceof AirPlayDevice) {
-                if (!mConnected && mCallback != null) {
-                    mCallback.onConnected(mCurrentDevice);
-                }
-
-                mConnected = true;
+            for(CastingListener listener: mListeners) {
+                listener.onPlayBackChanged(isPlaying, position);
             }
-        }
-
-        @Override
-        public void onDisconnected() {
-            if (mCurrentDevice instanceof AirPlayDevice) {
-                mConnected = false;
-                mCurrentDevice = null;
-
-                if (mCallback != null) {
-                    mCallback.onDisconnected();
-                }
-            }
-        }
-
-        @Override
-        public void onCommandFailed(String command, String message) {
-
-        }
-
-        @Override
-        public void onDeviceDetected(AirPlayDevice device) {
-            if(!mDiscoveredDevices.contains(device)) {
-                mDiscoveredDevices.add(device);
-                if (mCallback != null) {
-                    mCallback.onDeviceDetected(device);
-                }
-            }
-        }
-
-        @Override
-        public void onDeviceSelected(AirPlayDevice device) {
-            if (mCallback != null) {
-                mCallback.onDeviceSelected(device);
-            }
-        }
-
-        @Override
-        public void onDeviceRemoved(AirPlayDevice device) {
-            mDiscoveredDevices.remove(device);
-            if (mCallback != null) {
-                mCallback.onDeviceRemoved(device);
-            }
-        }
-
-        @Override
-        public void onPlaybackInfo(boolean isPlaying, float position, float rate, boolean isReady) {
-
-        }
-    };
-
-    DLNACallback dlnaCallback = new DLNACallback() {
-        @Override
-        public void onConnected() {
-            if (mCurrentDevice instanceof DLNADevice) {
-                if (!mConnected && mCallback != null) {
-                    mCallback.onConnected(mCurrentDevice);
-                }
-
-                mConnected = true;
-            }
-        }
-
-        @Override
-        public void onDisconnected() {
-            if (mCurrentDevice instanceof DLNADevice) {
-                mConnected = false;
-                mCurrentDevice = null;
-
-                if (mCallback != null) {
-                    mCallback.onDisconnected();
-                }
-            }
-        }
-
-        @Override
-        public void onCommandFailed(String command, String message) {
-
-        }
-
-        @Override
-        public void onDeviceDetected(DLNADevice device) {
-            if(!mDiscoveredDevices.contains(device)) {
-                mDiscoveredDevices.add(device);
-                if (mCallback != null) {
-                    mCallback.onDeviceDetected(device);
-                }
-            }
-        }
-
-        @Override
-        public void onDeviceSelected(DLNADevice device) {
-            if (mCallback != null) {
-                mCallback.onDeviceSelected(device);
-            }
-        }
-
-        @Override
-        public void onDeviceRemoved(DLNADevice device) {
-            mDiscoveredDevices.remove(device);
-            if (mCallback != null) {
-                mCallback.onDeviceRemoved(device);
-            }
-        }
-
-        @Override
-        public void onPlaybackInfo(boolean isPlaying, float position, float rate, boolean isReady) {
-
         }
     };
 

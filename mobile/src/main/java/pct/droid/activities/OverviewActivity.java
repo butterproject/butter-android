@@ -55,6 +55,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 		FragmentManager.enableDebugLogging(BuildConfig.DEBUG);
 
 		setSupportActionBar(mToolbar);
+        setShowCasting(true);
 
 		ToolbarUtils.updateToolbarHeight(this, mToolbar);
 
@@ -91,12 +92,13 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_overview, menu);
 
 		MenuItem playerTestMenuItem = menu.findItem(R.id.action_playertests);
 		playerTestMenuItem.setVisible(Constants.DEBUG_ENABLED);
 
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -108,9 +110,6 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 			case R.id.action_playertests:
 				openPlayerTestDialog();
 				break;
-            case R.id.action_casting:
-                CastDeviceSelectorDialogFragment.show(getFragmentManager());
-                break;
 			case R.id.action_search:
 				//start the search activity
 				SearchActivity.startActivity(this, mNavigationDrawerFragment.getSelectedPosition());

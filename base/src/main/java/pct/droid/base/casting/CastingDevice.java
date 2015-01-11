@@ -32,4 +32,9 @@ public abstract class CastingDevice {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
