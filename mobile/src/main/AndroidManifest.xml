@@ -91,7 +91,7 @@
 
 		<service
 			android:name=".base.services.StreamerService"
-			android:process=":node" />
+			android:process=":streamer" />
 	</application>
 
 </manifest>

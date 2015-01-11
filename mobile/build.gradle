@@ -98,6 +98,5 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
     compile project(':base')
     compile project(':vlc')
-    compile project(':node')
     compile project(':xmlrpc')
 }

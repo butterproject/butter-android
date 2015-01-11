@@ -146,15 +146,7 @@ public class StreamLoadingActivity extends BaseActivity {
             @Override
             public void onEvent(int event, String path) {
                 if (path == null) return;
-                if (path.contains("streamer.json")) {
-                    switch (event) {
-                        case CREATE:
-                            break;
-                        case MODIFY:
-                            startPlayer();
-                            break;
-                    }
-                } else if (path.contains("status.json")) {
+                if (path.contains("status.json")) {
                     switch (event) {
                         case CREATE:
                         case MODIFY:
@@ -168,7 +160,7 @@ public class StreamLoadingActivity extends BaseActivity {
         mFileObserver.startWatching();
     }
 
-    private void startPlayer() {
+    private void startPlayer(Status status) {
         if (mHasSubs && mSubsStatus == SubsStatus.DOWNLOADING) {
             mHandler.post(new Runnable() {
                 @Override
@@ -180,27 +172,22 @@ public class StreamLoadingActivity extends BaseActivity {
         }
 
         if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
-            try {
-                Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
-                mPlayerStarted = true;
-                String location = status.filePath;
-                if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
-                    Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
-                    if (getIntent().hasExtra(DATA)) {
-                        i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
-                    }
-                    if (getIntent().hasExtra(QUALITY)) {
-                        i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
-                    }
-                    if (mSubsStatus == SubsStatus.SUCCESS) {
-                        i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
-                    }
-                    i.putExtra(VideoPlayerActivity.LOCATION, "file://" + location);
-                    startActivity(i);
-                    finish();
+            mPlayerStarted = true;
+            String location = status.filePath;
+            if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
+                Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
+                if (getIntent().hasExtra(DATA)) {
+                    i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+                if (getIntent().hasExtra(QUALITY)) {
+                    i.putExtra(VideoPlayerActivity.QUALITY, getIntent().getStringExtra(QUALITY));
+                }
+                if (mSubsStatus == SubsStatus.SUCCESS) {
+                    i.putExtra(VideoPlayerActivity.SUBTITLES, getIntent().getStringExtra(SUBTITLES));
+                }
+                i.putExtra(VideoPlayerActivity.LOCATION, "file://" + location);
+                startActivity(i);
+                finish();
             }
         }
     }
@@ -211,7 +198,7 @@ public class StreamLoadingActivity extends BaseActivity {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
             if (status == null) return;
             LogUtils.d(status.toString());
-            int calculateProgress = (int) Math.floor(status.progress * 25);
+            int calculateProgress = (int) Math.floor(status.progress * 12.5);
             if (calculateProgress > 100) calculateProgress = 100;
             final int progress = calculateProgress;
             if (progressIndicator.getProgress() < 100) {
@@ -222,7 +209,7 @@ public class StreamLoadingActivity extends BaseActivity {
                         progressIndicator.setProgress(progress);
                         progressText.setText(progress + "%");
 
-                        if (status.downloadSpeed < 1048576) {
+                        if (status.downloadSpeed / 1024 < 1000) {
                             downloadSpeedText.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
                         } else {
                             downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
@@ -231,7 +218,7 @@ public class StreamLoadingActivity extends BaseActivity {
                     }
                 });
             } else {
-                startPlayer();
+                startPlayer(status);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -248,7 +235,7 @@ public class StreamLoadingActivity extends BaseActivity {
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.e(e);
         }
     }
 

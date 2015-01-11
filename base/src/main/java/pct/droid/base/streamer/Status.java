@@ -3,14 +3,10 @@ package pct.droid.base.streamer;
 import com.google.gson.Gson;
 
 public class Status {
-    public double downloaded;
     public double progress;
     public double downloadSpeed;
-    public double eta;
     public int peers;
     public int seeds;
-    public int connections;
-    public double uploadSpeed;
     public String filePath;
 
     public static Status parseJSON(String json) throws IllegalStateException {
@@ -18,8 +14,21 @@ public class Status {
         return gson.fromJson(json, Status.class);
     }
 
+    public static String getJSON(double progress, double downloadSpeed, int peers, int seeds, String filePath) throws IllegalStateException {
+        Gson gson = new Gson();
+        return gson.toJson(new Status(progress, downloadSpeed, peers, seeds, filePath));
+    }
+
+    private Status(double progress, double downloadSpeed, int peers, int seeds, String filePath) {
+        this.progress = progress;
+        this.downloadSpeed = downloadSpeed;
+        this.peers = peers;
+        this.seeds = seeds;
+        this.filePath = filePath;
+    }
+
     @Override
     public String toString() {
-        return "eta: " + eta + ", downloaded: " + downloaded + ", progress: " + progress + ", downloadSpeed: " + downloadSpeed + ", peers: " + peers + ", seeds: " + seeds + ", uploadSpeed: " + uploadSpeed + ", connections: " + connections;
+        return "filePath: " + filePath + ", progress: " + progress + ", downloadSpeed: " + downloadSpeed + ", peers: " + peers + ", seeds: " + seeds;
     }
 }
