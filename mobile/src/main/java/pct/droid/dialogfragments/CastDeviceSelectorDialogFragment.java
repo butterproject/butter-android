@@ -1,4 +1,4 @@
-package pct.droid.fragments;
+package pct.droid.dialogfragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,8 +14,6 @@ import pct.droid.base.casting.CastingDeviceAdapter;
 import pct.droid.base.casting.CastingManager;
 
 public class CastDeviceSelectorDialogFragment extends DialogFragment {
-
-    private Listener mListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,9 +34,6 @@ public class CastDeviceSelectorDialogFragment extends DialogFragment {
                             device = adapter.getItem(position);
                         }
                         CastingManager.getInstance(getActivity()).setDevice(device);
-                        if(mListener != null) {
-                            mListener.onDeviceSelected(device);
-                        }
                         dismiss();
                     }
                 })
@@ -58,14 +53,6 @@ public class CastDeviceSelectorDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-    }
-
-    public void setListener(Listener listener) {
-        mListener = listener;
-    }
-
-    public interface Listener {
-        public void onDeviceSelected(CastingDevice device);
     }
 
     public static void show(FragmentManager fm) {
