@@ -30,6 +30,7 @@ import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
+import pct.droid.base.streamer.Ready;
 import pct.droid.base.streamer.Status;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
@@ -185,7 +186,7 @@ public class StreamLoadingActivity extends BaseActivity {
 
         if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
             try {
-                Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
+                Ready status = Ready.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/streamer.json"));
                 mPlayerStarted = true;
                 String location = status.filePath;
                 Media media = getIntent().getParcelableExtra(DATA);
@@ -283,5 +284,6 @@ public class StreamLoadingActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         getApp().stopStreamer();
+        CastingManager.getInstance(this).stop();
     }
 }

@@ -19,6 +19,7 @@ import pct.droid.base.R;
 import pct.droid.base.casting.airplay.AirPlayDevice;
 import pct.droid.base.casting.dlna.DLNADevice;
 import pct.droid.base.casting.googlecast.GoogleDevice;
+import pct.droid.base.utils.ThreadUtils;
 
 public class CastingDeviceAdapter extends BaseAdapter {
 
@@ -126,7 +127,12 @@ public class CastingDeviceAdapter extends BaseAdapter {
         @Override
         public void onDeviceDetected(CastingDevice device) {
             mDevices = mCastingManager.getDevices();
-            notifyDataSetChanged();
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         @Override
@@ -137,7 +143,12 @@ public class CastingDeviceAdapter extends BaseAdapter {
         @Override
         public void onDeviceRemoved(CastingDevice device) {
             mDevices = mCastingManager.getDevices();
-            notifyDataSetChanged();
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         @Override

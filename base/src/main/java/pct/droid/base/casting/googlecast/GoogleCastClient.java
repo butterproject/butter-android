@@ -1,6 +1,7 @@
 package pct.droid.base.casting.googlecast;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.media.MediaRouteSelector;
@@ -18,6 +19,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.images.WebImage;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -77,6 +79,7 @@ public class GoogleCastClient extends BaseCastingClient {
         if(mCurrentDevice != null && mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             MediaMetadata mediaMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
             mediaMetadata.putString(MediaMetadata.KEY_TITLE, media.title);
+            mediaMetadata.addImage(new WebImage(Uri.parse(media.image)));
             MediaInfo mediaInfo = new MediaInfo.Builder(
                     location)
                     .setContentType("video/mp4")
@@ -118,7 +121,9 @@ public class GoogleCastClient extends BaseCastingClient {
 
     @Override
     public void stop() {
-
+        if(mCurrentDevice != null && mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mRemoteMediaPlayer.stop(mGoogleApiClient);
+        }
     }
 
     /**
