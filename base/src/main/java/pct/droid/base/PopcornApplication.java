@@ -27,6 +27,7 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import timber.log.Timber;
 
 public class PopcornApplication extends VLCApplication {
 
@@ -49,6 +50,9 @@ public class PopcornApplication extends VLCApplication {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+
+		if (BuildConfig.DEBUG) Timber.plant(new Timber.DebugTree());
 
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);

@@ -16,12 +16,18 @@
     <color name="yellow">#EEFF41</color>
 
     <!-- Popcorn -->
-    <color name="bg">#2F383F</color>
+    <!--<color name="bg">#2F383F</color>-->
     <color name="overlay_bg">#BB2F383F</color>
     <color name="list_selected">#55FFFFFF</color>
-    <color name="primary">#FF1976D2</color>
+
+
+	<color name="primary">#FF1976D2</color>
     <color name="primary_dark">#FF1668B9</color>
-    <color name="accent">#FF1C84EB</color>
+	<color name="accent">#ED7572</color>
+    <!--<color name="accent">#FF1C84EB</color>-->
+
+    <color name="card_bg">#555</color>
+
     <color name="trans_white">#99FFFFFF</color>
     <color name="div_white">#22FFFFFF</color>
     <color name="text_color">#FFFFFF</color>

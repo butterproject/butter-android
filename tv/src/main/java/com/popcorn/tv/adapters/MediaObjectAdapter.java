@@ -2,115 +2,115 @@ package com.popcorn.tv.adapters;
 
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.Presenter;
-import com.popcorn.tv.models.MainMedia;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MediaObjectAdapter extends ArrayObjectAdapter
-{
-    private ArrayList<MainMedia> mItems = new ArrayList<>();
-    private Boolean isUpdating = false;
-    private int lastPage = -1;
+import pct.droid.base.providers.media.types.Media;
 
-    //region Constructors
+public class MediaObjectAdapter extends ArrayObjectAdapter {
+	private ArrayList<Media> mItems = new ArrayList<>();
+	private Boolean isUpdating = false;
+	private int lastPage = -1;
 
-    public MediaObjectAdapter(Presenter presenter) {
-        super(presenter);
-    }
+	//region Constructors
 
-    //endregion
+	public MediaObjectAdapter(Presenter presenter) {
+		super(presenter);
+	}
 
-    //region Getters/Setters
+	//endregion
 
-    public int getLastPage() {
-        return lastPage;
-    }
+	//region Getters/Setters
 
-    public void setLastPage(int lastPage) {
-        this.lastPage = lastPage;
-    }
+	public int getLastPage() {
+		return lastPage;
+	}
 
-    @Override
-    public int size() {
-        return mItems.size();
-    }
+	public void setLastPage(int lastPage) {
+		this.lastPage = lastPage;
+	}
 
-    @Override
-    public Object get(int index) {
-        return mItems.get(index);
-    }
+	@Override
+	public int size() {
+		return mItems.size();
+	}
 
-    public int indexOf(Object item) {
-        return mItems.indexOf(item);
-    }
+	@Override
+	public Object get(int index) {
+		return mItems.get(index);
+	}
 
-    public void notifyArrayItemRangeChanged(int positionStart, int itemCount) {
-        notifyItemRangeChanged(positionStart, itemCount);
-    }
+	public int indexOf(Object item) {
+		return mItems.indexOf(item);
+	}
 
-    public Boolean getIsUpdating() {
-        return isUpdating;
-    }
+	public void notifyArrayItemRangeChanged(int positionStart, int itemCount) {
+		notifyItemRangeChanged(positionStart, itemCount);
+	}
 
-    public void setIsUpdating(Boolean isUpdating) {
-        this.isUpdating = isUpdating;
-    }
+	public Boolean getIsUpdating() {
+		return isUpdating;
+	}
 
-    //endregion
+	public void setIsUpdating(Boolean isUpdating) {
+		this.isUpdating = isUpdating;
+	}
 
-    //region Getters/Setters
+	//endregion
 
-    public int getCount()
-    {
-        return mItems.size();
-    }
+	//region Getters/Setters
 
-    //endregion
+	public int getCount() {
+		return mItems.size();
+	}
 
-    //region Addition
+	//endregion
 
-    public void add(MainMedia media) {
-        add(mItems.size(), media);
-    }
+	//region Addition
 
-    public void add(int index, MainMedia media) {
-        mItems.add(index, media);
-        notifyItemRangeInserted(index, 1);
-    }
+	public void add(Media media) {
+		add(mItems.size(), media);
+	}
 
-    public void addAll(int index, Collection items) {
-        int itemsCount = items.size();
-        mItems.addAll(index, items);
-        notifyItemRangeInserted(index, itemsCount);
-    }
-    //endregion
+	public void add(int index, Media media) {
+		mItems.add(index, media);
+		notifyItemRangeInserted(index, 1);
+	}
 
-   //region removal
+	public void addAll(int index, Collection items) {
+		int itemsCount = items.size();
+		mItems.addAll(index, items);
+		notifyItemRangeInserted(index, itemsCount);
+	}
+	//endregion
 
-    public boolean remove(MainMedia item) {
-        int index = mItems.indexOf(item);
-        if (index >= 0) {
-            mItems.remove(index);
-            notifyItemRangeRemoved(index, 1);
-        }
-        return index >= 0;
-    }
+	//region removal
 
-    public int removeItems(int position, int count) {
-        int itemsToRemove = Math.min(count, mItems.size() - position);
+	public boolean remove(Media item) {
+		int index = mItems.indexOf(item);
+		if (index >= 0) {
+			mItems.remove(index);
+			notifyItemRangeRemoved(index, 1);
+		}
+		return index >= 0;
+	}
 
-        for (int i = 0; i < itemsToRemove; i++) {
-            mItems.remove(position);
-        }
-        notifyItemRangeRemoved(position, itemsToRemove);
-        return itemsToRemove;
-    }
+	public int removeItems(int position, int count) {
+		int itemsToRemove = Math.min(count, mItems.size() - position);
 
-    public void clear() {
-        int itemCount = mItems.size();
-        mItems.clear();
-        notifyItemRangeRemoved(0, itemCount);
-    }
+		for (int i = 0; i < itemsToRemove; i++) {
+			mItems.remove(position);
+		}
+		notifyItemRangeRemoved(position, itemsToRemove);
+		return itemsToRemove;
+	}
 
-    //endregion
+	public void clear() {
+		int itemCount = mItems.size();
+		mItems.clear();
+		notifyItemRangeRemoved(0, itemCount);
+	}
+
+	//endregion
 }
