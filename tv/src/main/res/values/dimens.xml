@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- 1.5 ratio, height to width-->
+	<dimen name="card_width">120dp</dimen>
+	<dimen name="card_height">180dp</dimen>
+
+</resources>
