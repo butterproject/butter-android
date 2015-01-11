@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Αποθήκευση</string>
+  <string name="cancel">Ακύρωση</string>
+  <string name="close">Κλείσιμο</string>
+  <string name="ok">Εντάξει</string>
+  <string name="enabled">Ενεργοποιημένο</string>
+  <string name="disabled">Απενεργοποιημένο</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Τίτλος, έτος, ηθοποιοί</string>
+  <string name="title_shows">Σειρές</string>
+  <string name="title_movies">Ταινίες</string>
+  <string name="search">Αναζήτηση</string>
+  <string name="loading_data">Φόρτωση δεδομένων...</string>
+  <string name="no_data_found">Δεν βρέθηκαν δεδομένα</string>
+  <string name="unknown_error">Κάτι πήγε στραβά</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">λεπτά</string>
+  <string name="watch_trailer">Προβολή τρέιλερ</string>
+  <string name="disable_subs">Απενεργοποίηση υποτίτλων</string>
+  <string name="no_subs">Χωρίς υπότιτλους</string>
+  <string name="subtitles">Υπότιτλοι</string>
+  <string name="quality">Ποιότητα</string>
+  <string name="trailer">Τρέιλερ</string>
+  <string name="season">Κύκλος</string>
+  <string name="episode">Επεισόδιο</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">Άρχισε η ροή δεδομένων</string>
+  <string name="waiting_for_subtitles">Αναμονή για υπότιτλους</string>
+  <string name="seeds">τροφοδότες</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Παίζει τώρα</string>
+  <string name="volume">Ένταση</string>
+  <string name="brightness">Φωτεινότητα</string>
+  <string name="hardware_acceleration_error_title">Σφάλμα επιτάχυνσης υλικού</string>
+  <string name="hardware_acceleration_error_message">Παρουσιάστηκε σφάλμα με την επιτάχυνση υλικού. Θα θέλατε να την απενεργοποιήσετε και να προσπαθήσετε ξανά;</string>
+  <string name="best_fit">Βέλτιστη προσαρμογή</string>
+  <string name="fill">Γέμισμα</string>
+  <string name="fit_horizontal">Οριζόντια προσαρμογή</string>
+  <string name="fit_vertical">Κάθετη προσαρμογή</string>
+  <string name="original_size">Αρχική</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Αποδοχή</string>
+  <string name="leave">Αποχώρηση</string>
+  <!--SettingsActivity strings-->
+  <string name="settings">Προτιμήσεις</string>
+  <string name="general">Γενικά</string>
+  <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
+  <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>
+  <string name="i18n_language">Γλώσσα εφαρμογής</string>
+  <string name="restart_effect">Επανεκκινήστε την εφαρμογή για να ισχύσουν οι αλλαγές</string>
+  <string name="device_language">Γλώσσα συσκευής</string>
+  <string name="stream_over_wifi_only">Ροή δεδομένων μόνο με Wi-Fi</string>
+  <string name="internal_player">Εσωτερικό</string>
+  <string name="subtitle_color">Χρώμα</string>
+  <string name="subtitle_size">Μέγεθος</string>
+  <string name="subtitle_language">Προκαθορισμένη γλώσσα</string>
+  <string name="no_default_set">Καμία προκαθορισμένη γλώσσα</string>
+  <string name="advanced">Προχωρημένες</string>
+  <string name="storage_location">Τοποθεσία αποθήκευσης</string>
+  <string name="storage_automatic">Αυτόματα</string>
+  <string name="storage_choose">Επιλογή τοποθεσίας</string>
+  <string name="not_writable">Η τοποθεσία δεν είναι εγγράψιμη</string>
+  <string name="remove_cache">Αφαίρεση κρυφής μνήμης στο κλείσιμο</string>
+  <string name="hw_acceleration">Επιτάχυνση υλικού</string>
+  <string name="hw_automatic">Αυτόματα</string>
+  <string name="hw_full">Πλήρης</string>
+  <string name="hw_decoding">Αποκωδικοποίηση μόνο</string>
+  <string name="updates">Ενημερώσεις</string>
+  <string name="auto_updates">Αυτόματες ενημερώσεις</string>
+  <string name="check_for_updates">Έλεγχος για ενημερώσεις</string>
+  <string name="last_check">Τελευταίος έλεγχος</string>
+  <string name="about">Περί</string>
+  <string name="version">Έκδοση</string>
+  <string name="changelog">Αρχείο αλλαγών</string>
+  <string name="tap_to_open">Πατήστε για άνοιγμα</string>
+  <string name="report_a_bug">Αναφορά προβλήματος</string>
+  <string name="open_source_licenses">Άδειες ανοιχτού κώδικα</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Μόνο Wi-Fi</string>
+  <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="false"
+    android:background="@drawable/selectable_background">
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="@dimen/iconlist_icon_width"
+        android:layout_height="@dimen/iconlist_icon_width"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/iconlist_icon_margin_horizontal"
+        android:layout_marginStart="@dimen/iconlist_icon_margin_horizontal"
+        android:scaleType="centerInside"
+        tools:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/iconlist_text_margin_horizontal"
+        android:layout_marginStart="@dimen/iconlist_text_margin_horizontal"
+        android:layout_marginRight="@dimen/iconlist_text_margin_horizontal"
+        android:layout_marginEnd="@dimen/iconlist_text_margin_horizontal"
+        android:paddingTop="@dimen/iconlist_text_twolines_padding"
+        android:paddingBottom="@dimen/iconlist_text_twolines_padding">
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="@dimen/iconlist_text_size"
+            android:textColor="@color/text_color"
+            tools:text="Title Text" />
+
+        <TextView
+            android:id="@android:id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2sp"
+            android:textSize="@dimen/iconlist_secondary_text_size"
+            android:textColor="@color/secondary_text_color"
+            tools:text="Subtitle Text" />
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@android:id/checkbox"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_gravity="end|center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/iconlist_icon_margin_horizontal"
+        android:layout_marginEnd="@dimen/iconlist_icon_margin_horizontal" />
+</FrameLayout>

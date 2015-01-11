@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Mentés</string>
+  <string name="cancel">Mégse</string>
+  <string name="close">Bezárás</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Engedélyezve</string>
+  <string name="disabled">Kikapcsolva</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Cím, év, színészek</string>
+  <string name="title_shows">Műsorok</string>
+  <string name="title_movies">Filmek</string>
+  <string name="search">Keresés</string>
+  <string name="loading_data">Adatok betöltése...</string>
+  <string name="no_data_found">Nem található adat</string>
+  <string name="unknown_error">Valami rosszul sült el</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">perc</string>
+  <string name="watch_trailer">Előzetes megnézése</string>
+  <string name="disable_subs">Feliratok kikapcsolása</string>
+  <string name="no_subs">Nincs felirat</string>
+  <string name="subtitles">Feliratok</string>
+  <string name="quality">Minőség</string>
+  <string name="trailer">Előzetes</string>
+  <string name="season">Évad</string>
+  <string name="episode">Epizód</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">Adatfolyam elkezdődött</string>
+  <string name="waiting_for_subtitles">Várakozás feliratra</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Most játszott</string>
+  <string name="volume">Hangerő</string>
+  <string name="brightness">Fényerő</string>
+  <string name="hardware_acceleration_error_title">HW gyorsítás hiba</string>
+  <string name="hardware_acceleration_error_message">Egy hiba történt a hardver gyorsítással. Szeretné kikapcsolni és újra megpróbálni?</string>
+  <string name="best_fit">Legjobban illeszkedő</string>
+  <string name="fill">Kitőlt</string>
+  <string name="fit_horizontal">Vízszintes illesztés</string>
+  <string name="fit_vertical">Függőleges illesztés</string>
+  <string name="original_size">Eredeti</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Elfogad</string>
+  <string name="leave">Kilépés</string>
+  <!--SettingsActivity strings-->
+  <string name="settings">Beállítások</string>
+  <string name="general">Általános</string>
+  <string name="default_view">Kezdőképernyő</string>
+  <string name="default_player">Alapértelmezett videó lejátszó</string>
+  <string name="i18n_language">Alkalmazás nyelve</string>
+  <string name="restart_effect">Indítsa újra az alkalmazást a változtatások érvénybe léptetéséhez</string>
+  <string name="device_language">Készülék nyelve</string>
+  <string name="stream_over_wifi_only">Stream csak Wi-Fi-n</string>
+  <string name="internal_player">Belső</string>
+  <string name="subtitle_color">Szín</string>
+  <string name="subtitle_size">Méret</string>
+  <string name="subtitle_language">Alapértelmezett nyelv</string>
+  <string name="no_default_set">Nincs alapértelmezett nyelv</string>
+  <string name="advanced">Haladó</string>
+  <string name="storage_location">Tároló hely</string>
+  <string name="storage_automatic">Automaitkus</string>
+  <string name="storage_choose">Hely választás</string>
+  <string name="not_writable">A hely nem írható</string>
+  <string name="remove_cache">Gyorsítótár törlése lejátszó bezárásakor</string>
+  <string name="hw_acceleration">Hardveres gyorsítás</string>
+  <string name="hw_automatic">Autómatikus</string>
+  <string name="hw_full">Teljes</string>
+  <string name="hw_decoding">Csak dekódolás</string>
+  <string name="updates">Frissítések</string>
+  <string name="auto_updates">Automatikus frissítések</string>
+  <string name="check_for_updates">Frissítések keresése</string>
+  <string name="about">Névjegy</string>
+  <string name="version">Verzió</string>
+  <string name="changelog">Változások listája</string>
+  <string name="tap_to_open">Érintse meg a megnyitáshoz</string>
+  <string name="report_a_bug">Hiba jelentése</string>
+  <string name="open_source_licenses">Nyílt forráskódú engedélyek</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">csak Wi-Fi</string>
+  <string name="wifi_only_message">Csak Wi-Fi-n tud videót streamelni. Kikapcsolhatja a beállításoknál ha mobil hálózaton keresztűl akar streamelni.</string>
+</resources>

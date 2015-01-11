@@ -38,6 +38,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.StringUtils;
@@ -406,11 +407,8 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
         if (!mOverlayVisible) {
             updatePlayPause();
 
-            Animation fadeOutAnim = AnimationUtils.loadAnimation(TrailerPlayerActivity.this, android.R.anim.fade_in);
-            controlLayout.setVisibility(View.VISIBLE);
-            controlLayout.startAnimation(fadeOutAnim);
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar.startAnimation(fadeOutAnim);
+            AnimUtils.fadeIn(controlLayout);
+            AnimUtils.fadeIn(toolbar);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
@@ -432,11 +430,8 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     public void hideOverlay() {
         // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
         if (mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
-            Animation fadeOutAnim = AnimationUtils.loadAnimation(TrailerPlayerActivity.this, android.R.anim.fade_out);
-            controlLayout.startAnimation(fadeOutAnim);
-            controlLayout.setVisibility(View.GONE);
-            toolbar.startAnimation(fadeOutAnim);
-            toolbar.setVisibility(View.GONE);
+            AnimUtils.fadeOut(controlLayout);
+            AnimUtils.fadeOut(toolbar);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;

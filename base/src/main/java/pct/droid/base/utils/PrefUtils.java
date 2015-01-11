@@ -109,7 +109,7 @@ public class PrefUtils {
     }
 
     /**
-     * Check if the central {@link ObscuredSharedPreferences} contain a preference that uses that key
+     * Check if the central {@link ObscuredSharedPreferences} contains a preference that uses that key
      *
      * @param context Context
      * @param key     Key
@@ -117,6 +117,16 @@ public class PrefUtils {
      */
     public static Boolean contains(Context context, String key) {
         return getPrefs(context).contains(key);
+    }
+
+    /**
+     * Remove item from the central {@link ObscuredSharedPreferences} if it exists
+     *
+     * @param context Context
+     * @param key     Key
+     */
+    public static void remove(Context context, String key) {
+        getPrefs(context).edit().remove(key).apply();
     }
 
     /**

@@ -1,6 +1,5 @@
 package pct.droid.base.providers.subs;
 
-import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -69,6 +68,7 @@ public class YSubsProvider extends SubsProvider {
     public void getList(final Movie media, final Callback callback) {
         final Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(mApiUrl + media.videoId);
+        requestBuilder.tag(SUBS_CALL);
 
         fetch(requestBuilder, media, new Callback() {
             @Override

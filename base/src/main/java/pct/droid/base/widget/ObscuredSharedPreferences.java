@@ -192,9 +192,9 @@ public class ObscuredSharedPreferences implements SharedPreferences {
             Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
             pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID).getBytes(UTF8), 20));
             return new String(pbeCipher.doFinal(bytes), UTF8);
-
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            delegate.edit().clear().apply();
+            return null;
         }
     }
 

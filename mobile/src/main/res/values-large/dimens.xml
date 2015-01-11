@@ -12,7 +12,7 @@
     <dimen name="context_icon">28dp</dimen>
     <dimen name="divider_margin">72dp</dimen>
 
-    <dimen name="parallax_header_height">428dp</dimen>
+    <dimen name="parallax_header_height">528dp</dimen>
 
     <dimen name="player_controls_margin">64dp</dimen>
     <dimen name="player_controls_bottom_margin">32dp</dimen>

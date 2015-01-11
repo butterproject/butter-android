@@ -26,33 +26,45 @@ import java.util.Locale;
 
 public class StringUtils {
 
-    /**
-     * Convert time to a string
-     *
-     * @param millis e.g.time/length from file
-     * @return Formatted string (hh:)mm:ss
-     */
-    public static String millisToString(long millis) {
-        boolean negative = millis < 0;
-        millis = Math.abs(millis);
+	/**
+	 * Convert time to a string
+	 *
+	 * @param millis e.g.time/length from file
+	 *
+	 * @return Formatted string (hh:)mm:ss
+	 */
+	public static String millisToString(long millis) {
+		boolean negative = millis < 0;
+		millis = Math.abs(millis);
 
-        millis /= 1000;
-        int sec = (int) (millis % 60);
-        millis /= 60;
-        int min = (int) (millis % 60);
-        millis /= 60;
-        int hours = (int) millis;
+		millis /= 1000;
+		int sec = (int) (millis % 60);
+		millis /= 60;
+		int min = (int) (millis % 60);
+		millis /= 60;
+		int hours = (int) millis;
 
-        String time;
-        DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        format.applyPattern("00");
-        if (millis > 0) {
-            time = (negative ? "-" : "") + hours + ":" + format.format(min) + ":" + format.format(sec);
-        } else {
-            time = (negative ? "-" : "") + min + ":" + format.format(sec);
-        }
+		String time;
+		DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+		format.applyPattern("00");
+		if (millis > 0) {
+			time = (negative ? "-" : "") + hours + ":" + format.format(min) + ":" + format.format(sec);
+		} else {
+			time = (negative ? "-" : "") + min + ":" + format.format(sec);
+		}
 
-        return time;
-    }
+		return time;
+	}
+
+	/**
+	 * Uppercase first character
+	 *
+	 * @param str Input string
+	 *
+	 * @return Output string
+	 */
+	public static String uppercaseFirst(String str) {
+		return str.substring(0, 1).toUpperCase(Locale.getDefault()) + str.substring(1, str.length());
+	}
 
 }
