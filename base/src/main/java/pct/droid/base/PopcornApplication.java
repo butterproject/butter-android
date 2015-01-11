@@ -71,8 +71,8 @@ public class PopcornApplication extends VLCApplication {
 			Timber.plant(new Timber.DebugTree());
 		}
 
-        Intent nodeServiceIntent = new Intent(this, StreamerService.class);
-        bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        Intent streamerServiceIntent = new Intent(this, StreamerService.class);
+        bindService(streamerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
         File directory = new File(path, "/torrents/");
@@ -81,9 +81,7 @@ public class PopcornApplication extends VLCApplication {
             FileUtils.recursiveDelete(new File(path + "/subs"));
         } else {
             File statusFile = new File(directory, "status.json");
-            File streamerFile = new File(directory, "streamer.json");
             statusFile.delete();
-            streamerFile.delete();
         }
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
@@ -178,7 +176,7 @@ public class PopcornApplication extends VLCApplication {
 
         for (int i = 0; i < runningAppProcesses.size(); i++) {
             ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
-            if (info.processName.equalsIgnoreCase(mPackageName + ":node")) {
+            if (info.processName.equalsIgnoreCase(mPackageName + ":streamer")) {
                 android.os.Process.killProcess(info.pid);
             }
         }
@@ -188,9 +186,7 @@ public class PopcornApplication extends VLCApplication {
             FileUtils.recursiveDelete(torrentPath);
         } else {
             File statusFile = new File(torrentPath, "status.json");
-            File streamerFile = new File(torrentPath, "streamer.json");
             statusFile.delete();
-            streamerFile.delete();
         }
 
         startService();
@@ -198,8 +194,8 @@ public class PopcornApplication extends VLCApplication {
 
     public void startService() {
         if (mBound) return;
-        Intent nodeServiceIntent = new Intent(this, StreamerService.class);
-        bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        Intent streamerServiceIntent = new Intent(this, StreamerService.class);
+        bindService(streamerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
