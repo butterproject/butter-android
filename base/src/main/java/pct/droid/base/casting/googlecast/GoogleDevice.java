@@ -27,4 +27,10 @@ public class GoogleDevice extends CastingDevice {
     public CastDevice getCastDevice() {
         return device;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof GoogleDevice && ((GoogleDevice) o).routeInfo.equals(routeInfo);
+
+    }
 }

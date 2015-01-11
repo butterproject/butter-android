@@ -32,7 +32,7 @@ import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
-import pct.droid.fragments.CastDeviceSelectorDialogFragment;
+import pct.droid.dialogfragments.CastDeviceSelectorDialogFragment;
 import pct.droid.fragments.MediaListFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
 import pct.droid.utils.ToolbarUtils;
