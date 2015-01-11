@@ -1,7 +1,8 @@
 package pct.droid.base.providers;
 
+import android.os.AsyncTask;
+
 import com.google.gson.Gson;
-import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -9,14 +10,14 @@ import com.squareup.okhttp.Request;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.utils.StorageUtils;
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.meta.MetaProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 
 /**
  * BaseProvider.java
@@ -25,23 +26,11 @@ import pct.droid.base.utils.StorageUtils;
  */
 public abstract class BaseProvider {
 
-    private OkHttpClient mClient;
     protected Gson mGson = new Gson();
     protected Call mCurrentCall;
 
     protected OkHttpClient getClient() {
-        if(mClient == null) {
-            mClient = new OkHttpClient();
-
-            int cacheSize = 10 * 1024 * 1024;
-            try {
-                Cache cache = new Cache(new File(PopcornApplication.getStreamDir()), cacheSize);
-                mClient.setCache(cache);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return mClient;
+        return PopcornApplication.getHttpClient();
     }
 
     /**
@@ -68,9 +57,16 @@ public abstract class BaseProvider {
     }
 
     public void cancel() {
-        if (mCurrentCall != null) {
-            mCurrentCall.cancel();
-        }
+        // Cancel in asynctask to prevent networkOnMainThreadException
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                getClient().cancel(MediaProvider.MEDIA_CALL);
+                getClient().cancel(MetaProvider.META_CALL);
+                getClient().cancel(SubsProvider.SUBS_CALL);
+                return null;
+            }
+        }.execute();
     }
 
     /**

@@ -34,9 +34,10 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 import pct.droid.base.Constants;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.widget.ObscuredSharedPreferences;
 
 public class PopcornUpdater extends Observable {
 
@@ -58,19 +59,17 @@ public class PopcornUpdater extends Observable {
     private final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
     private final String DATA_URL = "http://ci.popcorntime.io/android";
 
-    private final String TAG = "PopcornUpdater";
+    public static final String LAST_UPDATE_CHECK = "update_check";
+    private static final String LAST_UPDATE_KEY = "last_update";
+    private static final String UPDATE_FILE = "update_file";
+    private static final String SHA1_TIME = "sha1_update_time";
+    private static final String SHA1_KEY = "sha1_update";
 
-    private final String LAST_UPDATE_KEY = "last_update";
-    private final String UPDATE_FILE = "update_file";
-    private final String SHA1_TIME = "sha1_update_time";
-    private final String SHA1_KEY = "sha1_update";
-
-    private final OkHttpClient mHttpClient = new OkHttpClient();
+    private final OkHttpClient mHttpClient = PopcornApplication.getHttpClient();
     private final Gson mGson = new Gson();
     private final Handler mUpdateHandler = new Handler();
 
     private Context mContext = null;
-    private ObscuredSharedPreferences mPreferences;
     private long lastUpdate = 0;
     private String mPackageName;
     private String mVersionName;
@@ -84,7 +83,6 @@ public class PopcornUpdater extends Observable {
         }
 
         mContext = context;
-        mPreferences = PrefUtils.getPrefs(mContext);
         mPackageName = context.getPackageName();
 
         try {
@@ -95,19 +93,19 @@ public class PopcornUpdater extends Observable {
             e.printStackTrace();
         }
 
-        lastUpdate = mPreferences.getLong(LAST_UPDATE_KEY, 0);
+        lastUpdate = PrefUtils.get(mContext, LAST_UPDATE_KEY, 0l);
         NOTIFICATION_ID += crc32(mPackageName);
 
         ApplicationInfo appinfo = context.getApplicationInfo();
 
-        if (new File(appinfo.sourceDir).lastModified() > mPreferences.getLong(SHA1_TIME, 0)) {
-            mPreferences.edit().putString(SHA1_KEY, SHA1(appinfo.sourceDir)).commit();
-            mPreferences.edit().putLong(SHA1_TIME, System.currentTimeMillis()).commit();
+        if (new File(appinfo.sourceDir).lastModified() > PrefUtils.get(mContext, SHA1_TIME, 0l)) {
+            PrefUtils.save(mContext, SHA1_KEY, SHA1(appinfo.sourceDir));
+            PrefUtils.save(mContext, SHA1_TIME, System.currentTimeMillis());
 
-            String update_file = mPreferences.getString(UPDATE_FILE, "");
+            String update_file = PrefUtils.get(mContext, UPDATE_FILE, "");
             if (update_file.length() > 0) {
                 if (new File(context.getFilesDir().getAbsolutePath() + "/" + update_file).delete()) {
-                    mPreferences.edit().remove(UPDATE_FILE).commit();
+                    PrefUtils.remove(mContext, UPDATE_FILE);
                 }
             }
         }
@@ -133,11 +131,18 @@ public class PopcornUpdater extends Observable {
         }
     };
 
-    private void checkUpdates(boolean forced) {
+    public void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
+
+        if (!PrefUtils.get(mContext, Prefs.AUTOMATIC_UPDATES, true) && !forced) {
+            return;
+        }
+
+        PrefUtils.save(mContext, LAST_UPDATE_CHECK, now);
+
         if (forced || (lastUpdate + UPDATE_INTERVAL) < now) {
             lastUpdate = System.currentTimeMillis();
-            mPreferences.edit().putLong(LAST_UPDATE_KEY, lastUpdate).apply();
+            PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
             setChanged();
             notifyObservers(STATUS_CHECKING);
 
@@ -185,7 +190,7 @@ public class PopcornUpdater extends Observable {
                                 }
                             }
 
-                            if (channel == null || channel.checksum.equals(mPreferences.getString(SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                            if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
                                 setChanged();
                                 notifyObservers(STATUS_NO_UPDATE);
                             } else {
@@ -225,10 +230,10 @@ public class PopcornUpdater extends Observable {
                     fos.write(response.body().bytes());
                     fos.close();
 
-                    mPreferences.edit().putString(UPDATE_FILE, fileName).apply();
+                    PrefUtils.save(mContext, UPDATE_FILE, fileName);
 
                     String update_file_path = mContext.getFilesDir().getAbsolutePath() + "/" + fileName;
-                    mPreferences.edit()
+                    PrefUtils.getPrefs(mContext).edit()
                             .putString(SHA1_KEY, SHA1(update_file_path))
                             .putString(UPDATE_FILE, fileName)
                             .putLong(SHA1_TIME, System.currentTimeMillis())
@@ -269,13 +274,13 @@ public class PopcornUpdater extends Observable {
     public void sendNotification() {
         NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String updateFile = mPreferences.getString(UPDATE_FILE, "");
+        String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
         if (updateFile.length() > 0) {
             setChanged();
             notifyObservers(STATUS_HAVE_UPDATE);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
-                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_notif_logo)
                     .setContentTitle(mContext.getString(R.string.update_available))
                     .setContentText(mContext.getString(R.string.press_install))
                     .setAutoCancel(true)

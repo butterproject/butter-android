@@ -1,53 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:fitsSystemWindows="true" />
+	<include layout="@layout/toolbar" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/terms" />
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/toolbar">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin">
-                <Button
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/leave"
-                    android:backgroundTint="@color/red"
-                    android:onClick="leaveClick" />
-                <Button
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accept"
-                    android:backgroundTint="@color/green"
-                    android:onClick="acceptClick" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:paddingTop="@dimen/activity_vertical_margin"
+			android:paddingBottom="@dimen/activity_vertical_margin">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/terms" />
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/activity_vertical_margin">
+
+				<Button
+					android:layout_weight="0.5"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/leave"
+					android:backgroundTint="@color/red"
+					android:onClick="leaveClick" />
+
+				<Button
+					android:layout_weight="0.5"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/accept"
+					android:backgroundTint="@color/green"
+					android:onClick="acceptClick" />
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
 </RelativeLayout>

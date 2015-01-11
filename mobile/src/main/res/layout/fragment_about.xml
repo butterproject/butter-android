@@ -1,0 +1,88 @@
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	tools:context="pct.droid.activities.AboutActivity"
+	tools:showIn="pct.droid.activities.AboutActivity"
+	android:fitsSystemWindows="false"
+	android:layout_width="match_parent">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context="pct.droid.fragments.AboutFragment">
+
+		<ImageView
+			android:id="@+id/logo_imageview"
+			android:layout_width="wrap_content"
+			android:layout_margin="32dp"
+			android:src="@drawable/popcorn_logo"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/message_textview"
+			android:layout_width="wrap_content"
+			android:layout_below="@+id/logo_imageview"
+			android:layout_margin="16dp"
+			android:text="@string/about_message"
+			android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+			android:gravity="center"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/popcorn_button"
+			android:drawableTop="@drawable/icon_popcorn"
+			android:text="@string/website"
+			android:layout_below="@+id/message_textview"
+			style="@style/AboutButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/discuss_button"
+			android:drawableTop="@drawable/icon_discourse"
+			android:text="@string/discuss"
+			android:layout_below="@+id/popcorn_button"
+			style="@style/AboutButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/blog_button"
+			android:drawableTop="@drawable/icon_blog"
+			android:text="@string/blog"
+			style="@style/AboutButton"
+			android:layout_below="@+id/discuss_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/twitter_button"
+			android:drawableTop="@drawable/icon_twitter"
+			android:layout_below="@+id/blog_button"
+			android:text="@string/twitter"
+			style="@style/AboutButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/facebook_button"
+			android:drawableTop="@drawable/icon_facebook"
+			android:text="@string/facebook"
+			android:layout_below="@+id/twitter_button"
+			style="@style/AboutButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/git_button"
+			android:drawableTop="@drawable/icon_stash"
+			android:text="@string/git"
+			android:layout_below="@+id/facebook_button"
+			android:layout_marginBottom="64dp"
+			style="@style/AboutButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+	</RelativeLayout>
+
+</ScrollView>

@@ -1,51 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.DrawerLayout
+	android:id="@+id/drawer_layout"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:fitsSystemWindows="true"
+	android:clipToPadding="false"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:fitsSystemWindows="true" />
+	<!-- As the main content view, the view below consumes the entire
+		 space available using match_parent in both dimensions. -->
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar" />
+		<include layout="@layout/toolbar"/>
 
-    <TextView
-        android:id="@+id/emptyView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/no_data_found"
-        android:visibility="gone" />
+		<FrameLayout
+			android:id="@+id/container"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1" />
+	</LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/progressOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical"
-        android:gravity="center">
+	<pct.droid.widget.ScrimInsetsFrameLayout
+		android:id="@+id/navigation_drawer_container"
+		android:layout_width="@dimen/nav_drawer_width"
+		android:layout_gravity="start"
+		android:layout_height="match_parent"
+		android:fitsSystemWindows="true"
+		android:clipToPadding="false"
+		app:insetForeground="#2000">
 
-        <ProgressBar
-            android:id="@+id/progressIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            style="?android:attr/progressBarStyleLarge" />
+		<fragment
+			android:id="@+id/navigation_drawer_fragment"
+			class="pct.droid.fragments.NavigationDrawerFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+	</pct.droid.widget.ScrimInsetsFrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/loading" />
-    </LinearLayout>
-
-</RelativeLayout>
+</android.support.v4.widget.DrawerLayout>
