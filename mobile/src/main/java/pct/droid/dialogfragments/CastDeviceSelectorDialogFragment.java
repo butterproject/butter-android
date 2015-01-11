@@ -15,6 +15,8 @@ import pct.droid.base.casting.CastingManager;
 
 public class CastDeviceSelectorDialogFragment extends DialogFragment {
 
+    private CastingDeviceAdapter mAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,16 +24,16 @@ public class CastDeviceSelectorDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final CastingDeviceAdapter adapter = new CastingDeviceAdapter(getActivity());
+        mAdapter = new CastingDeviceAdapter(getActivity());
         AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
-                .setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(mAdapter, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int position) {
                         CastingDevice device;
                         if(position == 0) {
                             device = null;
                         } else {
-                            device = adapter.getItem(position);
+                            device = mAdapter.getItem(position);
                         }
                         CastingManager.getInstance(getActivity()).setDevice(device);
                         dismiss();
@@ -53,6 +55,13 @@ public class CastDeviceSelectorDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(null != mAdapter)
+            mAdapter.destroy();
     }
 
     public static void show(FragmentManager fm) {

@@ -62,5 +62,4 @@ public class AirPlayDevice extends CastingDevice {
     public Boolean isPasswordProtected() {
         return pw;
     }
-
 }

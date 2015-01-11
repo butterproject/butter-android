@@ -238,6 +238,7 @@ public class MovieDetailActivity extends BaseActivity {
 		getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
         setSupportActionBar(toolbar);
+        setShowCasting(true);
 
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

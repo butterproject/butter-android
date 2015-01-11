@@ -31,6 +31,7 @@ import javax.jmdns.ServiceListener;
 
 import pct.droid.base.casting.BaseCastingClient;
 import pct.droid.base.casting.CastingDevice;
+import pct.droid.base.casting.CastingListener;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.utils.LogUtils;
 
@@ -52,13 +53,13 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
     private AirPlayDiscovery mDiscovery;
     private Handler mPingHandler;
     private Handler mHandler;
-    private AirPlayCallback mCallback;
+    private CastingListener mListener;
     private OkHttpClient mHttpClient = new OkHttpClient();
     private AirPlayDevice mCurrentDevice;
     private String mCurrentState = "stopped", mSessionId = null, mPassword = null;
 
-    public AirPlayClient(Context context, AirPlayCallback callback) {
-        mCallback = callback;
+    public AirPlayClient(Context context, CastingListener listener) {
+        mListener = listener;
         mHandler = new Handler(context.getApplicationContext().getMainLooper());
         mPingHandler = new Handler(context.getApplicationContext().getMainLooper());
         mDiscovery = AirPlayDiscovery.getInstance(context, this);
@@ -119,7 +120,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
         mSessionId = UUID.randomUUID().toString();
         LogUtils.d("Session ID: " + mSessionId);
 
-        mCallback.onDeviceSelected(mCurrentDevice);
+        mListener.onDeviceSelected(mCurrentDevice);
         mPingRunnable.run();
         // initEvents();
     }
@@ -133,7 +134,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
         stop();
         mPingHandler.removeCallbacks(mPingRunnable);
         mHandler.removeCallbacks(mPlaybackRunnable);
-        mCallback.onDisconnected();
+        mListener.onDisconnected();
     }
 
     /**
@@ -193,7 +194,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
             public void onFailure(Request request, IOException e) {
                 e.printStackTrace();
                 LogUtils.d("Failed to load media: " + e.getMessage());
-                mCallback.onCommandFailed("play", e.getMessage());
+                mListener.onCommandFailed("play", e.getMessage());
             }
 
             @Override
@@ -204,7 +205,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
                     LogUtils.d("Load media successful");
                 } else {
                     LogUtils.d("Failed to play media");
-                    mCallback.onCommandFailed("play", "Failed to play media");
+                    mListener.onCommandFailed("play", "Failed to play media");
                 }
             }
         });
@@ -288,13 +289,13 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
         mHttpClient.newCall(stopRequest).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                mCallback.onCommandFailed("stop", e.getMessage());
+                mListener.onCommandFailed("stop", e.getMessage());
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    mCallback.onCommandFailed("stop", "Cannot stop");
+                    mListener.onCommandFailed("stop", "Cannot stop");
                 } else {
                     mHandler.removeCallbacks(mPlaybackRunnable);
                 }
@@ -334,14 +335,14 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
                 @Override
                 public void onFailure(Request request, IOException e) {
                     mSessionId = null;
-                    mCallback.onCommandFailed("server-info", e.getMessage());
-                    mCallback.onDisconnected();
+                    mListener.onCommandFailed("server-info", e.getMessage());
+                    mListener.onDisconnected();
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
                     if (response.isSuccessful()) {
-                        mCallback.onConnected();
+                        mListener.onConnected(mCurrentDevice);
                         LogUtils.d("Ping successful to " + mCurrentDevice.getIpAddress());
                         mPingHandler.postDelayed(mPingRunnable, 30000);
                     }
@@ -358,7 +359,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
             mHttpClient.newCall(infoRequest).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    mCallback.onCommandFailed("playback-info", e.getMessage());
+                    mListener.onCommandFailed("playback-info", e.getMessage());
                 }
 
                 @Override
@@ -381,7 +382,11 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
 
                             LogUtils.d("PlaybackInfo: playing: " + playing + ", rate: " + rate + ", position: " + position + ", ready: " + readyToPlay);
 
-                            mCallback.onPlaybackInfo(playing, position, rate, readyToPlay);
+                            if(readyToPlay) {
+                                mListener.onReady();
+                            }
+
+                            mListener.onPlayBackChanged(playing, position);
 
                             if (position == duration) return;
 
@@ -390,7 +395,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
                             e.printStackTrace();
                         }
                     } else {
-                        mCallback.onCommandFailed("playback-info", "Cannot get playback info");
+                        mListener.onCommandFailed("playback-info", "Cannot get playback info");
                     }
                 }
             });
@@ -408,10 +413,10 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
         LogUtils.d("Removed AirPlay service: " + event.getName());
         mDiscoveredServices.remove(event.getInfo().getKey());
         AirPlayDevice removedDevice = new AirPlayDevice(event.getInfo());
-        mCallback.onDeviceRemoved(removedDevice);
+        mListener.onDeviceRemoved(removedDevice);
         if (mCurrentDevice != null && mCurrentDevice.getId().equals(removedDevice.getId())) {
             mPingHandler.removeCallbacks(mPingRunnable);
-            mCallback.onDisconnected();
+            mListener.onDisconnected();
             mCurrentDevice = null;
         }
     }
@@ -420,7 +425,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
     public void serviceResolved(ServiceEvent event) {
         LogUtils.d("Resolved AirPlay service: " + event.getName() + " @ " + event.getInfo().getURL());
         AirPlayDevice device = new AirPlayDevice(event.getInfo());
-        mCallback.onDeviceDetected(device);
+        mListener.onDeviceDetected(device);
         mDiscoveredServices.put(event.getInfo().getKey(), event.getInfo());
     }
 

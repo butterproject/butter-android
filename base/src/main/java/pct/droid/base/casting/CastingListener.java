@@ -6,6 +6,8 @@ public interface CastingListener {
 
     public void onDisconnected();
 
+    public void onCommandFailed(String command, String message);
+
     public void onConnectionFailed();
 
     public void onDeviceDetected(CastingDevice device);

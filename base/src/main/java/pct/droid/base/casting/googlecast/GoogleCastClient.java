@@ -26,6 +26,7 @@ import java.util.Set;
 import pct.droid.base.Constants;
 import pct.droid.base.casting.BaseCastingClient;
 import pct.droid.base.casting.CastingDevice;
+import pct.droid.base.casting.CastingListener;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.utils.LogUtils;
 
@@ -35,16 +36,16 @@ public class GoogleCastClient extends BaseCastingClient {
 
     private Context mContext;
     private Handler mHandler;
-    private GoogleCastCallback mCallback;
+    private CastingListener mListener;
     private MediaRouter mMediaRouter;
     private GoogleApiClient mGoogleApiClient;
     private GoogleDevice mCurrentDevice;
     private boolean mWaitingForReconnect = false, mApplicationStarted = false;
     private RemoteMediaPlayer mRemoteMediaPlayer;
 
-    public GoogleCastClient(Context context, GoogleCastCallback callback) {
+    public GoogleCastClient(Context context, CastingListener listener) {
         mContext = context;
-        mCallback = callback;
+        mListener = listener;
         mHandler = new Handler(context.getApplicationContext().getMainLooper());
         mMediaRouter = MediaRouter.getInstance(context.getApplicationContext());
 
@@ -135,7 +136,7 @@ public class GoogleCastClient extends BaseCastingClient {
 
 
 
-        mCallback.onDeviceSelected(mCurrentDevice);
+        mListener.onDeviceSelected(mCurrentDevice);
         // initEvents();
     }
 
@@ -154,7 +155,7 @@ public class GoogleCastClient extends BaseCastingClient {
 
         mCurrentDevice = null;
         mMediaRouter.selectRoute(mMediaRouter.getDefaultRoute());
-        mCallback.onDisconnected();
+        mListener.onDisconnected();
     }
 
     @Override
@@ -184,7 +185,7 @@ public class GoogleCastClient extends BaseCastingClient {
                 mWaitingForReconnect = false;
                 reconnectChannels();
             } else {
-                mCallback.onConnected();
+                mListener.onConnected(mCurrentDevice);
                 try {
                     LaunchOptions launchOptions = new LaunchOptions.Builder().setRelaunchIfRunning(false).build();
                     Cast.CastApi.launchApplication(mGoogleApiClient, Constants.CAST_ID, launchOptions)
@@ -215,7 +216,7 @@ public class GoogleCastClient extends BaseCastingClient {
     private GoogleApiClient.OnConnectionFailedListener mConnectionFailedListener = new GoogleApiClient.OnConnectionFailedListener() {
         @Override
         public void onConnectionFailed(ConnectionResult connectionResult) {
-            mCallback.onConnectionFailed();
+            mListener.onConnectionFailed();
         }
     };
 
@@ -263,7 +264,7 @@ public class GoogleCastClient extends BaseCastingClient {
             super.onRouteUnselected(router, route);
             if (mCurrentDevice != null && mCurrentDevice.equals(new GoogleDevice(route))) {
                 mCurrentDevice = null;
-                mCallback.onDisconnected();
+                mListener.onDisconnected();
             }
         }
 
@@ -272,7 +273,7 @@ public class GoogleCastClient extends BaseCastingClient {
             super.onRouteAdded(router, route);
             GoogleDevice device = new GoogleDevice(route);
             if(mDiscoveredDevices.add(route))
-                mCallback.onDeviceDetected(device);
+                mListener.onDeviceDetected(device);
         }
 
         @Override
@@ -280,13 +281,13 @@ public class GoogleCastClient extends BaseCastingClient {
             super.onRouteRemoved(router, route);
             GoogleDevice device = new GoogleDevice(route);
             mDiscoveredDevices.remove(route);
-            mCallback.onDeviceRemoved(device);
+            mListener.onDeviceRemoved(device);
         }
 
         @Override
         public void onRouteVolumeChanged(MediaRouter router, MediaRouter.RouteInfo route) {
             super.onRouteVolumeChanged(router, route);
-            mCallback.onVolumeChanged((double) route.getVolume(), route.getVolume() == 0);
+            mListener.onVolumeChanged((double) route.getVolume(), route.getVolume() == 0);
         }
     };
 
@@ -297,7 +298,7 @@ public class GoogleCastClient extends BaseCastingClient {
             if(mediaStatus != null) {
                 boolean isPlaying = mediaStatus.getPlayerState() == MediaStatus.PLAYER_STATE_PLAYING;
                 float position = (float) mRemoteMediaPlayer.getApproximateStreamPosition();
-                mCallback.onPlayBackChanged(isPlaying, position);
+                mListener.onPlayBackChanged(isPlaying, position);
             }
         }
     };
