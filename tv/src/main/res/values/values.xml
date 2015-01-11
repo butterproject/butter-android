@@ -1,27 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Movie Categories -->
-    <string-array name="categories">
-        <item>action</item>
-        <item>adventure</item>
-        <item>animation</item>
-        <item>biography</item>
-        <item>comedy</item>
-        <item>crime</item>
-        <item>documentary</item>
-        <item>drama</item>
-        <item>family</item>
-        <item>fantasy</item>
-        <item>film-noir</item>
-        <item>history</item>
-        <item>horror</item>
-        <item>music</item>
-        <item>musical</item>
-        <item>romance</item>
-        <item>sci-fi</item>
-        <item>sport</item>
-        <item>thriller</item>
-        <item>war</item>
-        <item>western</item>
-    </string-array>
+
 </resources>

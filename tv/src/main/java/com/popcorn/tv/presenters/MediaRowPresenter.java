@@ -10,10 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import com.popcorn.tv.R;
-import com.popcorn.tv.models.MainMedia;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import java.net.URI;
+
+import pct.droid.base.providers.media.types.Media;
 
 public class MediaRowPresenter extends Presenter {
     private static final String TAG = "MediaObjectPresenter";
@@ -22,7 +23,7 @@ public class MediaRowPresenter extends Presenter {
     private static int CARD_HEIGHT = 213;
 
     static class ViewHolder extends Presenter.ViewHolder {
-        private MainMedia media;
+        private Media media;
         private ImageCardView mCardView;
         private Drawable mDefaultCardImage;
         private PicassoImageCardViewTarget mImageCardViewTarget;
@@ -34,11 +35,11 @@ public class MediaRowPresenter extends Presenter {
             mDefaultCardImage = mContext.getResources().getDrawable(R.drawable.movie);
         }
 
-        public void setMedia(MainMedia m) {
+        public void setMedia(Media m) {
             media = m;
         }
 
-        public MainMedia getMedia() {
+        public Media getMedia() {
             return media;
         }
 
@@ -69,7 +70,7 @@ public class MediaRowPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-        MainMedia media = (MainMedia) item;
+        Media media = (Media) item;
         ((ViewHolder) viewHolder).setMedia(media);
         Log.d(TAG, "onBindViewHolder");
         ((ViewHolder) viewHolder).mCardView.setTitleText(media.title);
