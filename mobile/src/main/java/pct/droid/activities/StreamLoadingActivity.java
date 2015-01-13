@@ -198,7 +198,7 @@ public class StreamLoadingActivity extends BaseActivity {
             final Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
             if (status == null) return;
             LogUtils.d(status.toString());
-            int calculateProgress = (int) Math.floor(status.progress * 12.5);
+            int calculateProgress = (int) Math.floor(status.progress * 15);
             if (calculateProgress > 100) calculateProgress = 100;
             final int progress = calculateProgress;
             if (progressIndicator.getProgress() < 100) {
@@ -227,7 +227,6 @@ public class StreamLoadingActivity extends BaseActivity {
                         } else {
                             progressText.setText(R.string.streaming_started);
                         }
-
 
                         downloadSpeedText.setText(df.format((status.downloadSpeed / 1048576)) + " MB/s");
                         seedsText.setText(status.seeds + " " + getString(R.string.seeds));
