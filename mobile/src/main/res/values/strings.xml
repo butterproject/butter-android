@@ -33,9 +33,12 @@
 	<string name="episode">Episode</string>
 
 	<!-- StreamLoadingActivity strings -->
+    <string name="waiting_torrent">Waiting for torrent</string>
+    <string name="buffering_started">Buffering started</string>
 	<string name="streaming_started">Streaming started</string>
 	<string name="waiting_for_subtitles">Waiting for subtitles</string>
 	<string name="seeds">seeds</string>
+    <string name="error_files">Error: Couldn\'t write files</string>
 
 	<!-- VideoPlayerActivity strings -->
 	<string name="now_playing">Now playing</string>

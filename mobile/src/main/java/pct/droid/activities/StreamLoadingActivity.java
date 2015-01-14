@@ -1,23 +1,26 @@
 package pct.droid.activities;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.FileObserver;
+import android.os.IBinder;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Map;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
@@ -26,12 +29,12 @@ import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
-import pct.droid.base.streamer.Status;
-import pct.droid.base.utils.FileUtils;
-import pct.droid.base.utils.LogUtils;
+import pct.droid.base.streamer.StreamerService;
+import pct.droid.base.streamer.StreamerStatus;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.ThreadUtils;
 
-public class StreamLoadingActivity extends BaseActivity {
+public class StreamLoadingActivity extends BaseActivity implements StreamerService.Listener {
 
     public final static String STREAM_URL = "stream_url";
     public final static String DATA = "video_data";
@@ -39,15 +42,13 @@ public class StreamLoadingActivity extends BaseActivity {
     public final static String QUALITY = "quality";
     public final static String SUBTITLES = "subtitles";
 
-    private FileObserver mFileObserver;
     private SubsProvider mSubsProvider;
     private Boolean mPlayerStarted = false, mHasSubs = false;
+    private StreamerService mService;
 
-    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
-
-    ;
+    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING};
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
-    private String mSubtitleLanguage = null;
+    private String mSubtitleLanguage = null, mVideoLocation = "";
 
     @InjectView(R.id.progressIndicator)
     ProgressBar progressIndicator;
@@ -63,15 +64,10 @@ public class StreamLoadingActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_streamloading);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        while (!getApp().isServiceBound()) {
-            getApp().startService();
-        }
-
         if (!getIntent().hasExtra(STREAM_URL) && !getIntent().hasExtra(DATA)) {
             finish();
         }
 
-        String streamUrl = getIntent().getStringExtra(STREAM_URL);
         final Media data = getIntent().getParcelableExtra(DATA);
 
         if(null != data) {
@@ -138,29 +134,9 @@ public class StreamLoadingActivity extends BaseActivity {
                 }
             }
         }
-
-        getApp().startStreamer(streamUrl);
-
-        String directory = PopcornApplication.getStreamDir();
-        mFileObserver = new FileObserver(directory) {
-            @Override
-            public void onEvent(int event, String path) {
-                if (path == null) return;
-                if (path.contains("status.json")) {
-                    switch (event) {
-                        case CREATE:
-                        case MODIFY:
-                            updateStatus();
-                            break;
-                    }
-                }
-            }
-        };
-
-        mFileObserver.startWatching();
     }
 
-    private void startPlayer(Status status) {
+    private void startPlayer(String location) {
         if (mHasSubs && mSubsStatus == SubsStatus.DOWNLOADING) {
             mHandler.post(new Runnable() {
                 @Override
@@ -171,10 +147,10 @@ public class StreamLoadingActivity extends BaseActivity {
             return;
         }
 
-        if (!mPlayerStarted && progressIndicator.getProgress() == progressIndicator.getMax()) {
+        if (!mPlayerStarted) {
             mPlayerStarted = true;
-            String location = status.filePath;
             if (!DefaultPlayer.start(this, (Media) getIntent().getParcelableExtra(DATA), mSubtitleLanguage, location)) {
+                mService.removeListener();
                 Intent i = new Intent(StreamLoadingActivity.this, VideoPlayerActivity.class);
                 if (getIntent().hasExtra(DATA)) {
                     i.putExtra(VideoPlayerActivity.DATA, getIntent().getParcelableExtra(DATA));
@@ -192,70 +168,101 @@ public class StreamLoadingActivity extends BaseActivity {
         }
     }
 
-    private void updateStatus() {
-        try {
-            final DecimalFormat df = new DecimalFormat("#############0.00");
-            final Status status = Status.parseJSON(FileUtils.getContentsAsString(PopcornApplication.getStreamDir() + "/status.json"));
-            if (status == null) return;
-            LogUtils.d(status.toString());
-            int calculateProgress = (int) Math.floor(status.progress * 15);
-            if (calculateProgress > 100) calculateProgress = 100;
-            final int progress = calculateProgress;
-            if (progressIndicator.getProgress() < 100) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressIndicator.setIndeterminate(false);
-                        progressIndicator.setProgress(progress);
-                        progressText.setText(progress + "%");
+    private void updateStatus(final StreamerStatus status) {
+        final DecimalFormat df = new DecimalFormat("#############0.00");
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressIndicator.setIndeterminate(false);
+                progressIndicator.setProgress(status.bufferProgress);
+                progressText.setText(status.bufferProgress + "%");
 
-                        if (status.downloadSpeed / 1024 < 1000) {
-                            downloadSpeedText.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
-                        } else {
-                            downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
-                        }
-                        seedsText.setText(status.seeds + " " + getString(R.string.seeds));
-                    }
-                });
-            } else {
-                startPlayer(status);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mSubsStatus == SubsStatus.DOWNLOADING) {
-                            progressText.setText(R.string.waiting_for_subtitles);
-                        } else {
-                            progressText.setText(R.string.streaming_started);
-                        }
-
-                        downloadSpeedText.setText(df.format((status.downloadSpeed / 1048576)) + " MB/s");
-                        seedsText.setText(status.seeds + " " + getString(R.string.seeds));
-                    }
-                });
+                if (status.downloadSpeed / 1024 < 1000) {
+                    downloadSpeedText.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
+                } else {
+                    downloadSpeedText.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
+                }
+                seedsText.setText(status.seeds + " " + getString(R.string.seeds));
             }
-        } catch (Exception e) {
-            LogUtils.e(e);
-        }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StreamerService.bindHere(this, mServiceConnection);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mFileObserver.startWatching();
         if (mPlayerStarted) {
             onBackPressed();
         }
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mFileObserver.stopWatching();
+    protected void onStop() {
+        super.onStop();
+        if(mService != null)
+            unbindService(mServiceConnection);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        getApp().stopStreamer();
+        if(mService != null) {
+            mService.stopStreaming();
+        }
     }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((StreamerService.ServiceBinder) service).getService();
+            mService.setListener(StreamLoadingActivity.this);
+            mService.streamTorrent(getIntent().getStringExtra(STREAM_URL));
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
+
+    @Override
+    public void onStreamStarted() {
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressText.setText(R.string.buffering_started);
+            }
+        });
+    }
+
+    @Override
+    public void onStreamError(Exception e) {
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(StreamLoadingActivity.this, R.string.error_files, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onStreamReady(File videoLocation) {
+        mVideoLocation = videoLocation.toString();
+        startPlayer(mVideoLocation);
+    }
+
+    @Override
+    public void onStreamProgress(StreamerStatus status) {
+        if(mVideoLocation.isEmpty()) {
+            updateStatus(status);
+        } else {
+            startPlayer(mVideoLocation);
+        }
+    }
+
 }
