@@ -1,12 +1,12 @@
-package pct.droid.base.streamer;
+package pct.droid.base.torrent;
 
-public class StreamerStatus {
+public class DownloadStatus {
     public float progress;
     public int bufferProgress;
     public int seeds;
     public float downloadSpeed;
 
-    StreamerStatus(float progess, int bufferProgress, int seeds, int downloadSpeed) {
+    DownloadStatus(float progess, int bufferProgress, int seeds, int downloadSpeed) {
         this.progress = progess;
         this.bufferProgress = bufferProgress;
         this.seeds = seeds;

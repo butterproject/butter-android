@@ -216,7 +216,7 @@ public class ShowDetailActivity extends BaseActivity {
                                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                                     } else {
                                         Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
-                                        streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
+                                        streamIntent.putExtra(StreamLoadingActivity.TORRENT_URL, torrent.url);
                                         streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
                                         streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
                                         streamIntent.putExtra(StreamLoadingActivity.DATA, episode);

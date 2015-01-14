@@ -90,7 +90,7 @@
 			android:name="pct.droid.activities.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
-		<service android:name=".base.streamer.StreamerService" />
+		<service android:name=".base.torrent.TorrentService" />
 	</application>
 
 </manifest>
