@@ -50,7 +50,7 @@ SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
 });
  */
 
-public class PlayerActivity extends Activity {
+public class PTVPlayerActivity extends Activity {
 
     private static final String TAG = "PlayerActivity";
 
@@ -261,7 +261,7 @@ public class PlayerActivity extends Activity {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(PlayerActivity.this, PTVMovieDetailActivity.class);
+                    Intent intent = new Intent(PTVPlayerActivity.this, PTVMovieDetailActivity.class);
                     intent.putExtra(getResources().getString(R.string.movie), mSelectedMovie);
                     startActivity(intent);
                 }

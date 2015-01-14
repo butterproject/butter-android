@@ -1,6 +1,7 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,22 +11,27 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
+import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Movie;
 import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.utils.NetworkUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMovieDetailActivity;
@@ -123,19 +129,39 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		// Hook up transition element.
 		detailsPresenter.setSharedElementEnterTransition(getActivity(),
 				PTVMovieDetailActivity.SHARED_ELEMENT_NAME);
-		//
-		//		detailsPresenter.setOnActionClickedListener(new OnActionClickedListener() {
-		//			@Override
-		//			public void onActionClicked(Action action) {
-		//				if (action.getId() == ACTION_WATCH_TRAILER) {
-		//					Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
-		//					intent.putExtra(MovieDetailsActivity.MOVIE, mSelectedMovie);
-		//					startActivity(intent);
-		//				} else {
-		//					Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
-		//				}
-		//			}
-		//		});
+
+		detailsPresenter.setOnActionClickedListener(new OnActionClickedListener() {
+			@Override
+			public void onActionClicked(Action action) {
+
+
+//				final String streamUrl = mItem.torrents.get(mQuality).url;
+//				if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils
+//						.isWifiConnected(MovieDetailActivity.this) &&
+//						NetworkUtils
+//								.isNetworkConnected(MovieDetailActivity.this)) {
+//					MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
+//				} else {
+//					Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
+//					streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+//					streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
+//					streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
+//					if (mSubLanguage != null)
+//						streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
+//					startActivity(streamIntent);
+//				}
+
+
+
+//				if (action.getId() == ACTION_WATCH_TRAILER) {
+//					Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
+//					intent.putExtra(MovieDetailsActivity.MOVIE, mSelectedMovie);
+//					startActivity(intent);
+//				} else {
+//					Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
+//				}
+			}
+		});
 		mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
 	}
 

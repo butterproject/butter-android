@@ -38,189 +38,200 @@ import timber.log.Timber;
 
 public class PopcornApplication extends VLCApplication {
 
-    private Boolean mBound = false;
-    private Messenger mService;
-    private String mShouldBoundUrl = "", mPackageName = "pct.droid";
-    private static OkHttpClient sHttpClient;
-    private static Picasso sPicasso;
-    private static String sDefSystemLanguage;
+	private Boolean mBound = false;
+	private Messenger mService;
+	private String mShouldBoundUrl = "", mPackageName = "pct.droid";
+	private static OkHttpClient sHttpClient;
+	private static Picasso sPicasso;
+	private static String sDefSystemLanguage;
+	private static PopcornApplication sInstance;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sDefSystemLanguage = LocaleUtils.getCurrent();
+	public PopcornApplication() {
+		sInstance = this;
+	}
 
-        Bugsnag.register(this, Constants.BUGSNAG_KEY);
-        PopcornUpdater.getInstance(this).checkUpdates(false);
+	public static PopcornApplication getInstance() {
+		return sInstance;
+	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		sDefSystemLanguage = LocaleUtils.getCurrent();
+
+		Bugsnag.register(this, Constants.BUGSNAG_KEY);
+		PopcornUpdater.getInstance(this).checkUpdates(false);
 
 
-        Constants.DEBUG_ENABLED = false;
-        int versionCode = 0;
-        try {
-            mPackageName = getPackageName();
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(mPackageName, 0);
-            int flags = packageInfo.applicationInfo.flags;
-            versionCode = packageInfo.versionCode;
-            Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+		Constants.DEBUG_ENABLED = false;
+		int versionCode = 0;
+		try {
+			mPackageName = getPackageName();
+			PackageInfo packageInfo = getPackageManager().getPackageInfo(mPackageName, 0);
+			int flags = packageInfo.applicationInfo.flags;
+			versionCode = packageInfo.versionCode;
+			Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		//initialise logging
 		if (BuildConfig.DEBUG) {
 			Timber.plant(new Timber.DebugTree());
 		}
 
-        Intent nodeServiceIntent = new Intent(this, StreamerService.class);
-        bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+		Intent nodeServiceIntent = new Intent(this, StreamerService.class);
+		bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
-        File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
-        File directory = new File(path, "/torrents/");
-        if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
-            FileUtils.recursiveDelete(directory);
-        FileUtils.recursiveDelete(new File(path + "/subs"));
-        } else {
-            File statusFile = new File(directory, "status.json");
-            File streamerFile = new File(directory, "streamer.json");
-            statusFile.delete();
-            streamerFile.delete();
-        }
+		File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
+		File directory = new File(path, "/torrents/");
+		if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
+			FileUtils.recursiveDelete(directory);
+			FileUtils.recursiveDelete(new File(path + "/subs"));
+		} else {
+			File statusFile = new File(directory, "status.json");
+			File streamerFile = new File(directory, "streamer.json");
+			statusFile.delete();
+			streamerFile.delete();
+		}
 
-        LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.i("Chosen cache location: " + directory);
+		LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
+		LogUtils.i("Chosen cache location: " + directory);
 
 
-        if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
-            PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
-            FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
-        }
-    }
+		if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
+			PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
+			FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
+		}
+	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        sDefSystemLanguage = LocaleUtils.getCurrent();
-    }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		sDefSystemLanguage = LocaleUtils.getCurrent();
+	}
 
-    public static String getSystemLanguage() {
-        return sDefSystemLanguage;
-    }
+	public static String getSystemLanguage() {
+		return sDefSystemLanguage;
+	}
 
-    public static OkHttpClient getHttpClient() {
-        if (sHttpClient == null) {
-            sHttpClient = new OkHttpClient();
+	public static OkHttpClient getHttpClient() {
+		if (sHttpClient == null) {
+			sHttpClient = new OkHttpClient();
 
-            int cacheSize = 10 * 1024 * 1024;
-            try {
-                File cacheLocation = new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString()));
-                cacheLocation.mkdirs();
-                com.squareup.okhttp.Cache cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
-                sHttpClient.setCache(cache);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sHttpClient;
-    }
+			int cacheSize = 10 * 1024 * 1024;
+			try {
+				File cacheLocation = new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION,
+						StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString()));
+				cacheLocation.mkdirs();
+				com.squareup.okhttp.Cache cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
+				sHttpClient.setCache(cache);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return sHttpClient;
+	}
 
-    public static Picasso getPicasso() {
-        if (sPicasso == null) {
-            Picasso.Builder builder = new Picasso.Builder(getAppContext());
-            OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
-            builder.downloader(downloader);
-            sPicasso = builder.build();
-        }
-        return sPicasso;
-    }
+	public static Picasso getPicasso() {
+		if (sPicasso == null) {
+			Picasso.Builder builder = new Picasso.Builder(getAppContext());
+			OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
+			builder.downloader(downloader);
+			sPicasso = builder.build();
+		}
+		return sPicasso;
+	}
 
-    public Boolean isServiceBound() {
-        return mBound;
-    }
+	public Boolean isServiceBound() {
+		return mBound;
+	}
 
-    public static String getStreamDir() {
-        File path = new File(PrefUtils.get(getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(getAppContext()).toString()));
-        File directory = new File(path, "/torrents/");
-        return directory.toString();
-    }
+	public static String getStreamDir() {
+		File path = new File(
+				PrefUtils.get(getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(getAppContext()).toString()));
+		File directory = new File(path, "/torrents/");
+		return directory.toString();
+	}
 
-    public void startStreamer(String streamUrl) {
-        File torrentPath = new File(getStreamDir());
-        torrentPath.mkdirs();
+	public void startStreamer(String streamUrl) {
+		File torrentPath = new File(getStreamDir());
+		torrentPath.mkdirs();
 
-        if (!mBound) {
-            LogUtils.d("Service not started yet");
-            mShouldBoundUrl = streamUrl;
-            startService();
-            return;
-        }
+		if (!mBound) {
+			LogUtils.d("Service not started yet");
+			mShouldBoundUrl = streamUrl;
+			startService();
+			return;
+		}
 
-        LogUtils.i("Start streamer: " + streamUrl);
+		LogUtils.i("Start streamer: " + streamUrl);
 
-        Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
+		Message msg = Message.obtain(null, StreamerService.MSG_RUN_SCRIPT, 0, 0);
 
-        Bundle args = new Bundle();
-        args.putString("directory", getStreamDir());
-        args.putString("stream_url", streamUrl);
-        msg.setData(args);
+		Bundle args = new Bundle();
+		args.putString("directory", getStreamDir());
+		args.putString("stream_url", streamUrl);
+		msg.setData(args);
 
-        try {
-            mService.send(msg);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
+		try {
+			mService.send(msg);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void stopStreamer() {
-        if (!mBound) return;
+	public void stopStreamer() {
+		if (!mBound) return;
 
-        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
+		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
 
-        for (int i = 0; i < runningAppProcesses.size(); i++) {
-            ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
-            if (info.processName.equalsIgnoreCase(mPackageName + ":node")) {
-                android.os.Process.killProcess(info.pid);
-            }
-        }
+		for (int i = 0; i < runningAppProcesses.size(); i++) {
+			ActivityManager.RunningAppProcessInfo info = runningAppProcesses.get(i);
+			if (info.processName.equalsIgnoreCase(mPackageName + ":node")) {
+				android.os.Process.killProcess(info.pid);
+			}
+		}
 
-        File torrentPath = new File(getStreamDir());
-        if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
-        FileUtils.recursiveDelete(torrentPath);
-        } else {
-            File statusFile = new File(torrentPath, "status.json");
-            File streamerFile = new File(torrentPath, "streamer.json");
-            statusFile.delete();
-            streamerFile.delete();
-        }
+		File torrentPath = new File(getStreamDir());
+		if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
+			FileUtils.recursiveDelete(torrentPath);
+		} else {
+			File statusFile = new File(torrentPath, "status.json");
+			File streamerFile = new File(torrentPath, "streamer.json");
+			statusFile.delete();
+			streamerFile.delete();
+		}
 
-        startService();
-    }
+		startService();
+	}
 
-    public void startService() {
-        if (mBound) return;
-        Intent nodeServiceIntent = new Intent(this, StreamerService.class);
-        bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
-    }
+	public void startService() {
+		if (mBound) return;
+		Intent nodeServiceIntent = new Intent(this, StreamerService.class);
+		bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+	}
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+	private ServiceConnection mConnection = new ServiceConnection() {
 
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            mService = new Messenger(service);
-            mBound = true;
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mService = new Messenger(service);
+			mBound = true;
 
-            if (mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
-                startStreamer(mShouldBoundUrl);
-                mShouldBoundUrl = "";
-            }
-        }
+			if (mShouldBoundUrl != null && !mShouldBoundUrl.isEmpty()) {
+				startStreamer(mShouldBoundUrl);
+				mShouldBoundUrl = "";
+			}
+		}
 
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mService = null;
-            mBound = false;
-        }
-    };
+		@Override
+		public void onServiceDisconnected(ComponentName componentName) {
+			mService = null;
+			mBound = false;
+		}
+	};
 
 
 }

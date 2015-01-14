@@ -26,9 +26,9 @@
 		android:allowBackup="false"
 		android:name="pct.droid.base.PopcornApplication">
 
-		<!-- Activities -->
 		<activity
-			android:name=".activities.MainActivity"
+			android:name=".activities.PTVLaunchActivity"
+			android:theme="@style/Theme.HiddenActivity"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -36,10 +36,14 @@
 			</intent-filter>
 		</activity>
 
+		<!-- Activities -->
+		<activity android:name=".activities.PTVMainActivity"></activity>
+
 		<activity
-			android:name=".activities.PlayerActivity"
+			android:name=".activities.PTVPlayerActivity"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+		<activity android:name=".activities.PTVWelcomeActivity" />
 		<activity android:name=".activities.PTVMovieDetailActivity" />
 		<activity android:name=".activities.PTVShowDetailActivity" />
 		<activity android:name=".activities.PTVSearchActivity" />

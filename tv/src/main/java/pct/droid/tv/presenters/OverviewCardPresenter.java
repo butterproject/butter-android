@@ -23,8 +23,8 @@ import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import pct.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pct.droid.base.providers.media.types.Media;
+import pct.droid.tv.R;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand. 
@@ -82,8 +83,8 @@ public class OverviewCardPresenter extends Presenter {
 
 	public void onBindLoadingViewHolder(Presenter.ViewHolder viewHolder, OverviewCardItem overview) {
 		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
-		cardView.setMainImage(mContext.getDrawable(R.drawable.popcorn_icon_desat));
-		//		cardView.setMainImageScaleType(ImageView.ScaleType.CENTER);
+		cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
+		cardView.setMainImage(mContext.getDrawable(R.drawable.placeholder_inset));
 		cardView.setTitleText(mContext.getString(R.string.loading));
 		cardView.setMainImageDimensions(mCardWidth, mCardHeight);
 	}
