@@ -165,7 +165,8 @@ public class TorrentService extends Service {
     }
 
     public void stopStreaming() {
-        mWakeLock.release();
+        if(mWakeLock.isHeld())
+            mWakeLock.release();
 
         mHandler.post(new Runnable() {
             @Override
