@@ -1138,3 +1138,4 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
 }
+
