@@ -32,7 +32,6 @@ public class BaseActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		Bugsnag.onActivityResume(this);
-		getApp().startService();
 	}
 
 	@Override

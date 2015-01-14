@@ -2,17 +2,19 @@ package pct.droid.activities;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
-import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
@@ -61,14 +63,14 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.streamer.Status;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
+import pct.droid.base.streamer.StreamerService;
+import pct.droid.base.streamer.StreamerStatus;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
@@ -79,7 +81,7 @@ import pct.droid.base.utils.StringUtils;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener {
+public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener, StreamerService.Listener {
 
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
@@ -151,7 +153,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
     private AudioManager mAudioManager;
     private int mAudioMax;
-    private OnAudioFocusChangeListener mAudioFocusListener;
     private int mVol;
 
     private static final int TOUCH_NONE = 0;
@@ -167,6 +168,21 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
+
+    private StreamerService mService;
+
+    protected ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((StreamerService.ServiceBinder) service).getService();
+            mService.setListener(VideoPlayerActivity.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,6 +279,11 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -314,7 +335,9 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 
         mAudioManager = null;
 
-        ((PopcornApplication) getApplication()).stopStreamer();
+        if(mService != null)
+            mService.stopStreaming();
+
         PrefUtils.save(this, RESUME_POSITION, 0);
     }
 
@@ -888,23 +911,6 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
         if (mCurrentTime >= 0) currentTime.setText(StringUtils.millisToString(mCurrentTime));
         if (mDuration >= 0) lengthTime.setText(StringUtils.millisToString(mDuration));
 
-        try {
-            String filePath = ((PopcornApplication) getApplication()).getStreamDir() + "/status.json";
-            File file = new File(filePath);
-            if (file.exists()) {
-                Status status = Status.parseJSON(FileUtils.getContentsAsString(filePath));
-                if (status != null) {
-                    int newProgress = (int) Math.floor(status.progress);
-                    newProgress = (int) (mDuration / 100) * newProgress;
-                    if (mStreamerProgress < newProgress) {
-                        mStreamerProgress = newProgress;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         controlBar.setSecondaryProgress(mStreamerProgress);
 
@@ -1106,6 +1112,29 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
                 startSubtitles();
             }
         });
+    }
+
+    @Override
+    public void onStreamStarted() {
+
+    }
+
+    @Override
+    public void onStreamError(Exception e) {
+
+    }
+
+    @Override
+    public void onStreamReady(File videoLocation) {
+
+    }
+
+    @Override
+    public void onStreamProgress(StreamerStatus status) {
+        int newProgress = (int) ((mDuration / 100) * status.progress);
+        if (mStreamerProgress < newProgress) {
+            mStreamerProgress = newProgress;
+        }
     }
 
 }
