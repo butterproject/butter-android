@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.streamer.StreamerService;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
@@ -57,7 +57,7 @@ public class PopcornApplication extends VLCApplication {
 			Timber.plant(new Timber.DebugTree());
 		}
 
-        StreamerService.start(this);
+        TorrentService.start(this);
 
         File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
         File directory = new File(path, "/torrents/");

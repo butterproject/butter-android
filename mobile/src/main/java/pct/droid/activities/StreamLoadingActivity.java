@@ -29,14 +29,14 @@ import pct.droid.base.providers.media.types.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
-import pct.droid.base.streamer.StreamerService;
-import pct.droid.base.streamer.StreamerStatus;
+import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 
-public class StreamLoadingActivity extends BaseActivity implements StreamerService.Listener {
+public class StreamLoadingActivity extends BaseActivity implements TorrentService.Listener {
 
-    public final static String STREAM_URL = "stream_url";
+    public final static String TORRENT_URL = "stream_url";
     public final static String DATA = "video_data";
     public final static String SHOW = "show";
     public final static String QUALITY = "quality";
@@ -44,7 +44,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
 
     private SubsProvider mSubsProvider;
     private Boolean mPlayerStarted = false, mHasSubs = false;
-    private StreamerService mService;
+    private TorrentService mService;
 
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING};
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
@@ -64,7 +64,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
         super.onCreate(savedInstanceState, R.layout.activity_streamloading);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        if (!getIntent().hasExtra(STREAM_URL) && !getIntent().hasExtra(DATA)) {
+        if (!getIntent().hasExtra(TORRENT_URL) && !getIntent().hasExtra(DATA)) {
             finish();
         }
 
@@ -168,7 +168,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
         }
     }
 
-    private void updateStatus(final StreamerStatus status) {
+    private void updateStatus(final DownloadStatus status) {
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
@@ -190,7 +190,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
     @Override
     protected void onStart() {
         super.onStart();
-        StreamerService.bindHere(this, mServiceConnection);
+        TorrentService.bindHere(this, mServiceConnection);
     }
 
     @Override
@@ -202,6 +202,8 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
         progressText.setText(R.string.loading_data);
         seedsText.setText("");
         downloadSpeedText.setText("");
+        progressIndicator.setIndeterminate(true);
+        progressIndicator.setProgress(0);
     }
 
     @Override
@@ -222,9 +224,13 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((StreamerService.ServiceBinder) service).getService();
+            mService = ((TorrentService.ServiceBinder) service).getService();
             mService.setListener(StreamLoadingActivity.this);
-            mService.streamTorrent(getIntent().getStringExtra(STREAM_URL));
+            String torrentUrl = getIntent().getStringExtra(TORRENT_URL);
+            if(mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
+                mService.stopStreaming();
+            }
+            mService.streamTorrent(torrentUrl);
         }
 
         @Override
@@ -260,7 +266,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
     }
 
     @Override
-    public void onStreamProgress(StreamerStatus status) {
+    public void onStreamProgress(DownloadStatus status) {
         if(mVideoLocation.isEmpty()) {
             updateStatus(status);
         } else {

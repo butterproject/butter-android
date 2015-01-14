@@ -163,7 +163,7 @@ public class MovieDetailActivity extends BaseActivity {
                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
                         Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-                        streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+                        streamIntent.putExtra(StreamLoadingActivity.TORRENT_URL, streamUrl);
                         streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
                         streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
                         if (mSubLanguage != null)

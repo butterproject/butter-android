@@ -76,7 +76,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 			try {
 				streamUrl = URLDecoder.decode(streamUrl, "utf-8");
 				Intent streamIntent = new Intent(this, StreamLoadingActivity.class);
-				streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
+				streamIntent.putExtra(StreamLoadingActivity.TORRENT_URL, streamUrl);
 				startActivity(streamIntent);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();

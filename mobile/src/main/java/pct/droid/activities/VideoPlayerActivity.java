@@ -69,8 +69,8 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
-import pct.droid.base.streamer.StreamerService;
-import pct.droid.base.streamer.StreamerStatus;
+import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
@@ -81,7 +81,7 @@ import pct.droid.base.utils.StringUtils;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener, StreamerService.Listener {
+public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener, TorrentService.Listener {
 
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
@@ -169,12 +169,12 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
 
-    private StreamerService mService;
+    private TorrentService mService;
 
     protected ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((StreamerService.ServiceBinder) service).getService();
+            mService = ((TorrentService.ServiceBinder) service).getService();
             mService.setListener(VideoPlayerActivity.this);
         }
 
@@ -1130,7 +1130,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
     }
 
     @Override
-    public void onStreamProgress(StreamerStatus status) {
+    public void onStreamProgress(DownloadStatus status) {
         int newProgress = (int) ((mDuration / 100) * status.progress);
         if (mStreamerProgress < newProgress) {
             mStreamerProgress = newProgress;

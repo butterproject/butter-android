@@ -1,4 +1,4 @@
-package pct.droid.base.streamer;
+package pct.droid.base.torrent;
 
 import android.app.Service;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 
 import com.frostwire.jlibtorrent.DHT;
 import com.frostwire.jlibtorrent.Downloader;
-import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.FileStorage;
 import com.frostwire.jlibtorrent.Session;
 import com.frostwire.jlibtorrent.SessionSettings;
@@ -36,31 +35,37 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
 import timber.log.Timber;
 
-public class StreamerService extends Service {
+public class TorrentService extends Service {
 
     private static final String THREAD_NAME = "TORRENT_SERVICE_THREAD";
     private HandlerThread mThread;
     private Handler mHandler;
+
     private Session mTorrentSession;
     private DHT mDHT;
     private TorrentHandle mCurrentTorrent;
     private TorrentAlertAdapter mCurrentListener;
-    private IBinder mBinder = new ServiceBinder();
-    private Listener mListener = null;
+
+    private String mCurrentTorrentUrl = "";
     private File mCurrentVideoLocation;
     private boolean mIsStreaming = false;
+
+    private IBinder mBinder = new ServiceBinder();
+    private Listener mListener = null;
+
     private PowerManager.WakeLock mWakeLock;
 
     public class ServiceBinder extends Binder {
-        public StreamerService getService() {
-            return StreamerService.this;
+        public TorrentService getService() {
+            return TorrentService.this;
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mWakeLock.release();
+        if(mWakeLock.isHeld())
+            mWakeLock.release();
         mThread.interrupt();
     }
 
@@ -85,10 +90,6 @@ public class StreamerService extends Service {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, THREAD_NAME);
-                mWakeLock.acquire();
-
                 // Start libtorrent session and init DHT
                 Timber.d("Starting libtorrent session");
                 mTorrentSession = new Session();
@@ -107,11 +108,11 @@ public class StreamerService extends Service {
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
-        if(mHandler == null) return;
+        if(mHandler == null || mIsStreaming) return;
 
-        if(mIsStreaming) {
-            stopStreaming();
-        }
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, THREAD_NAME);
+        mWakeLock.acquire();
 
         mHandler.post(new Runnable() {
             @Override
@@ -165,6 +166,8 @@ public class StreamerService extends Service {
     }
 
     public void stopStreaming() {
+        mWakeLock.release();
+
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -179,7 +182,7 @@ public class StreamerService extends Service {
 
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
                 File torrentPath = saveDirectory;
-                if (!PrefUtils.get(StreamerService.this, Prefs.REMOVE_CACHE, true)) {
+                if (!PrefUtils.get(TorrentService.this, Prefs.REMOVE_CACHE, true)) {
                     torrentPath = new File(saveDirectory, "files");
                 }
                 FileUtils.recursiveDelete(torrentPath);
@@ -190,6 +193,10 @@ public class StreamerService extends Service {
 
     public boolean isStreaming() {
         return mIsStreaming;
+    }
+
+    public String getCurrentTorrentUrl() {
+        return mCurrentTorrentUrl;
     }
 
     public void setListener(@NonNull Listener listener) {
@@ -240,12 +247,12 @@ public class StreamerService extends Service {
     }
 
     public static void bindHere(Context context, ServiceConnection serviceConnection) {
-        Intent torrentServiceIntent = new Intent(context, StreamerService.class);
+        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
         context.bindService(torrentServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public static void start(Context context) {
-        Intent torrentServiceIntent = new Intent(context, StreamerService.class);
+        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
         context.startService(torrentServiceIntent);
     }
 
@@ -253,7 +260,7 @@ public class StreamerService extends Service {
         public void onStreamStarted();
         public void onStreamError(Exception e);
         public void onStreamReady(File videoLocation);
-        public void onStreamProgress(StreamerStatus status);
+        public void onStreamProgress(DownloadStatus status);
     }
 
     protected class TorrentAlertAdapter extends com.frostwire.jlibtorrent.TorrentAlertAdapter {
@@ -277,7 +284,7 @@ public class StreamerService extends Service {
             int downloadSpeed = status.getDownloadPayloadRate();
 
             if (mListener != null) {
-                mListener.onStreamProgress(new StreamerStatus(progress, bufferProgress, seeds, downloadSpeed));
+                mListener.onStreamProgress(new DownloadStatus(progress, bufferProgress, seeds, downloadSpeed));
             }
 
             if(bufferProgress == 100 && !mReady) {
