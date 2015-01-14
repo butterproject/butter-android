@@ -199,7 +199,7 @@ public class StreamLoadingActivity extends BaseActivity implements TorrentServic
         if (mPlayerStarted) {
             onBackPressed();
         }
-        progressText.setText(R.string.loading_data);
+        progressText.setText(R.string.waiting_torrent);
         seedsText.setText("");
         downloadSpeedText.setText("");
         progressIndicator.setIndeterminate(true);
@@ -244,7 +244,7 @@ public class StreamLoadingActivity extends BaseActivity implements TorrentServic
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressText.setText(R.string.buffering_started);
+                progressText.setText(R.string.starting_buffering);
             }
         });
     }

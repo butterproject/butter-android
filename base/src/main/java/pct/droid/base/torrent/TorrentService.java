@@ -101,7 +101,6 @@ public class TorrentService extends Service {
                 Timber.d("Init DHT");
                 mDHT = new DHT(mTorrentSession);
                 mDHT.start();
-                mDHT.waitNodes(1);
                 Timber.d("Nodes in DHT: %s", mDHT.nodes());
             }
         });
@@ -266,6 +265,7 @@ public class TorrentService extends Service {
     protected class TorrentAlertAdapter extends com.frostwire.jlibtorrent.TorrentAlertAdapter {
 
         private boolean mReady = false;
+        private int mLastLoggedProgress = 0;
 
         public TorrentAlertAdapter(TorrentHandle th) {
             super(th);
@@ -276,8 +276,11 @@ public class TorrentService extends Service {
             TorrentHandle th = alert.getHandle();
             TorrentStatus status = th.getStatus();
             float progress = status.getProgress() * 100;
-            if((int) progress % 10 == 0)
-            Timber.d("Torrent progress: %s", progress);
+            int floorProgress = (int) Math.floor(progress);
+            if(floorProgress % 5 == 0 && mLastLoggedProgress != floorProgress) {
+                mLastLoggedProgress = (int) Math.floor(progress);
+                Timber.d("Torrent progress: %s", progress);
+            }
             int bufferProgress = (int) Math.floor(progress * 15);
             if(bufferProgress > 100) bufferProgress = 100;
             int seeds = status.getNumSeeds();
