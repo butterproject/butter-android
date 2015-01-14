@@ -8,6 +8,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 
 import com.frostwire.jlibtorrent.DHT;
@@ -48,6 +49,7 @@ public class StreamerService extends Service {
     private Listener mListener = null;
     private File mCurrentVideoLocation;
     private boolean mIsStreaming = false;
+    private PowerManager.WakeLock mWakeLock;
 
     public class ServiceBinder extends Binder {
         public StreamerService getService() {
@@ -58,6 +60,7 @@ public class StreamerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mWakeLock.release();
         mThread.interrupt();
     }
 
@@ -82,6 +85,10 @@ public class StreamerService extends Service {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, THREAD_NAME);
+                mWakeLock.acquire();
+
                 // Start libtorrent session and init DHT
                 Timber.d("Starting libtorrent session");
                 mTorrentSession = new Session();
@@ -129,28 +136,26 @@ public class StreamerService extends Service {
                     return;
                 }
 
-                synchronized (this) {
-                    mCurrentTorrent = mTorrentSession.addTorrent(torrentFile, saveDirectory);
-                    mCurrentListener = new TorrentAlertAdapter(mCurrentTorrent);
-                    mTorrentSession.addListener(mCurrentListener);
+                mCurrentTorrent = mTorrentSession.addTorrent(torrentFile, saveDirectory);
+                mCurrentListener = new TorrentAlertAdapter(mCurrentTorrent);
+                mTorrentSession.addListener(mCurrentListener);
 
-                    TorrentInfo torrentInfo = mCurrentTorrent.getTorrentInfo();
-                    FileStorage fileStorage = torrentInfo.getFiles();
-                    long highestFileSize = 0;
-                    int selectedFile = -1;
-                    for (int i = 0; i < fileStorage.geNumFiles(); i++) {
-                        long fileSize = fileStorage.getFileSize(i);
-                        if (highestFileSize < fileSize) {
-                            highestFileSize = fileSize;
-                            selectedFile = i;
-                        }
+                TorrentInfo torrentInfo = mCurrentTorrent.getTorrentInfo();
+                FileStorage fileStorage = torrentInfo.getFiles();
+                long highestFileSize = 0;
+                int selectedFile = -1;
+                for (int i = 0; i < fileStorage.geNumFiles(); i++) {
+                    long fileSize = fileStorage.getFileSize(i);
+                    if (highestFileSize < fileSize) {
+                        highestFileSize = fileSize;
+                        selectedFile = i;
                     }
-
-                    mCurrentTorrent.getSwig().set_sequential_download(true);
-                    mCurrentTorrent.resume();
-
-                    mCurrentVideoLocation = new File(saveDirectory, torrentInfo.getFileAt(selectedFile).getPath());
                 }
+
+                mCurrentTorrent.getSwig().set_sequential_download(true);
+                mCurrentTorrent.resume();
+
+                mCurrentVideoLocation = new File(saveDirectory, torrentInfo.getFileAt(selectedFile).getPath());
 
                 if(mListener != null) {
                     mListener.onStreamStarted();
@@ -164,14 +169,12 @@ public class StreamerService extends Service {
             @Override
             public void run() {
                 mIsStreaming = false;
-                synchronized (this) {
-                    if (mCurrentTorrent != null) {
-                        mCurrentTorrent.pause();
-                        mTorrentSession.removeListener(mCurrentListener);
-                        mTorrentSession.removeTorrent(mCurrentTorrent);
-                        mCurrentListener = null;
-                        mCurrentTorrent = null;
-                    }
+                if (mCurrentTorrent != null) {
+                    mCurrentTorrent.pause();
+                    mTorrentSession.removeListener(mCurrentListener);
+                    mTorrentSession.removeTorrent(mCurrentTorrent);
+                    mCurrentListener = null;
+                    mCurrentTorrent = null;
                 }
 
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
@@ -267,7 +270,7 @@ public class StreamerService extends Service {
             TorrentStatus status = th.getStatus();
             float progress = status.getProgress() * 100;
             if((int) progress % 10 == 0)
-            Timber.d("Torrent rogress: %s", progress);
+            Timber.d("Torrent progress: %s", progress);
             int bufferProgress = (int) Math.floor(progress * 15);
             if(bufferProgress > 100) bufferProgress = 100;
             int seeds = status.getNumSeeds();

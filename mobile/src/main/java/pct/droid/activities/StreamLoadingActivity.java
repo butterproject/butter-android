@@ -199,6 +199,9 @@ public class StreamLoadingActivity extends BaseActivity implements StreamerServi
         if (mPlayerStarted) {
             onBackPressed();
         }
+        progressText.setText(R.string.loading_data);
+        seedsText.setText("");
+        downloadSpeedText.setText("");
     }
 
     @Override
