@@ -117,6 +117,8 @@ public class TorrentService extends Service {
             @Override
             public void run() {
                 mIsStreaming = true;
+                mCurrentTorrentUrl = torrentUrl;
+
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
                 saveDirectory.mkdirs();
 
