@@ -12,7 +12,9 @@
   <string name="title_shows">סדרות</string>
   <string name="title_movies">סרטים</string>
   <string name="search">חיפוש</string>
+  <string name="searching">מחפש...</string>
   <string name="loading_data">טוען מידע...</string>
+  <string name="loading_details">טוען פרטים...</string>
   <string name="no_data_found">לא נמצא מידע</string>
   <string name="unknown_error">משהו השתבש</string>
   <!--DetailActivity strings-->
@@ -80,4 +82,24 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi בלבד</string>
   <string name="wifi_only_message">הצפייה מתאפשרת דרך Wi-Fi בלבד כברירת מחדל. באפשרותך לשנות הגדרה זאת ולאפשר צפייה גם דרך האינטרנט של הרשת הסלולרית.</string>
+  <!--NavigationDrawer-->
+  <string name="share">שתף</string>
+  <string name="drawer_open">פתח שורת חיפוש</string>
+  <string name="drawer_close">סגור שורת חיפוש</string>
+  <string name="no_search_results">לא נמצאו תוצאות חיפוש</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time היא התוצאה של הרבה מפתחים ומעצבים שקיבצו מספר ממשקי תכנות יישומים כדאי
+ליצור את החוויה הטובה והפשוטה ביותר של צפייה בסרטים וסדרות דרך טורנטים.  אנחנו פרויקט קוד פתוח. אנחנו מכל העולם.
+
+אנחנו אוהבים סרטים וסדרות, אבל אהבה הכי גדולה שלנו היא לפופקורן.</string>
+  <string name="website">אתר</string>
+  <string name="discuss">פורום</string>
+  <string name="google_plus">גוגל+</string>
+  <string name="facebook">פייסבוק</string>
+  <string name="git">Git</string>
+  <string name="blog">בלוג</string>
+  <string name="twitter">טוויטר</string>
+  <!--Share dialog-->
+  <string name="share_text">ניסית את Popcorn Time לאנדרואיד? https://popcorntime.io</string>
+  <string name="share_dialog_title">שתף עם</string>
 </resources>
