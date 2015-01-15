@@ -34,6 +34,7 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaListFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
+import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ToolbarUtils;
 import pct.droid.widget.ScrimInsetsFrameLayout;
 
@@ -75,9 +76,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 			String streamUrl = data.toString();
 			try {
 				streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-				Intent streamIntent = new Intent(this, StreamLoadingActivity.class);
-				streamIntent.putExtra(StreamLoadingActivity.TORRENT_URL, streamUrl);
-				startActivity(streamIntent);
+				StreamLoadingActivity.startActivity(this, new StreamLoadingFragment.StreamInfo(streamUrl));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
