@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Сачувај</string>
+  <string name="cancel">Откажи</string>
+  <string name="close">Затвори</string>
+  <string name="ok">У реду</string>
+  <string name="enabled">Укључено</string>
+  <string name="disabled">Искључено</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Наслов, година, глумци</string>
+  <string name="title_shows">Серије</string>
+  <string name="title_movies">Филмови</string>
+  <string name="search">Претрага</string>
+  <string name="searching">Претраживање...</string>
+  <string name="loading_data">Учитавање података...</string>
+  <string name="loading_details">Учитавање детаља...</string>
+  <string name="no_data_found">Подаци нису нађени</string>
+  <string name="unknown_error">Нешто није у реду</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">мин</string>
+  <string name="watch_trailer">Погледај трејлер</string>
+  <string name="disable_subs">Искључи титлове</string>
+  <string name="no_subs">Нема титлова</string>
+  <string name="subtitles">Титлови</string>
+  <string name="quality">Квалитет</string>
+  <string name="trailer">Трејлер</string>
+  <string name="season">Сезона</string>
+  <string name="episode">Епизода</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="streaming_started">Streaming је почео</string>
+  <string name="waiting_for_subtitles">Чекање титлова</string>
+  <string name="seeds">seeds</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Покренуто</string>
+  <string name="volume">Јачина звука</string>
+  <string name="brightness">Осветљење</string>
+  <string name="hardware_acceleration_error_title">Неуспешно декодирање хардвера</string>
+  <string name="hardware_acceleration_error_message">Дошло је до грешке са хардверском ацелерацијом. Желите ли да је искључите па покушате поново касније?</string>
+  <string name="best_fit">Најбоље</string>
+  <string name="fill">Попуњено</string>
+  <string name="fit_horizontal">По хоризонтали</string>
+  <string name="fit_vertical">По вертикали</string>
+  <string name="original_size">Оригинал</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Прихватам</string>
+  <string name="leave">Не прихватам</string>
+  <!--SettingsActivity strings-->
+  <string name="settings">Подешавања</string>
+  <string name="general">Опште</string>
+  <string name="default_view">Подразумевани преглед</string>
+  <string name="default_player">Подразумевани видео плејер</string>
+  <string name="i18n_language">Језик апликације</string>
+  <string name="restart_effect">Рестартуј апликацију како би промене биле видљиве</string>
+  <string name="device_language">Језик уређаја</string>
+  <string name="stream_over_wifi_only">Stream само преко вајрлеса</string>
+  <string name="internal_player">Интерно</string>
+  <string name="subtitle_color">Боја</string>
+  <string name="subtitle_size">Величина</string>
+  <string name="subtitle_language">Подразумевани јези</string>
+  <string name="no_default_set">Нема подразумеваног језика</string>
+  <string name="advanced">Напредно</string>
+  <string name="storage_location">Локација складиштења</string>
+  <string name="storage_automatic">Аутоматски</string>
+  <string name="storage_choose">Одабери локацију</string>
+  <string name="not_writable">На овој локацији се не може уписивати</string>
+  <string name="remove_cache">Очисти кеш при затварању плејера</string>
+  <string name="hw_acceleration">Хардверска ацелерација</string>
+  <string name="hw_automatic">Аутоматски</string>
+  <string name="hw_full">Пуна</string>
+  <string name="hw_decoding">Само декодирање</string>
+  <string name="updates">Ажурирања</string>
+  <string name="auto_updates">Аутоматкса ажурирања</string>
+  <string name="check_for_updates">Провера ажурирања</string>
+  <string name="last_check">Последња провера</string>
+  <string name="about">О нама</string>
+  <string name="version">Верзија</string>
+  <string name="changelog">Списак измена</string>
+  <string name="tap_to_open">Додирни за отварање</string>
+  <string name="report_a_bug">Пријави проблем</string>
+  <string name="open_source_licenses">Лиценце отвореног кода</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Само преко вајрлеса</string>
+  <string name="wifi_only_message">Снимке можете stream-овати само преко вајрлеса. Ово можете искључити у подешавањима ако желите да stream-ујете преко мобилног интернета.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Подели</string>
+  <string name="drawer_open">Отвори навигациону фиоку </string>
+  <string name="drawer_close">Затвори навигациону фиоку</string>
+  <string name="no_search_results">Нема резултата претраге</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time је направљен тако што је група програмера и дизајнера саставила гомиле API-јева како би искуство
+		гледања торент филмова учинила што је могуће једноставније.\n\nМи смо пројекат отвореног кода. Ми смо из целог света. Ми
+		волимо наше филмове. И, бре, волимо кокице.</string>
+  <string name="website">Сајт</string>
+  <string name="discuss">Дискусија</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Фејсбук</string>
+  <string name="git">Git</string>
+  <string name="blog">Блог</string>
+  <string name="twitter">Твитер</string>
+  <!--Share dialog-->
+  <string name="share_text">Јеси ли испробао Popcorn Time за Android? Одличан је! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Подели са</string>
+</resources>

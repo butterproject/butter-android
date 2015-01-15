@@ -12,7 +12,9 @@
   <string name="title_shows">Сериали</string>
   <string name="title_movies">Филми</string>
   <string name="search">Търси</string>
+  <string name="searching">Търсене...</string>
   <string name="loading_data">Зареждане на данни...</string>
+  <string name="loading_details">Зареждане на детайли...</string>
   <string name="no_data_found">Не са открити данни</string>
   <string name="unknown_error">Нещо се обърка</string>
   <!--DetailActivity strings-->
@@ -44,7 +46,7 @@
   <string name="accept">Приеми</string>
   <string name="leave">Напусни</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Предпочитания</string>
+  <string name="settings">Настройки</string>
   <string name="general">Общи</string>
   <string name="default_view">Начален изглед</string>
   <string name="default_player">Начален видео плейър</string>
@@ -52,7 +54,7 @@
   <string name="restart_effect">Рестартирайте приложението,за да видите промените</string>
   <string name="device_language">Език на устройството</string>
   <string name="stream_over_wifi_only">Стриймвай само при Wi-Fi</string>
-  <string name="internal_player">Вътрешно</string>
+  <string name="internal_player">Вътрешен</string>
   <string name="subtitle_color">Цвят</string>
   <string name="subtitle_size">Размер</string>
   <string name="subtitle_language">Начален език</string>
@@ -80,4 +82,23 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Само чрез Wi-Fi</string>
   <string name="wifi_only_message">Може да стриймвате видеа само чрез Wi-Fi.Може да изключите това в \"предпочитания\" в случай,че искате да стриймвате чрез клетъчна връзка.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Сподели</string>
+  <string name="drawer_open">Отвори навигационно чекмедже</string>
+  <string name="drawer_close">Затвори навигационно чекмедже</string>
+  <string name="no_search_results">Няма открити резултати</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time! е продукт на много разработчици и дизайнери,които събраха няколко API-та на едно място,
+за да направят гледането на торент филми,колкото се може по-просто.\n\nНие сме проект с открит сорс код.Ние сме от цял свят.Ние
+обичаме нашите филми.И със сигурност обичаме пуканки!</string>
+  <string name="website">Уебсайт</string>
+  <string name="discuss">Дискутирай</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Блог</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Изпробвали ли сте Popcorn Time за Android? Страхотен е! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Сподели с</string>
 </resources>
