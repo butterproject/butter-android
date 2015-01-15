@@ -12,7 +12,9 @@
   <string name="title_shows">Oddaje</string>
   <string name="title_movies">Filmi</string>
   <string name="search">Iskanje</string>
+  <string name="searching">Iskanje...</string>
   <string name="loading_data">Nalaganje podatkov...</string>
+  <string name="loading_details">Nalaganje podrobnosti...</string>
   <string name="no_data_found">Ni najdenih podatkov</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
   <!--DetailActivity strings-->
@@ -80,4 +82,22 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Samo Wi-Fi</string>
   <string name="wifi_only_message">Video vsebine lahko prenašaš samo preko Wi-Fi. Lahko pa to tudi onemogočiš v nastavitvah, če želiš prenašat preko mobilne povezave.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Deli</string>
+  <string name="drawer_open">Odpri navigacijski predal</string>
+  <string name="drawer_close">Zapri navigacijski predal</string>
+  <string name="no_search_results">Ni našlo iskanih rezultatov</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time je rezultat mnogih razvijalcev in oblikovalcev kateri so združili kup API-jev skupaj, da bi omogočili
+⇥⇥izkušnjo ob gledanju filmskih torentov na najenostavnejši način.\n\nSmo odprto kodni projekt. Prihajamo iz vseh koncev sveta. Imamo ⇥⇥radi naše filme. In obožujemo kokice.</string>
+  <string name="website">Spletna stran</string>
+  <string name="discuss">Pogovor</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Ali ste poskusili Popcorn Time za Android? To je čudovito! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Deli z</string>
 </resources>

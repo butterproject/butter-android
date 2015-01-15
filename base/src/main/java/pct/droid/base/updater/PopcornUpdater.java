@@ -280,7 +280,7 @@ public class PopcornUpdater extends Observable {
             notifyObservers(STATUS_HAVE_UPDATE);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
-                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_notif_logo)
                     .setContentTitle(mContext.getString(R.string.update_available))
                     .setContentText(mContext.getString(R.string.press_install))
                     .setAutoCancel(true)
