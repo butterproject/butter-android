@@ -190,9 +190,9 @@ public class EZTVProvider extends MediaProvider {
 				show.seasons = ((Double) showData.get("num_seasons")).intValue();
 				show.year = showData.get("year").toString();
 				LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) showData.get("images");
-				show.image = images.get("poster").replace(".jpg", "-300.jpg");
+				show.image = images.get("poster").replace("/original/", "/medium/");
 				show.fullImage = images.get("poster");
-				show.headerImage = images.get("fanart").replace(".jpg", "-940.jpg");
+				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
 				show.status = showData.get("status").toString();
 				show.country = showData.get("country").toString();
 				show.network = showData.get("network").toString();
