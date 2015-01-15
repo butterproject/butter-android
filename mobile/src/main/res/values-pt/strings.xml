@@ -12,7 +12,9 @@
   <string name="title_shows">Séries</string>
   <string name="title_movies">Filmes</string>
   <string name="search">Pesquisar</string>
+  <string name="searching">A pesquisar...</string>
   <string name="loading_data">A carregar dados...</string>
+  <string name="loading_details">A carregar detalhes...</string>
   <string name="no_data_found">Dados não encontrados</string>
   <string name="unknown_error">Aconteceu algo de errado</string>
   <!--DetailActivity strings-->
@@ -51,7 +53,7 @@
   <string name="i18n_language">Idioma da aplicação</string>
   <string name="restart_effect">Reinicia a aplicação para as alterações serem aplicadas</string>
   <string name="device_language">Idioma do dispositivo</string>
-  <string name="stream_over_wifi_only">Reproduzir apenas por Wi-Fi</string>
+  <string name="stream_over_wifi_only">Reproduzir apenas através de Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Cor</string>
   <string name="subtitle_size">Tamanho</string>
@@ -80,4 +82,23 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Apenas podes reproduzir vídeo através de Wi-Fi. Desativa esta opção nas Definições se quiseres reproduzir através de uma rede móvel.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Partilhar</string>
+  <string name="drawer_open">Abrir gaveta de navegação</string>
+  <string name="drawer_close">Fechar gaveta de navegação</string>
+  <string name="no_search_results">Nenhum resultado encontrado</string>
+  <!--About fragment-->
+  <string name="about_message">O Popcorn Time é o resultado de muitos programadores e designers combinarem uma carrada de APIs para tornar a
+		experiência de ver um filme ou uma série tão simples quanto possível.\n\nSomos um projeto de código aberto. Somos do mundo inteiro.
+		Adoramos os nossos filmes. E acredita, adoramos pipocas.</string>
+  <string name="website">Página Web</string>
+  <string name="discuss">Fórum</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Já experimentaste o Popcorn Time para Android? É espetacular! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Partilha com</string>
 </resources>

@@ -12,7 +12,9 @@
   <string name="title_shows">TV serije</string>
   <string name="title_movies">Filmovi</string>
   <string name="search">Pretraži</string>
-  <string name="loading_data">Učitavanje podataka…</string>
+  <string name="searching">Pretraživanje...</string>
+  <string name="loading_data">Učitavanje podataka...</string>
+  <string name="loading_details">Učitavanje pojedinosti...</string>
   <string name="no_data_found">Nema pronađenih podataka</string>
   <string name="unknown_error">Nešto je pošlo po krivu</string>
   <!--DetailActivity strings-->
@@ -79,5 +81,24 @@
   <string name="open_source_licenses">Licenca otvorenog kôda</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Samo Wi-Fi</string>
-  <string name="wifi_only_message">Možete streamati samo video snimke putem Wi-Fi. Ovo možete onemogućiti u postavkama ako želite streamati putem mobilne mreže.</string>
+  <string name="wifi_only_message">Možete samo streamati video snimke putem Wi-Fi. Ovo možete onemogućiti u osobitostima ako želite streamati putem mobilne mreže.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Podijeli</string>
+  <string name="drawer_open">Otvori navigacijsku površinu</string>
+  <string name="drawer_close">Zatvori navigacijsku površinu</string>
+  <string name="no_search_results">Nema traženih rezultata</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time je rezultat truda mnogo razvijatelja i dizajnera koji su spojili hrpu API-ija zajedno kako bi učinili
+		iskustvo gledanja filmova putem torrenta što jednostavnijim.\n\nOvo je projekt otvorenog kôda. Mi smo sa svih strana svijeta. Volimo
+		gledati filmove. A najviše od svega, volimo kokice.</string>
+  <string name="website">Web stranica</string>
+  <string name="discuss">Discuss</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Jeste li isprobali Popcorn Time za Android? Super je! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Podijelite s</string>
 </resources>

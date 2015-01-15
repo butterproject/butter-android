@@ -12,7 +12,9 @@
   <string name="title_shows">Series</string>
   <string name="title_movies">Films</string>
   <string name="search">Zoeken</string>
-  <string name="loading_data">Gegevens laden…</string>
+  <string name="searching">Zoeken...</string>
+  <string name="loading_data">Gegevens laden...</string>
+  <string name="loading_details">Details laden...</string>
   <string name="no_data_found">Geen gegevens gevonden</string>
   <string name="unknown_error">Er is een fout opgetreden</string>
   <!--DetailActivity strings-->
@@ -80,4 +82,21 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Alleen Wi-Fi</string>
   <string name="wifi_only_message">Je kunt alleen streamen over een Wi-Fi-verbinding. Als je wilt streamen over een mobiele verbinding kun je deze instelling veranderen in de instellingen.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Delen</string>
+  <string name="drawer_open">Navigatielade openen</string>
+  <string name="drawer_close">Navigatieladen sluiten</string>
+  <string name="no_search_results">Er zijn geen zoekresultaten gevonden</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time is het resultaat van vele ontwikkelaars en designers...</string>
+  <string name="website">Website</string>
+  <string name="discuss">Discuss</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Heb je Popcorn Time voor Android al geprobeerd? Het is geweldig! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Delen via</string>
 </resources>
