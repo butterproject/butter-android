@@ -12,7 +12,9 @@
   <string name="title_shows">Seriale</string>
   <string name="title_movies">Filmy</string>
   <string name="search">Szukaj</string>
+  <string name="searching">Wyszukiwanie...</string>
   <string name="loading_data">Ładowanie danych...</string>
+  <string name="loading_details">Ładowanie szczegółów...</string>
   <string name="no_data_found">Brak danych</string>
   <string name="unknown_error">Coś poszło nie tak</string>
   <!--DetailActivity strings-->
@@ -80,4 +82,23 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Tylko Wi-Fi</string>
   <string name="wifi_only_message">Możesz streamować filmy tylko przez Wi-Fi. Możesz to wyłączyć w ustawieniach jeśli chcesz korzystać z łącza mobilnego.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Udostępnij</string>
+  <string name="drawer_open">Otwórz szufladę nawigacyjną</string>
+  <string name="drawer_close">Zamknij szufladę nawigacyjną</string>
+  <string name="no_search_results">Nic nie znaleziono</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time jest rezultatem pracy wielu programistów i projektantów, którzy złożyli kilka różnych API w całość w celu
+		jak najwygodniejszego oglądania filmów i seriali.\n\nJesteśmy projektem open source. Jesteśmy z całego świata. Kochamy filmy. 
+		Oczywiście kochamy też popcorn.</string>
+  <string name="website">Strona internetowa</string>
+  <string name="discuss">Forum dyskusyjne</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Spróbuj Popcorn Time dla Androida! Świetna aplikacja! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Udostępnij</string>
 </resources>
