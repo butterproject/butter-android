@@ -150,15 +150,7 @@ public class EZTVProvider extends MediaProvider {
 						ArrayList<Media> formattedData = result.formatForPopcorn();
 
 						if (formattedData.size() > 0) {
-							TraktProvider traktProvider = new TraktProvider();
 							Show show = (Show) formattedData.get(0);
-
-							TraktProvider.MetaData meta = traktProvider.getSummary(show.videoId, "show");
-
-							if (meta.certification != null) {
-								show.certification = meta.certification;
-							}
-
 							callback.onSuccess(formattedData);
 							return;
 						}
@@ -251,8 +243,8 @@ public class EZTVProvider extends MediaProvider {
 				show.tvdbId = item.get("tvdb_id").toString();
 				show.year = item.get("year").toString();
 				LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
-				show.image = images.get("poster").replace(".jpg", "-300.jpg");
-				show.headerImage = images.get("fanart").replace(".jpg", "-940.jpg");
+				show.image = images.get("poster").replace("/original/", "/medium/");
+				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
 
 				existingList.add(show);
 			}
