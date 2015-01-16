@@ -11,7 +11,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 21
         versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
-        versionName "0.1.1"
+        versionName "0.1.2"
     }
 
     signingConfigs {
