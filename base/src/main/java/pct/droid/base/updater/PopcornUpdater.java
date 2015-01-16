@@ -1,5 +1,6 @@
 package pct.droid.base.updater;
 
+import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -133,6 +134,7 @@ public class PopcornUpdater extends Observable {
         }
     };
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
 
