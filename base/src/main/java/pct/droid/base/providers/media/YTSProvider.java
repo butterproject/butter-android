@@ -2,6 +2,7 @@ package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
 
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
@@ -119,7 +120,10 @@ public class YTSProvider extends MediaProvider {
 					} catch (IllegalStateException e) {
 						onFailure(response.request(), new IOException("JSON Failed"));
 						return;
-					}
+					} catch (JsonSyntaxException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
 
 					if (result.status != null && result.status.equals("fail")) {
 						callback.onFailure(new NetworkErrorException(result.error));
@@ -200,7 +204,10 @@ public class YTSProvider extends MediaProvider {
 					} catch (IllegalStateException e) {
 						onFailure(response.request(), new IOException("JSON Failed"));
 						return;
-					}
+					} catch (JsonSyntaxException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
 
 					if (result.status != null && result.status.equals("fail")) {
 						callback.onFailure(new NetworkErrorException(result.error));
