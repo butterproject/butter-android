@@ -2,5 +2,6 @@
 <lint>
     <issue id="InvalidPackage">
         <ignore regexp=".*okio.*" />
+        <ignore regexp="java.nio.file" />
     </issue>
 </lint>
