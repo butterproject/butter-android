@@ -23,8 +23,8 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	protected String mApiUrl = "https://yts.pm/api/";
-	protected String mMirrorApiUrl = "https://yts.wf/api/";
+	protected String mApiUrl = "http://ytspt.re/api/";
+	protected String mMirrorApiUrl = "http://proxy.piratenpartij.nl/yts.re/api/";
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
