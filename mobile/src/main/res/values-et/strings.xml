@@ -12,7 +12,9 @@
   <string name="title_shows">Saated</string>
   <string name="title_movies">Filmid</string>
   <string name="search">Otsi</string>
+  <string name="searching">Otsin...</string>
   <string name="loading_data">Laen andmeid...</string>
+  <string name="loading_details">Laen üksikasju...</string>
   <string name="no_data_found">Andmeid ei leitud</string>
   <string name="unknown_error">Midagi läks valesti</string>
   <!--DetailActivity strings-->
@@ -80,4 +82,22 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">ainult Wi-Fi</string>
   <string name="wifi_only_message">Videosi saab voogedastada ainult üle Wi-Fi võrgu. Sa võid selle seadetest välja lülitada kui soovid voogedastust kasutada üle telefoni võrgu.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Jaga</string>
+  <string name="drawer_open">Ava navigeerimissahtel</string>
+  <string name="drawer_close">Sulge navigeerimissahtel</string>
+  <string name="no_search_results">Osingutulemusi ei leitud.</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time! on paljude tarkvara arendajate ja disainerite koostöö tulemus, kes on kokku pannud hulga einevaid liideseid, et teha torrenti filmide vaatamise kogemus võimalikult lihtsaks.Oleme avatud lähtekoodiga projekt. Me asume üle kogu maailma. Me armastame oma filme. Ja kurat, kus me armastame popcorni.</string>
+  <string name="website">Koduleht</string>
+  <string name="discuss">Discuss</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blogi</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Kas sa oled proovinud Popcorn Time`i Androidi jaoks? See on super!
+https://popcorntime.io/</string>
+  <string name="share_dialog_title">Jaga</string>
 </resources>
