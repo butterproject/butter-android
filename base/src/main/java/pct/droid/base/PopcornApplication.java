@@ -51,8 +51,6 @@ public class PopcornApplication extends VLCApplication {
         sDefSystemLanguage = LocaleUtils.getCurrent();
 
         Bugsnag.register(this, Constants.BUGSNAG_KEY);
-        PopcornUpdater.getInstance(this).checkUpdates(false);
-
 
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
@@ -94,6 +92,8 @@ public class PopcornApplication extends VLCApplication {
             PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
             FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
         }
+
+        PopcornUpdater.getInstance(this).checkUpdates(false);
     }
 
     @Override
