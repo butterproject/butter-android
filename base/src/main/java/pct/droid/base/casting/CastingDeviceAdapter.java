@@ -95,7 +95,7 @@ public class CastingDeviceAdapter extends BaseAdapter {
             holder.text1.setText(device.getName());
             holder.text2.setText(device.getModel());
         } else {
-            holder.icon.setImageResource(R.drawable.ic_launcher);
+            holder.icon.setImageResource(R.drawable.ic_notif_logo);
             holder.text1.setText("Local");
             holder.text2.setText("Popcorn Time");
         }
