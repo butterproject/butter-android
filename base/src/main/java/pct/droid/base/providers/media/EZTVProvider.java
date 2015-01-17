@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.types.Media;
 import pct.droid.base.providers.media.types.Show;
-import pct.droid.base.providers.meta.TraktProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -121,7 +120,7 @@ public class EZTVProvider extends MediaProvider {
 				} catch (Exception e) {
 					callback.onFailure(e);
 				}
-				callback.onFailure(new NetworkErrorException(response.body().string()));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
 			}
 		});
 	}
@@ -147,7 +146,7 @@ public class EZTVProvider extends MediaProvider {
 					if (map == null) {
 						callback.onFailure(new NetworkErrorException("Empty response"));
 					} else {
-						ArrayList<Media> formattedData = result.formatForPopcorn();
+						ArrayList<Media> formattedData = result.formatDetailForPopcorn();
 
 						if (formattedData.size() > 0) {
 							Show show = (Show) formattedData.get(0);
@@ -155,9 +154,10 @@ public class EZTVProvider extends MediaProvider {
 							return;
 						}
 						callback.onFailure(new IllegalStateException("Empty list"));
+                        return;
 					}
 				}
-				callback.onFailure(new NetworkErrorException(response.body().string()));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
 			}
 		});
 	}
@@ -170,28 +170,28 @@ public class EZTVProvider extends MediaProvider {
 			this.showData = showData;
 		}
 
-		public ArrayList<Media> formatForPopcorn() {
+		public ArrayList<Media> formatDetailForPopcorn() {
 			ArrayList<Media> list = new ArrayList<>();
 			try {
 				Show show = new Show();
 
-				show.title = showData.get("title").toString();
-				show.videoId = showData.get("imdb_id").toString();
-				show.imdbId = showData.get("imdb_id").toString();
-				show.tvdbId = showData.get("tvdb_id").toString();
+				show.title = (String) showData.get("title");
+				show.videoId = (String) showData.get("imdb_id");
+				show.imdbId = (String) showData.get("imdb_id");
+				show.tvdbId = (String) showData.get("tvdb_id");
 				show.seasons = ((Double) showData.get("num_seasons")).intValue();
-				show.year = showData.get("year").toString();
+				show.year = (String) showData.get("year");
 				LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) showData.get("images");
 				show.image = images.get("poster").replace("/original/", "/medium/");
 				show.fullImage = images.get("poster");
 				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
-				show.status = showData.get("status").toString();
-				show.country = showData.get("country").toString();
-				show.network = showData.get("network").toString();
-				show.synopsis = showData.get("synopsis").toString();
-				show.runtime = showData.get("runtime").toString();
-				show.airDay = showData.get("air_day").toString();
-				show.airTime = showData.get("air_time").toString();
+				show.status = (String) showData.get("status");
+				show.country = (String) showData.get("country");
+				show.network = (String) showData.get("network");
+				show.synopsis = (String) showData.get("synopsis");
+				show.runtime = (String) showData.get("runtime");
+				show.airDay = (String) showData.get("air_day");
+				show.airTime = (String) showData.get("air_time");
 				show.genre = ((ArrayList<String>) showData.get("genres")).get(0);
 				show.rating = Double.toString(((LinkedTreeMap<String, Double>) showData.get("rating")).get("percentage") / 10);
 
