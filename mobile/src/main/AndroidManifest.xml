@@ -91,10 +91,6 @@
 			android:screenOrientation="sensorLandscape" />
 
         <service android:name=".base.torrent.TorrentService" />
-
-        <meta-data
-            android:name="com.crashlytics.ApiKey"
-            android:value="7c4365e4bce79980f5f4d6c70026bdee5dcba8fb" />
 	</application>
 
 </manifest>
