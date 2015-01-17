@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="@dimen/list_divider_spacing" android:bottom="@dimen/list_divider_spacing">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#1fff" />
+            <size android:height="1dp"/>
+        </shape>
+    </item>
+</layer-list>

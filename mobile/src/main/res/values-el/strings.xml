@@ -12,7 +12,9 @@
   <string name="title_shows">Σειρές</string>
   <string name="title_movies">Ταινίες</string>
   <string name="search">Αναζήτηση</string>
-  <string name="loading">Φόρτωση δεδομένων...</string>
+  <string name="searching">Γίνεται αναζήτηση...</string>
+  <string name="loading_data">Φόρτωση δεδομένων...</string>
+  <string name="loading_details">Φόρτωση λεπτομερειών...</string>
   <string name="no_data_found">Δεν βρέθηκαν δεδομένα</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
   <!--DetailActivity strings-->
@@ -44,7 +46,7 @@
   <string name="accept">Αποδοχή</string>
   <string name="leave">Αποχώρηση</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Προτιμήσεις</string>
+  <string name="settings">Ρυθμίσεις</string>
   <string name="general">Γενικά</string>
   <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
   <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>
@@ -80,4 +82,23 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Μόνο Wi-Fi</string>
   <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Μοιραστείτε το</string>
+  <string name="drawer_open">Άνοιγμα συρταριού πλοήγησης</string>
+  <string name="drawer_close">Κλείσιμο συρταριού πλοήγησης</string>
+  <string name="no_search_results">Δεν βρέθηκαν αποτελέσματα αναζήτησης</string>
+  <!--About fragment-->
+  <string name="about_message">Το Popcorn Time είναι το αποτέλεσμα πολλών προγραμματιστών και σχεδιαστών που χρησιμοποίησαν αρκετά API για να κάνουν την
+		εμπειρία της προβολής ταινιών μέσω torrent όσο το δυνατόν απλούστερη.\n\nΕίμαστε ένα έργο ανοιχτού κώδικα. Είμαστε από όλο τον κόσμο.
+		Αγαπάμε τις ταινίες μας. Και ο φίλε, αγαπάμε το ποπκόρν.</string>
+  <string name="website">Ιστοσελίδα</string>
+  <string name="discuss">Συζήτηση</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Ιστολόγιο</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Δοκιμάσατε το Popcorn Time για το Android; Είναι καταπληκτικό! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Μοιραστείτε το με</string>
 </resources>

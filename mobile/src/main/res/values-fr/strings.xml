@@ -12,7 +12,9 @@
   <string name="title_shows">Séries</string>
   <string name="title_movies">Films</string>
   <string name="search">Recherche</string>
-  <string name="loading">Chargement des données...</string>
+  <string name="searching">Recherche...</string>
+  <string name="loading_data">Chargement des données...</string>
+  <string name="loading_details">Chargement de la fiche...</string>
   <string name="no_data_found">Aucune donnée trouvée</string>
   <string name="unknown_error">Quelque chose n\'a pas fonctionné</string>
   <!--DetailActivity strings-->
@@ -28,6 +30,7 @@
   <!--StreamLoadingActivity strings-->
   <string name="streaming_started">La lecture a commencé</string>
   <string name="waiting_for_subtitles">En attente des sous-titres…</string>
+  <string name="seeds">Sources</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">En cours de lecture</string>
   <string name="volume">Volume</string>
@@ -43,7 +46,7 @@
   <string name="accept">Accepter</string>
   <string name="leave">Quitter</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Préférences</string>
+  <string name="settings">Réglages</string>
   <string name="general">Général</string>
   <string name="default_view">Aperçu par défaut</string>
   <string name="default_player">Lecteur vidéo par défaut</string>
@@ -69,6 +72,7 @@
   <string name="updates">Mises à jour</string>
   <string name="auto_updates">Mises à jour automatiques</string>
   <string name="check_for_updates">Rechercher des mises à jour</string>
+  <string name="last_check">Dernière vérification</string>
   <string name="about">À propos</string>
   <string name="version">Version</string>
   <string name="changelog">Historique des modifications</string>
@@ -78,4 +82,21 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi uniquement </string>
   <string name="wifi_only_message">Vous ne pouvez lire de vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences si vous souhaitez utiliser une connexion de données mobiles.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Partager</string>
+  <string name="drawer_open">Ouvrir la barre de navigation</string>
+  <string name="drawer_close">Fermer la barre de navigation</string>
+  <string name="no_search_results">Aucun résultat trouvé pour la recherche</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time est le fruit de nombreux développeurs et de graphistes qui ont rassemblé plusieurs API dans le but de rendre l\'expérience du streaming via torrent la plus simple possible. Nous construisons ce projet en open source depuis les quatre coins du monde. Nous adorons le cinéma… et le popcorn !</string>
+  <string name="website">Site Internet</string>
+  <string name="discuss">Discuss</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Avez-vous déjà essayé Popcorn Time pour Android ? C\'est génial ! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Partager avec</string>
 </resources>

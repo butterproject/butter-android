@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">שמור</string>
-  <string name="cancel">ביטול</string>
+  <string name="cancel">בטל</string>
   <string name="close">סגור</string>
   <string name="ok">אישור</string>
   <string name="enabled">מופעל</string>
@@ -12,7 +12,9 @@
   <string name="title_shows">סדרות</string>
   <string name="title_movies">סרטים</string>
   <string name="search">חיפוש</string>
-  <string name="loading">טוען מידע...</string>
+  <string name="searching">מחפש...</string>
+  <string name="loading_data">טוען מידע...</string>
+  <string name="loading_details">טוען פרטים...</string>
   <string name="no_data_found">לא נמצא מידע</string>
   <string name="unknown_error">משהו השתבש</string>
   <!--DetailActivity strings-->
@@ -41,13 +43,13 @@
   <string name="fit_vertical">התאם אנכי</string>
   <string name="original_size">מקורי</string>
   <!--TermsActivity strings-->
-  <string name="accept">אישור</string>
-  <string name="leave">צא</string>
+  <string name="accept">מסכים</string>
+  <string name="leave">לא מסכים</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">העדפות</string>
+  <string name="settings">הגדרות</string>
   <string name="general">כללי</string>
-  <string name="default_view">מסך ברירית מחדל</string>
-  <string name="default_player">נגן ברירית מחדל</string>
+  <string name="default_view">מסך פתיחה</string>
+  <string name="default_player">נגן</string>
   <string name="i18n_language">שפת אפליקציה</string>
   <string name="restart_effect">יש צורך בהפעלת האפליקציה מחדש לשמירת השינויים</string>
   <string name="device_language">שפת מכשיר</string>
@@ -55,8 +57,8 @@
   <string name="internal_player">פנימי</string>
   <string name="subtitle_color">צבע</string>
   <string name="subtitle_size">גודל</string>
-  <string name="subtitle_language">שפת ברירית מחדל</string>
-  <string name="no_default_set">אין שפת ברירית מחדל</string>
+  <string name="subtitle_language">שפה מועדפת</string>
+  <string name="no_default_set">אין שפה מועדפת</string>
   <string name="advanced">מתקדם</string>
   <string name="storage_location">מקום אחסון</string>
   <string name="storage_automatic">אוטומטי</string>
@@ -74,10 +76,30 @@
   <string name="about">אודות</string>
   <string name="version">גירסה</string>
   <string name="changelog">יומן שינויים</string>
-  <string name="tap_to_open">גע לפתיחה</string>
+  <string name="tap_to_open">לחץ לפתיחה</string>
   <string name="report_a_bug">דיווח על תקלה</string>
-  <string name="open_source_licenses">רישיונות קוד פתוח</string>
+  <string name="open_source_licenses">רישיון קוד פתוח</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi בלבד</string>
-  <string name="wifi_only_message">צפייה בזרימת מדיה דרך Wi-Fi בלבד. באפשרותך לשנות העדפות לצפייה של תזרים דרך אינטרנט רשת סלולרית.</string>
+  <string name="wifi_only_message">הצפייה מתאפשרת דרך Wi-Fi בלבד כברירת מחדל. באפשרותך לשנות הגדרה זאת ולאפשר צפייה גם דרך האינטרנט של הרשת הסלולרית.</string>
+  <!--NavigationDrawer-->
+  <string name="share">שתף</string>
+  <string name="drawer_open">פתח שורת חיפוש</string>
+  <string name="drawer_close">סגור שורת חיפוש</string>
+  <string name="no_search_results">לא נמצאו תוצאות חיפוש</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time היא התוצאה של הרבה מפתחים ומעצבים שקיבצו מספר ממשקי תכנות יישומים כדאי
+ליצור את החוויה הטובה והפשוטה ביותר של צפייה בסרטים וסדרות דרך טורנטים.  אנחנו פרויקט קוד פתוח. אנחנו מכל העולם.
+
+אנחנו אוהבים סרטים וסדרות, אבל אהבה הכי גדולה שלנו היא לפופקורן.</string>
+  <string name="website">אתר</string>
+  <string name="discuss">פורום</string>
+  <string name="google_plus">גוגל+</string>
+  <string name="facebook">פייסבוק</string>
+  <string name="git">Git</string>
+  <string name="blog">בלוג</string>
+  <string name="twitter">טוויטר</string>
+  <!--Share dialog-->
+  <string name="share_text">ניסית את Popcorn Time לאנדרואיד? https://popcorntime.io</string>
+  <string name="share_dialog_title">שתף עם</string>
 </resources>

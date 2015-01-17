@@ -40,9 +40,9 @@ import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.fragments.MessageDialogFragment;
-import pct.droid.fragments.StringArraySelectorDialogFragment;
-import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.dialogfragments.MessageDialogFragment;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class ShowDetailActivity extends BaseActivity {
@@ -172,7 +172,15 @@ public class ShowDetailActivity extends BaseActivity {
                             }
 
                             // sorting hack
-                            Collections.sort(availableChapters);
+                            Collections.sort(availableChapters, new Comparator<String>() {
+                                @Override
+                                public int compare(String lhs, String rhs) {
+                                    Show.Episode lEpisode = mItem.episodes.get(lhs);
+                                    Show.Episode rEpisode = mItem.episodes.get(rhs);
+
+                                    return lEpisode.episode > rEpisode.episode ? 1 : -1;
+                                }
+                            });
                             Collections.sort(availableChaptersStringList, new Comparator<String>() {
                                 @Override
                                 public int compare(String lhs, String rhs) {
@@ -202,7 +210,9 @@ public class ShowDetailActivity extends BaseActivity {
                                     Show.Episode episode = mItem.episodes.get(key);
                                     Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
 
-                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
+                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY,
+											true) && !NetworkUtils.isWifiConnected(ShowDetailActivity.this) && NetworkUtils
+											.isNetworkConnected(ShowDetailActivity.this)) {
                                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                                     } else {
                                         Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
@@ -284,7 +294,8 @@ public class ShowDetailActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
+		getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+		super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle("");
