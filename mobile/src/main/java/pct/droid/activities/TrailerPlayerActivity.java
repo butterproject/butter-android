@@ -203,12 +203,6 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ((PopcornApplication) getApplication()).stopStreamer();
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
         DisplayMetrics screen = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(screen);
