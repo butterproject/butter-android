@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!-- convenience layout so the Toolbar can be easily included in any layout, maintaining
+the same attributes -->
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/toolbar"
+	android:minHeight="?attr/actionBarSize"
+	android:layout_height="wrap_content"
+	android:layout_width="match_parent"
+	android:fitsSystemWindows="true"
+	android:clipToPadding="false"
+	android:background="?attr/colorPrimary" />

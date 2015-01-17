@@ -15,7 +15,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import com.bugsnag.android.Bugsnag;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -34,6 +33,7 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import timber.log.Timber;
 
 public class PopcornApplication extends VLCApplication {
 
@@ -49,9 +49,6 @@ public class PopcornApplication extends VLCApplication {
         super.onCreate();
         sDefSystemLanguage = LocaleUtils.getCurrent();
 
-        Bugsnag.register(this, Constants.BUGSNAG_KEY);
-        PopcornUpdater.getInstance(this).checkUpdates(false);
-
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
         try {
@@ -63,6 +60,11 @@ public class PopcornApplication extends VLCApplication {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+		//initialise logging
+		if (BuildConfig.DEBUG) {
+			Timber.plant(new Timber.DebugTree());
+		}
 
         Intent nodeServiceIntent = new Intent(this, StreamerService.class);
         bindService(nodeServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
@@ -78,7 +80,6 @@ public class PopcornApplication extends VLCApplication {
             statusFile.delete();
             streamerFile.delete();
         }
-        directory.mkdirs();
 
         LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         LogUtils.i("Chosen cache location: " + directory);
@@ -88,6 +89,8 @@ public class PopcornApplication extends VLCApplication {
             PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
             FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
         }
+
+        PopcornUpdater.getInstance(this).checkUpdates(false);
     }
 
     @Override
@@ -106,7 +109,9 @@ public class PopcornApplication extends VLCApplication {
 
             int cacheSize = 10 * 1024 * 1024;
             try {
-                com.squareup.okhttp.Cache cache = new com.squareup.okhttp.Cache(new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString())), cacheSize);
+                File cacheLocation = new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString()));
+                cacheLocation.mkdirs();
+                com.squareup.okhttp.Cache cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
                 sHttpClient.setCache(cache);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -184,7 +189,6 @@ public class PopcornApplication extends VLCApplication {
             statusFile.delete();
             streamerFile.delete();
         }
-        torrentPath.mkdirs();
 
         startService();
     }

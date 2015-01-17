@@ -37,9 +37,9 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.youtube.YouTubeData;
-import pct.droid.fragments.MessageDialogFragment;
-import pct.droid.fragments.StringArraySelectorDialogFragment;
-import pct.droid.fragments.SynopsisDialogFragment;
+import pct.droid.dialogfragments.MessageDialogFragment;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class MovieDetailActivity extends BaseActivity {
@@ -157,7 +157,9 @@ public class MovieDetailActivity extends BaseActivity {
                     break;
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
-                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isConnectedToWifi() && NetworkUtils.isConnectedToCellular()) {
+                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&
+							NetworkUtils
+							.isNetworkConnected(MovieDetailActivity.this)) {
                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
                         Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
@@ -233,6 +235,7 @@ public class MovieDetailActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+		getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
         setSupportActionBar(toolbar);
 

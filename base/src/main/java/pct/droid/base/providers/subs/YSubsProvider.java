@@ -142,7 +142,10 @@ public class YSubsProvider extends SubsProvider {
         }
 
         private String[] getKeys(HashMap<String, ?> map) {
-            return map.keySet().toArray(new String[map.size()]);
+            if(map.size() > 0 && map != null) {
+                return map.keySet().toArray(new String[map.size()]);
+            }
+            return new String[0];
         }
 
         private String mapLanguage(String input, HashMap<String, String> mapping) {

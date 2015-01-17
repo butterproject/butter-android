@@ -37,6 +37,8 @@ public abstract class MediaProvider extends BaseProvider {
 
     public abstract Call getDetail(String torrentId, Callback callback);
 
+	public abstract int getLoadingMessage();
+
     public interface Callback {
         public void onSuccess(ArrayList<Media> items);
 

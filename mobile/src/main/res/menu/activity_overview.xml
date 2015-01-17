@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_action_search"
-        app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        android:title="@string/search" />
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_playertests"
-        android:visible="false"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_quality"
-        android:title="Player tests" />
+	<item
+		android:id="@+id/action_playertests"
+		android:visible="false"
+		app:showAsAction="ifRoom"
+		android:icon="@drawable/ic_action_quality"
+		android:title="Player tests" />
 
-    <item
-        android:id="@+id/action_switch_mode"
-        android:visible="true"
-        app:showAsAction="never"
-        android:title="@string/title_shows" />
-
-    <item
-        android:id="@+id/action_preferences"
-        android:visible="true"
-        app:showAsAction="never"
-        android:title="@string/preferences" />
+	<item
+		android:id="@+id/action_search"
+		android:icon="@drawable/ic_action_search"
+		app:showAsAction="ifRoom"
+		android:title="@string/search" />
 </menu>

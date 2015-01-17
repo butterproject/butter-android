@@ -12,7 +12,9 @@
   <string name="title_shows">Serie</string>
   <string name="title_movies">Film</string>
   <string name="search">Cerca</string>
-  <string name="loading">Caricamento...</string>
+  <string name="searching">Ricerca...</string>
+  <string name="loading_data">Caricamento Dati...</string>
+  <string name="loading_details">Caricamento dettagli...</string>
   <string name="no_data_found">Nessun dato trovato</string>
   <string name="unknown_error">Qualcosa è andato storto</string>
   <!--DetailActivity strings-->
@@ -28,6 +30,7 @@
   <!--StreamLoadingActivity strings-->
   <string name="streaming_started">Streraming avviato</string>
   <string name="waiting_for_subtitles">Aspettando i sottotitoli...</string>
+  <string name="seeds">Seeds</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">In riproduzione</string>
   <string name="volume">Volume</string>
@@ -43,7 +46,7 @@
   <string name="accept">Accetta</string>
   <string name="leave">Abbandona</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Preferenze</string>
+  <string name="settings">Opzioni</string>
   <string name="general">Generali</string>
   <string name="default_view">Visualizzazione predefinita</string>
   <string name="default_player">Riproduttore predefinito</string>
@@ -69,6 +72,7 @@
   <string name="updates">Aggiornamenti</string>
   <string name="auto_updates">Aggiornamenti automatici</string>
   <string name="check_for_updates">Controlla aggiornamenti</string>
+  <string name="last_check">Ultimo Controllo</string>
   <string name="about">Riguardo a</string>
   <string name="version">Versione</string>
   <string name="changelog">Cambiamenti</string>
@@ -78,4 +82,24 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Solo wifi</string>
   <string name="wifi_only_message">Puoi visualizzare i video solo da una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>
+  <!--NavigationDrawer-->
+  <string name="share">Condividi</string>
+  <string name="drawer_open">Apri cartella di navigazione</string>
+  <string name="drawer_close">Chiudi cartella di navigazione</string>
+  <string name="no_search_results">Nessun risultato trovato</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time! è il risultato di tanti sviluppatori e Designers che hanno lavorato alle API insieme per rendere
+⇥⇥l\'esperienza di vedere i film torrent più semplice possibile.\n\nSiamo un progetto Open Source. Veniamo da tutto il mondo, amiamo
+⇥⇥i nostri filme. E, ragazzi, quanto amiamo i Popcorn!</string>
+  <string name="website">Sito</string>
+  <string name="discuss">Discussioni</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Hai provato Popcorn Time per Android? È fantastico!
+https://popcorntime.io/</string>
+  <string name="share_dialog_title">Condividi con:</string>
 </resources>

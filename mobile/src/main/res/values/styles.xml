@@ -16,40 +16,95 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.PopcornTime" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@color/bg</item>
+	<style name="Theme.HiddenActivity" parent="Theme.AppCompat.NoActionBar">
+		<item name="android:windowIsTranslucent">true</item>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:backgroundDimEnabled">false</item>
+		<item name="android:windowAnimationStyle">@null</item>
+		<item name="android:activityOpenEnterAnimation">@null</item>
+		<item name="android:activityCloseEnterAnimation">@null</item>
+	</style>
 
-        <item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
-        <item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
-    </style>
+	<!-- These customisations apply to all platforms -->
+	<style name="Theme.Base" parent="Theme.AppCompat.NoActionBar">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+		<item name="colorAccent">@color/accent</item>
+		<item name="android:listDivider">@drawable/list_divider</item>
+		<!--<item name="windowActionBarOverlay">true</item>-->
+		<item name="android:windowBackground">@color/bg</item>
+	</style>
 
-    <style name="ProgressBar.PopcornTime" parent="android:Widget.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
-        <item name="android:indeterminateDrawable">
-            @drawable/progress_indeterminate_horizontal_holo_light
-        </item>
-        <item name="android:minHeight">16dip</item>
-        <item name="android:maxHeight">16dip</item>
-    </style>
+	<style name="Theme.PopcornTime" parent="Theme.Base">
+		<item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
+		<item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
+	</style>
 
-    <style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
-        </item>
-        <item name="android:indeterminateDrawable">
-            @drawable/scrubber_progress_horizontal_holo_light
-        </item>
-        <item name="android:minHeight">13dip</item>
-        <item name="android:maxHeight">13dip</item>
-        <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
-        <item name="android:thumbOffset">16dip</item>
-        <item name="android:paddingLeft">16dip</item>
-        <item name="android:paddingRight">16dip</item>
-    </style>
+	<style name="Theme.PopcornTime.Search" parent="Theme.PopcornTime">
+		<item name="android:windowAnimationStyle">@style/ActivityFadeAnimation</item>
+	</style>
+
+	<style name="Theme.Dialog.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:backgroundDimEnabled">true</item>
+	</style>
+
+	<style name="ActivityFadeAnimation" parent="@android:style/Animation.Activity">
+		<item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+		<item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+		<item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+		<item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
+	</style>
+
+	<style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+		<item name="colorControlNormal">@android:color/white</item>
+		<item name="colorAccent">@android:color/white</item>
+	</style>
+
+	<style name="Theme.PopcornTime.NavigationDrawer" parent="Theme.PopcornTime"></style>
+
+	<style name="Theme.PopcornTime.TransparentStatusBar" parent="Theme.PopcornTime"></style>
+
+	<style name="ProgressBar.PopcornTime" parent="android:Widget.ProgressBar.Horizontal">
+		<item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
+		<item name="android:indeterminateDrawable">
+			@drawable/progress_indeterminate_horizontal_holo_light
+		</item>
+		<item name="android:minHeight">16dip</item>
+		<item name="android:maxHeight">16dip</item>
+	</style>
+
+	<style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
+		<item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
+		</item>
+		<item name="android:indeterminateDrawable">
+			@drawable/scrubber_progress_horizontal_holo_light
+		</item>
+		<item name="android:minHeight">13dip</item>
+		<item name="android:maxHeight">13dip</item>
+		<item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
+		<item name="android:thumbOffset">16dip</item>
+		<item name="android:paddingLeft">16dip</item>
+		<item name="android:paddingRight">16dip</item>
+	</style>
+
+	<style name="AboutButton" parent="android:Widget.Button">
+		<item name="android:layout_marginTop">32dp</item>
+		<item name="android:drawablePadding">16dp</item>
+		<item name="android:layout_gravity">center_horizontal</item>
+		<item name="android:layout_centerHorizontal">true</item>
+        <item name="android:padding">16dp</item>
+		<item name="android:gravity">center</item>
+		<item name="android:textColor">@color/text_color</item>
+		<item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
+		<item name="android:background">?attr/selectableItemBackground</item>
+	</style>
 
 </resources>

@@ -12,7 +12,9 @@
   <string name="title_shows">Serier</string>
   <string name="title_movies">Film</string>
   <string name="search">Søg</string>
-  <string name="loading">Indlæser data...</string>
+  <string name="searching">Søger...</string>
+  <string name="loading_data">Indlæser data...</string>
+  <string name="loading_details">Indlæser detaljer...</string>
   <string name="no_data_found">Ingen data fundet</string>
   <string name="unknown_error">Noget gik galt</string>
   <!--DetailActivity strings-->
@@ -28,6 +30,7 @@
   <!--StreamLoadingActivity strings-->
   <string name="streaming_started">Streaming startet</string>
   <string name="waiting_for_subtitles">Venter på undertekster</string>
+  <string name="seeds">seeds</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Afspilles nu</string>
   <string name="volume">Lydstyrke</string>
@@ -43,7 +46,7 @@
   <string name="accept">Accepter</string>
   <string name="leave">Forlad</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Indstillinger</string>
+  <string name="settings">Indstillinger</string>
   <string name="general">Generelt</string>
   <string name="default_view">Standard oversigt</string>
   <string name="default_player">Standard videoafspiller</string>
@@ -69,6 +72,7 @@
   <string name="updates">Opdateringer</string>
   <string name="auto_updates">Automatiske opdateringer</string>
   <string name="check_for_updates">Tjek for opdateringer</string>
+  <string name="last_check">Sidst tjekket</string>
   <string name="about">Om</string>
   <string name="version">Version</string>
   <string name="changelog">Ændringslog</string>
@@ -78,4 +82,22 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan kun streame videoer via Wi-Fi. Du kan deaktivere dette i indstillinger, hvis du vil streame via mobilnetværk</string>
+  <!--NavigationDrawer-->
+  <string name="share">Del</string>
+  <string name="drawer_open">Åbn navigationsskuffe</string>
+  <string name="drawer_close">Luk navigationsskuffe</string>
+  <string name="no_search_results">Ingen søgeresultater fundet</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time! er resultatet af mange udviklere og designere, som har sammensat nogle API\'er for at gøre oplevelsen af at se torrent-film så enkelt som muligt.</string>
+  <string name="website">Hjemmeside</string>
+  <string name="discuss">Discuss</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Har du prøvet Popcorn Time for Android? Det er vildt godt!
+https://popcorntime.io/</string>
+  <string name="share_dialog_title">Del med</string>
 </resources>

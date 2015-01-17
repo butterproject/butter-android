@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.utils.ToolbarUtils;
 
 public class TermsActivity extends BaseActivity {
 
@@ -24,11 +25,7 @@ public class TermsActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_terms);
         setSupportActionBar(toolbar);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + PixelUtils.getStatusBarHeight(this)));
-        } else {
-            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
-        }
+		ToolbarUtils.updateToolbarHeight(this,toolbar);
     }
 
     public void acceptClick(View v) {

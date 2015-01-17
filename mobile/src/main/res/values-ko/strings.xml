@@ -12,7 +12,9 @@
   <string name="title_shows">쇼</string>
   <string name="title_movies">영화</string>
   <string name="search">찾기</string>
-  <string name="loading">데이터 불러오는 중...</string>
+  <string name="searching">찾는 중...</string>
+  <string name="loading_data">데이터 불러오는 중...</string>
+  <string name="loading_details">상세정보 불러오는 중...</string>
   <string name="no_data_found">발견된 데이터 없음</string>
   <string name="unknown_error">무언가 잘못됐습니다</string>
   <!--DetailActivity strings-->
@@ -28,6 +30,7 @@
   <!--StreamLoadingActivity strings-->
   <string name="streaming_started">스트리밍 시작됨</string>
   <string name="waiting_for_subtitles">자막 대기 중</string>
+  <string name="seeds">시드</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">지금 상영 중</string>
   <string name="volume">볼륨</string>
@@ -43,7 +46,7 @@
   <string name="accept">동의</string>
   <string name="leave">떠나기</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">설정</string>
+  <string name="settings">설정</string>
   <string name="general">일반</string>
   <string name="default_view">기본 개요</string>
   <string name="default_player">기본 비디오 재생기</string>
@@ -69,6 +72,7 @@
   <string name="updates">업데이트</string>
   <string name="auto_updates">자동 업데이트</string>
   <string name="check_for_updates">업데이트 확인</string>
+  <string name="last_check">지난번 검사</string>
   <string name="about">정보</string>
   <string name="version">버전</string>
   <string name="changelog">변경사항</string>
@@ -78,4 +82,23 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi만</string>
   <string name="wifi_only_message">Wi-Fi만을 통해서 비디오를 스트리밍할 수 있습니다. 셀룰러 연결에서도 스트리밍을 하길 원한다면 설정에서 이 항목을 비활성화하세요.</string>
+  <!--NavigationDrawer-->
+  <string name="share">공유</string>
+  <string name="drawer_open">네비게이션 드로어 열기</string>
+  <string name="drawer_close">네비게이션 드로어 닫기</string>
+  <string name="no_search_results">검색된 결과 없음</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time은 가능한 쉽게 토렌트 영화를 볼 수 있게 만드는 API들을 집어넣은 많은 개발자와 디자이너의
+\t\t결과물입니다.\n\n오픈소스프로젝트이구요. 전세계에서 참여하고 있습니다.
+\t\t영화를 사랑하고 팝콘을 무지 사랑합니다.</string>
+  <string name="website">웹사이트</string>
+  <string name="discuss">토론</string>
+  <string name="google_plus">구글+</string>
+  <string name="facebook">페이스북</string>
+  <string name="git">Git</string>
+  <string name="blog">블로그</string>
+  <string name="twitter">트위터</string>
+  <!--Share dialog-->
+  <string name="share_text">안드로이드용  Popcorn Time를 써보셨나요? 끝내줍니다! https://popcorntime.io/</string>
+  <string name="share_dialog_title">다음으로 공유</string>
 </resources>

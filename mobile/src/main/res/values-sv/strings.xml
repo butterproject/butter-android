@@ -12,7 +12,9 @@
   <string name="title_shows">Shows</string>
   <string name="title_movies">Filmer</string>
   <string name="search">Sök</string>
-  <string name="loading">Laddar data...</string>
+  <string name="searching">Söker...</string>
+  <string name="loading_data">Laddar data...</string>
+  <string name="loading_details">Laddar information...</string>
   <string name="no_data_found">Ingen data hittades</string>
   <string name="unknown_error">Något gick fel</string>
   <!--DetailActivity strings-->
@@ -44,7 +46,7 @@
   <string name="accept">Accept</string>
   <string name="leave">Lämna</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Inställningar</string>
+  <string name="settings">Inställningar</string>
   <string name="general">Allmänt</string>
   <string name="default_view">Förvald vy</string>
   <string name="default_player">Standardvideospelare</string>
@@ -80,4 +82,23 @@
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Endast Wi-Fi</string>
   <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>
+  <!--NavigationDrawer-->
+  <string name="share">Dela</string>
+  <string name="drawer_open">Öppen navigering låda</string>
+  <string name="drawer_close">Stäng navigering låda</string>
+  <string name="no_search_results">Inga sökresultat hittades</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time är resultatet av många utvecklare och designers som har slagit ihop ett gäng APIs tillsammans för att göra 
+⇥⇥upplevelsen att titta torrent filmer så enkla som möjligt. \ n \ nVi är ett open source-projekt. Vi är från hela världen. Vi
+⇥⇥älskar våra filmer. Oh boy, vad vi älskar popcorn.</string>
+  <string name="website">Websida </string>
+  <string name="discuss">Diskutera</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Har du provat Popcorn Time till Android? Den är grymt! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Dela med</string>
 </resources>
