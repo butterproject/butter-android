@@ -8,6 +8,8 @@
 
 	<fragment
 		android:layout_width="match_parent"
-		class="pct.droid.fragments.AboutFragment"
-		android:layout_height="match_parent" />
+		android:layout_height="match_parent"
+        android:id="@+id/aboutFragment"
+        class="pct.droid.fragments.AboutFragment" />
+
 </LinearLayout>
