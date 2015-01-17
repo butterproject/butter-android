@@ -73,9 +73,9 @@ android {
         def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
         def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
             Properties properties = new Properties()
-            println "...copying apiSecret (${crashlyticsSecret}) for ${variant.name}"
+            println "...copying apiSecret for ${variant.name}"
             properties.put("apiSecret", crashlyticsSecret)
-            println "...copying apiKey (${crashlyticsKey}) for ${variant.name}"
+            println "...copying apiKey for ${variant.name}"
             properties.put("apiKey", crashlyticsKey)
             properties.store(new FileWriter(crashlyticsProperties), "")
         }
