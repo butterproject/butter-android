@@ -15,7 +15,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import com.bugsnag.android.Bugsnag;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -49,8 +48,6 @@ public class PopcornApplication extends VLCApplication {
     public void onCreate() {
         super.onCreate();
         sDefSystemLanguage = LocaleUtils.getCurrent();
-
-        Bugsnag.register(this, Constants.BUGSNAG_KEY);
 
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
