@@ -2,6 +2,7 @@ package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
 
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
@@ -23,8 +24,8 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	protected String mApiUrl = "https://yts.pm/api/";
-	protected String mMirrorApiUrl = "https://yts.wf/api/";
+	protected String mApiUrl = "http://ytspt.re/api/";
+	protected String mMirrorApiUrl = "http://proxy.piratenpartij.nl/yts.re/api/";
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -119,7 +120,10 @@ public class YTSProvider extends MediaProvider {
 					} catch (IllegalStateException e) {
 						onFailure(response.request(), new IOException("JSON Failed"));
 						return;
-					}
+					} catch (JsonSyntaxException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
 
 					if (result.status != null && result.status.equals("fail")) {
 						callback.onFailure(new NetworkErrorException(result.error));
@@ -200,7 +204,10 @@ public class YTSProvider extends MediaProvider {
 					} catch (IllegalStateException e) {
 						onFailure(response.request(), new IOException("JSON Failed"));
 						return;
-					}
+					} catch (JsonSyntaxException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    }
 
 					if (result.status != null && result.status.equals("fail")) {
 						callback.onFailure(new NetworkErrorException(result.error));
@@ -267,6 +274,7 @@ public class YTSProvider extends MediaProvider {
 							return;
 						}
 						callback.onFailure(new IllegalStateException("Empty list"));
+                        return;
 					}
 				}
 				callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
@@ -316,25 +324,25 @@ public class YTSProvider extends MediaProvider {
 			for (LinkedTreeMap<String, Object> item : MovieList) {
 				Movie movie = new Movie();
 
-				movie.videoId = item.get("ImdbCode").toString();
-				String torrentQuality = item.get("Quality").toString();
+				movie.videoId = (String) item.get("ImdbCode");
+				String torrentQuality = (String) item.get("Quality");
 
 				if (torrentQuality.equals("3D")) {
 					continue;
 				}
 
 				Media.Torrent torrent = new Media.Torrent();
-				torrent.url = item.get("TorrentMagnetUrl").toString();
-				torrent.seeds = item.get("TorrentSeeds").toString();
-				torrent.peers = item.get("TorrentPeers").toString();
+				torrent.url = (String) item.get("TorrentMagnetUrl");
+				torrent.seeds = (String) item.get("TorrentSeeds");
+				torrent.peers = (String) item.get("TorrentPeers");
 
 				int existingItem = isInResults(existingList, movie.videoId);
 				if (existingItem == -1) {
 					movie.title = item.get("MovieTitleClean")
 							.toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
-					movie.year = item.get("MovieYear").toString();
-					movie.genre = item.get("Genre").toString();
-					movie.rating = item.get("MovieRating").toString();
+					movie.year = (String) item.get("MovieYear");
+					movie.genre = (String) item.get("Genre");
+					movie.rating = (String) item.get("MovieRating");
 				} else {
 					movie = (Movie) existingList.get(existingItem);
 				}
