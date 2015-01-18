@@ -66,7 +66,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
@@ -86,8 +86,7 @@ import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, OnSystemUiVisibilityChangeListener, TorrentService.Listener {
 
 
-	public static Intent startActivity(Activity activity, String streamUrl, Media data, String quality, String subtitleLanguage,
-			long resumePosition) {
+	public static Intent startActivity(Activity activity, String streamUrl, Media data, String quality, String subtitleLanguage, long resumePosition) {
 		Intent i = new Intent(activity, VideoPlayerActivity.class);
 		i.putExtra(VideoPlayerActivity.DATA, data);
 		i.putExtra(VideoPlayerActivity.QUALITY, quality);

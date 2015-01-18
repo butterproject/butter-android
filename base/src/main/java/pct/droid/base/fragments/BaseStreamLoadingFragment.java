@@ -23,9 +23,9 @@ import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
@@ -120,7 +120,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      * Start the internal player for a streaming torrent
      *
      * @param activity
-     * @param s
+     * @param location
      * @param media
      * @param quality
      * @param subtitleLanguage
@@ -128,7 +128,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     protected abstract void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
                                                 String subtitleLanguage,
-                                                int i);
+                                                int resumePosition);
 
     @DebugLog
     private void setState(final State state) {
@@ -318,38 +318,19 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     mSubsStatus = SubsStatus.SUCCESS;
                 }
             } else {
-                // TODO: make more generic
-                if (data instanceof Movie) {
-                    mSubsProvider = new YSubsProvider();
-                    mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
-                        @Override
-                        public void onSuccess(Map<String, String> items) {
-                            data.subtitles = items;
-                            mSubsStatus = SubsStatus.SUCCESS;
-                        }
+                mSubsProvider = data.getSubsProvider();
+                mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
+                    @Override
+                    public void onSuccess(Map<String, String> items) {
+                        data.subtitles = items;
+                        mSubsStatus = SubsStatus.SUCCESS;
+                    }
 
-                        @Override
-                        public void onFailure(Exception e) {
-                            mSubsStatus = SubsStatus.FAILURE;
-                        }
-                    });
-                } else {
-                    mSubsProvider = new OpenSubsProvider();
-                    Show.Episode episode = (Show.Episode) data;
-                    Show show = mStreamInfo.getShow();
-                    mSubsProvider.getList(show, episode, new SubsProvider.Callback() {
-                        @Override
-                        public void onSuccess(Map<String, String> items) {
-                            data.subtitles = items;
-                            mSubsStatus = SubsStatus.SUCCESS;
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            mSubsStatus = SubsStatus.FAILURE;
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailure(Exception e) {
+                        mSubsStatus = SubsStatus.FAILURE;
+                    }
+                });
             }
         }
     }

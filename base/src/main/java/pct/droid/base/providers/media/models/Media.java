@@ -1,10 +1,12 @@
-package pct.droid.base.providers.media.types;
+package pct.droid.base.providers.media.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import pct.droid.base.providers.subs.SubsProvider;
 
 public class Media implements Parcelable {
     public String videoId;
@@ -118,5 +120,9 @@ public class Media implements Parcelable {
                 return new Torrent[size];
             }
         };
+    }
+
+    public SubsProvider getSubsProvider() {
+        throw new AbstractMethodError("Not implemented");
     }
 }

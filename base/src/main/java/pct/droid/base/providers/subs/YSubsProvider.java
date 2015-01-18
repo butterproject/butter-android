@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 
 public class YSubsProvider extends SubsProvider {
 

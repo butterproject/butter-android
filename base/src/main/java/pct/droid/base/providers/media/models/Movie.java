@@ -1,4 +1,4 @@
-package pct.droid.base.providers.media.types;
+package pct.droid.base.providers.media.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

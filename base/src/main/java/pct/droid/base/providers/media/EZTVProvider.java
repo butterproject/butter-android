@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import pct.droid.base.R;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.providers.subs.OpenSubsProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -173,7 +175,7 @@ public class EZTVProvider extends MediaProvider {
 		public ArrayList<Media> formatDetailForPopcorn() {
 			ArrayList<Media> list = new ArrayList<>();
 			try {
-				Show show = new Show();
+				Show show = new EZTVShow();
 
 				show.title = (String) showData.get("title");
 				show.videoId = (String) showData.get("imdb_id");
@@ -235,7 +237,7 @@ public class EZTVProvider extends MediaProvider {
 
 		public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
 			for (LinkedTreeMap<String, Object> item : showsList) {
-				Show show = new Show();
+				Show show = new EZTVShow();
 
 				show.title = item.get("title").toString();
 				show.videoId = item.get("imdb_id").toString();
@@ -252,7 +254,15 @@ public class EZTVProvider extends MediaProvider {
 		}
 	}
 
-	@Override public int getLoadingMessage() {
+	@Override
+    public int getLoadingMessage() {
 		return R.string.loading_shows;
 	}
+
+    public static class EZTVShow extends Show {
+        @Override
+        public SubsProvider getSubsProvider() {
+            return new OpenSubsProvider();
+        }
+    }
 }

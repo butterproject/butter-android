@@ -1,10 +1,12 @@
-package pct.droid.base.providers.media.types;
+package pct.droid.base.providers.media.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import pct.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
     public String type = "show";
@@ -139,6 +141,11 @@ public class Show extends Media implements Parcelable {
             } else {
                 dest.writeInt(0);
             }
+        }
+
+        @Override
+        public SubsProvider getSubsProvider() {
+            throw new AbstractMethodError("Method not implemented");
         }
 
         @SuppressWarnings("unused")
