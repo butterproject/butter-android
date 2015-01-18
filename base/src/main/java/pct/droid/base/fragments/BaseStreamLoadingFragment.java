@@ -37,10 +37,10 @@ import pct.droid.base.utils.ThreadUtils;
 
 /**
  * This fragment handles starting a stream of a torrent.
- *
- *
+ * <p/>
+ * <p/>
  * It does multiple things:
- *
+ * <p/>
  * <pre>
  * 1. Downloads torrent file
  * 2. Downloads subtitles file
@@ -49,387 +49,403 @@ import pct.droid.base.utils.ThreadUtils;
  * 3. Starts downloading (buffering) the torrent
  * 4. Starts the Video activity
  * </pre>
- *
- *
- *
+ * <p/>
+ * <p/>
+ * <p/>
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
 public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentService.Listener {
 
-	private FragmentListener mCallback;
-	private SubsProvider mSubsProvider;
-	private Boolean mPlayerStarted = false, mHasSubs = false;
-	private TorrentService mService;
+    protected FragmentListener mCallback;
+    private SubsProvider mSubsProvider;
+    private Boolean mPlayerStarted = false, mHasSubs = false;
+    private TorrentService mService;
 
-	private StreamInfo mStreamInfo;
+    private StreamInfo mStreamInfo;
 
-	private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
+    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
 
-	private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
-	private String mSubtitleLanguage = null, mVideoLocation = "";
+    private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
+    private String mSubtitleLanguage = null, mVideoLocation = "";
 
-	public enum State {
-		UNINITIALISED, WAITING_TORRENT, WAITING_SUBTITLES, BUFFERING, STREAMING, ERROR;
-	}
+    public enum State {
+        UNINITIALISED, WAITING_TORRENT, WAITING_SUBTITLES, BUFFERING, STREAMING, ERROR;
+    }
 
-	@Override public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
-	@Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-		mStreamInfo = mCallback.getStreamInformation();
-		loadSubs();
-	}
-
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		TorrentService.bindHere(getActivity(), mServiceConnection);
-	}
+        mStreamInfo = mCallback.getStreamInformation();
+        loadSubs();
+    }
 
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		if (mService != null)
-			getActivity().unbindService(mServiceConnection);
-	}
-
-	@Override public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (activity instanceof FragmentListener) mCallback = (FragmentListener) activity;
-	}
+    @Override
+    public void onStart() {
+        super.onStart();
+        TorrentService.bindHere(getActivity(), mServiceConnection);
+    }
 
 
-	/**
-	 * Update the view based on a state.
-	 *
-	 * @param state
-	 * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
-	 */
-	protected abstract void updateView(State state, Object extra);
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mService != null)
+            getActivity().unbindService(mServiceConnection);
+    }
 
-	/**
-	 * Start the internal player for a streaming torrent
-	 *
-	 * @param activity
-	 * @param s
-	 * @param media
-	 * @param quality
-	 * @param subtitleLanguage
-	 * @param i
-	 */
-	protected abstract void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
-			String subtitleLanguage,
-			int i);
-
-	@DebugLog
-	private void setState(final State state) {
-		setState(state, null);
-	}
-
-	@DebugLog
-	private void setState(final State state, final Object extra) {
-		ThreadUtils.runOnUiThread(new Runnable() {
-			@Override public void run() {
-				updateView(state, extra);
-			}
-		});
-	}
-
-	/**
-	 * Starts the player for a torrent stream.
-	 *
-	 * Will either start an external player, or the internal one
-	 */
-	@DebugLog
-	private void startPlayer(String location) {
-		if (mHasSubs && mSubsStatus == SubsStatus.DOWNLOADING) {
-			ThreadUtils.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					setState(State.WAITING_SUBTITLES);
-				}
-			});
-			return;
-		}
-
-		if (!mPlayerStarted) {
-			mPlayerStarted = true;
-
-			//play with default 'external' player
-			//todo: why don't we remove torrent service listeners and kill activity when playing externally?
-			//I assume so the service continues running? Service should have a notification
-			boolean playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
-
-			if (!playingExternal) {
-				//play internally
-				mService.removeListener();
-				startPlayerActivity(getActivity(), "file://" + location, mStreamInfo.getMedia(), mStreamInfo.getQuality(),
-						mStreamInfo.getSubtitleLanguage(), 0);
-				getActivity().finish();
-			}
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (mPlayerStarted) {
-			getActivity().onBackPressed();
-		}
-
-		setState(State.WAITING_TORRENT);
-	}
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof FragmentListener) mCallback = (FragmentListener) activity;
+    }
 
 
-	private ServiceConnection mServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			mService = ((TorrentService.ServiceBinder) service).getService();
-			mService.setListener(BaseStreamLoadingFragment.this);
+    /**
+     * Update the view based on a state.
+     *
+     * @param state
+     * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
+     */
+    protected abstract void updateView(State state, Object extra);
 
-			//kicks off the torrent stream
-			startStream();
-		}
+    /**
+     * Start the internal player for a streaming torrent
+     *
+     * @param activity
+     * @param s
+     * @param media
+     * @param quality
+     * @param subtitleLanguage
+     * @param i
+     */
+    protected abstract void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
+                                                String subtitleLanguage,
+                                                int i);
 
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			mService = null;
-		}
-	};
+    @DebugLog
+    private void setState(final State state) {
+        setState(state, null);
+    }
 
+    @DebugLog
+    private void setState(final State state, final Object extra) {
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateView(state, extra);
+            }
+        });
+    }
 
-	/**
-	 * Starts the torrent service streaming a torrent url
-	 */
-	private void startStream() {
-		if (null == mService) throw new IllegalStateException("Torrent service must be bound");
-		String torrentUrl = mStreamInfo.getTorrentUrl();
+    /**
+     * Starts the player for a torrent stream.
+     * <p/>
+     * Will either start an external player, or the internal one
+     */
+    @DebugLog
+    private void startPlayer(String location) {
+        if (mHasSubs && mSubsStatus == SubsStatus.DOWNLOADING) {
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setState(State.WAITING_SUBTITLES);
+                }
+            });
+            return;
+        }
 
-		//if the torrent service is currently streaming another file, stop it.
-		if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
-			mService.stopStreaming();
-		}
-		//start streaming the new file
-		mService.streamTorrent(torrentUrl);
-	}
+        if (!mPlayerStarted) {
+            mPlayerStarted = true;
 
-	/**
-	 * Stops the torrent service streaming
-	 */
-	@DebugLog
-	public void cancelStream() {
-		if (mService != null) {
-			mService.stopStreaming();
-		}
-	}
+            //play with default 'external' player
+            //todo: why don't we remove torrent service listeners and kill activity when playing externally?
+            //I assume so the service continues running? Service should have a notification
+            boolean playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
 
-	@Override
-	@DebugLog
-	public void onStreamStarted() {
-		setState(State.BUFFERING);
-	}
+            if (!playingExternal) {
+                //play internally
+                mService.removeListener();
+                startPlayerActivity(getActivity(), "file://" + location, mStreamInfo.getMedia(), mStreamInfo.getQuality(),
+                        mStreamInfo.getSubtitleLanguage(), 0);
+                getActivity().finish();
+            }
+        }
+    }
 
-	@Override
-	@DebugLog
-	public void onStreamError(Exception e) {
-		ThreadUtils.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				State state = State.ERROR;
-				setState(State.ERROR, getString(R.string.error_files));
-			}
-		});
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPlayerStarted) {
+            getActivity().onBackPressed();
+        }
 
-	/**
-	 * Called when torrent buffering has reached 100%
-	 *
-	 * @param videoLocation
-	 */
-	@Override
-	@DebugLog
-	public void onStreamReady(File videoLocation) {
-		mVideoLocation = videoLocation.toString();
-		startPlayer(mVideoLocation);
-	}
-
-
-	/**
-	 * Called when the torrent buffering status has been updated
-	 *
-	 * @param status
-	 */
-	@Override
-	@DebugLog
-	public void onStreamProgress(DownloadStatus status) {
-		if (mVideoLocation.isEmpty()) {
-			setState(State.STREAMING, status);
-		} else {
-			startPlayer(mVideoLocation);
-		}
-	}
+        setState(State.WAITING_TORRENT);
+    }
 
 
-	/**
-	 * Downloads the subs file
-	 */
-	private void loadSubs() {
-		final Media data = mStreamInfo.getMedia();
-		if (null != data) {
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((TorrentService.ServiceBinder) service).getService();
+            mService.setListener(BaseStreamLoadingFragment.this);
 
-			//if there are no subtitles specified, try to use the default subs
-			if (mStreamInfo.getSubtitleLanguage() == null && data.subtitles != null && data.subtitles.size() > 0) {
-				if (data.subtitles.containsKey(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
-					mStreamInfo.setSubtitleLanguage(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs"));
-				}
-			}
+            //kicks off the torrent stream
+            startStream();
+        }
 
-			//todo: tidy up
-			mSubsStatus = SubsStatus.SUCCESS;
-
-
-			//load subtitles
-			if (data.subtitles != null && data.subtitles.size() > 0 && mStreamInfo.mSubtitleLanguage != null) {
-				mHasSubs = true;
-				mSubtitleLanguage = mStreamInfo.mSubtitleLanguage;
-				if (!mSubtitleLanguage.equals("no-subs")) {
-					SubsProvider.download(getActivity(), data, mSubtitleLanguage, new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							mSubsStatus = SubsStatus.FAILURE;
-						}
-
-						@Override
-						public void onResponse(Response response) throws IOException {
-							mSubsStatus = SubsStatus.SUCCESS;
-						}
-					});
-				} else {
-					mSubsStatus = SubsStatus.SUCCESS;
-				}
-			} else {
-				// TODO: make more generic
-				if (data instanceof Movie) {
-					mSubsProvider = new YSubsProvider();
-					mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
-						@Override
-						public void onSuccess(Map<String, String> items) {
-							data.subtitles = items;
-							mSubsStatus = SubsStatus.SUCCESS;
-						}
-
-						@Override
-						public void onFailure(Exception e) {
-							mSubsStatus = SubsStatus.FAILURE;
-						}
-					});
-				} else {
-					mSubsProvider = new OpenSubsProvider();
-					Show.Episode episode = (Show.Episode) data;
-					Show show = mStreamInfo.getShow();
-					mSubsProvider.getList(show, episode, new SubsProvider.Callback() {
-						@Override
-						public void onSuccess(Map<String, String> items) {
-							data.subtitles = items;
-							mSubsStatus = SubsStatus.SUCCESS;
-						}
-
-						@Override
-						public void onFailure(Exception e) {
-							mSubsStatus = SubsStatus.FAILURE;
-						}
-					});
-				}
-			}
-		}
-	}
-
-	public interface FragmentListener {
-		StreamInfo getStreamInformation();
-	}
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
 
 
-	/**
-	 * Container for all information needed to start a stream
-	 */
-	public static class StreamInfo implements Parcelable {
-		private Media mMedia;
-		private String mSubtitleLanguage;
-		private String mQuality;
-		private String mTorrentUrl;
-		private Show mShow;
+    /**
+     * Starts the torrent service streaming a torrent url
+     */
+    private void startStream() {
+        if (null == mService) throw new IllegalStateException("Torrent service must be bound");
+        String torrentUrl = mStreamInfo.getTorrentUrl();
 
-		public StreamInfo(String torrentUrl) {
-			this(null, null, torrentUrl, null, null);
-		}
+        //if the torrent service is currently streaming another file, stop it.
+        if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
+            mService.stopStreaming();
+        }
+        //start streaming the new file
+        mService.streamTorrent(torrentUrl);
+    }
 
-		public StreamInfo(Media media, String torrentUrl, String subtitleLanguage, String quality) {
-			this(media, null, torrentUrl, subtitleLanguage, quality);
-		}
+    /**
+     * Stops the torrent service streaming
+     */
+    @DebugLog
+    public void cancelStream() {
+        if (mService != null) {
+            mService.stopStreaming();
+        }
+    }
 
-		public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality) {
-			mMedia = media;
-			mShow = show;
-			mTorrentUrl = torrentUrl;
-			mSubtitleLanguage = subtitleLanguage;
-			mQuality = quality;
-		}
+    @Override
+    @DebugLog
+    public void onStreamStarted() {
+        setState(State.BUFFERING);
+    }
 
-		public Show getShow() {
-			return mShow;
-		}
+    @Override
+    @DebugLog
+    public void onStreamError(Exception e) {
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                State state = State.ERROR;
+                setState(State.ERROR, getString(R.string.error_files));
+            }
+        });
+    }
 
-		public Media getMedia() {
-			return mMedia;
-		}
-
-		public String getSubtitleLanguage() {
-			return mSubtitleLanguage;
-		}
-
-		public String getQuality() {
-			return mQuality;
-		}
-
-		public String getTorrentUrl() {
-			return mTorrentUrl;
-		}
-
-		public void setSubtitleLanguage(String subtitleLanguage) {
-			mSubtitleLanguage = subtitleLanguage;
-		}
+    /**
+     * Called when torrent buffering has reached 100%
+     *
+     * @param videoLocation
+     */
+    @Override
+    @DebugLog
+    public void onStreamReady(File videoLocation) {
+        mVideoLocation = videoLocation.toString();
+        startPlayer(mVideoLocation);
+    }
 
 
-		@Override public int describeContents() { return 0; }
+    /**
+     * Called when the torrent buffering status has been updated
+     *
+     * @param status
+     */
+    @Override
+    @DebugLog
+    public void onStreamProgress(DownloadStatus status) {
+        if (mVideoLocation.isEmpty()) {
+            setState(State.STREAMING, status);
+        } else {
+            startPlayer(mVideoLocation);
+        }
+    }
 
-		@Override public void writeToParcel(Parcel dest, int flags) {
-			dest.writeParcelable(this.mMedia, 0);
-			dest.writeString(this.mSubtitleLanguage);
-			dest.writeString(this.mQuality);
-			dest.writeString(this.mTorrentUrl);
-			dest.writeParcelable(this.mShow, 0);
-		}
 
-		private StreamInfo(Parcel in) {
-			this.mMedia = in.readParcelable(Media.class.getClassLoader());
-			this.mSubtitleLanguage = in.readString();
-			this.mQuality = in.readString();
-			this.mTorrentUrl = in.readString();
-			this.mShow = in.readParcelable(Show.class.getClassLoader());
-		}
+    /**
+     * Downloads the subs file
+     */
+    private void loadSubs() {
+        final Media data = mStreamInfo.getMedia();
+        if (null != data) {
 
-		public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
-			public StreamInfo createFromParcel(Parcel source) {return new StreamInfo(source);}
+            //if there are no subtitles specified, try to use the default subs
+            if (mStreamInfo.getSubtitleLanguage() == null && data.subtitles != null && data.subtitles.size() > 0) {
+                if (data.subtitles.containsKey(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
+                    mStreamInfo.setSubtitleLanguage(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs"));
+                }
+            }
 
-			public StreamInfo[] newArray(int size) {return new StreamInfo[size];}
-		};
-	}
+            //todo: tidy up
+            mSubsStatus = SubsStatus.SUCCESS;
+
+
+            //load subtitles
+            if (data.subtitles != null && data.subtitles.size() > 0 && mStreamInfo.mSubtitleLanguage != null) {
+                mHasSubs = true;
+                mSubtitleLanguage = mStreamInfo.mSubtitleLanguage;
+                if (!mSubtitleLanguage.equals("no-subs")) {
+                    SubsProvider.download(getActivity(), data, mSubtitleLanguage, new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
+                    });
+                } else {
+                    mSubsStatus = SubsStatus.SUCCESS;
+                }
+            } else {
+                // TODO: make more generic
+                if (data instanceof Movie) {
+                    mSubsProvider = new YSubsProvider();
+                    mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
+                        @Override
+                        public void onSuccess(Map<String, String> items) {
+                            data.subtitles = items;
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+                    });
+                } else {
+                    mSubsProvider = new OpenSubsProvider();
+                    Show.Episode episode = (Show.Episode) data;
+                    Show show = mStreamInfo.getShow();
+                    mSubsProvider.getList(show, episode, new SubsProvider.Callback() {
+                        @Override
+                        public void onSuccess(Map<String, String> items) {
+                            data.subtitles = items;
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    public interface FragmentListener {
+        StreamInfo getStreamInformation();
+    }
+
+
+    /**
+     * Container for all information needed to start a stream
+     */
+    public static class StreamInfo implements Parcelable {
+        private Media mMedia;
+        private String mSubtitleLanguage;
+        private String mQuality;
+        private String mTorrentUrl;
+        private Show mShow;
+
+        public StreamInfo(String torrentUrl) {
+            this(null, null, torrentUrl, null, null);
+        }
+
+        public StreamInfo(Media media, String torrentUrl, String subtitleLanguage, String quality) {
+            this(media, null, torrentUrl, subtitleLanguage, quality);
+        }
+
+        public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality) {
+            mMedia = media;
+            mShow = show;
+            mTorrentUrl = torrentUrl;
+            mSubtitleLanguage = subtitleLanguage;
+            mQuality = quality;
+        }
+
+        public boolean isShow() {
+            return null != mShow;
+        }
+
+        public Show getShow() {
+            return mShow;
+        }
+
+        public Media getMedia() {
+            return mMedia;
+        }
+
+        public String getSubtitleLanguage() {
+            return mSubtitleLanguage;
+        }
+
+        public String getQuality() {
+            return mQuality;
+        }
+
+        public String getTorrentUrl() {
+            return mTorrentUrl;
+        }
+
+        public void setSubtitleLanguage(String subtitleLanguage) {
+            mSubtitleLanguage = subtitleLanguage;
+        }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeParcelable(this.mMedia, 0);
+            dest.writeString(this.mSubtitleLanguage);
+            dest.writeString(this.mQuality);
+            dest.writeString(this.mTorrentUrl);
+            dest.writeParcelable(this.mShow, 0);
+        }
+
+        private StreamInfo(Parcel in) {
+            this.mMedia = in.readParcelable(Media.class.getClassLoader());
+            this.mSubtitleLanguage = in.readString();
+            this.mQuality = in.readString();
+            this.mTorrentUrl = in.readString();
+            this.mShow = in.readParcelable(Show.class.getClassLoader());
+        }
+
+        public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
+            public StreamInfo createFromParcel(Parcel source) {
+                return new StreamInfo(source);
+            }
+
+            public StreamInfo[] newArray(int size) {
+                return new StreamInfo[size];
+            }
+        };
+    }
 
 
 }
