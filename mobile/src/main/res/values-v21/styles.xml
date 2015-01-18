@@ -2,6 +2,8 @@
 <resources>
 
 	<style name="Theme.PopcornTime" parent="Theme.Base">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
 		<!-- v21 specific customisations here -->
 	</style>
 
@@ -14,5 +16,14 @@
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
 		<item name="android:statusBarColor">@android:color/transparent</item>
 	</style>
+
+    <style name="Theme.PopcornTime.Detail" parent="Theme.PopcornTime.TransparentStatusBar">
+        <item name="android:windowExitTransition">@transition/movie_detail_exit</item>
+        <item name="android:windowReenterTransition">@transition/movie_detail_exit</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/movie_detail_shared_exit</item>
+        <item name="android:windowSharedElementExitTransition">@transition/movie_detail_shared_exit</item>
+    </style>
+
 
 </resources>
