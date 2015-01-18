@@ -5,7 +5,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
-    int buildNumber = (int) (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER"))
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
     def gitBranch = (System.getenv("GIT_BRANCH") == null ? "local" : System.getenv("GIT_BRANCH").replace("origin/", ""))
     defaultConfig {
         minSdkVersion 15
