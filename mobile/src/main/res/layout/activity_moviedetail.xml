@@ -153,13 +153,15 @@
 
                 <ImageButton
                     android:id="@+id/playButton"
-                    android:transitionName="fab"
-                    android:elevation="3dp"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp"
-                    android:background="@drawable/play_button_circle" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/play_button_circle"
+                    android:transitionName="fab"
+                    android:elevation="3dp" />
 
                 <LinearLayout
                     android:layout_below="@id/mainInfoBlock"

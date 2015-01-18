@@ -20,12 +20,15 @@ repositories {
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER"))
+    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb" // Valid keys of non-existing organization on Crashlytics to make local building possible
+    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93" // Valid keys of non-existing organization on Crashlytics to make local building possible
 
     defaultConfig {
         applicationId "pct.droid"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
+        versionCode buildNumber
         versionName "0.1.2"
     }
 
@@ -45,7 +48,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            versionNameSuffix "#" + (System.getenv("BUILD_NUMBER") == null ? "local" : "dev" + System.getenv("BUILD_NUMBER")) + (System.getenv("GIT_BRANCH") == null ? "" : "-git-" + System.getenv("GIT_BRANCH").replace("origin/", ""))
+            versionNameSuffix "#" + buildNumber
             applicationIdSuffix ".dev"
         }
     }
@@ -65,8 +68,6 @@ android {
 
     project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
 
-    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "000000"
-    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "000000"
     File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     android.applicationVariants.all { variant ->
         def variantSuffix = variant.name.capitalize()
