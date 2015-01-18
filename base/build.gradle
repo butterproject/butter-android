@@ -12,7 +12,6 @@ android {
         targetSdkVersion 21
         buildConfigField "Integer", "BUILD_NUMBER", "" + buildNumber + ""
         buildConfigField "String", "GIT_BRANCH", "\"" + gitBranch + "\""
-        versionCode buildNumber
     }
 
     buildTypes {

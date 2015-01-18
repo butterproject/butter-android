@@ -77,6 +77,7 @@ public class PopcornUpdater extends Observable {
     private long lastUpdate = 0;
     private String mPackageName;
     private String mVersionName;
+    private Integer mVersionCode;
 
     private PopcornUpdater(Context context) {
         if (Constants.DEBUG_ENABLED) {
@@ -90,6 +91,7 @@ public class PopcornUpdater extends Observable {
 
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(mPackageName, 0);
+            mVersionCode = pInfo.versionCode;
             mVersionName = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -202,7 +204,7 @@ public class PopcornUpdater extends Observable {
                                 channel = variant.get(channelStr).get(abi);
                             }
 
-                            if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= BuildConfig.VERSION_CODE) {
+                            if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
                                 setChanged();
                                 notifyObservers(STATUS_NO_UPDATE);
                             } else {
