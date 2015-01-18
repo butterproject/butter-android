@@ -150,7 +150,7 @@ public class PopcornUpdater extends Observable {
             PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
             setChanged();
 
-            if (mVersionName.contains("local")) return;
+            if (BuildConfig.GIT_BRANCH.contains("local")) return;
 
             notifyObservers(STATUS_CHECKING);
 
