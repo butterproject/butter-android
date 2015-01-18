@@ -32,7 +32,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.NetworkUtils;

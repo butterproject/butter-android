@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import pct.droid.base.R;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
@@ -326,7 +326,7 @@ public class YTSProvider extends MediaProvider {
             }
 
 			for (LinkedTreeMap<String, Object> item : MovieList) {
-				Movie movie = new Movie();
+				Movie movie = new YTSMovie();
 
 				movie.videoId = (String) item.get("ImdbCode");
 				String torrentQuality = (String) item.get("Quality");
@@ -365,8 +365,16 @@ public class YTSProvider extends MediaProvider {
 		}
 	}
 
-	@Override public int getLoadingMessage() {
+	@Override
+    public int getLoadingMessage() {
 		return R.string.loading_movies;
 	}
+
+    public static class YTSMovie extends Movie {
+        @Override
+        public SubsProvider getSubsProvider() {
+            return new YSubsProvider();
+        }
+    }
 
 }

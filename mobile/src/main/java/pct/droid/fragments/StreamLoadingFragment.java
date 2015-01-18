@@ -23,7 +23,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtil;
@@ -155,7 +155,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
                                        String subtitleLanguage,
-                                       int i) {
-        VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, i);
+                                       int resumePosition) {
+        VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
     }
 }

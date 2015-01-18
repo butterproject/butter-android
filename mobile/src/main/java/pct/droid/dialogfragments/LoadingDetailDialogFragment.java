@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.MediaProvider;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.ThreadUtils;
 
 public class LoadingDetailDialogFragment extends DialogFragment {
