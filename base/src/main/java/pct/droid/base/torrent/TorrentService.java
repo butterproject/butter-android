@@ -120,11 +120,11 @@ public class TorrentService extends Service {
                 mCurrentTorrentUrl = torrentUrl;
 
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
-                saveDirectory.mkdirs();
-
-                File torrentFile = new File(saveDirectory, "files/" + System.currentTimeMillis() + ".torrent");
+                File torrentFileDir = new File(saveDirectory, "files");
+                File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
                 try {
-                    torrentFile.getParentFile().mkdirs();
+                    saveDirectory.mkdirs();
+                    torrentFileDir.mkdirs();
                     torrentFile.delete();
                     torrentFile.createNewFile();
                 } catch (IOException e) {
