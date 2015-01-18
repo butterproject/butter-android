@@ -285,7 +285,7 @@ public class YTSProvider extends MediaProvider {
 	private class YTSReponse {
 		public String status;
 		public String error;
-		public ArrayList<LinkedTreeMap<String, Object>> MovieList;
+		public ArrayList<LinkedTreeMap<String, Object>> movieList;
 
 		/**
 		 * Test if there is an item that already exists
@@ -321,7 +321,11 @@ public class YTSProvider extends MediaProvider {
 		 * @return List with items
 		 */
 		public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
-			for (LinkedTreeMap<String, Object> item : MovieList) {
+            if(movieList == null) {
+                movieList = new ArrayList<>();
+            }
+
+			for (LinkedTreeMap<String, Object> item : movieList) {
 				Movie movie = new Movie();
 
 				movie.videoId = (String) item.get("ImdbCode");
