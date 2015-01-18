@@ -9,8 +9,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.bugsnag.android.Bugsnag;
-
 import butterknife.ButterKnife;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
@@ -29,7 +27,6 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 
 	public void onCreate(Bundle savedInstanceState, int layoutId) {
 		super.onCreate(savedInstanceState);
-		Bugsnag.onActivityCreate(this);
 		setContentView(layoutId);
 		ButterKnife.inject(this);
 		mHandler = new Handler(getMainLooper());
@@ -38,22 +35,13 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Bugsnag.onActivityResume(this);
-		getApp().startService();
         CastingManager.getInstance(this).addListener(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Bugsnag.onActivityPause(this);
         CastingManager.getInstance(this).removeListener(this);
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		Bugsnag.onActivityDestroy(this);
 	}
 
 	@Override

@@ -53,7 +53,7 @@
   <string name="i18n_language">Idioma de la aplicación</string>
   <string name="restart_effect">Reiniciar la aplicación para que los cambios tengan efecto</string>
   <string name="device_language">Idioma del dispositivo </string>
-  <string name="stream_over_wifi_only">Transmisión sólo a través de Wi-Fi</string>
+  <string name="stream_over_wifi_only">Transmisión sólo por Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Color</string>
   <string name="subtitle_size">Tamaño</string>
@@ -88,9 +88,7 @@
   <string name="drawer_close">Cerrar cajón de navegación</string>
   <string name="no_search_results">No se encontraron resultados de búsqueda</string>
   <!--About fragment-->
-  <string name="about_message">Popcorn Time es el resultado de muchos desarrolladores y diseñadores que juntaron muchas APIs para que
-⇥⇥la experiencia de ver películas por torrent fuera mucho más fácil.\n\nSomos un proyecto de código abierto. Somos de diferentes partes del mundo. Amamos
-⇥⇥las películas. Y claro, amamos las palomitas de maíz.</string>
+  <string name="about_message">Popcorn Time es el resultado de muchos desarrolladores y diseñadores que juntaron muchas APIs para que la experiencia de ver películas por torrent fuera mucho más fácil.\n\nSomos un proyecto de código abierto. Somos de diferentes partes del mundo. Amamos las películas. Y claro, amamos las palomitas de maíz.</string>
   <string name="website">Página Web</string>
   <string name="discuss">Discuss</string>
   <string name="google_plus">Google+</string>

@@ -29,7 +29,7 @@ import pct.droid.base.Constants;
 import pct.droid.base.casting.BaseCastingClient;
 import pct.droid.base.casting.CastingDevice;
 import pct.droid.base.casting.CastingListener;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.LogUtils;
 
 public class GoogleCastClient extends BaseCastingClient {

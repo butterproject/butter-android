@@ -1,6 +1,6 @@
 package pct.droid.base.casting;
 
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 
 public abstract class BaseCastingClient {
 

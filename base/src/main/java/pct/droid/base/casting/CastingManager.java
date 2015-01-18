@@ -17,7 +17,7 @@ import pct.droid.base.casting.dlna.DLNADevice;
 import pct.droid.base.casting.googlecast.GoogleCastClient;
 import pct.droid.base.casting.googlecast.GoogleDevice;
 import pct.droid.base.casting.server.CastingServerService;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 
 /**
  * CastingManager.java

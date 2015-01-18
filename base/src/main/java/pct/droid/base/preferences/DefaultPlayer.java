@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
