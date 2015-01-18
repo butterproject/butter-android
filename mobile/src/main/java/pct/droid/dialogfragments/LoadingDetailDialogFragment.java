@@ -23,6 +23,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
 	public static final String EXTRA_ITEM_ID = "item_id";
 	public static final String EXTRA_PALETTE_COLOR = "palette_color";
 	private MediaProvider mProvider;
+    private Boolean mSavedInstanceState = false;
 
 	public static LoadingDetailDialogFragment newInstance(String itemId, int paletteColor) {
 		LoadingDetailDialogFragment frag = new LoadingDetailDialogFragment();
@@ -43,6 +44,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        mSavedInstanceState = false;
 		setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Transparent);
 	}
 
@@ -76,7 +78,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
 							@Override
 							public void run() {
 								mCallback.onDetailLoadSuccess(item, paletteColor);
-								dismiss();
+								if(!mSavedInstanceState) dismiss();
 							}
 						});
 
@@ -90,7 +92,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
 								@Override
 								public void run() {
 									mCallback.onDetailLoadFailure();
-									dismiss();
+                                    if(!mSavedInstanceState) dismiss();
 								}
 							});
 						}
@@ -100,7 +102,13 @@ public class LoadingDetailDialogFragment extends DialogFragment {
 		);
 	}
 
-	public interface Callback {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mSavedInstanceState = true;
+    }
+
+    public interface Callback {
 		MediaProvider getProvider();
 
 		void onDetailLoadFailure();
