@@ -48,7 +48,7 @@
 		</activity>
 		<activity
 			android:name="pct.droid.activities.MovieDetailActivity"
-			android:theme="@style/Theme.PopcornTime.TransparentStatusBar"
+			android:theme="@style/Theme.PopcornTime.Detail"
 			android:parentActivityName=".activities.OverviewActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->
 			<meta-data
@@ -62,7 +62,7 @@
 
 		<activity
 			android:name="pct.droid.activities.ShowDetailActivity"
-			android:theme="@style/Theme.PopcornTime.TransparentStatusBar"
+			android:theme="@style/Theme.PopcornTime.Detail"
 			android:parentActivityName=".activities.OverviewActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->
 			<meta-data
@@ -82,7 +82,7 @@
 
 		<activity
 			android:name="pct.droid.activities.StreamLoadingActivity"
-			android:screenOrientation="sensorLandscape" />
+            android:theme="@style/Theme.PopcornTime.Detail" />
 		<activity
 			android:name="pct.droid.activities.VideoPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
