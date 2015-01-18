@@ -35,6 +35,7 @@ import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
@@ -76,7 +77,6 @@ public class PopcornUpdater extends Observable {
     private long lastUpdate = 0;
     private String mPackageName;
     private String mVersionName;
-    private Integer mVersionCode;
 
     private PopcornUpdater(Context context) {
         if (Constants.DEBUG_ENABLED) {
@@ -90,7 +90,6 @@ public class PopcornUpdater extends Observable {
 
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(mPackageName, 0);
-            mVersionCode = pInfo.versionCode;
             mVersionName = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -168,12 +167,10 @@ public class PopcornUpdater extends Observable {
             }
 
             final String channelStr;
-            if (mVersionName.contains("dev")) {
-                channelStr = "development";
-            } else if (mVersionName.contains("git")) {
-                channelStr = mVersionName.replaceAll("(.*-git-).*", "");
-            } else {
+            if(BuildConfig.BUILD_TYPE.equals("release")) {
                 channelStr = "release";
+            } else {
+                channelStr = BuildConfig.GIT_BRANCH;
             }
 
             Request request = new Request.Builder()
@@ -205,7 +202,7 @@ public class PopcornUpdater extends Observable {
                                 channel = variant.get(channelStr).get(abi);
                             }
 
-                            if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                            if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= BuildConfig.VERSION_CODE) {
                                 setChanged();
                                 notifyObservers(STATUS_NO_UPDATE);
                             } else {
