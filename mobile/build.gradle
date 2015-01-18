@@ -20,7 +20,7 @@ repositories {
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER"))
+    int buildNumber = (int) (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER"))
     def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb" // Valid keys of non-existing organization on Crashlytics to make local building possible
     def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93" // Valid keys of non-existing organization on Crashlytics to make local building possible
 
