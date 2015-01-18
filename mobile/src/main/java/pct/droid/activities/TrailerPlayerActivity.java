@@ -36,8 +36,7 @@ import android.widget.VideoView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -200,12 +199,6 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
                     Settings.System.SCREEN_BRIGHTNESS_MODE,
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ((PopcornApplication) getApplication()).stopStreamer();
     }
 
     @Override

@@ -49,12 +49,7 @@
 		<item name="android:windowAnimationStyle">@style/ActivityFadeAnimation</item>
 	</style>
 
-	<style name="Theme.Dialog.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
-		<item name="android:windowIsFloating">true</item>
-		<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:backgroundDimEnabled">true</item>
-	</style>
+    <style name="Theme.PopcornTime.Detail" parent="Theme.PopcornTime.TransparentStatusBar"/>
 
 	<style name="ActivityFadeAnimation" parent="@android:style/Animation.Activity">
 		<item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
@@ -63,7 +58,15 @@
 		<item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
 	</style>
 
-	<style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="Theme.Dialog.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+
+    <style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 		<item name="colorControlNormal">@android:color/white</item>
 		<item name="colorAccent">@android:color/white</item>
 	</style>
@@ -81,29 +84,29 @@
 		<item name="android:maxHeight">16dip</item>
 	</style>
 
-	<style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
-		<item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
-		</item>
-		<item name="android:indeterminateDrawable">
-			@drawable/scrubber_progress_horizontal_holo_light
-		</item>
-		<item name="android:minHeight">13dip</item>
-		<item name="android:maxHeight">13dip</item>
-		<item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
-		<item name="android:thumbOffset">16dip</item>
-		<item name="android:paddingLeft">16dip</item>
-		<item name="android:paddingRight">16dip</item>
-	</style>
+    <style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
 
-	<style name="AboutButton" parent="android:Widget.Button">
-		<item name="android:layout_marginTop">32dp</item>
-		<item name="android:drawablePadding">16dp</item>
-		<item name="android:layout_gravity">center_horizontal</item>
-		<item name="android:layout_centerHorizontal">true</item>
-		<item name="android:gravity">center</item>
-		<item name="android:textColor">@color/text_color</item>
-		<item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
-		<item name="android:background">?attr/selectableItemBackground</item>
-	</style>
+    <style name="AboutButton" parent="android:Widget.Button">
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
 
 </resources>

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 
 public class YSubsProvider extends SubsProvider {
 
@@ -142,7 +142,10 @@ public class YSubsProvider extends SubsProvider {
         }
 
         private String[] getKeys(HashMap<String, ?> map) {
-            return map.keySet().toArray(new String[map.size()]);
+            if(map.size() > 0 && map != null) {
+                return map.keySet().toArray(new String[map.size()]);
+            }
+            return new String[0];
         }
 
         private String mapLanguage(String input, HashMap<String, String> mapping) {

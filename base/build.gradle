@@ -1,12 +1,18 @@
 apply plugin: 'com.android.library'
+apply plugin: 'hugo'
 
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
+    def gitBranch = (System.getenv("GIT_BRANCH") == null ? "local" : System.getenv("GIT_BRANCH").replace("origin/", ""))
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 21
+        buildConfigField "Integer", "BUILD_NUMBER", "" + buildNumber + ""
+        buildConfigField "String", "GIT_BRANCH", "\"" + gitBranch + "\""
+        versionCode buildNumber
     }
 
     buildTypes {
@@ -22,6 +28,7 @@ android {
 
     lintOptions {
         abortOnError false
+        lintConfig file("lint.xml")
     }
 }
 
@@ -46,7 +53,6 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.12.v20130726'
     compile group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.12.v20130726'
 
-    compile project(':node')
     compile project(':vlc')
     compile project(':xmlrpc')
 }

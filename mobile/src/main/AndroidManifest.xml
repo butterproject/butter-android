@@ -44,32 +44,32 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="magnet" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="pct.droid.activities.MovieDetailActivity"
-            android:theme="@style/Theme.PopcornTime.TransparentStatusBar"
-            android:parentActivityName=".activities.OverviewActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.OverviewActivity" />
-        </activity>
+				<data android:scheme="magnet" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="pct.droid.activities.MovieDetailActivity"
+			android:theme="@style/Theme.PopcornTime.Detail"
+			android:parentActivityName=".activities.OverviewActivity">
+			<!-- Parent activity meta-data to support 4.0 and lower -->
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activities.OverviewActivity" />
+		</activity>
 
         <activity
             android:name="pct.droid.activities.SearchActivity"
             android:theme="@style/Theme.PopcornTime.Search" />
 
-        <activity
-            android:name="pct.droid.activities.ShowDetailActivity"
-            android:theme="@style/Theme.PopcornTime.TransparentStatusBar"
-            android:parentActivityName=".activities.OverviewActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.OverviewActivity" />
-        </activity>
+		<activity
+			android:name="pct.droid.activities.ShowDetailActivity"
+			android:theme="@style/Theme.PopcornTime.Detail"
+			android:parentActivityName=".activities.OverviewActivity">
+			<!-- Parent activity meta-data to support 4.0 and lower -->
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activities.OverviewActivity" />
+		</activity>
 
         <activity android:name=".activities.TermsActivity" />
 
@@ -81,23 +81,21 @@
             android:name=".activities.PreferencesActivity"
             android:parentActivityName=".activities.OverviewActivity" />
 
-        <activity
-            android:name="pct.droid.activities.StreamLoadingActivity"
-            android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name="pct.droid.activities.VideoPlayerActivity"
-            android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name="pct.droid.activities.TrailerPlayerActivity"
-            android:screenOrientation="sensorLandscape" />
+		<activity
+			android:name="pct.droid.activities.StreamLoadingActivity"
+            android:theme="@style/Theme.PopcornTime.Detail" />
+		<activity
+			android:name="pct.droid.activities.VideoPlayerActivity"
+			android:screenOrientation="sensorLandscape" />
+		<activity
+			android:name="pct.droid.activities.TrailerPlayerActivity"
+			android:screenOrientation="sensorLandscape" />
 
-        <service
-            android:name=".base.services.StreamerService"
-            android:process=":node" />
+        <service android:name=".base.torrent.TorrentService" />
         <service android:name=".base.casting.server.CastingServerService" />
         <service android:name=".base.casting.dlna.DLNAService" />
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-    </application>
+	</application>
 
 </manifest>

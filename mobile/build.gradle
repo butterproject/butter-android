@@ -1,24 +1,42 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
+    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb" // Valid keys of non-existing organization on Crashlytics to make local building possible
+    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93" // Valid keys of non-existing organization on Crashlytics to make local building possible
 
     defaultConfig {
         applicationId "pct.droid"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
-        versionName "0.1.1"
+        versionCode buildNumber
+        versionName "0.1.2"
     }
 
     signingConfigs {
         mainConfig {
             keyAlias System.getenv("S_ALIAS").toString() ?: ""
             keyPassword System.getenv("S_KEYPASS").toString() ?: ""
-            storeFile file(System.getenv("S_KEYSTORE").toString()) ?: file("")
+            storeFile System.getenv("S_KEYSTORE").toString() ? file(System.getenv("S_KEYSTORE").toString()) : file("")
             storePassword System.getenv("S_KEYPASS").toString() ?: ""
         }
     }
@@ -30,7 +48,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            versionNameSuffix "#" + (System.getenv("BUILD_NUMBER") == null ? "local" : "dev" + System.getenv("BUILD_NUMBER")) + (System.getenv("GIT_BRANCH") == null ? "" : "-git-" + System.getenv("GIT_BRANCH").replace("origin/", ""))
+            versionNameSuffix "#" + buildNumber
             applicationIdSuffix ".dev"
         }
     }
@@ -54,7 +72,25 @@ android {
 
     project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
 
+    File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     android.applicationVariants.all { variant ->
+        def variantSuffix = variant.name.capitalize()
+        def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
+        def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
+            Properties properties = new Properties()
+            println "...copying apiSecret for ${variant.name}"
+            properties.put("apiSecret", crashlyticsSecret)
+            println "...copying apiKey for ${variant.name}"
+            properties.put("apiKey", crashlyticsKey)
+            properties.store(new FileWriter(crashlyticsProperties), "")
+        }
+        generateResourcesTask.dependsOn generatePropertiesTask
+        def cleanResourcesTask = project.tasks.getByName("crashlyticsCleanupResourcesAfterUpload${variantSuffix}")
+        cleanResourcesTask.doLast {
+            println "...removing crashlytics.properties"
+            crashlyticsProperties.delete()
+        }
+
         variant.outputs.each { output ->
             def abi = output.getFilter(com.android.build.OutputFile.ABI);
             output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode
@@ -100,8 +136,12 @@ dependencies {
     compile 'com.larswerkman:HoloColorPicker:1.+'
     compile 'net.rdrei.android.dirchooser:library:2.+@aar'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.+'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+        transitive = true;
+    }
+
     compile project(':base')
     compile project(':vlc')
-    compile project(':node')
     compile project(':xmlrpc')
 }

@@ -5,4 +5,5 @@
 	<string name="movies_error">No movies found</string>
 	<string name="loading_shows">Loading shows…</string>
 	<string name="loading_movies">Loading movies…</string>
+	<string name="error_files">Error: Couldn\'t write files</string>
 </resources>

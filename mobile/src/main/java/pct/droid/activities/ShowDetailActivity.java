@@ -2,12 +2,15 @@ package pct.droid.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.util.Pair;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -33,16 +36,18 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.VersionUtil;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class ShowDetailActivity extends BaseActivity {
@@ -152,82 +157,91 @@ public class ShowDetailActivity extends BaseActivity {
                     for (String key : mItem.episodes.keySet()) {
                         if (!availableSeasons.contains(mItem.episodes.get(key).season)) {
                             availableSeasons.add(mItem.episodes.get(key).season);
-                            availableSeasonsStringList.add(getString(R.string.season) + " " + ((Integer) mItem.episodes.get(key).season).toString());
+                            availableSeasonsStringList
+                                    .add(getString(R.string.season) + " " + ((Integer) mItem.episodes.get(key).season).toString());
                         }
                     }
                     Collections.sort(availableSeasonsStringList);
                     Collections.sort(availableSeasons);
 
-                    openDialog(getString(R.string.season), availableSeasonsStringList.toArray(new String[availableSeasonsStringList.size()]), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            final int selectedSeason = availableSeasons.get(position);
-                            final List<String> availableChapters = new ArrayList<>();
-                            List<String> availableChaptersStringList = new ArrayList<>();
-                            for (String key : mItem.episodes.keySet()) {
-                                if (mItem.episodes.get(key).season == selectedSeason) {
-                                    availableChapters.add(key);
-                                    availableChaptersStringList.add(((Integer) mItem.episodes.get(key).episode).toString());
-                                }
-                            }
-
-                            // sorting hack
-                            Collections.sort(availableChapters, new Comparator<String>() {
-                                @Override
-                                public int compare(String lhs, String rhs) {
-                                    Show.Episode lEpisode = mItem.episodes.get(lhs);
-                                    Show.Episode rEpisode = mItem.episodes.get(rhs);
-
-                                    return lEpisode.episode > rEpisode.episode ? 1 : -1;
-                                }
-                            });
-                            Collections.sort(availableChaptersStringList, new Comparator<String>() {
-                                @Override
-                                public int compare(String lhs, String rhs) {
-                                    int a = Integer.parseInt(lhs);
-                                    int b = Integer.parseInt(rhs);
-                                    if (a > b) {
-                                        return 1;
-                                    } else if (a < b) {
-                                        return -1;
-                                    } else {
-                                        return 0;
-                                    }
-                                }
-                            });
-
-                            for (final ListIterator<String> iter = availableChaptersStringList.listIterator(); iter.hasNext(); ) {
-                                final String element = iter.next();
-                                iter.set(getString(R.string.episode) + " " + element);
-                            }
-
-                            dialog.dismiss();
-
-                            openDialog(getString(R.string.episode), availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]), new DialogInterface.OnClickListener() {
+                    openDialog(getString(R.string.season),
+                            availableSeasonsStringList.toArray(new String[availableSeasonsStringList.size()]),
+                            new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int position) {
-                                    String key = availableChapters.get(position);
-                                    Show.Episode episode = mItem.episodes.get(key);
-                                    Media.Torrent torrent = episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
-
-                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY,
-											true) && !NetworkUtils.isWifiConnected(ShowDetailActivity.this) && NetworkUtils
-											.isNetworkConnected(ShowDetailActivity.this)) {
-                                        MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
-                                    } else {
-                                        Intent streamIntent = new Intent(ShowDetailActivity.this, StreamLoadingActivity.class);
-                                        streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, torrent.url);
-                                        streamIntent.putExtra(StreamLoadingActivity.QUALITY, key);
-                                        streamIntent.putExtra(StreamLoadingActivity.SHOW, mItem);
-                                        streamIntent.putExtra(StreamLoadingActivity.DATA, episode);
-                                        if (mSubLanguage != null)
-                                            streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-                                        startActivity(streamIntent);
+                                    final int selectedSeason = availableSeasons.get(position);
+                                    final List<String> availableChapters = new ArrayList<>();
+                                    List<String> availableChaptersStringList = new ArrayList<>();
+                                    for (String key : mItem.episodes.keySet()) {
+                                        if (mItem.episodes.get(key).season == selectedSeason) {
+                                            availableChapters.add(key);
+                                            availableChaptersStringList.add(((Integer) mItem.episodes.get(key).episode).toString());
+                                        }
                                     }
+
+                                    // sorting hack
+                                    Collections.sort(availableChapters, new Comparator<String>() {
+                                        @Override
+                                        public int compare(String lhs, String rhs) {
+                                            Show.Episode lEpisode = mItem.episodes.get(lhs);
+                                            Show.Episode rEpisode = mItem.episodes.get(rhs);
+
+                                            return lEpisode.episode > rEpisode.episode ? 1 : -1;
+                                        }
+                                    });
+                                    Collections.sort(availableChaptersStringList, new Comparator<String>() {
+                                        @Override
+                                        public int compare(String lhs, String rhs) {
+                                            int a = Integer.parseInt(lhs);
+                                            int b = Integer.parseInt(rhs);
+                                            if (a > b) {
+                                                return 1;
+                                            } else if (a < b) {
+                                                return -1;
+                                            } else {
+                                                return 0;
+                                            }
+                                        }
+                                    });
+
+                                    for (final ListIterator<String> iter = availableChaptersStringList.listIterator(); iter.hasNext(); ) {
+                                        final String element = iter.next();
+                                        iter.set(getString(R.string.episode) + " " + element);
+                                    }
+
+                                    dialog.dismiss();
+
+                                    openDialog(getString(R.string.episode),
+                                            availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]),
+                                            new DialogInterface.OnClickListener() {
+                                                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int position) {
+                                                    String key = availableChapters.get(position);
+                                                    Show.Episode episode = mItem.episodes.get(key);
+                                                    Media.Torrent torrent =
+                                                            episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
+
+                                                    if (PrefUtils.get(ShowDetailActivity.this, Prefs.WIFI_ONLY,
+                                                            true) && !NetworkUtils.isWifiConnected(ShowDetailActivity.this) && NetworkUtils
+                                                            .isNetworkConnected(ShowDetailActivity.this)) {
+                                                        MessageDialogFragment
+                                                                .show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
+                                                    } else {
+
+                                                        StreamLoadingFragment.StreamInfo streamInfo =
+                                                                new StreamLoadingFragment.StreamInfo(episode, mItem, torrent.url,
+                                                                        mSubLanguage, key);
+
+                                                        if (VersionUtil.isLollipop())
+                                                            StreamLoadingActivity.startActivity(ShowDetailActivity.this, streamInfo, Pair.create((View) coverImage, coverImage.getTransitionName()));
+                                                        else
+                                                            StreamLoadingActivity.startActivity(ShowDetailActivity.this, streamInfo);
+                                                    }
+                                                }
+                                            });
                                 }
                             });
-                        }
-                    });
 
                     break;
             }
@@ -294,8 +308,8 @@ public class ShowDetailActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-		getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-		super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
         setSupportActionBar(toolbar);
         setShowCasting(true);
 
@@ -303,7 +317,9 @@ public class ShowDetailActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBarBackground.fadeOut(this);
 
-        Drawable playButtonDrawable = PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
+
+        Drawable playButtonDrawable =
+                PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
         if (mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
 
         playButton.setOnClickListener(mOnClickListener);
@@ -363,7 +379,8 @@ public class ShowDetailActivity extends BaseActivity {
                     }
                 }
 
-                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), oldColor, mPaletteColor);
+                final ObjectAnimator mainInfoBlockColorFade =
+                        ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), oldColor, mPaletteColor);
                 mainInfoBlockColorFade.setDuration(500);
                 Drawable oldDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, oldColor);
                 mPlayButtonDrawable = PixelUtils.changeDrawableColor(ShowDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);

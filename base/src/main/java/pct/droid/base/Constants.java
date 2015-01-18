@@ -8,7 +8,6 @@ public class Constants {
     public static final String DATABASE_NAME = "PCT_DB.db";
     public static final Integer DATABASE_VERSION = 1;
     public static final Integer SERVER_PORT = 55723;
-    public static final String BUGSNAG_KEY = "8ab4dda6780329b10aca038b86d506e5";
     public static final String GIT_URL = "https://git.popcorntime.io/";
     public static final String POPCORN_URL = "https://popcorntime.io/";
     public static final String FB_URL = "https://fb.com/PopcornTimeTv";
