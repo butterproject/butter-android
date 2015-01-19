@@ -84,6 +84,8 @@ public class TorrentService extends Service {
     private void start() {
         if(mThread != null) return;
 
+        // TODO: Add notification
+
         mThread = new HandlerThread(THREAD_NAME);
         mThread.start();
         mHandler = new Handler(mThread.getLooper());
