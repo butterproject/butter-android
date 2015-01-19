@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
@@ -79,7 +80,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             else url = info.getMedia().image;
 
             if (!TextUtils.isEmpty(url))
-                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+                PopcornApplication.getPicasso().load(url).error(R.color.bg).into(mBackgroundImageView);
         }
     }
 
