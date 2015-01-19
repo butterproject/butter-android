@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.util.Map;
 
 import hugo.weaving.DebugLog;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
+import pct.droid.base.casting.CastingManager;
+import pct.droid.base.casting.server.CastingServer;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
@@ -124,7 +127,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      * @param media
      * @param quality
      * @param subtitleLanguage
-     * @param i
+     * @param resumePosition
      */
     protected abstract void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
                                                 String subtitleLanguage,
@@ -167,7 +170,14 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
             //play with default 'external' player
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
-            boolean playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
+
+            boolean playingExternal = false;
+            if(CastingManager.getInstance(getActivity()).isConnected()) {
+                CastingServer.setCurrentVideo(location);
+                playingExternal = !CastingManager.getInstance(getActivity()).loadMedia(mStreamInfo.getMedia(), CastingServer.getVideoURL(), false);
+            } else {
+                playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
+            }
 
             if (!playingExternal) {
                 //play internally
@@ -227,6 +237,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     @DebugLog
     public void cancelStream() {
+        CastingManager.getInstance(getActivity()).stop();
         if (mService != null) {
             mService.stopStreaming();
         }

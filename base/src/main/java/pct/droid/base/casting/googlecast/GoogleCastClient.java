@@ -122,7 +122,11 @@ public class GoogleCastClient extends BaseCastingClient {
     @Override
     public void stop() {
         if(mCurrentDevice != null && mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mRemoteMediaPlayer.stop(mGoogleApiClient);
+            try {
+                mRemoteMediaPlayer.stop(mGoogleApiClient);
+            } catch (IllegalStateException e) {
+                // Not able to stop because there was nothing playing. Just leave it.
+            }
         }
     }
 

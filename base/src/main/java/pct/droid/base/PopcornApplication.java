@@ -29,7 +29,6 @@ public class PopcornApplication extends VLCApplication {
 
     private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
-    private static CastingManager sCastingManager;
 
     @Override
     public void onCreate() {
