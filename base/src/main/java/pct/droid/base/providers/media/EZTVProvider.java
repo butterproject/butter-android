@@ -199,7 +199,7 @@ public class EZTVProvider extends MediaProvider {
 
 				ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
 				for (LinkedTreeMap<String, Object> episode : episodes) {
-					Show.Episode episodeObject = new Show.Episode();
+					Show.Episode episodeObject = new EZTVShow.EZTVEpisode();
 					LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
 							(LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
 					for (String key : torrents.keySet()) {
@@ -263,6 +263,13 @@ public class EZTVProvider extends MediaProvider {
         @Override
         public SubsProvider getSubsProvider() {
             return new OpenSubsProvider();
+        }
+
+        public static class EZTVEpisode extends Episode {
+            @Override
+            public SubsProvider getSubsProvider() {
+                return new OpenSubsProvider();
+            }
         }
     }
 }
