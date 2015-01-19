@@ -166,8 +166,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             mPlayerStarted = true;
 
             //play with default 'external' player
-            //todo: why don't we remove torrent service listeners and kill activity when playing externally?
-            //I assume so the service continues running? Service should have a notification
+            //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
             boolean playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
 
             if (!playingExternal) {
@@ -297,7 +296,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             //todo: tidy up
             mSubsStatus = SubsStatus.SUCCESS;
 
-
             //load subtitles
             if (data.subtitles != null && data.subtitles.size() > 0 && mStreamInfo.mSubtitleLanguage != null) {
                 mHasSubs = true;
@@ -319,7 +317,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                 }
             } else {
                 mSubsProvider = data.getSubsProvider();
-                mSubsProvider.getList((Movie) data, new SubsProvider.Callback() {
+                SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
                     @Override
                     public void onSuccess(Map<String, String> items) {
                         data.subtitles = items;
@@ -330,7 +328,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     public void onFailure(Exception e) {
                         mSubsStatus = SubsStatus.FAILURE;
                     }
-                });
+                };
+
+                if(mStreamInfo.isShow()) {
+                    mSubsProvider.getList(mStreamInfo.getShow(), (Show.Episode) data, subsCallback);
+                } else {
+                    mSubsProvider.getList((Movie)data, subsCallback);
+                }
             }
         }
     }
