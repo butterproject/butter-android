@@ -8,8 +8,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
-import com.bugsnag.android.Bugsnag;
-
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
@@ -22,7 +20,6 @@ public class BaseActivity extends ActionBarActivity {
 
 	public void onCreate(Bundle savedInstanceState, int layoutId) {
 		super.onCreate(savedInstanceState);
-		Bugsnag.onActivityCreate(this);
 		setContentView(layoutId);
 		ButterKnife.inject(this);
 		mHandler = new Handler(getMainLooper());
@@ -31,20 +28,6 @@ public class BaseActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Bugsnag.onActivityResume(this);
-		getApp().startService();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		Bugsnag.onActivityPause(this);
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		Bugsnag.onActivityDestroy(this);
 	}
 
 	@Override

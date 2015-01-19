@@ -19,10 +19,9 @@ import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
-import timber.log.Timber;
 
 
 public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

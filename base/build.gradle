@@ -1,12 +1,18 @@
 apply plugin: 'com.android.library'
+apply plugin: 'hugo'
 
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
+    def gitBranch = (System.getenv("GIT_BRANCH") == null ? "local" : System.getenv("GIT_BRANCH").replace("origin/", ""))
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 21
+        buildConfigField "Integer", "BUILD_NUMBER", "" + buildNumber + ""
+        buildConfigField "String", "GIT_BRANCH", "\"" + gitBranch + "\""
+        versionCode buildNumber
     }
 
     buildTypes {
@@ -15,21 +21,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        lintConfig file("lint.xml")
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.jakewharton.timber:timber:2.5.0'
+    compile 'com.jakewharton.timber:timber:2.+'
     compile 'com.android.support:support-annotations:20.0.0'
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.android.support:palette-v7:21.0.3'
-    compile 'com.squareup.okhttp:okhttp:2.0.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
-    compile 'com.squareup.picasso:picasso:2.3.4'
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'com.android.support:mediarouter-v7:21.0.3'
-    compile project(':node')
+    compile 'com.android.support:appcompat-v7:21.+'
+    compile 'com.android.support:palette-v7:21.+'
+    compile 'com.squareup.okhttp:okhttp:2.+'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.+'
+    compile 'com.squareup.picasso:picasso:2.+'
+    compile 'com.google.code.gson:gson:2.+'
+    compile 'com.android.support:mediarouter-v7:21.+'
     compile project(':vlc')
     compile project(':xmlrpc')
 }
