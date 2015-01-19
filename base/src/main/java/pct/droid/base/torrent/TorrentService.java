@@ -125,19 +125,17 @@ public class TorrentService extends Service {
                 File torrentFileDir = new File(saveDirectory, "files");
                 File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
 
-                boolean fileCreationDone = false;
-                while(!fileCreationDone) {
+                int fileCreationTries = 0;
+                while(fileCreationTries < 4) {
                     try {
                         saveDirectory.mkdirs();
                         torrentFileDir.mkdirs();
                         torrentFile.delete();
                         torrentFile.createNewFile();
-                        fileCreationDone = true;
+                        fileCreationTries = 4;
                     } catch (IOException e) {
-                        if(!e.getMessage().contains("EBUSY")) {
-                            fileCreationDone = true;
-                            Timber.e(e, "Error on file create");
-                        }
+                        Timber.e(e, "Error on file create");
+                        fileCreationTries++;
                     }
                 }
 
