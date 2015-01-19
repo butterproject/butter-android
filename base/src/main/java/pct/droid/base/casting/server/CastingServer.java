@@ -64,6 +64,16 @@ public class CastingServer extends SimpleWebServer {
     public static void setCurrentSubs(File file) {
         sCurrentSubs = file;
     }
+    public static void setCurrentVideo(String file) {
+        setCurrentVideo(new File(file));
+    }
+    public static void setCurrentSubs(String file) {
+        setCurrentSubs(new File(file));
+    }
+
+    public static String getHost() {
+        return "http://" + sHost + ":" + sPort + "/";
+    }
 
     public static String getVideoURL() {
         return "http://" + sHost + ":" + sPort + "/video.mp4";

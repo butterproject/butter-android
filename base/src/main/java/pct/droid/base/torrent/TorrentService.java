@@ -124,13 +124,21 @@ public class TorrentService extends Service {
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
                 File torrentFileDir = new File(saveDirectory, "files");
                 File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
-                try {
-                    saveDirectory.mkdirs();
-                    torrentFileDir.mkdirs();
-                    torrentFile.delete();
-                    torrentFile.createNewFile();
-                } catch (IOException e) {
-                    Timber.e(e, "Error on file create");
+
+                boolean fileCreationDone = false;
+                while(!fileCreationDone) {
+                    try {
+                        saveDirectory.mkdirs();
+                        torrentFileDir.mkdirs();
+                        torrentFile.delete();
+                        torrentFile.createNewFile();
+                        fileCreationDone = true;
+                    } catch (IOException e) {
+                        if(!e.getMessage().contains("EBUSY")) {
+                            fileCreationDone = true;
+                            Timber.e(e, "Error on file create");
+                        }
+                    }
                 }
 
                 if(!getTorrentFile(torrentUrl, torrentFile) || !torrentFile.exists()) {
@@ -156,7 +164,7 @@ public class TorrentService extends Service {
                     }
                 }
 
-                mCurrentTorrent.getSwig().set_sequential_download(true);
+                mCurrentTorrent.setSequentialDownload(true);
                 mCurrentTorrent.resume();
 
                 mCurrentVideoLocation = new File(saveDirectory, torrentInfo.getFileAt(selectedFile).getPath());
@@ -286,7 +294,7 @@ public class TorrentService extends Service {
                 mLastLoggedProgress = (int) Math.floor(progress);
                 Timber.d("Torrent progress: %s", progress);
             }
-            int bufferProgress = (int) Math.floor(progress * 15);
+            int bufferProgress = (int) Math.floor(progress * 12);
             if(bufferProgress > 100) bufferProgress = 100;
             int seeds = status.getNumSeeds();
             int downloadSpeed = status.getDownloadPayloadRate();
