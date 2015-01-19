@@ -130,10 +130,10 @@ public class TorrentService extends Service {
                 int fileCreationTries = 0;
                 while(fileCreationTries < 4) {
                     try {
-                        torrentFileDir.delete();
-                        torrentFileDir.mkdirs();
-                        torrentFile.createNewFile();
-                        fileCreationTries = 4;
+                        if(torrentFileDir.mkdirs() || torrentFileDir.isDirectory()) {
+                            torrentFile.createNewFile();
+                            fileCreationTries = 4;
+                        }
                     } catch (IOException e) {
                         Timber.e(e, "Error on file create");
                         fileCreationTries++;
