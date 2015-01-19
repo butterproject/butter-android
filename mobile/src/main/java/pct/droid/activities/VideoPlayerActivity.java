@@ -205,6 +205,8 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 		ButterKnife.inject(this);
 		setSupportActionBar(toolbar);
 
+        TorrentService.bindHere(this, mServiceConnection);
+
 		videoSurface.setVisibility(View.VISIBLE);
 		toolbar.setOnTouchListener(new View.OnTouchListener() {
 			@Override
