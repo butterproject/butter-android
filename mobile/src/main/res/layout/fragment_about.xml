@@ -8,7 +8,7 @@
 
 	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		tools:context="pct.droid.fragments.AboutFragment">
 
 		<ImageView
@@ -28,60 +28,71 @@
 			android:gravity="center"
 			android:layout_height="wrap_content" />
 
-		<TextView
-			android:id="@+id/popcorn_button"
-			android:drawableTop="@drawable/icon_popcorn"
-			android:text="@string/website"
-			android:layout_below="@+id/message_textview"
-			style="@style/AboutButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/about_box_1"
+            android:layout_below="@id/message_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/popcorn_button"
+                android:drawableTop="@drawable/icon_popcorn"
+                android:text="@string/website"
+                style="@style/AboutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-		<TextView
-			android:id="@+id/discuss_button"
-			android:drawableTop="@drawable/icon_discourse"
-			android:text="@string/discuss"
-			android:layout_below="@+id/popcorn_button"
-			style="@style/AboutButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/discuss_button"
+                android:drawableTop="@drawable/icon_discourse"
+                android:text="@string/discuss"
+                style="@style/AboutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-		<TextView
-			android:id="@+id/blog_button"
-			android:drawableTop="@drawable/icon_blog"
-			android:text="@string/blog"
-			style="@style/AboutButton"
-			android:layout_below="@+id/discuss_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/blog_button"
+                android:drawableTop="@drawable/icon_blog"
+                android:text="@string/blog"
+                style="@style/AboutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-		<TextView
-			android:id="@+id/twitter_button"
-			android:drawableTop="@drawable/icon_twitter"
-			android:layout_below="@+id/blog_button"
-			android:text="@string/twitter"
-			style="@style/AboutButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_below="@id/about_box_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/twitter_button"
+                android:drawableTop="@drawable/icon_twitter"
+                android:text="@string/twitter"
+                style="@style/AboutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-		<TextView
-			android:id="@+id/facebook_button"
-			android:drawableTop="@drawable/icon_facebook"
-			android:text="@string/facebook"
-			android:layout_below="@+id/twitter_button"
-			style="@style/AboutButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/facebook_button"
+                android:drawableTop="@drawable/icon_facebook"
+                android:text="@string/facebook"
+                style="@style/AboutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-		<TextView
-			android:id="@+id/git_button"
-			android:drawableTop="@drawable/icon_stash"
-			android:text="@string/git"
-			android:layout_below="@+id/facebook_button"
-			android:layout_marginBottom="64dp"
-			style="@style/AboutButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/git_button"
+                android:drawableTop="@drawable/icon_stash"
+                android:text="@string/git"
+                android:layout_marginBottom="64dp"
+                style="@style/AboutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
 	</RelativeLayout>
 

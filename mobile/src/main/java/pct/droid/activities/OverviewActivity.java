@@ -27,13 +27,15 @@ import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.YTSProvider;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaListFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
+import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ToolbarUtils;
 import pct.droid.widget.ScrimInsetsFrameLayout;
 
@@ -73,9 +75,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 			String streamUrl = data.toString();
 			try {
 				streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-				Intent streamIntent = new Intent(this, StreamLoadingActivity.class);
-				streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
-				startActivity(streamIntent);
+				StreamLoadingActivity.startActivity(this, new StreamLoadingFragment.StreamInfo(streamUrl));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
@@ -151,7 +151,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									Movie media = new Movie();
+									Movie media = new YTSProvider.YTSMovie();
 									final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
 									i.putExtra(VideoPlayerActivity.DATA, media);
 									i.putExtra(VideoPlayerActivity.LOCATION, dialogInput.getText());
@@ -163,13 +163,13 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 				}
 				if (YouTubeData.isYouTubeUrl(location)) {
 					Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
-					Media media = new Media();
+					Media media = new YTSProvider.YTSMovie();
 					media.title = file_types[index];
 					i.putExtra(TrailerPlayerActivity.DATA, media);
 					i.putExtra(TrailerPlayerActivity.LOCATION, location);
 					startActivity(i);
 				} else {
-					Movie media = new Movie();
+					Movie media = new YTSProvider.YTSMovie();
 					final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
 					i.putExtra(VideoPlayerActivity.DATA, media);
 					i.putExtra(VideoPlayerActivity.LOCATION, location);

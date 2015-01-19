@@ -1,5 +1,6 @@
 package pct.droid.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,8 +30,8 @@ import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.LoadingDetailDialogFragment;
@@ -64,6 +65,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	//overrides the default loading message
 	private int mLoadingMessage = R.string.loading_data;
 
+    private Boolean mIsAttached;
 	private State mState = State.UNINITIALISED;
 	private Mode mode;
 
@@ -131,7 +133,19 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		recyclerView.setAdapter(mAdapter);
 	}
 
-	@Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mIsAttached = true;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mIsAttached = false;
+    }
+
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		//get the provider type and create a provider
@@ -279,7 +293,19 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	@Override
 	@DebugLog
 	public void onFailure(Exception e) {
-		if (e.getMessage() != null && e.getMessage().equals(getString(R.string.movies_error))) {
+        if(!mIsAttached) {
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter == null) {
+                        return;
+                    }
+
+                    mAdapter.removeLoading();
+                    setState(State.LOADED);
+                }
+            });
+        } else if (e.getMessage() != null && e.getMessage().equals(getString(R.string.movies_error))) {
 			mEndOfListReached = true;
 			ThreadUtils.runOnUiThread(new Runnable() {
 				@Override
@@ -289,7 +315,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 					}
 
 					mAdapter.removeLoading();
-
 					setState(State.LOADED);
 				}
 			});

@@ -5,7 +5,7 @@ import com.squareup.okhttp.Call;
 import java.util.ArrayList;
 
 import pct.droid.base.providers.BaseProvider;
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 
 /**
  * MediaProvider.java

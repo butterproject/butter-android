@@ -2,12 +2,15 @@ package pct.droid.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.util.Pair;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,17 +32,19 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
+import pct.droid.base.utils.VersionUtil;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class MovieDetailActivity extends BaseActivity {
@@ -50,6 +55,8 @@ public class MovieDetailActivity extends BaseActivity {
     private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
     private String mQuality, mSubLanguage = "no-subs";
 
+    @InjectView(R.id.popcornLogo)
+    View mPopcornLogo;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
     @InjectView(R.id.scrollView)
@@ -92,6 +99,7 @@ public class MovieDetailActivity extends BaseActivity {
     TextView subtitlesText;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onClick(View v) {
             Bundle b;
@@ -110,13 +118,15 @@ public class MovieDetailActivity extends BaseActivity {
                         return;
                     final String[] qualities = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
                     Arrays.sort(qualities);
-                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            onQualitySelected(qualities[position]);
-                            dialog.dismiss();
-                        }
-                    });
+                    StringArraySelectorDialogFragment
+                            .showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int position) {
+                                            onQualitySelected(qualities[position]);
+                                            dialog.dismiss();
+                                        }
+                                    });
                     break;
                 case R.id.subtitlesBlock:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
@@ -138,13 +148,14 @@ public class MovieDetailActivity extends BaseActivity {
                         }
                     }
 
-                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames, Arrays.asList(adapterLanguages).indexOf(mSubLanguage), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            onSubtitleLanguageSelected(adapterLanguages[position]);
-                            dialog.dismiss();
-                        }
-                    });
+                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
+                            Arrays.asList(adapterLanguages).indexOf(mSubLanguage), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int position) {
+                                    onSubtitleLanguageSelected(adapterLanguages[position]);
+                                    dialog.dismiss();
+                                }
+                            });
                     break;
                 case R.id.trailerBlock:
                     Intent trailerIntent = new Intent(MovieDetailActivity.this, TrailerPlayerActivity.class);
@@ -157,18 +168,24 @@ public class MovieDetailActivity extends BaseActivity {
                     break;
                 case R.id.playButton:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
-                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&
-							NetworkUtils
-							.isNetworkConnected(MovieDetailActivity.this)) {
+                    if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) &&
+                            !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&
+                            NetworkUtils
+                                    .isNetworkConnected(MovieDetailActivity.this)) {
                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
-                        Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-                        streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
-                        streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
-                        streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
-                        if (mSubLanguage != null)
-                            streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-                        startActivity(streamIntent);
+                        StreamLoadingFragment.StreamInfo streamInfo =
+                                new StreamLoadingFragment.StreamInfo(mItem, streamUrl, mSubLanguage, mQuality);
+
+
+                        Intent i = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
+                        i.putExtra(StreamLoadingActivity.EXTRA_INFO, streamInfo);
+
+
+                        if (VersionUtil.isLollipop())
+                            StreamLoadingActivity.startActivity(MovieDetailActivity.this, streamInfo, Pair.create((View) coverImage, coverImage.getTransitionName()));
+                        else
+                            StreamLoadingActivity.startActivity(MovieDetailActivity.this, streamInfo);
                     }
                     break;
             }
@@ -235,7 +252,7 @@ public class MovieDetailActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-		getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
         setSupportActionBar(toolbar);
 
@@ -243,8 +260,19 @@ public class MovieDetailActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBarBackground.fadeOut(this);
 
-        Drawable playButtonDrawable = PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
+        Drawable playButtonDrawable =
+                PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
         if (mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
+
+
+        //so all elements in the block transition as one
+//        mainInfoBlock.setTransitionGroup(true);
+
+//        TransitionInflater inflater = TransitionInflater.from(MovieDetailActivity.this);
+//        Transition transition = inflater.inflateTransition(R.transition.movie_detail_exit);
+////        getWindow().setWindowEnterTransition(transition)
+//        getWindow().setExitTransition(transition);
+//        getWindow().setReenterTransition(transition);
 
         playButton.setOnClickListener(mOnClickListener);
         synopsisBlock.setOnClickListener(mOnClickListener);
@@ -307,7 +335,8 @@ public class MovieDetailActivity extends BaseActivity {
                     }
                 }
 
-                final ObjectAnimator mainInfoBlockColorFade = ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), oldColor, mPaletteColor);
+                final ObjectAnimator mainInfoBlockColorFade =
+                        ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), oldColor, mPaletteColor);
                 mainInfoBlockColorFade.setDuration(500);
                 Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, oldColor);
                 mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
@@ -321,6 +350,7 @@ public class MovieDetailActivity extends BaseActivity {
                         mainInfoBlockColorFade.start();
                         td.startTransition(500);
                         AnimUtils.fadeIn(coverImage);
+                        mPopcornLogo.setVisibility(View.GONE);
                     }
                 }, 1000);
             }

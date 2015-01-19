@@ -1,5 +1,6 @@
 package pct.droid.base.updater;
 
+import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -28,15 +29,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class PopcornUpdater extends Observable {
@@ -131,6 +135,7 @@ public class PopcornUpdater extends Observable {
         }
     };
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
 
@@ -144,10 +149,34 @@ public class PopcornUpdater extends Observable {
             lastUpdate = System.currentTimeMillis();
             PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
             setChanged();
+
+            if (BuildConfig.GIT_BRANCH.contains("local")) return;
+
             notifyObservers(STATUS_CHECKING);
 
+            final String abi;
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                abi = Build.CPU_ABI.toLowerCase(Locale.US);
+            } else {
+                abi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
+            }
+            
+            final String variantStr;
+            if (mPackageName.contains("tv")) {
+                variantStr = "tv";
+            } else {
+                variantStr = "mobile";
+            }
+
+            final String channelStr;
+            if(BuildConfig.BUILD_TYPE.equals("release")) {
+                channelStr = "release";
+            } else {
+                channelStr = BuildConfig.GIT_BRANCH;
+            }
+
             Request request = new Request.Builder()
-                    .url(DATA_URL)
+                    .url(DATA_URL + "/" + variantStr + "/" + channelStr)
                     .build();
 
             mHttpClient.newCall(request).enqueue(new Callback() {
@@ -164,30 +193,15 @@ public class PopcornUpdater extends Observable {
                             UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
                             Map<String, Map<String, UpdaterData.Arch>> variant;
 
-                            if (mPackageName.contains("tv")) {
+                            if (variantStr.equals("tv")) {
                                 variant = data.tv;
                             } else {
                                 variant = data.mobile;
                             }
 
                             UpdaterData.Arch channel = null;
-
-                            String abi = Build.CPU_ABI.toLowerCase();
-                            if (mVersionName.contains("local")) return;
-
-                            if (mVersionName.contains("dev")) {
-                                if (variant.containsKey("development") && variant.get("development").containsKey(abi)) {
-                                    channel = variant.get("development").get(abi);
-                                }
-                            } else if (mVersionName.contains("git")) {
-                                String branch = mVersionName.replaceAll("(.*-git-).*", "");
-                                if (variant.containsKey(branch) && variant.get(branch).containsKey(abi)) {
-                                    channel = variant.get(branch).get(abi);
-                                }
-                            } else {
-                                if (variant.containsKey("release") && variant.get("release").containsKey(abi)) {
-                                    channel = variant.get("release").get(abi);
-                                }
+                            if(variant.containsKey(channelStr) && variant.get(channelStr).containsKey(abi)) {
+                                channel = variant.get(channelStr).get(abi);
                             }
 
                             if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
@@ -257,12 +271,10 @@ public class PopcornUpdater extends Observable {
     private BroadcastReceiver mConnectivityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            NetworkInfo currentNetworkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
             // do application-specific task(s) based on the current network state, such
             // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
-            boolean notMobile = !currentNetworkInfo.getTypeName().equalsIgnoreCase("MOBILE");
-            if (currentNetworkInfo.isConnected() && notMobile) {
+            if (NetworkUtils.isWifiConnected(context)) {
                 checkUpdates(false);
                 mUpdateHandler.postDelayed(periodicUpdate, UPDATE_INTERVAL);
             } else {

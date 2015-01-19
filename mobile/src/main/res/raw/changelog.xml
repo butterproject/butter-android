@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.1.2">
+        <changelogtext>[b]New![/b] Navigation drawer</changelogtext>
+        <changelogtext>[b]New![/b] More translations</changelogtext>
+        <changelogtext>Improve switching between screens</changelogtext>
+        <changelogtext>Fixed wrong episode selection</changelogtext>
+        <changelogtext>Fixed external storage support</changelogtext>
+        <changelogtext>Fixed Trakt images of TV shows</changelogtext>
+        <changelogtext>And more..</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.1.1">
         <changelogtext>[b]New![/b] Preferences</changelogtext>
         <changelogtext>[b]New![/b] Translations</changelogtext>
@@ -17,7 +27,7 @@
     </changelogversion>
 
     <changelogversion versionName="0.1.0">
-        <changelogtext>Initial release.</changelogtext>
+        <changelogtext>Initial release</changelogtext>
     </changelogversion>
 
 </changelog>

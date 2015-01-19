@@ -12,7 +12,9 @@
   <string name="title_shows">Programas</string>
   <string name="title_movies">Películas</string>
   <string name="search">Buscar</string>
+  <string name="searching">Buscando...</string>
   <string name="loading_data">Cargando datos...</string>
+  <string name="loading_details">Cargando detalles...</string>
   <string name="no_data_found">No se encontraron datos</string>
   <string name="unknown_error">Algo salió mal</string>
   <!--DetailActivity strings-->
@@ -44,14 +46,14 @@
   <string name="accept">Aceptar</string>
   <string name="leave">Abandonar</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Preferencias</string>
+  <string name="settings">Configuración</string>
   <string name="general">General</string>
   <string name="default_view">Presentación predeterminada</string>
   <string name="default_player">Reproductor predeterminado</string>
   <string name="i18n_language">Idioma de la aplicación</string>
   <string name="restart_effect">Reiniciar la aplicación para que los cambios tengan efecto</string>
   <string name="device_language">Idioma del dispositivo </string>
-  <string name="stream_over_wifi_only">Solo transmitir contenido a través de Wi-Fi</string>
+  <string name="stream_over_wifi_only">Transmisión sólo por Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Color</string>
   <string name="subtitle_size">Tamaño</string>
@@ -79,5 +81,22 @@
   <string name="open_source_licenses">Licencias de código abierto</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Sólo Wi-Fi</string>
-  <string name="wifi_only_message">Sólo puedes transmitir vídeos a través de Wi-Fi. Puedes desactivar ésto en preferencias si quieres transmitir a través de una conexión de datos.</string>
+  <string name="wifi_only_message">La transmisión de videos sólo es posible a través de Wi-Fi. Puedes desactivar ésto en las preferencias si quieres que la transmisión sea a través de una conexión de datos.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Compartir</string>
+  <string name="drawer_open">Abrir cajón de navegación</string>
+  <string name="drawer_close">Cerrar cajón de navegación</string>
+  <string name="no_search_results">No se encontraron resultados de búsqueda</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time es el resultado de muchos desarrolladores y diseñadores que juntaron muchas APIs para que la experiencia de ver películas por torrent fuera mucho más fácil.\n\nSomos un proyecto de código abierto. Somos de diferentes partes del mundo. Amamos las películas. Y claro, amamos las palomitas de maíz.</string>
+  <string name="website">Página Web</string>
+  <string name="discuss">Discuss</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">¿Has probado Popcorn Time para Android? ¡Es impresionante! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Compartir con</string>
 </resources>
