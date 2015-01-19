@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -364,7 +365,7 @@ public class ShowDetailActivity extends BaseActivity {
         qualityBlock.setVisibility(View.GONE);
         subtitlesBlock.setVisibility(View.GONE);
 
-        PopcornApplication.getPicasso().load(mItem.image).into(coverImage, new Callback() {
+        Picasso.with(this).load(mItem.image).into(coverImage, new Callback() {
             @Override
             public void onSuccess() {
                 int oldColor = mPaletteColor;

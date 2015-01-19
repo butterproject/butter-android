@@ -80,7 +80,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             else url = info.getMedia().image;
 
             if (!TextUtils.isEmpty(url))
-                PopcornApplication.getPicasso().load(url).error(R.color.bg).into(mBackgroundImageView);
+                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
         }
     }
 
