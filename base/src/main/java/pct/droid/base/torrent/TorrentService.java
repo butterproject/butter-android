@@ -122,15 +122,16 @@ public class TorrentService extends Service {
                 mCurrentTorrentUrl = torrentUrl;
 
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
+                saveDirectory.mkdirs();
+
                 File torrentFileDir = new File(saveDirectory, "files");
                 File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
 
                 int fileCreationTries = 0;
                 while(fileCreationTries < 4) {
                     try {
-                        saveDirectory.mkdirs();
+                        torrentFileDir.delete();
                         torrentFileDir.mkdirs();
-                        torrentFile.delete();
                         torrentFile.createNewFile();
                         fileCreationTries = 4;
                     } catch (IOException e) {
