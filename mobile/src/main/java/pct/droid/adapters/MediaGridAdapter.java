@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -86,7 +87,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			}
 
 			if (item.image != null && !item.image.equals("")) {
-				PopcornApplication.getPicasso().load(item.image)
+				Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
 						.resize(mItemWidth, mItemHeight)
 						.into(videoViewHolder.coverImage, new Callback() {
 							@Override
