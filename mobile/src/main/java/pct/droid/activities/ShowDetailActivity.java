@@ -232,7 +232,7 @@ public class ShowDetailActivity extends BaseActivity {
 
                                                         StreamLoadingFragment.StreamInfo streamInfo =
                                                                 new StreamLoadingFragment.StreamInfo(episode, mItem, torrent.url,
-                                                                        mSubLanguage, key);
+                                                                        mSubLanguage==null?"no-subs":mSubLanguage, key);
 
                                                         if (VersionUtil.isLollipop())
                                                             StreamLoadingActivity.startActivity(ShowDetailActivity.this, streamInfo, Pair.create((View) coverImage, coverImage.getTransitionName()));
@@ -446,6 +446,6 @@ public class ShowDetailActivity extends BaseActivity {
     }
 
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
-        StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, -1, onClickListener);
+        StringArraySelectorDialogFragment.show(getSupportFragmentManager(), title, items, -1, onClickListener);
     }
 }

@@ -120,7 +120,7 @@ public class MovieDetailActivity extends BaseActivity {
                     final String[] qualities = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
                     Arrays.sort(qualities);
                     StringArraySelectorDialogFragment
-                            .showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality),
+                            .showSingleChoice(getSupportFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality),
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int position) {
@@ -149,7 +149,7 @@ public class MovieDetailActivity extends BaseActivity {
                         }
                     }
 
-                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
+                    StringArraySelectorDialogFragment.showSingleChoice(getSupportFragmentManager(), R.string.subtitles, readableNames,
                             Arrays.asList(adapterLanguages).indexOf(mSubLanguage), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int position) {
