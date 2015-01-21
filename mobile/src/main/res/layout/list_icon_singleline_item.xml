@@ -5,7 +5,7 @@
     android:layout_height="@dimen/navlist_item_height"
     android:focusable="true"
     android:focusableInTouchMode="false"
-    android:background="@drawable/selectable_background">
+    android:background="@drawable/selectable_background_list">
 
     <ImageView
         android:id="@android:id/icon"

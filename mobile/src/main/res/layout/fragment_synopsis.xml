@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/synopsisText"
+        android:id="@+id/synopsis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/action_margin" />

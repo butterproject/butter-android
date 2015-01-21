@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.nirhart.parallaxscroll.views.ParallaxScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdgeLength="0dp"
@@ -30,10 +30,11 @@
                     android:layout_marginRight="32dp"
                     android:layout_centerInParent="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/popcorn_logo" />
+                    android:src="@drawable/popcorn_logo"
+                    android:alpha="0.6" />
 
                 <ProgressBar
-                    android:id="@+id/headerProgress"
+                    android:id="@+id/header_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -42,7 +43,7 @@
                     style="?android:attr/progressBarStyle" />
 
                 <ImageView
-                    android:id="@+id/coverImage"
+                    android:id="@+id/cover_image"
                     android:transitionName="background"
                     android:visibility="invisible"
                     android:layout_width="match_parent"
@@ -72,84 +73,100 @@
                     android:layout_marginTop="12dp" />
 
                 <RelativeLayout
-                    android:id="@+id/mainInfoBlock"
+                    android:id="@+id/base_info_block"
                     android:layout_below="@id/top"
                     android:transitionName="info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="100dp"
-                    android:paddingLeft="@dimen/divider_margin"
-                    android:paddingRight="104dp"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:elevation="3dp"
+                    android:paddingLeft="@dimen/detail_horizontal_margin"
+                    android:paddingRight="@dimen/detail_horizontal_margin"
+                    android:paddingStart="@dimen/detail_horizontal_margin"
+                    android:paddingEnd="@dimen/detail_horizontal_margin"
+                    android:paddingTop="@dimen/detail_vertical_margin"
                     android:gravity="center_vertical"
-                    android:background="@color/primary"
+                    android:background="@color/detail_background"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/titleText"
+                    <com.devspark.robototextview.widget.RobotoTextView
+                        android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text=""
+                        android:text="Movie Title"
                         android:textColor="@color/text_color"
-                        android:fontFamily="sans-serif-medium"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/detail_title_text_size"
+                        app:typeface="roboto_medium" />
 
-                    <TextView
-                        android:id="@+id/yearText"
-                        android:layout_below="@id/titleText"
+                    <RatingBar
+                        android:id="@+id/rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text=""
-                        android:textColor="@color/secondary_text_color" />
+                        android:layout_below="@id/title"
+                        android:layout_marginTop="@dimen/detail_rating_margin_top"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:isIndicator="true"
+                        android:max="10"
+                        android:progress="5"/>
 
-                    <ImageView
-                        android:id="@+id/dotOne"
-                        android:layout_toRightOf="@id/yearText"
-                        android:layout_below="@id/titleText"
-                        android:layout_alignTop="@id/yearText"
-                        android:layout_alignBottom="@id/yearText"
-                        android:layout_width="4dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/mini_circle" />
-
-                    <TextView
-                        android:id="@+id/runtimeText"
-                        android:layout_toRightOf="@id/dotOne"
-                        android:layout_below="@id/titleText"
+                    <com.devspark.robototextview.widget.RobotoTextView
+                        android:id="@+id/meta"
+                        android:layout_below="@id/rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text=""
+                        android:layout_marginTop="@dimen/detail_meta_margin_top"
+                        android:gravity="center_vertical"
+                        android:text="2013 ● 94 min ● Animation"
+                        android:textSize="@dimen/detail_meta_text_size"
                         android:textColor="@color/secondary_text_color" />
 
-                    <ImageView
-                        android:id="@+id/dotTwo"
-                        android:layout_toRightOf="@id/runtimeText"
-                        android:layout_below="@id/titleText"
-                        android:layout_alignTop="@id/yearText"
-                        android:layout_alignBottom="@id/yearText"
-                        android:layout_width="4dp"
+                    <com.devspark.robototextview.widget.RobotoTextView
+                        android:id="@+id/synopsis"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/mini_circle" />
-
-                    <TextView
-                        android:id="@+id/ratingText"
-                        android:layout_toRightOf="@id/dotTwo"
-                        android:layout_below="@id/titleText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text=""
-                        android:textColor="@color/secondary_text_color" />
+                        android:layout_below="@id/meta"
+                        android:layout_marginTop="@dimen/detail_vertical_margin"
+                        android:text="..."
+                        android:textDirection="ltr"
+                        android:maxLines="6"
+                        android:ellipsize="end"
+                        android:textSize="@dimen/detail_text_size"
+                        android:textColor="@color/text_color" />
                 </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/info_buttons"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/base_info_block"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingBottom="@dimen/detail_vertical_margin"
+                    android:background="@color/detail_background"
+                    >
+                    <com.devspark.robototextview.widget.RobotoButton
+                        style="@style/DetailButton.PopcornTime"
+                        android:id="@+id/read_more"
+                        android:text="@string/read_more"
+                        app:typeface="roboto_medium"  />
+
+                    <com.devspark.robototextview.widget.RobotoButton
+                        style="@style/DetailButton.PopcornTime"
+                        android:id="@+id/watch_trailer"
+                        android:layout_marginLeft="@dimen/detail_button_margin"
+                        android:layout_marginStart="@dimen/detail_button_margin"
+                        android:text="@string/watch_trailer"
+                        app:typeface="roboto_medium"  />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignTop="@id/base_info_block"
+                    android:background="@android:color/white"
+                    android:alpha="0.08"
+                    />
 
                 <ImageButton
                     android:id="@+id/playButton"
@@ -159,93 +176,29 @@
                     android:layout_marginRight="16dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_av_play_button"
                     android:background="@drawable/play_button_circle"
                     android:transitionName="fab"
-                    android:elevation="3dp" />
+                    android:elevation="5dp" />
+
+                <View
+                    android:id="@+id/main_div"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/info_buttons"
+                    android:background="@color/div_white" />
 
                 <LinearLayout
-                    android:layout_below="@id/mainInfoBlock"
+                    android:layout_below="@id/main_div"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_centerHorizontal="true"
                     android:elevation="3dp"
                     android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:orientation="vertical"
-                    android:background="?android:attr/windowBackground">
+                    android:background="@color/detail_background">
 
-                    <LinearLayout
-                        android:id="@+id/synopsisBlock"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/detail_margin"
-                        android:paddingRight="@dimen/detail_margin_right"
-                        android:paddingTop="@dimen/activity_vertical_margin"
-                        android:paddingBottom="@dimen/activity_vertical_margin"
-                        android:layout_gravity="center_horizontal"
-                        android:orientation="horizontal"
-                        android:gravity="top"
-                        android:background="@drawable/selectable_background">
 
-                        <ImageView
-                            android:id="@+id/synopsisBlockImage"
-                            android:layout_width="@dimen/context_icon"
-                            android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/detail_icon_margin"
-                            android:src="@drawable/ic_action_info" />
-
-                        <TextView
-                            android:id="@+id/synopsisText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/detail_margin"
-                            android:text="..."
-                            android:maxLines="6"
-                            android:ellipsize="end"
-                            android:textSize="@dimen/detail_text_size"
-                            android:textColor="@android:color/white" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/div_white" />
-
-                    <LinearLayout
-                        android:id="@+id/trailerBlock"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:paddingLeft="@dimen/detail_margin"
-                        android:paddingRight="@dimen/detail_margin_right"
-                        android:layout_gravity="center_horizontal"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:background="@drawable/selectable_background">
-
-                        <ImageView
-                            android:id="@+id/trailerBlockImage"
-                            android:layout_width="@dimen/context_icon"
-                            android:layout_height="@dimen/context_icon"
-                            android:layout_marginRight="@dimen/detail_icon_margin"
-                            android:src="@drawable/ic_av_trailer" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/detail_margin"
-                            android:layout_marginTop="@dimen/activity_vertical_margin"
-                            android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            android:text="@string/watch_trailer"
-                            android:textSize="@dimen/detail_text_size"
-                            android:textColor="@android:color/white" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/div_white" />
                     <!--<LinearLayout
                         android:id="@+id/favouriteBlock"
                         android:layout_width="match_parent"
@@ -280,7 +233,7 @@
                         android:layout_marginLeft="@dimen/divider_margin"
                         android:background="@color/div_white" />-->
                     <LinearLayout
-                        android:id="@+id/qualityBlock"
+                        android:id="@+id/quality"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:paddingLeft="@dimen/detail_margin"
@@ -289,7 +242,7 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:clickable="true"
-                        android:background="@drawable/selectable_background">
+                        android:background="@drawable/selectable_background_list">
 
                         <ImageView
                             android:id="@+id/qualityBlockImage"
@@ -299,7 +252,7 @@
                             android:src="@drawable/ic_action_quality" />
 
                         <TextView
-                            android:id="@+id/qualityText"
+                            android:id="@+id/quality_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/detail_margin"
@@ -317,7 +270,7 @@
                         android:background="@color/div_white" />
 
                     <LinearLayout
-                        android:id="@+id/subtitlesBlock"
+                        android:id="@+id/subtitles"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:paddingLeft="@dimen/detail_margin"
@@ -326,7 +279,7 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:clickable="true"
-                        android:background="@drawable/selectable_background">
+                        android:background="@drawable/selectable_background_list">
 
                         <ImageView
                             android:id="@+id/subtitlesBlockImage"
@@ -336,7 +289,7 @@
                             android:src="@drawable/ic_av_subs" />
 
                         <TextView
-                            android:id="@+id/subtitlesText"
+                            android:id="@+id/subtitles_lang"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/detail_margin"
@@ -345,6 +298,7 @@
                             android:text="@string/subtitles"
                             android:textSize="@dimen/detail_text_size"
                             android:textColor="@android:color/white" />
+
                     </LinearLayout>
                 </LinearLayout>
 

@@ -112,7 +112,7 @@
                 android:layout_below="@id/timeBar"
                 android:layout_toLeftOf="@id/playButton"
                 android:layout_marginRight="@dimen/player_controls_distance"
-                android:background="@drawable/selectable_background"
+                android:background="@drawable/selectable_background_list"
                 android:src="@drawable/ic_av_rewind"
                 android:scaleType="centerInside"
                 android:onClick="seekBackwardClick" />
@@ -124,7 +124,7 @@
                 android:layout_below="@id/timeBar"
                 android:layout_toRightOf="@id/playButton"
                 android:layout_marginLeft="@dimen/player_controls_distance"
-                android:background="@drawable/selectable_background"
+                android:background="@drawable/selectable_background_list"
                 android:src="@drawable/ic_av_forward"
                 android:scaleType="centerInside"
                 android:onClick="seekForwardClick" />
@@ -136,7 +136,7 @@
                 android:layout_below="@id/timeBar"
                 android:layout_toLeftOf="@id/rewindButton"
                 android:layout_marginRight="@dimen/player_controls_distance"
-                android:background="@drawable/selectable_background"
+                android:background="@drawable/selectable_background_list"
                 android:src="@drawable/ic_av_aspect_ratio"
                 android:scaleType="centerInside"
                 android:onClick="scaleClick" />
@@ -148,7 +148,7 @@
                 android:layout_below="@id/timeBar"
                 android:layout_toRightOf="@id/forwardButton"
                 android:layout_marginLeft="@dimen/player_controls_distance"
-                android:background="@drawable/selectable_background"
+                android:background="@drawable/selectable_background_list"
                 android:src="@drawable/ic_av_subs"
                 android:scaleType="centerInside"
                 android:onClick="subsClick" />

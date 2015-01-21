@@ -38,6 +38,7 @@
 		<item name="android:listDivider">@drawable/list_divider</item>
 		<!--<item name="windowActionBarOverlay">true</item>-->
 		<item name="android:windowBackground">@color/bg</item>
+        <item name="android:ratingBarStyle">@style/RatingBar.PopcornTime</item>
 	</style>
 
 	<style name="Theme.PopcornTime" parent="Theme.Base">
@@ -107,6 +108,25 @@
         <item name="android:textColor">@color/text_color</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
         <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="RatingBar.PopcornTime" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:maxHeight">16dp</item>
+    </style>
+
+    <style name="DetailButton.PopcornTime" parent="android:Widget.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/detail_button_text_size</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/selectable_background</item>
     </style>
 
 </resources>
