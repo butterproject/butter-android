@@ -1,17 +1,11 @@
 package pct.droid.activities;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -23,8 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,14 +27,10 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
-import pct.droid.base.utils.AnimUtils;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
-import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.VersionUtil;
 import pct.droid.dialogfragments.MessageDialogFragment;
@@ -61,43 +49,29 @@ public class ShowDetailActivity extends BaseActivity {
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.scrollView)
+    @InjectView(R.id.scrollview)
     ParallaxScrollView scrollView;
     @InjectView(R.id.parallax)
     RelativeLayout parallax;
     @InjectView(R.id.coverImage)
     ImageView coverImage;
-    @InjectView(R.id.headerProgress)
+    @InjectView(R.id.header_progress)
     ProgressBar headerProgress;
-    @InjectView(R.id.mainInfoBlock)
+    @InjectView(R.id.base_info_block)
     RelativeLayout mainInfoBlock;
     @InjectView(R.id.playButton)
     ImageButton playButton;
-    @InjectView(R.id.titleText)
+    @InjectView(R.id.title)
     TextView titleText;
-    @InjectView(R.id.yearText)
+    @InjectView(R.id.meta)
     TextView yearText;
-    @InjectView(R.id.runtimeText)
-    TextView runtimeText;
-    @InjectView(R.id.ratingText)
-    TextView ratingText;
-    @InjectView(R.id.synopsisText)
-    TextView synopsisText;
-    //@InjectView(R.id.favouriteText)
-    //TextView favouriteText;
-    @InjectView(R.id.synopsisBlock)
-    LinearLayout synopsisBlock;
-    @InjectView(R.id.qualityBlock)
+    @InjectView(R.id.quality)
     LinearLayout qualityBlock;
-    @InjectView(R.id.qualityText)
+    @InjectView(R.id.quality_text)
     TextView qualityText;
-    //@InjectView(R.id.favouriteBlock)
-    //LinearLayout favouriteBlock;
-    @InjectView(R.id.trailerBlock)
-    LinearLayout trailerBlock;
-    @InjectView(R.id.subtitlesBlock)
+    @InjectView(R.id.subtitles)
     LinearLayout subtitlesBlock;
-    @InjectView(R.id.subtitlesText)
+    @InjectView(R.id.subtitles_lang)
     TextView subtitlesText;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -105,7 +79,7 @@ public class ShowDetailActivity extends BaseActivity {
         public void onClick(View v) {
             Bundle b;
             switch (v.getId()) {
-                case R.id.synopsisBlock:
+                case R.id.synopsis:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
@@ -115,7 +89,7 @@ public class ShowDetailActivity extends BaseActivity {
                     synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
                 /*
-                case R.id.qualityBlock:
+                case R.id.mQuality:
                     if(getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
                     QualitySelectorDialogFragment qualitySelectorDialogFragment = new QualitySelectorDialogFragment();
                     b = new Bundle();
@@ -124,7 +98,7 @@ public class ShowDetailActivity extends BaseActivity {
                     qualitySelectorDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
 
-                case R.id.subtitlesBlock:
+                case R.id.mSubtitles:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SubtitleSelectorDialogFragment subtitleSelectorDialogFragment = new SubtitleSelectorDialogFragment();
@@ -318,16 +292,16 @@ public class ShowDetailActivity extends BaseActivity {
         ActionBarBackground.fadeOut(this);
 
 
-        Drawable playButtonDrawable =
+        /*Drawable playButtonDrawable =
                 PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
         if (mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
 
         playButton.setOnClickListener(mOnClickListener);
         synopsisBlock.setOnClickListener(mOnClickListener);
         trailerBlock.setOnClickListener(mOnClickListener);
-        subtitlesBlock.setOnClickListener(mOnClickListener);
+        mSubtitles.setOnClickListener(mOnClickListener);
         //favouriteBlock.setOnClickListener(mOnClickListener);
-        qualityBlock.setOnClickListener(mOnClickListener);
+        mQuality.setOnClickListener(mOnClickListener);
 
         mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3) * 2;
         parallax.getLayoutParams().height = mParallaxHeight;
@@ -346,9 +320,9 @@ public class ShowDetailActivity extends BaseActivity {
         LogUtils.d(mItem.toString());
         titleText.setText(mItem.title);
         yearText.setText(mItem.year);
-        ratingText.setText(mItem.rating + "/10");
+        //ratingText.setText(mItem.rating + "/10");
 
-        if (mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
+        /*if (mItem.runtime != null && Integer.parseInt(mItem.runtime) > 0) {
             runtimeText.setText(mItem.runtime + " " + getString(R.string.minutes));
         } else {
             runtimeText.setText("n/a " + getString(R.string.minutes));
@@ -361,8 +335,8 @@ public class ShowDetailActivity extends BaseActivity {
         }
 
         trailerBlock.setVisibility(View.GONE);
-        qualityBlock.setVisibility(View.GONE);
-        subtitlesBlock.setVisibility(View.GONE);
+        mQuality.setVisibility(View.GONE);
+        mSubtitles.setVisibility(View.GONE);
 
         Picasso.with(this).load(mItem.image).into(coverImage, new Callback() {
             @Override
@@ -402,7 +376,7 @@ public class ShowDetailActivity extends BaseActivity {
             public void onError() {
                 headerProgress.setVisibility(View.GONE);
             }
-        });
+        });*/
     }
 
     @Override

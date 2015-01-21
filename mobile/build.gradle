@@ -109,6 +109,18 @@ android {
             // 'unaligned' APK
             output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
         }
+
+        variant.mergeAssets.doFirst {
+            File fonts = file("${projectDir}/build/intermediates/exploded-aar/com.github.johnkil.android-robototextview/robototextview/2.2.0/assets/fonts")
+            if (fonts.exists()) {
+                for (File file : fonts.listFiles()) {
+                    if (file.getName().contains("RobotoSlab")) {
+                        println("delete " + file.getName() + " font")
+                        file.delete()
+                    };
+                }
+            }
+        }
     }
 }
 
@@ -132,6 +144,7 @@ dependencies {
     compile 'com.larswerkman:HoloColorPicker:1.+'
     compile 'net.rdrei.android.dirchooser:library:2.+@aar'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.+'
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.+'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
         transitive = true;

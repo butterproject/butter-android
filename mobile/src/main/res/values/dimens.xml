@@ -43,6 +43,15 @@
 
     <dimen name="settings_subheader_text_size">14sp</dimen>
 
+    <dimen name="detail_horizontal_margin">24dp</dimen>
+    <dimen name="detail_vertical_margin">24dp</dimen>
+    <dimen name="detail_title_text_size">21sp</dimen>
+    <dimen name="detail_meta_text_size">14sp</dimen>
+    <dimen name="detail_meta_margin_top">8dp</dimen>
+    <dimen name="detail_rating_margin_top">16dp</dimen>
+    <dimen name="detail_button_margin">14dp</dimen>
+    <dimen name="detail_button_text_size">12sp</dimen>
+
 	<!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
      https://developer.android.com/design/patterns/navigation-drawer.html -->
 	<dimen name="nav_drawer_width">304dp</dimen>

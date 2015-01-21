@@ -13,12 +13,18 @@ import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,12 +32,13 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.AnimUtils;
@@ -53,51 +60,45 @@ public class MovieDetailActivity extends BaseActivity {
     private Movie mItem;
     private Drawable mPlayButtonDrawable;
     private Integer mLastScrollLocation = 0, mPaletteColor, mOpenBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
-    private Boolean mTransparentBar = true, mOpenBar = true, mIsFavourited = false;
-    private String mQuality, mSubLanguage = "no-subs";
+    private Boolean mTransparentBar = true, mOpenBar = true;
+    private String mSelectedQuality, mSubLanguage = "no-subs";
 
     @InjectView(R.id.popcornLogo)
     View mPopcornLogo;
     @InjectView(R.id.toolbar)
-    Toolbar toolbar;
-    @InjectView(R.id.scrollView)
-    ParallaxScrollView scrollView;
+    Toolbar mToolbar;
+    @InjectView(R.id.scrollview)
+    ParallaxScrollView mScrollView;
     @InjectView(R.id.parallax)
-    RelativeLayout parallax;
-    @InjectView(R.id.coverImage)
-    ImageView coverImage;
-    @InjectView(R.id.headerProgress)
-    ProgressBar headerProgress;
-    @InjectView(R.id.mainInfoBlock)
+    RelativeLayout mParallaxLayout;
+    @InjectView(R.id.cover_image)
+    ImageView mCoverImage;
+    @InjectView(R.id.header_progress)
+    ProgressBar mHeaderProgressCircle;
+    @InjectView(R.id.base_info_block)
     RelativeLayout mainInfoBlock;
     @InjectView(R.id.playButton)
-    ImageButton playButton;
-    @InjectView(R.id.titleText)
-    TextView titleText;
-    @InjectView(R.id.yearText)
-    TextView yearText;
-    @InjectView(R.id.runtimeText)
-    TextView runtimeText;
-    @InjectView(R.id.ratingText)
-    TextView ratingText;
-    @InjectView(R.id.synopsisText)
-    TextView synopsisText;
-    //@InjectView(R.id.favouriteText)
-    //TextView favouriteText;
-    @InjectView(R.id.synopsisBlock)
-    LinearLayout synopsisBlock;
-    @InjectView(R.id.qualityBlock)
-    LinearLayout qualityBlock;
-    @InjectView(R.id.qualityText)
-    TextView qualityText;
-    //@InjectView(R.id.favouriteBlock)
-    //LinearLayout favouriteBlock;
-    @InjectView(R.id.trailerBlock)
-    LinearLayout trailerBlock;
-    @InjectView(R.id.subtitlesBlock)
-    LinearLayout subtitlesBlock;
-    @InjectView(R.id.subtitlesText)
-    TextView subtitlesText;
+    ImageButton mPlayFab;
+    @InjectView(R.id.title)
+    TextView mTitle;
+    @InjectView(R.id.meta)
+    TextView mMeta;
+    @InjectView(R.id.synopsis)
+    TextView mSynopsis;
+    @InjectView(R.id.rating)
+    RatingBar mRating;
+    @InjectView(R.id.watch_trailer)
+    Button mWatchTrailer;
+    @InjectView(R.id.read_more)
+    Button mReadMore;
+    @InjectView(R.id.quality)
+    LinearLayout mQuality;
+    @InjectView(R.id.quality_text)
+    TextView mQualityText;
+    @InjectView(R.id.subtitles)
+    LinearLayout mSubtitles;
+    @InjectView(R.id.subtitles_lang)
+    TextView mSubtitlesLang;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -105,7 +106,8 @@ public class MovieDetailActivity extends BaseActivity {
         public void onClick(View v) {
             Bundle b;
             switch (v.getId()) {
-                case R.id.synopsisBlock:
+                case R.id.read_more:
+                case R.id.synopsis:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
@@ -114,13 +116,13 @@ public class MovieDetailActivity extends BaseActivity {
                     synopsisDialogFragment.setArguments(b);
                     synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
                     break;
-                case R.id.qualityBlock:
+                case R.id.quality:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     final String[] qualities = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
                     Arrays.sort(qualities);
                     StringArraySelectorDialogFragment
-                            .showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality),
+                            .showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mSelectedQuality),
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int position) {
@@ -129,7 +131,7 @@ public class MovieDetailActivity extends BaseActivity {
                                         }
                                     });
                     break;
-                case R.id.subtitlesBlock:
+                case R.id.subtitles:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
                     String[] languages = mItem.subtitles.keySet().toArray(new String[mItem.subtitles.size()]);
@@ -158,7 +160,7 @@ public class MovieDetailActivity extends BaseActivity {
                                 }
                             });
                     break;
-                case R.id.trailerBlock:
+                case R.id.watch_trailer:
                     Intent trailerIntent = new Intent(MovieDetailActivity.this, TrailerPlayerActivity.class);
                     if (!YouTubeData.isYouTubeUrl(mItem.trailer)) {
                         trailerIntent = new Intent(MovieDetailActivity.this, VideoPlayerActivity.class);
@@ -168,7 +170,7 @@ public class MovieDetailActivity extends BaseActivity {
                     startActivity(trailerIntent);
                     break;
                 case R.id.playButton:
-                    final String streamUrl = mItem.torrents.get(mQuality).url;
+                    final String streamUrl = mItem.torrents.get(mSelectedQuality).url;
                     if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) &&
                             !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&
                             NetworkUtils
@@ -176,7 +178,7 @@ public class MovieDetailActivity extends BaseActivity {
                         MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
                     } else {
                         StreamLoadingFragment.StreamInfo streamInfo =
-                                new StreamLoadingFragment.StreamInfo(mItem, streamUrl, mSubLanguage, mQuality);
+                                new StreamLoadingFragment.StreamInfo(mItem, streamUrl, mSubLanguage, mSelectedQuality);
 
 
                         Intent i = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
@@ -184,7 +186,7 @@ public class MovieDetailActivity extends BaseActivity {
 
 
                         if (VersionUtil.isLollipop())
-                            StreamLoadingActivity.startActivity(MovieDetailActivity.this, streamInfo, Pair.create((View) coverImage, coverImage.getTransitionName()));
+                            StreamLoadingActivity.startActivity(MovieDetailActivity.this, streamInfo, Pair.create((View) mCoverImage, mCoverImage.getTransitionName()));
                         else
                             StreamLoadingActivity.startActivity(MovieDetailActivity.this, streamInfo);
                     }
@@ -198,27 +200,27 @@ public class MovieDetailActivity extends BaseActivity {
         @Override
         public void onScrollChanged() {
             if (mToolbarHeight == 0) {
-                mToolbarHeight = toolbar.getHeight();
+                mToolbarHeight = mToolbar.getHeight();
                 mHeaderHeight = mParallaxHeight - mToolbarHeight;
             }
 
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mToolbar.getLayoutParams();
 
-            if (scrollView.getScrollY() > mHeaderHeight) {
-                if (mLastScrollLocation > scrollView.getScrollY()) {
+            if (mScrollView.getScrollY() > mHeaderHeight) {
+                if (mLastScrollLocation > mScrollView.getScrollY()) {
                     // scroll up
                     if ((mOpenBarPos == null || !mOpenBar) && layoutParams.topMargin <= -mToolbarHeight)
-                        mOpenBarPos = scrollView.getScrollY() - mToolbarHeight;
+                        mOpenBarPos = mScrollView.getScrollY() - mToolbarHeight;
                     mOpenBar = true;
-                } else if (mLastScrollLocation < scrollView.getScrollY()) {
+                } else if (mLastScrollLocation < mScrollView.getScrollY()) {
                     // scroll down
                     if (mOpenBarPos == null || mOpenBar)
-                        mOpenBarPos = scrollView.getScrollY();
+                        mOpenBarPos = mScrollView.getScrollY();
                     mOpenBar = false;
                 }
 
                 if (layoutParams.topMargin <= 0) {
-                    layoutParams.topMargin = mOpenBarPos - scrollView.getScrollY();
+                    layoutParams.topMargin = mOpenBarPos - mScrollView.getScrollY();
                 }
 
                 if (layoutParams.topMargin > 0) {
@@ -227,13 +229,13 @@ public class MovieDetailActivity extends BaseActivity {
             }
 
             if (layoutParams.topMargin < 0) {
-                scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+                mScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
             } else {
-                scrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
+                mScrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
             }
 
                 /* Fade out when over header */
-            if (mParallaxHeight - scrollView.getScrollY() < 0) {
+            if (mParallaxHeight - mScrollView.getScrollY() < 0) {
                 if (mTransparentBar) {
                     mTransparentBar = false;
                     ActionBarBackground.changeColor(MovieDetailActivity.this, mPaletteColor, false);
@@ -245,9 +247,9 @@ public class MovieDetailActivity extends BaseActivity {
                 }
             }
 
-            toolbar.setLayoutParams(layoutParams);
+            mToolbar.setLayoutParams(layoutParams);
 
-            mLastScrollLocation = scrollView.getScrollY();
+            mLastScrollLocation = mScrollView.getScrollY();
         }
     };
 
@@ -255,78 +257,88 @@ public class MovieDetailActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
+        // Set transparent toolbar
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBarBackground.fadeOut(this);
 
-        Drawable playButtonDrawable =
-                PixelUtils.changeDrawableColor(this, R.drawable.ic_av_play_button, getResources().getColor(R.color.primary));
-        if (mPlayButtonDrawable == null) playButton.setImageDrawable(playButtonDrawable);
+        Drawable playButtonDrawable = PixelUtils.changeDrawableColor(this, R.drawable.play_button_circle, getResources().getColor(R.color.primary));
+        if (mPlayButtonDrawable == null) mPlayFab.setBackgroundDrawable(playButtonDrawable);
 
-
-        //so all elements in the block transition as one
-//        mainInfoBlock.setTransitionGroup(true);
-
-//        TransitionInflater inflater = TransitionInflater.from(MovieDetailActivity.this);
-//        Transition transition = inflater.inflateTransition(R.transition.movie_detail_exit);
-////        getWindow().setWindowEnterTransition(transition)
-//        getWindow().setExitTransition(transition);
-//        getWindow().setReenterTransition(transition);
-
-        playButton.setOnClickListener(mOnClickListener);
-        synopsisBlock.setOnClickListener(mOnClickListener);
-        trailerBlock.setOnClickListener(mOnClickListener);
-        subtitlesBlock.setOnClickListener(mOnClickListener);
-        //favouriteBlock.setOnClickListener(mOnClickListener);
-        qualityBlock.setOnClickListener(mOnClickListener);
+        mPlayFab.setOnClickListener(mOnClickListener);
+        mSynopsis.setOnClickListener(mOnClickListener);
+        mWatchTrailer.setOnClickListener(mOnClickListener);
+        mReadMore.setOnClickListener(mOnClickListener);
+        mSubtitles.setOnClickListener(mOnClickListener);
+        mQuality.setOnClickListener(mOnClickListener);
 
         mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3) * 2;
-        parallax.getLayoutParams().height = mParallaxHeight;
+        mParallaxLayout.getLayoutParams().height = mParallaxHeight;
 
-        mToolbarHeight = toolbar.getHeight();
+        mToolbarHeight = mToolbar.getHeight();
         mHeaderHeight = mParallaxHeight - mToolbarHeight;
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
+        mScrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
         Intent intent = getIntent();
         mItem = intent.getParcelableExtra("item");
 
         mPaletteColor = intent.getIntExtra("palette", getResources().getColor(R.color.primary));
-        mainInfoBlock.setBackgroundColor(mPaletteColor);
-        mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
-        playButton.setImageDrawable(mPlayButtonDrawable);
+        mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.play_button_circle, mPaletteColor);
+        mPlayFab.setBackgroundDrawable(mPlayButtonDrawable);
 
-        titleText.setText(mItem.title);
-        yearText.setText(mItem.year);
-        ratingText.setText(mItem.rating + "/10");
+        Double rating = Double.parseDouble(mItem.rating);
+        mTitle.setText(mItem.title);
+        mRating.setProgress(rating.intValue());
 
-        if (mItem.runtime != null && !mItem.runtime.isEmpty() && Integer.parseInt(mItem.runtime) > 0) {
-            runtimeText.setText(mItem.runtime + " " + getString(R.string.minutes));
-        } else {
-            runtimeText.setText("n/a " + getString(R.string.minutes));
+        String metaDataStr = mItem.year;
+        List<int[]> spanDatas = new ArrayList<>();
+        if (!TextUtils.isEmpty(mItem.runtime)) {
+            int spanData[] = new int[2];
+            spanData[0] = metaDataStr.length() + 1;
+            metaDataStr += " ● ";
+            spanData[1] = metaDataStr.length() - 1;
+            spanDatas.add(spanData);
+            metaDataStr += mItem.runtime + " " + getString(R.string.minutes);
         }
 
-        if (mItem.synopsis != null) {
-            synopsisText.setText(mItem.synopsis);
+        if (!TextUtils.isEmpty(mItem.genre)) {
+            int spanData[] = new int[2];
+            spanData[0] = metaDataStr.length() + 1;
+            metaDataStr += " ● ";
+            spanData[1] = metaDataStr.length() - 1;
+            spanDatas.add(spanData);
+            metaDataStr += mItem.genre;
+        }
+
+        SpannableString metaDataSpan =  new SpannableString(metaDataStr);
+        for(int[] spanData : spanDatas) {
+            metaDataSpan.setSpan(new RelativeSizeSpan(0.7f), spanData[0], spanData[1], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        mMeta.setText(metaDataSpan);
+
+        if (!TextUtils.isEmpty(mItem.synopsis)) {
+            mSynopsis.setText(mItem.synopsis);
         } else {
-            synopsisBlock.setClickable(false);
+            mSynopsis.setClickable(false);
         }
 
         if (mItem.trailer == null) {
-            trailerBlock.setVisibility(View.GONE);
+            mWatchTrailer.setVisibility(View.GONE);
         }
 
         if (mItem.subtitles.containsKey(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
             onSubtitleLanguageSelected(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
         }
 
-        Picasso.with(this).load(mItem.image).into(coverImage, new Callback() {
+        Picasso.with(this).load(mItem.image).into(mCoverImage, new Callback() {
             @Override
             public void onSuccess() {
                 int oldColor = mPaletteColor;
                 if (mPaletteColor == getResources().getColor(R.color.primary)) {
-                    Palette palette = Palette.generate(((BitmapDrawable) coverImage.getDrawable()).getBitmap());
+                    Palette palette = Palette.generate(((BitmapDrawable) mCoverImage.getDrawable()).getBitmap());
 
                     int vibrantColor = palette.getVibrantColor(-1);
                     if (vibrantColor == -1) {
@@ -339,18 +351,18 @@ public class MovieDetailActivity extends BaseActivity {
                 final ObjectAnimator mainInfoBlockColorFade =
                         ObjectAnimator.ofObject(mainInfoBlock, "backgroundColor", new ArgbEvaluator(), oldColor, mPaletteColor);
                 mainInfoBlockColorFade.setDuration(500);
-                Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, oldColor);
-                mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
+                Drawable oldDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.play_button_circle, oldColor);
+                mPlayButtonDrawable = PixelUtils.changeDrawableColor(MovieDetailActivity.this, R.drawable.play_button_circle, mPaletteColor);
+
                 final TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
 
                 // Delay to make sure transition is smooth
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        playButton.setImageDrawable(td);
-                        mainInfoBlockColorFade.start();
+                        mPlayFab.setBackgroundDrawable(td);
                         td.startTransition(500);
-                        AnimUtils.fadeIn(coverImage);
+                        AnimUtils.fadeIn(mCoverImage);
                         mPopcornLogo.setVisibility(View.GONE);
                     }
                 }, 1000);
@@ -358,7 +370,7 @@ public class MovieDetailActivity extends BaseActivity {
 
             @Override
             public void onError() {
-                headerProgress.setVisibility(View.GONE);
+                mHeaderProgressCircle.setVisibility(View.GONE);
             }
         });
     }
@@ -366,7 +378,7 @@ public class MovieDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mQuality == null) {
+        if (mSelectedQuality == null) {
             String[] keys = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
             onQualitySelected(keys[0]);
         }
@@ -380,21 +392,21 @@ public class MovieDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        scrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
+        mScrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
     }
 
     public void onQualitySelected(String quality) {
-        mQuality = quality;
-        qualityText.setText(mQuality);
+        mSelectedQuality = quality;
+        mQualityText.setText(mSelectedQuality);
     }
 
     private void onSubtitleLanguageSelected(String language) {
         mSubLanguage = language;
         if (!mSubLanguage.equals("no-subs")) {
             Locale locale = LocaleUtils.toLocale(mSubLanguage);
-            subtitlesText.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
+            mSubtitlesLang.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
         } else {
-            subtitlesText.setText(R.string.no_subs);
+            mSubtitlesLang.setText(R.string.no_subs);
         }
     }
 }

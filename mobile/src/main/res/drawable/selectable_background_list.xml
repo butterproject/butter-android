@@ -15,18 +15,10 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:exitFadeDuration="@android:integer/config_mediumAnimTime">
-    <item
-        android:state_pressed="false"
-        android:state_focused="true"
-        android:drawable="@color/selectable_focused" />
-    <item
-        android:state_pressed="false"
-        android:state_hovered="true"
-        android:drawable="@color/selectable_focused" />
-    <item
-        android:state_pressed="true"
-        android:drawable="@color/selectable_pressed" />
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+    <item android:state_pressed="false" android:state_focused="true" android:drawable="@drawable/list_focused" />
+    <item android:state_pressed="false" android:state_hovered="true" android:drawable="@drawable/list_focused" />
+    <item android:state_pressed="true" android:drawable="@drawable/list_pressed" />
     <item android:drawable="@android:color/transparent" />
 </selector>

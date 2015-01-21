@@ -115,7 +115,7 @@ public class YSubsProvider extends SubsProvider {
 
         public Map<String, Map<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
             Map<String, Map<String, String>> returnMap = new HashMap<>();
-            if (success) {
+            if (success && subs != null) {
                 String[] imdbIds = getKeys(subs);
                 for (String imdbId : imdbIds) {
                     HashMap<String, String> imdbMap = new HashMap<>();
