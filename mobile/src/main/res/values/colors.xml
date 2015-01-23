@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<color name="bg">#2F383F</color>
+	<color name="bg">#1F2224</color>
+    <color name="bg_light">#383D42</color>
 	<color name="overlay_bg">#BB2F383F</color>
 
 	<color name="list_selected">#55FFFFFF</color>
@@ -35,6 +36,5 @@
 	<color name="nav_drawer_highlight">#1FFF</color>
 
     <!-- Detail view colors -->
-    <color name="detail_background">#1F2224</color>
 
 </resources>

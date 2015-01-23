@@ -11,7 +11,7 @@
         android:id="@android:id/icon"
         android:layout_width="@dimen/iconlist_icon_width"
         android:layout_height="@dimen/iconlist_icon_width"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center_vertical|start"
         android:layout_marginLeft="@dimen/iconlist_icon_margin_horizontal"
         android:layout_marginStart="@dimen/iconlist_icon_margin_horizontal"
         android:scaleType="centerInside"

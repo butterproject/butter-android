@@ -122,11 +122,14 @@
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:minHeight">16dp</item>
         <item name="android:padding">8dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_color</item>
         <item name="android:textSize">@dimen/detail_button_text_size</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:background">@drawable/selectable_background</item>
+        <item name="android:radius">2dp</item>
+        <item name="android:background">@drawable/selectable_background_rounded</item>
     </style>
 
 </resources>
