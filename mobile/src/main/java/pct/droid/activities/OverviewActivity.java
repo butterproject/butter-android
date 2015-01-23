@@ -174,7 +174,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 					media.videoId = "bigbucksbunny";
 					media.title = file_types[index];
 					media.subtitles = new HashMap<String, String>();
-					media.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");
+					media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
 					SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
 						@Override

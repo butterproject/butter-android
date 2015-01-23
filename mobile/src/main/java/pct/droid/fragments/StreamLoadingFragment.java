@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.activities.VideoPlayerActivity;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
@@ -32,7 +31,7 @@ import pct.droid.base.utils.VersionUtil;
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     View mRoot;
-    @InjectView(R.id.progressIndicator)
+    @InjectView(R.id.progress_indicator)
     ProgressBar progressIndicator;
     @InjectView(R.id.primary_textview)
     TextView mPrimaryTextView;

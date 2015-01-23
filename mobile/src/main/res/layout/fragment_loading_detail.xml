@@ -7,7 +7,7 @@
 	android:layout_height="match_parent">
 
 	<ProgressBar
-		android:id="@+id/progressIndicator"
+		android:id="@+id/progress_indicator"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:indeterminate="true"

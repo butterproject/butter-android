@@ -20,7 +20,7 @@
             android:layout_gravity="center" />
 
         <SurfaceView
-            android:id="@+id/videoSurface"
+            android:id="@+id/video_surface"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,7 +28,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/subtitleText"
+        android:id="@+id/subtitle_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -37,13 +37,13 @@
         android:textSize="@dimen/player_subtitles_default_text_size" />
 
     <ProgressBar
-        android:id="@+id/progressIndicator"
+        android:id="@+id/progress_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
     <RelativeLayout
-        android:id="@+id/controlLayout"
+        android:id="@+id/control_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/player_controls_margin"
@@ -77,7 +77,7 @@
                     android:text="0:00" />
 
                 <TextView
-                    android:id="@+id/lengthTime"
+                    android:id="@+id/length_time"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -87,15 +87,15 @@
                     android:text="0:00" />
 
                 <SeekBar
-                    android:id="@+id/controlBar"
+                    android:id="@+id/control_bar"
                     android:layout_toRightOf="@id/currentTime"
-                    android:layout_toLeftOf="@id/lengthTime"
+                    android:layout_toLeftOf="@id/length_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
 
             <ImageButton
-                android:id="@+id/playButton"
+                android:id="@+id/play_butotn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"
@@ -109,7 +109,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@id/timeBar"
-                android:layout_toLeftOf="@id/playButton"
+                android:layout_toLeftOf="@id/play_butotn"
                 android:layout_marginRight="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_rewind"
@@ -120,7 +120,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@id/timeBar"
-                android:layout_toRightOf="@id/playButton"
+                android:layout_toRightOf="@id/play_butotn"
                 android:layout_marginLeft="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_forward"
@@ -159,7 +159,7 @@
         android:fitsSystemWindows="true" />
 
     <TextView
-        android:id="@+id/playerInfo"
+        android:id="@+id/player_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

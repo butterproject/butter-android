@@ -316,12 +316,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     mSubsStatus = SubsStatus.SUCCESS;
                 }
             } else {
-				try {
-					mSubsProvider = data.getSubsProvider();
-				}catch (AbstractMethodError e){
-					e.printStackTrace();
-				}
-				if (null!=mSubsProvider) {
+			    mSubsProvider = data.getSubsProvider();
+				if (null != mSubsProvider) {
 					SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
 						@Override
 						public void onSuccess(Map<String, String> items) {
