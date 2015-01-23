@@ -59,20 +59,12 @@ public class ShowDetailActivity extends BaseActivity {
     ProgressBar headerProgress;
     @InjectView(R.id.base_info_block)
     RelativeLayout mainInfoBlock;
-    @InjectView(R.id.playButton)
+    @InjectView(R.id.play_button)
     ImageButton playButton;
     @InjectView(R.id.title)
     TextView titleText;
     @InjectView(R.id.meta)
     TextView yearText;
-    @InjectView(R.id.quality)
-    LinearLayout qualityBlock;
-    @InjectView(R.id.quality_text)
-    TextView qualityText;
-    @InjectView(R.id.subtitles)
-    LinearLayout subtitlesBlock;
-    @InjectView(R.id.subtitles_lang)
-    TextView subtitlesText;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -123,7 +115,7 @@ public class ShowDetailActivity extends BaseActivity {
                     startActivity(trailerIntent);
                     break;
                 */
-                case R.id.playButton:
+                case R.id.play_button:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
 
@@ -284,7 +276,7 @@ public class ShowDetailActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        super.onCreate(savedInstanceState, R.layout.activity_moviedetail);
+        super.onCreate(savedInstanceState, R.layout.activity_mediadetail);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle("");
@@ -399,27 +391,7 @@ public class ShowDetailActivity extends BaseActivity {
         scrollView.getViewTreeObserver().removeOnScrollChangedListener(mOnScrollListener);
     }
 
-    public void onQualitySelected(String quality) {
-        mQuality = quality;
-        qualityText.setText(mQuality);
-    }
-
-    public void onSubtitleLanguageSelected(String language) {
-        mSubLanguage = language;
-        if (!language.equals("no-subs")) {
-            Locale locale;
-            if (language.contains("-")) {
-                locale = new Locale(language.substring(0, 2), language.substring(3, 5));
-            } else {
-                locale = new Locale(language);
-            }
-            subtitlesText.setText(locale.getDisplayName());
-        } else {
-            subtitlesText.setText(R.string.no_subs);
-        }
-    }
-
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
-        StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, -1, onClickListener);
+        StringArraySelectorDialogFragment.show(getSupportFragmentManager(), title, items, -1, onClickListener);
     }
 }

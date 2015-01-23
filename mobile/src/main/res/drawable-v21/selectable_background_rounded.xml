@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+    android:color="#5FFF"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <selector android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+            <item
+                android:state_pressed="false"
+                android:state_focused="true">
+                <shape>
+                    <solid android:color="@color/selectable_focused"/>
+                    <corners android:radius="2dp"/>
+                </shape>
+            </item>
+            <item
+                android:state_pressed="false"
+                android:state_hovered="true">
+                <shape>
+                    <solid android:color="@color/selectable_focused"/>
+                    <corners android:radius="2dp"/>
+                </shape>
+            </item>
+            <item
+                android:state_pressed="true">
+                <shape>
+                    <solid android:color="@color/selectable_pressed"/>
+                    <corners android:radius="2dp"/>
+                </shape>
+            </item>
+            <item android:drawable="@android:color/transparent" />
+        </selector>
+        <corners android:radius="2dp"/>
+    </item>
+</ripple>

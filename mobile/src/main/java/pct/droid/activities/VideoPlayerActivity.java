@@ -117,7 +117,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 	TextView playerInfo;
 	@InjectView(R.id.controlBar)
 	SeekBar controlBar;
-	@InjectView(R.id.playButton)
+	@InjectView(R.id.play_button)
 	ImageButton playButton;
 	@InjectView(R.id.currentTime)
 	TextView currentTime;
@@ -842,7 +842,7 @@ public class VideoPlayerActivity extends BaseActivity implements IVideoPlayer, O
 				}
 			}
 
-			StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
+			StringArraySelectorDialogFragment.showSingleChoice(getSupportFragmentManager(), R.string.subtitles, readableNames,
 					Arrays.asList(subtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int position) {

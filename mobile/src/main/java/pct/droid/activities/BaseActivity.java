@@ -19,6 +19,8 @@ public class BaseActivity extends ActionBarActivity {
 	protected Handler mHandler;
 
 	public void onCreate(Bundle savedInstanceState, int layoutId) {
+        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
 		super.onCreate(savedInstanceState);
 		setContentView(layoutId);
 		ButterKnife.inject(this);
@@ -27,6 +29,8 @@ public class BaseActivity extends ActionBarActivity {
 
 	@Override
 	protected void onResume() {
+        String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
 		super.onResume();
 	}
 

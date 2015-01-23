@@ -29,7 +29,7 @@ public class DefaultPlayer {
      */
     public static Map<String, String> getVideoPlayerApps() {
         Intent playerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("/path/video.mp4"));
-        playerIntent.setDataAndType(Uri.parse("/path/video.mp4"), "video/mp4");
+        playerIntent.setDataAndType(Uri.parse("/path/video.mp4"), "video/*");
 
         PackageManager packageManager = PopcornApplication.getAppContext().getPackageManager();
         List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(playerIntent, 0);

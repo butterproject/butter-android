@@ -31,7 +31,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
         return i;
     }
 
-    public static Intent startActivity(Activity activity, StreamLoadingFragment.StreamInfo info,Pair<View,String>... elements) {
+    public static Intent startActivity(Activity activity, StreamLoadingFragment.StreamInfo info, Pair<View,String>... elements) {
         Intent i = new Intent(activity, StreamLoadingActivity.class);
         i.putExtra(EXTRA_INFO, info);
 

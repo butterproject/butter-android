@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
-import pct.droid.activities.MovieDetailActivity;
+import pct.droid.activities.MediaDetailActivity;
 import pct.droid.activities.ShowDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.providers.media.EZTVProvider;
@@ -425,7 +425,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	@Override public void onDetailLoadSuccess(final Media item, final int paletteColor) {
 		Intent intent;
 		if (item instanceof Movie) {
-			intent = new Intent(getActivity(), MovieDetailActivity.class);
+			intent = new Intent(getActivity(), MediaDetailActivity.class);
 		} else {
 			intent = new Intent(getActivity(), ShowDetailActivity.class);
 		}
