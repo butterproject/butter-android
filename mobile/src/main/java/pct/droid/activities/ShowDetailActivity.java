@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
@@ -71,7 +70,7 @@ public class ShowDetailActivity extends BaseActivity {
     ProgressBar headerProgress;
     @InjectView(R.id.mainInfoBlock)
     RelativeLayout mainInfoBlock;
-    @InjectView(R.id.playButton)
+    @InjectView(R.id.play_butotn)
     ImageButton playButton;
     @InjectView(R.id.titleText)
     TextView titleText;
@@ -149,7 +148,7 @@ public class ShowDetailActivity extends BaseActivity {
                     startActivity(trailerIntent);
                     break;
                 */
-                case R.id.playButton:
+                case R.id.play_butotn:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
 

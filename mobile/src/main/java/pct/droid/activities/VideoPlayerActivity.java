@@ -1,9 +1,7 @@
 package pct.droid.activities;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -11,9 +9,7 @@ import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.fragments.VideoPlayerFragment;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
-
 
 	private Media mMedia;
 	private String mQuality;
@@ -24,8 +20,7 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 		return startActivity(activity, streamUrl, data, null, null, 0);
 	}
 
-	public static Intent startActivity(Activity activity, String streamUrl, Media data, String quality, String subtitleLanguage,
-			long resumePosition) {
+	public static Intent startActivity(Activity activity, String streamUrl, Media data, String quality, String subtitleLanguage, long resumePosition) {
 		Intent i = new Intent(activity, VideoPlayerActivity.class);
 		i.putExtra(DATA, data);
 		i.putExtra(QUALITY, quality);
@@ -42,10 +37,11 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	public final static String SUBTITLES = "subtitles";
 	public final static String RESUME_POSITION = "resume_position";
 
-	@Override public void onCreate(Bundle savedInstanceState) {
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
-		mMedia = (Media) getIntent().getParcelableExtra(DATA);
+		mMedia = getIntent().getParcelableExtra(DATA);
 		mQuality = getIntent().getStringExtra(QUALITY);
 		mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
 		mLocation = getIntent().getStringExtra(LOCATION);
@@ -61,19 +57,23 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override public Media getData() {
+	@Override
+    public Media getData() {
 		return mMedia;
 	}
 
-	@Override public String getQuality() {
+	@Override
+    public String getQuality() {
 		return mQuality;
 	}
 
-	@Override public String getSubtitles() {
+	@Override
+    public String getSubtitles() {
 		return mSubtitleLanguage;
 	}
 
-	@Override public String getLocation() {
+	@Override
+    public String getLocation() {
 		return mLocation;
 	}
 }

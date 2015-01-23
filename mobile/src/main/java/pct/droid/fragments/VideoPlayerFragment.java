@@ -48,29 +48,26 @@ import pct.droid.base.utils.StringUtils;
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
 	@InjectView(R.id.toolbar)
-	Toolbar toolbar;
-	@InjectView(R.id.progressIndicator)
-	ProgressBar progressIndicator;
-
-	@InjectView(R.id.videoSurface)
+	Toolbar mToolbar;
+	@InjectView(R.id.progress_indicator)
+	ProgressBar mProgressIndicator;
+	@InjectView(R.id.video_surface)
 	SurfaceView videoSurface;
-
-	@InjectView(R.id.subtitleText)
-
-	TextView subtitleText;
-	@InjectView(R.id.controlLayout)
-	RelativeLayout controlLayout;
-	@InjectView(R.id.playerInfo)
-	TextView playerInfo;
-	@InjectView(R.id.controlBar)
-	SeekBar controlBar;
-	@InjectView(R.id.playButton)
+	@InjectView(R.id.subtitle_text)
+	TextView mSubtitleText;
+	@InjectView(R.id.control_layout)
+	RelativeLayout mControlLayout;
+	@InjectView(R.id.player_info)
+	TextView mPlayerInfo;
+	@InjectView(R.id.control_bar)
+	SeekBar mControlBar;
+	@InjectView(R.id.play_butotn)
 	ImageButton playButton;
 	@InjectView(R.id.currentTime)
 	TextView mCurrentTimeTextView;
-	@InjectView(R.id.lengthTime)
+	@InjectView(R.id.length_time)
 	TextView lengthTime;
-	View decorView;
+	View mDecorView;
 
 	private AudioManager mAudioManager;
 
@@ -118,17 +115,17 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		super.onActivityCreated(savedInstanceState);
 		setRetainInstance(true);
 
-		getActionBarActivity().setSupportActionBar(toolbar);
+		getActionBarActivity().setSupportActionBar(mToolbar);
 
 		videoSurface.setVisibility(View.VISIBLE);
 
-		toolbar.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				onTouchEvent(event);
-				return true;
-			}
-		});
+		mToolbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                onTouchEvent(event);
+                return true;
+            }
+        });
 
 		/* Services and miscellaneous */
 		mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
@@ -136,19 +133,19 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
 		mDisplayHandler = new Handler(Looper.getMainLooper());
 
-		decorView = getActivity().getWindow().getDecorView();
+		mDecorView = getActivity().getWindow().getDecorView();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			decorView.setOnSystemUiVisibilityChangeListener(this);
+			mDecorView.setOnSystemUiVisibilityChangeListener(this);
 		}
 
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
 			getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 			getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-			toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-					getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) +
-							PixelUtils.getStatusBarHeight(getActivity())));
-			toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(getActivity()), toolbar.getPaddingRight(),
-					toolbar.getPaddingBottom());
+			mToolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                    getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) +
+                            PixelUtils.getStatusBarHeight(getActivity())));
+			mToolbar.setPadding(mToolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(getActivity()), mToolbar.getPaddingRight(),
+					mToolbar.getPaddingBottom());
 		}
 
 		if (null != mCallback.getData()) {
@@ -170,10 +167,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		getActionBarActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-		subtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
-		subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
+		mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
+		mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
 
-		controlBar.setOnSeekBarChangeListener(mOnControlBarListener);
+		mControlBar.setOnSeekBarChangeListener(mOnControlBarListener);
 
 		getActionBarActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
@@ -397,13 +394,13 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		if (!mOverlayVisible) {
 			updatePlayPauseState();
 
-			AnimUtils.fadeIn(controlLayout);
-			AnimUtils.fadeIn(toolbar);
+			AnimUtils.fadeIn(mControlLayout);
+			AnimUtils.fadeIn(mToolbar);
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 				int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
 						View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-				decorView.setSystemUiVisibility(uiOptions);
+				mDecorView.setSystemUiVisibility(uiOptions);
 			} else {
 				getActionBarActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 				getActionBarActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -421,12 +418,12 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	public void hideOverlay() {
 		// Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
 		if (mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
-			AnimUtils.fadeOut(controlLayout);
-			AnimUtils.fadeOut(toolbar);
+			AnimUtils.fadeOut(mControlLayout);
+			AnimUtils.fadeOut(mToolbar);
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 				int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-				decorView.setSystemUiVisibility(uiOptions);
+				mDecorView.setSystemUiVisibility(uiOptions);
 			} else {
 				getActionBarActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 				getActionBarActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -438,18 +435,18 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	}
 
 	protected void showPlayerInfo(String text) {
-		playerInfo.setVisibility(View.VISIBLE);
-		playerInfo.setText(text);
+		mPlayerInfo.setVisibility(View.VISIBLE);
+		mPlayerInfo.setText(text);
 		mDisplayHandler.removeCallbacks(mInfoHideRunnable);
 		mDisplayHandler.postDelayed(mInfoHideRunnable, FADE_OUT_INFO);
 	}
 
 	private void hidePlayerInfo() {
-		if (playerInfo.getVisibility() == View.VISIBLE) {
+		if (mPlayerInfo.getVisibility() == View.VISIBLE) {
 			Animation fadeOutAnim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-			playerInfo.startAnimation(fadeOutAnim);
+			mPlayerInfo.startAnimation(fadeOutAnim);
 		}
-		playerInfo.setVisibility(View.INVISIBLE);
+		mPlayerInfo.setVisibility(View.INVISIBLE);
 	}
 
 	public void updatePlayPauseState() {
@@ -524,8 +521,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 			@Override
 			public void run() {
 				if (text == null) {
-					if (subtitleText.getText().length() > 0) {
-						subtitleText.setText("");
+					if (mSubtitleText.getText().length() > 0) {
+						mSubtitleText.setText("");
 					}
 					return;
 				}
@@ -536,15 +533,16 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 					styledString.removeSpan(remove);
 				}
 
-				if (!subtitleText.getText().toString().equals(styledString.toString())) {
-					subtitleText.setText(styledString);
+				if (!mSubtitleText.getText().toString().equals(styledString.toString())) {
+					mSubtitleText.setText(styledString);
 				}
 			}
 		});
 	}
 
-	@Override protected void setProgressVisible(boolean visible) {
-		progressIndicator.setVisibility(visible?View.VISIBLE:View.GONE);
+	@Override
+    protected void setProgressVisible(boolean visible) {
+		mProgressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 
 	/**
@@ -552,35 +550,41 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	 * @param currentTime
 	 * @param duration
 	 */
-	@Override protected void onProgressChanged(long currentTime, long duration) {
-		controlBar.setMax((int)duration);
-		controlBar.setProgress((int) currentTime);
-		controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-		controlBar.setSecondaryProgress(getStreamerProgress());
+	@Override
+    protected void onProgressChanged(long currentTime, long duration) {
+		mControlBar.setMax((int) duration);
+		mControlBar.setProgress((int) currentTime);
+		mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+		mControlBar.setSecondaryProgress(getStreamerProgress());
 		if (getCurrentTime() >= 0) mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
 		if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
 
-		controlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-		controlBar.setSecondaryProgress(getStreamerProgress());
+		mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+		mControlBar.setSecondaryProgress(getStreamerProgress());
 	}
 
-	@OnClick(R.id.playButton)void onPlayPauseClick(){
+	@OnClick(R.id.play_butotn)
+    void onPlayPauseClick(){
 		togglePlayPause();
 	}
 
-	@OnClick(R.id.rewindButton)void onRewindClick(){
+	@OnClick(R.id.rewindButton)
+    void onRewindClick(){
 		seekBackwardClick();
 	}
 
-	@OnClick(R.id.forwardButton)void onForwardClick(){
+	@OnClick(R.id.forwardButton)
+    void onForwardClick(){
 		seekForwardClick();
 	}
 
-	@OnClick(R.id.scaleButton)void onScaleClick(){
+	@OnClick(R.id.scaleButton)
+    void onScaleClick(){
 		scaleClick();
 	}
 
-	@OnClick(R.id.subsButton)void onSubsClick(){
+	@OnClick(R.id.subsButton)
+    void onSubsClick(){
 		subsClick();
 	}
 

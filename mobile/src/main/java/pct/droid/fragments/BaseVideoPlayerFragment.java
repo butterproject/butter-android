@@ -18,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -71,8 +70,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	private static final int SURFACE_ORIGINAL = 6;
 	private int mCurrentSize = SURFACE_BEST_FIT;
 
-	private long mDuration = 0;
-	private long mCurrentTime = 0;
 	private int mStreamerProgress = 0;
 
 	private Media mMedia;
@@ -106,12 +103,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	private SurfaceHolder mVideoSurfaceHolder;
 
 
-	@Override public void onCreate(Bundle savedInstanceState) {
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 	}
 
-	@Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+	@Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		mMedia = mCallback.getData();
@@ -187,7 +186,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		resumeVideo();
 	}
 
-	@Override public void onDestroyView() {
+	@Override
+    public void onDestroyView() {
 		super.onDestroyView();
 
 		EventHandler em = EventHandler.getInstance();
@@ -363,11 +363,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		return false;
 	}
 
+    // Required method for LibVLC
 	public void eventHardwareAccelerationError() {
 		EventHandler em = EventHandler.getInstance();
 		em.callback(EventHandler.HardwareAccelerationError, new Bundle());
 	}
-
 
 	private void endReached() {
 		if (mLibVLC.getMediaList().expandMedia(mSavedIndexPosition) == 0) {
@@ -383,7 +383,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			// TODO: END, ASK USER TO CLOSE PLAYER?
 		}
 	}
-
 
 	public void subsClick() {
 		if (mMedia != null && mMedia.subtitles != null) {
@@ -590,15 +589,16 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	protected void checkSubs() {
 		if (mLibVLC != null && mLibVLC.isPlaying() && mSubs != null) {
 			Collection<Caption> subtitles = mSubs.captions.values();
-			if (mLastSub != null && mCurrentTime >= mLastSub.start.getMilliseconds() && mCurrentTime <= mLastSub.end.getMilliseconds()) {
+            double currentTime = getCurrentTime();
+			if (mLastSub != null && currentTime >= mLastSub.start.getMilliseconds() && currentTime <= mLastSub.end.getMilliseconds()) {
 				showTimedCaptionText(mLastSub);
 			} else {
 				for (Caption caption : subtitles) {
-					if (mCurrentTime >= caption.start.getMilliseconds() && mCurrentTime <= caption.end.getMilliseconds()) {
+					if (currentTime >= caption.start.getMilliseconds() && currentTime <= caption.end.getMilliseconds()) {
 						mLastSub = caption;
 						showTimedCaptionText(caption);
 						break;
-					} else if (mCurrentTime > caption.end.getMilliseconds()) {
+					} else if (currentTime > caption.end.getMilliseconds()) {
 						showTimedCaptionText(null);
 					}
 				}
@@ -718,7 +718,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 	@Override
 	public void onStreamProgress(DownloadStatus status) {
-		int newProgress = (int) ((mDuration / 100) * status.progress);
+		int newProgress = (int) ((getDuration() / 100) * status.progress);
 		if (mStreamerProgress < newProgress) {
 			mStreamerProgress = newProgress;
 		}
