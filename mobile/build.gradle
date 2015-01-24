@@ -21,8 +21,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
-    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb" // Valid keys of non-existing organization on Crashlytics to make local building possible
-    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93" // Valid keys of non-existing organization on Crashlytics to make local building possible
+
 
     defaultConfig {
         applicationId "pct.droid"
@@ -68,48 +67,7 @@ android {
 
     project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
 
-    File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
-    android.applicationVariants.all { variant ->
-        def variantSuffix = variant.name.capitalize()
-        def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
-        def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
-            Properties properties = new Properties()
-            println "...copying apiSecret for ${variant.name}"
-            properties.put("apiSecret", crashlyticsSecret)
-            println "...copying apiKey for ${variant.name}"
-            properties.put("apiKey", crashlyticsKey)
-            properties.store(new FileWriter(crashlyticsProperties), "")
-        }
-        generateResourcesTask.dependsOn generatePropertiesTask
-        def cleanResourcesTask = project.tasks.getByName("crashlyticsCleanupResourcesAfterUpload${variantSuffix}")
-        cleanResourcesTask.doLast {
-            println "...removing crashlytics.properties"
-            crashlyticsProperties.delete()
-        }
 
-        variant.outputs.each { output ->
-            def abi = output.getFilter(com.android.build.OutputFile.ABI);
-            output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode
-
-            def alignedOutputFile = output.outputFile
-            def unalignedOutputFile = output.packageApplication.outputFile
-            def outputFileName = alignedOutputFile.name
-
-            // Customise APK filenames
-            if (outputFileName.contains("debug")) {
-                outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-            } else {
-                outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
-            }
-
-            if (variant.buildType.zipAlignEnabled) {
-                // normal APK
-                output.outputFile = new File(alignedOutputFile.parent, outputFileName)
-            }
-            // 'unaligned' APK
-            output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
-        }
-    }
 }
 
 //to check for dependency updates,
