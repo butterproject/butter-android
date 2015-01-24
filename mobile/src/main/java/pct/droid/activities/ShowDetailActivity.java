@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
@@ -32,7 +30,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.VersionUtil;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
@@ -200,7 +198,7 @@ public class ShowDetailActivity extends BaseActivity {
                                                                 new StreamLoadingFragment.StreamInfo(episode, mItem, torrent.url,
                                                                         mSubLanguage, key);
 
-                                                        if (VersionUtil.isLollipop())
+                                                        if (VersionUtils.isLollipop())
                                                             StreamLoadingActivity.startActivity(ShowDetailActivity.this, streamInfo, Pair.create((View) coverImage, coverImage.getTransitionName()));
                                                         else
                                                             StreamLoadingActivity.startActivity(ShowDetailActivity.this, streamInfo);

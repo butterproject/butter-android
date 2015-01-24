@@ -154,7 +154,7 @@ public class YTSProvider extends MediaProvider {
 									}
 
 									if (meta.images.containsKey("fanart")) {
-										media.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
+										media.headerImage = meta.images.get("fanart");
 									}
 
 									if (meta.title != null) {
@@ -227,7 +227,7 @@ public class YTSProvider extends MediaProvider {
 							}
 
 							if (meta.images != null && meta.images.containsKey("fanart")) {
-								movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
+								movie.headerImage = meta.images.get("fanart");
 							} else {
 								movie.headerImage = movie.image;
 							}

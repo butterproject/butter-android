@@ -1,9 +1,9 @@
 package pct.droid.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Layout;
@@ -15,9 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,15 +30,17 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.activities.TrailerPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.LocaleUtils;
+import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
-import pct.droid.base.utils.ThreadUtils;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.widget.OptionSelector;
@@ -43,15 +48,18 @@ import pct.droid.widget.OptionSelector;
 public class MovieDetailFragment extends BaseDetailFragment {
 
     private static final String DATA = "data";
+    private static final String COLOR = "palette_color";
 
     private FragmentListener mCallback;
     private Movie mMovie;
     private Adapter mAdapter;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
+    private int mPaletteColor;
+    private boolean mIsTablet = false;
 
     View mRoot;
-    @InjectView(R.id.base_info_block)
-    RelativeLayout mainInfoBlock;
+    @InjectView(R.id.play_button)
+    ImageButton mPlaybutton;
     @InjectView(R.id.title)
     TextView mTitle;
     @InjectView(R.id.meta)
@@ -68,10 +76,14 @@ public class MovieDetailFragment extends BaseDetailFragment {
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
+    @Optional
+    @InjectView(R.id.cover_image)
+    ImageView mCoverImage;
 
-    public static MovieDetailFragment newInstance(Movie movie) {
+    public static MovieDetailFragment newInstance(Movie movie, int color) {
         Bundle b = new Bundle();
         b.putParcelable(DATA, movie);
+        b.putInt(COLOR, color);
         MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
         movieDetailFragment.setArguments(b);
         return movieDetailFragment;
@@ -81,43 +93,38 @@ public class MovieDetailFragment extends BaseDetailFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMovie = getArguments().getParcelable(DATA);
+        mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
+        mIsTablet = mCoverImage != null;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_moviedetail, container, false);
         ButterKnife.inject(this, mRoot);
+
+        if(VersionUtils.isJellyBean()) {
+            mPlaybutton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlaybutton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+        } else {
+            mPlaybutton.setBackground(PixelUtils.changeDrawableColor(mPlaybutton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+        }
 
         Double rating = Double.parseDouble(mMovie.rating);
         mTitle.setText(mMovie.title);
         mRating.setProgress(rating.intValue());
 
         String metaDataStr = mMovie.year;
-        List<int[]> spanDatas = new ArrayList<>();
         if (!TextUtils.isEmpty(mMovie.runtime)) {
-            int spanData[] = new int[2];
-            spanData[0] = metaDataStr.length() + 1;
-            metaDataStr += " ● ";
-            spanData[1] = metaDataStr.length() - 1;
-            spanDatas.add(spanData);
+            metaDataStr += " • ";
             metaDataStr += mMovie.runtime + " " + getString(R.string.minutes);
         }
 
         if (!TextUtils.isEmpty(mMovie.genre)) {
-            int spanData[] = new int[2];
-            spanData[0] = metaDataStr.length() + 1;
-            metaDataStr += " ● ";
-            spanData[1] = metaDataStr.length() - 1;
-            spanDatas.add(spanData);
+            metaDataStr += " • ";
             metaDataStr += mMovie.genre;
         }
 
-        SpannableString metaDataSpan =  new SpannableString(metaDataStr);
-        for(int[] spanData : spanDatas) {
-            metaDataSpan.setSpan(new RelativeSizeSpan(0.7f), spanData[0], spanData[1], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        mMeta.setText(metaDataSpan);
+        mMeta.setText(metaDataStr);
 
         if (!TextUtils.isEmpty(mMovie.synopsis)) {
             mSynopsis.setText(mMovie.synopsis);
@@ -126,6 +133,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 public void run() {
                     boolean ellipsized = false;
                     Layout layout = mSynopsis.getLayout();
+                    if(layout == null) return;
                     int lines = layout.getLineCount();
                     if(lines > 0) {
                         int ellipsisCount = layout.getEllipsisCount(lines-1);
@@ -185,14 +193,18 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
         });
 
-        String defaultQuality = qualities[qualities.length - 1];
-        mQuality.setText(defaultQuality);
+        mSelectedQuality = qualities[qualities.length - 1];
+        mQuality.setText(mSelectedQuality);
         mQuality.setDefault(qualities.length - 1);
 
         String defaultSubtitle = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, null);
         if (mMovie.subtitles.containsKey(defaultSubtitle)) {
             onSubtitleLanguageSelected(defaultSubtitle);
             mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
+        }
+
+        if(mCoverImage != null) {
+            Picasso.with(mCoverImage.getContext()).load(mMovie.image).into(mCoverImage);
         }
 
         return mRoot;
@@ -227,6 +239,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         startActivity(trailerIntent);
     }
 
+    @OnClick(R.id.play_button)
     public void play() {
         String streamUrl = mMovie.torrents.get(mSelectedQuality).url;
         StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);

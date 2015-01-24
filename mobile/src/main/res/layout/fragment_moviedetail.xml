@@ -1,140 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/content"
-    android:transitionName="content"
-    android:layout_below="@id/parallax"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp" />
 
     <RelativeLayout
-        android:id="@+id/base_info_block"
-        android:transitionName="info"
+        android:id="@+id/content"
+        android:transitionName="content"
+        android:layout_below="@id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="100dp"
-        android:paddingLeft="@dimen/detail_horizontal_margin"
-        android:paddingRight="@dimen/detail_horizontal_margin"
-        android:paddingStart="@dimen/detail_horizontal_margin"
-        android:paddingEnd="@dimen/detail_horizontal_margin"
-        android:paddingTop="@dimen/detail_vertical_margin"
-        android:gravity="center_vertical"
-        android:background="@color/bg"
-        android:orientation="vertical">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@color/bg">
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Movie Title"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/detail_title_text_size"
-            app:typeface="roboto_medium" />
-
-        <RatingBar
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_marginTop="@dimen/detail_rating_margin_top"
-            android:clickable="false"
-            android:focusable="false"
-            android:isIndicator="true"
-            android:max="10"
-            android:progress="5"/>
-
-        <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/meta"
-            android:layout_below="@id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_meta_margin_top"
-            android:gravity="center_vertical"
-            android:text="2013 ● 94 min ● Animation"
-            android:textSize="@dimen/detail_meta_text_size"
-            android:textColor="@color/secondary_text_color" />
-
-        <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/synopsis"
+        <RelativeLayout
+            android:id="@+id/base_info_block"
+            android:transitionName="info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/meta"
-            android:layout_marginTop="@dimen/detail_vertical_margin"
-            android:text="..."
-            android:textDirection="locale"
-            android:maxLines="5"
-            android:ellipsize="end"
-            android:textSize="@dimen/detail_desc_text_size"
-            android:textColor="@color/text_color" />
+            android:minHeight="100dp"
+            android:paddingLeft="@dimen/detail_horizontal_margin"
+            android:paddingRight="@dimen/detail_horizontal_margin"
+            android:paddingStart="@dimen/detail_horizontal_margin"
+            android:paddingEnd="@dimen/detail_horizontal_margin"
+            android:paddingTop="@dimen/detail_vertical_offset"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movie Title"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/detail_title_text_size"
+                app:typeface="roboto_medium" />
+
+            <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="@dimen/detail_rating_margin_top"
+                android:clickable="false"
+                android:focusable="false"
+                android:isIndicator="true"
+                android:max="10"
+                android:progress="5"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/meta"
+                android:layout_below="@id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_meta_margin_top"
+                android:gravity="center_vertical"
+                android:text="2013 ● 94 min ● Animation"
+                android:textSize="@dimen/detail_meta_text_size"
+                android:textColor="@color/secondary_text_color" />
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/meta"
+                android:layout_marginTop="@dimen/detail_vertical_offset"
+                android:text="..."
+                android:textDirection="locale"
+                android:maxLines="5"
+                android:ellipsize="end"
+                android:textSize="@dimen/detail_desc_text_size"
+                android:textColor="@color/text_color" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/info_buttons"
+            android:orientation="horizontal"
+            android:layout_below="@id/base_info_block"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/detail_vertical_offset"
+            android:paddingTop="12dp"
+            >
+            <com.devspark.robototextview.widget.RobotoButton
+                style="@style/DetailButton.PopcornTime"
+                android:id="@+id/read_more"
+                android:layout_marginRight="@dimen/detail_button_margin"
+                android:layout_marginEnd="@dimen/detail_button_margin"
+                android:text="@string/read_more"
+                app:typeface="roboto_medium"  />
+
+            <com.devspark.robototextview.widget.RobotoButton
+                style="@style/DetailButton.PopcornTime"
+                android:id="@+id/watch_trailer"
+                android:text="@string/watch_trailer"
+                app:typeface="roboto_medium"  />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignTop="@id/base_info_block"
+            android:background="@android:color/white"
+            android:alpha="0.08"
+            />
+
+        <View
+            android:id="@+id/main_div"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/info_buttons"
+            android:background="@color/div_white" />
+
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/subtitles"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@id/main_div"
+            app:optionIcon="@drawable/ic_av_subs"
+            app:optionText="@string/subtitles"
+            />
+
+        <View
+            android:id="@+id/option_div_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+            android:layout_marginStart="@dimen/optionselector_text_margin_start"
+            android:layout_below="@id/subtitles"
+            android:background="@color/div_white" />
+
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/quality"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@id/option_div_1"
+            app:optionIcon="@drawable/ic_action_quality"
+            app:optionText="@string/quality"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"
+            android:alpha="0.08"
+            />
+
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/info_buttons"
-        android:orientation="horizontal"
-        android:layout_below="@id/base_info_block"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/detail_vertical_margin"
-        >
-        <com.devspark.robototextview.widget.RobotoButton
-            style="@style/DetailButton.PopcornTime"
-            android:id="@+id/read_more"
-            android:layout_marginRight="@dimen/detail_button_margin"
-            android:layout_marginEnd="@dimen/detail_button_margin"
-            android:text="@string/read_more"
-            app:typeface="roboto_medium"  />
-
-        <com.devspark.robototextview.widget.RobotoButton
-            style="@style/DetailButton.PopcornTime"
-            android:id="@+id/watch_trailer"
-            android:text="@string/watch_trailer"
-            app:typeface="roboto_medium"  />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignTop="@id/base_info_block"
-        android:background="@android:color/white"
-        android:alpha="0.08"
-        />
-
-    <View
-        android:id="@+id/main_div"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/info_buttons"
-        android:background="@color/div_white" />
-
-    <pct.droid.widget.OptionSelector
-        android:id="@+id/subtitles"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/play_button"
+        android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_below="@id/main_div"
-        app:optionIcon="@drawable/ic_av_subs"
-        app:optionText="@string/subtitles"
-        />
-
-    <View
-        android:id="@+id/option_div_1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-        android:layout_marginStart="@dimen/optionselector_text_margin_start"
-        android:layout_below="@id/subtitles"
-        android:background="@color/div_white" />
-
-    <pct.droid.widget.OptionSelector
-        android:id="@+id/quality"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_below="@id/option_div_1"
-        app:optionIcon="@drawable/ic_action_quality"
-        app:optionText="@string/quality"
-        />
-
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_av_play_button"
+        android:background="@drawable/play_button_circle"
+        android:transitionName="fab"
+        android:elevation="5dp" />
 </RelativeLayout>

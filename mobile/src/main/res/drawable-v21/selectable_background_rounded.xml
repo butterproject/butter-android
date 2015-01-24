@@ -29,6 +29,5 @@
             </item>
             <item android:drawable="@android:color/transparent" />
         </selector>
-        <corners android:radius="2dp"/>
     </item>
 </ripple>
