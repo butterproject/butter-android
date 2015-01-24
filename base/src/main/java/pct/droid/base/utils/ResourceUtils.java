@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
-public class ResourceUtil {
+public class ResourceUtils {
 
 	public static TypedValue resolveThemeAttribute(Context context, int attrId) {
 		TypedValue value = new TypedValue();

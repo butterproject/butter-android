@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="overview_cols">3</integer>
+    <integer name="overview_cols">4</integer>
 </resources>

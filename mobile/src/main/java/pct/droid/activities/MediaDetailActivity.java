@@ -2,29 +2,26 @@ package pct.droid.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
-import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import butterknife.InjectView;
-import butterknife.OnClick;
+import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.Prefs;
@@ -35,7 +32,7 @@ import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.VersionUtil;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.fragments.BaseDetailFragment;
 import pct.droid.fragments.MovieDetailFragment;
@@ -46,25 +43,25 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     public static final String DATA = "item";
     public static final String COLOR = "palette";
 
-    private Integer mLastScrollLocation = 0, mPaletteColor, mVisibleBarPos, mHeaderHeight, mToolbarHeight, mParallaxHeight;
-    private Boolean mTransparentBar = true, mVisibleBar = true;
-    private Drawable mPlayButtonDrawable;
+    private Integer mLastScrollLocation = 0, mVisibleBarPos, mHeaderHeight = 0, mToolbarHeight = 0, mParallaxHeight, mPaletteColor;
+    private Boolean mTransparentBar = true, mVisibleBar = true, mIsTablet = false;
     private Fragment mFragment;
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.scrollview)
-    ParallaxScrollView mScrollView;
+    ScrollView mScrollView;
+    @Optional
     @InjectView(R.id.parallax)
     RelativeLayout mParallaxLayout;
+    @InjectView(R.id.content)
+    FrameLayout mContent;
     @InjectView(R.id.logo)
     ImageView mLogo;
     @InjectView(R.id.header_progress)
     ProgressBar mProgress;
     @InjectView(R.id.bg_image)
     ImageView mBgImage;
-    @InjectView(R.id.play_button)
-    ImageButton mPlayFab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,82 +74,69 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBarBackground.fadeOut(this);
 
-        // Calculate toolbar scrolling variables
-        mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3) * 2;
-        mParallaxLayout.getLayoutParams().height = mParallaxHeight;
+        // mParallaxLayout doesn't exist? Then this is a tablet or big screen device
+        mIsTablet = mParallaxLayout == null;
 
-        mToolbarHeight = mToolbar.getHeight();
-        mHeaderHeight = mParallaxHeight - mToolbarHeight;
+        // Calculate toolbar scrolling variables
+        if(!mIsTablet) {
+            mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3);
+            mParallaxHeight = mParallaxHeight * 2;
+            mParallaxLayout.getLayoutParams().height = mParallaxHeight;
+        } else {
+            mParallaxHeight = (PixelUtils.getScreenHeight(this) / 2);
+            ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = mParallaxHeight;
+        }
+
+        if(VersionUtils.isLollipop()) {
+            int navigationBarHeight = PixelUtils.getNavigationBarHeight(this);
+            mContent.setPadding(mContent.getPaddingLeft(), mContent.getPaddingTop(), mContent.getPaddingRight(), mContent.getPaddingBottom() + navigationBarHeight);
+        }
+
         mScrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
         Intent intent = getIntent();
-
         mPaletteColor = intent.getIntExtra(COLOR, getResources().getColor(R.color.primary));
-        mPlayButtonDrawable = PixelUtils.changeDrawableColor(MediaDetailActivity.this, R.drawable.play_button_circle, mPaletteColor);
-        mPlayFab.setBackgroundDrawable(mPlayButtonDrawable);
-
         Media media = intent.getParcelableExtra(DATA);
 
         mFragment = null;
         if(media instanceof Movie) {
-            mFragment = MovieDetailFragment.newInstance((Movie)media);
+            mFragment = MovieDetailFragment.newInstance((Movie)media, mPaletteColor);
         } else if(media instanceof Show) {
-            mPlayFab.setVisibility(View.GONE);
             //mFragment = ShowDetailFragment.newInstance((Show)media);
         }
 
         if(mFragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_layout, mFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.content, mFragment).commit();
         }
 
-        Picasso.with(this).load(media.image).into(mBgImage, new Callback() {
+        String imageUrl = media.image;
+        if(mIsTablet || !PixelUtils.screenIsPortrait(this)) {
+            imageUrl = media.headerImage;
+        }
+        Picasso.with(this).load(imageUrl).into(mBgImage, new Callback() {
             @Override
             public void onSuccess() {
-                final TransitionDrawable td;
-                if (mPaletteColor == getResources().getColor(R.color.primary)) {
-                    Palette palette = Palette.generate(((BitmapDrawable) mBgImage.getDrawable()).getBitmap());
-
-                    int vibrantColor = palette.getVibrantColor(-1);
-                    if (vibrantColor == -1) {
-                        mPaletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
-                    } else {
-                        mPaletteColor = vibrantColor;
-                    }
-
-                    Drawable oldDrawable = mPlayButtonDrawable;
-                    mPlayButtonDrawable = PixelUtils.changeDrawableColor(MediaDetailActivity.this, R.drawable.ic_av_play_button, mPaletteColor);
-                    td = new TransitionDrawable(new Drawable[]{oldDrawable, mPlayButtonDrawable});
-                } else {
-                    td = null;
-                }
-
-                mHandler.postDelayed(new Runnable() {
+                mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (td != null) {
-                            mPlayFab.setImageDrawable(td);
-                            td.startTransition(500);
-                        }
                         AnimUtils.fadeIn(mBgImage);
                         mLogo.setVisibility(View.GONE);
                         mProgress.setVisibility(View.GONE);
                     }
-                }, 1000);
+                });
             }
 
             @Override
             public void onError() {
-                mProgress.setVisibility(View.GONE);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mProgress.setVisibility(View.GONE);
+                    }
+                });
             }
         });
-    }
-
-    @OnClick(R.id.play_button)
-    public void play(View v) {
-        if(mFragment instanceof MovieDetailFragment) {
-            ((MovieDetailFragment) mFragment).play();
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -165,7 +149,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         } else {
             Intent i = new Intent(this, StreamLoadingActivity.class);
             i.putExtra(StreamLoadingActivity.EXTRA_INFO, streamInfo);
-            if (VersionUtil.isLollipop()) {
+            if (VersionUtils.isLollipop()) {
                 StreamLoadingActivity.startActivity(this, streamInfo, Pair.create((View) mBgImage, mBgImage.getTransitionName()));
             } else {
                 StreamLoadingActivity.startActivity(this, streamInfo);
@@ -179,7 +163,11 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         public void onScrollChanged() {
             if (mToolbarHeight == 0) {
                 mToolbarHeight = mToolbar.getHeight();
-                mHeaderHeight = mParallaxHeight - mToolbarHeight;
+                if(!mIsTablet) {
+                    mHeaderHeight = mParallaxHeight - mToolbarHeight;
+                } else {
+                    mHeaderHeight = mParallaxHeight + mToolbarHeight;
+                }
             }
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mToolbar.getLayoutParams();
@@ -216,7 +204,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             if (mParallaxHeight - mScrollView.getScrollY() < 0) {
                 if (mTransparentBar) {
                     mTransparentBar = false;
-                    ActionBarBackground.changeColor(MediaDetailActivity.this, mPaletteColor, false);
+                    ActionBarBackground.changeColor(MediaDetailActivity.this, mPaletteColor, true);
                 }
             } else {
                 if (!mTransparentBar) {
