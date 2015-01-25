@@ -19,6 +19,7 @@ public class Media implements Parcelable {
     public String fullImage;
     public String headerImage;
     public Map<String, String> subtitles;
+    protected SubsProvider mSubsProvider = null;
 
     public Media() {
 
@@ -123,6 +124,6 @@ public class Media implements Parcelable {
     }
 
     public SubsProvider getSubsProvider() {
-        throw new AbstractMethodError("Not implemented");
+        return mSubsProvider;
     }
 }
