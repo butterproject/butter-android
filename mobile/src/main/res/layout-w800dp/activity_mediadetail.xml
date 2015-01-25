@@ -38,7 +38,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3F000000"
+        android:background="#000000"
+        android:alpha="0.18"
         />
 
     <View

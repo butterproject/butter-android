@@ -20,8 +20,7 @@
                     <corners android:radius="2dp"/>
                 </shape>
             </item>
-            <item
-                android:state_pressed="true">
+            <item android:state_pressed="true">
                 <shape>
                     <solid android:color="@color/selectable_pressed"/>
                     <corners android:radius="2dp"/>
