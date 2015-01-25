@@ -7,14 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Layout;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -22,9 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -47,19 +41,11 @@ import pct.droid.widget.OptionSelector;
 
 public class MovieDetailFragment extends BaseDetailFragment {
 
-    private static final String DATA = "data";
-    private static final String COLOR = "palette_color";
-
-    private FragmentListener mCallback;
     private Movie mMovie;
-    private Adapter mAdapter;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
-    private int mPaletteColor;
-    private boolean mIsTablet = false;
 
-    View mRoot;
     @InjectView(R.id.play_button)
-    ImageButton mPlaybutton;
+    ImageButton mPlayButton;
     @InjectView(R.id.title)
     TextView mTitle;
     @InjectView(R.id.meta)
@@ -94,7 +80,6 @@ public class MovieDetailFragment extends BaseDetailFragment {
         super.onCreate(savedInstanceState);
         mMovie = getArguments().getParcelable(DATA);
         mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
-        mIsTablet = mCoverImage != null;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -104,9 +89,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
         ButterKnife.inject(this, mRoot);
 
         if(VersionUtils.isJellyBean()) {
-            mPlaybutton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlaybutton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         } else {
-            mPlaybutton.setBackground(PixelUtils.changeDrawableColor(mPlaybutton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         }
 
         Double rating = Double.parseDouble(mMovie.rating);
@@ -197,7 +182,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         mQuality.setText(mSelectedQuality);
         mQuality.setDefault(qualities.length - 1);
 
-        String defaultSubtitle = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, null);
+        String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
         if (mMovie.subtitles.containsKey(defaultSubtitle)) {
             onSubtitleLanguageSelected(defaultSubtitle);
             mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
@@ -225,14 +210,14 @@ public class MovieDetailFragment extends BaseDetailFragment {
         Bundle b = new Bundle();
         b.putString("text", mMovie.synopsis);
         synopsisDialogFragment.setArguments(b);
-        synopsisDialogFragment.show(getActivity().getFragmentManager(), "overlay_fragment");
+        synopsisDialogFragment.show(mActivity.getFragmentManager(), "overlay_fragment");
     }
 
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
-        Intent trailerIntent = new Intent(getActivity(), TrailerPlayerActivity.class);
+        Intent trailerIntent = new Intent(mActivity, TrailerPlayerActivity.class);
         if (!YouTubeData.isYouTubeUrl(mMovie.trailer)) {
-            trailerIntent = new Intent(getActivity(), VideoPlayerActivity.class);
+            trailerIntent = new Intent(mActivity, VideoPlayerActivity.class);
         }
         trailerIntent.putExtra(TrailerPlayerActivity.DATA, mMovie);
         trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mMovie.trailer);

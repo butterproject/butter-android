@@ -9,11 +9,13 @@ import java.util.Map;
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
+    public enum Status { CONTINUING, ENDED }
+
     public String type = "show";
     public String imdbId = "";
     public String airDay = "";
     public String airTime = "";
-    public String status = "";
+    public Status status = null;
     public String runtime = "";
     public String network = "";
     public String country = "";
@@ -32,7 +34,16 @@ public class Show extends Media implements Parcelable {
         airDay = in.readString();
         airTime = in.readString();
         runtime = in.readString();
-        status = in.readString();
+
+        int statusInt = in.readInt();
+        if(statusInt == 0) {
+            status = Status.CONTINUING;
+        } else if(statusInt == 1) {
+            status = Status.ENDED;
+        } else {
+            status = null;
+        }
+
         network = in.readString();
         country = in.readString();
         tvdbId = in.readString();
@@ -59,7 +70,7 @@ public class Show extends Media implements Parcelable {
         dest.writeString(airDay);
         dest.writeString(airTime);
         dest.writeString(runtime);
-        dest.writeString(status);
+        dest.writeInt(status.ordinal());
         dest.writeString(network);
         dest.writeString(country);
         dest.writeString(tvdbId);

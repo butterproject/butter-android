@@ -1,6 +1,8 @@
 package pct.droid.activities;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.fragments.BaseDetailFragment;
 import pct.droid.fragments.MovieDetailFragment;
+import pct.droid.fragments.ShowDetailFragment;
 import pct.droid.utils.ActionBarBackground;
 
 public class MediaDetailActivity extends BaseActivity implements BaseDetailFragment.FragmentListener {
@@ -62,6 +65,13 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     ProgressBar mProgress;
     @InjectView(R.id.bg_image)
     ImageView mBgImage;
+
+    public static void startActivity(Activity activity, Media media, int paletteColor) {
+        Intent intent = new Intent(activity, MediaDetailActivity.class);
+        if (paletteColor != -1) intent.putExtra("palette", paletteColor);
+        intent.putExtra("item", media);
+        activity.startActivity(intent);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +112,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         if(media instanceof Movie) {
             mFragment = MovieDetailFragment.newInstance((Movie)media, mPaletteColor);
         } else if(media instanceof Show) {
-            //mFragment = ShowDetailFragment.newInstance((Show)media);
+            mFragment = ShowDetailFragment.newInstance((Show) media, mPaletteColor);
         }
 
         if(mFragment != null) {

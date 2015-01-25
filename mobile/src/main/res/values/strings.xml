@@ -32,6 +32,8 @@
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
+    <string name="continuing">Continuing</string>
+    <string name="ended">Ended</string>
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
@@ -68,7 +70,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="leave">Leave</string>
 
 	<!-- SettingsActivity strings -->
-
 	<string name="settings">Settings</string>
 	<string name="general">General</string>
 	<string name="default_view">Default overview</string>
