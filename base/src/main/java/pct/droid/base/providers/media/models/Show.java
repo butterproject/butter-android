@@ -9,7 +9,7 @@ import java.util.Map;
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
-    public enum Status { CONTINUING, ENDED }
+    public enum Status { CONTINUING, ENDED, CANCELED }
 
     public String type = "show";
     public String imdbId = "";

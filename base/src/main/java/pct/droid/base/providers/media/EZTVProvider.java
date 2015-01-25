@@ -22,7 +22,6 @@ public class EZTVProvider extends MediaProvider {
 
 	protected String mApiUrl = "http://eztvapi.re/";
 	protected String mMirrorApiUrl = "http://api.popcorntime.io/";
-	public static final int NO_MOVIES_ERROR = R.string.movies_error;
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -192,8 +191,10 @@ public class EZTVProvider extends MediaProvider {
                     String status = (String) showData.get("status");
                     if(status.equalsIgnoreCase("ended")) {
                         show.status = Show.Status.ENDED;
-                    } else {
+                    } else if(status.equalsIgnoreCase("returning series")) {
                         show.status = Show.Status.CONTINUING;
+                    } else if(status.equalsIgnoreCase("canceled")) {
+                        show.status = Show.Status.CANCELED;
                     }
                 }
 
@@ -224,7 +225,7 @@ public class EZTVProvider extends MediaProvider {
 
 					episodeObject.dateBased = (Boolean) episode.get("date_based");
 					episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
-					episodeObject.overview = episode.get("overview").toString();
+					episodeObject.overview = (String) episode.get("overview");
 					episodeObject.season = ((Double) episode.get("season")).intValue();
 					episodeObject.episode = ((Double) episode.get("episode")).intValue();
 					episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
