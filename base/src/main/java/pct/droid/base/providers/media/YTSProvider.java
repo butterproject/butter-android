@@ -65,6 +65,18 @@ public class YTSProvider extends MediaProvider {
 			case POPULARITY:
 				sort = "seeds";
 				break;
+            case YEAR:
+                sort = "year";
+                break;
+            case DATE:
+                sort = "date";
+                break;
+            case RATING:
+                sort = "rating";
+                break;
+            case ALPHABET:
+                sort = "alphabet";
+                break;
 		}
 
 		params.add(new BasicNameValuePair("sort", sort));
