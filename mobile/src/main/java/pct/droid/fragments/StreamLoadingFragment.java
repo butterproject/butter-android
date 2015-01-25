@@ -31,7 +31,7 @@ import pct.droid.base.utils.VersionUtils;
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     View mRoot;
-    @InjectView(R.id.progressIndicator)
+    @InjectView(R.id.progress_indicator)
     ProgressBar progressIndicator;
     @InjectView(R.id.primary_textview)
     TextView mPrimaryTextView;

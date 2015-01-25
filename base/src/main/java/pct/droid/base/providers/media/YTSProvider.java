@@ -1,6 +1,7 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.os.Parcel;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
@@ -371,9 +372,14 @@ public class YTSProvider extends MediaProvider {
 	}
 
     public static class YTSMovie extends Movie {
-        @Override
-        public SubsProvider getSubsProvider() {
-            return new YSubsProvider();
+        public YTSMovie() {
+            super();
+            mSubsProvider = new YSubsProvider();
+        }
+
+        public YTSMovie(Parcel in) {
+            super(in);
+            mSubsProvider = new YSubsProvider();
         }
     }
 

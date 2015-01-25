@@ -53,23 +53,23 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     protected String mMsgError = "An error occurred during the retrieval of the video.  This could be due to network issues or YouTube protocols.  Please try again later.";
 
     View decorView;
-    @InjectView(R.id.progressIndicator)
+    @InjectView(R.id.progress_indicator)
     ProgressBar progressIndicator;
     @InjectView(R.id.trailerView)
     VideoView videoView;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.controlLayout)
+    @InjectView(R.id.control_layout)
     RelativeLayout controlLayout;
-    @InjectView(R.id.playerInfo)
+    @InjectView(R.id.player_info)
     TextView playerInfo;
-    @InjectView(R.id.controlBar)
+    @InjectView(R.id.control_bar)
     SeekBar controlBar;
     @InjectView(R.id.play_button)
     ImageButton playButton;
     @InjectView(R.id.currentTime)
     TextView currentTime;
-    @InjectView(R.id.lengthTime)
+    @InjectView(R.id.length_time)
     TextView lengthTime;
     @InjectView(R.id.scaleButton)
     ImageButton scaleButton;
