@@ -59,12 +59,6 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
      |          |-- main
      |          |     |-- java           # tv module java code
      |          |     `-- res            # tv module resources
-    `|-- node                            # node module (native node lib)
-     |    |-- build.gradle               # node module build script
-     |    `-- src
-     |          |-- main
-     |          |     |-- jniLibs        # native node libraries
-     |          |     |-- java           # Node Java code
     `|-- vlc                             # vlc module (VLC mediaplayer library)
      |    |-- build.gradle               # vlc module build script
      |    `-- src
@@ -81,12 +75,20 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Popcorn Time will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
 
+###Beta versions
+
+Beta releases will be numbered with the following format:
+
+`0.<major>.<minor>-<patch>`
+
+###Stable versions
+
 Releases will be numbered with the following format:
 
 `<major>.<minor>.<patch>`
 
-Constructed with the following guidelines:
 
+Constructed with the following guidelines:
 * A new *major* release indicates a large change where backwards compatibility is broken.
 * A new *minor* release indicates a normal change that maintains backwards compatibility.
 * A new *patch* release indicates a bugfix or small change which does not affect compatibility.
