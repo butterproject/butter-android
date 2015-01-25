@@ -7,11 +7,12 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/detail_card_margin"
+        android:layout_centerHorizontal="true"
         android:scaleType="centerInside"
         android:src="@drawable/popcorn_logo"
         android:alpha="0.6" />
@@ -20,10 +21,10 @@
         android:id="@+id/header_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/logo"
         android:alpha="0.6"
-        android:paddingTop="100dp"
+        android:paddingTop="20dp"
         style="?android:attr/progressBarStyle" />
 
     <ImageView
@@ -33,6 +34,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#3F000000"
+        />
 
     <View
         android:layout_width="match_parent"
