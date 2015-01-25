@@ -1,6 +1,15 @@
 [main]
 host = https://www.transifex.com
 
+[popcorn-time-app.base-strings]
+file_filter = base/src/main/res/values-<lang>/strings.xml
+source_lang = en
+source_file = base/src/main/res/values/strings.xml
+type = ANDROID
+minimum_perc = 95
+trans.zh_CN = base/src/main/res/values-zh-rCN/strings.xml
+trans.pt_BR = base/src/main/res/values-pt-rBR/strings.xml
+
 [popcorn-time-app.mobile-strings]
 file_filter = mobile/src/main/res/values-<lang>/strings.xml
 source_lang = en
@@ -16,3 +25,5 @@ source_lang = en
 source_file = tv/src/main/res/values/strings.xml
 type = ANDROID
 minimum_perc = 95
+trans.zh_CN = tv/src/main/res/values-zh-rCN/strings.xml
+trans.pt_BR = tv/src/main/res/values-pt-rBR/strings.xml
