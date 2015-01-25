@@ -17,8 +17,6 @@ import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
-import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.providers.subs.YSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -189,7 +187,16 @@ public class EZTVProvider extends MediaProvider {
 				show.image = images.get("poster").replace("/original/", "/medium/");
 				show.fullImage = images.get("poster");
 				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
-				show.status = (String) showData.get("status");
+
+                if(showData.get("status") != null) {
+                    String status = (String) showData.get("status");
+                    if(status.equalsIgnoreCase("ended")) {
+                        show.status = Show.Status.ENDED;
+                    } else {
+                        show.status = Show.Status.CONTINUING;
+                    }
+                }
+
 				show.country = (String) showData.get("country");
 				show.network = (String) showData.get("network");
 				show.synopsis = (String) showData.get("synopsis");

@@ -38,7 +38,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Movie Title"
+                tools:text="Show Title"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/detail_title_text_size"
                 app:typeface="roboto_medium" />
@@ -98,59 +98,12 @@
                 android:layout_marginEnd="@dimen/detail_button_margin"
                 android:text="@string/read_more"
                 app:typeface="roboto_medium"  />
-
-            <com.devspark.robototextview.widget.RobotoButton
-                style="@style/DetailButton.PopcornTime"
-                android:id="@+id/watch_trailer"
-                android:text="@string/watch_trailer"
-                app:typeface="roboto_medium"  />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignTop="@id/base_info_block"
-            android:background="@android:color/white"
-            android:alpha="0.08"
-            />
-
-        <View
-            android:id="@+id/main_div"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/info_buttons"
-            android:background="@color/div_white" />
-
-        <pct.droid.widget.OptionSelector
-            android:id="@+id/subtitles"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_below="@id/main_div"
-            app:optionIcon="@drawable/ic_av_subs"
-            app:optionText="@string/subtitles"
-            />
-
-        <View
-            android:id="@+id/option_div_1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-            android:layout_marginStart="@dimen/optionselector_text_margin_start"
-            android:layout_below="@id/subtitles"
-            android:background="@color/div_white" />
-
-        <pct.droid.widget.OptionSelector
-            android:id="@+id/quality"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_below="@id/option_div_1"
-            app:optionIcon="@drawable/ic_action_quality"
-            app:optionText="@string/quality"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
             android:background="@android:color/white"
             android:alpha="0.08"
             />

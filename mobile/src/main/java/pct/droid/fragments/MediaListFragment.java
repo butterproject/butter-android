@@ -25,13 +25,11 @@ import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
-import pct.droid.activities.ShowDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.LoadingDetailDialogFragment;
@@ -83,7 +81,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 	private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
-
 	private MediaProvider mProvider;
 	private int mPage = 1;
 	private MediaProvider.Filters mFilters = new MediaProvider.Filters();
@@ -96,7 +93,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	TextView emptyView;
 	@InjectView(R.id.progress_textview)
 	TextView progressTextView;
-
 
 	//todo: a better way to passing a provider to this fragment
 	public static MediaListFragment newInstance(Mode mode, int provider) {
@@ -413,7 +409,8 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	/**
 	 * Called when loading media details fails
 	 */
-	@Override public void onDetailLoadFailure() {
+	@Override
+    public void onDetailLoadFailure() {
 		Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
 	}
 
@@ -422,16 +419,8 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	 *
 	 * @param item
 	 */
-	@Override public void onDetailLoadSuccess(final Media item, final int paletteColor) {
-		Intent intent;
-		if (item instanceof Movie) {
-			intent = new Intent(getActivity(), MediaDetailActivity.class);
-		} else {
-			intent = new Intent(getActivity(), ShowDetailActivity.class);
-		}
-		if (paletteColor != -1) intent.putExtra("palette", paletteColor);
-		intent.putExtra("item", item);
-		startActivity(intent);
-
+	@Override
+    public void onDetailLoadSuccess(final Media item, final int paletteColor) {
+        MediaDetailActivity.startActivity(getActivity(), item, paletteColor);
 	}
 }
