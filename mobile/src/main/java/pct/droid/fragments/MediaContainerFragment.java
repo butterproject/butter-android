@@ -28,13 +28,11 @@ public class MediaContainerFragment extends Fragment {
 
     public static final String EXTRA_ARGS = "extra_args";
 
-
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip mTabs;
     @InjectView(R.id.pager)
     ViewPager mViewPager;
     private MediaPagerAdapter mAdapter;
-
 
     //todo: a better way to passing a provider to this fragment
     public static MediaContainerFragment newInstance(int provider) {

@@ -27,7 +27,7 @@
         android:layout_marginEnd="@dimen/iconlist_text_margin_horizontal"
         android:layout_gravity="center_vertical"
         android:singleLine="true"
-        android:textSize="@dimen/iconlist_text_size"
+        android:textSize="@dimen/list_text_size"
         android:textColor="@color/text_color"
         tools:text="Title Text" />
 

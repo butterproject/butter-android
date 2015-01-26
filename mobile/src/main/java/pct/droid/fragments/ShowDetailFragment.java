@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -32,6 +34,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.activities.StreamLoadingActivity;
+import pct.droid.adapters.ShowDetailPagerAdapter;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
@@ -42,6 +45,7 @@ import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.widget.WrappingViewPager;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
@@ -49,11 +53,13 @@ public class ShowDetailFragment extends BaseDetailFragment {
     private Boolean mIsTablet = false;
 
     @InjectView(R.id.pager)
-    ViewPager mViewPager;
+    WrappingViewPager mViewPager;
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip mTabs;
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
+    @InjectView(R.id.background)
+    View mBackground;
     @Optional
     @InjectView(R.id.title)
     TextView mTitle;
@@ -93,14 +99,23 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
-        mRoot.setMinimumHeight(container.getMinimumHeight());
         ButterKnife.inject(this, mRoot);
+        if(VersionUtils.isJellyBean() && container != null) {
+            int minHeight = container.getMinimumHeight();
+            mRoot.setMinimumHeight(minHeight);
+            mBackground.getLayoutParams().height = minHeight - mTabs.getHeight();
+        }
 
+        /*
+        Ready if ever needed for a cool function
         if(VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         }
+        For now, the play button is not visible:
+        */
+        mPlayButton.setVisibility(View.GONE);
 
         mIsTablet = mCoverImage != null;
 
@@ -153,8 +168,24 @@ public class ShowDetailFragment extends BaseDetailFragment {
             Picasso.with(mCoverImage.getContext()).load(mShow.image).into(mCoverImage);
         }
 
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(ShowDetailAboutFragment.newInstance(mShow));
+        for(int i = 1; i < mShow.seasons + 1; i++) {
+            fragments.add(ShowDetailSeasonFragment.newInstance(mShow, i, mPaletteColor));
+        }
+        ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
+
+        mViewPager.setAdapter(fragmentPagerAdapter);
+
         mTabs.setIndicatorColor(mPaletteColor);
-        //mTabs.setViewPager(mViewPager);
+        mTabs.setViewPager(mViewPager);
+
+        mBackground.post(new Runnable() {
+            @Override
+            public void run() {
+                mBackground.getLayoutParams().height = mBackground.getLayoutParams().height - mTabs.getHeight();
+            }
+        });
 
         return mRoot;
     }
@@ -173,98 +204,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.play_button)
     public void play() {
-        // Ready for the future
-        // Start next not-watched episode. For when we are going to keep the watched statuses of episodes.
-        
-        // Temporary: show dialog for selection
-        List<String> availableSeasonsStringList = new ArrayList<>();
-        final List<Integer> availableSeasons = new ArrayList<>();
-        for (String key : mShow.episodes.keySet()) {
-            if (!availableSeasons.contains(mShow.episodes.get(key).season)) {
-                availableSeasons.add(mShow.episodes.get(key).season);
-                availableSeasonsStringList
-                        .add(getString(R.string.season) + " " + ((Integer) mShow.episodes.get(key).season).toString());
-            }
-        }
-        Collections.sort(availableSeasonsStringList);
-        Collections.sort(availableSeasons);
-
-        openDialog(getString(R.string.season),
-                availableSeasonsStringList.toArray(new String[availableSeasonsStringList.size()]),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int position) {
-                        final int selectedSeason = availableSeasons.get(position);
-                        final List<String> availableChapters = new ArrayList<>();
-                        List<String> availableChaptersStringList = new ArrayList<>();
-                        for (String key : mShow.episodes.keySet()) {
-                            if (mShow.episodes.get(key).season == selectedSeason) {
-                                availableChapters.add(key);
-                                availableChaptersStringList.add(((Integer) mShow.episodes.get(key).episode).toString());
-                            }
-                        }
-
-                        // sorting hack
-                        Collections.sort(availableChapters, new Comparator<String>() {
-                            @Override
-                            public int compare(String lhs, String rhs) {
-                                Show.Episode lEpisode = mShow.episodes.get(lhs);
-                                Show.Episode rEpisode = mShow.episodes.get(rhs);
-
-                                return lEpisode.episode > rEpisode.episode ? 1 : -1;
-                            }
-                        });
-                        Collections.sort(availableChaptersStringList, new Comparator<String>() {
-                            @Override
-                            public int compare(String lhs, String rhs) {
-                                int a = Integer.parseInt(lhs);
-                                int b = Integer.parseInt(rhs);
-                                if (a > b) {
-                                    return 1;
-                                } else if (a < b) {
-                                    return -1;
-                                } else {
-                                    return 0;
-                                }
-                            }
-                        });
-
-                        for (final ListIterator<String> iter = availableChaptersStringList.listIterator(); iter.hasNext(); ) {
-                            final String element = iter.next();
-                            iter.set(getString(R.string.episode) + " " + element);
-                        }
-
-                        dialog.dismiss();
-
-                        openDialog(getString(R.string.episode),
-                                availableChaptersStringList.toArray(new String[availableChaptersStringList.size()]),
-                                new DialogInterface.OnClickListener() {
-                                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int position) {
-                                        String key = availableChapters.get(position);
-                                        Show.Episode episode = mShow.episodes.get(key);
-                                        Media.Torrent torrent =
-                                                episode.torrents.get(episode.torrents.keySet().toArray(new String[1])[0]);
-
-                                        if (PrefUtils.get(mActivity, Prefs.WIFI_ONLY, true) &&
-                                                !NetworkUtils.isWifiConnected(mActivity) &&
-                                                NetworkUtils .isNetworkConnected(mActivity)) {
-                                            MessageDialogFragment.show(mActivity.getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
-                                        } else {
-                                            StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(episode, mShow, torrent.url, null, key);
-
-                                            if (VersionUtils.isLollipop()) {
-                                                StreamLoadingActivity.startActivity(mActivity, streamInfo, Pair.create((View) mCoverImage, mCoverImage.getTransitionName()));
-                                            } else {
-                                                StreamLoadingActivity.startActivity(mActivity, streamInfo);
-                                            }
-                                        }
-                                    }
-                                }
-                        );
-                    }
-                });
+        // Ready if ever needed for a cool function
     }
 
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
