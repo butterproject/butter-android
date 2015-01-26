@@ -35,6 +35,7 @@
 
 		<activity
 			android:name="pct.droid.activities.OverviewActivity"
+            android:label="@null"
 			android:theme="@style/Theme.PopcornTime.NavigationDrawer"
 			android:windowSoftInputMode="adjustPan">
 			<intent-filter>

@@ -247,7 +247,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		/**
 		 * Called when an item in the navigation drawer is selected.
 		 */
-		void onNavigationDrawerItemSelected(int position);
+		void onNavigationDrawerItemSelected(int position, String s);
 	}
 
 	/**
@@ -264,7 +264,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 			mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
 		}
 		if (mCallbacks != null) {
-			mCallbacks.onNavigationDrawerItemSelected(position);
+            NavDrawerItem navDrawerItem = mAdapter.getItem(position+1);
+			mCallbacks.onNavigationDrawerItemSelected(position,null!=navDrawerItem?navDrawerItem.getTitle():null);
 		}
 
 		mAdapter.notifyDataSetChanged();

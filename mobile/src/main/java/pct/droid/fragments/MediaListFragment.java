@@ -1,7 +1,6 @@
 package pct.droid.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -51,6 +50,7 @@ import pct.droid.dialogfragments.LoadingDetailDialogFragment;
 public class MediaListFragment extends Fragment implements MediaProvider.Callback, LoadingDetailDialogFragment.Callback {
 
 	public static final String EXTRA_ARGS = "extra_args";
+	public static final String EXTRA_SORT = "extra_sort";
 	public static final String EXTRA_MODE = "extra_mode";
 	public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
@@ -65,9 +65,10 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
     private Boolean mIsAttached;
 	private State mState = State.UNINITIALISED;
-	private Mode mode;
+	private Mode mMode;
+    private MediaProvider.Filters.Sort mSort;
 
-	public enum Mode {
+    public enum Mode {
 		NORMAL, SEARCH
 	}
 
@@ -95,18 +96,19 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	TextView progressTextView;
 
 	//todo: a better way to passing a provider to this fragment
-	public static MediaListFragment newInstance(Mode mode, int provider) {
+	public static MediaListFragment newInstance(Mode mode, int provider,MediaProvider.Filters.Sort filter) {
 		MediaListFragment frag = new MediaListFragment();
 		Bundle args = new Bundle();
 		args.putInt(EXTRA_ARGS, provider);
 		args.putSerializable(EXTRA_MODE, mode);
+		args.putSerializable(EXTRA_SORT, filter);
 		frag.setArguments(args);
 		return frag;
 	}
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+//		setRetainInstance(true);
 	}
 
 	@Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -146,7 +148,10 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 		//get the provider type and create a provider
 		int providerType = getArguments().getInt(EXTRA_ARGS);
-		mode = (Mode) getArguments().getSerializable(EXTRA_MODE);
+        mSort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
+        mFilters.sort = mSort;
+
+		mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
 		switch (providerType) {
 			case 0:
 				mProvider = new YTSProvider();
@@ -159,10 +164,10 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 
 		}
-		if (mode == Mode.SEARCH) emptyView.setText(getString(R.string.no_search_results));
+		if (mMode == Mode.SEARCH) emptyView.setText(getString(R.string.no_search_results));
 
 		//don't load initial data in search mode
-		if (mode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
+		if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
 			mProvider.getList(mFilters, this);/* fetch new items */
 			setState(State.LOADING);
 		} else updateUI();
