@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -53,9 +54,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @InjectView(R.id.synopsis)
     TextView mSynopsis;
     @InjectView(R.id.read_more)
-    TextView mReadMore;
+    Button mReadMore;
     @InjectView(R.id.watch_trailer)
-    TextView mWatchTrailer;
+    Button mWatchTrailer;
     @InjectView(R.id.rating)
     RatingBar mRating;
     @InjectView(R.id.subtitles)

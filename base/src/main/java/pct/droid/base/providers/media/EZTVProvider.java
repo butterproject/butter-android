@@ -236,12 +236,13 @@ public class EZTVProvider extends MediaProvider {
 
 					episodeObject.dateBased = (Boolean) episode.get("date_based");
 					episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
+                    episodeObject.title = (String) episode.get("title");
 					episodeObject.overview = (String) episode.get("overview");
 					episodeObject.season = ((Double) episode.get("season")).intValue();
 					episodeObject.episode = ((Double) episode.get("episode")).intValue();
 					episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
 
-					show.episodes.put(episodeObject.season + "-" + episodeObject.episode, episodeObject);
+					show.episodes.add(episodeObject);
 				}
 
 				list.add(show);
