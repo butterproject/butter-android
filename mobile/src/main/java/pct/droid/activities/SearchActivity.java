@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.fragments.MediaListFragment;
 import pct.droid.utils.ToolbarUtils;
 
@@ -58,7 +59,7 @@ public class SearchActivity extends BaseActivity {
 
 		//create and add the media fragment
 		mFragment =
-				MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider);
+				MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider, MediaProvider.Filters.Sort.POPULARITY);
 
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
 	}
