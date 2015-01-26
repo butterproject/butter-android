@@ -55,11 +55,22 @@ public class EZTVProvider extends MediaProvider {
 
 		String sort = "";
 		switch (filters.sort) {
-
 			default:
 			case POPULARITY:
-				sort = "seeds";
+				sort = "popularity";
 				break;
+            case YEAR:
+                sort = "year";
+                break;
+            case DATE:
+                sort = "'updated'";
+                break;
+            case RATING:
+                sort = "rating";
+                break;
+            case ALPHABET:
+                sort = "'name'";
+                break;
 		}
 
 		params.add(new BasicNameValuePair("sort", sort));
