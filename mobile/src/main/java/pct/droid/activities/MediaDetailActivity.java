@@ -2,7 +2,6 @@ package pct.droid.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +45,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     public static final String DATA = "item";
     public static final String COLOR = "palette";
 
-    private Integer mLastScrollLocation = 0, mVisibleBarPos, mHeaderHeight = 0, mToolbarHeight = 0, mParallaxHeight, mPaletteColor;
+    private Integer mLastScrollLocation = 0, mVisibleBarPos, mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
     private Boolean mTransparentBar = true, mVisibleBar = true, mIsTablet = false;
     private Fragment mFragment;
 
@@ -89,12 +88,13 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
         // Calculate toolbar scrolling variables
         if(!mIsTablet) {
-            mParallaxHeight = (PixelUtils.getScreenHeight(this) / 3);
-            mParallaxHeight = mParallaxHeight * 2;
-            mParallaxLayout.getLayoutParams().height = mParallaxHeight;
+            mParallaxLayout.getLayoutParams().height = mTopHeight = PixelUtils.getScreenHeight(this);
+            ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = -(mTopHeight / 3);
+            mContent.setMinimumHeight(mTopHeight / 3);
         } else {
-            mParallaxHeight = (PixelUtils.getScreenHeight(this) / 2);
-            ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = mParallaxHeight;
+            mTopHeight = (PixelUtils.getScreenHeight(this) / 2);
+            ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = mTopHeight;
+            mContent.setMinimumHeight(mTopHeight);
         }
 
         if(VersionUtils.isLollipop()) {
@@ -174,9 +174,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             if (mToolbarHeight == 0) {
                 mToolbarHeight = mToolbar.getHeight();
                 if(!mIsTablet) {
-                    mHeaderHeight = mParallaxHeight - mToolbarHeight;
+                    mHeaderHeight = mTopHeight - mToolbarHeight;
                 } else {
-                    mHeaderHeight = mParallaxHeight + mToolbarHeight;
+                    mHeaderHeight = mTopHeight + mToolbarHeight;
                 }
             }
 
@@ -211,7 +211,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             }
 
                 /* Fade out when over header */
-            if (mParallaxHeight - mScrollView.getScrollY() < 0) {
+            if (mTopHeight - mScrollView.getScrollY() < 0) {
                 if (mTransparentBar) {
                     mTransparentBar = false;
                     ActionBarBackground.changeColor(MediaDetailActivity.this, mPaletteColor, true);

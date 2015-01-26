@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,22 +42,31 @@ import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
-import pct.droid.widget.OptionSelector;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
     private Show mShow;
+    private Boolean mIsTablet = false;
 
+    @InjectView(R.id.pager)
+    ViewPager mViewPager;
+    @InjectView(R.id.tabs)
+    PagerSlidingTabStrip mTabs;
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
+    @Optional
     @InjectView(R.id.title)
     TextView mTitle;
+    @Optional
     @InjectView(R.id.meta)
     TextView mMeta;
+    @Optional
     @InjectView(R.id.synopsis)
     TextView mSynopsis;
+    @Optional
     @InjectView(R.id.read_more)
     TextView mReadMore;
+    @Optional
     @InjectView(R.id.rating)
     RatingBar mRating;
     @Optional
@@ -82,6 +93,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
+        mRoot.setMinimumHeight(container.getMinimumHeight());
         ButterKnife.inject(this, mRoot);
 
         if(VersionUtils.isJellyBean()) {
@@ -90,58 +102,64 @@ public class ShowDetailFragment extends BaseDetailFragment {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         }
 
-        Double rating = Double.parseDouble(mShow.rating);
-        mTitle.setText(mShow.title);
-        mRating.setProgress(rating.intValue());
+        mIsTablet = mCoverImage != null;
 
-        String metaDataStr = mShow.year;
+        if(mIsTablet) {
+            Double rating = Double.parseDouble(mShow.rating);
+            mTitle.setText(mShow.title);
+            mRating.setProgress(rating.intValue());
 
-        if (mShow.status != null) {
-            metaDataStr += " • ";
-            if(mShow.status == Show.Status.CONTINUING) {
-                metaDataStr += getString(R.string.continuing);
-            } else {
-                metaDataStr += getString(R.string.ended);
-            }
-        }
+            String metaDataStr = mShow.year;
 
-        if (!TextUtils.isEmpty(mShow.genre)) {
-            metaDataStr += " • ";
-            metaDataStr += mShow.genre;
-        }
-
-        mMeta.setText(metaDataStr);
-
-        if (!TextUtils.isEmpty(mShow.synopsis)) {
-            mSynopsis.setText(mShow.synopsis);
-            mSynopsis.post(new Runnable() {
-                @Override
-                public void run() {
-                    boolean ellipsized = false;
-                    Layout layout = mSynopsis.getLayout();
-                    if(layout == null) return;
-                    int lines = layout.getLineCount();
-                    if(lines > 0) {
-                        int ellipsisCount = layout.getEllipsisCount(lines-1);
-                        if (ellipsisCount > 0) {
-                            ellipsized = true;
-                        }
-                    }
-                    mReadMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+            if (mShow.status != null) {
+                metaDataStr += " • ";
+                if (mShow.status == Show.Status.CONTINUING) {
+                    metaDataStr += getString(R.string.continuing);
+                } else {
+                    metaDataStr += getString(R.string.ended);
                 }
-            });
-        } else {
-            mSynopsis.setClickable(false);
-            mReadMore.setVisibility(View.GONE);
-        }
+            }
 
-        if(mCoverImage != null) {
+            if (!TextUtils.isEmpty(mShow.genre)) {
+                metaDataStr += " • ";
+                metaDataStr += mShow.genre;
+            }
+
+            mMeta.setText(metaDataStr);
+
+            if (!TextUtils.isEmpty(mShow.synopsis)) {
+                mSynopsis.setText(mShow.synopsis);
+                mSynopsis.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean ellipsized = false;
+                        Layout layout = mSynopsis.getLayout();
+                        if (layout == null) return;
+                        int lines = layout.getLineCount();
+                        if (lines > 0) {
+                            int ellipsisCount = layout.getEllipsisCount(lines - 1);
+                            if (ellipsisCount > 0) {
+                                ellipsized = true;
+                            }
+                        }
+                        mReadMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+                    }
+                });
+            } else {
+                mSynopsis.setClickable(false);
+                mReadMore.setVisibility(View.GONE);
+            }
+
             Picasso.with(mCoverImage.getContext()).load(mShow.image).into(mCoverImage);
         }
+
+        mTabs.setIndicatorColor(mPaletteColor);
+        //mTabs.setViewPager(mViewPager);
 
         return mRoot;
     }
 
+    @Optional
     @OnClick(R.id.read_more)
     public void openReadMore(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)

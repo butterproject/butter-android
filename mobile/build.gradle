@@ -83,6 +83,7 @@ dependencies {
     compile 'net.rdrei.android.dirchooser:library:2.+@aar'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.+'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.+'
+    compile 'com.jpardogo.materialtabstrip:library:1.0.8'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
         transitive = true;
