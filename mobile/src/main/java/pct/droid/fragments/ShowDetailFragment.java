@@ -101,9 +101,10 @@ public class ShowDetailFragment extends BaseDetailFragment {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
         ButterKnife.inject(this, mRoot);
         if(VersionUtils.isJellyBean() && container != null) {
-            int minHeight = container.getMinimumHeight();
+            int minHeight = container.getMinimumHeight() + PixelUtils.getPixelsFromDp(mActivity, 48);
             mRoot.setMinimumHeight(minHeight);
-            mBackground.getLayoutParams().height = minHeight - mTabs.getHeight();
+            mBackground.getLayoutParams().height = minHeight;
+            mViewPager.setMinimumHeight(minHeight);
         }
 
         /*

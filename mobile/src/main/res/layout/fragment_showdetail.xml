@@ -34,12 +34,9 @@
         android:id="@id/tabs"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:paddingLeft="@dimen/detail_horizontal_offset"
-        android:layout_marginLeft="-16dp"
-        android:layout_marginStart="-16dp"
-        android:paddingRight="@dimen/detail_horizontal_offset"
         android:background="@android:color/transparent"
         app:pstsDividerColor="@android:color/transparent"
+        app:pstsPaddingMiddle="true"
         android:layout_marginBottom="-2dp" />
 
     <View
