@@ -87,7 +87,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_moviedetail, container, false);
-        mRoot.setMinimumHeight(container.getMinimumHeight());
+        if(VersionUtils.isJellyBean() && container != null) {
+            mRoot.setMinimumHeight(container.getMinimumHeight());
+        }
         ButterKnife.inject(this, mRoot);
 
         if(VersionUtils.isJellyBean()) {

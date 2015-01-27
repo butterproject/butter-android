@@ -10,9 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,6 +39,7 @@ import pct.droid.fragments.BaseDetailFragment;
 import pct.droid.fragments.MovieDetailFragment;
 import pct.droid.fragments.ShowDetailFragment;
 import pct.droid.utils.ActionBarBackground;
+import pct.droid.widget.ObservableParallaxScrollView;
 import timber.log.Timber;
 
 public class MediaDetailActivity extends BaseActivity implements BaseDetailFragment.FragmentListener {
@@ -49,7 +47,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     public static final String DATA = "item";
     public static final String COLOR = "palette";
 
-    private Integer mLastScrollLocation = 0, mVisibleBarPos, mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
+    private Integer mVisibleBarPos, mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
     private Boolean mTransparentBar = true, mVisibleBar = true, mIsTablet = false;
     private Fragment mFragment;
 
@@ -119,6 +117,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             mToolbar.getBackground().setAlpha(0);
             mParallaxColor.setBackgroundColor(mPaletteColor);
             mParallaxColor.getBackground().setAlpha(0);
+
+            ((ObservableParallaxScrollView) mScrollView).setListener(mOnScrollListener);
+            ((ObservableParallaxScrollView) mScrollView).setOverScrollEnabled(false);
         } else {
             mTopHeight = (PixelUtils.getScreenHeight(this) / 2);
             ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = mTopHeight;
@@ -129,8 +130,6 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             int navigationBarHeight = PixelUtils.getNavigationBarHeight(this);
             mContent.setPadding(mContent.getPaddingLeft(), mContent.getPaddingTop(), mContent.getPaddingRight(), mContent.getPaddingBottom() + navigationBarHeight);
         }
-
-        mScrollView.getViewTreeObserver().addOnScrollChangedListener(mOnScrollListener);
 
         mFragment = null;
         if(media instanceof Movie) {
@@ -191,16 +190,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         }
     }
 
-    public void addSubScrollListener(ViewTreeObserver.OnScrollChangedListener subScrollListener) {
-        mScrollView.getViewTreeObserver().addOnScrollChangedListener(subScrollListener);
-    }
-
-    public void removeSubScrollListener(ViewTreeObserver.OnScrollChangedListener subScrollListener) {
-        mScrollView.getViewTreeObserver().removeOnScrollChangedListener(subScrollListener);
-    }
-
-    public ScrollView getScrollView() {
-        return mScrollView;
+    public void setSubScrollListener(ObservableParallaxScrollView.Listener subScrollListener) {
+        mSubOnScrollListener = subScrollListener;
     }
 
     public int getHeaderHeight() {
@@ -208,9 +199,10 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     }
 
     /* The scroll listener makes the toolbar scroll off the screen when the user scroll all the way down. And it appears again on scrolling up. */
-    private ViewTreeObserver.OnScrollChangedListener mOnScrollListener = new ViewTreeObserver.OnScrollChangedListener() {
+    private ObservableParallaxScrollView.Listener mSubOnScrollListener = null;
+    private ObservableParallaxScrollView.Listener mOnScrollListener = new ObservableParallaxScrollView.Listener() {
         @Override
-        public void onScrollChanged() {
+        public void onScroll(int scrollY, ObservableParallaxScrollView.Direction direction) {
             if (mToolbarHeight == 0) {
                 mToolbarHeight = mToolbar.getHeight();
                 if(!mIsTablet) {
@@ -222,9 +214,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             }
 
             if(!mIsTablet) {
-                if(mScrollView.getScrollY() > 0) {
-                    if (mScrollView.getScrollY() < mHeaderHeight) {
-                        float diff = (float) mScrollView.getScrollY() / (float) mHeaderHeight;
+                if(scrollY > 0) {
+                    if (scrollY < mHeaderHeight) {
+                        float diff = (float) scrollY / (float) mHeaderHeight;
                         int alpha = (int) Math.ceil(255 * diff);
                         mParallaxColor.getBackground().setAlpha(alpha);
                         mToolbar.getBackground().setAlpha(0);
@@ -238,21 +230,21 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             } else {
                 float transY = mToolbar.getTranslationY();
 
-                if (mScrollView.getScrollY() > mHeaderHeight) {
-                    if (mLastScrollLocation > mScrollView.getScrollY()) {
+                if (scrollY > mHeaderHeight) {
+                    if (direction == ObservableParallaxScrollView.Direction.UP) {
                         // scroll up
                         if ((mVisibleBarPos == null || !mVisibleBar) && transY <= -mToolbarHeight)
-                            mVisibleBarPos = mScrollView.getScrollY() - mToolbarHeight;
+                            mVisibleBarPos = scrollY - mToolbarHeight;
                         mVisibleBar = true;
-                    } else if (mLastScrollLocation < mScrollView.getScrollY()) {
+                    } else if (direction == ObservableParallaxScrollView.Direction.DOWN) {
                         // scroll down
                         if (mVisibleBarPos == null || mVisibleBar)
-                            mVisibleBarPos = mScrollView.getScrollY();
+                            mVisibleBarPos = scrollY;
                         mVisibleBar = false;
                     }
 
                     if (transY <= 0) {
-                        mToolbar.setTranslationY(mVisibleBarPos - mScrollView.getScrollY());
+                        mToolbar.setTranslationY(mVisibleBarPos - scrollY);
                     }
 
                     if (transY > 0) {
@@ -260,10 +252,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                     }
                 }
 
-                mScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-
                 /* Fade out when over header */
-                if (mTopHeight - mScrollView.getScrollY() < 0) {
+                if (mTopHeight - scrollY < 0) {
                     if (mTransparentBar) {
                         mTransparentBar = false;
                         ActionBarBackground.changeColor(MediaDetailActivity.this, mPaletteColor, true);
@@ -276,7 +266,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                 }
             }
 
-            mLastScrollLocation = mScrollView.getScrollY();
+            if(mSubOnScrollListener != null) {
+                mSubOnScrollListener.onScroll(scrollY, direction);
+            }
         }
     };
 }
