@@ -2,56 +2,37 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.Optional;
 import pct.droid.R;
-import pct.droid.activities.StreamLoadingActivity;
 import pct.droid.adapters.ShowDetailPagerAdapter;
-import pct.droid.base.preferences.Prefs;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
-import pct.droid.base.utils.AnimUtils;
-import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
-import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.widget.ObservableParallaxScrollView;
 import pct.droid.widget.WrappingViewPager;
 import timber.log.Timber;
 
@@ -60,7 +41,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
     private Show mShow;
     private Boolean mIsTablet = false;
 
-    ScrollView mScrollView;
     @InjectView(R.id.pager)
     WrappingViewPager mViewPager;
     @InjectView(R.id.tabs)
@@ -186,8 +166,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
             }
         });
 
-        mScrollView = mActivity.getScrollView();
-        mActivity.addSubScrollListener(mOnScrollListener);
+        mActivity.setSubScrollListener(mOnScrollListener);
 
         return mRoot;
     }
@@ -195,7 +174,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mActivity.removeSubScrollListener(mOnScrollListener);
+        mActivity.setSubScrollListener(null);
     }
 
     @Optional
@@ -214,23 +193,21 @@ public class ShowDetailFragment extends BaseDetailFragment {
         StringArraySelectorDialogFragment.show(mActivity.getSupportFragmentManager(), title, items, -1, onClickListener);
     }
 
-    private boolean mTabsTransparent = false;
-    private ViewTreeObserver.OnScrollChangedListener mOnScrollListener = new ViewTreeObserver.OnScrollChangedListener() {
+    private ObservableParallaxScrollView.Listener mOnScrollListener = new ObservableParallaxScrollView.Listener() {
         @Override
-        public void onScrollChanged() {
+        public void onScroll(int scrollY, ObservableParallaxScrollView.Direction direction) {
             if(!mIsTablet) {
-                Timber.d("ScrollY %d", mScrollView.getScrollY());
-                if(mScrollView.getScrollY() > 0) {
+                if(scrollY > 0) {
                     int headerHeight = mActivity.getHeaderHeight();
-                    if (mScrollView.getScrollY() < headerHeight) {
-                        float alpha = -0.7f * ((float) mScrollView.getScrollY() / (float) headerHeight) + 0.7f;
+                    if (scrollY < headerHeight) {
+                        float alpha = -0.7f * ((float) scrollY / (float) headerHeight) + 0.7f;
                         mShadow.setAlpha(alpha);
                         mTabs.setBackgroundColor(mActivity.getResources().getColor(android.R.color.transparent));
                         mTabs.setTranslationY(0);
                     } else {
                         mShadow.setAlpha(0);
                         mTabs.setBackgroundColor(mPaletteColor);
-                        mTabs.setTranslationY(mScrollView.getScrollY() - headerHeight);
+                        mTabs.setTranslationY(scrollY - headerHeight);
                     }
                 }
             }

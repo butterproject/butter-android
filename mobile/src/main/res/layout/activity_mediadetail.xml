@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.nirhart.parallaxscroll.views.ParallaxScrollView
+    <pct.droid.widget.ObservableParallaxScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,7 +73,7 @@
 
         </LinearLayout>
 
-    </com.nirhart.parallaxscroll.views.ParallaxScrollView>
+    </pct.droid.widget.ObservableParallaxScrollView>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
