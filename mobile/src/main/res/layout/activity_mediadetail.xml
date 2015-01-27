@@ -56,6 +56,11 @@
                     android:layout_height="100dp"
                     android:background="@drawable/ab_gradient" />
 
+                <View
+                    android:id="@+id/parallax_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
             </RelativeLayout>
 
             <FrameLayout

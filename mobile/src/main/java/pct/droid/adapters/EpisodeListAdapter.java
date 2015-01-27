@@ -65,7 +65,7 @@ public class EpisodeListAdapter extends BaseAdapter {
 
         Show.Episode episode = getItem(position);
         holder.title.setText(episode.title);
-        holder.number.setText("Ep. " + episode.episode);
+        holder.number.setText("E" + episode.episode);
         holder.number.setTextColor(mColor);
 
         return convertView;

@@ -14,12 +14,12 @@
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/number"
         android:layout_height="wrap_content"
-        android:layout_width="60dp"
+        android:layout_width="40dp"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/list_text_size"
         app:typeface="roboto_medium"
-        tools:text="Ep. 100"
+        tools:text="E99"
         />
 
     <com.devspark.robototextview.widget.RobotoTextView
@@ -29,6 +29,6 @@
         android:textSize="@dimen/list_text_size"
         android:textColor="@color/text_color"
         app:typeface="roboto_regular"
-        tools:text="Roboto"
+        tools:text="Episode Title"
         />
 </LinearLayout>
