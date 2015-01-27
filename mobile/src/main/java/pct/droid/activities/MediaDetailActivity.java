@@ -88,8 +88,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
         // Calculate toolbar scrolling variables
         if(!mIsTablet) {
-            mParallaxLayout.getLayoutParams().height = mTopHeight = PixelUtils.getScreenHeight(this);
-            ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = -(mTopHeight / 3);
+            int parallaxHeight = mParallaxLayout.getLayoutParams().height = PixelUtils.getScreenHeight(this);
+            mTopHeight = (parallaxHeight / 3) * 2;
+            ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = -(parallaxHeight / 3);
             mContent.setMinimumHeight(mTopHeight / 3);
         } else {
             mTopHeight = (PixelUtils.getScreenHeight(this) / 2);
