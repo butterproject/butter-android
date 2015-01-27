@@ -84,6 +84,12 @@
             android:layout_marginEnd="@dimen/detail_button_margin"
             android:text="@string/read_more"
             app:typeface="roboto_medium"  />
+
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/DetailButton.PopcornTime"
+            android:id="@+id/watch_trailer"
+            android:text="@string/watch_trailer"
+            app:typeface="roboto_medium"  />
     </LinearLayout>
 
 </RelativeLayout>

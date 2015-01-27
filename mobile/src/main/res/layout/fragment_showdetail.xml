@@ -8,57 +8,40 @@
     <View
         android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_alignBottom="@+id/tabs"
-        android:layout_marginBottom="2dp"
+        android:layout_height="48dp"
         android:alpha="0.7"
         android:background="@drawable/base_gradient" />
 
     <View
         android:id="@+id/background"
-        android:layout_below="@id/tabs"
+        android:layout_below="@id/top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg" />
 
     <pct.droid.widget.WrappingViewPager
         android:id="@+id/pager"
-        android:layout_below="@id/tabs"
+        android:layout_below="@id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fadingEdgeLength="0dp"
         android:background="@color/bg" />
 
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@android:color/transparent"
-        app:pstsDividerColor="@android:color/transparent"
-        app:pstsPaddingMiddle="true"
-        android:layout_marginBottom="-2dp" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignTop="@id/pager"
+        android:layout_below="@id/top"
         android:background="@android:color/white"
         android:alpha="0.08"
         />
 
-    <ImageButton
-        android:id="@+id/play_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_alignTop="@id/pager"
-        android:layout_marginTop="-30dp"
-        android:src="@drawable/ic_av_play_button"
-        android:background="@drawable/play_button_circle"
-        android:elevation="5dp" />
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingLeft="56dp"
+        android:layout_alignTop="@id/top"
+        android:background="@android:color/transparent"
+        app:pstsDividerColor="@android:color/white" />
 
 </RelativeLayout>

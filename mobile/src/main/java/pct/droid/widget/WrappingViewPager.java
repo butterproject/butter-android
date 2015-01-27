@@ -81,7 +81,7 @@ public class WrappingViewPager extends ViewPager {
                         }
                     });
 
-                    a.setDuration(500);
+                    a.setDuration(1000);
                     startAnimation(a);
                     mAnimStarted = true;
             } else {

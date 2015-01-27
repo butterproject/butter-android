@@ -2,6 +2,7 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,9 +15,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -38,6 +44,7 @@ import pct.droid.adapters.ShowDetailPagerAdapter;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -46,20 +53,23 @@ import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.widget.WrappingViewPager;
+import timber.log.Timber;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
     private Show mShow;
     private Boolean mIsTablet = false;
 
+    ScrollView mScrollView;
     @InjectView(R.id.pager)
     WrappingViewPager mViewPager;
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip mTabs;
-    @InjectView(R.id.play_button)
-    ImageButton mPlayButton;
     @InjectView(R.id.background)
     View mBackground;
+    @Optional
+    @InjectView(R.id.top)
+    View mShadow;
     @Optional
     @InjectView(R.id.title)
     TextView mTitle;
@@ -106,17 +116,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
             mBackground.getLayoutParams().height = minHeight;
             mViewPager.setMinimumHeight(minHeight);
         }
-
-        /*
-        Ready if ever needed for a cool function
-        if(VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
-        } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
-        }
-        For now, the play button is not visible:
-        */
-        mPlayButton.setVisibility(View.GONE);
 
         mIsTablet = mCoverImage != null;
 
@@ -167,6 +166,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
             }
 
             Picasso.with(mCoverImage.getContext()).load(mShow.image).into(mCoverImage);
+            mTabs.setIndicatorColor(mPaletteColor);
         }
 
         List<Fragment> fragments = new ArrayList<>();
@@ -177,8 +177,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
 
         mViewPager.setAdapter(fragmentPagerAdapter);
-
-        mTabs.setIndicatorColor(mPaletteColor);
         mTabs.setViewPager(mViewPager);
 
         mBackground.post(new Runnable() {
@@ -188,7 +186,16 @@ public class ShowDetailFragment extends BaseDetailFragment {
             }
         });
 
+        mScrollView = mActivity.getScrollView();
+        mActivity.addSubScrollListener(mOnScrollListener);
+
         return mRoot;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity.removeSubScrollListener(mOnScrollListener);
     }
 
     @Optional
@@ -203,13 +210,31 @@ public class ShowDetailFragment extends BaseDetailFragment {
         synopsisDialogFragment.show(mActivity.getFragmentManager(), "overlay_fragment");
     }
 
-    @OnClick(R.id.play_button)
-    public void play() {
-        // Ready if ever needed for a cool function
-    }
-
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
         StringArraySelectorDialogFragment.show(mActivity.getSupportFragmentManager(), title, items, -1, onClickListener);
     }
+
+    private boolean mTabsTransparent = false;
+    private ViewTreeObserver.OnScrollChangedListener mOnScrollListener = new ViewTreeObserver.OnScrollChangedListener() {
+        @Override
+        public void onScrollChanged() {
+            if(!mIsTablet) {
+                Timber.d("ScrollY %d", mScrollView.getScrollY());
+                if(mScrollView.getScrollY() > 0) {
+                    int headerHeight = mActivity.getHeaderHeight();
+                    if (mScrollView.getScrollY() < headerHeight) {
+                        float alpha = -0.7f * ((float) mScrollView.getScrollY() / (float) headerHeight) + 0.7f;
+                        mShadow.setAlpha(alpha);
+                        mTabs.setBackgroundColor(mActivity.getResources().getColor(android.R.color.transparent));
+                        mTabs.setTranslationY(0);
+                    } else {
+                        mShadow.setAlpha(0);
+                        mTabs.setBackgroundColor(mPaletteColor);
+                        mTabs.setTranslationY(mScrollView.getScrollY() - headerHeight);
+                    }
+                }
+            }
+        }
+    };
 
 }
