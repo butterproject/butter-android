@@ -45,6 +45,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     WrappingViewPager mViewPager;
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip mTabs;
+    @Optional
     @InjectView(R.id.background)
     View mBackground;
     @Optional
@@ -93,7 +94,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
         if(VersionUtils.isJellyBean() && container != null) {
             int minHeight = container.getMinimumHeight() + PixelUtils.getPixelsFromDp(mActivity, 48);
             mRoot.setMinimumHeight(minHeight);
-            mBackground.getLayoutParams().height = minHeight;
             mViewPager.setMinimumHeight(minHeight);
         }
 
@@ -147,6 +147,13 @@ public class ShowDetailFragment extends BaseDetailFragment {
 
             Picasso.with(mCoverImage.getContext()).load(mShow.image).into(mCoverImage);
             mTabs.setIndicatorColor(mPaletteColor);
+        } else {
+            mBackground.post(new Runnable() {
+                @Override
+                public void run() {
+                    mBackground.getLayoutParams().height = mBackground.getLayoutParams().height - mTabs.getHeight();
+                }
+            });
         }
 
         List<Fragment> fragments = new ArrayList<>();
@@ -158,13 +165,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
 
         mViewPager.setAdapter(fragmentPagerAdapter);
         mTabs.setViewPager(mViewPager);
-
-        mBackground.post(new Runnable() {
-            @Override
-            public void run() {
-                mBackground.getLayoutParams().height = mBackground.getLayoutParams().height - mTabs.getHeight();
-            }
-        });
 
         mActivity.setSubScrollListener(mOnScrollListener);
 
@@ -200,7 +200,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
                 if(scrollY > 0) {
                     int headerHeight = mActivity.getHeaderHeight();
                     if (scrollY < headerHeight) {
-                        float alpha = -0.7f * ((float) scrollY / (float) headerHeight) + 0.7f;
+                        float alpha = 1.0f - ((float) scrollY / (float) headerHeight);
                         mShadow.setAlpha(alpha);
                         mTabs.setBackgroundColor(mActivity.getResources().getColor(android.R.color.transparent));
                         mTabs.setTranslationY(0);

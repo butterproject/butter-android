@@ -126,8 +126,24 @@
 
             </LinearLayout>
         </RelativeLayout>
-        
     </LinearLayout>
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingLeft="56dp"
+        android:layout_below="@id/main_content"
+        android:background="@android:color/transparent"
+        app:pstsDividerColor="@android:color/white" />
+
+    <pct.droid.widget.WrappingViewPager
+        android:id="@+id/pager"
+        android:layout_below="@id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdgeLength="0dp"
+        android:background="@color/bg" />
 
     <View
         android:layout_width="match_parent"
