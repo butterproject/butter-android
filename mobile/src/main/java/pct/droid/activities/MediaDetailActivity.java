@@ -59,6 +59,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     @Optional
     @InjectView(R.id.parallax)
     RelativeLayout mParallaxLayout;
+    @Optional
     @InjectView(R.id.parallax_color)
     View mParallaxColor;
     @InjectView(R.id.content)

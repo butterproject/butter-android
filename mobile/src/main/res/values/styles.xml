@@ -39,6 +39,10 @@
 		<!--<item name="windowActionBarOverlay">true</item>-->
 		<item name="android:windowBackground">@color/bg</item>
         <item name="android:ratingBarStyle">@style/RatingBar.PopcornTime</item>
+
+        <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
+        <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
 	</style>
 
 	<style name="Theme.PopcornTime" parent="Theme.Base">
@@ -129,6 +133,23 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:radius">2dp</item>
         <item name="android:background">@drawable/selectable_background_rounded</item>
+    </style>
+
+    <!-- Fix Toolbar metrics -->
+    <style name="Custom.Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="maxButtonHeight">48dp</item>
+        <item name="android:paddingLeft">@dimen/toolbar_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/toolbar_horizontal_padding</item>
+        <item name="contentInsetStart">@dimen/first_keyline</item>
+    </style>
+
+    <style name="Custom.Widget.Toolbar.Button.Navigation" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">48dp</item>
+    </style>
+
+    <style name="Custom.Widget.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
     </style>
 
 </resources>
