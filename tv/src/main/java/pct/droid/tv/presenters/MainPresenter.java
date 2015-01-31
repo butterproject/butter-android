@@ -4,6 +4,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.Row;
 
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.tv.interactors.MainInteractor;
 import pct.droid.tv.interfaces.main.MainInteractorInputInterface;
 import pct.droid.tv.interfaces.main.MainInteractorOutputInterface;
@@ -11,7 +12,6 @@ import pct.droid.tv.interfaces.main.MainPresenterInputInterface;
 import pct.droid.tv.interfaces.main.MainViewInputInterface;
 import pct.droid.tv.utils.MediaListRow;
 
-import pct.droid.base.providers.media.types.Media;
 
 public class MainPresenter implements MainPresenterInputInterface, MainInteractorOutputInterface {
 	//region Attributes

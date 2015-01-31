@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string name="loading_data">Loading data…</string>
+	<string name="loading_details">Loading details…</string>
+
 </resources>

@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.tv.R;
 import pct.droid.tv.fragments.PTVMovieDetailsFragment;
-
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
 
 public class PTVMovieDetailActivity extends Activity implements PTVMovieDetailsFragment.Callback {
 

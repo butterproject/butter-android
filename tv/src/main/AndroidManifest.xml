@@ -37,7 +37,7 @@
 		</activity>
 
 		<!-- Activities -->
-		<activity android:name=".activities.PTVMainActivity"></activity>
+		<activity android:name=".activities.PTVMainActivity"/>
 
 		<activity
 			android:name=".activities.PTVPlayerActivity"
@@ -47,7 +47,9 @@
 		<activity android:name=".activities.PTVMovieDetailActivity" />
 		<activity android:name=".activities.PTVShowDetailActivity" />
 		<activity android:name=".activities.PTVSearchActivity" />
+		<activity android:name=".activities.PTVStreamLoadingActivity" />
 
+		<!--<service android:name=".base.torrent.TorrentService" />-->
 	</application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,27 +21,29 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.NetworkUtils;
-import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMovieDetailActivity;
+import pct.droid.tv.activities.PTVStreamLoadingActivity;
 import pct.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
 
-public class PTVMovieDetailsFragment extends DetailsFragment implements MediaProvider.Callback {
+public class PTVMovieDetailsFragment extends DetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
 	private Callback mCallback;
 
-	private static final int ACTION_WATCH = 1;
+	private static final int ACTION_WATCH_720 = 1;
+	private static final int ACTION_WATCH_1080 = 2;
 
 	private ArrayObjectAdapter mAdapter;
 	private ClassPresenterSelector mPresenterSelector;
@@ -70,7 +71,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		//			removeNotification(getActivity().getIntent()
 		//					.getIntExtra(MovieDetailsActivity.NOTIFICATION_ID, NO_NOTIFICATION));
 		setupAdapter();
-		addDetailsOverviewRow();
+		//		addDetailsOverviewRow();
 		setupDetailsOverviewRowPresenter();
 
 		//			setupMovieListRow();
@@ -85,7 +86,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		//
 
 
-		setOnItemViewClickedListener(getDefaultItemClickedListener());
+		//		setOnItemViewClickedListener(getDefaultItemClickedListener());
 		updateBackground();
 		getDetails();
 	}
@@ -130,38 +131,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		detailsPresenter.setSharedElementEnterTransition(getActivity(),
 				PTVMovieDetailActivity.SHARED_ELEMENT_NAME);
 
-		detailsPresenter.setOnActionClickedListener(new OnActionClickedListener() {
-			@Override
-			public void onActionClicked(Action action) {
-
-
-//				final String streamUrl = mItem.torrents.get(mQuality).url;
-//				if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) && !NetworkUtils
-//						.isWifiConnected(MovieDetailActivity.this) &&
-//						NetworkUtils
-//								.isNetworkConnected(MovieDetailActivity.this)) {
-//					MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
-//				} else {
-//					Intent streamIntent = new Intent(MovieDetailActivity.this, StreamLoadingActivity.class);
-//					streamIntent.putExtra(StreamLoadingActivity.STREAM_URL, streamUrl);
-//					streamIntent.putExtra(StreamLoadingActivity.QUALITY, mQuality);
-//					streamIntent.putExtra(StreamLoadingActivity.DATA, mItem);
-//					if (mSubLanguage != null)
-//						streamIntent.putExtra(StreamLoadingActivity.SUBTITLES, mSubLanguage);
-//					startActivity(streamIntent);
-//				}
-
-
-
-//				if (action.getId() == ACTION_WATCH_TRAILER) {
-//					Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
-//					intent.putExtra(MovieDetailsActivity.MOVIE, mSelectedMovie);
-//					startActivity(intent);
-//				} else {
-//					Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
-//				}
-			}
-		});
+		detailsPresenter.setOnActionClickedListener(this);
 		mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
 	}
 
@@ -185,12 +155,33 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 			}
 		});
 
-		mDetailsRow.addAction(new Action(ACTION_WATCH, getResources().getString(
-				R.string.watch), getResources().getString(R.string.quality_720)));
-		mDetailsRow.addAction(new Action(ACTION_WATCH, getResources().getString(
-				R.string.watch), getResources().getString(R.string.quality_1080)));
+		addActions(mItem.getMedia());
 
 		mAdapter.add(mDetailsRow);
+	}
+
+	private void addActions(Media item) {
+		if (item instanceof Movie) {
+			Movie movie = (Movie) item;
+
+			List<String> qualities = new ArrayList(movie.torrents.keySet());
+
+			for (String quality : qualities) {
+
+				Media.Torrent torrent = movie.torrents.get(quality);
+
+				//add action
+				mDetailsRow.addAction(new WatchAction((long) qualities.indexOf(quality), getResources().getString(
+						R.string.watch), quality, torrent));
+			}
+
+		} else if (item instanceof Show) {
+			//todo:
+			//			Show show = (Show) item;
+			//			show.
+
+		}
+
 	}
 
 
@@ -198,7 +189,8 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		return new OnItemViewClickedListener() {
 			@Override public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder,
 					Row row) {
-				Media movie = (Media) item;
+
+
 			}
 		};
 	}
@@ -217,6 +209,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 
 		ThreadUtils.runOnUiThread(new Runnable() {
 			@Override public void run() {
+				addDetailsOverviewRow();
 				mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
 			}
 		});
@@ -258,6 +251,25 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 
 	}
 
+	@Override public void onActionClicked(Action a) {
+		if (!(a instanceof WatchAction)) return;
+
+		//check for network
+		if (!NetworkUtils
+				.isNetworkConnected(getActivity())) {
+			Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
+		} else {
+			WatchAction action = (WatchAction) a;
+			Media.Torrent torrent = action.getTorrent();
+
+			BaseStreamLoadingFragment.StreamInfo info =
+					new BaseStreamLoadingFragment.StreamInfo(mItem.getMedia(), torrent.url, "no-subs",
+							action.getLabel2().toString());
+
+			PTVStreamLoadingActivity.startActivity(getActivity(), info);
+		}
+	}
+
 	public static class ItemWrapper {
 		private Media mItem;
 		private boolean mLoadingDetail;
@@ -280,6 +292,24 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 
 		public void setLoadingDetail(boolean loadingDetail) {
 			mLoadingDetail = loadingDetail;
+		}
+	}
+
+	public static class WatchAction extends android.support.v17.leanback.widget.Action {
+
+		private Media.Torrent mTorrent;
+
+		public WatchAction(long id, CharSequence label, CharSequence label2, Media.Torrent torrent) {
+			super(id, label, label2);
+			this.mTorrent = torrent;
+		}
+
+		public Media.Torrent getTorrent() {
+			return mTorrent;
+		}
+
+		public void setTorrent(Media.Torrent torrent) {
+			mTorrent = torrent;
 		}
 	}
 

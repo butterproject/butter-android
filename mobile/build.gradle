@@ -1,21 +1,7 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
 apply plugin: 'io.fabric'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
 
 android {
     compileSdkVersion 21
@@ -71,8 +57,8 @@ android {
     File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     android.applicationVariants.all { variant ->
         def variantSuffix = variant.name.capitalize()
-        def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
-        def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
+        def generateResourcesTask = project.tasks.getByName("fabricGenerateResources${variantSuffix}")
+        def generatePropertiesTask = task("fabricGenerateProperties${variantSuffix}") << {
             Properties properties = new Properties()
             println "...copying apiSecret for ${variant.name}"
             properties.put("apiSecret", crashlyticsSecret)
@@ -81,12 +67,13 @@ android {
             properties.store(new FileWriter(crashlyticsProperties), "")
         }
         generateResourcesTask.dependsOn generatePropertiesTask
-        def cleanResourcesTask = project.tasks.getByName("crashlyticsCleanupResourcesAfterUpload${variantSuffix}")
+        def cleanResourcesTask = project.tasks.getByName("fabricCleanupResourcesAfterUpload${variantSuffix}")
         cleanResourcesTask.doLast {
             println "...removing crashlytics.properties"
             crashlyticsProperties.delete()
         }
 
+        //customise output file name
         variant.outputs.each { output ->
             def abi = output.getFilter(com.android.build.OutputFile.ABI);
             output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode
