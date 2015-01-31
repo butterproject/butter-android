@@ -45,7 +45,7 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.VersionUtil;
 import pct.droid.dialogfragments.MessageDialogFragment;
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.base.fragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ActionBarBackground;

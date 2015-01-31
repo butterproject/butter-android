@@ -35,7 +35,6 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	public final static String DATA = "video_data";
 	public final static String QUALITY = "quality";
 	public final static String SUBTITLES = "subtitles";
-	public final static String RESUME_POSITION = "resume_position";
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {

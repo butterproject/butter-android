@@ -42,7 +42,7 @@ import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.VersionUtil;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.dialogfragments.MessageDialogFragment;
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.base.fragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ActionBarBackground;
