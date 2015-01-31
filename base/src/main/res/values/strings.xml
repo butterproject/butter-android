@@ -6,15 +6,22 @@
 	<string name="loading_shows">Loading shows…</string>
 	<string name="loading_movies">Loading movies…</string>
 	<string name="error_files">Error: Couldn\'t write files</string>
+	<string name="no_subs">No subtitles</string>
+	<string name="subtitles">Subtitles</string>
 
     <!-- Genres -->
+	<string name="best_fit">Best fit</string>
     <string name="genre_action">Action</string>
     <string name="genre_adventure">Adventure</string>
+	<string name="fill">Fill</string>
+	<string name="fit_horizontal">Fit horizontal</string>
     <string name="genre_animation">Animation</string>
     <string name="genre_biography">Biography</string>
     <string name="genre_comedy">Comedy</string>
+	<string name="fit_vertical">Fit vertical</string>
     <string name="genre_crime">Crime</string>
     <string name="genre_documentary">Documentary</string>
+	<string name="original_size">Original</string>
     <string name="genre_drama">Drama</string>
     <string name="genre_family">Family</string>
     <string name="genre_fantasy">Fantasy</string>

@@ -1,4 +1,4 @@
-package pct.droid.dialogfragments;
+package pct.droid.base.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentManager;
 
 import java.util.List;
 
-import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.R;
 
 public class StringArraySelectorDialogFragment extends DialogFragment {
 
@@ -56,7 +56,7 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
 
         builder
                 .setTitle(title)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
