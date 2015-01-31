@@ -49,6 +49,9 @@
 		<activity android:name=".activities.PTVSearchActivity" />
 		<activity android:name=".activities.PTVStreamLoadingActivity" />
 
+		<meta-data android:name="com.crashlytics.ApiKey"
+			android:value="${crashlyticsKey}"/>
+
 		<!--<service android:name=".base.torrent.TorrentService" />-->
 	</application>
 

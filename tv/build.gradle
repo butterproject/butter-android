@@ -1,25 +1,27 @@
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
-//apply plugin: 'io.fabric'
-
+apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
 
     defaultConfig {
         applicationId "pct.droid.tv"
         minSdkVersion 21
-        targetSdkVersion 21
-        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
-        versionName "0.1"
+        targetSdkVersion rootProject.ext.targetSdk
+        versionCode buildNumber
+        versionName "0.1.2"
+        ext.enableCrashlytics = false
+        manifestPlaceholders = [ crashlyticsKey:"${project.ext.crashlyticsKey}"]
     }
 
     signingConfigs {
         mainConfig {
             keyAlias System.getenv("S_ALIAS").toString() ?: ""
             keyPassword System.getenv("S_KEYPASS").toString() ?: ""
-            storeFile file(System.getenv("S_KEYSTORE").toString()) ?: file("")
+            storeFile System.getenv("S_KEYSTORE").toString() ? file(System.getenv("S_KEYSTORE").toString()) : file("")
             storePassword System.getenv("S_KEYPASS").toString() ?: ""
         }
     }
@@ -31,10 +33,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            versionNameSuffix "#" + (System.getenv("BUILD_NUMBER") == null ? "local" : "dev" + System.getenv("BUILD_NUMBER")) + (System.getenv("GIT_BRANCH") == null ? "" : "-git-" + System.getenv("GIT_BRANCH").replace("origin/", ""))
+            versionNameSuffix "#" + buildNumber
             applicationIdSuffix ".dev"
         }
     }
+
 
     lintOptions {
         abortOnError false
@@ -50,31 +53,6 @@ android {
     }
 
     project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
-
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def abi = output.getFilter(com.android.build.OutputFile.ABI);
-            output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode
-
-            def alignedOutputFile = output.outputFile
-            def unalignedOutputFile = output.packageApplication.outputFile
-            def outputFileName = alignedOutputFile.name
-
-            // Customise APK filenames
-            if (outputFileName.contains("debug")) {
-                outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-            } else {
-                outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
-            }
-
-            if (variant.buildType.zipAlignEnabled) {
-                // normal APK
-                output.outputFile = new File(alignedOutputFile.parent, outputFileName)
-            }
-            // 'unaligned' APK
-            output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
-        }
-    }
 }
 
 dependencies {
@@ -84,11 +62,17 @@ dependencies {
     compile ('com.android.support:palette-v7:21.0.3'){
         force=true
     }
+
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.android.support:leanback-v17:21.0.3'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.jakewharton:butterknife:6.0.0'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+        transitive = true;
+    }
+
     compile project(':base')
     compile project(':vlc')
     compile project(':xmlrpc')

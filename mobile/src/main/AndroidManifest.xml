@@ -91,6 +91,9 @@
 			android:name="pct.droid.activities.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
+		<meta-data android:name="com.crashlytics.ApiKey"
+			android:value="${crashlyticsKey}"/>
+
 	</application>
 
 </manifest>
