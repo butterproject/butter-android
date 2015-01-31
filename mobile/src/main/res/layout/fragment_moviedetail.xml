@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp"
+        android:alpha="0.7"
+        android:background="@drawable/base_gradient" />
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_below="@id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@color/bg">
+
+        <include
+            android:id="@+id/about_fragment"
+            layout="@layout/fragment_detail_about"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"
+            android:alpha="0.08"
+            />
+
+        <View
+            android:id="@+id/main_div"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/about_fragment"
+            android:background="@color/div_white" />
+
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/subtitles"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@id/main_div"
+            app:optionIcon="@drawable/ic_av_subs"
+            app:optionText="@string/subtitles"
+            />
+
+        <View
+            android:id="@+id/option_div_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+            android:layout_marginStart="@dimen/optionselector_text_margin_start"
+            android:layout_below="@id/subtitles"
+            android:background="@color/div_white" />
+
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/quality"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@id/option_div_1"
+            app:optionIcon="@drawable/ic_action_quality"
+            app:optionText="@string/quality"
+            />
+
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/play_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_av_play_button"
+        android:background="@drawable/play_button_circle"
+        android:elevation="5dp" />
+</RelativeLayout>

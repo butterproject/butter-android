@@ -23,6 +23,7 @@
 
 	<!-- DetailActivity strings -->
 	<string name="minutes">min</string>
+    <string name="read_more">Read more</string>
 	<string name="watch_trailer">Watch trailer</string>
 	<string name="disable_subs">Disable subtitles</string>
 	<string name="no_subs">No subtitles</string>
@@ -31,6 +32,8 @@
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
+    <string name="continuing">Continuing</string>
+    <string name="ended">Ended</string>
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
@@ -67,7 +70,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="leave">Leave</string>
 
 	<!-- SettingsActivity strings -->
-
 	<string name="settings">Settings</string>
 	<string name="general">General</string>
 	<string name="default_view">Default overview</string>
@@ -127,5 +129,10 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<!-- Share dialog -->
 	<string name="share_text">Have you tried Popcorn Time for Android? It\'s awesome! https://popcorntime.io/</string>
 	<string name="share_dialog_title">Share with</string>
+    <string name="popular_now">POPULAR NOW</string>
+    <string name="top_rated">TOP RATED</string>
+    <string name="release_date">RELEASE DATE</string>
+    <string name="year">YEAR</string>
+    <string name="a_to_z">A - Z</string>
 
 </resources>

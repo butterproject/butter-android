@@ -44,7 +44,7 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.ResourceUtil;
+import pct.droid.base.utils.ResourceUtils;
 import pct.droid.base.utils.StorageUtils;
 import pct.droid.dialogfragments.ChangeLogDialogFragment;
 import pct.droid.dialogfragments.ColorPickerDialogFragment;
@@ -534,7 +534,7 @@ public class PreferencesActivity extends BaseActivity
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		refreshItems();
-		toolbar.setMinimumHeight((int) ResourceUtil.getAttributeDimension(this,this.getTheme(),R.attr.actionBarSize));
+		toolbar.setMinimumHeight((int) ResourceUtils.getAttributeDimension(this, this.getTheme(), R.attr.actionBarSize));
 	}
 
 	@Override

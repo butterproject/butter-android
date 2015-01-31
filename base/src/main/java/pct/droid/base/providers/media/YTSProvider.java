@@ -1,7 +1,9 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.content.res.Resources;
 import android.os.Parcel;
+import android.text.TextUtils;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
@@ -14,8 +16,10 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
@@ -167,7 +171,7 @@ public class YTSProvider extends MediaProvider {
 									}
 
 									if (meta.images.containsKey("fanart")) {
-										media.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
+										media.headerImage = meta.images.get("fanart");
 									}
 
 									if (meta.title != null) {
@@ -240,7 +244,7 @@ public class YTSProvider extends MediaProvider {
 							}
 
 							if (meta.images != null && meta.images.containsKey("fanart")) {
-								movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
+								movie.headerImage = meta.images.get("fanart");
 							} else {
 								movie.headerImage = movie.image;
 							}
@@ -360,6 +364,14 @@ public class YTSProvider extends MediaProvider {
 					movie.year = (String) item.get("MovieYear");
 					movie.genre = (String) item.get("Genre");
 					movie.rating = (String) item.get("MovieRating");
+
+                    if(!TextUtils.isEmpty(movie.genre)) {
+                        Resources resources = PopcornApplication.getAppContext().getResources();
+                        int resourceId = resources.getIdentifier("genre_" + movie.genre.toLowerCase(Locale.US).replace("-", "_"), "string", PopcornApplication.getAppContext().getPackageName());
+                        if(resourceId != 0) {
+                            movie.genre = resources.getString(resourceId);
+                        }
+                    }
 				} else {
 					movie = (Movie) existingList.get(existingItem);
 				}

@@ -68,8 +68,7 @@ public class TraktProvider extends MetaProvider {
             Response response = call.execute();
             if (response.isSuccessful()) {
                 String responseStr = response.body().string();
-                MetaData[] result = mGson.fromJson(responseStr, MetaData[].class);
-                return result;
+                return mGson.fromJson(responseStr, MetaData[].class);
             }
         } catch (IOException e) {
             // eat exception for now TODO

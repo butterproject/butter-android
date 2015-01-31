@@ -3,14 +3,19 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="first_keyline">16dp</dimen>
+    <dimen name="second_keyline">72dp</dimen>
+    <dimen name="toolbar_horizontal_padding">4dp</dimen>
+
     <dimen name="list_vertical_padding">8dp</dimen>
     <dimen name="list_divider_spacing">8dp</dimen>
+
+    <dimen name="list_text_size">16sp</dimen>
 
     <dimen name="iconlist_item_height">56dp</dimen>
     <dimen name="iconlist_icon_width">24dp</dimen>
     <dimen name="iconlist_icon_margin_horizontal">16dp</dimen>
     <dimen name="iconlist_text_margin_horizontal">72dp</dimen>
-    <dimen name="iconlist_text_size">16sp</dimen>
     <dimen name="iconlist_text_padding_top">16dp</dimen>
     <dimen name="iconlist_text_padding_bottom">20dp</dimen>
     <dimen name="iconlist_secondary_text_size">14sp</dimen>
@@ -20,11 +25,6 @@
     <dimen name="navlist_item_height">48dp</dimen>
     <dimen name="navlist_item_header">172dp</dimen>
     <dimen name="navlist_item_header_padding">16dp</dimen>
-
-    <dimen name="detail_icon_margin">32dp</dimen>
-    <dimen name="detail_margin">16dp</dimen>
-    <dimen name="detail_margin_right">32dp</dimen>
-    <dimen name="detail_text_size">15sp</dimen>
 
     <dimen name="action_margin">32dp</dimen>
     <dimen name="context_icon">28dp</dimen>
@@ -42,6 +42,22 @@
     <dimen name="player_subtitles_default_text_size">16dp</dimen>
 
     <dimen name="settings_subheader_text_size">14sp</dimen>
+
+    <dimen name="detail_horizontal_offset">24dp</dimen>
+    <dimen name="detail_vertical_offset">24dp</dimen>
+    <dimen name="detail_title_text_size">21sp</dimen>
+    <dimen name="detail_meta_text_size">14sp</dimen>
+    <dimen name="detail_meta_margin_top">8dp</dimen>
+    <dimen name="detail_rating_margin_top">16dp</dimen>
+    <dimen name="detail_button_margin">14dp</dimen>
+    <dimen name="detail_button_text_size">12sp</dimen>
+    <dimen name="detail_desc_text_size">15sp</dimen>
+
+    <dimen name="optionselector_icon_margin_start">16dp</dimen>
+    <dimen name="optionselector_text_margin_start">72dp</dimen>
+    <dimen name="optionselector_text_margin_end">16dp</dimen>
+    <dimen name="optionselecter_margin_end">32dp</dimen>
+    <dimen name="optionselector_text_size">15sp</dimen>
 
 	<!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
      https://developer.android.com/design/patterns/navigation-drawer.html -->

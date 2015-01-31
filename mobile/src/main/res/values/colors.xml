@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<color name="bg">#2F383F</color>
+	<color name="bg">#1F2224</color>
+    <color name="bg_light">#383D42</color>
 	<color name="overlay_bg">#BB2F383F</color>
 
 	<color name="list_selected">#55FFFFFF</color>
+
+    <color name="selectable_focused">#22FFFFFF</color>
+    <color name="selectable_pressed">#55FFFFFF</color>
 
 	<color name="primary">#FF1976D2</color>
 	<color name="primary_dark">#FF1668B9</color>
@@ -13,6 +17,17 @@
 	<color name="trans_white">#99FFFFFF</color>
 	<color name="div_white">#22FFFFFF</color>
 
+    <color name="text_color">#FFFFFF</color>
+    <color name="secondary_text_color">#AAFFFFFF</color>
+
+    <color name="overlay">#33000000</color>
+
+    <color name="player_overlay">#55000000</color>
+
+    <color name="green">#00CC00</color>
+    <color name="red">#CC0000</color>
+
+    <!-- Nav drawer colors -->
     <color name="nav_drawer_color">#16171A</color>
     <color name="nav_drawer_selected_bg">#1D1D21</color>
     <color name="nav_drawer_focused_bg">#414144</color>
@@ -20,14 +35,7 @@
 	<color name="nav_drawer_deselected">#CFFF</color>
 	<color name="nav_drawer_highlight">#1FFF</color>
 
-	<color name="text_color">#FFFFFF</color>
-	<color name="secondary_text_color">#AAFFFFFF</color>
-
-	<color name="overlay">#33000000</color>
-
-	<color name="player_overlay">#55000000</color>
-
-	<color name="green">#00CC00</color>
-	<color name="red">#CC0000</color>
+    <!-- Detail view colors -->
+    <color name="detail_header_title_bg">#383D42</color>
 
 </resources>

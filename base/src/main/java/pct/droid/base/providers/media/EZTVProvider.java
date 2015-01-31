@@ -17,14 +17,11 @@ import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
-import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.providers.subs.YSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
 	protected String mApiUrl = "http://eztvapi.re/";
 	protected String mMirrorApiUrl = "http://api.popcorntime.io/";
-	public static final int NO_MOVIES_ERROR = R.string.movies_error;
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -200,7 +197,18 @@ public class EZTVProvider extends MediaProvider {
 				show.image = images.get("poster").replace("/original/", "/medium/");
 				show.fullImage = images.get("poster");
 				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
-				show.status = (String) showData.get("status");
+
+                if(showData.get("status") != null) {
+                    String status = (String) showData.get("status");
+                    if(status.equalsIgnoreCase("ended")) {
+                        show.status = Show.Status.ENDED;
+                    } else if(status.equalsIgnoreCase("returning series")) {
+                        show.status = Show.Status.CONTINUING;
+                    } else if(status.equalsIgnoreCase("canceled")) {
+                        show.status = Show.Status.CANCELED;
+                    }
+                }
+
 				show.country = (String) showData.get("country");
 				show.network = (String) showData.get("network");
 				show.synopsis = (String) showData.get("synopsis");
@@ -228,12 +236,13 @@ public class EZTVProvider extends MediaProvider {
 
 					episodeObject.dateBased = (Boolean) episode.get("date_based");
 					episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
-					episodeObject.overview = episode.get("overview").toString();
+                    episodeObject.title = (String) episode.get("title");
+					episodeObject.overview = (String) episode.get("overview");
 					episodeObject.season = ((Double) episode.get("season")).intValue();
 					episodeObject.episode = ((Double) episode.get("episode")).intValue();
 					episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
 
-					show.episodes.put(episodeObject.season + "-" + episodeObject.episode, episodeObject);
+					show.episodes.add(episodeObject);
 				}
 
 				list.add(show);
