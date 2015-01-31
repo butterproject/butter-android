@@ -9,12 +9,13 @@ import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import java.net.URI;
 
-import pct.droid.base.providers.media.types.Media;
 
 public class MediaRowPresenter extends Presenter {
     private static final String TAG = "MediaObjectPresenter";

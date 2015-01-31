@@ -54,4 +54,16 @@
 
 	<!-- Categories -->
 
+	<!-- StreamLoadingActivity strings -->
+	<string name="waiting_torrent">Waiting for torrent</string>
+	<string name="starting_buffering">Starting buffering</string>
+	<string name="streaming_started">Streaming started</string>
+	<string name="waiting_for_subtitles">Waiting for subtitles</string>
+	<string name="seeds">seeds</string>
+	<string name="error_files">Error: Couldn\'t write files</string>
+
+	<!-- WifiOnlyDialogFragment -->
+	<string name="network_message">Check your internet connection</string>
+
+
 </resources>

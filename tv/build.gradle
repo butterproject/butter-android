@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
+//apply plugin: 'io.fabric'
 
-apply plugin: 'com.android.application'
-apply plugin: 'hugo'
 
 android {
     compileSdkVersion 21
@@ -92,6 +91,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:6.0.0'
     compile project(':base')
     compile project(':vlc')
-    compile project(':node')
     compile project(':xmlrpc')
 }

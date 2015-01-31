@@ -6,7 +6,8 @@ import android.support.v17.leanback.widget.Presenter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
+
 
 public class MediaObjectAdapter extends ArrayObjectAdapter {
 	private ArrayList<Media> mItems = new ArrayList<>();

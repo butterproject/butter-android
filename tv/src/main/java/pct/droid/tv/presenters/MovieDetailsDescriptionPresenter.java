@@ -2,7 +2,7 @@ package pct.droid.tv.presenters;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
-import pct.droid.base.providers.media.types.Movie;
+import pct.droid.base.providers.media.models.Movie;
 import pct.droid.tv.fragments.PTVMovieDetailsFragment;
 
 

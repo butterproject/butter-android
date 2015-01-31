@@ -31,7 +31,7 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
-import pct.droid.base.providers.media.types.Media;
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.tv.R;
 
 /*

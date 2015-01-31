@@ -5,6 +5,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.util.Log;
 
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.tv.R;
 import pct.droid.tv.adapters.MediaObjectAdapter;
 import pct.droid.tv.interfaces.main.MainDataManagerCallback;
@@ -19,7 +20,6 @@ import pct.droid.tv.utils.MediaListRow;
 import java.util.ArrayList;
 import java.util.List;
 
-import pct.droid.base.providers.media.types.Media;
 
 public class MainInteractor implements MainInteractorInputInterface {
 	//region Attributes
