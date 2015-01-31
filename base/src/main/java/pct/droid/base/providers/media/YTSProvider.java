@@ -1,6 +1,7 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.os.Parcel;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
@@ -64,6 +65,18 @@ public class YTSProvider extends MediaProvider {
 			case POPULARITY:
 				sort = "seeds";
 				break;
+            case YEAR:
+                sort = "year";
+                break;
+            case DATE:
+                sort = "date";
+                break;
+            case RATING:
+                sort = "rating";
+                break;
+            case ALPHABET:
+                sort = "alphabet";
+                break;
 		}
 
 		params.add(new BasicNameValuePair("sort", sort));
@@ -371,9 +384,14 @@ public class YTSProvider extends MediaProvider {
 	}
 
     public static class YTSMovie extends Movie {
-        @Override
-        public SubsProvider getSubsProvider() {
-            return new YSubsProvider();
+        public YTSMovie() {
+            super();
+            mSubsProvider = new YSubsProvider();
+        }
+
+        public YTSMovie(Parcel in) {
+            super(in);
+            mSubsProvider = new YSubsProvider();
         }
     }
 

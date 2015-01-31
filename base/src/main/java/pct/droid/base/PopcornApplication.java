@@ -27,7 +27,6 @@ import timber.log.Timber;
 public class PopcornApplication extends VLCApplication {
 
 	private static OkHttpClient sHttpClient;
-	private static Picasso sPicasso;
 	private static String sDefSystemLanguage;
 	private static PopcornApplication sInstance;
 
@@ -82,6 +81,11 @@ public class PopcornApplication extends VLCApplication {
 			FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
 		}
 
+        Picasso.Builder builder = new Picasso.Builder(getAppContext());
+        OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
+        builder.downloader(downloader);
+        Picasso.setSingletonInstance(builder.build());
+
         PopcornUpdater.getInstance(this).checkUpdates(false);
 	}
 
@@ -111,16 +115,6 @@ public class PopcornApplication extends VLCApplication {
 			}
 		}
 		return sHttpClient;
-	}
-
-	public static Picasso getPicasso() {
-		if (sPicasso == null) {
-			Picasso.Builder builder = new Picasso.Builder(getAppContext());
-			OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
-			builder.downloader(downloader);
-			sPicasso = builder.build();
-		}
-		return sPicasso;
 	}
 
 	public static String getStreamDir() {

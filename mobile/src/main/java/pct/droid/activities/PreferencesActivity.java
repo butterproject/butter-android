@@ -559,9 +559,9 @@ public class PreferencesActivity extends BaseActivity
 	private void openListSelectionDialog(String title, String[] items, int mode, int defaultPosition,
 			DialogInterface.OnClickListener onClickListener) {
 		if (mode == StringArraySelectorDialogFragment.NORMAL) {
-			StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, defaultPosition, onClickListener);
+			StringArraySelectorDialogFragment.show(getSupportFragmentManager(), title, items, defaultPosition, onClickListener);
 		} else if (mode == StringArraySelectorDialogFragment.SINGLE_CHOICE) {
-			StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), title, items, defaultPosition, onClickListener);
+			StringArraySelectorDialogFragment.showSingleChoice(getSupportFragmentManager(), title, items, defaultPosition, onClickListener);
 		}
 	}
 
