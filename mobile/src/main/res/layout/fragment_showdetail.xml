@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/base_gradient" />
+
+    <View
+        android:id="@+id/background"
+        android:layout_below="@id/top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg" />
+
+    <pct.droid.widget.WrappingViewPager
+        android:id="@+id/pager"
+        android:layout_below="@id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdgeLength="0dp"
+        android:background="@color/bg" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/top"
+        android:background="@android:color/white"
+        android:alpha="0.08"
+        />
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingLeft="56dp"
+        android:layout_alignTop="@id/top"
+        android:background="@android:color/transparent"
+        app:pstsDividerColor="@android:color/white" />
+
+</RelativeLayout>

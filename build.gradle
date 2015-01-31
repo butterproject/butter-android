@@ -17,17 +17,13 @@ buildscript {
     }
 }
 
-
-ext{
-    appCompatVersion="21.0.3"
-    buildToolsVersion="21.1.2"
-    targetSdk= 21
-    compileSdk= 21
-    minSdk= 15
-
+ext {
+    appCompatVersion = "21.0.3"
+    buildToolsVersion = "21.1.2"
+    targetSdk = 21
+    compileSdk = 21
+    minSdk = 15
 }
-
-
 
 allprojects {
     repositories {

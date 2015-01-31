@@ -35,6 +35,7 @@
 
 		<activity
 			android:name="pct.droid.activities.OverviewActivity"
+            android:label="@null"
 			android:theme="@style/Theme.PopcornTime.NavigationDrawer"
 			android:windowSoftInputMode="adjustPan">
 			<intent-filter>
@@ -47,7 +48,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="pct.droid.activities.MovieDetailActivity"
+			android:name=".activities.MediaDetailActivity"
 			android:theme="@style/Theme.PopcornTime.Detail"
 			android:parentActivityName=".activities.OverviewActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->

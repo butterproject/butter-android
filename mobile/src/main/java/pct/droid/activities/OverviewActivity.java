@@ -33,7 +33,7 @@ import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
-import pct.droid.fragments.MediaListFragment;
+import pct.droid.fragments.MediaContainerFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
 import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.utils.ToolbarUtils;
@@ -114,7 +114,8 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 	}
 
 
-	@Override public void onNavigationDrawerItemSelected(int position) {
+	@Override public void onNavigationDrawerItemSelected(int position, String title) {
+        setTitle(null!=title?title: getString(R.string.app_name));
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		String tag = Integer.toString(position);
@@ -122,9 +123,9 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 		//		Fragment fragment = mFragmentCache.get(position);
 		Fragment fragment = fragmentManager.findFragmentByTag(tag);
 		if (null == fragment) {
-			fragment = MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, position); //create new fragment instance
-		}
-		fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
+            fragment = MediaContainerFragment.newInstance(position);
+        }
+        fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
 	}
 
 	private void openPlayerTestDialog() {

@@ -26,7 +26,7 @@ import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.utils.ThreadUtils;
-import pct.droid.base.utils.VersionUtil;
+import pct.droid.base.utils.VersionUtils;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
@@ -48,7 +48,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         mRoot = inflater.inflate(R.layout.fragment_streamloading, container, false);
         ButterKnife.inject(this, mRoot);
 
-        if (VersionUtil.isLollipop()) {
+        if (VersionUtils.isLollipop()) {
             //postpone the transitions until after the view is layed out.
             getActivity().postponeEnterTransition();
 

@@ -40,4 +40,5 @@ dependencies {
     compile "com.android.support:mediarouter-v7:${rootProject.ext.appCompatVersion}"
     compile project(':vlc')
     compile project(':xmlrpc')
+    compile files('libs/frostwire-jlibtorrent.jar')
 }

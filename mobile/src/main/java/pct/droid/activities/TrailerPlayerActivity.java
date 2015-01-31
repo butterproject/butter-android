@@ -65,7 +65,7 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
     TextView playerInfo;
     @InjectView(R.id.control_bar)
     SeekBar controlBar;
-    @InjectView(R.id.play_butotn)
+    @InjectView(R.id.play_button)
     ImageButton playButton;
     @InjectView(R.id.currentTime)
     TextView currentTime;
@@ -102,6 +102,10 @@ public class TrailerPlayerActivity extends BaseActivity implements View.OnSystem
 
     private int mLastSystemUIVisibility;
     private long mLastSystemShowTime = System.currentTimeMillis();
+
+    public void startActivity() {
+
+    }
 
     @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)

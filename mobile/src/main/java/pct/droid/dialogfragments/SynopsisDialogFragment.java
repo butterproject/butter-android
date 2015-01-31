@@ -14,7 +14,7 @@ import pct.droid.R;
 
 public class SynopsisDialogFragment extends DialogFragment {
 
-    @InjectView(R.id.synopsisText)
+    @InjectView(R.id.synopsis)
     TextView synopsisText;
 
     @Override

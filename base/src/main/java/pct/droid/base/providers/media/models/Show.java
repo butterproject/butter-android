@@ -3,17 +3,21 @@ package pct.droid.base.providers.media.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
+    public enum Status { CONTINUING, ENDED, CANCELED }
+
     public String type = "show";
     public String imdbId = "";
     public String airDay = "";
     public String airTime = "";
-    public String status = "";
+    public Status status = null;
     public String runtime = "";
     public String network = "";
     public String country = "";
@@ -21,7 +25,7 @@ public class Show extends Media implements Parcelable {
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
     public Integer seasons = 0;
-    public Map<String, Episode> episodes = new HashMap<>();
+    public List<Episode> episodes = new ArrayList<>();
 
     public Show() {
 
@@ -32,7 +36,16 @@ public class Show extends Media implements Parcelable {
         airDay = in.readString();
         airTime = in.readString();
         runtime = in.readString();
-        status = in.readString();
+
+        int statusInt = in.readInt();
+        if(statusInt == 0) {
+            status = Status.CONTINUING;
+        } else if(statusInt == 1) {
+            status = Status.ENDED;
+        } else {
+            status = null;
+        }
+
         network = in.readString();
         country = in.readString();
         tvdbId = in.readString();
@@ -42,9 +55,8 @@ public class Show extends Media implements Parcelable {
         seasons = in.readInt();
         int size = in.readInt();
         for (int i = 0; i < size; i++) {
-            String key = in.readString();
             Episode episode = in.readParcelable(Episode.class.getClassLoader());
-            episodes.put(key, episode);
+            episodes.add(episode);
         }
     }
 
@@ -59,7 +71,7 @@ public class Show extends Media implements Parcelable {
         dest.writeString(airDay);
         dest.writeString(airTime);
         dest.writeString(runtime);
-        dest.writeString(status);
+        dest.writeInt(status.ordinal());
         dest.writeString(network);
         dest.writeString(country);
         dest.writeString(tvdbId);
@@ -68,9 +80,8 @@ public class Show extends Media implements Parcelable {
         dest.writeString(certification);
         dest.writeInt(seasons == null ? 0 : seasons);
         dest.writeInt(episodes.size());
-        for (String key : episodes.keySet()) {
-            dest.writeString(key);
-            dest.writeParcelable(episodes.get(key), flags);
+        for (Episode episode : episodes) {
+            dest.writeParcelable(episode, flags);
         }
     }
 
@@ -141,11 +152,6 @@ public class Show extends Media implements Parcelable {
             } else {
                 dest.writeInt(0);
             }
-        }
-
-        @Override
-        public SubsProvider getSubsProvider() {
-            throw new AbstractMethodError("Method not implemented");
         }
 
         @SuppressWarnings("unused")

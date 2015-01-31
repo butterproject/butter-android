@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="ScrimInsetsView">
         <attr name="insetForeground" format="reference|color" />
     </declare-styleable>
+
+    <declare-styleable name="OptionSelector">
+        <attr name="optionIcon" format="reference"/>
+        <attr name="optionText" format="string"/>
+    </declare-styleable>
+
 </resources>
