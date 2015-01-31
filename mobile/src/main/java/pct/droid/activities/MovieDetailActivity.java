@@ -24,13 +24,13 @@ import android.widget.TextView;
 
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.AnimUtils;
@@ -69,7 +69,7 @@ public class MovieDetailActivity extends BaseActivity {
     ProgressBar headerProgress;
     @InjectView(R.id.mainInfoBlock)
     RelativeLayout mainInfoBlock;
-    @InjectView(R.id.playButton)
+    @InjectView(R.id.play_butotn)
     ImageButton playButton;
     @InjectView(R.id.titleText)
     TextView titleText;
@@ -119,7 +119,7 @@ public class MovieDetailActivity extends BaseActivity {
                     final String[] qualities = mItem.torrents.keySet().toArray(new String[mItem.torrents.size()]);
                     Arrays.sort(qualities);
                     StringArraySelectorDialogFragment
-                            .showSingleChoice(getFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality),
+                            .showSingleChoice(getSupportFragmentManager(), R.string.quality, qualities, Arrays.asList(qualities).indexOf(mQuality),
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int position) {
@@ -148,7 +148,7 @@ public class MovieDetailActivity extends BaseActivity {
                         }
                     }
 
-                    StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
+                    StringArraySelectorDialogFragment.showSingleChoice(getSupportFragmentManager(), R.string.subtitles, readableNames,
                             Arrays.asList(adapterLanguages).indexOf(mSubLanguage), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int position) {
@@ -166,7 +166,7 @@ public class MovieDetailActivity extends BaseActivity {
                     trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mItem.trailer);
                     startActivity(trailerIntent);
                     break;
-                case R.id.playButton:
+                case R.id.play_butotn:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
                     if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) &&
                             !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&
@@ -320,7 +320,7 @@ public class MovieDetailActivity extends BaseActivity {
             onSubtitleLanguageSelected(PrefUtils.get(this, Prefs.SUBTITLE_DEFAULT, "no-subs"));
         }
 
-        PopcornApplication.getPicasso().load(mItem.image).into(coverImage, new Callback() {
+        Picasso.with(this).load(mItem.image).into(coverImage, new Callback() {
             @Override
             public void onSuccess() {
                 int oldColor = mPaletteColor;

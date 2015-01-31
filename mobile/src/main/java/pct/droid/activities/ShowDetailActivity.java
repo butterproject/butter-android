@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +35,6 @@ import java.util.Locale;
 
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
@@ -70,7 +70,7 @@ public class ShowDetailActivity extends BaseActivity {
     ProgressBar headerProgress;
     @InjectView(R.id.mainInfoBlock)
     RelativeLayout mainInfoBlock;
-    @InjectView(R.id.playButton)
+    @InjectView(R.id.play_butotn)
     ImageButton playButton;
     @InjectView(R.id.titleText)
     TextView titleText;
@@ -148,7 +148,7 @@ public class ShowDetailActivity extends BaseActivity {
                     startActivity(trailerIntent);
                     break;
                 */
-                case R.id.playButton:
+                case R.id.play_butotn:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
 
@@ -231,7 +231,7 @@ public class ShowDetailActivity extends BaseActivity {
 
                                                         StreamLoadingFragment.StreamInfo streamInfo =
                                                                 new StreamLoadingFragment.StreamInfo(episode, mItem, torrent.url,
-                                                                        mSubLanguage, key);
+                                                                        mSubLanguage==null?"no-subs":mSubLanguage, key);
 
                                                         if (VersionUtil.isLollipop())
                                                             StreamLoadingActivity.startActivity(ShowDetailActivity.this, streamInfo, Pair.create((View) coverImage, coverImage.getTransitionName()));
@@ -363,7 +363,7 @@ public class ShowDetailActivity extends BaseActivity {
         qualityBlock.setVisibility(View.GONE);
         subtitlesBlock.setVisibility(View.GONE);
 
-        PopcornApplication.getPicasso().load(mItem.image).into(coverImage, new Callback() {
+        Picasso.with(this).load(mItem.image).into(coverImage, new Callback() {
             @Override
             public void onSuccess() {
                 int oldColor = mPaletteColor;
@@ -445,6 +445,6 @@ public class ShowDetailActivity extends BaseActivity {
     }
 
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
-        StringArraySelectorDialogFragment.show(getFragmentManager(), title, items, -1, onClickListener);
+        StringArraySelectorDialogFragment.show(getSupportFragmentManager(), title, items, -1, onClickListener);
     }
 }

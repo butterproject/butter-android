@@ -175,7 +175,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		mNavigationDrawerContainer = navigationContainer;
 		mDrawerLayout = drawerLayout;
 
-		//ensure the toolbar displays the home icon (will be overriden with the burger icon)
+		//ensure the mToolbar displays the home icon (will be overriden with the burger icon)
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
