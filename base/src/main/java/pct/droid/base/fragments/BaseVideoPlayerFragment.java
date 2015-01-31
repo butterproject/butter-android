@@ -1,4 +1,4 @@
-package pct.droid.fragments;
+package pct.droid.base.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -39,8 +39,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
-import pct.droid.R;
-import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
@@ -54,7 +53,6 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
 
@@ -69,6 +67,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	private static final int SURFACE_4_3 = 5;
 	private static final int SURFACE_ORIGINAL = 6;
 	private int mCurrentSize = SURFACE_BEST_FIT;
+
+	public final static String RESUME_POSITION = "resume_position";
 
 	private int mStreamerProgress = 0;
 
@@ -148,7 +148,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		LogUtils.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
 		mLibVLC.eventVideoPlayerActivityCreated(true);
 
-		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+		PrefUtils.save(getActivity(), RESUME_POSITION, 0);
 
 		loadMedia();
 	}
@@ -165,7 +165,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		if (mLibVLC != null) {
 			long currentTime = mLibVLC.getTime();
-			PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, currentTime);
+			PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
 
             /*
 			 * Pausing here generates errors because the vout is constantly
@@ -205,7 +205,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		if (mService != null)
 			mService.stopStreaming();
 
-		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+		PrefUtils.save(getActivity(), RESUME_POSITION, 0);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			mLibVLC.playIndex(mSavedIndexPosition);
 		}
 
-		long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+		long resumeTime = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
 		if (resumeTime > 0) {
 			mLibVLC.setTime(resumeTime);
 		}
@@ -255,7 +255,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 	protected abstract void onErrorEncountered();
 
-	abstract void onHardwareAccelerationError();
+	protected abstract void onHardwareAccelerationError();
 
 	protected abstract void showTimedCaptionText(Caption text);
 
@@ -279,11 +279,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		if (mLibVLC == null)
 			return;
 
-		long resumePosition = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+		long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
 		long length = mLibVLC.getLength();
 		if (length > resumePosition && resumePosition > 0) {
 			mLibVLC.setTime(resumePosition);
-			PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+			PrefUtils.save(getActivity(), RESUME_POSITION, 0);
 		}
 	}
 
@@ -542,7 +542,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	}
 
 
-	void seek(int delta) {
+	public void seek(int delta) {
 		if (mLibVLC.getLength() <= 0 && !mSeeking) return;
 
 		long position = mLibVLC.getTime() + delta;
