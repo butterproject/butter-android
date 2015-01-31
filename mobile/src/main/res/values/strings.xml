@@ -26,8 +26,7 @@
     <string name="read_more">Read more</string>
 	<string name="watch_trailer">Watch trailer</string>
 	<string name="disable_subs">Disable subtitles</string>
-	<string name="no_subs">No subtitles</string>
-	<string name="subtitles">Subtitles</string>
+
 	<string name="quality">Quality</string>
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
@@ -49,11 +48,7 @@
 	<string name="brightness">Brightness</string>
 	<string name="hardware_acceleration_error_title">HW acceleration error</string>
 	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
-	<string name="best_fit">Best fit</string>
-	<string name="fill">Fill</string>
-	<string name="fit_horizontal">Fit horizontal</string>
-	<string name="fit_vertical">Fit vertical</string>
-	<string name="original_size">Original</string>
+
 
 	<!-- TermsActivity strings -->
     <string name="terms" translatable="false">Your Acceptance\n\n

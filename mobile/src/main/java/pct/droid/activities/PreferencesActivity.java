@@ -49,7 +49,7 @@ import pct.droid.base.utils.StorageUtils;
 import pct.droid.dialogfragments.ChangeLogDialogFragment;
 import pct.droid.dialogfragments.ColorPickerDialogFragment;
 import pct.droid.dialogfragments.NumberPickerDialogFragment;
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.base.fragments.StringArraySelectorDialogFragment;
 import pct.droid.utils.ToolbarUtils;
 
 public class PreferencesActivity extends BaseActivity

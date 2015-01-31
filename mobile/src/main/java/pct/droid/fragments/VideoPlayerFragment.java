@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.subs.Caption;
@@ -68,6 +69,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	@InjectView(R.id.length_time)
 	TextView lengthTime;
 	View mDecorView;
+
 
 	private AudioManager mAudioManager;
 
@@ -479,7 +481,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		}
 	};
 
-	@Override void onHardwareAccelerationError() {
+	@Override public void onHardwareAccelerationError() {
 		AlertDialog dialog = new AlertDialog.Builder(getActivity())
 				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 					@Override
