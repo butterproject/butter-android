@@ -7,6 +7,7 @@ android {
 
     def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
     def gitBranch = (System.getenv("GIT_BRANCH") == null ? "local" : System.getenv("GIT_BRANCH").replace("origin/", ""))
+
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
