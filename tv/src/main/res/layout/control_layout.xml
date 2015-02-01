@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/control_layout"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_marginLeft="@dimen/player_controls_margin"
+	android:layout_marginRight="@dimen/player_controls_margin"
+	android:layout_marginBottom="@dimen/player_controls_bottom_margin"
+	android:orientation="vertical">
+
+	<ProgressBar
+		android:id="@+id/control_bar"
+		android:focusable="false"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="80dp"
+		android:padding="@dimen/player_controls_padding"
+		android:background="@drawable/player_controls_background">
+
+		<TextView
+			android:id="@+id/currentTime"
+			android:layout_width="55dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:focusable="false"
+			android:layout_alignParentStart="true"
+			android:layout_alignParentTop="true"
+			android:gravity="end"
+			tools:text="0:00" />
+
+		<TextView
+			android:id="@+id/length_time"
+			android:layout_width="55dp"
+			android:layout_height="wrap_content"
+			android:focusable="false"
+			android:layout_alignParentTop="true"
+			android:layout_gravity="center_vertical"
+			android:layout_alignParentEnd="true"
+			android:gravity="start"
+			tools:text="0:00" />
+
+		<ImageButton
+			android:id="@+id/rewindButton"
+			android:layout_width="@dimen/player_control_button_size"
+			android:layout_height="@dimen/player_control_button_size"
+			android:layout_centerVertical="true"
+			android:layout_toStartOf="@+id/play_button"
+			android:layout_marginEnd="@dimen/player_controls_distance"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:src="@drawable/ic_av_rewind" />
+
+		<ImageButton
+			android:id="@+id/play_button"
+			android:layout_width="@dimen/player_control_button_size"
+			android:layout_height="@dimen/player_control_button_size"
+			android:layout_centerInParent="true"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:src="@drawable/ic_av_play">
+
+			<requestFocus />
+		</ImageButton>
+
+		<ImageButton
+			android:id="@+id/forwardButton"
+			android:layout_width="@dimen/player_control_button_size"
+			android:layout_centerVertical="true"
+			android:layout_height="@dimen/player_control_button_size"
+			android:layout_toEndOf="@+id/play_button"
+			android:layout_marginStart="@dimen/player_controls_distance"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:src="@drawable/ic_av_forward" />
+
+		<ImageButton
+			android:id="@+id/scaleButton"
+			android:layout_width="@dimen/player_control_button_size"
+			android:layout_height="@dimen/player_control_button_size"
+			android:layout_toStartOf="@+id/rewindButton"
+			android:layout_centerVertical="true"
+			android:layout_marginEnd="@dimen/player_controls_distance"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:src="@drawable/ic_av_aspect_ratio" />
+
+		<ImageButton
+			android:id="@+id/subsButton"
+			android:layout_width="@dimen/player_control_button_size"
+			android:layout_height="@dimen/player_control_button_size"
+			android:layout_centerVertical="true"
+			android:layout_toEndOf="@+id/forwardButton"
+			android:layout_marginStart="@dimen/player_controls_distance"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:src="@drawable/ic_av_subs" />
+	</RelativeLayout>
+</LinearLayout>

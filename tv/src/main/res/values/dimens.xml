@@ -5,10 +5,12 @@
 	<dimen name="card_width">120dp</dimen>
 	<dimen name="card_height">180dp</dimen>
 
+	<dimen name="player_control_button_size">96dp</dimen>
+
 	<dimen name="player_controls_margin">32dp</dimen>
-	<dimen name="player_controls_bottom_margin">32dp</dimen>
+	<dimen name="player_controls_bottom_margin">120dp</dimen>
 	<dimen name="player_controls_padding">16dp</dimen>
-	<dimen name="player_controls_corners">7dp</dimen>
+	<dimen name="player_controls_corners">3dp</dimen>
 	<dimen name="player_controls_distance">8dp</dimen>
 	<dimen name="player_subtitles_bottom_margin">16dp</dimen>
 	<dimen name="player_subtitles_default_text_size">16dp</dimen>
