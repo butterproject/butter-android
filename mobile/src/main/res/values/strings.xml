@@ -42,12 +42,6 @@
 	<string name="seeds">seeds</string>
     <string name="error_files">Error: Couldn\'t write files</string>
 
-	<!-- VideoPlayerActivity strings -->
-	<string name="now_playing">Now playing</string>
-	<string name="volume">Volume</string>
-	<string name="brightness">Brightness</string>
-	<string name="hardware_acceleration_error_title">HW acceleration error</string>
-	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
 
 
 	<!-- TermsActivity strings -->

@@ -53,7 +53,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 	YTSProvider mMovieProvider = new YTSProvider();
 
 	private ItemWrapper mItem;
-	private CustomDetailsOverviewRow mDetailsRow;
+	private DetailsOverviewRow mDetailsRow;
 
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -137,7 +137,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 
 	private void addDetailsOverviewRow() {
 
-		mDetailsRow = new CustomDetailsOverviewRow(mItem);
+		mDetailsRow = new DetailsOverviewRow(mItem);
 		mDetailsRow.setImageDrawable(getResources().getDrawable(R.drawable.default_background));
 
 		Picasso.with(getActivity()).load(mItem.getMedia().image).into(new Target() {
@@ -202,6 +202,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 	}
 
 	@Override public void onSuccess(ArrayList<Media> items) {
+		if (!isAdded()) return;
 		if (null != mItem) mItem.setLoadingDetail(false);
 		if (null == items || items.size() == 0) return;
 		Media itemDetail = items.get(0);
@@ -224,32 +225,6 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		Media getItem();
 	}
 
-
-	private static class CustomDetailsOverviewRow extends DetailsOverviewRow {
-
-		//		Field mItemField = null;
-
-		private CustomDetailsOverviewRow(Object item) {
-			super(item);
-			//			try {
-			//				mItemField = getClass().getSuperclass().getDeclaredField("mItem");
-			//				mItemField.setAccessible(true);
-			//			} catch (NoSuchFieldException e) {
-			//				e.printStackTrace();
-			//			}
-		}
-		//
-		//		public void setItem(Media item) {
-		//			try {
-		//				//				mItemField.set
-		//				mItemField.set(this, item);
-		//			} catch (IllegalAccessException e) {
-		//				e.printStackTrace();
-		//			}
-		//		}
-		//
-
-	}
 
 	@Override public void onActionClicked(Action a) {
 		if (!(a instanceof WatchAction)) return;

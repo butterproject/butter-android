@@ -1,10 +1,5 @@
 <resources>
     <!-- By default -->
-    <color name="background_gradient_start">#000000</color>
-    <color name="background_gradient_end">#DDDDDD</color>
-    <color name="fastlane_background">#0096a6</color>
-    <color name="search_opaque">#ffaa3f</color>
-    <color name="detail_background">#0096a6</color>
     <color name="soft_opaque">#30000000</color>
     <color name="img_soft_opaque">#30FF0000</color>
     <color name="img_full_opaque">#00000000</color>
@@ -20,6 +15,8 @@
     <color name="overlay_bg">#BB2F383F</color>
     <color name="list_selected">#55FFFFFF</color>
 
+	<color name="selectable_focused">#22FFFFFF</color>
+	<color name="selectable_pressed">#55FFFFFF</color>
 
 	<color name="primary">#FF1976D2</color>
     <color name="primary_dark">#FF1668B9</color>

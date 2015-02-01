@@ -47,7 +47,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mBackgroundUpdater.initialise(getActivity(), R.drawable.default_background);
+		mBackgroundUpdater.initialise(getActivity(), R.drawable.default_row_background);
 		mListRowPresenter = new ListRowPresenter();
 		mListRowPresenter.setShadowEnabled(false);
 		mRowsAdapter = new ArrayObjectAdapter(mListRowPresenter);

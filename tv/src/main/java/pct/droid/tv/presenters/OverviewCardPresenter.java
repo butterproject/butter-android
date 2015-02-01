@@ -84,7 +84,7 @@ public class OverviewCardPresenter extends Presenter {
 	public void onBindLoadingViewHolder(Presenter.ViewHolder viewHolder, OverviewCardItem overview) {
 		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 		cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		cardView.setMainImage(mContext.getDrawable(R.drawable.placeholder_inset));
+		cardView.setMainImage(mContext.getResources().getDrawable(R.drawable.placeholder_inset));
 		cardView.setTitleText(mContext.getString(R.string.loading));
 		cardView.setMainImageDimensions(mCardWidth, mCardHeight);
 	}
