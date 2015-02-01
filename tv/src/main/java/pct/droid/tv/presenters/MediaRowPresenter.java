@@ -64,7 +64,7 @@ public class MediaRowPresenter extends Presenter {
         ImageCardView cardView = new ImageCardView(mContext);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
-        cardView.setBackgroundColor(mContext.getResources().getColor(R.color.fastlane_background));
+        cardView.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
         return new ViewHolder(cardView);
     }
 

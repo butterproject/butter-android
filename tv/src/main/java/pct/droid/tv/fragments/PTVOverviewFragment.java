@@ -14,6 +14,9 @@
 
 package pct.droid.tv.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -28,9 +31,16 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
@@ -40,10 +50,14 @@ import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.youtube.YouTubeData;
+import pct.droid.tv.BuildConfig;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMovieDetailActivity;
 import pct.droid.tv.activities.PTVSearchActivity;
 import pct.droid.tv.activities.PTVShowDetailActivity;
+import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.presenters.MorePresenter;
 import pct.droid.tv.presenters.OverviewCardPresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
@@ -72,7 +86,7 @@ public class PTVOverviewFragment extends BrowseFragment {
 
 		//setup background updater
 		mBackgroundUpdater = new BackgroundUpdater();
-		mBackgroundUpdater.initialise(getActivity(), R.drawable.default_background);
+		mBackgroundUpdater.initialise(getActivity(), R.drawable.default_row_background);
 
 		//setup main adapter
 		mListRowPresenter = new ListRowPresenter();
@@ -200,6 +214,8 @@ public class PTVOverviewFragment extends BrowseFragment {
 		ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
 		gridRowAdapter.add(new MorePresenter.MoreItem(R.string.about, R.drawable.ic_about));
 		gridRowAdapter.add(new MorePresenter.MoreItem(R.string.settings, R.drawable.ic_settings));
+		if (BuildConfig.DEBUG)
+		gridRowAdapter.add(new MorePresenter.MoreItem(R.string.tests, R.drawable.ic_av_play));
 		mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 	}
 
@@ -222,6 +238,10 @@ public class PTVOverviewFragment extends BrowseFragment {
 				else if (media.getMedia() instanceof Show)
 					PTVShowDetailActivity.startActivity(getActivity(), options, (Show) media.getMedia());
 			}
+			else{
+				openPlayerTestDialog();
+			}
+
 		}
 	}
 
@@ -237,5 +257,61 @@ public class PTVOverviewFragment extends BrowseFragment {
 			}
 
 		}
+	}
+
+	private void openPlayerTestDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+		final String[] file_types = getResources().getStringArray(R.array.file_types);
+		final String[] files = getResources().getStringArray(R.array.files);
+
+		builder.setTitle("Player Tests")
+				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						dialogInterface.dismiss();
+					}
+				}).setSingleChoiceItems(file_types, -1, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int index) {
+				dialogInterface.dismiss();
+				final String location = files[index];
+				if (location.equals("dialog")) {
+					final EditText dialogInput = new EditText(getActivity());
+					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+							.setView(dialogInput)
+							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									Movie media = new YTSProvider.YTSMovie();
+
+									media.videoId = "dialogtestvideo";
+									media.title = "User input test video";
+
+									PTVVideoPlayerActivity.startActivity(getActivity(), dialogInput.getText().toString(), media);
+								}
+							});
+				}
+					final Movie media = new YTSProvider.YTSMovie();
+					media.videoId = "bigbucksbunny";
+					media.title = file_types[index];
+					media.subtitles = new HashMap<String, String>();
+					media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
+
+					SubsProvider.download(getActivity(), media, "en", new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							PTVVideoPlayerActivity.startActivity(getActivity(), location, media, null, null, 0);
+						}
+
+						@Override
+						public void onResponse(Response response) throws IOException {
+							PTVVideoPlayerActivity.startActivity(getActivity(), location, media, null, "en", 0);
+						}
+					});
+			}
+		});
+
+		builder.show();
 	}
 }

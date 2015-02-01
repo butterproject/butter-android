@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,8 +19,8 @@ import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.utils.ThreadUtils;
-import pct.droid.base.utils.VersionUtil;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.utils.BackgroundUpdater;
 
 public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
@@ -43,19 +42,6 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mRoot = inflater.inflate(R.layout.fragment_streamloading, container, false);
 		ButterKnife.inject(this, mRoot);
-
-		if (VersionUtil.isLollipop()) {
-			//postpone the transitions until after the view is layed out.
-			getActivity().postponeEnterTransition();
-
-			mRoot.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-				public boolean onPreDraw() {
-					mRoot.getViewTreeObserver().removeOnPreDrawListener(this);
-					getActivity().startPostponedEnterTransition();
-					return true;
-				}
-			});
-		}
 
 		return mRoot;
 	}
@@ -141,8 +127,7 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 			String subtitleLanguage,
 			int resumePosition) {
 
-		//todo:
-		//		VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+		PTVVideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
 	}
 
 
