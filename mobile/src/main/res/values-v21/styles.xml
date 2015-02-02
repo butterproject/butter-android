@@ -5,6 +5,9 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowActivityTransitions">true</item>
 		<!-- v21 specific customisations here -->
+        <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
+        <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
 	</style>
 
 	<style name="Theme.PopcornTime.NavigationDrawer" parent="Theme.PopcornTime">

@@ -29,7 +29,7 @@ public class WrappingViewPager extends ViewPager {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if(!mAnimStarted) {
+        if(!mAnimStarted && null != getAdapter()) {
             int height = 0;
             View child = ((FragmentPagerAdapter) getAdapter()).getItem(getCurrentItem()).getView();
             if (child != null) {
