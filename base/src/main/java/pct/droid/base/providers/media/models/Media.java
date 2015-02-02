@@ -10,6 +10,7 @@ import pct.droid.base.providers.subs.SubsProvider;
 
 public class Media implements Parcelable {
     public String videoId;
+    public String imdbId;
     public String title;
     public String year;
     public String genre;
@@ -27,6 +28,7 @@ public class Media implements Parcelable {
 
     public Media(Parcel in) {
         videoId = in.readString();
+        imdbId = in.readString();
         title = in.readString();
         year = in.readString();
         genre = in.readString();
@@ -50,6 +52,7 @@ public class Media implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(videoId);
+        dest.writeString(imdbId);
         dest.writeString(title);
         dest.writeString(year);
         dest.writeString(genre);
@@ -86,6 +89,7 @@ public class Media implements Parcelable {
         public String url;
         public String seeds;
         public String peers;
+        public String hash;
 
         public Torrent() {
 
@@ -95,6 +99,7 @@ public class Media implements Parcelable {
             url = in.readString();
             seeds = in.readString();
             peers = in.readString();
+            hash = in.readString();
         }
 
         @Override
@@ -107,6 +112,7 @@ public class Media implements Parcelable {
             dest.writeString(url);
             dest.writeString(seeds);
             dest.writeString(peers);
+            dest.writeString(hash);
         }
 
         @SuppressWarnings("unused")
