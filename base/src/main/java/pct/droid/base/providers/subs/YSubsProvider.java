@@ -67,7 +67,7 @@ public class YSubsProvider extends SubsProvider {
     @Override
     public void getList(final Movie media, final Callback callback) {
         final Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + media.videoId);
+        requestBuilder.url(mApiUrl + media.imdbId);
         requestBuilder.tag(SUBS_CALL);
 
         fetch(requestBuilder, media, new Callback() {
@@ -78,7 +78,7 @@ public class YSubsProvider extends SubsProvider {
 
             @Override
             public void onFailure(Exception e) {
-                requestBuilder.url(mMirrorApiUrl + media.videoId);
+                requestBuilder.url(mMirrorApiUrl + media.imdbId);
                 fetch(requestBuilder, media, callback);
             }
         });
@@ -102,7 +102,7 @@ public class YSubsProvider extends SubsProvider {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-                    callback.onSuccess(result.formatForPopcorn(mPrefix, mLanguageMapping).get(media.videoId));
+                    callback.onSuccess(result.formatForPopcorn(mPrefix, mLanguageMapping).get(media.imdbId));
                 }
             }
         });
