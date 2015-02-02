@@ -55,7 +55,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     Toolbar mToolbar;
     TextView mToolbarTitle;
     @InjectView(R.id.scrollview)
-    ScrollView mScrollView;
+    ObservableParallaxScrollView mScrollView;
     @Optional
     @InjectView(R.id.parallax)
     RelativeLayout mParallaxLayout;
@@ -107,6 +107,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
         getSupportActionBar().setTitle(media.title);
 
+        mScrollView.setListener(mOnScrollListener);
+        mScrollView.setOverScrollEnabled(false);
         // Calculate toolbar scrolling variables
         if(!mIsTablet) {
             int parallaxHeight = mParallaxLayout.getLayoutParams().height = PixelUtils.getScreenHeight(this);
@@ -118,9 +120,6 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             mToolbar.getBackground().setAlpha(0);
             mParallaxColor.setBackgroundColor(mPaletteColor);
             mParallaxColor.getBackground().setAlpha(0);
-
-            ((ObservableParallaxScrollView) mScrollView).setListener(mOnScrollListener);
-            ((ObservableParallaxScrollView) mScrollView).setOverScrollEnabled(false);
         } else {
             mTopHeight = (PixelUtils.getScreenHeight(this) / 2);
             ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = mTopHeight;

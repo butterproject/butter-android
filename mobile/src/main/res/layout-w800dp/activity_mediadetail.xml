@@ -47,11 +47,16 @@
         android:layout_height="100dp"
         android:background="@drawable/ab_gradient" />
 
-    <ScrollView
+    <pct.droid.widget.ObservableParallaxScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdgeLength="0dp">
+
+        <!-- Placeholder view for parallax -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,7 +76,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </pct.droid.widget.ObservableParallaxScrollView>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

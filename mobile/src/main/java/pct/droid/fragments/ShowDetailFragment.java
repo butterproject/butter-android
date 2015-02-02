@@ -99,6 +99,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
 
         mIsTablet = mCoverImage != null;
 
+        List<Fragment> fragments = new ArrayList<>();
         if(mIsTablet) {
             Double rating = Double.parseDouble(mShow.rating);
             mTitle.setText(mShow.title);
@@ -154,10 +155,9 @@ public class ShowDetailFragment extends BaseDetailFragment {
                     mBackground.getLayoutParams().height = mBackground.getLayoutParams().height - mTabs.getHeight();
                 }
             });
+            fragments.add(ShowDetailAboutFragment.newInstance(mShow));
         }
 
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(ShowDetailAboutFragment.newInstance(mShow));
         for(int i = 1; i < mShow.seasons + 1; i++) {
             fragments.add(ShowDetailSeasonFragment.newInstance(mShow, i, mPaletteColor));
         }

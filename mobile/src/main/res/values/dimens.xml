@@ -3,10 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="first_keyline">16dp</dimen>
-    <dimen name="second_keyline">72dp</dimen>
-    <dimen name="toolbar_horizontal_padding">4dp</dimen>
-
     <dimen name="list_vertical_padding">8dp</dimen>
     <dimen name="list_divider_spacing">8dp</dimen>
 
@@ -29,7 +25,9 @@
     <dimen name="action_margin">32dp</dimen>
     <dimen name="context_icon">28dp</dimen>
     <dimen name="divider_margin">72dp</dimen>
-    <dimen name="keyline">72dp</dimen>
+    <dimen name="first_keyline">16dp</dimen>
+    <dimen name="second_keyline">72dp</dimen>
+    <dimen name="toolbar_horizontal_padding">4dp</dimen>
 
     <dimen name="parallax_header_height">428dp</dimen>
 
