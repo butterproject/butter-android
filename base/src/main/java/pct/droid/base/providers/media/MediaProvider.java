@@ -35,7 +35,7 @@ public abstract class MediaProvider extends BaseProvider {
      */
     public abstract Call getList(ArrayList<Media> currentList, Filters filters, Callback callback);
 
-    public abstract Call getDetail(String torrentId, Callback callback);
+    public abstract Call getDetail(String videoId, Callback callback);
 
 	public abstract int getLoadingMessage();
 
