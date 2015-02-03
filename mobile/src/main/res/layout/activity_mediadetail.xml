@@ -75,12 +75,10 @@
 
     </pct.droid.widget.ObservableParallaxScrollView>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <include
+        layout="@layout/toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@android:color/transparent"
         android:fitsSystemWindows="true" />
 
 </RelativeLayout>
