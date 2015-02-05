@@ -47,8 +47,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     public static final String DATA = "item";
     public static final String COLOR = "palette";
 
-    private Integer mVisibleBarPos, mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
-    private Boolean mTransparentBar = true, mVisibleBar = true, mIsTablet = false;
+    private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
+    private Boolean mTransparentBar = true, mIsTablet = false;
     private Fragment mFragment;
 
     @InjectView(R.id.toolbar)
@@ -116,10 +116,10 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = -(parallaxHeight / 3);
             mContent.setMinimumHeight(mTopHeight / 3);
 
-            mToolbar.setBackgroundColor(mPaletteColor);
-            mToolbar.getBackground().setAlpha(0);
             mParallaxColor.setBackgroundColor(mPaletteColor);
             mParallaxColor.getBackground().setAlpha(0);
+            mToolbar.setBackgroundColor(mPaletteColor);
+            mToolbar.getBackground().setAlpha(0);
         } else {
             mTopHeight = (PixelUtils.getScreenHeight(this) / 2);
             ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = mTopHeight;
@@ -205,11 +205,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         public void onScroll(int scrollY, ObservableParallaxScrollView.Direction direction) {
             if (mToolbarHeight == 0) {
                 mToolbarHeight = mToolbar.getHeight();
-                if(!mIsTablet) {
-                    mHeaderHeight = mTopHeight - mToolbarHeight;
-                } else {
-                    mHeaderHeight = mTopHeight + mToolbarHeight;
-                }
+                mHeaderHeight = mTopHeight - mToolbarHeight;
                 Timber.d("mHeaderHeight: %d", mHeaderHeight);
             }
 
@@ -228,30 +224,6 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                     }
                 }
             } else {
-                float transY = mToolbar.getTranslationY();
-
-                if (scrollY > mHeaderHeight) {
-                    if (direction == ObservableParallaxScrollView.Direction.UP) {
-                        // scroll up
-                        if ((mVisibleBarPos == null || !mVisibleBar) && transY <= -mToolbarHeight)
-                            mVisibleBarPos = scrollY - mToolbarHeight;
-                        mVisibleBar = true;
-                    } else if (direction == ObservableParallaxScrollView.Direction.DOWN) {
-                        // scroll down
-                        if (mVisibleBarPos == null || mVisibleBar)
-                            mVisibleBarPos = scrollY;
-                        mVisibleBar = false;
-                    }
-
-                    if (transY <= 0) {
-                        mToolbar.setTranslationY(mVisibleBarPos - scrollY);
-                    }
-
-                    if (transY > 0) {
-                        mToolbar.setTranslationY(0);
-                    }
-                }
-
                 /* Fade out when over header */
                 if (mTopHeight - scrollY < 0) {
                     if (mTransparentBar) {

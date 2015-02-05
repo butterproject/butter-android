@@ -2,6 +2,7 @@
 the same attributes -->
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Custom.Widget.Toolbar"
 	android:id="@+id/toolbar"
     app:contentInsetStart="@dimen/second_keyline"
 	android:minHeight="?attr/actionBarSize"
