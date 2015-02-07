@@ -64,8 +64,8 @@ def createCrashlyticsProperties(Project project,variant) {
         properties.store(new FileWriter(crashlyticsProperties), "")
     }
     generateResourcesTask.dependsOn generatePropertiesTask
-    def assembleTask = project.tasks.getByName("assemble${variantSuffix}")
-    assembleTask.doLast {
+    def cleanResourcesTask = project.tasks.getByName("crashlyticsCleanupResourcesAfterUpload${variantSuffix}")
+    cleanResourcesTask.doLast {
         println "...removing crashlytics.properties"
         crashlyticsProperties.delete()
     }
