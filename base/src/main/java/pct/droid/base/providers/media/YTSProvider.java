@@ -1,6 +1,7 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.os.Parcel;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
@@ -11,7 +12,9 @@ import com.squareup.okhttp.Response;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -24,8 +27,8 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	protected String mApiUrl = "http://ytspt.re/api/";
-	protected String mMirrorApiUrl = "http://proxy.piratenpartij.nl/yts.re/api/";
+	protected String mApiUrl = "http://yts.re/api/v2/";
+	protected String mMirrorApiUrl = "http://ytspt.re/api/v2/";
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -45,7 +48,7 @@ public class YTSProvider extends MediaProvider {
 
 		if (filters.keywords != null) {
 			String keywords = filters.keywords.replaceAll("\\s", "% ");
-			params.add(new BasicNameValuePair("keywords", keywords));
+			params.add(new BasicNameValuePair("query_term", keywords));
 		}
 
 		if (filters.genre != null) {
@@ -53,9 +56,9 @@ public class YTSProvider extends MediaProvider {
 		}
 
 		if (filters.order == Filters.Order.ASC) {
-			params.add(new BasicNameValuePair("order", "asc"));
+			params.add(new BasicNameValuePair("order_by", "asc"));
 		} else {
-			params.add(new BasicNameValuePair("order", "desc"));
+			params.add(new BasicNameValuePair("order_by", "desc"));
 		}
 
 		String sort;
@@ -64,17 +67,29 @@ public class YTSProvider extends MediaProvider {
 			case POPULARITY:
 				sort = "seeds";
 				break;
+            case YEAR:
+                sort = "year";
+                break;
+            case DATE:
+                sort = "date_added";
+                break;
+            case RATING:
+                sort = "rating";
+                break;
+            case ALPHABET:
+                sort = "title";
+                break;
 		}
 
-		params.add(new BasicNameValuePair("sort", sort));
+		params.add(new BasicNameValuePair("sort_by", sort));
 
 		if (filters.page != null) {
-			params.add(new BasicNameValuePair("set", Integer.toString(filters.page)));
+			params.add(new BasicNameValuePair("page", Integer.toString(filters.page)));
 		}
 
 		Request.Builder requestBuilder = new Request.Builder();
 		String query = buildQuery(params);
-		requestBuilder.url(mApiUrl + "list.json?" + query);
+		requestBuilder.url(mApiUrl + "list_movies.json?" + query);
 		requestBuilder.tag(MEDIA_CALL);
 
 		return fetchList(currentList, requestBuilder, callback);
@@ -125,47 +140,10 @@ public class YTSProvider extends MediaProvider {
                         return;
                     }
 
-					if (result.status != null && result.status.equals("fail")) {
-						callback.onFailure(new NetworkErrorException(result.error));
+					if (result.status != null && result.status.equals("error")) {
+						callback.onFailure(new NetworkErrorException(result.status_message));
 					} else {
-						int previousSize = currentList.size();
 						ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
-						int newDataSize = formattedData.size() - previousSize;
-
-						// Only get metdata for new items in list
-						String[] imdbIds = new String[newDataSize];
-						for (int i = previousSize, index = 0; i < formattedData.size(); i++, index++) {
-							Media media = formattedData.get(i);
-							imdbIds[index] = media.videoId;
-						}
-
-						TraktProvider traktProvider = new TraktProvider();
-						TraktProvider.MetaData[] metaDatas = traktProvider.getSummaries(imdbIds, "movie", "normal");
-
-						for (int i = previousSize, index = 0; i < formattedData.size(); i++) {
-							Media media = formattedData.get(i);
-
-							if (metaDatas.length > index) {
-								TraktProvider.MetaData meta = metaDatas[index];
-								if (media.videoId.equals(meta.imdb_id)) {
-									if (meta.images.containsKey("poster")) {
-										media.image = meta.images.get("poster").replace("/original/", "/medium/");
-										media.fullImage = meta.images.get("poster");
-									}
-
-									if (meta.images.containsKey("fanart")) {
-										media.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
-									}
-
-									if (meta.title != null) {
-										media.title = meta.title;
-									}
-									formattedData.set(i, media);
-									index++;
-								}
-							}
-						}
-
 						callback.onSuccess(formattedData);
 						return;
 					}
@@ -176,9 +154,9 @@ public class YTSProvider extends MediaProvider {
 	}
 
 	@Override
-	public Call getDetail(String imdbId, final Callback callback) {
+	public Call getDetail(String videoId, final Callback callback) {
 		Request.Builder requestBuilder = new Request.Builder();
-		requestBuilder.url(mApiUrl + "listimdb.json?imdb_id=" + imdbId);
+		requestBuilder.url(mApiUrl + "movie_details.json?movie_id=" + videoId);
 		requestBuilder.tag(MEDIA_CALL);
 
 		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
@@ -209,71 +187,69 @@ public class YTSProvider extends MediaProvider {
                         return;
                     }
 
-					if (result.status != null && result.status.equals("fail")) {
-						callback.onFailure(new NetworkErrorException(result.error));
+					if (result.status != null && result.status.equals("error")) {
+						callback.onFailure(new NetworkErrorException(result.status_message));
 					} else {
-						final ArrayList<Media> formattedData = result.formatForPopcorn();
+						final YTSMovie movie = result.formatDetailForPopcorn();
 
-						if (formattedData.size() > 0) {
-							TraktProvider traktProvider = new TraktProvider();
-							final Movie movie = (Movie) formattedData.get(0);
+                        TraktProvider traktProvider = new TraktProvider();
 
-							TraktProvider.MetaData meta = traktProvider.getSummary(movie.videoId, "movie");
-							if (meta.images != null && meta.images.containsKey("poster")) {
-								movie.image = meta.images.get("poster").replace("/original/", "/medium/");
-								movie.fullImage = meta.images.get("poster");
-							} else {
-								movie.fullImage = movie.image;
-							}
+                        TraktProvider.MetaData meta = traktProvider.getSummary(movie.imdbId, "movie");
+                        if (meta.images != null && meta.images.containsKey("poster")) {
+                            movie.image = meta.images.get("poster").replace("/original/", "/medium/");
+                            movie.fullImage = meta.images.get("poster");
+                        } else {
+                            movie.fullImage = movie.image;
+                        }
 
-							if (meta.images != null && meta.images.containsKey("fanart")) {
-								movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
-							} else {
-								movie.headerImage = movie.image;
-							}
+                        if (meta.images != null && meta.images.containsKey("fanart")) {
+                            movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
+                        } else {
+                            movie.headerImage = movie.image;
+                        }
 
-							if (meta.title != null) {
-								movie.title = meta.title;
-							}
+                        if (meta.title != null) {
+                            movie.title = meta.title;
+                        }
 
-							if (meta.overview != null) {
-								movie.synopsis = meta.overview;
-							}
+                        if (meta.overview != null) {
+                            movie.synopsis = meta.overview;
+                        }
 
-							if (meta.tagline != null) {
-								movie.tagline = meta.tagline;
-							}
+                        if (meta.tagline != null) {
+                            movie.tagline = meta.tagline;
+                        }
 
-							if (meta.trailer != null) {
-								movie.trailer = meta.trailer;
-							}
+                        if (meta.trailer != null) {
+                            movie.trailer = meta.trailer;
+                        }
 
-							if (meta.runtime != null) {
-								movie.runtime = Integer.toString(meta.runtime);
-							}
+                        if (meta.runtime != null) {
+                            movie.runtime = Integer.toString(meta.runtime);
+                        }
 
-							if (meta.certification != null) {
-								movie.certification = meta.certification;
-							}
+                        if (meta.certification != null) {
+                            movie.certification = meta.certification;
+                        }
 
-							YSubsProvider subsProvider = new YSubsProvider();
-							subsProvider.getList(movie, new SubsProvider.Callback() {
-								@Override
-								public void onSuccess(Map<String, String> items) {
-									movie.subtitles = items;
-									formattedData.set(0, movie);
-									callback.onSuccess(formattedData);
-								}
+                        final ArrayList<Media> returnData = new ArrayList<>();
+                        returnData.add(movie);
 
-								@Override
-								public void onFailure(Exception e) {
-									callback.onSuccess(formattedData);
-								}
-							});
+                        YSubsProvider subsProvider = new YSubsProvider();
+                        subsProvider.getList(movie, new SubsProvider.Callback() {
+                            @Override
+                            public void onSuccess(Map<String, String> items) {
+                                movie.subtitles = items;
+                                returnData.set(0, movie);
+                                callback.onSuccess(returnData);
+                            }
 
-							return;
-						}
-						callback.onFailure(new IllegalStateException("Empty list"));
+                            @Override
+                            public void onFailure(Exception e) {
+                                callback.onSuccess(returnData);
+                            }
+                        });
+
                         return;
 					}
 				}
@@ -284,8 +260,8 @@ public class YTSProvider extends MediaProvider {
 
 	private class YTSReponse {
 		public String status;
-		public String error;
-		public ArrayList<LinkedTreeMap<String, Object>> MovieList;
+		public String status_message;
+		public LinkedTreeMap<String, Object> data;
 
 		/**
 		 * Test if there is an item that already exists
@@ -309,8 +285,45 @@ public class YTSProvider extends MediaProvider {
 		 *
 		 * @return List with items
 		 */
-		public ArrayList<Media> formatForPopcorn() {
-			return formatForPopcorn(new ArrayList<Media>());
+		public YTSMovie formatDetailForPopcorn() {
+            YTSMovie movie = new YTSMovie();
+            LinkedTreeMap<String, Object> movieObj = data;
+            if(movieObj == null) return movie;
+
+            movie.videoId = movieObj.get("id").toString();
+            movie.imdbId = (String) movieObj.get("imdb_code");
+
+            movie.title = (String) movieObj.get("title");
+            movie.year = movieObj.get("year").toString();
+            movie.rating = movieObj.get("rating").toString();
+            movie.genre = ((ArrayList<String>) movieObj.get("genres")).get(0);
+
+            ArrayList<LinkedTreeMap<String, Object>> torrents =
+                    (ArrayList<LinkedTreeMap<String, Object>>) movieObj.get("torrents");
+            if(torrents != null) {
+                for (LinkedTreeMap<String, Object> torrentObj : torrents) {
+                    String quality = (String) torrentObj.get("quality");
+                    if(quality == null || quality.equals("3D")) continue;
+
+                    Media.Torrent torrent = new Media.Torrent();
+
+                    torrent.seeds = torrentObj.get("seeds").toString();
+                    torrent.peers = torrentObj.get("peers").toString();
+                    torrent.hash = (String) torrentObj.get("hash");
+                    try {
+                        String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(movieObj.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
+                        torrent.url = magnet;
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        torrent.url = (String) torrentObj.get("url");
+                    }
+
+                    movie.torrents.put(quality, torrent);
+                }
+            }
+
+
+            return movie;
 		}
 
 		/**
@@ -321,44 +334,50 @@ public class YTSProvider extends MediaProvider {
 		 * @return List with items
 		 */
 		public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
-            if(MovieList == null) {
-                MovieList = new ArrayList<>();
+            ArrayList<LinkedTreeMap<String, Object>> movies = new ArrayList<>();
+            if(data != null) {
+                movies = (ArrayList<LinkedTreeMap<String, Object>>) data.get("movies");
             }
 
-			for (LinkedTreeMap<String, Object> item : MovieList) {
+			for (LinkedTreeMap<String, Object> item : movies) {
 				Movie movie = new YTSMovie();
 
-				movie.videoId = (String) item.get("ImdbCode");
-				String torrentQuality = (String) item.get("Quality");
-
-				if (torrentQuality.equals("3D")) {
-					continue;
-				}
-
-				Media.Torrent torrent = new Media.Torrent();
-				torrent.url = (String) item.get("TorrentMagnetUrl");
-				torrent.seeds = (String) item.get("TorrentSeeds");
-				torrent.peers = (String) item.get("TorrentPeers");
+				movie.videoId = item.get("id").toString();
+                movie.imdbId = (String) item.get("imdb_code");
 
 				int existingItem = isInResults(existingList, movie.videoId);
 				if (existingItem == -1) {
-					movie.title = item.get("MovieTitleClean")
-							.toString();//.replaceAll("([^)]*)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]", "");
-					movie.year = (String) item.get("MovieYear");
-					movie.genre = (String) item.get("Genre");
-					movie.rating = (String) item.get("MovieRating");
-				} else {
-					movie = (Movie) existingList.get(existingItem);
-				}
+                    movie.title = (String) item.get("title");
+                    movie.year = item.get("year").toString();
+                    movie.rating = item.get("rating").toString();
+                    movie.genre = ((ArrayList<String>)item.get("genres")).get(0);
+                    movie.image = (String) item.get("medium_cover_image");
 
-				if (!movie.torrents.containsKey(torrentQuality)) {
-					movie.torrents.put(torrentQuality, torrent);
-				}
+                    ArrayList<LinkedTreeMap<String, Object>> torrents =
+                            (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
+                    if(torrents != null) {
+                        for (LinkedTreeMap<String, Object> torrentObj : torrents) {
+                            String quality = (String) torrentObj.get("quality");
+                            if(quality == null || quality.equals("3D")) continue;
 
-				if (existingItem == -1) {
-					existingList.add(movie);
-				} else {
-					existingList.set(existingItem, movie);
+                            Media.Torrent torrent = new Media.Torrent();
+
+                            torrent.seeds = torrentObj.get("seeds").toString();
+                            torrent.peers = torrentObj.get("peers").toString();
+                            torrent.hash = (String) torrentObj.get("hash");
+                            try {
+                                String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
+                                torrent.url = magnet;
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                                torrent.url = (String) torrentObj.get("url");
+                            }
+
+                            movie.torrents.put(quality, torrent);
+                        }
+                    }
+
+                    existingList.add(movie);
 				}
 			}
 			return existingList;
@@ -371,9 +390,14 @@ public class YTSProvider extends MediaProvider {
 	}
 
     public static class YTSMovie extends Movie {
-        @Override
-        public SubsProvider getSubsProvider() {
-            return new YSubsProvider();
+        public YTSMovie() {
+            super();
+            mSubsProvider = new YSubsProvider();
+        }
+
+        public YTSMovie(Parcel in) {
+            super(in);
+            mSubsProvider = new YSubsProvider();
         }
     }
 

@@ -35,7 +35,7 @@ public abstract class MediaProvider extends BaseProvider {
      */
     public abstract Call getList(ArrayList<Media> currentList, Filters filters, Callback callback);
 
-    public abstract Call getDetail(String torrentId, Callback callback);
+    public abstract Call getDetail(String videoId, Callback callback);
 
 	public abstract int getLoadingMessage();
 
@@ -50,7 +50,7 @@ public abstract class MediaProvider extends BaseProvider {
 
         ;
 
-        public enum Sort {POPULARITY, YEAR /*TODO: add more*/}
+        public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET}
 
         public String keywords = null;
         public String genre = null;

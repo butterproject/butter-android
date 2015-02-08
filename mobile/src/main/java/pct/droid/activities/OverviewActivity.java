@@ -148,7 +148,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 			@Override
 			public void onClick(DialogInterface dialogInterface, int index) {
 				dialogInterface.dismiss();
-				String location = files[index];
+				final String location = files[index];
 				if (location.equals("dialog")) {
 					final EditText dialogInput = new EditText(OverviewActivity.this);
 					AlertDialog.Builder builder = new AlertDialog.Builder(OverviewActivity.this)
@@ -157,12 +157,11 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									Movie media = new YTSProvider.YTSMovie();
-									final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
-									i.putExtra(VideoPlayerActivity.DATA, media);
-									i.putExtra(VideoPlayerActivity.LOCATION, dialogInput.getText());
+
 									media.videoId = "dialogtestvideo";
 									media.title = "User input test video";
-									startActivity(i);
+
+									VideoPlayerActivity.startActivity(OverviewActivity.this, dialogInput.getText().toString(), media);
 								}
 							});
 				}
@@ -174,24 +173,21 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 					i.putExtra(TrailerPlayerActivity.LOCATION, location);
 					startActivity(i);
 				} else {
-					Movie media = new YTSProvider.YTSMovie();
-					final Intent i = new Intent(OverviewActivity.this, VideoPlayerActivity.class);
-					i.putExtra(VideoPlayerActivity.DATA, media);
-					i.putExtra(VideoPlayerActivity.LOCATION, location);
+					final Movie media = new YTSProvider.YTSMovie();
 					media.videoId = "bigbucksbunny";
 					media.title = file_types[index];
 					media.subtitles = new HashMap<String, String>();
-					media.subtitles.put("en", "http://popcorn.sv244.cf/bbb-subs.srt");
+					media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
+
 					SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-							startActivity(i);
+							VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, null, 0);
 						}
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-							i.putExtra(VideoPlayerActivity.SUBTITLES, "en");
-							startActivity(i);
+							VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, "en", 0);
 						}
 					});
 				}

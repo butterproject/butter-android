@@ -28,8 +28,8 @@ public class DefaultPlayer {
      * @return Map with options
      */
     public static Map<String, String> getVideoPlayerApps() {
-        Intent playerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("/path/video.mp4"));
-        playerIntent.setDataAndType(Uri.parse("/path/video.mp4"), "video/mp4");
+        Intent playerIntent = new Intent(Intent.ACTION_VIEW);
+        playerIntent.setDataAndType(Uri.parse("http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4"), "video/*");
 
         PackageManager packageManager = PopcornApplication.getAppContext().getPackageManager();
         List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(playerIntent, 0);
