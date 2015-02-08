@@ -44,6 +44,7 @@ import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
+import timber.log.Timber;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
@@ -90,7 +91,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	private float mTouchY, mTouchX;
 
 	private int mAudioMax;
-	private int mVol;
+	private float mVol;
 
 	private boolean mIsFirstBrightnessGesture = true;
 	private float mRestoreBrightness = -1f;
@@ -313,7 +314,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 			return;
 		float delta = -((y_changed * 2f / mSurfaceYDisplayRange) * mAudioMax);
 		mVol += delta;
-		int vol = Math.min(Math.max(mVol, 0), mAudioMax);
+        int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
 		if (delta != 0f) {
 			setAudioVolume(vol);
 		}

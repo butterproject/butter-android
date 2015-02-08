@@ -235,7 +235,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 		if (resumeTime > 0) {
-			mLibVLC.setTime(resumeTime);
+			setCurrentTime(resumeTime);
 		}
 	}
 
@@ -282,7 +282,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		long resumePosition = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 		long length = mLibVLC.getLength();
 		if (length > resumePosition && resumePosition > 0) {
-			mLibVLC.setTime(resumePosition);
+			setCurrentTime(resumePosition);
 			PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 		}
 	}
@@ -302,7 +302,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	public void togglePlayPause() {
 		if (mLibVLC == null)
 			return;
-
+    
 		if (mLibVLC.isPlaying()) {
 			pause();
 		} else {
@@ -338,7 +338,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	}
 
 	protected void setCurrentTime(long time) {
-		mLibVLC.setTime(time);
+        if(time / getDuration() * 100 <= getStreamerProgress()) {
+            mLibVLC.setTime(time);
+        }
 	}
 
 	protected long getCurrentTime() {
@@ -547,7 +549,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		long position = mLibVLC.getTime() + delta;
 		if (position < 0) position = 0;
-		mLibVLC.setTime(position);
+		setCurrentTime(position);
 		showOverlay();
 		onProgressChanged(getCurrentTime(),getDuration());
 		mLastSub = null;
