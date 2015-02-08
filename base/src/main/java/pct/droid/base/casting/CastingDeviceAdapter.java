@@ -28,16 +28,16 @@ public class CastingDeviceAdapter extends BaseAdapter {
     private CastingDevice[] mDevices = new CastingDevice[0];
 
     class ViewHolder {
-        public ViewHolder(View v) {
-            ButterKnife.inject(this, v);
-        }
-
         @InjectView(android.R.id.icon)
         ImageView icon;
         @InjectView(android.R.id.text1)
         TextView text1;
         @InjectView(android.R.id.text2)
         TextView text2;
+
+        public ViewHolder(View v) {
+            ButterKnife.inject(this, v);
+        }
     }
 
     public CastingDeviceAdapter(Context context) {
