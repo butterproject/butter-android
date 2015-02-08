@@ -1,6 +1,7 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.os.Parcel;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
@@ -17,6 +18,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.providers.subs.YSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
@@ -56,11 +58,22 @@ public class EZTVProvider extends MediaProvider {
 
 		String sort = "";
 		switch (filters.sort) {
-
 			default:
 			case POPULARITY:
-				sort = "seeds";
+				sort = "popularity";
 				break;
+            case YEAR:
+                sort = "year";
+                break;
+            case DATE:
+                sort = "'updated'";
+                break;
+            case RATING:
+                sort = "rating";
+                break;
+            case ALPHABET:
+                sort = "'name'";
+                break;
 		}
 
 		params.add(new BasicNameValuePair("sort", sort));
@@ -260,15 +273,25 @@ public class EZTVProvider extends MediaProvider {
 	}
 
     public static class EZTVShow extends Show {
-        @Override
-        public SubsProvider getSubsProvider() {
-            return new OpenSubsProvider();
+        public EZTVShow() {
+            super();
+            mSubsProvider = new OpenSubsProvider();
+        }
+
+        public EZTVShow(Parcel in) {
+            super(in);
+            mSubsProvider = new OpenSubsProvider();
         }
 
         public static class EZTVEpisode extends Episode {
-            @Override
-            public SubsProvider getSubsProvider() {
-                return new OpenSubsProvider();
+            public EZTVEpisode() {
+                super();
+                mSubsProvider = new OpenSubsProvider();
+            }
+
+            public EZTVEpisode(Parcel in) {
+                super(in);
+                mSubsProvider = new OpenSubsProvider();
             }
         }
     }

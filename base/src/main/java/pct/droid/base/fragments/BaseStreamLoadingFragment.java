@@ -327,25 +327,27 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     mSubsStatus = SubsStatus.SUCCESS;
                 }
             } else {
-                mSubsProvider = data.getSubsProvider();
-                SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
-                    @Override
-                    public void onSuccess(Map<String, String> items) {
-                        data.subtitles = items;
-                        mSubsStatus = SubsStatus.SUCCESS;
-                    }
+			    mSubsProvider = data.getSubsProvider();
+				if (null != mSubsProvider) {
+					SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
+						@Override
+						public void onSuccess(Map<String, String> items) {
+							data.subtitles = items;
+							mSubsStatus = SubsStatus.SUCCESS;
+						}
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        mSubsStatus = SubsStatus.FAILURE;
-                    }
-                };
+						@Override
+						public void onFailure(Exception e) {
+							mSubsStatus = SubsStatus.FAILURE;
+						}
+					};
 
-                if(mStreamInfo.isShow()) {
-                    mSubsProvider.getList(mStreamInfo.getShow(), (Show.Episode) data, subsCallback);
-                } else {
-                    mSubsProvider.getList((Movie)data, subsCallback);
-                }
+					if (mStreamInfo.isShow()) {
+						mSubsProvider.getList(mStreamInfo.getShow(), (Show.Episode) data, subsCallback);
+					} else {
+						mSubsProvider.getList((Movie) data, subsCallback);
+					}
+				}
             }
         }
     }
