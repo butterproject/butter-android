@@ -357,6 +357,10 @@ public class YTSProvider extends MediaProvider {
                     movie.genre = ((ArrayList<String>)item.get("genres")).get(0);
                     movie.image = (String) item.get("medium_cover_image");
 
+                    if(movie.image != null) {
+                        movie.image = movie.image.replace("medium-cover", "large-cover");
+                    }
+
                     ArrayList<LinkedTreeMap<String, Object>> torrents =
                             (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
                     if(torrents != null) {
