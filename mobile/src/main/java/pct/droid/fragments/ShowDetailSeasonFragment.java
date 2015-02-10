@@ -80,6 +80,10 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
         });
     }
 
+    public int getSeasonNumber() {
+        return getArguments().getInt(SEASON);
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
