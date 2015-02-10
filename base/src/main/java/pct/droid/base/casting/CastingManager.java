@@ -153,7 +153,7 @@ public class CastingManager {
     private CastingListener mInternalListener = new CastingListener() {
         @Override
         public void onConnected(CastingDevice device) {
-            if(!device.equals(mCurrentDevice) && !mConnected) return;
+            if((!device.equals(mCurrentDevice) && !mConnected) || mConnected) return;
 
             mConnected = true;
             for(CastingListener listener: mListeners) {

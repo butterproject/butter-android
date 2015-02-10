@@ -26,6 +26,9 @@ import butterknife.InjectView;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
+import pct.droid.base.casting.CastingManager;
+import pct.droid.base.casting.server.CastingServer;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
@@ -176,18 +179,28 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 					final Movie media = new YTSProvider.YTSMovie();
 					media.videoId = "bigbucksbunny";
 					media.title = file_types[index];
-					media.subtitles = new HashMap<String, String>();
+					media.subtitles = new HashMap<>();
 					media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
 					SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-							VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, null, 0);
+                            CastingManager cm = CastingManager.getInstance(OverviewActivity.this);
+                            if(cm.isConnected()) {
+                                CastingManager.getInstance(OverviewActivity.this).loadMedia(media, location, false);
+                            } else {
+                                VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, null, 0);
+                            }
 						}
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-							VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, "en", 0);
+                            CastingManager cm = CastingManager.getInstance(OverviewActivity.this);
+                            if(cm.isConnected()) {
+                                CastingManager.getInstance(OverviewActivity.this).loadMedia(media, location, false);
+                            } else {
+                                VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, null, 0);
+                            }
 						}
 					});
 				}
