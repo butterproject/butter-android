@@ -16,6 +16,6 @@ public class Constants {
     public static final String TWITTER_URL = "https://twitter.com/PopcornTimeTv";
     public static final String JIRA_API = GIT_URL + "jira/rest/api/2/";
     public static final String JIRA_PROJECT = "10200";
-    public static final String CAST_ID = "9A435985";
+    public static final String CAST_ID = "887D0748";
 
 }

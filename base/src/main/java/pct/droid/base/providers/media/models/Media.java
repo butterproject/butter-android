@@ -38,7 +38,7 @@ public class Media implements Parcelable {
         fullImage = in.readString();
         headerImage = in.readString();
         int length = in.readInt();
-        subtitles = new HashMap<String, String>();
+        subtitles = new HashMap<>();
         for (int i = 0; i < length; i++) {
             subtitles.put(in.readString(), in.readString());
         }

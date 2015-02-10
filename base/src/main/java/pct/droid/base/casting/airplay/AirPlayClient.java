@@ -33,7 +33,7 @@ import pct.droid.base.casting.BaseCastingClient;
 import pct.droid.base.casting.CastingDevice;
 import pct.droid.base.casting.CastingListener;
 import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.utils.LogUtils;
+import timber.log.Timber;
 
 /**
  * AirPlayClient.java
@@ -115,10 +115,10 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
             disconnect();
         }
         mCurrentDevice = (AirPlayDevice) device;
-        LogUtils.d("Connecting to airplay device: " + device.getId() + " - " + mCurrentDevice.getIpAddress());
+        Timber.d("Connecting to airplay device: %s - %s", device.getId(), mCurrentDevice.getIpAddress().toString());
 
         mSessionId = UUID.randomUUID().toString();
-        LogUtils.d("Session ID: " + mSessionId);
+        Timber.d("Session ID: %s", mSessionId);
 
         mListener.onDeviceSelected(mCurrentDevice);
         mPingRunnable.run();
@@ -177,13 +177,20 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
     @Override
     public void loadMedia(Media media, String location, float position) {
         if(mCurrentDevice == null) return;
-        LogUtils.d("Load media: " + location);
+        Timber.d("Load media: %s", location);
 
         stop();
 
-        RequestBody body = RequestBody.create(TYPE_PARAMETERS, "Content-Location: " + location + "\n" + "Start-Position: " + position);
+        StringBuilder content = new StringBuilder();
+        content.append("Content-Location: ");
+        content.append(location);
+        content.append("\n");
+        content.append("Start-Position: 0\n");
+
+        RequestBody body = RequestBody.create(TYPE_PARAMETERS, content.toString());
 
         Request playRequest = requestBuilder("play")
+                .addHeader("X-Apple-AssetKey", UUID.randomUUID().toString())
                 .post(body)
                 .build();
 
@@ -193,18 +200,18 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
             @Override
             public void onFailure(Request request, IOException e) {
                 e.printStackTrace();
-                LogUtils.d("Failed to load media: " + e.getMessage());
+                Timber.d("Failed to load media: %s", e.getMessage());
                 mListener.onCommandFailed("play", e.getMessage());
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
                 String body = response.body().string();
-                LogUtils.d("Load media response: " + body);
+                Timber.d("Load media response: %s", body);
                 if (response.isSuccessful()) {
-                    LogUtils.d("Load media successful");
+                    Timber.d("Load media successful");
                 } else {
-                    LogUtils.d("Failed to play media");
+                    Timber.d("Failed to play media");
                     mListener.onCommandFailed("play", "Failed to play media");
                 }
             }
@@ -343,7 +350,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
                 public void onResponse(Response response) throws IOException {
                     if (response.isSuccessful()) {
                         mListener.onConnected(mCurrentDevice);
-                        LogUtils.d("Ping successful to " + mCurrentDevice.getIpAddress());
+                        Timber.d("Ping successful to %s",  mCurrentDevice.getIpAddress().toString());
                         mPingHandler.postDelayed(mPingRunnable, 30000);
                     }
                 }
@@ -367,28 +374,30 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
                     if (response.isSuccessful()) {
                         try {
                             NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(response.body().byteStream());
-                            float position = ((NSNumber) rootDict.objectForKey("position")).floatValue();
-                            float duration = ((NSNumber) rootDict.objectForKey("duration")).floatValue();
+                            if(rootDict.containsKey("position")) {
+                                float position = ((NSNumber) rootDict.objectForKey("position")).floatValue();
+                                float duration = ((NSNumber) rootDict.objectForKey("duration")).floatValue();
 
-                            float rate = ((NSNumber) rootDict.objectForKey("rate")).floatValue();
-                            boolean playing = false;
-                            if (rate > 0) {
-                                playing = true;
+                                float rate = ((NSNumber) rootDict.objectForKey("rate")).floatValue();
+                                boolean playing = false;
+                                if (rate > 0) {
+                                    playing = true;
+                                }
+                                boolean readyToPlay = false;
+                                if (rootDict.containsKey("readyToPlay")) {
+                                    readyToPlay = ((NSNumber) rootDict.objectForKey("readyToPlay")).boolValue();
+                                }
+
+                                Timber.d("PlaybackInfo: playing: " + playing + ", rate: " + rate + ", position: " + position + ", ready: " + readyToPlay);
+
+                                if (readyToPlay) {
+                                    mListener.onReady();
+                                }
+
+                                mListener.onPlayBackChanged(playing, position);
+
+                                if (position == duration) return;
                             }
-                            boolean readyToPlay = false;
-                            if (rootDict.containsKey("readyToPlay")) {
-                                readyToPlay = ((NSNumber) rootDict.objectForKey("readyToPlay")).boolValue();
-                            }
-
-                            LogUtils.d("PlaybackInfo: playing: " + playing + ", rate: " + rate + ", position: " + position + ", ready: " + readyToPlay);
-
-                            if(readyToPlay) {
-                                mListener.onReady();
-                            }
-
-                            mListener.onPlayBackChanged(playing, position);
-
-                            if (position == duration) return;
 
                             mHandler.postDelayed(mPlaybackRunnable, 200);
                         } catch (Exception e) {
@@ -404,13 +413,13 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
 
     @Override
     public void serviceAdded(final ServiceEvent event) {
-        LogUtils.d("Found AirPlay service: " + event.getName());
+        Timber.d("Found AirPlay service: " + event.getName());
         mDiscoveredServices.put(event.getInfo().getKey(), event.getInfo());
     }
 
     @Override
     public void serviceRemoved(ServiceEvent event) {
-        LogUtils.d("Removed AirPlay service: " + event.getName());
+        Timber.d("Removed AirPlay service: " + event.getName());
         mDiscoveredServices.remove(event.getInfo().getKey());
         AirPlayDevice removedDevice = new AirPlayDevice(event.getInfo());
         mListener.onDeviceRemoved(removedDevice);
@@ -423,7 +432,7 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
 
     @Override
     public void serviceResolved(ServiceEvent event) {
-        LogUtils.d("Resolved AirPlay service: " + event.getName() + " @ " + event.getInfo().getURL());
+        Timber.d("Resolved AirPlay service: " + event.getName() + " @ " + event.getInfo().getURL());
         AirPlayDevice device = new AirPlayDevice(event.getInfo());
         mListener.onDeviceDetected(device);
         mDiscoveredServices.put(event.getInfo().getKey(), event.getInfo());
