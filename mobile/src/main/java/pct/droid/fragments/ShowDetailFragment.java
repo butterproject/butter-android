@@ -19,6 +19,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -158,8 +159,16 @@ public class ShowDetailFragment extends BaseDetailFragment {
             fragments.add(ShowDetailAboutFragment.newInstance(mShow));
         }
 
-        for(int i = 1; i < mShow.seasons + 1; i++) {
-            fragments.add(ShowDetailSeasonFragment.newInstance(mShow, i, mPaletteColor));
+        final List<Integer> availableSeasons = new ArrayList<>();
+        for (Show.Episode episode : mShow.episodes) {
+            if (!availableSeasons.contains(episode.season)) {
+                availableSeasons.add(episode.season);
+            }
+        }
+        Collections.sort(availableSeasons);
+
+        for(int seasonInt : availableSeasons) {
+            fragments.add(ShowDetailSeasonFragment.newInstance(mShow, seasonInt, mPaletteColor));
         }
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
 

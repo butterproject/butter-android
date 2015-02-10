@@ -10,6 +10,7 @@ import java.util.List;
 
 import pct.droid.R;
 import pct.droid.fragments.ShowDetailAboutFragment;
+import pct.droid.fragments.ShowDetailSeasonFragment;
 
 public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
 
@@ -45,14 +46,10 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        int season = position;
-        if(mHasAbout) {
-            if(season == 0)
-                return mContext.getString(R.string.about);
-        } else {
-            season = season + 1;
+        if(mFragments.get(position) instanceof ShowDetailSeasonFragment) {
+            return mContext.getString(R.string.season) + " " + ((ShowDetailSeasonFragment) mFragments.get(position)).getSeasonNumber();
         }
-        return mContext.getString(R.string.season) + " " + season;
+        return mContext.getString(R.string.about);
     }
 
 }
