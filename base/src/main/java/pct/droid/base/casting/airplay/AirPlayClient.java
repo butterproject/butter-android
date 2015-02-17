@@ -247,10 +247,10 @@ public class AirPlayClient extends BaseCastingClient implements ServiceListener 
     @Override
     public void pause() {
         if (mCurrentState.equals("playing")) {
-            Request playRequest = requestBuilder("scrub?position=0.000000")
+            Request pauseRequest = requestBuilder("rate?value=0.000000")
                     .build();
 
-            mHttpClient.newCall(playRequest).enqueue(new Callback() {
+            mHttpClient.newCall(pauseRequest).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
                     // Ignore, playback info will be obtained and so will the result

@@ -181,7 +181,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
             if (!playingExternal) {
                 //play internally
-                mService.removeListener();
+                mService.removeListener(BaseStreamLoadingFragment.this);
                 startPlayerActivity(getActivity(), "file://" + location, mStreamInfo.getMedia(), mStreamInfo.getQuality(),
                         mStreamInfo.getSubtitleLanguage(), 0);
                 getActivity().finish();
@@ -204,7 +204,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((TorrentService.ServiceBinder) service).getService();
-            mService.setListener(BaseStreamLoadingFragment.this);
+            mService.addListener(BaseStreamLoadingFragment.this);
 
             //kicks off the torrent stream
             startStream();
