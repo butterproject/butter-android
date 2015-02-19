@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import hugo.weaving.DebugLog;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.casting.CastingManager;
 import pct.droid.base.casting.server.CastingServer;
@@ -29,9 +28,7 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
-import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;

@@ -1,6 +1,7 @@
 package pct.droid.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,6 +30,8 @@ import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtil;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
+
+    private boolean mAttached = false;
 
     View mRoot;
     @InjectView(R.id.progress_indicator)
@@ -65,6 +68,18 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mAttached = true;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAttached = false;
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loadBackgroundImage();
@@ -84,6 +99,8 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     private void updateStatus(final DownloadStatus status) {
+        if(!mAttached) return;
+
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override

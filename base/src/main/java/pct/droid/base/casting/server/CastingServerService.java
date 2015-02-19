@@ -28,13 +28,8 @@ public class CastingServerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.i("CastingServer", "Starting CastingServer");
-        mServer = new CastingServer(NetworkUtils.getWifiIPAddress(), Constants.SERVER_PORT, new File(PopcornApplication.getStreamDir()), true);
-        try {
-            mServer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return START_NOT_STICKY;
-        }
+        mServer = new CastingServer(NetworkUtils.getWifiIPAddress(), Constants.SERVER_PORT);
+        mServer.start();
 
         return START_STICKY;
     }
