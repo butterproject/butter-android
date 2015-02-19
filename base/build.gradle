@@ -48,6 +48,7 @@ dependencies {
     compile 'javax.jmdns:jmdns:3.4.1'
     compile 'com.googlecode.plist:dd-plist:1.8'
     compile 'com.google.android.gms:play-services-cast:6.5+'
+    compile 'com.koushikdutta.async:androidasync:2.0.5'
 
     compile group: 'org.fourthline.cling', name: 'cling-core', version:'2.0.1'
     compile group: 'org.fourthline.cling', name: 'cling-support', version:'2.0.1'
