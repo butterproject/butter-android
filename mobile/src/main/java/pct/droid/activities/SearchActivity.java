@@ -43,6 +43,7 @@ public class SearchActivity extends BaseActivity {
 		super.onCreate(savedInstanceState, R.layout.activity_search);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setShowCasting(true);
 
 		ToolbarUtils.updateToolbarHeight(this, toolbar);
 		int provider = getIntent().getExtras().getInt(EXTRA_PROVIDER);

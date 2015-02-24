@@ -14,6 +14,7 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.io.IOException;
 
+import pct.droid.base.casting.CastingManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;
@@ -84,6 +85,12 @@ public class PopcornApplication extends VLCApplication {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         sDefSystemLanguage = LocaleUtils.getCurrent();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        CastingManager.getInstance(getAppContext()).onDestroy();
     }
 
     public static String getSystemLanguage() {

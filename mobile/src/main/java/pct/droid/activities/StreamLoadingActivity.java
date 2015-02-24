@@ -6,15 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
-import android.transition.Explode;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import pct.droid.R;
-import pct.droid.base.utils.VersionUtil;
+import pct.droid.base.casting.CastingManager;
 import pct.droid.fragments.StreamLoadingFragment;
 
 public class StreamLoadingActivity extends BaseActivity implements StreamLoadingFragment.FragmentListener {

@@ -693,7 +693,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			mService = ((TorrentService.ServiceBinder) service).getService();
-			mService.setListener(BaseVideoPlayerFragment.this);
+			mService.addListener(BaseVideoPlayerFragment.this);
 		}
 
 		@Override
