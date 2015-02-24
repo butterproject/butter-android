@@ -21,14 +21,14 @@ import java.util.Map;
 
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
+import pct.droid.base.casting.CastingManager;
+import pct.droid.base.casting.server.CastingServer;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
-import pct.droid.base.providers.subs.OpenSubsProvider;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
@@ -124,7 +124,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      * @param media
      * @param quality
      * @param subtitleLanguage
-     * @param i
+     * @param resumePosition
      */
     protected abstract void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
                                                 String subtitleLanguage,
@@ -167,11 +167,18 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
             //play with default 'external' player
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
-            boolean playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
+
+            boolean playingExternal = false;
+            if(CastingManager.getInstance(getActivity()).isConnected()) {
+                CastingServer.setCurrentVideo(location);
+                playingExternal = !CastingManager.getInstance(getActivity()).loadMedia(mStreamInfo.getMedia(), CastingServer.getVideoURL(), false);
+            } else {
+                playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
+            }
 
             if (!playingExternal) {
                 //play internally
-                mService.removeListener();
+                mService.removeListener(BaseStreamLoadingFragment.this);
                 startPlayerActivity(getActivity(), "file://" + location, mStreamInfo.getMedia(), mStreamInfo.getQuality(),
                         mStreamInfo.getSubtitleLanguage(), 0);
                 getActivity().finish();
@@ -194,7 +201,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((TorrentService.ServiceBinder) service).getService();
-            mService.setListener(BaseStreamLoadingFragment.this);
+            mService.addListener(BaseStreamLoadingFragment.this);
 
             //kicks off the torrent stream
             startStream();
@@ -227,6 +234,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     @DebugLog
     public void cancelStream() {
+        CastingManager.getInstance(getActivity()).stop();
         if (mService != null) {
             mService.stopStreaming();
         }
