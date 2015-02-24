@@ -45,7 +45,11 @@ public class CastingManager {
         mListeners = new HashSet<>();
 
         mGoogleCastClient = new GoogleCastClient(context, mInternalListener);
+        /*
+        Do not init, it does not work stable with torrent videos and needs more work. That can happen in the future.
         mAirPlayClient = new AirPlayClient(context, mInternalListener);
+        TODO: Get AirPlay working
+        */
         mDLNAClient = new DLNAClient(context, mInternalListener);
 
         Intent castServerService = new Intent(context, CastingServerService.class);
@@ -57,7 +61,7 @@ public class CastingManager {
             sInstance = new CastingManager(context);
         }
         sInstance.mGoogleCastClient.setContext(context);
-        sInstance.mAirPlayClient.setContext(context);
+        //sInstance.mAirPlayClient.setContext(context);
         sInstance.mDLNAClient.setContext(context);
 
         return sInstance;
@@ -72,7 +76,7 @@ public class CastingManager {
     }
 
     public void onDestroy() {
-        mAirPlayClient.destroy();
+        //mAirPlayClient.destroy();
         mDLNAClient.destroy();
         mGoogleCastClient.destroy();
 
@@ -94,7 +98,7 @@ public class CastingManager {
         if (mCurrentDevice instanceof GoogleDevice) {
             mGoogleCastClient.stop();
         } else if (mCurrentDevice instanceof AirPlayDevice) {
-            mAirPlayClient.stop();
+            //mAirPlayClient.stop();
         } else if (mCurrentDevice instanceof DLNADevice) {
             mDLNAClient.stop();
         }
@@ -122,7 +126,7 @@ public class CastingManager {
         if (mCurrentDevice instanceof GoogleDevice) {
             mGoogleCastClient.loadMedia(media, location);
         } else if (mCurrentDevice instanceof AirPlayDevice) {
-            mAirPlayClient.loadMedia(media, location);
+            //mAirPlayClient.loadMedia(media, location);
         } else if (mCurrentDevice instanceof DLNADevice) {
             mDLNAClient.loadMedia(media, location);
         }
@@ -133,7 +137,7 @@ public class CastingManager {
     public void setDevice(CastingDevice castingDevice) {
         if(castingDevice == mCurrentDevice) return;
 
-        mAirPlayClient.disconnect();
+        //mAirPlayClient.disconnect();
         mDLNAClient.disconnect();
         mGoogleCastClient.disconnect();
 
