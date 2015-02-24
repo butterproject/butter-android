@@ -30,6 +30,10 @@ ext{
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
+        maven {
+            url "http://4thline.org/m2"
+        }
     }
 
     //let project evaluate its script first

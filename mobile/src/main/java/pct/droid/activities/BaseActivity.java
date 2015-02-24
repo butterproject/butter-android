@@ -6,17 +6,24 @@ import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.ButterKnife;
+import pct.droid.R;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.casting.CastingDevice;
+import pct.droid.base.casting.CastingListener;
+import pct.droid.base.casting.CastingManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.dialogfragments.CastDeviceSelectorDialogFragment;
 
-public class BaseActivity extends ActionBarActivity {
+public class BaseActivity extends ActionBarActivity implements CastingListener {
 
 	protected Handler mHandler;
+    private Boolean mShowCasting = false;
 
 	public void onCreate(Bundle savedInstanceState, int layoutId) {
 		super.onCreate(savedInstanceState);
@@ -28,6 +35,13 @@ public class BaseActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+        CastingManager.getInstance(this).addListener(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+        CastingManager.getInstance(this).removeListener(this);
 	}
 
 	@Override
@@ -36,6 +50,10 @@ public class BaseActivity extends ActionBarActivity {
 		LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
 		super.setContentView(layoutResID);
 	}
+
+    public void setShowCasting(boolean b) {
+        mShowCasting = b;
+    }
 
 	protected void onHomePressed() {
 		Intent upIntent = NavUtils.getParentActivityIntent(this);
@@ -52,14 +70,26 @@ public class BaseActivity extends ActionBarActivity {
 		}
 	}
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
-	@Override
+        getMenuInflater().inflate(R.menu.activity_base, menu);
+
+        menu.findItem(R.id.action_casting).setVisible(mShowCasting);
+
+        return true;
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				onHomePressed();
 				return true;
-
+            case R.id.action_casting:
+                CastDeviceSelectorDialogFragment.show(getFragmentManager());
+                break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -68,4 +98,53 @@ public class BaseActivity extends ActionBarActivity {
 		return (PopcornApplication) getApplication();
 	}
 
+    @Override
+    public void onConnected(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onCommandFailed(String command, String message) {
+
+    }
+
+    @Override
+    public void onConnectionFailed() {
+
+    }
+
+    @Override
+    public void onDeviceDetected(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onDeviceSelected(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onDeviceRemoved(CastingDevice device) {
+
+    }
+
+    @Override
+    public void onVolumeChanged(double value, boolean isMute) {
+
+    }
+
+    @Override
+    public void onReady() {
+
+    }
+
+    @Override
+    public void onPlayBackChanged(boolean isPlaying, float position) {
+
+    }
 }
