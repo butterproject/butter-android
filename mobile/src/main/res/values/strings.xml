@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-	<!-- General strings -->
-	<string name="app_name" translatable="false">Popcorn Time</string>
-	<string name="save">Save</string>
-	<string name="cancel">Cancel</string>
-	<string name="close">Close</string>
-	<string name="ok">OK</string>
-	<string name="enabled">Enabled</string>
-	<string name="disabled">Disabled</string>
+    <!-- General strings -->
+    <string name="app_name" translatable="false">Popcorn Time</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="casting">Casting</string>
 
 	<!-- OverviewActivity strings -->
 	<string name="search_hint">Title, year, actors</string>
