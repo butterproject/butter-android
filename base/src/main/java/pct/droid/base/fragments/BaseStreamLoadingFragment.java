@@ -168,7 +168,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             //play with default 'external' player
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
 
-            boolean playingExternal = false;
+            boolean playingExternal;
             if(CastingManager.getInstance(getActivity()).isConnected()) {
                 CastingServer.setCurrentVideo(location);
                 playingExternal = !CastingManager.getInstance(getActivity()).loadMedia(mStreamInfo.getMedia(), CastingServer.getVideoURL(), false);
