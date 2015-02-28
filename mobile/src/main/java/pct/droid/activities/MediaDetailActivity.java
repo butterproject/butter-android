@@ -83,9 +83,10 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_mediadetail);
         setSupportActionBar(mToolbar);
+        setShowCasting(true);
 
         // Set transparent toolbar
-        // Hacky spaces to make sure title textview is added to the toolbar
+        // Hacky empty string to make sure title textview is added to the toolbar
         getSupportActionBar().setTitle("   ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBarBackground.fadeOut(this);

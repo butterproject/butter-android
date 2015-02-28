@@ -261,11 +261,11 @@ public class EZTVProvider extends MediaProvider {
 			for (LinkedTreeMap<String, Object> item : showsList) {
 				Show show = new EZTVShow();
 
-				show.title = item.get("title").toString();
-				show.videoId = item.get("imdb_id").toString();
+				show.title = (String) item.get("title");
+				show.videoId = (String) item.get("imdb_id");
 				show.seasons = (Integer) item.get("seasons");
-				show.tvdbId = item.get("tvdb_id").toString();
-				show.year = item.get("year").toString();
+				show.tvdbId = (String) item.get("tvdb_id");
+				show.year = (String) item.get("year");
 				LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
 				show.image = images.get("poster").replace("/original/", "/medium/");
 				show.headerImage = images.get("fanart").replace("/original/", "/medium/");

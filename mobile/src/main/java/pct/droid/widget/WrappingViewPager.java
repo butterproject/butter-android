@@ -43,47 +43,51 @@ public class WrappingViewPager extends ViewPager {
             // Not the best place to put this animation, but it works pretty good.
             int newHeight = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
             if (getLayoutParams().height != 0 && heightMeasureSpec != newHeight) {
-                    final int targetHeight = height;
-                    final int currentHeight = getLayoutParams().height;
-                    final int heightChange = targetHeight - currentHeight;
+                final int targetHeight = height;
+                final int currentHeight = getLayoutParams().height;
+                final int heightChange = targetHeight - currentHeight;
 
-                    Animation a = new Animation() {
-                        @Override
-                        protected void applyTransformation(float interpolatedTime, Transformation t) {
-                            if (interpolatedTime >= 1) {
-                                getLayoutParams().height = targetHeight;
-                            } else {
-                                int stepHeight = (int) (heightChange * interpolatedTime);
-                                getLayoutParams().height = currentHeight + stepHeight;
-                            }
-                            requestLayout();
+                Animation a = new Animation() {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        if (interpolatedTime >= 1) {
+                            getLayoutParams().height = targetHeight;
+                        } else {
+                            int stepHeight = (int) (heightChange * interpolatedTime);
+                            getLayoutParams().height = currentHeight + stepHeight;
                         }
+                        requestLayout();
+                    }
 
-                        @Override
-                        public boolean willChangeBounds() {
-                            return true;
-                        }
-                    };
+                    @Override
+                    public boolean willChangeBounds() {
+                        return true;
+                    }
+                };
 
-                    a.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            mAnimStarted = true;
-                        }
+                a.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        mAnimStarted = true;
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mAnimStarted = false;
-                        }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mAnimStarted = false;
+                    }
 
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                        }
-                    });
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
 
-                    a.setDuration(1000);
-                    startAnimation(a);
-                    mAnimStarted = true;
+                if(heightChange > 0) {
+                    a.setDuration(50);
+                } else {
+                    a.setDuration(500);
+                }
+                startAnimation(a);
+                mAnimStarted = true;
             } else {
                 heightMeasureSpec = newHeight;
             }

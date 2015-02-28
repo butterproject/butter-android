@@ -45,10 +45,10 @@ import pct.droid.widget.ScrimInsetsFrameLayout;
  */
 public class OverviewActivity extends BaseActivity implements NavigationDrawerFragment.Callbacks {
 
-	//    private OverviewActivityTaskFragment mTaskFragment;
-
-	@InjectView(R.id.toolbar) Toolbar mToolbar;
-	@InjectView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
+	@InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+	@InjectView(R.id.navigation_drawer_container)
+    ScrimInsetsFrameLayout mNavigationDrawerContainer;
 	NavigationDrawerFragment mNavigationDrawerFragment;
 
 	@Override
