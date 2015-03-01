@@ -23,7 +23,7 @@ import pct.droid.dialogfragments.CastDeviceSelectorDialogFragment;
 public class BaseActivity extends ActionBarActivity implements CastingListener {
 
 	protected Handler mHandler;
-    private Boolean mShowCasting = false;
+    private Boolean mShowCasting = false, mCastingVisible = false;
 
 	public void onCreate(Bundle savedInstanceState, int layoutId) {
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
@@ -80,7 +80,8 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 
         getMenuInflater().inflate(R.menu.activity_base, menu);
 
-        menu.findItem(R.id.action_casting).setVisible(mShowCasting);
+        mCastingVisible = mShowCasting && CastingManager.getInstance(this).hasCastDevices();
+        menu.findItem(R.id.action_casting).setVisible(mCastingVisible);
 
         return true;
     }
@@ -103,6 +104,20 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 	}
 
     @Override
+    public void onDeviceDetected(CastingDevice device) {
+        if(mShowCasting && !mCastingVisible) {
+            supportInvalidateOptionsMenu();
+        }
+    }
+
+    @Override
+    public void onDeviceRemoved(CastingDevice device) {
+        if(mShowCasting && mCastingVisible) {
+            supportInvalidateOptionsMenu();
+        }
+    }
+
+    @Override
     public void onConnected(CastingDevice device) {
 
     }
@@ -123,17 +138,7 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
     }
 
     @Override
-    public void onDeviceDetected(CastingDevice device) {
-
-    }
-
-    @Override
     public void onDeviceSelected(CastingDevice device) {
-
-    }
-
-    @Override
-    public void onDeviceRemoved(CastingDevice device) {
 
     }
 
