@@ -27,8 +27,8 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	protected String mApiUrl = "http://yts.re/api/v2/";
-	protected String mMirrorApiUrl = "http://ytspt.re/api/v2/";
+	private static final String API_URL = "http://yts.re/api/v2/";
+    private static final String MIRROR_URL = "http://ytspt.re/api/v2/";
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -89,7 +89,7 @@ public class YTSProvider extends MediaProvider {
 
 		Request.Builder requestBuilder = new Request.Builder();
 		String query = buildQuery(params);
-		requestBuilder.url(mApiUrl + "list_movies.json?" + query);
+		requestBuilder.url(API_URL + "list_movies.json?" + query);
 		requestBuilder.tag(MEDIA_CALL);
 
 		return fetchList(currentList, requestBuilder, callback);
@@ -109,10 +109,10 @@ public class YTSProvider extends MediaProvider {
 			@Override
 			public void onFailure(Request request, IOException e) {
 				String url = requestBuilder.build().urlString();
-				if (url.equals(mMirrorApiUrl)) {
+				if (url.equals(MIRROR_URL)) {
 					callback.onFailure(e);
 				} else {
-					url = url.replace(mApiUrl, mMirrorApiUrl);
+					url = url.replace(API_URL, MIRROR_URL);
 					requestBuilder.url(url);
 					fetchList(currentList, requestBuilder, callback);
 				}
@@ -156,7 +156,7 @@ public class YTSProvider extends MediaProvider {
 	@Override
 	public Call getDetail(String videoId, final Callback callback) {
 		Request.Builder requestBuilder = new Request.Builder();
-		requestBuilder.url(mApiUrl + "movie_details.json?movie_id=" + videoId);
+		requestBuilder.url(API_URL + "movie_details.json?movie_id=" + videoId);
 		requestBuilder.tag(MEDIA_CALL);
 
 		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
@@ -194,19 +194,21 @@ public class YTSProvider extends MediaProvider {
 
                         TraktProvider traktProvider = new TraktProvider();
 
-                        TraktProvider.MetaData meta = traktProvider.getSummary(movie.imdbId, "movie");
-                        if (meta.images != null && meta.images.containsKey("poster")) {
-                            movie.image = meta.images.get("poster").replace("/original/", "/medium/");
-                            movie.fullImage = meta.images.get("poster");
+                        TraktProvider.MetaData meta = traktProvider.getSummary(movie.imdbId);
+                        if (meta.images != null) {
+                            if(meta.images.poster != null) {
+                                movie.image = meta.images.poster.replace("/original/", "/medium/");
+                                movie.fullImage = meta.images.poster;
+                            }
+
+                            if (meta.images != null && meta.images.backdrop != null) {
+                                movie.headerImage = meta.images.backdrop.replace("/original/", "/medium/");
+                            }
                         } else {
                             movie.fullImage = movie.image;
-                        }
-
-                        if (meta.images != null && meta.images.containsKey("fanart")) {
-                            movie.headerImage = meta.images.get("fanart").replace("/original/", "/medium/");
-                        } else {
                             movie.headerImage = movie.image;
                         }
+
 
                         if (meta.title != null) {
                             movie.title = meta.title;

@@ -1,9 +1,11 @@
 package pct.droid.base;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.support.multidex.MultiDex;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
@@ -29,6 +31,12 @@ public class PopcornApplication extends VLCApplication {
 
     private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
