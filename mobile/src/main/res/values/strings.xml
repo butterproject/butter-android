@@ -55,6 +55,8 @@
 	<string name="fit_horizontal">Fit horizontal</string>
 	<string name="fit_vertical">Fit vertical</string>
 	<string name="original_size">Original</string>
+    <string name="comm_error">Communications Error</string>
+    <string name="comm_message">An error occurred during the retrieval of the video. This could be due to network issues or YouTube protocols. Please try again later.</string>
 
 	<!-- TermsActivity strings -->
     <string name="terms" translatable="false">Your Acceptance\n\n

@@ -13,6 +13,7 @@ android {
         buildConfigField "Integer", "BUILD_NUMBER", "" + buildNumber + ""
         buildConfigField "String", "GIT_BRANCH", "\"" + gitBranch + "\""
         versionCode buildNumber
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -24,30 +25,38 @@ android {
 
     packagingOptions {
         exclude 'META-INF/beans.xml'
+        exclude 'META-INF/DEPENDENCIES'
     }
 
     lintOptions {
         abortOnError false
         lintConfig file("lint.xml")
     }
+
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.jakewharton.timber:timber:2.+'
+    compile 'com.android.support:multidex:1.0.0'
+
+    compile 'com.jakewharton.timber:timber:2.7.1'
     compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:appcompat-v7:${rootProject.ext.appCompatVersion}"
-    compile 'com.squareup.okhttp:okhttp:2.+'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.+'
-    compile 'com.squareup.picasso:picasso:2.+'
-    compile 'com.google.code.gson:gson:2.+'
-    compile 'com.jakewharton:butterknife:6+'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.uwetrottmann:trakt-java:4.3.0'
 
     compile "com.android.support:mediarouter-v7:${rootProject.ext.appCompatVersion}"
 
     compile 'javax.jmdns:jmdns:3.4.1'
     compile 'com.googlecode.plist:dd-plist:1.8'
-    compile 'com.google.android.gms:play-services-cast:6.5+'
+    compile 'com.google.android.gms:play-services-cast:6.5.87'
     compile 'com.koushikdutta.async:androidasync:2.0.5'
 
     compile group: 'org.fourthline.cling', name: 'cling-core', version:'2.0.1'

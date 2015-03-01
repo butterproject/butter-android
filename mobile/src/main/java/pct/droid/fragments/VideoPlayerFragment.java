@@ -44,7 +44,6 @@ import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
-import timber.log.Timber;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
@@ -62,8 +61,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	TextView mPlayerInfo;
 	@InjectView(R.id.control_bar)
 	SeekBar mControlBar;
-	@InjectView(R.id.play_butotn)
-	ImageButton playButton;
+	@InjectView(R.id.play_button)
+	ImageButton mPlayButton;
+    @InjectView(R.id.subsButton)
+    ImageButton mSubsButton;
 	@InjectView(R.id.currentTime)
 	TextView mCurrentTimeTextView;
 	@InjectView(R.id.length_time)
@@ -452,9 +453,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
 	public void updatePlayPauseState() {
 		if (isPlaying()) {
-			playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
+			mPlayButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
 		} else {
-			playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
+			mPlayButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
 		}
 	}
 
@@ -564,7 +565,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		mControlBar.setSecondaryProgress(getStreamerProgress());
 	}
 
-	@OnClick(R.id.play_butotn)
+    public void enableSubsButton(boolean b) {
+        mSubsButton.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+    }
+
+	@OnClick(R.id.play_button)
     void onPlayPauseClick(){
 		togglePlayPause();
 	}
