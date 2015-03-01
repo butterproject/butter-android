@@ -95,7 +95,7 @@
             </RelativeLayout>
 
             <ImageButton
-                android:id="@+id/play_butotn"
+                android:id="@+id/play_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"
@@ -109,7 +109,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@id/timeBar"
-                android:layout_toLeftOf="@id/play_butotn"
+                android:layout_toLeftOf="@id/play_button"
                 android:layout_marginRight="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_rewind"
@@ -120,7 +120,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@id/timeBar"
-                android:layout_toRightOf="@id/play_butotn"
+                android:layout_toRightOf="@id/play_button"
                 android:layout_marginLeft="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_forward"
