@@ -1,82 +1,53 @@
 package pct.droid.base.providers.meta;
 
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.uwetrottmann.trakt.v2.TraktV2;
+import com.uwetrottmann.trakt.v2.entities.Movie;
+import com.uwetrottmann.trakt.v2.enums.Extended;
+import com.uwetrottmann.trakt.v2.services.Movies;
 
-import java.io.IOException;
+import retrofit.RetrofitError;
 
 public class TraktProvider extends MetaProvider {
-    //http://api.trakt.tv/movie/summary.json/8ad497c5baf8ce8ce7d61040db5e7289/tt1285016 -> movies
-    //http://api.trakt.tv/show/summary.json/8ad497c5baf8ce8ce7d61040db5e7289/the-walking-dead -> shows
-    private String mApiUrl = "https://api.trakt.tv/";
-    private String mApiKey = "515a27ba95fbd83f20690e5c22bceaff0dfbde7c";
 
-    /**
-     * Get metadata from Trakt
-     *
-     * @param imdbId IMDb ids to get metadata for
-     * @param type   Type of item
-     * @return MetaData
-     */
-    public MetaData getSummary(String imdbId, String type) {
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + type + "/summary.json/" + mApiKey + "/" + imdbId);
-        requestBuilder.tag(META_CALL);
+    private static final String API_KEY = "8712a855abab180fc954c8c0ced2e8405e80d86cc9189bbdab349d760963e766"; // Temporary API key.
+    private static TraktV2 TRAKT = new TraktV2();
+    private static Movies MOVIES;
 
-        Call call = enqueue(requestBuilder.build());
-        try {
-            Response response = call.execute();
-            if (response.isSuccessful()) {
-                String responseStr = response.body().string();
-                MetaData result = mGson.fromJson(responseStr, MetaData.class);
-                return result;
-            }
-        } catch (IOException e) {
-            // eat exception for now TODO
-            e.printStackTrace();
-        }
-
-        return new MetaData();
+    static {
+        TRAKT.setApiKey(API_KEY);
+        MOVIES = TRAKT.movies();
     }
 
     /**
      * Get metadata from Trakt
      *
-     * @param ids      IMDb ids to get metadata for
-     * @param type     Type of item
-     * @param extended Type of data to get
+     * @param imdbId IMDb id to get metadata for
      * @return MetaData
      */
-    public MetaData[] getSummaries(String[] ids, String type, String extended) {
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.tag(META_CALL);
-
-        String idString = "";
-        for (int i = 0; i < ids.length; i++) {
-            idString += ids[i];
-            if (i != ids.length - 1) {
-                idString += ",";
-            }
-        }
-
-        requestBuilder.url(mApiUrl + type + "/summaries.json/" + mApiKey + "/" + idString + "/" + extended);
-
-        Call call = enqueue(requestBuilder.build());
+    public MetaData getSummary(String imdbId) {
         try {
-            Response response = call.execute();
-            if (response.isSuccessful()) {
-                String responseStr = response.body().string();
-                MetaData[] result = mGson.fromJson(responseStr, MetaData[].class);
-                return result;
-            }
-        } catch (IOException e) {
-            // eat exception for now TODO
+            Movie m = MOVIES.summary(imdbId, Extended.FULLIMAGES);
+
+            MetaData metaData = new MetaData();
+            metaData.certification = m.certification;
+            metaData.genres = m.genres.toArray(new String[m.genres.size()]);
+            metaData.imdb_id = imdbId;
+            metaData.overview = m.overview;
+            metaData.released = m.released;
+            metaData.year = m.year;
+            metaData.runtime = m.runtime;
+            metaData.trailer = m.trailer;
+            metaData.tagline = m.tagline;
+            metaData.title = m.title;
+            metaData.images = new MetaData.Images(m.images.poster.full, m.images.fanart.full);
+
+            return metaData;
+        } catch (RetrofitError e) {
             e.printStackTrace();
         }
 
-        return new MetaData[0];
+        return new MetaData();
     }
 
 }
