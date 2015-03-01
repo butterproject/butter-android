@@ -44,6 +44,7 @@ import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
+import pct.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
@@ -54,7 +55,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	@InjectView(R.id.video_surface)
 	SurfaceView videoSurface;
 	@InjectView(R.id.subtitle_text)
-	TextView mSubtitleText;
+    StrokedRobotoTextView mSubtitleText;
 	@InjectView(R.id.control_layout)
 	RelativeLayout mControlLayout;
 	@InjectView(R.id.player_info)
@@ -171,6 +172,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
 		mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
 		mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
+        mSubtitleText.setStrokeColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
+        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_WIDTH, 2));
 
 		mControlBar.setOnSeekBarChangeListener(mOnControlBarListener);
 

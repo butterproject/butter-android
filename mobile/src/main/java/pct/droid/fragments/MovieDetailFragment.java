@@ -190,6 +190,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
         if (mMovie.subtitles.containsKey(defaultSubtitle)) {
             onSubtitleLanguageSelected(defaultSubtitle);
             mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
+        } else {
+            onSubtitleLanguageSelected("no-subs");
+            mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf("no-subs"));
         }
 
         if(mCoverImage != null) {
