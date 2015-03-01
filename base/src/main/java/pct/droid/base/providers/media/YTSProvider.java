@@ -300,7 +300,8 @@ public class YTSProvider extends MediaProvider {
             movie.imdbId = (String) movieObj.get("imdb_code");
 
             movie.title = (String) movieObj.get("title");
-            movie.year = movieObj.get("year").toString();
+            Double year = (Double) movieObj.get("year");
+            movie.year = Integer.toString(year.intValue());
             movie.rating = movieObj.get("rating").toString();
             movie.genre = ((ArrayList<String>) movieObj.get("genres")).get(0);
 

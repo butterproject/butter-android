@@ -161,7 +161,6 @@ public class EZTVProvider extends MediaProvider {
 						ArrayList<Media> formattedData = result.formatDetailForPopcorn();
 
 						if (formattedData.size() > 0) {
-							Show show = (Show) formattedData.get(0);
 							callback.onSuccess(formattedData);
 							return;
 						}
