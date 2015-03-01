@@ -27,14 +27,13 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
-    <TextView
+    <pct.droid.widget.StrokedRobotoTextView
         android:id="@+id/subtitle_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/player_subtitles_bottom_margin"
-        android:gravity="center_horizontal"
-        android:textSize="@dimen/player_subtitles_default_text_size" />
+        android:gravity="center_horizontal" />
 
     <ProgressBar
         android:id="@+id/progress_indicator"

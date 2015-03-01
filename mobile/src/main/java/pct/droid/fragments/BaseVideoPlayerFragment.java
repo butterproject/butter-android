@@ -389,17 +389,22 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		} else {
 			/* Exit player when reaching the end */
 			// TODO: END, ASK USER TO CLOSE PLAYER?
+            mSavedIndexPosition = -1;
 		}
 	}
 
 	public void subsClick() {
 		if (mMedia != null && mMedia.subtitles != null) {
 			if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
-			final String[] subtitles = mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]);
+			String[] subtitles = mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]);
 			Arrays.sort(subtitles);
-			String[] readableNames = new String[subtitles.length];
+            final String[] adapterSubtitles = new String[subtitles.length + 1];
+            System.arraycopy(subtitles, 0, adapterSubtitles, 1, subtitles.length);
+            adapterSubtitles[0] = "no-subs";
+			String[] readableNames = new String[adapterSubtitles.length];
+
 			for (int i = 0; i < readableNames.length; i++) {
-				String language = subtitles[i];
+				String language = adapterSubtitles[i];
 				if (language.equals("no-subs")) {
 					readableNames[i] = getString(R.string.no_subs);
 				} else {
@@ -409,10 +414,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			}
 
 			StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
-					Arrays.asList(subtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
+					Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int position) {
-							onSubtitleLanguageSelected(subtitles[position]);
+							onSubtitleLanguageSelected(adapterSubtitles[position]);
 							dialog.dismiss();
 						}
 					});
@@ -622,12 +627,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		showTimedCaptionText(null);
 
+        mCurrentSubsLang = language;
+
 		if (language.equals("no-subs")) {
 			mSubs = null;
 			return;
 		}
 
-		mCurrentSubsLang = language;
 		SubsProvider.download(getActivity(), mMedia, language, new com.squareup.okhttp.Callback() {
 			@Override
 			public void onFailure(Request request, IOException e) {

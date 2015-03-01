@@ -78,7 +78,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 	private ArrayList<Media> mItems = new ArrayList<>();
 
-	private boolean mEndOfListReached = false;
+	private boolean mEndOfListReached = false, mSavedInstanceState = false;
 
 	private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
@@ -111,7 +111,13 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 //		setRetainInstance(true);
 	}
 
-	@Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mSavedInstanceState = true;
+    }
+
+    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_media, container, false);
 	}
 
@@ -135,6 +141,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mIsAttached = true;
+        mSavedInstanceState = false;
     }
 
     @Override
@@ -364,11 +371,13 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 						} else {
 							paletteColor = vibrantColor;
 						}
-						showLoadingDialog(item.videoId, paletteColor);
+                        if(!mSavedInstanceState) showLoadingDialog(item.videoId, paletteColor);
 
 					}
 				});
-			} else showLoadingDialog(item.videoId, -1);
+			} else {
+                showLoadingDialog(item.videoId, -1);
+            }
 
 		}
 	};
@@ -377,7 +386,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(itemId, paletteColor);
 		loadingFragment.setTargetFragment(MediaListFragment.this, LOADING_DIALOG_FRAGMENT);
 		loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
-
 	}
 
 

@@ -288,6 +288,58 @@ public class PreferencesActivity extends BaseActivity
 						return Integer.toString((int) item.getValue());
 					}
 				}));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_subtitle_stroke_color, R.string.subtitle_stroke_color, Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        Bundle args = new Bundle();
+                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+
+                        ColorPickerDialogFragment dialogFragment = new ColorPickerDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.setOnResultListener(new ColorPickerDialogFragment.ResultListener() {
+                            @Override
+                            public void onNewValue(int value) {
+                                item.saveValue(value);
+                            }
+                        });
+                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return String.format("#%06X", 0xFFFFFF & (int) item.getValue());
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_subtitle_stroke_width, R.string.subtitle_stroke_width, Prefs.SUBTITLE_STROKE_WIDTH, 2,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        Bundle args = new Bundle();
+                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
+                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 5);
+                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 0);
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+
+                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                            @Override
+                            public void onNewValue(int value) {
+                                item.saveValue(value);
+                            }
+                        });
+                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return Integer.toString((int) item.getValue());
+                    }
+                }));
 		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_subtitle_lang, R.string.subtitle_language, Prefs.SUBTITLE_DEFAULT, "",
 				new PrefItem.OnClickListener() {
 					@Override
