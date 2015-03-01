@@ -88,6 +88,10 @@ public class CastingManager {
         return mDiscoveredDevices.toArray(new CastingDevice[mDiscoveredDevices.size()]);
     }
 
+    public boolean hasCastDevices() {
+        return mDiscoveredDevices.size() > 0;
+    }
+
     public boolean isConnected() {
         return mConnected;
     }
