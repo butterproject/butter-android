@@ -267,7 +267,7 @@ public class PreferencesActivity extends BaseActivity
 					public void onClick(final PrefItem item) {
 						Bundle args = new Bundle();
 						args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
-						args.putInt(NumberPickerDialogFragment.MAX_VALUE, 30);
+						args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
 						args.putInt(NumberPickerDialogFragment.MIN_VALUE, 10);
 						args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
 
