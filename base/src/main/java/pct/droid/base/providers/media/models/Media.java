@@ -3,6 +3,8 @@ package pct.droid.base.providers.media.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,19 @@ public class Media implements Parcelable {
         image = in.readString();
         fullImage = in.readString();
         headerImage = in.readString();
+        String className = in.readString();
+        mSubsProvider = null;
+        try {
+            Class<?> clazz = Class.forName(className);
+            mSubsProvider = (SubsProvider) clazz.newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         int length = in.readInt();
         subtitles = new HashMap<>();
         for (int i = 0; i < length; i++) {
@@ -61,6 +76,7 @@ public class Media implements Parcelable {
         dest.writeString(image);
         dest.writeString(fullImage);
         dest.writeString(headerImage);
+        dest.writeString(mSubsProvider.getClass().getCanonicalName());
         if (subtitles != null) {
             dest.writeInt(subtitles.size());
             for (String key : subtitles.keySet()) {

@@ -1,5 +1,7 @@
 package pct.droid.base.providers.subs;
 
+import android.os.Parcel;
+
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -15,59 +17,59 @@ import pct.droid.base.providers.media.models.Show;
 
 public class YSubsProvider extends SubsProvider {
 
-    protected String mApiUrl = "http://api.yifysubtitles.com/subs/";
-    protected String mMirrorApiUrl = "http://api.ysubs.com/subs/";
-    protected String mPrefix = "http://www.yifysubtitles.com/";
-    protected HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
+    private static final String API_URL = "http://api.yifysubtitles.com/subs/";
+    private static final String MIRROR_URL = "http://api.ysubs.com/subs/";
+    private static final String PREFIX = "http://www.yifysubtitles.com/";
+    private static final HashMap<String, String> LANGUAGE_MAPPING = new HashMap<String, String>();
 
-    public YSubsProvider() {
-        mLanguageMapping.put("albanian", "sq");
-        mLanguageMapping.put("arabic", "ar");
-        mLanguageMapping.put("bengali", "bn");
-        mLanguageMapping.put("brazilian-portuguese", "pt-br");
-        mLanguageMapping.put("bulgarian", "bg");
-        mLanguageMapping.put("bosnian", "bs");
-        mLanguageMapping.put("chinese", "zh");
-        mLanguageMapping.put("croatian", "hr");
-        mLanguageMapping.put("czech", "cs");
-        mLanguageMapping.put("danish", "da");
-        mLanguageMapping.put("dutch", "nl");
-        mLanguageMapping.put("english", "en");
-        mLanguageMapping.put("estonian", "et");
-        mLanguageMapping.put("farsi-persian", "fa");
-        mLanguageMapping.put("finnish", "fi");
-        mLanguageMapping.put("french", "fr");
-        mLanguageMapping.put("german", "de");
-        mLanguageMapping.put("greek", "el");
-        mLanguageMapping.put("hebrew", "he");
-        mLanguageMapping.put("hungarian", "hu");
-        mLanguageMapping.put("indonesian", "id");
-        mLanguageMapping.put("italian", "it");
-        mLanguageMapping.put("japanese", "ja");
-        mLanguageMapping.put("korean", "ko");
-        mLanguageMapping.put("lithuanian", "lt");
-        mLanguageMapping.put("macedonian", "mk");
-        mLanguageMapping.put("malay", "ms");
-        mLanguageMapping.put("norwegian", "no");
-        mLanguageMapping.put("polish", "pl");
-        mLanguageMapping.put("portuguese", "pt");
-        mLanguageMapping.put("romanian", "ro");
-        mLanguageMapping.put("russian", "ru");
-        mLanguageMapping.put("serbian", "sr");
-        mLanguageMapping.put("slovenian", "sl");
-        mLanguageMapping.put("spanish", "es");
-        mLanguageMapping.put("swedish", "sv");
-        mLanguageMapping.put("thai", "th");
-        mLanguageMapping.put("turkish", "tr");
-        mLanguageMapping.put("urdu", "ur");
-        mLanguageMapping.put("ukrainian", "uk");
-        mLanguageMapping.put("vietnamese", "vi");
+    static {
+        LANGUAGE_MAPPING.put("albanian", "sq");
+        LANGUAGE_MAPPING.put("arabic", "ar");
+        LANGUAGE_MAPPING.put("bengali", "bn");
+        LANGUAGE_MAPPING.put("brazilian-portuguese", "pt-br");
+        LANGUAGE_MAPPING.put("bulgarian", "bg");
+        LANGUAGE_MAPPING.put("bosnian", "bs");
+        LANGUAGE_MAPPING.put("chinese", "zh");
+        LANGUAGE_MAPPING.put("croatian", "hr");
+        LANGUAGE_MAPPING.put("czech", "cs");
+        LANGUAGE_MAPPING.put("danish", "da");
+        LANGUAGE_MAPPING.put("dutch", "nl");
+        LANGUAGE_MAPPING.put("english", "en");
+        LANGUAGE_MAPPING.put("estonian", "et");
+        LANGUAGE_MAPPING.put("farsi-persian", "fa");
+        LANGUAGE_MAPPING.put("finnish", "fi");
+        LANGUAGE_MAPPING.put("french", "fr");
+        LANGUAGE_MAPPING.put("german", "de");
+        LANGUAGE_MAPPING.put("greek", "el");
+        LANGUAGE_MAPPING.put("hebrew", "he");
+        LANGUAGE_MAPPING.put("hungarian", "hu");
+        LANGUAGE_MAPPING.put("indonesian", "id");
+        LANGUAGE_MAPPING.put("italian", "it");
+        LANGUAGE_MAPPING.put("japanese", "ja");
+        LANGUAGE_MAPPING.put("korean", "ko");
+        LANGUAGE_MAPPING.put("lithuanian", "lt");
+        LANGUAGE_MAPPING.put("macedonian", "mk");
+        LANGUAGE_MAPPING.put("malay", "ms");
+        LANGUAGE_MAPPING.put("norwegian", "no");
+        LANGUAGE_MAPPING.put("polish", "pl");
+        LANGUAGE_MAPPING.put("portuguese", "pt");
+        LANGUAGE_MAPPING.put("romanian", "ro");
+        LANGUAGE_MAPPING.put("russian", "ru");
+        LANGUAGE_MAPPING.put("serbian", "sr");
+        LANGUAGE_MAPPING.put("slovenian", "sl");
+        LANGUAGE_MAPPING.put("spanish", "es");
+        LANGUAGE_MAPPING.put("swedish", "sv");
+        LANGUAGE_MAPPING.put("thai", "th");
+        LANGUAGE_MAPPING.put("turkish", "tr");
+        LANGUAGE_MAPPING.put("urdu", "ur");
+        LANGUAGE_MAPPING.put("ukrainian", "uk");
+        LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
     @Override
     public void getList(final Movie media, final Callback callback) {
         final Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + media.imdbId);
+        requestBuilder.url(API_URL + media.imdbId);
         requestBuilder.tag(SUBS_CALL);
 
         fetch(requestBuilder, media, new Callback() {
@@ -78,7 +80,7 @@ public class YSubsProvider extends SubsProvider {
 
             @Override
             public void onFailure(Exception e) {
-                requestBuilder.url(mMirrorApiUrl + media.imdbId);
+                requestBuilder.url(MIRROR_URL + media.imdbId);
                 fetch(requestBuilder, media, callback);
             }
         });
@@ -102,7 +104,7 @@ public class YSubsProvider extends SubsProvider {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-                    callback.onSuccess(result.formatForPopcorn(mPrefix, mLanguageMapping).get(media.imdbId));
+                    callback.onSuccess(result.formatForPopcorn(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
             }
         });
@@ -142,7 +144,7 @@ public class YSubsProvider extends SubsProvider {
         }
 
         private String[] getKeys(HashMap<String, ?> map) {
-            if(map.size() > 0 && map != null) {
+            if(map != null && map.size() > 0) {
                 return map.keySet().toArray(new String[map.size()]);
             }
             return new String[0];

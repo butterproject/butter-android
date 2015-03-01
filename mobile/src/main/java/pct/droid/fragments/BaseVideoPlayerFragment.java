@@ -149,6 +149,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mLibVLC.eventVideoPlayerActivityCreated(true);
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+
+        if(mLocation != null) {
+            loadMedia();
+        }
 	}
 
 	@Override public void onAttach(Activity activity) {
@@ -211,7 +215,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	 */
 	@SuppressWarnings({"unchecked"})
 	public void loadMedia() {
-		if (mLocation == null && null != mCallback.getLocation()) {
+		if (null != mCallback.getLocation()) {
 			mLocation = mCallback.getLocation();
 		}
 
@@ -300,6 +304,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	public void togglePlayPause() {
 		if (mLibVLC == null)
 			return;
+
+        if(mSavedIndexPosition < 0) {
+            loadMedia();
+        }
     
 		if (mLibVLC.isPlaying()) {
 			pause();

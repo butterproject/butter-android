@@ -1,6 +1,8 @@
 package pct.droid.base.providers.subs;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
