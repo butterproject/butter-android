@@ -31,8 +31,8 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	private static final String API_URL = "http://yts.re/api/v2/";
-    private static final String MIRROR_URL = "http://ytspt.re/api/v2/";
+	private static final String API_URL = "http://cloudflare.com/api/v2/";
+    private static final String MIRROR_URL = "http://reddit.com/api/v2/";
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -109,6 +109,7 @@ public class YTSProvider extends MediaProvider {
 	 * @return Call
 	 */
 	private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
+        requestBuilder.addHeader("Host", "eqwww.image.yt");
 		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
 			@Override
 			public void onFailure(Request request, IOException e) {
@@ -161,6 +162,7 @@ public class YTSProvider extends MediaProvider {
 	public Call getDetail(String videoId, final Callback callback) {
 		Request.Builder requestBuilder = new Request.Builder();
 		requestBuilder.url(API_URL + "movie_details.json?movie_id=" + videoId);
+        requestBuilder.addHeader("Host", "eqwww.image.yt");
 		requestBuilder.tag(MEDIA_CALL);
 
 		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
