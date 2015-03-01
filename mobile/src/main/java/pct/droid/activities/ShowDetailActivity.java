@@ -70,7 +70,7 @@ public class ShowDetailActivity extends BaseActivity {
     ProgressBar headerProgress;
     @InjectView(R.id.mainInfoBlock)
     RelativeLayout mainInfoBlock;
-    @InjectView(R.id.play_butotn)
+    @InjectView(R.id.play_button)
     ImageButton playButton;
     @InjectView(R.id.titleText)
     TextView titleText;
@@ -148,7 +148,7 @@ public class ShowDetailActivity extends BaseActivity {
                     startActivity(trailerIntent);
                     break;
                 */
-                case R.id.play_butotn:
+                case R.id.play_button:
                     if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
                         return;
 

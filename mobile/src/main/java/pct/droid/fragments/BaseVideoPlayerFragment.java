@@ -115,7 +115,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		mMedia = mCallback.getData();
 
-		//start subtitiles
+		//start subtitles
 		if (null != mCallback.getSubtitles()) {
 			mCurrentSubsLang = mCallback.getSubtitles();
 			startSubtitles();
@@ -149,8 +149,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mLibVLC.eventVideoPlayerActivityCreated(true);
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
-
-		loadMedia();
 	}
 
 	@Override public void onAttach(Activity activity) {
@@ -212,7 +210,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	 * External extras: - position (long) - position of the video to start with (in ms)
 	 */
 	@SuppressWarnings({"unchecked"})
-	protected void loadMedia() {
+	public void loadMedia() {
 		if (mLocation == null && null != mCallback.getLocation()) {
 			mLocation = mCallback.getLocation();
 		}
