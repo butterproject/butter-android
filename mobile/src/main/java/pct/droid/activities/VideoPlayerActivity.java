@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.fragments.VideoPlayerFragment;
@@ -15,6 +16,7 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	private String mQuality;
 	private String mSubtitleLanguage;
 	private String mLocation;
+    private VideoPlayerFragment mVideoPlayerFragment;
 
 	public static Intent startActivity(Activity activity, String streamUrl, Media data) {
 		return startActivity(activity, streamUrl, data, null, null, 0);
@@ -45,6 +47,9 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 		mQuality = getIntent().getStringExtra(QUALITY);
 		mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
 		mLocation = getIntent().getStringExtra(LOCATION);
+
+        mVideoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+        mVideoPlayerFragment.loadMedia();
 	}
 
 	@Override

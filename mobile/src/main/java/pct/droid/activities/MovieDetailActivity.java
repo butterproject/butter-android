@@ -69,7 +69,7 @@ public class MovieDetailActivity extends BaseActivity {
     ProgressBar headerProgress;
     @InjectView(R.id.mainInfoBlock)
     RelativeLayout mainInfoBlock;
-    @InjectView(R.id.play_butotn)
+    @InjectView(R.id.play_button)
     ImageButton playButton;
     @InjectView(R.id.titleText)
     TextView titleText;
@@ -166,7 +166,7 @@ public class MovieDetailActivity extends BaseActivity {
                     trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mItem.trailer);
                     startActivity(trailerIntent);
                     break;
-                case R.id.play_butotn:
+                case R.id.play_button:
                     final String streamUrl = mItem.torrents.get(mQuality).url;
                     if (PrefUtils.get(MovieDetailActivity.this, Prefs.WIFI_ONLY, true) &&
                             !NetworkUtils.isWifiConnected(MovieDetailActivity.this) &&

@@ -52,6 +52,8 @@
 	<string name="fit_horizontal">Fit horizontal</string>
 	<string name="fit_vertical">Fit vertical</string>
 	<string name="original_size">Original</string>
+    <string name="comm_error">Communications Error</string>
+    <string name="comm_message">An error occurred during the retrieval of the video. This could be due to network issues or YouTube protocols. Please try again later.</string>
 
 	<!-- TermsActivity strings -->
     <string name="terms" translatable="false">Your Acceptance\n\n
@@ -68,7 +70,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="leave">Leave</string>
 
 	<!-- SettingsActivity strings -->
-
 	<string name="settings">Settings</string>
 	<string name="general">General</string>
 	<string name="default_view">Default overview</string>
