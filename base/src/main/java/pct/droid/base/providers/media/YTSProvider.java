@@ -27,8 +27,18 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	private static final String API_URL = "http://cloudflare.com/api/v2/";
-    private static final String MIRROR_URL = "http://reddit.com/api/v2/";
+	private static final String API_URL = "https://cloudflare.com/api/v2/";
+    private static final String MIRROR_URL = "https://reddit.com/api/v2/";
+
+    @Override
+    protected OkHttpClient getClient() {
+        OkHttpClient client = super.getClient().clone();
+        // Only use HTTP 1.1 for YTS
+        List<Protocol> proto = new ArrayList<>();
+        proto.add(Protocol.HTTP_1_1);
+        client.setProtocols(proto);
+        return client;
+    }
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
