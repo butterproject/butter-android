@@ -78,7 +78,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 	private ArrayList<Media> mItems = new ArrayList<>();
 
-	private boolean mEndOfListReached = false, mSavedInstanceState = false;
+	private boolean mEndOfListReached = false;
 
 	private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
@@ -111,12 +111,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 //		setRetainInstance(true);
 	}
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mSavedInstanceState = true;
-    }
-
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_media, container, false);
 	}
@@ -138,10 +132,15 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	}
 
     @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mAdapter.setOnItemClickListener(mOnItemClickListener);
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mIsAttached = true;
-        mSavedInstanceState = false;
     }
 
     @Override
@@ -371,8 +370,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 						} else {
 							paletteColor = vibrantColor;
 						}
-                        if(!mSavedInstanceState) showLoadingDialog(item.videoId, paletteColor);
-
+                        showLoadingDialog(item.videoId, paletteColor);
 					}
 				});
 			} else {
