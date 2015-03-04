@@ -17,6 +17,7 @@ public class AnimUtils {
         Animation fadeInAnim = AnimationUtils.loadAnimation(PopcornApplication.getAppContext(), android.R.anim.fade_in);
         v.setVisibility(View.VISIBLE);
         v.startAnimation(fadeInAnim);
+        v.requestLayout(); // Force redraw
     }
 
     public static void fadeOut(View v) {
@@ -24,6 +25,7 @@ public class AnimUtils {
         Animation fadeOutAnim = AnimationUtils.loadAnimation(PopcornApplication.getAppContext(), android.R.anim.fade_out);
         v.startAnimation(fadeOutAnim);
         v.setVisibility(View.INVISIBLE);
+        v.requestLayout(); // Force redraw
     }
 
 }

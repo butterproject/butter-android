@@ -9,7 +9,7 @@ import retrofit.RetrofitError;
 
 public class TraktProvider extends MetaProvider {
 
-    private static final String API_KEY = "8712a855abab180fc954c8c0ced2e8405e80d86cc9189bbdab349d760963e766"; // Temporary API key.
+    private static final String API_KEY = "c7e20abc718e46fc75399dd6688afca9ac83cd4519c9cb1fba862b37b8640e89";
     private static TraktV2 TRAKT = new TraktV2();
     private static Movies MOVIES;
 
