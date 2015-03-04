@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -18,7 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
@@ -31,8 +33,18 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-	private static final String API_URL = "http://cloudflare.com/api/v2/";
-    private static final String MIRROR_URL = "http://reddit.com/api/v2/";
+	private static final String API_URL = "https://cloudflare.com/api/v2/";
+    private static final String MIRROR_URL = "https://reddit.com/api/v2/";
+
+    @Override
+    protected OkHttpClient getClient() {
+        OkHttpClient client = super.getClient().clone();
+        // Use only HTTP 1.1 for YTS
+        List<Protocol> proto = new ArrayList<>();
+        proto.add(Protocol.HTTP_1_1);
+        client.setProtocols(proto);
+        return client;
+    }
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
