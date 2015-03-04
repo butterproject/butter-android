@@ -12,12 +12,14 @@ public class AnimUtils {
         Animation fadeInAnim = AnimationUtils.loadAnimation(PopcornApplication.getAppContext(), android.R.anim.fade_in);
         v.setVisibility(View.VISIBLE);
         v.startAnimation(fadeInAnim);
+        v.requestLayout();
     }
 
     public static void fadeOut(View v) {
         Animation fadeOutAnim = AnimationUtils.loadAnimation(PopcornApplication.getAppContext(), android.R.anim.fade_out);
         v.startAnimation(fadeOutAnim);
         v.setVisibility(View.INVISIBLE);
+        v.requestLayout();
     }
 
 }

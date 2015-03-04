@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Movie extends Media implements Parcelable {
     public String type = "movie";
+    public String imdbId = "";
     public String trailer = "";
     public String runtime = "";
     public String tagline = "";
