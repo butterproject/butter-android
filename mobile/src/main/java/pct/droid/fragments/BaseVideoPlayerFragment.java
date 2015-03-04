@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
@@ -77,7 +78,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	private TimedTextObject mSubs;
 	private Caption mLastSub = null;
 
-	private int mSavedIndexPosition = -1;
+    private boolean mEnded = false;
 	private boolean mSeeking = false;
 
 	private int mVideoHeight;
@@ -149,6 +150,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mLibVLC.eventVideoPlayerActivityCreated(true);
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+
+        loadMedia();
 	}
 
 	@Override public void onAttach(Activity activity) {
@@ -212,26 +215,21 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	@SuppressWarnings({"unchecked"})
 	public void loadMedia() {
 		if (mLocation == null && null != mCallback.getLocation()) {
-			mLocation = mCallback.getLocation();
+            mLocation = mCallback.getLocation();
 		}
 
 		getVideoSurface().setKeepScreenOn(true);
 
-		if (mLibVLC == null)
+		if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty())
 			return;
 
-        /* Start / resume playback */
-		if (mSavedIndexPosition > -1) {
-			mLibVLC.setMediaList();
-			mLibVLC.playIndex(mSavedIndexPosition);
-		} else if (mLocation != null && mLocation.length() > 0) {
-			mLibVLC.setMediaList();
-			mLibVLC.getMediaList().add(new org.videolan.libvlc.Media(mLibVLC, mLocation));
-			mSavedIndexPosition = mLibVLC.getMediaList().size() - 1;
-			mLibVLC.playIndex(mSavedIndexPosition);
-		}
+        if(!mLocation.startsWith("http"))
+            mLocation = LibVLC.PathToURI(mLocation);
 
-		long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        mLibVLC.playMRL(mLocation);
+        mEnded = false;
+
+        long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 		if (resumeTime > 0) {
 			setCurrentTime(resumeTime);
 		}
@@ -300,6 +298,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	public void togglePlayPause() {
 		if (mLibVLC == null)
 			return;
+
+        if(mEnded) {
+            loadMedia();
+        }
     
 		if (mLibVLC.isPlaying()) {
 			pause();
@@ -370,18 +372,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	}
 
 	private void endReached() {
-		if (mLibVLC.getMediaList().expandMedia(mSavedIndexPosition) == 0) {
-			LogUtils.d("Found a video playlist, expanding it");
-			mVlcEventHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					loadMedia();
-				}
-			}, 1000);
-		} else {
-			/* Exit player when reaching the end */
-			// TODO: END, ASK USER TO CLOSE PLAYER?
-		}
+        mEnded = true;
+		/* Exit player when reaching the end */
+        // TODO: END, ASK USER TO CLOSE PLAYER?
 	}
 
 	public void subsClick() {
@@ -416,7 +409,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		onHardwareAccelerationError();
 	}
 
-
 	protected int getHardwareAccelerationMode() {
 		return mLibVLC.getHardwareAcceleration();
 	}
@@ -425,15 +417,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mLibVLC.setHardwareAcceleration(mode);
 	}
 
-
-	@Override public void onConfigurationChanged(Configuration newConfig) {
-		setSurfaceSize(mVideoWidth, mVideoHeight, mVideoVisibleWidth, mVideoVisibleHeight, mSarNum, mSarDen);
-		super.onConfigurationChanged(newConfig);
-	}
-
-
-	@Override
-	public void setSurfaceSize(int width, int height, int visible_width, int visible_height, int sar_num, int sar_den) {
+    @Override
+    public void setSurfaceLayout(int width, int height, int visible_width, int visible_height, int sar_num, int sar_den) {
 		if (width * height == 0)
 			return;
 
@@ -452,6 +437,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		});
 	}
 
+    @Override
+    public int configureSurface(Surface surface, final int width, final int height, final int hal) {
+        return -1;
+    }
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	private void changeSurfaceSize(boolean message) {
