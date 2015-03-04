@@ -78,6 +78,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	private TimedTextObject mSubs;
 	private Caption mLastSub = null;
 
+    private boolean mEnded = false;
 	private boolean mSeeking = false;
 
 	private int mVideoHeight;
@@ -214,17 +215,21 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	@SuppressWarnings({"unchecked"})
 	public void loadMedia() {
 		if (mLocation == null && null != mCallback.getLocation()) {
-			mLocation = LibVLC.PathToURI(mCallback.getLocation());
+            mLocation = mCallback.getLocation();
 		}
 
 		getVideoSurface().setKeepScreenOn(true);
 
-		if (mLibVLC == null || mLibVLC.isPlaying())
+		if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty())
 			return;
 
-        mLibVLC.playMRL(mLocation);
+        if(!mLocation.startsWith("http"))
+            mLocation = LibVLC.PathToURI(mLocation);
 
-		long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        mLibVLC.playMRL(mLocation);
+        mEnded = false;
+
+        long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 		if (resumeTime > 0) {
 			setCurrentTime(resumeTime);
 		}
@@ -293,6 +298,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	public void togglePlayPause() {
 		if (mLibVLC == null)
 			return;
+
+        if(mEnded) {
+            loadMedia();
+        }
     
 		if (mLibVLC.isPlaying()) {
 			pause();
@@ -363,6 +372,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	}
 
 	private void endReached() {
+        mEnded = true;
 		/* Exit player when reaching the end */
         // TODO: END, ASK USER TO CLOSE PLAYER?
 	}
