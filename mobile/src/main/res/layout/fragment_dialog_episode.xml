@@ -51,12 +51,6 @@
                         android:layout_height="wrap_content"
                         android:background="@color/overlay_bg"
                         android:clipChildren="true">
-                        <ProgressBar
-                            android:id="@+id/header_progress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            style="?android:attr/progressBarStyle" />
                         <ImageView
                             android:id="@+id/header_image"
                             android:layout_width="match_parent"
