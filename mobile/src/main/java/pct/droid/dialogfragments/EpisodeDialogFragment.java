@@ -108,7 +108,7 @@ public class EpisodeDialogFragment extends DialogFragment {
                 .fragment_dialog_episode, container, false);
         ButterKnife.inject(this, v);
 
-        if(VersionUtils.isJellyBean()) {
+        if(!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
