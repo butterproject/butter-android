@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
 
@@ -42,7 +43,7 @@ public class OpenSubsProvider extends SubsProvider {
     }
 
     @Override
-    public void getList(final Show show, final Show.Episode episode, final Callback callback) {
+    public void getList(final Show show, final Episode episode, final Callback callback) {
         login(new XMLRPCCallback() {
             @Override
             public void onSuccess(long id, Object result) {

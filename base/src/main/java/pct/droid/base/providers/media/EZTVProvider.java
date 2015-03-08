@@ -31,8 +31,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import pct.droid.base.R;
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.OpenSubsProvider;
 
 public class EZTVProvider extends MediaProvider {
@@ -236,7 +238,7 @@ public class EZTVProvider extends MediaProvider {
 
 				ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
 				for (LinkedTreeMap<String, Object> episode : episodes) {
-					Show.Episode episodeObject = new EZTVShow.EZTVEpisode();
+					Episode episodeObject = new EZTVShow.EZTVEpisode();
 					LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
 							(LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
 					for (String key : torrents.keySet()) {
@@ -257,6 +259,8 @@ public class EZTVProvider extends MediaProvider {
 					episodeObject.season = ((Double) episode.get("season")).intValue();
 					episodeObject.episode = ((Double) episode.get("episode")).intValue();
 					episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
+                    episodeObject.imdbId = show.imdbId;
+                    episodeObject.image = episodeObject.fullImage = episodeObject.headerImage = show.headerImage;
 
 					show.episodes.add(episodeObject);
 				}
@@ -303,20 +307,11 @@ public class EZTVProvider extends MediaProvider {
             mSubsProvider = new OpenSubsProvider();
         }
 
-        public EZTVShow(Parcel in) {
-            super(in);
-            mSubsProvider = new OpenSubsProvider();
-        }
-
         public static class EZTVEpisode extends Episode {
             public EZTVEpisode() {
                 super();
                 mSubsProvider = new OpenSubsProvider();
-            }
-
-            public EZTVEpisode(Parcel in) {
-                super(in);
-                mSubsProvider = new OpenSubsProvider();
+                mMetaProvider = new TraktProvider();
             }
         }
     }

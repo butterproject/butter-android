@@ -152,6 +152,11 @@
         <item name="android:background">@drawable/selectable_background_rounded</item>
     </style>
 
+    <style name="Theme.PopcornTime.DialogFade">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
     <!-- Fix Toolbar metrics -->
     <style name="Custom.Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="maxButtonHeight">48dp</item>

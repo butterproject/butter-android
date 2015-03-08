@@ -16,7 +16,7 @@
   ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
   <string name="save">Guardar</string>
   <string name="cancel">Cancelar</string>

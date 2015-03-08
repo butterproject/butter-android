@@ -5,7 +5,6 @@ import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;

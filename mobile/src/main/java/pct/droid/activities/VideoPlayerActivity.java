@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.fragments.VideoPlayerFragment;

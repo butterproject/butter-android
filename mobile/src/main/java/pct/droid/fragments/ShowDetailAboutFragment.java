@@ -28,7 +28,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
 
     @InjectView(R.id.title)
     TextView mTitle;
-    @InjectView(R.id.meta)
+    @InjectView(R.id.aired)
     TextView mMeta;
     @InjectView(R.id.synopsis)
     TextView mSynopsis;
@@ -117,7 +117,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
         Bundle b = new Bundle();
         b.putString("text", mShow.synopsis);
         synopsisDialogFragment.setArguments(b);
-        synopsisDialogFragment.show(mActivity.getFragmentManager(), "overlay_fragment");
+        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
 }

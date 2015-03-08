@@ -52,6 +52,8 @@
 	<string name="episode">Episode</string>
     <string name="continuing">Continuing</string>
     <string name="ended">Ended</string>
+    <string name="loading_subs">Loading subs…</string>
+    <string name="aired">Aired: %s</string>
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>

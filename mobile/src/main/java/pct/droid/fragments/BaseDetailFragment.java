@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import pct.droid.activities.BaseActivity;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 

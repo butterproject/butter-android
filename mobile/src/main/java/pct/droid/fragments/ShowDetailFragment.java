@@ -28,6 +28,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.adapters.ShowDetailPagerAdapter;
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
@@ -35,7 +36,6 @@ import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.widget.ObservableParallaxScrollView;
 import pct.droid.widget.WrappingViewPager;
-import timber.log.Timber;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
@@ -56,7 +56,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @InjectView(R.id.title)
     TextView mTitle;
     @Optional
-    @InjectView(R.id.meta)
+    @InjectView(R.id.aired)
     TextView mMeta;
     @Optional
     @InjectView(R.id.synopsis)
@@ -160,7 +160,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
         }
 
         final List<Integer> availableSeasons = new ArrayList<>();
-        for (Show.Episode episode : mShow.episodes) {
+        for (Episode episode : mShow.episodes) {
             if (!availableSeasons.contains(episode.season)) {
                 availableSeasons.add(episode.season);
             }
@@ -195,7 +195,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
         Bundle b = new Bundle();
         b.putString("text", mShow.synopsis);
         synopsisDialogFragment.setArguments(b);
-        synopsisDialogFragment.show(mActivity.getFragmentManager(), "overlay_fragment");
+        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {

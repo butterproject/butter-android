@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_vertical_offset"
+            android:layout_marginBottom="@dimen/detail_vertical_offset"
+            android:background="@color/bg"
+            android:elevation="5dp"
+            android:clipChildren="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/overlay_bg"
+                    android:clipChildren="true">
+                    <ProgressBar
+                        android:id="@+id/header_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:alpha="0.6"
+                        style="?android:attr/progressBarStyle" />
+                    <ImageView
+                        android:id="@+id/header_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/app_name" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/header"
+                    android:paddingLeft="@dimen/detail_horizontal_offset"
+                    android:paddingRight="@dimen/detail_horizontal_offset"
+                    android:paddingStart="@dimen/detail_horizontal_offset"
+                    android:paddingEnd="@dimen/detail_horizontal_offset"
+                    android:paddingTop="@dimen/detail_vertical_offset"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Show Title"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/detail_title_text_size"
+                    app:typeface="roboto_medium" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/aired"
+                    android:layout_below="@id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/detail_meta_margin_top"
+                    android:gravity="center_vertical"
+                    tools:text="Aired: 12 dec 2014"
+                    android:textSize="@dimen/detail_meta_text_size"
+                    android:textColor="@color/secondary_text_color" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/synopsis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/aired"
+                    android:paddingTop="12dp"
+                    android:textDirection="locale"
+                    android:maxLines="4"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/detail_desc_text_size"
+                    android:textColor="@color/text_color"
+                    tools:text="Lorem ipsum dolor sit amet." />
+                </RelativeLayout>
+                <ImageButton
+                    android:id="@+id/play_button"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="152dp"
+                    android:src="@drawable/ic_av_play_button"
+                    android:background="@drawable/play_button_circle"
+                    android:elevation="5dp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/info_buttons"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="@dimen/detail_vertical_offset"
+                android:paddingTop="12dp"
+                >
+                <com.devspark.robototextview.widget.RobotoButton
+                    style="@style/DetailButton.PopcornTime"
+                    android:id="@+id/read_more"
+                    android:layout_marginRight="@dimen/detail_button_margin"
+                    android:layout_marginEnd="@dimen/detail_button_margin"
+                    android:text="@string/read_more"
+                    app:typeface="roboto_medium"  />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/main_div"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/div_white" />
+
+            <pct.droid.widget.OptionSelector
+                android:id="@+id/subtitles"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:optionIcon="@drawable/ic_av_subs"
+                app:optionText="@string/subtitles"
+                />
+
+            <View
+                android:id="@+id/option_div_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+                android:layout_marginStart="@dimen/optionselector_text_margin_start"
+                android:background="@color/div_white" />
+
+            <pct.droid.widget.OptionSelector
+                android:id="@+id/quality"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:optionIcon="@drawable/ic_action_quality"
+                app:optionText="@string/quality"
+                />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
