@@ -17,13 +17,16 @@
 
 package pct.droid.dialogfragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Layout;
+import android.text.method.ScrollingMovementMethod;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +50,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
+import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -85,8 +89,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     TextView mAired;
     @InjectView(R.id.synopsis)
     RobotoTextView mSynopsis;
-    @InjectView(R.id.read_more)
-    Button mReadMore;
     @InjectView(R.id.subtitles)
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
@@ -102,6 +104,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         return frag;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout
@@ -156,22 +159,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMM dd, yyyy", new Locale(LocaleUtils.getCurrent())).format(airedDate)));
 
         mSynopsis.setText(mEpisode.overview);
-        mSynopsis.post(new Runnable() {
-            @Override
-            public void run() {
-                boolean ellipsized = false;
-                Layout layout = mSynopsis.getLayout();
-                if(layout == null) return;
-                int lines = layout.getLineCount();
-                if(lines > 0) {
-                    int ellipsisCount = layout.getEllipsisCount(lines-1);
-                    if (ellipsisCount > 0) {
-                        ellipsized = true;
-                    }
-                }
-                mReadMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
-            }
-        });
+        mSynopsis.setMovementMethod(new ScrollingMovementMethod());
 
         mSubtitles.setFragmentManager(getFragmentManager());
         mQuality.setFragmentManager(getFragmentManager());
@@ -273,21 +261,9 @@ public class EpisodeDialogFragment extends DialogFragment {
 
     @OnClick(R.id.play_button)
     public void play() {
-        String quality = mEpisode.torrents.keySet().toArray(new String[1])[0];
-        Media.Torrent torrent = mEpisode.torrents.get(quality);
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mEpisode, mShow, torrent.url, null, quality);
+        Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
+        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
-    }
-
-    @OnClick(R.id.read_more)
-    public void openReadMore(View v) {
-        if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
-            return;
-        SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
-        Bundle b = new Bundle();
-        b.putString("text", mEpisode.overview);
-        synopsisDialogFragment.setArguments(b);
-        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
     private void onSubtitleLanguageSelected(String language) {

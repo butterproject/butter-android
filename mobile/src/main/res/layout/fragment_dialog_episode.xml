@@ -36,7 +36,8 @@
             android:clipChildren="true">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/detail_vertical_offset">
                 <RelativeLayout
                     android:id="@+id/header"
                     android:layout_width="match_parent"
@@ -72,6 +73,8 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="80dp"
+                    android:layout_marginEnd="80dp"
                     tools:text="Show Title"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/detail_title_text_size"
@@ -94,7 +97,7 @@
                     android:paddingTop="12dp"
                     android:textDirection="locale"
                     android:maxLines="4"
-                    android:ellipsize="end"
+                    android:scrollbars="vertical"
                     android:textSize="@dimen/detail_desc_text_size"
                     android:textColor="@color/text_color"
                     tools:text="Lorem ipsum dolor sit amet." />
@@ -112,25 +115,6 @@
                     android:background="@drawable/play_button_circle"
                     android:elevation="5dp" />
             </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/info_buttons"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingBottom="@dimen/detail_vertical_offset"
-                android:paddingTop="12dp"
-                >
-                <com.devspark.robototextview.widget.RobotoButton
-                    style="@style/DetailButton.PopcornTime"
-                    android:id="@+id/read_more"
-                    android:layout_marginRight="@dimen/detail_button_margin"
-                    android:layout_marginEnd="@dimen/detail_button_margin"
-                    android:text="@string/read_more"
-                    app:typeface="roboto_medium"  />
-            </LinearLayout>
 
             <View
                 android:id="@+id/main_div"
