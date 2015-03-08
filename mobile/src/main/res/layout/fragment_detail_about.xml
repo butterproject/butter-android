@@ -59,7 +59,7 @@
             android:progress="5"/>
 
         <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/aired"
+            android:id="@+id/meta"
             android:layout_below="@id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:id="@+id/synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/aired"
+            android:layout_below="@id/meta"
             android:layout_marginTop="@dimen/detail_vertical_offset"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac scelerisque diam. Etiam porttitor nibh vitae purus luctus, a efficitur orci aliquam. Nulla varius mollis nisi at sagittis. Nam consectetur augue eu consequat feugiat. Aliquam."
             android:textDirection="locale"

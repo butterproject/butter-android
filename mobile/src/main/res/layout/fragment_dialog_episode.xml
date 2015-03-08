@@ -21,130 +21,157 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
+    <ScrollView android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_alignParentBottom="true">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_vertical_offset"
-            android:layout_marginBottom="@dimen/detail_vertical_offset"
-            android:background="@color/bg"
-            android:elevation="5dp"
-            android:clipChildren="true">
-            <RelativeLayout
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="100dp"
+                android:background="@drawable/base_gradient" />
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/detail_vertical_offset">
+                android:background="@color/bg"
+                android:clipChildren="true">
+
                 <RelativeLayout
-                    android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/overlay_bg"
-                    android:clipChildren="true">
-                    <ProgressBar
-                        android:id="@+id/header_progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:alpha="0.6"
-                        style="?android:attr/progressBarStyle" />
-                    <ImageView
-                        android:id="@+id/header_image"
+                    android:layout_marginBottom="@dimen/detail_vertical_offset">
+                    <RelativeLayout
+                        android:id="@+id/header"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/app_name" />
+                        android:layout_height="wrap_content"
+                        android:background="@color/overlay_bg"
+                        android:clipChildren="true">
+                        <ProgressBar
+                            android:id="@+id/header_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            style="?android:attr/progressBarStyle" />
+                        <ImageView
+                            android:id="@+id/header_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/app_name" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:alpha="0.7"
+                            android:background="@drawable/base_gradient" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="@dimen/detail_horizontal_offset"
+                            android:layout_marginStart="@dimen/detail_horizontal_offset"
+                            android:paddingBottom="@dimen/detail_vertical_offset">
+                            <com.devspark.robototextview.widget.RobotoTextView
+                                android:id="@+id/info"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:text="S01E02"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/detail_meta_text_size"
+                                android:textAllCaps="true"
+                                app:typeface="roboto_medium" />
+                            <com.devspark.robototextview.widget.RobotoTextView
+                                android:id="@+id/title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="75dp"
+                                android:layout_marginEnd="75dp"
+                                tools:text="Show Title"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/detail_title_text_size"
+                                app:typeface="roboto_medium" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/header"
+                        android:paddingLeft="@dimen/detail_horizontal_offset"
+                        android:paddingRight="@dimen/detail_horizontal_offset"
+                        android:paddingStart="@dimen/detail_horizontal_offset"
+                        android:paddingEnd="@dimen/detail_horizontal_offset"
+                        android:paddingTop="@dimen/detail_vertical_offset"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+                        <com.devspark.robototextview.widget.RobotoTextView
+                            android:id="@+id/aired"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_meta_margin_top"
+                            android:gravity="center_vertical"
+                            tools:text="Aired: 12 dec 2014"
+                            android:textSize="@dimen/detail_meta_text_size"
+                            android:textColor="@color/secondary_text_color" />
+                        <com.devspark.robototextview.widget.RobotoTextView
+                            android:id="@+id/synopsis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/aired"
+                            android:paddingTop="12dp"
+                            android:textDirection="locale"
+                            android:textSize="@dimen/detail_desc_text_size"
+                            android:textColor="@color/text_color"
+                            tools:text="Lorem ipsum dolor sit amet." />
+                    </RelativeLayout>
+                    <ImageButton
+                        android:id="@+id/play_button"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginTop="152dp"
+                        android:src="@drawable/ic_av_play_button"
+                        android:background="@drawable/play_button_circle"
+                        android:elevation="5dp" />
                 </RelativeLayout>
-                <RelativeLayout
+
+                <View
+                    android:id="@+id/main_div"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/header"
-                    android:paddingLeft="@dimen/detail_horizontal_offset"
-                    android:paddingRight="@dimen/detail_horizontal_offset"
-                    android:paddingStart="@dimen/detail_horizontal_offset"
-                    android:paddingEnd="@dimen/detail_horizontal_offset"
-                    android:paddingTop="@dimen/detail_vertical_offset"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-                <com.devspark.robototextview.widget.RobotoTextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="80dp"
-                    android:layout_marginEnd="80dp"
-                    tools:text="Show Title"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/detail_title_text_size"
-                    app:typeface="roboto_medium" />
-                <com.devspark.robototextview.widget.RobotoTextView
-                    android:id="@+id/aired"
-                    android:layout_below="@id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/detail_meta_margin_top"
-                    android:gravity="center_vertical"
-                    tools:text="Aired: 12 dec 2014"
-                    android:textSize="@dimen/detail_meta_text_size"
-                    android:textColor="@color/secondary_text_color" />
-                <com.devspark.robototextview.widget.RobotoTextView
-                    android:id="@+id/synopsis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/aired"
-                    android:paddingTop="12dp"
-                    android:textDirection="locale"
-                    android:maxLines="4"
-                    android:scrollbars="vertical"
-                    android:textSize="@dimen/detail_desc_text_size"
-                    android:textColor="@color/text_color"
-                    tools:text="Lorem ipsum dolor sit amet." />
-                </RelativeLayout>
-                <ImageButton
-                    android:id="@+id/play_button"
-                    android:layout_width="56dp"
+                    android:layout_height="1dp"
+                    android:background="@color/div_white" />
+
+                <pct.droid.widget.OptionSelector
+                    android:id="@+id/subtitles"
+                    android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="152dp"
-                    android:src="@drawable/ic_av_play_button"
-                    android:background="@drawable/play_button_circle"
-                    android:elevation="5dp" />
-            </RelativeLayout>
+                    app:optionIcon="@drawable/ic_av_subs"
+                    app:optionText="@string/subtitles"
+                    />
 
-            <View
-                android:id="@+id/main_div"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/div_white" />
+                <View
+                    android:id="@+id/option_div_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+                    android:layout_marginStart="@dimen/optionselector_text_margin_start"
+                    android:background="@color/div_white" />
 
-            <pct.droid.widget.OptionSelector
-                android:id="@+id/subtitles"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                app:optionIcon="@drawable/ic_av_subs"
-                app:optionText="@string/subtitles"
-                />
-
-            <View
-                android:id="@+id/option_div_1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-                android:layout_marginStart="@dimen/optionselector_text_margin_start"
-                android:background="@color/div_white" />
-
-            <pct.droid.widget.OptionSelector
-                android:id="@+id/quality"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                app:optionIcon="@drawable/ic_action_quality"
-                app:optionText="@string/quality"
-                />
+                <pct.droid.widget.OptionSelector
+                    android:id="@+id/quality"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    app:optionIcon="@drawable/ic_action_quality"
+                    app:optionText="@string/quality"
+                    />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

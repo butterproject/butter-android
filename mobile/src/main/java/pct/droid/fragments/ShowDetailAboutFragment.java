@@ -28,7 +28,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
 
     @InjectView(R.id.title)
     TextView mTitle;
-    @InjectView(R.id.aired)
+    @InjectView(R.id.meta)
     TextView mMeta;
     @InjectView(R.id.synopsis)
     TextView mSynopsis;

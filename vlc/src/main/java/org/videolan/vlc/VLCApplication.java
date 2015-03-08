@@ -8,16 +8,16 @@ import android.content.Context;
  */
 public class VLCApplication extends Application {
 
-    private static Application mInstance;
+    private static Application sInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mInstance = this;
+        sInstance = this;
     }
 
     public static Context getAppContext() {
-        return mInstance;
+        return sInstance;
     }
 
 }
