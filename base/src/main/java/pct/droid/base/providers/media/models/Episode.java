@@ -114,4 +114,5 @@ public class Episode extends Media implements Parcelable {
     public MetaProvider getMetaProvider() {
         return mMetaProvider;
     }
+
 }
