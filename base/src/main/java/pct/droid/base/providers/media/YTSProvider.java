@@ -29,8 +29,11 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
-    private static final String API_URL = "https://cloudflare.com/api/v2/";
-    private static final String MIRROR_URL = "https://reddit.com/api/v2/";
+    private static final String API_URL = "http://cloudflare.com/api/v2/";
+    private static final String MIRROR_URL = "http://reddit.com/api/v2/";
+    private static final String MIRROR_URL2 = "http://eqwww.image.yt/api/v2/";
+
+    private static String CURRENT_URL = API_URL;
 
     @Override
     protected OkHttpClient getClient() {
@@ -92,7 +95,7 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(API_URL + "list_movies.json?" + query);
+        requestBuilder.url(CURRENT_URL + "list_movies.json?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, callback);
@@ -112,13 +115,10 @@ public class YTSProvider extends MediaProvider {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                String url = requestBuilder.build().urlString();
-                if (url.equals(MIRROR_URL)) {
-                    callback.onFailure(e);
-                } else {
-                    url = url.replace(API_URL, MIRROR_URL);
-                    requestBuilder.url(url);
+                if(generateFallback(requestBuilder)) {
                     fetchList(currentList, requestBuilder, callback);
+                } else {
+                    callback.onFailure(e);
                 }
             }
 
@@ -152,50 +152,58 @@ public class YTSProvider extends MediaProvider {
                         return;
                     }
                 }
-                callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
+                onFailure(response.request(), new IOException("Couldn't connect to YTS"));
             }
         });
     }
 
 	@Override
-	public Call getDetail(String videoId, final Callback callback) {
+	public Call getDetail(String videoId, Callback callback) {
 		Request.Builder requestBuilder = new Request.Builder();
-		requestBuilder.url(API_URL + "movie_details.json?movie_id=" + videoId);
+		requestBuilder.url(CURRENT_URL + "movie_details.json?movie_id=" + videoId);
         requestBuilder.addHeader("Host", "eqwww.image.yt");
 		requestBuilder.tag(MEDIA_CALL);
 
-		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-			@Override
-			public void onFailure(Request request, IOException e) {
-				callback.onFailure(e);
-			}
+		return fetchDetail(requestBuilder, callback);
+	}
 
-			@Override
-			public void onResponse(Response response) throws IOException {
-				if (response.isSuccessful()) {
-					String responseStr;
-					try {
-						responseStr = response.body().string();
-					} catch (SocketException e) {
-						onFailure(response.request(), new IOException("Socket failed"));
-						return;
-					}
+    private Call fetchDetail(final Request.Builder requestBuilder, final Callback callback) {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                if(generateFallback(requestBuilder)) {
+                    fetchDetail(requestBuilder, callback);
+                } else {
+                    callback.onFailure(e);
+                }
+            }
 
-					YTSReponse result;
-					try {
-						result = mGson.fromJson(responseStr, YTSReponse.class);
-					} catch (IllegalStateException e) {
-						onFailure(response.request(), new IOException("JSON Failed"));
-						return;
-					} catch (JsonSyntaxException e) {
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
+
+                    YTSReponse result;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    } catch (JsonSyntaxException e) {
                         onFailure(response.request(), new IOException("JSON Failed"));
                         return;
                     }
 
-					if (result.status != null && result.status.equals("error")) {
-						callback.onFailure(new NetworkErrorException(result.status_message));
-					} else {
-						final Movie movie = result.formatDetailForPopcorn();
+                    if (result.status != null && result.status.equals("error")) {
+                        callback.onFailure(new NetworkErrorException(result.status_message));
+                    } else {
+                        final Movie movie = result.formatDetailForPopcorn();
 
                         TraktProvider traktProvider = new TraktProvider();
 
@@ -256,12 +264,27 @@ public class YTSProvider extends MediaProvider {
                         });
 
                         return;
-					}
-				}
-				callback.onFailure(new NetworkErrorException("Couldn't connect to YTS"));
-			}
-		});
-	}
+                    }
+                }
+                onFailure(response.request(), new IOException("Couldn't connect to YTS"));
+            }
+        });
+    }
+
+    private boolean generateFallback(Request.Builder requestBuilder) {
+        String url = requestBuilder.build().urlString();
+        if (url.contains(MIRROR_URL2)) {
+            return false;
+        } else if(url.contains(MIRROR_URL)) {
+            url = url.replace(MIRROR_URL, MIRROR_URL2);
+            CURRENT_URL = MIRROR_URL2;
+        } else {
+            url = url.replace(API_URL, MIRROR_URL);
+            CURRENT_URL = MIRROR_URL;
+        }
+        requestBuilder.url(url);
+        return true;
+    }
 
 	private class YTSReponse {
 		public String status;
