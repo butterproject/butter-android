@@ -17,6 +17,7 @@
 
 package pct.droid.base.utils;
 
+import android.content.Context;
 import android.content.res.Configuration;
 
 import java.util.Locale;
@@ -29,12 +30,12 @@ public class LocaleUtils {
         return getLanguageCode(Locale.getDefault());
     }
 
-    public static void setCurrent(Locale locale) {
+    public static void setCurrent(Context context, Locale locale) {
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
 
-        PopcornApplication.getAppContext().getResources().updateConfiguration(config, PopcornApplication.getAppContext().getResources().getDisplayMetrics());
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     public static String getLanguageCode(Locale locale) {

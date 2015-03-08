@@ -44,7 +44,7 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 
 	public void onCreate(Bundle savedInstanceState, int layoutId) {
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
+        LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
 		super.onCreate(savedInstanceState);
 		setContentView(layoutId);
 		ButterKnife.inject(this);
@@ -54,7 +54,7 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 	@Override
 	protected void onResume() {
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-        LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
+        LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
 		super.onResume();
         CastingManager.getInstance(this).addListener(this);
 	}
@@ -68,7 +68,7 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 	@Override
 	public void setContentView(int layoutResID) {
 		String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
-		LocaleUtils.setCurrent(LocaleUtils.toLocale(language));
+		LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
 		super.setContentView(layoutResID);
 	}
 

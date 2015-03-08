@@ -24,7 +24,7 @@ public class EpisodeListAdapter extends BaseAdapter {
             ButterKnife.inject(this, v);
         }
 
-        @InjectView(R.id.number)
+        @InjectView(R.id.info)
         TextView number;
         @InjectView(R.id.title)
         TextView title;

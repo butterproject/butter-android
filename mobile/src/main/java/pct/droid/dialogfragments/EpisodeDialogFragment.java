@@ -19,19 +19,14 @@ package pct.droid.dialogfragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.text.Layout;
-import android.text.method.ScrollingMovementMethod;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,7 +36,6 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -51,7 +45,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
-import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -85,6 +78,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     ImageButton mPlayButton;
     @InjectView(R.id.header_image)
     ImageView mHeaderImage;
+    @InjectView(R.id.info)
+    TextView mInfo;
     @InjectView(R.id.title)
     TextView mTitle;
     @InjectView(R.id.aired)
@@ -122,21 +117,10 @@ public class EpisodeDialogFragment extends DialogFragment {
         return v;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        int width = PixelUtils.getScreenWidth(getActivity());
-        int height = PixelUtils.getScreenHeight(getActivity());
-        dialog.getWindow().setLayout(width, height);
-        dialog.getWindow().setWindowAnimations(R.style.Theme_PopcornTime_DialogFade);
-        return dialog;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Transparent);
+        setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Episode);
 
         mPaletteColor = getArguments().getInt(EXTRA_COLOR);
         mShow = getArguments().getParcelable(EXTRA_SHOW);
@@ -158,10 +142,16 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mTitle.setText(mEpisode.title);
         Date airedDate = new Date((long)mEpisode.aired * 1000);
-        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMM dd, yyyy", new Locale(LocaleUtils.getCurrent())).format(airedDate)));
+        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", new Locale(LocaleUtils.getCurrent())).format(airedDate)));
 
         mSynopsis.setText(mEpisode.overview);
-        mSynopsis.setMovementMethod(new ScrollingMovementMethod());
+
+        String seasonStr = Integer.toString(mEpisode.season);
+        if(seasonStr.length() < 2) seasonStr = "0" + seasonStr;
+        String episodeStr = Integer.toString(mEpisode.episode);
+        if(episodeStr.length() < 2) episodeStr = "0" + episodeStr;
+
+        mInfo.setText("S" + seasonStr + "E" + episodeStr);
 
         mSubtitles.setFragmentManager(getFragmentManager());
         mQuality.setFragmentManager(getFragmentManager());
