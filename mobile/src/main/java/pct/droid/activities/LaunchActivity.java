@@ -21,8 +21,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 
+import io.fabric.sdk.android.Fabric;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 

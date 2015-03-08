@@ -42,6 +42,7 @@ import pct.droid.base.casting.CastingManager;
 import pct.droid.base.casting.server.CastingServer;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
@@ -357,7 +358,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 					};
 
 					if (mStreamInfo.isShow()) {
-						mSubsProvider.getList(mStreamInfo.getShow(), (Show.Episode) data, subsCallback);
+						mSubsProvider.getList(mStreamInfo.getShow(), (Episode) data, subsCallback);
 					} else {
 						mSubsProvider.getList((Movie) data, subsCallback);
 					}

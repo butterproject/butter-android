@@ -40,6 +40,7 @@ import java.util.zip.ZipInputStream;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.BaseProvider;
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
@@ -58,7 +59,7 @@ public abstract class SubsProvider extends BaseProvider {
 
     public abstract void getList(Movie movie, Callback callback);
 
-    public abstract void getList(Show media, Show.Episode episode, Callback callback);
+    public abstract void getList(Show media, Episode episode, Callback callback);
 
     public interface Callback {
         public void onSuccess(Map<String, String> items);

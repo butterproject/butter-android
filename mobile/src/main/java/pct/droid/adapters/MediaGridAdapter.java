@@ -36,7 +36,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;

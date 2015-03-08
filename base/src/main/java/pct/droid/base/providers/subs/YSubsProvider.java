@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
 
@@ -104,7 +105,7 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public void getList(Show media, Show.Episode episode, Callback callback) {
+    public void getList(Show media, Episode episode, Callback callback) {
         // Show subtitles not supported
         callback.onFailure(new MethodNotSupportedException("Show subtitles not supported"));
     }

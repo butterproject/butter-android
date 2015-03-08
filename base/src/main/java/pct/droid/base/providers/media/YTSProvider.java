@@ -18,9 +18,7 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
-import android.content.res.Resources;
 import android.os.Parcel;
-import android.text.TextUtils;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
@@ -40,10 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
@@ -229,60 +227,52 @@ public class YTSProvider extends MediaProvider {
 
                         TraktProvider traktProvider = new TraktProvider();
 
-                        TraktProvider.MetaData meta = traktProvider.getSummary(movie.imdbId);
-                        if (meta.images != null) {
-                            if(meta.images.poster != null) {
-                                movie.image = meta.images.poster.replace("/original/", "/medium/");
-                                movie.fullImage = meta.images.poster;
-                            }
-
-                            if (meta.images != null && meta.images.backdrop != null) {
-                                movie.headerImage = meta.images.backdrop.replace("/original/", "/medium/");
-                            }
-                        } else {
-                            movie.fullImage = movie.image;
-                            movie.headerImage = movie.image;
-                        }
-
-
-                        if (meta.title != null) {
-                            movie.title = meta.title;
-                        }
-
-                        if (meta.overview != null) {
-                            movie.synopsis = meta.overview;
-                        }
-
-                        if (meta.tagline != null) {
-                            movie.tagline = meta.tagline;
-                        }
-
-                        if (meta.trailer != null) {
-                            movie.trailer = meta.trailer;
-                        }
-
-                        if (meta.runtime != null) {
-                            movie.runtime = Integer.toString(meta.runtime);
-                        }
-
-                        if (meta.certification != null) {
-                            movie.certification = meta.certification;
-                        }
-
-                        final ArrayList<Media> returnData = new ArrayList<>();
-                        returnData.add(movie);
-
-                        YSubsProvider subsProvider = new YSubsProvider();
-                        subsProvider.getList(movie, new SubsProvider.Callback() {
+                        traktProvider.getMovieMeta(movie.imdbId, new MetaProvider.Callback() {
                             @Override
-                            public void onSuccess(Map<String, String> items) {
-                                movie.subtitles = items;
-                                returnData.set(0, movie);
-                                callback.onSuccess(returnData);
-                            }
+                            public void onResult(MetaProvider.MetaData metaData, Exception e) {
+                                if(e == null) {
+                                    if (metaData.images != null) {
+                                        if(metaData.images.poster != null) {
+                                            movie.image = metaData.images.poster.replace("/original/", "/medium/");
+                                            movie.fullImage = metaData.images.poster;
+                                        }
 
-                            @Override
-                            public void onFailure(Exception e) {
+                                        if (metaData.images != null && metaData.images.backdrop != null) {
+                                            movie.headerImage = metaData.images.backdrop.replace("/original/", "/medium/");
+                                        }
+                                    } else {
+                                        movie.fullImage = movie.image;
+                                        movie.headerImage = movie.image;
+                                    }
+
+
+                                    if (metaData.title != null) {
+                                        movie.title = metaData.title;
+                                    }
+
+                                    if (metaData.overview != null) {
+                                        movie.synopsis = metaData.overview;
+                                    }
+
+                                    if (metaData.tagline != null) {
+                                        movie.tagline = metaData.tagline;
+                                    }
+
+                                    if (metaData.trailer != null) {
+                                        movie.trailer = metaData.trailer;
+                                    }
+
+                                    if (metaData.runtime != null) {
+                                        movie.runtime = Integer.toString(metaData.runtime);
+                                    }
+
+                                    if (metaData.certification != null) {
+                                        movie.certification = metaData.certification;
+                                    }
+                                }
+
+                                final ArrayList<Media> returnData = new ArrayList<>();
+                                returnData.add(movie);
                                 callback.onSuccess(returnData);
                             }
                         });
@@ -434,11 +424,6 @@ public class YTSProvider extends MediaProvider {
     public static class YTSMovie extends Movie {
         public YTSMovie() {
             super();
-            mSubsProvider = new YSubsProvider();
-        }
-
-        public YTSMovie(Parcel in) {
-            super(in);
             mSubsProvider = new YSubsProvider();
         }
     }

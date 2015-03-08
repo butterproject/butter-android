@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+~ This file is part of Popcorn Time.
+~
+~ Popcorn Time is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU General Public License as published by
+~ the Free Software Foundation, either version 3 of the License, or
+~ (at your option) any later version.
+~
+~ Popcorn Time is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+~ GNU General Public License for more details.
+~
+~ You should have received a copy of the GNU General Public License
+~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -42,7 +59,7 @@
             android:progress="5"/>
 
         <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/meta"
+            android:id="@+id/aired"
             android:layout_below="@id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +73,7 @@
             android:id="@+id/synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/meta"
+            android:layout_below="@id/aired"
             android:layout_marginTop="@dimen/detail_vertical_offset"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac scelerisque diam. Etiam porttitor nibh vitae purus luctus, a efficitur orci aliquam. Nulla varius mollis nisi at sagittis. Nam consectetur augue eu consequat feugiat. Aliquam."
             android:textDirection="locale"
@@ -87,6 +104,7 @@
 
         <com.devspark.robototextview.widget.RobotoButton
             style="@style/DetailButton.PopcornTime"
+            android:visibility="gone"
             android:id="@+id/watch_trailer"
             android:text="@string/watch_trailer"
             app:typeface="roboto_medium"  />

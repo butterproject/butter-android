@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.ServiceConnection;
-import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
@@ -451,11 +450,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mSarNum = sar_num;
 		mSarDen = sar_den;
 		ThreadUtils.runOnUiThread(new Runnable() {
-			@Override public void run() {
-				changeSurfaceSize(false);
+            @Override
+            public void run() {
+                changeSurfaceSize(false);
 
-			}
-		});
+            }
+        });
 	}
 
     @Override

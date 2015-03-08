@@ -93,7 +93,7 @@ public class Media implements Parcelable {
         dest.writeString(image);
         dest.writeString(fullImage);
         dest.writeString(headerImage);
-        dest.writeString(mSubsProvider.getClass().getCanonicalName());
+        dest.writeString(mSubsProvider != null ? mSubsProvider.getClass().getCanonicalName() : "");
         if (subtitles != null) {
             dest.writeInt(subtitles.size());
             for (String key : subtitles.keySet()) {
