@@ -87,4 +87,5 @@ public class Movie extends Media implements Parcelable {
             return new Movie[size];
         }
     };
+
 }

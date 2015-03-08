@@ -36,6 +36,7 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SortUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
@@ -156,6 +157,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
             public void onSuccess(Map<String, String> subtitles) {
                 if(!mAttached) return;
 
+                mMovie.subtitles = subtitles;
+
                 String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
                 Arrays.sort(languages);
                 final String[] adapterLanguages = new String[languages.length + 1];
@@ -205,7 +208,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         });
 
         final String[] qualities = mMovie.torrents.keySet().toArray(new String[mMovie.torrents.size()]);
-        Arrays.sort(qualities);
+        SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
         mQuality.setListener(new OptionSelector.SelectorListener() {
             @Override

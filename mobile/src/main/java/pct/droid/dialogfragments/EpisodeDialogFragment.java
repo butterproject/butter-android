@@ -41,6 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -60,6 +61,7 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SortUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
@@ -167,7 +169,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         mQuality.setTitle(R.string.quality);
 
         final String[] qualities = mEpisode.torrents.keySet().toArray(new String[mEpisode.torrents.size()]);
-        Arrays.sort(qualities);
+        SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
         mSelectedQuality = qualities[qualities.length - 1];
         mQuality.setText(mSelectedQuality);
@@ -186,6 +188,8 @@ public class EpisodeDialogFragment extends DialogFragment {
             @Override
             public void onSuccess(Map<String, String> subtitles) {
                 if(!mAttached) return;
+
+                mEpisode.subtitles = subtitles;
 
                 String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
                 Arrays.sort(languages);
@@ -261,6 +265,7 @@ public class EpisodeDialogFragment extends DialogFragment {
 
     @OnClick(R.id.play_button)
     public void play() {
+        dismiss();
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
         StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
