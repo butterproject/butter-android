@@ -97,7 +97,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         }
         ButterKnife.inject(this, mRoot);
 
-        if(VersionUtils.isJellyBean()) {
+        if(!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
