@@ -65,8 +65,6 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     FrameLayout mContent;
     @InjectView(R.id.logo)
     ImageView mLogo;
-    @InjectView(R.id.header_progress)
-    ProgressBar mProgress;
     @InjectView(R.id.bg_image)
     ImageView mBgImage;
 
@@ -155,19 +153,12 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                     public void run() {
                         AnimUtils.fadeIn(mBgImage);
                         mLogo.setVisibility(View.GONE);
-                        mProgress.setVisibility(View.GONE);
                     }
                 });
             }
 
             @Override
             public void onError() {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProgress.setVisibility(View.GONE);
-                    }
-                });
             }
         });
     }
