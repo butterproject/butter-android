@@ -21,7 +21,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView android:layout_width="match_parent"
+    <pct.droid.widget.BottomSheetScrollView
+        android:id="@+id/scrollview"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
         <LinearLayout
@@ -29,10 +32,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <View
+                android:id="@+id/placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <View
                 android:id="@+id/top"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:layout_marginTop="100dp"
                 android:background="@drawable/base_gradient" />
             <LinearLayout
                 android:orientation="vertical"
@@ -95,10 +101,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/header"
-                        android:paddingLeft="@dimen/detail_horizontal_offset"
-                        android:paddingRight="@dimen/detail_horizontal_offset"
-                        android:paddingStart="@dimen/detail_horizontal_offset"
-                        android:paddingEnd="@dimen/detail_horizontal_offset"
                         android:paddingTop="@dimen/detail_vertical_offset"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
@@ -107,6 +109,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_meta_margin_top"
+                            android:layout_marginBottom="12dp"
+                            android:paddingLeft="@dimen/detail_horizontal_offset"
+                            android:paddingRight="@dimen/detail_horizontal_offset"
+                            android:paddingStart="@dimen/detail_horizontal_offset"
+                            android:paddingEnd="@dimen/detail_horizontal_offset"
                             android:gravity="center_vertical"
                             tools:text="Aired: 12 dec 2014"
                             android:textSize="@dimen/detail_meta_text_size"
@@ -116,11 +123,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/aired"
-                            android:paddingTop="12dp"
+                            android:paddingLeft="@dimen/detail_horizontal_offset"
+                            android:paddingRight="@dimen/detail_horizontal_offset"
+                            android:paddingStart="@dimen/detail_horizontal_offset"
+                            android:paddingEnd="@dimen/detail_horizontal_offset"
+                            android:maxLines="5"
+                            android:ellipsize="end"
                             android:textDirection="locale"
                             android:textSize="@dimen/detail_desc_text_size"
                             android:textColor="@color/text_color"
-                            tools:text="Lorem ipsum dolor sit amet." />
+                            tools:text="Lorem ipsum dolor sit amet."
+                            android:background="@drawable/selectable_background_list" />
                     </RelativeLayout>
                     <ImageButton
                         android:id="@+id/play_button"
@@ -167,5 +180,5 @@
                     />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </pct.droid.widget.BottomSheetScrollView>
 </RelativeLayout>

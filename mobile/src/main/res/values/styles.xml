@@ -100,8 +100,8 @@
     </style>
 
     <style name="Theme.Dialog.Episode.Anim">
-        <item name="android:windowEnterAnimation">@anim/slide_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_down</item>
+        <item name="android:windowEnterAnimation">@anim/episode_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/episode_fade_out</item>
     </style>
 
     <style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

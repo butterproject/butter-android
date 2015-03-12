@@ -19,19 +19,24 @@ package pct.droid.dialogfragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.devspark.robototextview.widget.RobotoTextView;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -59,6 +64,7 @@ import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.fragments.StreamLoadingFragment;
+import pct.droid.widget.BottomSheetScrollView;
 import pct.droid.widget.OptionSelector;
 
 public class EpisodeDialogFragment extends DialogFragment {
@@ -66,14 +72,23 @@ public class EpisodeDialogFragment extends DialogFragment {
     public static final String EXTRA_EPISODE = "episode";
     public static final String EXTRA_SHOW = "show";
     public static final String EXTRA_COLOR = "palette";
+
+    private static final int ANIM_SPEED = 250;
+
+    private Integer mThreshold = 0, mBottom = 0;
+    private Activity mActivity;
     private MetaProvider mMetaProvider;
     private SubsProvider mSubsProvider;
-    private boolean mAttached = false;
+    private boolean mAttached = false, mTouching = false, mOpened = false;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Episode mEpisode;
     private Show mShow;
     private int mPaletteColor;
 
+    @InjectView(R.id.scrollview)
+    BottomSheetScrollView mScrollView;
+    @InjectView(R.id.placeholder)
+    View mPlaceholder;
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
     @InjectView(R.id.header_image)
@@ -85,7 +100,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     @InjectView(R.id.aired)
     TextView mAired;
     @InjectView(R.id.synopsis)
-    RobotoTextView mSynopsis;
+    TextView mSynopsis;
     @InjectView(R.id.subtitles)
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
@@ -114,6 +129,10 @@ public class EpisodeDialogFragment extends DialogFragment {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         }
 
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mPlaceholder.getLayoutParams();
+        layoutParams.height = PixelUtils.getScreenHeight(mActivity);
+        mPlaceholder.setLayoutParams(layoutParams);
+
         return v;
     }
 
@@ -121,7 +140,11 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Episode);
+        setCancelable(false);
 
+        mActivity = getActivity();
+        mThreshold = PixelUtils.getPixelsFromDp(mActivity, 220);
+        mBottom = PixelUtils.getPixelsFromDp(mActivity, 33);
         mPaletteColor = getArguments().getInt(EXTRA_COLOR);
         mShow = getArguments().getParcelable(EXTRA_SHOW);
         mEpisode = getArguments().getParcelable(EXTRA_EPISODE);
@@ -129,11 +152,65 @@ public class EpisodeDialogFragment extends DialogFragment {
         mSubsProvider = mEpisode.getSubsProvider();
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK) {
+                    smoothDismiss();
+                }
+                return true;
+            }
+        });
+        return dialog;
+    }
+
+    public void smoothDismiss() {
+        mOpened = false;
+
+        if(mScrollView.getScrollY() <= mBottom) {
+            dismiss();
+            return;
+        }
+
+        mScrollView.animateScrollTo(0, ANIM_SPEED);
+        mScrollView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        }, 400);
+    }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         if (null != mMetaProvider) mMetaProvider.cancel();
         if (null != mSubsProvider) mSubsProvider.cancel();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mScrollView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //mMaxHeight = PixelUtils.getScreenHeight(mActivity) - PixelUtils.getPixelsFromDp(mActivity, 50);
+                int screenHeight = PixelUtils.getScreenHeight(mActivity);
+                int scroll = (screenHeight / 3) * 2;
+                mScrollView.animateScrollTo(scroll, ANIM_SPEED);
+                mScrollView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mOpened = true;
+                    }
+                }, 400);
+            }
+        }, 250);
     }
 
     @Override
@@ -229,6 +306,32 @@ public class EpisodeDialogFragment extends DialogFragment {
             }
         });
 
+        mScrollView.setListener(new BottomSheetScrollView.Listener() {
+            @Override
+            public void onScroll(int scrollY, BottomSheetScrollView.Direction direction) {
+            }
+
+            @Override
+            public void onTouch(boolean touching) {
+                mTouching = touching;
+                int scrollY = mScrollView.getScrollY();
+                if(!mTouching && mOpened && scrollY <= mThreshold) {
+                    smoothDismiss();
+                }
+            }
+
+            @Override
+            public void onScrollStart() {
+            }
+
+            @Override
+            public void onScrollEnd() {
+                if(!mTouching && mOpened && mScrollView.getScrollY() <= mThreshold) {
+                    smoothDismiss();
+                }
+            }
+        });
+
         mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode, new MetaProvider.Callback() {
             @Override
             public void onResult(MetaProvider.MetaData metaData, Exception e) {
@@ -247,10 +350,15 @@ public class EpisodeDialogFragment extends DialogFragment {
         mAttached = true;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mAttached = false;
+    @OnClick(R.id.synopsis)
+    public void openReadMore(View v) {
+        if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
+            return;
+        SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
+        Bundle b = new Bundle();
+        b.putString("text", mEpisode.overview);
+        synopsisDialogFragment.setArguments(b);
+        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
     @OnClick(R.id.play_button)
