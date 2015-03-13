@@ -71,6 +71,7 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
+import pct.droid.dialogfragments.FileSelectorDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
@@ -93,6 +94,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	private String mCurrentSubsLang = "no-subs";
 	private TimedTextObject mSubs;
 	private Caption mLastSub = null;
+    private File mSubsFile = null;
 
     private boolean mEnded = false;
 	private boolean mSeeking = false;
@@ -398,12 +400,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
 			String[] subtitles = mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]);
 			Arrays.sort(subtitles);
-            final String[] adapterSubtitles = new String[subtitles.length + 1];
+            final String[] adapterSubtitles = new String[subtitles.length + 2];
             System.arraycopy(subtitles, 0, adapterSubtitles, 1, subtitles.length);
+
             adapterSubtitles[0] = "no-subs";
+            adapterSubtitles[adapterSubtitles.length - 1] = "custom";
 			String[] readableNames = new String[adapterSubtitles.length];
 
-			for (int i = 0; i < readableNames.length; i++) {
+			for (int i = 0; i < readableNames.length - 1; i++) {
 				String language = adapterSubtitles[i];
 				if (language.equals("no-subs")) {
 					readableNames[i] = getString(R.string.no_subs);
@@ -413,10 +417,28 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 				}
 			}
 
+            readableNames[readableNames.length - 1] = "Custom..";
+
 			StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
 					Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
 						@Override
-						public void onClick(DialogInterface dialog, int position) {
+						public void onClick(final DialogInterface dialog, int position) {
+                            if(position == adapterSubtitles.length - 1) {
+                                FileSelectorDialogFragment.show(getChildFragmentManager(), new FileSelectorDialogFragment.Listener() {
+                                    @Override
+                                    public void onFileSelected(File f) {
+                                        if(!f.getPath().endsWith(".srt")) {
+                                            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        FileSelectorDialogFragment.hide();
+                                        mSubsFile = f;
+                                        startSubtitles();
+                                        dialog.dismiss();
+                                    }
+                                });
+                                return;
+                            }
 							onSubtitleLanguageSelected(adapterSubtitles[position]);
 							dialog.dismiss();
 						}
@@ -576,11 +598,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			@Override
 			protected Void doInBackground(Void... voids) {
 				try {
-					File file = new File(SubsProvider.getStorageLocation(getActivity()),
-							mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
-					FileInputStream fileInputStream = new FileInputStream(file);
+                    if(mSubsFile == null) {
+                        mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()),
+                                mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
+                    }
+					FileInputStream fileInputStream = new FileInputStream(mSubsFile);
 					FormatSRT formatSRT = new FormatSRT();
-					mSubs = formatSRT.parseFile(file.toString(), FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
+					mSubs = formatSRT.parseFile(mSubsFile.toString(), FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
 					checkSubs();
 				} catch (FileNotFoundException e) {
 					if (e.getMessage().contains("EBUSY")) {
