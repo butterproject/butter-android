@@ -50,6 +50,7 @@
             android:layout_below="@id/message_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
@@ -64,7 +65,7 @@
             <TextView
                 android:id="@+id/discuss_button"
                 android:drawableTop="@drawable/icon_discourse"
-                android:text="@string/discuss"
+                android:text="@string/forum"
                 style="@style/AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -103,7 +104,7 @@
 
             <TextView
                 android:id="@+id/git_button"
-                android:drawableTop="@drawable/icon_stash"
+                android:drawableTop="@drawable/icon_git"
                 android:text="@string/git"
                 android:layout_marginBottom="64dp"
                 style="@style/AboutButton"
