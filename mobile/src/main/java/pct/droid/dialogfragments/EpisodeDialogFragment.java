@@ -73,7 +73,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public static final String EXTRA_SHOW = "show";
     public static final String EXTRA_COLOR = "palette";
 
-    private static final int ANIM_SPEED = 250;
+    private static final int ANIM_SPEED = 200;
 
     private Integer mThreshold = 0, mBottom = 0;
     private Activity mActivity;
@@ -182,7 +182,7 @@ public class EpisodeDialogFragment extends DialogFragment {
             public void run() {
                 dismiss();
             }
-        }, 400);
+        }, ANIM_SPEED);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class EpisodeDialogFragment extends DialogFragment {
                     public void run() {
                         mOpened = true;
                     }
-                }, 400);
+                }, ANIM_SPEED);
             }
         }, 250);
     }
@@ -351,7 +351,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     @OnClick(R.id.synopsis)
-    public void openReadMore(View v) {
+    public void readMoreClick(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
             return;
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
@@ -362,11 +362,16 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     @OnClick(R.id.play_button)
-    public void play() {
-        dismiss();
+    public void playClick() {
+        smoothDismiss();
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
         StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
+    }
+
+    @OnClick(R.id.placeholder)
+    public void outsideClick() {
+        smoothDismiss();
     }
 
     private void onSubtitleLanguageSelected(String language) {

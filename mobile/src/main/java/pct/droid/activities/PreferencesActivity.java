@@ -51,6 +51,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.InjectView;
+import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
 import pct.droid.base.Constants;
@@ -519,16 +520,11 @@ public class PreferencesActivity extends BaseActivity
 					new PrefItem.OnClickListener() {
 						@Override
 						public void onClick(PrefItem item) {
-							JiraClient.getVersionId(new JiraClient.VersionCallback() {
-								@Override
-								public void onResult(String result) {
-									Intent i = new Intent(Intent.ACTION_VIEW);
-									i.setData(Uri.parse(
-											"https://git.popcorntime.io/jira/CreateIssueDetails!init.jspa?pid=10200&issuetype=1&priority=4&versions=" +
-													result));
-									startActivity(i);
-								}
-							});
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            int version = BuildConfig.VERSION_CODE;
+                            String versionName = BuildConfig.VERSION_NAME;
+                            i.setData(Uri.parse("https://git.popcorntime.io/popcorntime/android/issues/new?issue[label_ids][]=17&issue[label_ids][]=12&issue[title]=Bug:%20&issue[description]=I found a bug in build " + versionName + " (" + version + ") of the Android application. These are the steps to reproduce: "));
+                            startActivity(i);
 						}
 					},
 					new PrefItem.SubTitleGenerator() {

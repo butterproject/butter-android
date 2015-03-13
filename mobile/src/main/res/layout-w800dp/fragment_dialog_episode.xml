@@ -36,6 +36,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frame_layout"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/detail_card_margin"
+    android:paddingRight="@dimen/detail_card_margin"
+    android:elevation="4dp">
     <include layout="@layout/fragment_dialog_episode_layout" />
 </FrameLayout>
