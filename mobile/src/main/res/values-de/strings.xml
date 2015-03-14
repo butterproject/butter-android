@@ -61,7 +61,7 @@
   <string name="accept">Annehmen</string>
   <string name="leave">Verlassen</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Einstellungen</string>
+  <string name="preferences">Einstellungen</string>
   <string name="general">Allgemein</string>
   <string name="default_view">Standardübersicht</string>
   <string name="default_player">Standard-Videoabspieler</string>

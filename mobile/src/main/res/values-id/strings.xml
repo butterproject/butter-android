@@ -63,7 +63,7 @@
   <string name="accept">Terima</string>
   <string name="leave">Tinggalkan</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Pengaturan</string>
+  <string name="preferences">Pengaturan</string>
   <string name="general">Umum</string>
   <string name="default_view">Tampilan standar</string>
   <string name="default_player">Pemutar video standar</string>

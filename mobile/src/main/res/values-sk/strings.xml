@@ -61,7 +61,7 @@
   <string name="accept">Prijať</string>
   <string name="leave">Nechať pôvodné</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Nastavenia</string>
+  <string name="preferences">Nastavenia</string>
   <string name="general">Všeobecné</string>
   <string name="default_view">Predvolený prehľad</string>
   <string name="default_player">Predvolený videoprehrávač</string>

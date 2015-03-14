@@ -63,7 +63,7 @@
   <string name="accept">Hyväksy</string>
   <string name="leave">Poistu</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Asetukset</string>
+  <string name="preferences">Asetukset</string>
   <string name="general">Yleinen</string>
   <string name="default_view">Aloitusnäkymä</string>
   <string name="default_player">Oletus videosoitin</string>

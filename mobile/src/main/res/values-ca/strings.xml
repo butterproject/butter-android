@@ -63,7 +63,7 @@
   <string name="accept">Acceptar</string>
   <string name="leave">Eixir</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Configuració</string>
+  <string name="preferences">Configuració</string>
   <string name="general">General</string>
   <string name="default_view">Pantalla inicial per defecte</string>
   <string name="default_player">Reproductor per defecte</string>

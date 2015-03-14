@@ -63,7 +63,7 @@
   <string name="accept">Sutikti</string>
   <string name="leave">Išeiti</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Nustatymai</string>
+  <string name="preferences">Nustatymai</string>
   <string name="general">Pagrindiniai</string>
   <string name="default_view">Numatytoji apžvalga</string>
   <string name="default_player">Numatytasis vaizdo grotuvas</string>

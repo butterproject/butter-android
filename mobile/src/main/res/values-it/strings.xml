@@ -63,7 +63,7 @@
   <string name="accept">Accetta</string>
   <string name="leave">Abbandona</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Opzioni</string>
+  <string name="preferences">Opzioni</string>
   <string name="general">Generali</string>
   <string name="default_view">Visualizzazione predefinita</string>
   <string name="default_player">Riproduttore predefinito</string>

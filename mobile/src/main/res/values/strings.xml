@@ -89,7 +89,7 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="leave">Leave</string>
 
 	<!-- SettingsActivity strings -->
-	<string name="settings">Settings</string>
+	<string name="preferences">Preferences</string>
 	<string name="general">General</string>
 	<string name="default_view">Default overview</string>
 	<string name="default_player">Default video player</string>

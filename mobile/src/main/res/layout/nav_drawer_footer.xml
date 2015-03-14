@@ -33,7 +33,7 @@
         android:id="@+id/settings_button"
         android:layout_width="match_parent"
         android:minHeight="48dp"
-        android:text="@string/settings"
+        android:text="@string/preferences"
         android:background="?attr/selectableItemBackground"
         android:paddingLeft="16dp"
         android:gravity="center_vertical"

@@ -63,7 +63,7 @@
   <string name="accept">Прихватам</string>
   <string name="leave">Не прихватам</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Подешавања</string>
+  <string name="preferences">Подешавања</string>
   <string name="general">Опште</string>
   <string name="default_view">Подразумевани преглед</string>
   <string name="default_player">Подразумевани видео плејер</string>
