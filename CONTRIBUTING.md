@@ -18,7 +18,7 @@ There are lots and lots of ways to get involved, this document covers:
 If you're about to raise an issue because think you've found a problem with Popcorn Time, or you'd like to make a request
 for a new feature in the codebase, or any other reason then please read this first.
 
-The JIRA issue tracker is the preferred channel for [bug reports](#bugs),
+The GitLab issue tracker is the preferred channel for [bug reports](#bugs),
 [feature requests](#features), [change requests](#changes) and [submitting pull
 requests](#pull-requests), but please respect the following restrictions:
 
@@ -38,13 +38,13 @@ Good bug reports are extremely helpful - thank you!
 
 Guidelines for bug reports:
 
-1. **Use the JIRA issue search** &mdash; check if the issue has already been reported.
+1. **Use the GitLab issue search** &mdash; check if the issue has already been reported.
 
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` or look for [closed issues](https://git.popcorntime.io/jira/issues/?jql=project%20%3D%20PT%20AND%20status%20in%20%28Resolved%2C%20Closed%29).
+2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` or look for [closed issues](/popcorntime/desktop/issues?state=closed).
 
-3. **Include a screencast if relevant** - Is your issue about a design or front end feature or bug? The most helpful thing in the world is if we can *see* what you're talking about. Embed it directly into your Jira issue. Kapow.
+3. Is your issue about a design or front end feature or bug? The most helpful thing in the world is if we can *see* what you're talking about.
 
-3. Use the Bug Report template below to start creating a bug report with the template automatically.
+3. Use the Bug Report template below to start creating a bug report with the template automatically or [click here](http://bit.ly/1F6aC3w).
 
 A good bug report shouldn't leave others needing to chase you up for more information. Be sure to include the details of your environment.
 
@@ -90,7 +90,7 @@ likely to be common.
 Change requests cover both architectural and functional changes to how Popcorn Time works. If you have an idea for a
 new or different dependency, a refactor, or an improvement to a feature, etc  - please be sure to:
 
-1. **Use the Jira search** and check someone else didn't get there first
+1. **Use the GitLab search** and check someone else didn't get there first
 2. Take a moment to think about the best way to make a case for, and explain what you're thinking. Are you sure
 this shouldn't really be a [bug report](#bug-reports) or a [feature request](#feature-requests)? Is it really one
 idea or is it many? What's the context? What problem are you solving? Why is what you are suggesting better than
