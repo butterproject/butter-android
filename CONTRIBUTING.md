@@ -40,11 +40,11 @@ Guidelines for bug reports:
 
 1. **Use the GitLab issue search** &mdash; check if the issue has already been reported.
 
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` or look for [closed issues](/popcorntime/desktop/issues?state=closed).
+2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` or look for [closed issues](/popcorntime/android/issues?state=closed).
 
 3. Is your issue about a design or front end feature or bug? The most helpful thing in the world is if we can *see* what you're talking about.
 
-3. Use the Bug Report template below to start creating a bug report with the template automatically or [click here](http://bit.ly/1F6aC3w).
+3. Use the Bug Report template below to start creating a bug report with the template automatically or [click here](http://bit.ly/18JXvdo).
 
 A good bug report shouldn't leave others needing to chase you up for more information. Be sure to include the details of your environment.
 
