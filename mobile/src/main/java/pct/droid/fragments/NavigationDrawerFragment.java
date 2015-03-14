@@ -38,7 +38,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import pct.droid.R;
-import pct.droid.activities.AboutActivity;
 import pct.droid.activities.PreferencesActivity;
 import pct.droid.adapters.NavigationAdapter;
 import pct.droid.adapters.decorators.OneShotDividerDecorator;
@@ -128,8 +127,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies));
 		navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv));
 		navItems.add(new NavDrawerItem(getString(R.string.share), R.drawable.ic_nav_share, mOnShareClickListener));
-		navItems.add(new NavDrawerItem(getString(R.string.settings), R.drawable.ic_nav_settings, mOnSettingsClickListener));
-		navItems.add(new NavDrawerItem(getString(R.string.about), R.drawable.ic_nav_about, mOnAboutClickListener));
+		navItems.add(new NavDrawerItem(getString(R.string.preferences), R.drawable.ic_nav_settings, mOnSettingsClickListener));
 
 		mAdapter = new NavigationAdapter(getActivity(), this, navItems);
 		mAdapter.setOnItemClickListener(this);
@@ -140,12 +138,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.requestFocus();
 	}
-
-	private View.OnClickListener mOnAboutClickListener = new View.OnClickListener() {
-		@Override public void onClick(View v) {
-			AboutActivity.startActivity(getActivity());
-		}
-	};
 
 	private View.OnClickListener mOnSettingsClickListener = new View.OnClickListener() {
 		@Override public void onClick(View v) {

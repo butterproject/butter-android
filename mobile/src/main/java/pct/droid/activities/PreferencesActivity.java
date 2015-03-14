@@ -55,7 +55,6 @@ import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
 import pct.droid.base.Constants;
-import pct.droid.base.JiraClient;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.Prefs;
@@ -96,7 +95,7 @@ public class PreferencesActivity extends BaseActivity
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle(R.string.settings);
+		getSupportActionBar().setTitle(R.string.preferences);
 
 		ToolbarUtils.updateToolbarHeight(this,toolbar);
 
@@ -565,7 +564,6 @@ public class PreferencesActivity extends BaseActivity
 						return getString(R.string.tap_to_open);
 					}
 				}));
-
 		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_version, R.string.version, "", "",
 				new PrefItem.SubTitleGenerator() {
 					@Override
@@ -579,6 +577,19 @@ public class PreferencesActivity extends BaseActivity
 						return "?.? (?) - ?";
 					}
 				}));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_about, R.string.about, "", "",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+                        AboutActivity.startActivity(PreferencesActivity.this);
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return getString(R.string.tap_to_open);
+                    }
+                }));
 
 		if (recyclerView.getAdapter() != null && mLayoutManager != null) {
 			int position = mLayoutManager.findFirstVisibleItemPosition();

@@ -63,7 +63,7 @@
   <string name="accept">গ্রহণ</string>
   <string name="leave">ত্যাগ</string>
   <!--SettingsActivity strings-->
-  <string name="settings">সেটিংস</string>
+  <string name="preferences">সেটিংস</string>
   <string name="general">সাধারণ</string>
   <string name="default_view">ডিফল্ট অবলোকন</string>
   <string name="default_player">ডিফল্ট ভিডিও প্লেয়ার</string>

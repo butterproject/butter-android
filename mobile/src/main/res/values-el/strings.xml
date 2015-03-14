@@ -63,7 +63,7 @@
   <string name="accept">Αποδοχή</string>
   <string name="leave">Αποχώρηση</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Ρυθμίσεις</string>
+  <string name="preferences">Ρυθμίσεις</string>
   <string name="general">Γενικά</string>
   <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
   <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>

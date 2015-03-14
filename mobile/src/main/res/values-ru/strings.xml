@@ -63,7 +63,7 @@
   <string name="accept">Принять</string>
   <string name="leave">Отказаться</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Настройки</string>
+  <string name="preferences">Настройки</string>
   <string name="general">Основные</string>
   <string name="default_view">Стартовая страница</string>
   <string name="default_player">Видео проигрыватель</string>

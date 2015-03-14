@@ -63,7 +63,7 @@
   <string name="accept">Accept</string>
   <string name="leave">Ieșire</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Configurări</string>
+  <string name="preferences">Configurări</string>
   <string name="general">General</string>
   <string name="default_view">Vedere implicită</string>
   <string name="default_player">Player video implicit</string>

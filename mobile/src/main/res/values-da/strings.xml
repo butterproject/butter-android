@@ -63,7 +63,7 @@
   <string name="accept">Accepter</string>
   <string name="leave">Forlad</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Indstillinger</string>
+  <string name="preferences">Indstillinger</string>
   <string name="general">Generelt</string>
   <string name="default_view">Standard oversigt</string>
   <string name="default_player">Standard videoafspiller</string>

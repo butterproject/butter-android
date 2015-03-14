@@ -63,7 +63,7 @@
   <string name="accept">Accepter</string>
   <string name="leave">Quitter</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Réglages</string>
+  <string name="preferences">Réglages</string>
   <string name="general">Général</string>
   <string name="default_view">Aperçu par défaut</string>
   <string name="default_player">Lecteur vidéo par défaut</string>

@@ -63,7 +63,7 @@
   <string name="accept">Приеми</string>
   <string name="leave">Напусни</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Настройки</string>
+  <string name="preferences">Настройки</string>
   <string name="general">Общи</string>
   <string name="default_view">Начален изглед</string>
   <string name="default_player">Начален видео плейър</string>

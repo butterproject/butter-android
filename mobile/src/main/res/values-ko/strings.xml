@@ -63,7 +63,7 @@
   <string name="accept">동의</string>
   <string name="leave">떠나기</string>
   <!--SettingsActivity strings-->
-  <string name="settings">설정</string>
+  <string name="preferences">설정</string>
   <string name="general">일반</string>
   <string name="default_view">기본 개요</string>
   <string name="default_player">기본 비디오 재생기</string>
