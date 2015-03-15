@@ -26,7 +26,7 @@ import pct.droid.base.providers.media.MediaProvider;
  */
 public class MediaContainerFragment extends Fragment {
 
-    public static final String EXTRA_ARGS = "extra_args";
+    public static final String PROVIDER_EXTRA = "provider";
 
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip mTabs;
@@ -34,11 +34,10 @@ public class MediaContainerFragment extends Fragment {
     ViewPager mViewPager;
     private MediaPagerAdapter mAdapter;
 
-    //todo: a better way to passing a provider to this fragment
-    public static MediaContainerFragment newInstance(int provider) {
+    public static MediaContainerFragment newInstance(MediaProvider provider) {
         MediaContainerFragment frag = new MediaContainerFragment();
         Bundle args = new Bundle();
-        args.putInt(EXTRA_ARGS, provider);
+        args.putParcelable(PROVIDER_EXTRA, provider);
         frag.setArguments(args);
         return frag;
     }
@@ -58,9 +57,15 @@ public class MediaContainerFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        int provider = getArguments().getInt(EXTRA_ARGS);
+        MediaProvider provider = getArguments().getParcelable(PROVIDER_EXTRA);
 
         List<TabInfo> tabs = new ArrayList<>();
+        tabs.add(new TabInfo(MediaProvider.Filters.Sort.DATE,getString(R.string.release_date)));
+        tabs.add(new TabInfo(MediaProvider.Filters.Sort.POPULARITY,getString(R.string.popular_now)));
+        tabs.add(new TabInfo(MediaProvider.Filters.Sort.RATING,getString(R.string.top_rated)));
+        tabs.add(new TabInfo(MediaProvider.Filters.Sort.YEAR,getString(R.string.year)));
+        tabs.add(new TabInfo(MediaProvider.Filters.Sort.ALPHABET,getString(R.string.a_to_z)));
+        /*
         switch (provider){
             case 0:
                 //movies
@@ -79,7 +84,8 @@ public class MediaContainerFragment extends Fragment {
                 //shows
                 break;
         }
-        mAdapter = new MediaPagerAdapter(getActivity(),provider,getChildFragmentManager(), tabs);
+        */
+        mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), tabs);
         mViewPager.setAdapter(mAdapter);
         mTabs.setViewPager(mViewPager);
         mViewPager.setCurrentItem(1);
@@ -87,13 +93,11 @@ public class MediaContainerFragment extends Fragment {
 
     public static class MediaPagerAdapter extends FragmentPagerAdapter {
 
-        private final Context mContext;
         private final List<TabInfo> mFilters;
-        private int mProvider;
+        private MediaProvider mProvider;
 
-        public MediaPagerAdapter(Context context,int provider, FragmentManager fm, List<TabInfo> filters) {
+        public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<TabInfo> filters) {
             super(fm);
-            mContext = context;
             mFilters = filters;
             mProvider = provider;
         }
@@ -110,8 +114,9 @@ public class MediaContainerFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mProvider,mFilters.get(position).getFilter()); //create new fragment instance
+            return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mProvider, mFilters.get(position).getFilter()); //create new fragment instance
         }
+
     }
 
     public static class TabInfo {

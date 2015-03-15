@@ -47,7 +47,10 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if(mFragments.get(position) instanceof ShowDetailSeasonFragment) {
-            return mContext.getString(R.string.season) + " " + ((ShowDetailSeasonFragment) mFragments.get(position)).getSeasonNumber();
+            int seasonNumber = ((ShowDetailSeasonFragment) mFragments.get(position)).getSeasonNumber();
+            if(seasonNumber == 0)
+                return mContext.getString(R.string.specials);
+            return mContext.getString(R.string.season) + " " + seasonNumber;
         }
         return mContext.getString(R.string.about);
     }

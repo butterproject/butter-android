@@ -18,6 +18,7 @@
 package pct.droid.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,13 +50,13 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	private MediaGridAdapter.OnItemClickListener mItemClickListener;
 	final int NORMAL = 0, LOADING = 1;
 
-	public MediaGridAdapter(Activity activity, ArrayList<Media> items, Integer columns) {
+	public MediaGridAdapter(Context context, ArrayList<Media> items, Integer columns) {
 		mColumns = columns;
 
-		int screenWidth = PixelUtils.getScreenWidth(activity);
+		int screenWidth = PixelUtils.getScreenWidth(context);
 		mItemWidth = (screenWidth / columns);
 		mItemHeight = (int) ((double) mItemWidth / 0.677);
-		mMargin = PixelUtils.getPixelsFromDp(activity, 2);
+		mMargin = PixelUtils.getPixelsFromDp(context, 2);
 
 		setItems(items);
 	}
@@ -136,7 +137,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	}
 
 	public OverviewItem getItem(int position) {
-		if (position<0 || mItems.size()<=position)return null;
+		if (position<0 || mItems.size() <= position)return null;
 		return mItems.get(position);
 	}
 

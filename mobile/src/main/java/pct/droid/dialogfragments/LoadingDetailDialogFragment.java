@@ -19,6 +19,7 @@ package pct.droid.dialogfragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
@@ -42,10 +43,10 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     private MediaProvider mProvider;
     private Boolean mSavedInstanceState = false;
 
-    public static LoadingDetailDialogFragment newInstance(String itemId, int paletteColor) {
+    public static LoadingDetailDialogFragment newInstance(Media itemId, int paletteColor) {
         LoadingDetailDialogFragment frag = new LoadingDetailDialogFragment();
         Bundle args = new Bundle();
-        args.putString(EXTRA_ITEM_ID, itemId);
+        args.putParcelable(EXTRA_ITEM_ID, itemId);
         args.putInt(EXTRA_PALETTE_COLOR, paletteColor);
         frag.setArguments(args);
         return frag;
@@ -86,11 +87,11 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String itemId = getArguments().getString(EXTRA_ITEM_ID);
+        Media media = getArguments().getParcelable(EXTRA_ITEM_ID);
         final int paletteColor = getArguments().getInt(EXTRA_PALETTE_COLOR);
-        mProvider = mCallback.getProvider();
 
-        mProvider.getDetail(itemId, new MediaProvider.Callback() {
+        mProvider = media.getMediaProvider();
+        mProvider.getDetail(media.videoId, new MediaProvider.Callback() {
                     @Override
                     public void onSuccess(ArrayList<Media> items) {
                         if (!isAdded()) return;
@@ -132,8 +133,6 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     }
 
     public interface Callback {
-        MediaProvider getProvider();
-
         void onDetailLoadFailure();
 
         void onDetailLoadSuccess(Media item, int paletteColor);

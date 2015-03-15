@@ -55,7 +55,7 @@
                         android:id="@+id/header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/overlay_bg"
+                        android:background="@color/overlay"
                         android:clipChildren="true">
                         <ImageView
                             android:id="@+id/header_image"

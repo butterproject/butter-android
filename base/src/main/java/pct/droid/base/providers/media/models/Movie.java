@@ -23,6 +23,9 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.subs.SubsProvider;
+
 public class Movie extends Media implements Parcelable {
     public String type = "movie";
     public String trailer = "";
@@ -32,8 +35,9 @@ public class Movie extends Media implements Parcelable {
     public String certification = "n/a";
     public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
 
-    public Movie() {
-
+    public Movie(MediaProvider mediaProvider, SubsProvider subsProvider) {
+        super(mediaProvider, subsProvider);
+        isMovie = true;
     }
 
     protected Movie(Parcel in) {

@@ -43,6 +43,9 @@ import pct.droid.adapters.NavigationAdapter;
 import pct.droid.adapters.decorators.OneShotDividerDecorator;
 import pct.droid.base.Constants;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.providers.media.EZTVProvider;
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.utils.IntentUtils;
 import pct.droid.base.utils.PrefUtils;
 
@@ -124,8 +127,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		//todo: make list items dynamic
 		List<NavDrawerItem> navItems = new ArrayList<>();
 		navItems.add(new NavDrawerItem(true));
-		navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies));
-		navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv));
+		navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies, new YTSProvider()));
+		navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv, new EZTVProvider()));
 		navItems.add(new NavDrawerItem(getString(R.string.share), R.drawable.ic_nav_share, mOnShareClickListener));
 		navItems.add(new NavDrawerItem(getString(R.string.preferences), R.drawable.ic_nav_settings, mOnSettingsClickListener));
 
@@ -166,8 +169,13 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	public int getSelectedPosition() {
-		return mCurrentSelectedPosition;
+    @Override
+    public int getSelectedPosition() {
+        return mCurrentSelectedPosition;
+    }
+
+	public NavDrawerItem getCurrentItem() {
+		return mAdapter.getItem(getSelectedPosition() + 1);
 	}
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -241,22 +249,22 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 	}
 
 	@Override public void onItemClick(View v, NavDrawerItem item, int position) {
-		if (null != item.getClickListener()) {
-			item.getClickListener().onClick(v);
+		if (null != item.getmOnClickListener()) {
+			item.getmOnClickListener().onClick(v);
 			return;
 		}
 
 		selectItem(mAdapter.getCorrectPosition(position));
 	}
 
-	/**
+    /**
 	 * Callbacks interface that all activities using this fragment must implement.
 	 */
 	public static interface Callbacks {
 		/**
 		 * Called when an item in the navigation drawer is selected.
 		 */
-		void onNavigationDrawerItemSelected(int position, String s);
+		void onNavigationDrawerItemSelected(NavDrawerItem item, String s);
 	}
 
 	/**
@@ -272,9 +280,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
 		}
+
 		if (mCallbacks != null) {
-            NavDrawerItem navDrawerItem = mAdapter.getItem(position+1);
-			mCallbacks.onNavigationDrawerItemSelected(position,null!=navDrawerItem?navDrawerItem.getTitle():null);
+            NavDrawerItem navDrawerItem = mAdapter.getItem(position + 1);
+			mCallbacks.onNavigationDrawerItemSelected(navDrawerItem, null != navDrawerItem ? navDrawerItem.getTitle() : null);
 		}
 
 		mAdapter.notifyDataSetChanged();
@@ -284,35 +293,53 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 	 * Describes an item to be displayed in the navigation list
 	 */
 	public static class NavDrawerItem {
-		private View.OnClickListener clickListener;
-		public boolean isHeader = false;
-		private String title;
-		private int icon;
+		private View.OnClickListener mOnClickListener;
+		private boolean mIsHeader = false;
+		private String mTitle;
+		private int mIcon;
+        private MediaProvider mMediaProvider;
 
 		public NavDrawerItem(String title, int icon) {
-			this(title, icon, null);
+            mTitle = title;
+            mIcon = icon;
 		}
 
+        public NavDrawerItem(String title, int icon, MediaProvider mediaProvider) {
+            this(title, icon);
+            mMediaProvider = mediaProvider;
+        }
+
 		public NavDrawerItem(String title, int icon, View.OnClickListener listener) {
-			this.title = title;
-			this.icon = icon;
-			this.clickListener = listener;
+			this(title, icon);
+			mOnClickListener = listener;
 		}
 
 		public NavDrawerItem(boolean isHeader) {
-			this.isHeader = true;
+			mIsHeader = true;
 		}
 
 		public String getTitle() {
-			return title;
+			return mTitle;
 		}
 
 		public int getIcon() {
-			return icon;
+			return mIcon;
 		}
 
-		public View.OnClickListener getClickListener() {
-			return clickListener;
+        public MediaProvider getMediaProvider() {
+            return mMediaProvider;
+        }
+
+        public boolean isHeader() {
+            return mIsHeader;
+        }
+
+        public boolean hasProvider() {
+            return mMediaProvider != null;
+        }
+
+		public View.OnClickListener getmOnClickListener() {
+			return mOnClickListener;
 		}
 	}
 

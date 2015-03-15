@@ -23,7 +23,9 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
+import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.meta.MetaProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 
 public class Episode extends Media implements Parcelable {
     public int aired;
@@ -36,8 +38,9 @@ public class Episode extends Media implements Parcelable {
 
     protected MetaProvider mMetaProvider;
 
-    public Episode() {
-
+    public Episode(MediaProvider mediaProvider, SubsProvider subsProvider, MetaProvider metaProvider) {
+        super(mediaProvider, subsProvider);
+        mMetaProvider = metaProvider;
     }
 
     protected Episode(Parcel in) {

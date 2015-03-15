@@ -1,7 +1,7 @@
 package pct.droid.activities;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.InjectView;
 import butterknife.Optional;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
@@ -43,9 +43,9 @@ import timber.log.Timber;
 
 public class MediaDetailActivity extends BaseActivity implements BaseDetailFragment.FragmentListener {
 
-    public static final String DATA = "item";
     public static final String COLOR = "palette";
 
+    private static Media sMedia;
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
     private Boolean mTransparentBar = true, mIsTablet = false;
     private Fragment mFragment;
@@ -68,11 +68,12 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     @InjectView(R.id.bg_image)
     ImageView mBgImage;
 
-    public static void startActivity(Activity activity, Media media, int paletteColor) {
-        Intent intent = new Intent(activity, MediaDetailActivity.class);
-        if (paletteColor != -1) intent.putExtra("palette", paletteColor);
-        intent.putExtra("item", media);
-        activity.startActivity(intent);
+    public static void startActivity(Context context, Media media, int paletteColor) {
+        Intent intent = new Intent(PopcornApplication.getAppContext(), MediaDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (paletteColor != -1) intent.putExtra(COLOR, paletteColor);
+        sMedia = media;
+        PopcornApplication.getAppContext().startActivity(intent);
     }
 
     @Override
@@ -101,9 +102,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
         Intent intent = getIntent();
         mPaletteColor = intent.getIntExtra(COLOR, getResources().getColor(R.color.primary));
-        Media media = intent.getParcelableExtra(DATA);
 
-        getSupportActionBar().setTitle(media.title);
+        getSupportActionBar().setTitle(sMedia.title);
 
         mScrollView.setListener(mOnScrollListener);
         mScrollView.setOverScrollEnabled(false);
@@ -130,10 +130,10 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         }
 
         mFragment = null;
-        if(media instanceof Movie) {
-            mFragment = MovieDetailFragment.newInstance((Movie)media, mPaletteColor);
-        } else if(media instanceof Show) {
-            mFragment = ShowDetailFragment.newInstance((Show) media, mPaletteColor);
+        if(sMedia.isMovie) {
+            mFragment = MovieDetailFragment.newInstance((Movie) sMedia, mPaletteColor);
+        } else if(sMedia instanceof Show) {
+            mFragment = ShowDetailFragment.newInstance((Show) sMedia, mPaletteColor);
         }
 
         if(mFragment != null) {
@@ -141,9 +141,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             fragmentManager.beginTransaction().replace(R.id.content, mFragment).commit();
         }
 
-        String imageUrl = media.image;
+        String imageUrl = sMedia.image;
         if(mIsTablet || !PixelUtils.screenIsPortrait(this)) {
-            imageUrl = media.headerImage;
+            imageUrl = sMedia.headerImage;
         }
         Picasso.with(this).load(imageUrl).into(mBgImage, new Callback() {
             @Override

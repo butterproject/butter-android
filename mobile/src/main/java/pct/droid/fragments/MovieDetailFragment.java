@@ -46,7 +46,7 @@ import pct.droid.widget.OptionSelector;
 
 public class MovieDetailFragment extends BaseDetailFragment {
 
-    private Movie mMovie;
+    private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Boolean mAttached = false;
 
@@ -73,8 +73,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     ImageView mCoverImage;
 
     public static MovieDetailFragment newInstance(Movie movie, int color) {
+        sMovie = movie;
         Bundle args = new Bundle();
-        args.putParcelable(DATA, movie);
         args.putInt(COLOR, color);
         MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
         movieDetailFragment.setArguments(args);
@@ -84,7 +84,6 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMovie = getArguments().getParcelable(DATA);
         mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
     }
 
@@ -103,25 +102,25 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
         }
 
-        Double rating = Double.parseDouble(mMovie.rating);
-        mTitle.setText(mMovie.title);
+        Double rating = Double.parseDouble(sMovie.rating);
+        mTitle.setText(sMovie.title);
         mRating.setProgress(rating.intValue());
 
-        String metaDataStr = mMovie.year;
-        if (!TextUtils.isEmpty(mMovie.runtime)) {
+        String metaDataStr = sMovie.year;
+        if (!TextUtils.isEmpty(sMovie.runtime)) {
             metaDataStr += " • ";
-            metaDataStr += mMovie.runtime + " " + getString(R.string.minutes);
+            metaDataStr += sMovie.runtime + " " + getString(R.string.minutes);
         }
 
-        if (!TextUtils.isEmpty(mMovie.genre)) {
+        if (!TextUtils.isEmpty(sMovie.genre)) {
             metaDataStr += " • ";
-            metaDataStr += mMovie.genre;
+            metaDataStr += sMovie.genre;
         }
 
         mMeta.setText(metaDataStr);
 
-        if (!TextUtils.isEmpty(mMovie.synopsis)) {
-            mSynopsis.setText(mMovie.synopsis);
+        if (!TextUtils.isEmpty(sMovie.synopsis)) {
+            mSynopsis.setText(sMovie.synopsis);
             mSynopsis.post(new Runnable() {
                 @Override
                 public void run() {
@@ -143,7 +142,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mReadMore.setVisibility(View.GONE);
         }
 
-        mWatchTrailer.setVisibility(mMovie.trailer == null ? View.GONE: View.VISIBLE);
+        mWatchTrailer.setVisibility(sMovie.trailer == null ? View.GONE: View.VISIBLE);
 
         mSubtitles.setFragmentManager(getFragmentManager());
         mQuality.setFragmentManager(getFragmentManager());
@@ -152,12 +151,12 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
         mSubtitles.setText(R.string.loading_subs);
         mSubtitles.setClickable(false);
-        mMovie.getSubsProvider().getList(mMovie, new SubsProvider.Callback() {
+        sMovie.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
             @Override
             public void onSuccess(Map<String, String> subtitles) {
                 if(!mAttached) return;
 
-                mMovie.subtitles = subtitles;
+                sMovie.subtitles = subtitles;
 
                 String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
                 Arrays.sort(languages);
@@ -207,7 +206,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
         });
 
-        final String[] qualities = mMovie.torrents.keySet().toArray(new String[mMovie.torrents.size()]);
+        final String[] qualities = sMovie.torrents.keySet().toArray(new String[sMovie.torrents.size()]);
         SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
         mQuality.setListener(new OptionSelector.SelectorListener() {
@@ -221,7 +220,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         mQuality.setDefault(qualities.length - 1);
 
         if(mCoverImage != null) {
-            Picasso.with(mCoverImage.getContext()).load(mMovie.image).into(mCoverImage);
+            Picasso.with(mCoverImage.getContext()).load(sMovie.image).into(mCoverImage);
         }
 
         return mRoot;
@@ -247,7 +246,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             return;
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle b = new Bundle();
-        b.putString("text", mMovie.synopsis);
+        b.putString("text", sMovie.synopsis);
         synopsisDialogFragment.setArguments(b);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
@@ -255,18 +254,18 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
         Intent trailerIntent = new Intent(mActivity, TrailerPlayerActivity.class);
-        if (!YouTubeData.isYouTubeUrl(mMovie.trailer)) {
+        if (!YouTubeData.isYouTubeUrl(sMovie.trailer)) {
             trailerIntent = new Intent(mActivity, VideoPlayerActivity.class);
         }
-        trailerIntent.putExtra(TrailerPlayerActivity.DATA, mMovie);
-        trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mMovie.trailer);
+        trailerIntent.putExtra(TrailerPlayerActivity.DATA, sMovie);
+        trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, sMovie.trailer);
         startActivity(trailerIntent);
     }
 
     @OnClick(R.id.play_button)
     public void play() {
-        String streamUrl = mMovie.torrents.get(mSelectedQuality).url;
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
+        String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
+        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
     }
 

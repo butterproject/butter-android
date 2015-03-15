@@ -18,7 +18,6 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
-import android.os.Parcel;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
@@ -34,13 +33,18 @@ import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.OpenSubsProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
-	protected String mApiUrl = "http://eztvapi.re/";
-	protected String mMirrorApiUrl = "http://api.popcorntime.io/";
+    private static final String mApiUrl = "http://eztvapi.re/";
+    private static final String mMirrorApiUrl = "http://api.popcorntime.io/";
+    private static final SubsProvider sSubsProvider = new OpenSubsProvider();
+    private static final MetaProvider sMetaProvider = new TraktProvider();
+    private static final MediaProvider sMediaProvider = new EZTVProvider();
 
 	@Override
 	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -203,7 +207,7 @@ public class EZTVProvider extends MediaProvider {
 		public ArrayList<Media> formatDetailForPopcorn() {
 			ArrayList<Media> list = new ArrayList<>();
 			try {
-				Show show = new EZTVShow();
+				Show show = new Show(sMediaProvider, sSubsProvider);
 
 				show.title = (String) showData.get("title");
 				show.videoId = (String) showData.get("imdb_id");
@@ -238,7 +242,7 @@ public class EZTVProvider extends MediaProvider {
 
 				ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
 				for (LinkedTreeMap<String, Object> episode : episodes) {
-					Episode episodeObject = new EZTVShow.EZTVEpisode();
+					Episode episodeObject = new Episode(sMediaProvider, sSubsProvider, sMetaProvider);
 					LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
 							(LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
 					for (String key : torrents.keySet()) {
@@ -279,7 +283,7 @@ public class EZTVProvider extends MediaProvider {
 
 		public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
 			for (LinkedTreeMap<String, Object> item : showsList) {
-				Show show = new EZTVShow();
+				Show show = new Show(sMediaProvider, sSubsProvider);
 
 				show.title = (String) item.get("title");
 				show.videoId = (String) item.get("imdb_id");
@@ -300,19 +304,4 @@ public class EZTVProvider extends MediaProvider {
     public int getLoadingMessage() {
 		return R.string.loading_shows;
 	}
-
-    public static class EZTVShow extends Show {
-        public EZTVShow() {
-            super();
-            mSubsProvider = new OpenSubsProvider();
-        }
-
-        public static class EZTVEpisode extends Episode {
-            public EZTVEpisode() {
-                super();
-                mSubsProvider = new OpenSubsProvider();
-                mMetaProvider = new TraktProvider();
-            }
-        }
-    }
 }

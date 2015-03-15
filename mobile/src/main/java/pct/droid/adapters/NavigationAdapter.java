@@ -39,14 +39,11 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 	private OnItemClickListener mItemClickListener;
 	private final List<NavigationDrawerFragment.NavDrawerItem> mItems;
-	private Context mContext;
 	final int HEADER = 0, ITEM = 1;
 	final int mNormalColor, mCheckedColor, mCheckedBackgroundRes, mNormalBackgroundRes;
 	private Callback mCallback;
 
-	public NavigationAdapter(@NonNull Context context, @NonNull Callback callback,
-			List<NavigationDrawerFragment.NavDrawerItem> items) {
-		mContext = context;
+	public NavigationAdapter(@NonNull Context context, @NonNull Callback callback, List<NavigationDrawerFragment.NavDrawerItem> items) {
 		mItems = items;
 		mCallback = callback;
 		mNormalColor = context.getResources().getColor(R.color.nav_drawer_deselected);
@@ -118,7 +115,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 	@Override
 	public int getItemViewType(int position) {
-		if (getItem(position).isHeader) {
+		if (getItem(position).isHeader()) {
 			return HEADER;
 		}
 		return ITEM;

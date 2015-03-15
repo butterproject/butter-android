@@ -39,7 +39,7 @@ import pct.droid.widget.WrappingViewPager;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
-    private Show mShow;
+    private static Show sShow;
     private Boolean mIsTablet = false;
 
     @InjectView(R.id.pager)
@@ -72,8 +72,8 @@ public class ShowDetailFragment extends BaseDetailFragment {
     ImageView mCoverImage;
 
     public static ShowDetailFragment newInstance(Show show, int color) {
+        sShow = show;
         Bundle b = new Bundle();
-        b.putParcelable(DATA, show);
         b.putInt(COLOR, color);
         ShowDetailFragment showDetailFragment = new ShowDetailFragment();
         showDetailFragment.setArguments(b);
@@ -83,7 +83,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mShow = getArguments().getParcelable(DATA);
         mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
     }
 
@@ -102,30 +101,30 @@ public class ShowDetailFragment extends BaseDetailFragment {
 
         List<Fragment> fragments = new ArrayList<>();
         if(mIsTablet) {
-            Double rating = Double.parseDouble(mShow.rating);
-            mTitle.setText(mShow.title);
+            Double rating = Double.parseDouble(sShow.rating);
+            mTitle.setText(sShow.title);
             mRating.setProgress(rating.intValue());
 
-            String metaDataStr = mShow.year;
+            String metaDataStr = sShow.year;
 
-            if (mShow.status != null) {
+            if (sShow.status != null) {
                 metaDataStr += " • ";
-                if (mShow.status == Show.Status.CONTINUING) {
+                if (sShow.status == Show.Status.CONTINUING) {
                     metaDataStr += getString(R.string.continuing);
                 } else {
                     metaDataStr += getString(R.string.ended);
                 }
             }
 
-            if (!TextUtils.isEmpty(mShow.genre)) {
+            if (!TextUtils.isEmpty(sShow.genre)) {
                 metaDataStr += " • ";
-                metaDataStr += mShow.genre;
+                metaDataStr += sShow.genre;
             }
 
             mMeta.setText(metaDataStr);
 
-            if (!TextUtils.isEmpty(mShow.synopsis)) {
-                mSynopsis.setText(mShow.synopsis);
+            if (!TextUtils.isEmpty(sShow.synopsis)) {
+                mSynopsis.setText(sShow.synopsis);
                 mSynopsis.post(new Runnable() {
                     @Override
                     public void run() {
@@ -147,7 +146,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
                 mReadMore.setVisibility(View.GONE);
             }
 
-            Picasso.with(mCoverImage.getContext()).load(mShow.image).into(mCoverImage);
+            Picasso.with(mCoverImage.getContext()).load(sShow.image).into(mCoverImage);
             mTabs.setIndicatorColor(mPaletteColor);
         } else {
             mBackground.post(new Runnable() {
@@ -156,20 +155,27 @@ public class ShowDetailFragment extends BaseDetailFragment {
                     mBackground.getLayoutParams().height = mBackground.getLayoutParams().height - mTabs.getHeight();
                 }
             });
-            fragments.add(ShowDetailAboutFragment.newInstance(mShow));
+            fragments.add(ShowDetailAboutFragment.newInstance(sShow));
         }
 
-        final List<Integer> availableSeasons = new ArrayList<>();
-        for (Episode episode : mShow.episodes) {
+        final ArrayList<Integer> availableSeasons = new ArrayList<>();
+        for (Episode episode : sShow.episodes) {
             if (!availableSeasons.contains(episode.season)) {
                 availableSeasons.add(episode.season);
             }
         }
         Collections.sort(availableSeasons);
 
+        boolean hasSpecial = availableSeasons.indexOf(0) > -1;
+        if(hasSpecial)
+            availableSeasons.remove(availableSeasons.indexOf(0));
+
         for(int seasonInt : availableSeasons) {
-            fragments.add(ShowDetailSeasonFragment.newInstance(mShow, seasonInt, mPaletteColor));
+            fragments.add(ShowDetailSeasonFragment.newInstance(sShow, seasonInt, mPaletteColor));
         }
+        if(hasSpecial)
+            fragments.add(ShowDetailSeasonFragment.newInstance(sShow, 0, mPaletteColor));
+
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
 
         mViewPager.setAdapter(fragmentPagerAdapter);
@@ -193,7 +199,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
             return;
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle b = new Bundle();
-        b.putString("text", mShow.synopsis);
+        b.putString("text", sShow.synopsis);
         synopsisDialogFragment.setArguments(b);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }

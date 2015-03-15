@@ -48,10 +48,13 @@ import pct.droid.base.providers.subs.YSubsProvider;
 
 public class YTSProvider extends MediaProvider {
 
+    private static final YTSProvider sMediaProvider = new YTSProvider();
 	private static final String API_URL = "http://cloudflare.com/api/v2/";
     private static final String MIRROR_URL = "http://reddit.com/api/v2/";
     private static final String MIRROR_URL2 = "http://eqwww.image.yt/api/v2/";
     public static String CURRENT_URL = API_URL;
+
+    private static final SubsProvider sSubsProvider = new YSubsProvider();
 
     @Override
     protected OkHttpClient getClient() {
@@ -230,7 +233,7 @@ public class YTSProvider extends MediaProvider {
 					if (result.status != null && result.status.equals("error")) {
 						callback.onFailure(new NetworkErrorException(result.status_message));
 					} else {
-						final YTSMovie movie = result.formatDetailForPopcorn();
+						final Movie movie = result.formatDetailForPopcorn();
 
                         TraktProvider traktProvider = new TraktProvider();
 
@@ -334,8 +337,8 @@ public class YTSProvider extends MediaProvider {
 		 *
 		 * @return List with items
 		 */
-		public YTSMovie formatDetailForPopcorn() {
-            YTSMovie movie = new YTSMovie();
+		public Movie formatDetailForPopcorn() {
+            Movie movie = new Movie(sMediaProvider, sSubsProvider);
             LinkedTreeMap<String, Object> movieObj = data;
             if(movieObj == null) return movie;
 
@@ -390,7 +393,7 @@ public class YTSProvider extends MediaProvider {
             }
 
 			for (LinkedTreeMap<String, Object> item : movies) {
-				Movie movie = new YTSMovie();
+				Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
 				movie.videoId = item.get("id").toString();
                 movie.imdbId = (String) item.get("imdb_code");
@@ -442,12 +445,5 @@ public class YTSProvider extends MediaProvider {
     public int getLoadingMessage() {
 		return R.string.loading_movies;
 	}
-
-    public static class YTSMovie extends Movie {
-        public YTSMovie() {
-            super();
-            mSubsProvider = new YSubsProvider();
-        }
-    }
 
 }

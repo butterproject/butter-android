@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
@@ -44,8 +45,8 @@ public class Show extends Media implements Parcelable {
     public Integer seasons = 0;
     public List<Episode> episodes = new ArrayList<>();
 
-    public Show() {
-
+    public Show(MediaProvider mediaProvider, SubsProvider subsProvider) {
+        super(mediaProvider, subsProvider);
     }
 
     protected Show(Parcel in) {

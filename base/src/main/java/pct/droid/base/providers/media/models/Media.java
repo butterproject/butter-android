@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Media implements Parcelable {
@@ -34,15 +35,17 @@ public class Media implements Parcelable {
     public String year;
     public String genre;
     public String rating;
-    public String type = "media";
+    public Boolean isMovie = false;
     public String image;
     public String fullImage;
     public String headerImage;
     public Map<String, String> subtitles;
     protected SubsProvider mSubsProvider = null;
+    protected MediaProvider mMediaProvider = null;
 
-    public Media() {
-
+    public Media(MediaProvider provider, SubsProvider subsProvider) {
+        mMediaProvider = provider;
+        mSubsProvider = subsProvider;
     }
 
     public Media(Parcel in) {
@@ -52,15 +55,28 @@ public class Media implements Parcelable {
         year = in.readString();
         genre = in.readString();
         rating = in.readString();
-        type = in.readString();
+        isMovie = in.readInt() == 1;
         image = in.readString();
         fullImage = in.readString();
         headerImage = in.readString();
+
         String className = in.readString();
         mSubsProvider = null;
         try {
             Class<?> clazz = Class.forName(className);
             mSubsProvider = (SubsProvider) clazz.newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        className = in.readString();
+        mMediaProvider = null;
+        try {
+            Class<?> clazz = Class.forName(className);
+            mMediaProvider = (MediaProvider) clazz.newInstance();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -89,11 +105,12 @@ public class Media implements Parcelable {
         dest.writeString(year);
         dest.writeString(genre);
         dest.writeString(rating);
-        dest.writeString(type);
+        dest.writeInt(isMovie ? 1 : 2);
         dest.writeString(image);
         dest.writeString(fullImage);
         dest.writeString(headerImage);
         dest.writeString(mSubsProvider != null ? mSubsProvider.getClass().getCanonicalName() : "");
+        dest.writeString(mMediaProvider != null ? mMediaProvider.getClass().getCanonicalName() : "");
         if (subtitles != null) {
             dest.writeInt(subtitles.size());
             for (String key : subtitles.keySet()) {
@@ -165,4 +182,9 @@ public class Media implements Parcelable {
     public SubsProvider getSubsProvider() {
         return mSubsProvider;
     }
+
+    public MediaProvider getMediaProvider() {
+        return mMediaProvider;
+    }
+
 }

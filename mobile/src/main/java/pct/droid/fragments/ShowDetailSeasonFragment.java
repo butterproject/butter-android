@@ -13,27 +13,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.adapters.EpisodeListAdapter;
 import pct.droid.base.providers.media.models.Episode;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.EpisodeDialogFragment;
-import pct.droid.dialogfragments.SynopsisDialogFragment;
 import pct.droid.widget.LinearList;
 
 public class ShowDetailSeasonFragment extends BaseDetailFragment {
 
     protected static final String SEASON = "season";
 
-    private Show mShow;
+    private static Show sShow;
     private List<Episode> mEpisodes = new ArrayList<>();
 
     public static ShowDetailSeasonFragment newInstance(Show show, int season, int color) {
+        sShow = show;
         Bundle b = new Bundle();
-        b.putParcelable(DATA, show);
         b.putInt(SEASON, season);
         b.putInt(COLOR, color);
         ShowDetailSeasonFragment showDetailFragment = new ShowDetailSeasonFragment();
@@ -44,11 +41,10 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mShow = getArguments().getParcelable(DATA);
         mPaletteColor = getArguments().getInt(COLOR);
         int season = getArguments().getInt(SEASON);
 
-        for(Episode episode : mShow.episodes) {
+        for(Episode episode : sShow.episodes) {
             if(episode.season == season) {
                 mEpisodes.add(episode);
             }
@@ -94,14 +90,14 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
             int position = ((LinearList) mRoot).indexOfChild(v);
             Episode episode = mEpisodes.get(position);
 
-            EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(mShow, episode, mPaletteColor);
+            EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(sShow, episode, mPaletteColor);
             fragment.show(getFragmentManager(), "episode_dialog");
 
             /*
             String quality = episode.torrents.keySet().toArray(new String[1])[0];
             Media.Torrent torrent = episode.torrents.get(quality);
 
-            StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(episode, mShow, torrent.url, null, quality);
+            StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(episode, sShow, torrent.url, null, quality);
             mActivity.playStream(streamInfo);*/
         }
     };

@@ -9,7 +9,6 @@ import pct.droid.base.fragments.BaseStreamLoadingFragment;
 
 public abstract class BaseDetailFragment extends Fragment {
 
-    protected static final String DATA = "data";
     protected static final String COLOR = "palette_color";
 
     protected FragmentListener mCallback;

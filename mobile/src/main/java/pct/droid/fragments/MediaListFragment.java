@@ -18,6 +18,7 @@
 package pct.droid.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -42,9 +43,8 @@ import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
-import pct.droid.base.providers.media.EZTVProvider;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.MediaProvider;
-import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.ThreadUtils;
@@ -66,13 +66,14 @@ import pct.droid.dialogfragments.LoadingDetailDialogFragment;
  */
 public class MediaListFragment extends Fragment implements MediaProvider.Callback, LoadingDetailDialogFragment.Callback {
 
-	public static final String EXTRA_ARGS = "extra_args";
+	public static final String EXTRA_PROVIDER = "extra_provider";
 	public static final String EXTRA_SORT = "extra_sort";
 	public static final String EXTRA_MODE = "extra_mode";
 	public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
 	public static final int LOADING_DIALOG_FRAGMENT = 1;
 
+    private Context mContext;
 	private MediaGridAdapter mAdapter;
 	private GridLayoutManager mLayoutManager;
 	private Integer mColumns = 2, mRetries = 0;
@@ -112,11 +113,10 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	@InjectView(R.id.progress_textview)
 	TextView progressTextView;
 
-	//todo: a better way to passing a provider to this fragment
-	public static MediaListFragment newInstance(Mode mode, int provider,MediaProvider.Filters.Sort filter) {
+	public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter) {
 		MediaListFragment frag = new MediaListFragment();
 		Bundle args = new Bundle();
-		args.putInt(EXTRA_ARGS, provider);
+		args.putParcelable(EXTRA_PROVIDER, provider);
 		args.putSerializable(EXTRA_MODE, mode);
 		args.putSerializable(EXTRA_SORT, filter);
 		frag.setArguments(args);
@@ -129,6 +129,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	}
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mContext = getActivity();
 		return inflater.inflate(R.layout.fragment_media, container, false);
 	}
 
@@ -139,11 +140,11 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		mColumns = getResources().getInteger(R.integer.overview_cols);
 		mLoadingTreshold = mColumns * 3;
 		recyclerView.setHasFixedSize(true);
-		mLayoutManager = new GridLayoutManager(getActivity(), mColumns);
+		mLayoutManager = new GridLayoutManager(mContext, mColumns);
 		recyclerView.setLayoutManager(mLayoutManager);
 		recyclerView.setOnScrollListener(mScrollListener);
 		//adapter should only ever be created once on fragment initialise.
-		mAdapter = new MediaGridAdapter(getActivity(), mItems, mColumns);
+		mAdapter = new MediaGridAdapter(mContext, mItems, mColumns);
 		mAdapter.setOnItemClickListener(mOnItemClickListener);
 		recyclerView.setAdapter(mAdapter);
 	}
@@ -170,23 +171,11 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		super.onActivityCreated(savedInstanceState);
 
 		//get the provider type and create a provider
-		int providerType = getArguments().getInt(EXTRA_ARGS);
+		mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
         mSort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
         mFilters.sort = mSort;
 
 		mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
-		switch (providerType) {
-			case 0:
-				mProvider = new YTSProvider();
-				break;
-			case 1:
-				mProvider = new EZTVProvider();
-				break;
-			default:
-				throw new IllegalArgumentException("No provider set");
-
-
-		}
 		if (mMode == Mode.SEARCH) emptyView.setText(getString(R.string.no_search_results));
 
 		//don't load initial data in search mode
@@ -200,11 +189,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		super.onPause();
 		mProvider.cancel();
 	}
-
-	@Override public MediaProvider getProvider() {
-		return mProvider;
-	}
-
 
 	/**
 	 * Responsible for updating the UI based on the state of this fragment
@@ -349,7 +333,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 				ThreadUtils.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+						Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
 						setState(State.LOADED);
 					}
 				});
@@ -361,47 +345,48 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	}
 
 
-	private MediaGridAdapter.OnItemClickListener mOnItemClickListener = new MediaGridAdapter.OnItemClickListener() {
-		@Override
-		public void onItemClick(final View view, final Media item, final int position) {
-			/**
-			 * We shouldn't really be doing the palette loading here without any ui feedback,
-			 * but it should be really quick
-			 */
-			RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
-			if (holder instanceof MediaGridAdapter.ViewHolder) {
-				ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
+    private MediaGridAdapter.OnItemClickListener mOnItemClickListener = new MediaGridAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(final View view, final Media item, final int position) {
+            /**
+             * We shouldn't really be doing the palette loading here without any ui feedback,
+             * but it should be really quick
+             */
+            RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
+            if (holder instanceof MediaGridAdapter.ViewHolder) {
+                ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 
-				if (coverImage.getDrawable() == null) {
-					showLoadingDialog(item.videoId, -1);
-					return;
-				}
+                if (coverImage.getDrawable() == null) {
+                    showLoadingDialog(item, -1);
+                    return;
+                }
 
-				Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
-				Palette.generateAsync(cover, 5, new Palette.PaletteAsyncListener() {
-					@Override public void onGenerated(Palette palette) {
-						int vibrantColor = palette.getVibrantColor(-1);
-						int paletteColor;
-						if (vibrantColor == -1) {
-							paletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
-						} else {
-							paletteColor = vibrantColor;
-						}
-                        showLoadingDialog(item.videoId, paletteColor);
-					}
-				});
-			} else {
-                showLoadingDialog(item.videoId, -1);
+                Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
+                Palette.generateAsync(cover, 5, new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        int vibrantColor = palette.getVibrantColor(-1);
+                        int paletteColor;
+                        if (vibrantColor == -1) {
+                            paletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
+                        } else {
+                            paletteColor = vibrantColor;
+                        }
+                        showLoadingDialog(item, paletteColor);
+                    }
+                });
+            } else {
+                showLoadingDialog(item, -1);
             }
 
-		}
-	};
+        }
+    };
 
-	private void showLoadingDialog(String itemId, int paletteColor) {
-		LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(itemId, paletteColor);
-		loadingFragment.setTargetFragment(MediaListFragment.this, LOADING_DIALOG_FRAGMENT);
-		loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
-	}
+    private void showLoadingDialog(Media item, int paletteColor) {
+        LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(item, paletteColor);
+        loadingFragment.setTargetFragment(MediaListFragment.this, LOADING_DIALOG_FRAGMENT);
+        loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
+    }
 
 
 	private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
@@ -439,7 +424,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	 */
 	@Override
     public void onDetailLoadFailure() {
-		Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+		Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -449,6 +434,6 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	 */
 	@Override
     public void onDetailLoadSuccess(final Media item, final int paletteColor) {
-        MediaDetailActivity.startActivity(getActivity(), item, paletteColor);
+        MediaDetailActivity.startActivity(mContext, item, paletteColor);
 	}
 }
