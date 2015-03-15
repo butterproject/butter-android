@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.dialogfragments.ExitDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
