@@ -73,11 +73,24 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				finish();
+                showExitDialog();
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+    @Override
+    public void onBackPressed() {
+       showExitDialog();
+    }
+
+    private void showExitDialog() {
+        String type = mMedia instanceof Movie ? "Movie" : "Show";
+        String title = "Exit " + type + "?";
+        ExitDialogFragment.show(getFragmentManager(), title,
+                String.format("Do you want to quit playback of %s?", mMedia.title),
+                "Yes, exit", "Cancel");
+    }
 
 	@Override
     public Media getData() {
