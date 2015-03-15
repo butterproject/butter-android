@@ -48,6 +48,7 @@
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
+    <string name="specials">Specials</string>
     <string name="continuing">Continuing</string>
     <string name="ended">Ended</string>
     <string name="aired">Aired: %s</string>

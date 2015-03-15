@@ -46,9 +46,9 @@ import pct.droid.base.Constants;
 import pct.droid.base.casting.CastingManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.YTSProvider;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaContainerFragment;
@@ -129,23 +129,24 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 				break;
 			case R.id.action_search:
 				//start the search activity
-				SearchActivity.startActivity(this, mNavigationDrawerFragment.getSelectedPosition());
+				SearchActivity.startActivity(this, mNavigationDrawerFragment.getCurrentItem().getMediaProvider());
 				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 
-	@Override public void onNavigationDrawerItemSelected(int position, String title) {
-        setTitle(null!=title?title: getString(R.string.app_name));
+	@Override
+    public void onNavigationDrawerItemSelected(NavigationDrawerFragment.NavDrawerItem item, String title) {
+        setTitle(null != title ? title : getString(R.string.app_name));
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		String tag = Integer.toString(position);
 
-		//		Fragment fragment = mFragmentCache.get(position);
+        String tag = title + "_tag";
+		// Fragment fragment = mFragmentCache.get(position);
 		Fragment fragment = fragmentManager.findFragmentByTag(tag);
-		if (null == fragment) {
-            fragment = MediaContainerFragment.newInstance(position);
+		if (null == fragment && item.hasProvider()) {
+            fragment = MediaContainerFragment.newInstance(item.getMediaProvider());
         }
         fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
 	}
@@ -174,7 +175,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									Movie media = new YTSProvider.YTSMovie();
+									Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 
 									media.videoId = "dialogtestvideo";
 									media.title = "User input test video";
@@ -185,13 +186,13 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 				}
 				if (YouTubeData.isYouTubeUrl(location)) {
 					Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
-					Media media = new YTSProvider.YTSMovie();
+                    Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 					media.title = file_types[index];
 					i.putExtra(TrailerPlayerActivity.DATA, media);
 					i.putExtra(TrailerPlayerActivity.LOCATION, location);
 					startActivity(i);
 				} else {
-					final Movie media = new YTSProvider.YTSMovie();
+					final Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 					media.videoId = "bigbucksbunny";
 					media.title = file_types[index];
 					media.subtitles = new HashMap<>();

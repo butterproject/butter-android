@@ -55,13 +55,11 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/activity_vertical_margin">
-
 				<Button
 					android:layout_weight="0.5"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:text="@string/leave"
-					android:backgroundTint="@color/red"
 					android:onClick="leaveClick" />
 
 				<Button
@@ -69,7 +67,6 @@
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:text="@string/accept"
-					android:backgroundTint="@color/green"
 					android:onClick="acceptClick" />
 			</LinearLayout>
 		</LinearLayout>

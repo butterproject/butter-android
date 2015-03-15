@@ -17,19 +17,23 @@
 
 package pct.droid.base.providers.media;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.squareup.okhttp.Call;
 
 import java.util.ArrayList;
 
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.meta.MetaProvider;
 
 /**
  * MediaProvider.java
  * <p/>
  * Base class for all media providers. Any media providers has to extend this class and use the callback defined here.
  */
-public abstract class MediaProvider extends BaseProvider {
+public abstract class MediaProvider extends BaseProvider implements Parcelable {
     public static final String MEDIA_CALL = "media_http_call";
 
     /**
@@ -63,10 +67,7 @@ public abstract class MediaProvider extends BaseProvider {
     }
 
     public static class Filters {
-        public enum Order {ASC, DESC}
-
-        ;
-
+        public enum Order {ASC, DESC};
         public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET}
 
         public String keywords = null;
@@ -75,5 +76,41 @@ public abstract class MediaProvider extends BaseProvider {
         public Sort sort = Sort.POPULARITY;
         public Integer page = null;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        String className = getClass().getCanonicalName();
+        dest.writeString(className);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<MediaProvider> CREATOR = new Parcelable.Creator<MediaProvider>() {
+        @Override
+        public MediaProvider createFromParcel(Parcel in) {
+            String className = in.readString();
+            MediaProvider provider = null;
+            try {
+                Class<?> clazz = Class.forName(className);
+                provider = (MediaProvider) clazz.newInstance();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return provider;
+        }
+
+        @Override
+        public MediaProvider[] newArray(int size) {
+            return null;
+        }
+    };
 
 }

@@ -48,7 +48,7 @@ public class SearchActivity extends BaseActivity {
 
 	private MediaListFragment mFragment;
 
-	public static Intent startActivity(Activity activity, int provider) {
+	public static Intent startActivity(Activity activity, MediaProvider provider) {
 		Intent intent = new Intent(activity, SearchActivity.class);
 		intent.putExtra(EXTRA_PROVIDER, provider);
 		activity.startActivity(intent);
@@ -64,7 +64,7 @@ public class SearchActivity extends BaseActivity {
         setShowCasting(true);
 
 		ToolbarUtils.updateToolbarHeight(this, toolbar);
-		int provider = getIntent().getExtras().getInt(EXTRA_PROVIDER);
+		MediaProvider provider = getIntent().getExtras().getParcelable(EXTRA_PROVIDER);
 
 		mSearchview.onActionViewExpanded();
 		mSearchview.setOnQueryTextListener(mSearchListener);

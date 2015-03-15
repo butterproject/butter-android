@@ -33,6 +33,7 @@
         android:paddingRight="@dimen/detail_horizontal_offset"
         android:paddingStart="@dimen/detail_horizontal_offset"
         android:paddingEnd="@dimen/detail_horizontal_offset"
+        android:paddingBottom="@dimen/detail_vertical_offset"
         android:paddingTop="@dimen/detail_vertical_offset"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -92,7 +93,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/detail_vertical_offset"
-        android:paddingTop="12dp"
         >
         <com.devspark.robototextview.widget.RobotoButton
             style="@style/DetailButton.PopcornTime"
