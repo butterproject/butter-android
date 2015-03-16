@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.dialogfragments.ExitDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
@@ -73,11 +75,24 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				finish();
+                showExitDialog();
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+    @Override
+    public void onBackPressed() {
+       showExitDialog();
+    }
+
+    private void showExitDialog() {
+        String type = mMedia instanceof Movie ? "Movie" : "Show";
+        String title = "Exit " + type + "?";
+        ExitDialogFragment.show(getFragmentManager(), title,
+                String.format("Do you want to quit playback of %s?", mMedia.title),
+                "Yes, exit", "Cancel");
+    }
 
 	@Override
     public Media getData() {
