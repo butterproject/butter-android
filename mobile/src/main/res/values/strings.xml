@@ -71,6 +71,8 @@
 	<string name="original_size">Original</string>
     <string name="comm_error">Communications Error</string>
     <string name="comm_message">An error occurred during the retrieval of the video. This could be due to network issues or YouTube protocols. Please try again later.</string>
+    <string name="leave_videoplayer_title">Are you sure?</string>
+    <string name="leave_videoplayer_message">Are you sure you want to leave the video player? %s will stop playing.</string>
 
 	<!-- TermsActivity strings -->
     <string name="terms" translatable="false">Your Acceptance\n\n
