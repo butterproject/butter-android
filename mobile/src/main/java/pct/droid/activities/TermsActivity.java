@@ -44,7 +44,7 @@ public class TermsActivity extends BaseActivity {
 
     public void acceptClick(View v) {
         PrefUtils.save(this, TERMS_ACCEPTED, true);
-        Intent overviewIntent = new Intent(this, OverviewActivity.class);
+        Intent overviewIntent = new Intent(this, MainActivity.class);
         startActivity(overviewIntent);
         finish();
     }

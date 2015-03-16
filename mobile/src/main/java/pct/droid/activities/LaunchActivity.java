@@ -34,7 +34,7 @@ public class LaunchActivity extends BaseActivity {
         Fabric.with(this, new Crashlytics());
         TorrentService.start(this);
         if (PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
-            startActivity(new Intent(this, OverviewActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         } else {
             startActivity(new Intent(this, TermsActivity.class));
         }

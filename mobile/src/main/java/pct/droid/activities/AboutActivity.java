@@ -31,8 +31,6 @@ import pct.droid.utils.ToolbarUtils;
 
 public class AboutActivity extends BaseActivity implements AboutFragment.OnFragmentInteractionListener {
 
-	public static String TERMS_ACCEPTED = "terms_accepted";
-
 	@InjectView(R.id.toolbar)
 	Toolbar toolbar;
 
@@ -49,17 +47,6 @@ public class AboutActivity extends BaseActivity implements AboutFragment.OnFragm
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		ToolbarUtils.updateToolbarHeight(this, toolbar);
-	}
-
-	public void acceptClick(View v) {
-		PrefUtils.save(this, TERMS_ACCEPTED, true);
-		Intent overviewIntent = new Intent(this, OverviewActivity.class);
-		startActivity(overviewIntent);
-		finish();
-	}
-
-	public void leaveClick(View v) {
-		finish();
 	}
 
 }

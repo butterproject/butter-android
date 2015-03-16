@@ -401,7 +401,8 @@ public class YTSProvider extends MediaProvider {
 				int existingItem = isInResults(existingList, movie.videoId);
 				if (existingItem == -1) {
                     movie.title = (String) item.get("title");
-                    movie.year = item.get("year").toString();
+                    Double year = (Double) item.get("year");
+                    movie.year = Integer.toString(year.intValue());
                     movie.rating = item.get("rating").toString();
                     movie.genre = ((ArrayList<String>)item.get("genres")).get(0);
                     movie.image = (String) item.get("medium_cover_image");

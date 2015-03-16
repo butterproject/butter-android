@@ -17,14 +17,9 @@
   ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.devspark.robototextview.widget.RobotoTextView
-        android:id="@+id/synopsis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/action_margin" />
-</LinearLayout>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:startColor="#F000"
+        android:endColor="#0000"
+        android:angle="90" />
+</shape>

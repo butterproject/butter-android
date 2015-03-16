@@ -18,7 +18,7 @@
         tools:src="@drawable/ic_launcher"
         android:duplicateParentState="true" />
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

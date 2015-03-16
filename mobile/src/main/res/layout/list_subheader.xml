@@ -16,7 +16,7 @@
   ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.devspark.robototextview.widget.RobotoTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
