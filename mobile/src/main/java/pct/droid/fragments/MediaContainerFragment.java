@@ -1,6 +1,5 @@
 package pct.droid.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -59,33 +57,7 @@ public class MediaContainerFragment extends Fragment {
 
         MediaProvider provider = getArguments().getParcelable(PROVIDER_EXTRA);
 
-        List<TabInfo> tabs = new ArrayList<>();
-        tabs.add(new TabInfo(MediaProvider.Filters.Sort.DATE,getString(R.string.release_date)));
-        tabs.add(new TabInfo(MediaProvider.Filters.Sort.POPULARITY,getString(R.string.popular_now)));
-        tabs.add(new TabInfo(MediaProvider.Filters.Sort.RATING,getString(R.string.top_rated)));
-        tabs.add(new TabInfo(MediaProvider.Filters.Sort.YEAR,getString(R.string.year)));
-        tabs.add(new TabInfo(MediaProvider.Filters.Sort.ALPHABET,getString(R.string.a_to_z)));
-        /*
-        switch (provider){
-            case 0:
-                //movies
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.DATE,getString(R.string.release_date)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.POPULARITY,getString(R.string.popular_now)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.RATING,getString(R.string.top_rated)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.YEAR,getString(R.string.year)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.ALPHABET,getString(R.string.a_to_z)));
-                break;
-            case 1:
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.POPULARITY,getString(R.string.popular_now)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.DATE,getString(R.string.release_date)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.RATING,getString(R.string.top_rated)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.YEAR,getString(R.string.year)));
-                tabs.add(new TabInfo(MediaProvider.Filters.Sort.ALPHABET,getString(R.string.a_to_z)));
-                //shows
-                break;
-        }
-        */
-        mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), tabs);
+        mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), provider.getNavigation());
         mViewPager.setAdapter(mAdapter);
         mTabs.setViewPager(mViewPager);
         mViewPager.setCurrentItem(1);
@@ -93,47 +65,29 @@ public class MediaContainerFragment extends Fragment {
 
     public static class MediaPagerAdapter extends FragmentPagerAdapter {
 
-        private final List<TabInfo> mFilters;
+        private final List<MediaProvider.NavInfo> mTabs;
         private MediaProvider mProvider;
 
-        public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<TabInfo> filters) {
+        public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<MediaProvider.NavInfo> tabs) {
             super(fm);
-            mFilters = filters;
+            mTabs = tabs;
             mProvider = provider;
         }
 
         @Override
         public int getCount() {
-            return mFilters.size();
+            return mTabs.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return String.valueOf(mFilters.get(position).getLabel());
+            return String.valueOf(mTabs.get(position).getLabel());
         }
 
         @Override
         public Fragment getItem(int position) {
-            return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mProvider, mFilters.get(position).getFilter()); //create new fragment instance
+            return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mProvider, mTabs.get(position).getFilter(), mTabs.get(position).getOrder()); //create new fragment instance
         }
 
-    }
-
-    public static class TabInfo {
-        private MediaProvider.Filters.Sort mSort;
-        private String mLabel;
-
-        public TabInfo(MediaProvider.Filters.Sort mSort, String mLabel) {
-            this.mSort = mSort;
-            this.mLabel = mLabel;
-        }
-
-        public MediaProvider.Filters.Sort getFilter() {
-            return mSort;
-        }
-
-        public String getLabel() {
-            return mLabel;
-        }
     }
 }

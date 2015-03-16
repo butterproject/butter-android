@@ -68,6 +68,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 	public static final String EXTRA_PROVIDER = "extra_provider";
 	public static final String EXTRA_SORT = "extra_sort";
+    public static final String EXTRA_ORDER = "extra_order";
 	public static final String EXTRA_MODE = "extra_mode";
 	public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
@@ -85,6 +86,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	private State mState = State.UNINITIALISED;
 	private Mode mMode;
     private MediaProvider.Filters.Sort mSort;
+    private MediaProvider.Filters.Order mDefOrder;
 
     public enum Mode {
 		NORMAL, SEARCH
@@ -113,12 +115,13 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	@InjectView(R.id.progress_textview)
 	TextView progressTextView;
 
-	public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter) {
+	public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
 		MediaListFragment frag = new MediaListFragment();
 		Bundle args = new Bundle();
 		args.putParcelable(EXTRA_PROVIDER, provider);
 		args.putSerializable(EXTRA_MODE, mode);
 		args.putSerializable(EXTRA_SORT, filter);
+        args.putSerializable(EXTRA_ORDER, defOrder);
 		frag.setArguments(args);
 		return frag;
 	}
@@ -173,7 +176,10 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		//get the provider type and create a provider
 		mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
         mSort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
+        mDefOrder = (MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER);
         mFilters.sort = mSort;
+        // if not changed use default order
+        mFilters.order = mDefOrder;
 
 		mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
 		if (mMode == Mode.SEARCH) emptyView.setText(getString(R.string.no_search_results));

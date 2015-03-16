@@ -18,7 +18,6 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
-import android.os.Parcel;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
@@ -36,8 +35,8 @@ import java.net.SocketException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
@@ -446,5 +445,21 @@ public class YTSProvider extends MediaProvider {
     public int getLoadingMessage() {
 		return R.string.loading_movies;
 	}
+
+    @Override
+    public List<NavInfo> getNavigation() {
+        List<NavInfo> tabs = new ArrayList<>();
+        tabs.add(new NavInfo(Filters.Sort.DATE, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.release_date)));
+        tabs.add(new NavInfo(Filters.Sort.POPULARITY, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.popular_now)));
+        tabs.add(new NavInfo(Filters.Sort.RATING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.top_rated)));
+        tabs.add(new NavInfo(Filters.Sort.YEAR, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.year)));
+        tabs.add(new NavInfo(Filters.Sort.ALPHABET, Filters.Order.ASC, PopcornApplication.getAppContext().getString(R.string.a_to_z)));
+        return tabs;
+    }
+
+    @Override
+    public List<String> getGenres() {
+        return null;
+    }
 
 }

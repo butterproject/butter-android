@@ -28,7 +28,9 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -86,13 +88,13 @@ public class EZTVProvider extends MediaProvider {
                 sort = "year";
                 break;
             case DATE:
-                sort = "'updated'";
+                sort = "updated";
                 break;
             case RATING:
                 sort = "rating";
                 break;
             case ALPHABET:
-                sort = "'name'";
+                sort = "name";
                 break;
 		}
 
@@ -304,4 +306,20 @@ public class EZTVProvider extends MediaProvider {
     public int getLoadingMessage() {
 		return R.string.loading_shows;
 	}
+
+    @Override
+    public List<NavInfo> getNavigation() {
+        List<NavInfo> tabs = new ArrayList<>();
+        tabs.add(new NavInfo(Filters.Sort.DATE, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.last_updated)));
+        tabs.add(new NavInfo(Filters.Sort.POPULARITY, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.popular_now)));
+        tabs.add(new NavInfo(Filters.Sort.RATING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.top_rated)));
+        tabs.add(new NavInfo(Filters.Sort.YEAR, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.year)));
+        tabs.add(new NavInfo(Filters.Sort.ALPHABET, Filters.Order.ASC, PopcornApplication.getAppContext().getString(R.string.a_to_z)));
+        return tabs;
+    }
+
+    @Override
+    public List<String> getGenres() {
+        return null;
+    }
 }

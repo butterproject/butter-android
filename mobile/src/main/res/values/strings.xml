@@ -153,10 +153,5 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<!-- Share dialog -->
 	<string name="share_text">Have you tried Popcorn Time for Android? It\'s awesome! https://popcorntime.io/</string>
 	<string name="share_dialog_title">Share with</string>
-    <string name="popular_now">POPULAR NOW</string>
-    <string name="top_rated">TOP RATED</string>
-    <string name="release_date">RELEASE DATE</string>
-    <string name="year">YEAR</string>
-    <string name="a_to_z">A - Z</string>
 
 </resources>

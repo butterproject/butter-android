@@ -52,6 +52,12 @@
     <string name="genre_war">War</string>
     <string name="genre_western">Western</string>
 
-
+    <!-- Possible tabs -->
+    <string name="popular_now">POPULAR NOW</string>
+    <string name="top_rated">TOP RATED</string>
+    <string name="release_date">RELEASE DATE</string>
+    <string name="last_updated">LAST UPDATED</string>
+    <string name="year">YEAR</string>
+    <string name="a_to_z">A - Z</string>
 
 </resources>
