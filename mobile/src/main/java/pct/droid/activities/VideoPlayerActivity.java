@@ -22,11 +22,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
-import pct.droid.dialogfragments.ExitDialogFragment;
+import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
@@ -87,11 +86,15 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
     }
 
     private void showExitDialog() {
-        String type = mMedia instanceof Movie ? "Movie" : "Show";
-        String title = "Exit " + type + "?";
-        ExitDialogFragment.show(getFragmentManager(), title,
-                String.format("Do you want to quit playback of %s?", mMedia.title),
-                "Yes, exit", "Cancel");
+        OptionDialogFragment.show(getFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mMedia.title), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
+            @Override
+            public void onSelectionPositive() {
+                finish();
+            }
+
+            @Override
+            public void onSelectionNegative() {}
+        });
     }
 
 	@Override
