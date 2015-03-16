@@ -24,6 +24,8 @@ import android.view.MenuItem;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
@@ -72,11 +74,28 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				finish();
+                showExitDialog();
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+    @Override
+    public void onBackPressed() {
+       showExitDialog();
+    }
+
+    private void showExitDialog() {
+        OptionDialogFragment.show(getFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mMedia.title), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
+            @Override
+            public void onSelectionPositive() {
+                finish();
+            }
+
+            @Override
+            public void onSelectionNegative() {}
+        });
+    }
 
 	@Override
     public Media getData() {
