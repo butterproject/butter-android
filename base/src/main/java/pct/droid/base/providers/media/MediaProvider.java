@@ -23,10 +23,10 @@ import android.os.Parcelable;
 import com.squareup.okhttp.Call;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.providers.meta.MetaProvider;
 
 /**
  * MediaProvider.java
@@ -60,6 +60,10 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
 
 	public abstract int getLoadingMessage();
 
+    public abstract List<NavInfo> getNavigation();
+
+    public abstract List<String> getGenres();
+
     public interface Callback {
         public void onSuccess(ArrayList<Media> items);
 
@@ -75,6 +79,30 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
         public Order order = Order.DESC;
         public Sort sort = Sort.POPULARITY;
         public Integer page = null;
+    }
+
+    public static class NavInfo {
+        private Filters.Sort mSort;
+        private Filters.Order mDefOrder;
+        private String mLabel;
+
+        public NavInfo(Filters.Sort sort, Filters.Order defOrder, String label) {
+            mSort = sort;
+            mDefOrder = defOrder;
+            mLabel = label;
+        }
+
+        public Filters.Sort getFilter() {
+            return mSort;
+        }
+
+        public Filters.Order getOrder() {
+            return mDefOrder;
+        }
+
+        public String getLabel() {
+            return mLabel;
+        }
     }
 
     @Override

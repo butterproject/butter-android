@@ -77,7 +77,7 @@ public class SearchActivity extends BaseActivity {
 
 		//create and add the media fragment
 		mFragment =
-				MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider, MediaProvider.Filters.Sort.POPULARITY);
+				MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider, MediaProvider.Filters.Sort.POPULARITY, MediaProvider.Filters.Order.DESC);
 
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
 	}
