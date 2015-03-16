@@ -22,7 +22,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent">
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,10 +30,9 @@
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp">
-    </TextView>
+        android:layout_marginStart="10dp" />
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
         android:id="@android:id/text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -60,7 +60,7 @@ import pct.droid.widget.ScrimInsetsFrameLayout;
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
  */
-public class OverviewActivity extends BaseActivity implements NavigationDrawerFragment.Callbacks {
+public class MainActivity extends BaseActivity implements NavigationDrawerFragment.Callbacks {
 
 	@InjectView(R.id.toolbar)
     Toolbar mToolbar;
@@ -70,7 +70,7 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.activity_overview);
+		super.onCreate(savedInstanceState, R.layout.activity_main);
 		FragmentManager.enableDebugLogging(BuildConfig.DEBUG);
 
 		setSupportActionBar(mToolbar);
@@ -169,8 +169,8 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 				dialogInterface.dismiss();
 				final String location = files[index];
 				if (location.equals("dialog")) {
-					final EditText dialogInput = new EditText(OverviewActivity.this);
-					AlertDialog.Builder builder = new AlertDialog.Builder(OverviewActivity.this)
+					final EditText dialogInput = new EditText(MainActivity.this);
+					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
 							.setView(dialogInput)
 							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
 								@Override
@@ -180,12 +180,12 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 									media.videoId = "dialogtestvideo";
 									media.title = "User input test video";
 
-									VideoPlayerActivity.startActivity(OverviewActivity.this, dialogInput.getText().toString(), media);
+									VideoPlayerActivity.startActivity(MainActivity.this, dialogInput.getText().toString(), media);
 								}
 							});
 				}
 				if (YouTubeData.isYouTubeUrl(location)) {
-					Intent i = new Intent(OverviewActivity.this, TrailerPlayerActivity.class);
+					Intent i = new Intent(MainActivity.this, TrailerPlayerActivity.class);
                     Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 					media.title = file_types[index];
 					i.putExtra(TrailerPlayerActivity.DATA, media);
@@ -198,24 +198,24 @@ public class OverviewActivity extends BaseActivity implements NavigationDrawerFr
 					media.subtitles = new HashMap<>();
 					media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
-					SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
+					SubsProvider.download(MainActivity.this, media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-                            CastingManager cm = CastingManager.getInstance(OverviewActivity.this);
+                            CastingManager cm = CastingManager.getInstance(MainActivity.this);
                             if(cm.isConnected()) {
-                                CastingManager.getInstance(OverviewActivity.this).loadMedia(media, location, false);
+                                CastingManager.getInstance(MainActivity.this).loadMedia(media, location, false);
                             } else {
-                                VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, null, 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
                             }
 						}
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-                            CastingManager cm = CastingManager.getInstance(OverviewActivity.this);
+                            CastingManager cm = CastingManager.getInstance(MainActivity.this);
                             if(cm.isConnected()) {
-                                CastingManager.getInstance(OverviewActivity.this).loadMedia(media, location, false);
+                                CastingManager.getInstance(MainActivity.this).loadMedia(media, location, false);
                             } else {
-                                VideoPlayerActivity.startActivity(OverviewActivity.this, location, media, null, null, 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
                             }
 						}
 					});

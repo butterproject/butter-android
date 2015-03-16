@@ -45,7 +45,7 @@
         android:paddingTop="@dimen/iconlist_text_twolines_padding"
         android:paddingBottom="@dimen/iconlist_text_twolines_padding">
 
-        <TextView
+        <com.devspark.robototextview.widget.RobotoTextView
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:textColor="@color/text_color"
             tools:text="Title Text" />
 
-        <TextView
+        <com.devspark.robototextview.widget.RobotoTextView
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -82,7 +82,7 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="@dimen/player_controls_distance">
 
-                <TextView
+                <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/currentTime"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                     android:gravity="right"
                     android:text="0:00" />
 
-                <TextView
+                <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/length_time"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
         android:background="@color/player_overlay"
         android:fitsSystemWindows="true" />
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/player_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

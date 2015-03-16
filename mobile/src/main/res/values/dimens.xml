@@ -74,6 +74,12 @@
     <dimen name="optionselecter_margin_end">32dp</dimen>
     <dimen name="optionselector_text_size">15sp</dimen>
 
+    <dimen name="griditem_title_horizontal">16dp</dimen>
+    <dimen name="griditem_title_bottom">16dp</dimen>
+    <dimen name="griditem_title_top">4dp</dimen>
+    <dimen name="griditem_title_textsize">14dp</dimen>
+    <dimen name="griditem_year_textsize">12dp</dimen>
+
 	<!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
      https://developer.android.com/design/patterns/navigation-drawer.html -->
 	<dimen name="nav_drawer_width">304dp</dimen>

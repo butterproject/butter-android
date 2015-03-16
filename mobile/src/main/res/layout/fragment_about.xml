@@ -35,7 +35,7 @@
 			android:src="@drawable/popcorn_logo"
 			android:layout_height="wrap_content" />
 
-		<TextView
+		<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/message_textview"
 			android:layout_width="wrap_content"
 			android:layout_below="@+id/logo_imageview"
@@ -54,7 +54,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/popcorn_button"
                 android:drawableTop="@drawable/icon_popcorn"
                 android:text="@string/website"
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/discuss_button"
                 android:drawableTop="@drawable/icon_discourse"
                 android:text="@string/forum"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/blog_button"
                 android:drawableTop="@drawable/icon_blog"
                 android:text="@string/blog"
@@ -86,7 +86,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/twitter_button"
                 android:drawableTop="@drawable/icon_twitter"
                 android:text="@string/twitter"
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/facebook_button"
                 android:drawableTop="@drawable/icon_facebook"
                 android:text="@string/facebook"
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/git_button"
                 android:drawableTop="@drawable/icon_git"
                 android:text="@string/git"

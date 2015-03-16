@@ -17,7 +17,6 @@
 
 package pct.droid.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,11 +65,11 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 		View v;
 		switch (viewType) {
 			case LOADING:
-				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_overview_griditem_loading, parent, false);
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_griditem_loading, parent, false);
 				return new MediaGridAdapter.LoadingHolder(v);
 			case NORMAL:
 			default:
-				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_overview_griditem, parent, false);
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_griditem, parent, false);
 				return new MediaGridAdapter.ViewHolder(v);
 		}
 	}
@@ -97,11 +96,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			final OverviewItem overviewItem = getItem(position);
 			Media item = overviewItem.media;
 
-			videoViewHolder.title.setVisibility(View.GONE);
-			videoViewHolder.title.setText(item.title.toUpperCase(Locale.getDefault()));
-			if (overviewItem.imageError) {
-				AnimUtils.fadeIn(videoViewHolder.title);
-			}
+			videoViewHolder.title.setText(item.title);
+            videoViewHolder.year.setText(item.year);
 
 			if (item.image != null && !item.image.equals("")) {
 				Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
@@ -115,8 +111,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 							@Override
 							public void onError() {
 								overviewItem.imageError = true;
-								if (((ViewHolder) viewHolder).title.getVisibility() != View.VISIBLE)
-									AnimUtils.fadeIn(videoViewHolder.title);
 							}
 						});
 			}
@@ -199,12 +193,14 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		View itemView;
-        @InjectView(R.id.focusOverlay)
+        @InjectView(R.id.focus_overlay)
         View focusOverlay;
-		@InjectView(R.id.coverImage)
+		@InjectView(R.id.cover_image)
 		ImageView coverImage;
 		@InjectView(R.id.title)
 		TextView title;
+        @InjectView(R.id.year)
+        TextView year;
 
         private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
