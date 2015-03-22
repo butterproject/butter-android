@@ -43,7 +43,6 @@ import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.LogUtils;
@@ -69,6 +68,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	public static final String EXTRA_PROVIDER = "extra_provider";
 	public static final String EXTRA_SORT = "extra_sort";
     public static final String EXTRA_ORDER = "extra_order";
+    public static final String EXTRA_GENRE = "extra_genre";
 	public static final String EXTRA_MODE = "extra_mode";
 	public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
@@ -107,24 +107,39 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 	private MediaProvider.Filters mFilters = new MediaProvider.Filters();
 
 	@InjectView(R.id.progressOverlay)
-	LinearLayout progressOverlay;
+	LinearLayout mProgressOverlay;
 	@InjectView(R.id.recyclerView)
-	RecyclerView recyclerView;
+	RecyclerView mRecyclerView;
 	@InjectView(R.id.emptyView)
-	TextView emptyView;
+	TextView mEmptyView;
 	@InjectView(R.id.progress_textview)
-	TextView progressTextView;
+	TextView mProgressTextView;
 
-	public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
+    public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
+        return newInstance(mode, provider, filter, defOrder, null);
+    }
+
+	public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder, String genre) {
 		MediaListFragment frag = new MediaListFragment();
 		Bundle args = new Bundle();
 		args.putParcelable(EXTRA_PROVIDER, provider);
 		args.putSerializable(EXTRA_MODE, mode);
 		args.putSerializable(EXTRA_SORT, filter);
         args.putSerializable(EXTRA_ORDER, defOrder);
+        args.putString(EXTRA_GENRE, genre);
 		frag.setArguments(args);
 		return frag;
 	}
+
+    public void changeGenre(String genre) {
+        if (mTotalItemCount > 0 && !(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
+            mAdapter.clearItems();
+            mFilters.genre = genre;
+            mProvider.getList(mFilters, this);
+            if(isAdded())
+                setState(State.LOADING);
+        }
+    }
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -142,14 +157,14 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 		mColumns = getResources().getInteger(R.integer.overview_cols);
 		mLoadingTreshold = mColumns * 3;
-		recyclerView.setHasFixedSize(true);
+		mRecyclerView.setHasFixedSize(true);
 		mLayoutManager = new GridLayoutManager(mContext, mColumns);
-		recyclerView.setLayoutManager(mLayoutManager);
-		recyclerView.setOnScrollListener(mScrollListener);
+		mRecyclerView.setLayoutManager(mLayoutManager);
+		mRecyclerView.setOnScrollListener(mScrollListener);
 		//adapter should only ever be created once on fragment initialise.
 		mAdapter = new MediaGridAdapter(mContext, mItems, mColumns);
 		mAdapter.setOnItemClickListener(mOnItemClickListener);
-		recyclerView.setAdapter(mAdapter);
+		mRecyclerView.setAdapter(mAdapter);
 	}
 
     @Override
@@ -180,9 +195,10 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
         mFilters.sort = mSort;
         // if not changed use default order
         mFilters.order = mDefOrder;
+        mFilters.genre = getArguments().getString(EXTRA_GENRE);
 
 		mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
-		if (mMode == Mode.SEARCH) emptyView.setText(getString(R.string.no_search_results));
+		if (mMode == Mode.SEARCH) mEmptyView.setText(getString(R.string.no_search_results));
 
 		//don't load initial data in search mode
 		if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
@@ -203,8 +219,8 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		if (!isAdded()) return;
 
 		//animate recyclerview to full alpha
-		//		if (recyclerView.getAlpha() != 1.0f)
-		//			recyclerView.animate().alpha(1.0f).setDuration(100).start();
+		//		if (mRecyclerView.getAlpha() != 1.0f)
+		//			mRecyclerView.animate().alpha(1.0f).setDuration(100).start();
 
 		//update loading message based on state
 		switch (mState) {
@@ -226,31 +242,31 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 			case LOADING:
 				if (mAdapter.isLoading()) mAdapter.removeLoading();
 				//show the progress bar
-				recyclerView.setVisibility(View.VISIBLE);
-				//				recyclerView.animate().alpha(0.5f).setDuration(500).start();
-				emptyView.setVisibility(View.GONE);
-				progressOverlay.setVisibility(View.VISIBLE);
+				mRecyclerView.setVisibility(View.VISIBLE);
+				//				mRecyclerView.animate().alpha(0.5f).setDuration(500).start();
+				mEmptyView.setVisibility(View.GONE);
+				mProgressOverlay.setVisibility(View.VISIBLE);
 				break;
 			case LOADED:
 				if (mAdapter.isLoading()) mAdapter.removeLoading();
-				progressOverlay.setVisibility(View.GONE);
+				mProgressOverlay.setVisibility(View.GONE);
 				boolean hasItems = mItems.size() > 0;
 				//show either the recyclerview or the empty view
-				recyclerView.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
-				emptyView.setVisibility(hasItems ? View.GONE : View.VISIBLE);
+				mRecyclerView.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
+				mEmptyView.setVisibility(hasItems ? View.GONE : View.VISIBLE);
 				break;
 			case LOADING_PAGE:
 				//add a loading view to the adapter
 				if (!mAdapter.isLoading()) mAdapter.addLoading();
-				emptyView.setVisibility(View.GONE);
-				recyclerView.setVisibility(View.VISIBLE);
+				mEmptyView.setVisibility(View.GONE);
+				mRecyclerView.setVisibility(View.VISIBLE);
 				break;
 		}
 		updateLoadingMessage();
 	}
 
 	private void updateLoadingMessage() {
-		progressTextView.setText(mLoadingMessage);
+		mProgressTextView.setText(mLoadingMessage);
 	}
 
 	@DebugLog
@@ -358,7 +374,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
              * We shouldn't really be doing the palette loading here without any ui feedback,
              * but it should be really quick
              */
-            RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
+            RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);
             if (holder instanceof MediaGridAdapter.ViewHolder) {
                 ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 

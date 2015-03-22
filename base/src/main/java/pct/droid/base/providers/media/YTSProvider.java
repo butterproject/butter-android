@@ -38,6 +38,7 @@ import java.util.List;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
+import pct.droid.base.providers.media.models.Genre;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.meta.MetaProvider;
@@ -458,8 +459,33 @@ public class YTSProvider extends MediaProvider {
     }
 
     @Override
-    public List<String> getGenres() {
-        return null;
+    public List<Genre> getGenres() {
+        List<Genre> returnList = new ArrayList<>();
+        returnList.add(new Genre(null, R.string.genre_all));
+        returnList.add(new Genre("action", R.string.genre_action));
+        returnList.add(new Genre("adventure", R.string.genre_adventure));
+        returnList.add(new Genre("animation", R.string.genre_animation));
+        returnList.add(new Genre("biography", R.string.genre_biography));
+        returnList.add(new Genre("comedy", R.string.genre_comedy));
+        returnList.add(new Genre("crime", R.string.genre_crime));
+        returnList.add(new Genre("documentary", R.string.genre_documentary));
+        returnList.add(new Genre("drama", R.string.genre_drama));
+        returnList.add(new Genre("family", R.string.genre_family));
+        returnList.add(new Genre("fantasy", R.string.genre_fantasy));
+        returnList.add(new Genre("filmnoir", R.string.genre_film_noir));
+        returnList.add(new Genre("history", R.string.genre_history));
+        returnList.add(new Genre("horror", R.string.genre_horror));
+        returnList.add(new Genre("music", R.string.genre_music));
+        returnList.add(new Genre("musical", R.string.genre_musical));
+        returnList.add(new Genre("mystery", R.string.genre_mystery));
+        returnList.add(new Genre("romance", R.string.genre_romance));
+        returnList.add(new Genre("scifi", R.string.genre_sci_fi));
+        returnList.add(new Genre("short", R.string.genre_short));
+        returnList.add(new Genre("sport", R.string.genre_sport));
+        returnList.add(new Genre("thriller", R.string.genre_thriller));
+        returnList.add(new Genre("war", R.string.genre_war));
+        returnList.add(new Genre("western", R.string.genre_western));
+        return returnList;
     }
 
 }

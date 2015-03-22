@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pct.droid.base.providers.BaseProvider;
+import pct.droid.base.providers.media.models.Genre;
 import pct.droid.base.providers.media.models.Media;
 
 /**
@@ -62,7 +63,13 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
 
     public abstract List<NavInfo> getNavigation();
 
-    public abstract List<String> getGenres();
+    public int getDefaultNavigationIndex() {
+        return 2;
+    }
+
+    public List<Genre> getGenres() {
+        return new ArrayList<>();
+    }
 
     public interface Callback {
         public void onSuccess(ArrayList<Media> items);

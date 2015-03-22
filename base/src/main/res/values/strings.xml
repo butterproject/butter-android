@@ -28,6 +28,7 @@
 	<string name="error_files">Error: Couldn\'t write files</string>
 
     <!-- Genres -->
+    <string name="genre_all">All</string>
     <string name="genre_action">Action</string>
     <string name="genre_adventure">Adventure</string>
     <string name="genre_animation">Animation</string>

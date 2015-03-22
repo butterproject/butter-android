@@ -18,6 +18,8 @@
 package pct.droid.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,9 +30,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -96,23 +98,35 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			final OverviewItem overviewItem = getItem(position);
 			Media item = overviewItem.media;
 
+
 			videoViewHolder.title.setText(item.title);
             videoViewHolder.year.setText(item.year);
+
+            videoViewHolder.gradient.setVisibility(View.GONE);
+            videoViewHolder.coverImage.setVisibility(View.GONE);
+            videoViewHolder.title.setVisibility(View.GONE);
+            videoViewHolder.year.setVisibility(View.GONE);
 
 			if (item.image != null && !item.image.equals("")) {
 				Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
 						.resize(mItemWidth, mItemHeight)
 						.into(videoViewHolder.coverImage, new Callback() {
-							@Override
-							public void onSuccess() {
-								overviewItem.imageError = false;
-							}
+                            @Override
+                            public void onSuccess() {
+                                overviewItem.isImageError = false;
+                                AnimUtils.fadeIn(videoViewHolder.gradient);
+                                AnimUtils.fadeIn(videoViewHolder.coverImage);
+                                AnimUtils.fadeIn(videoViewHolder.title);
+                                AnimUtils.fadeIn(videoViewHolder.year);
+                            }
 
-							@Override
-							public void onError() {
-								overviewItem.imageError = true;
-							}
-						});
+                            @Override
+                            public void onError() {
+                                overviewItem.isImageError = true;
+                                AnimUtils.fadeIn(videoViewHolder.title);
+                                AnimUtils.fadeIn(videoViewHolder.year);
+                            }
+                        });
 			}
 		}
 	}
@@ -201,6 +215,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 		TextView title;
         @InjectView(R.id.year)
         TextView year;
+        @InjectView(R.id.gradient)
+        View gradient;
 
         private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
@@ -248,7 +264,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 	class OverviewItem {
 		Media media;
-		boolean imageError = false;
+		boolean isImageError = true;
 		boolean isLoadingItem = false;
 
 		OverviewItem(Media media) {
