@@ -32,6 +32,7 @@
 	<string name="search_hint">Title, year, actors</string>
 	<string name="title_shows">Shows</string>
 	<string name="title_movies">Movies</string>
+    <string name="genres">Genres</string>
 	<string name="search">Search</string>
 	<string name="searching">Searching…</string>
 	<string name="no_data_found">No data found</string>

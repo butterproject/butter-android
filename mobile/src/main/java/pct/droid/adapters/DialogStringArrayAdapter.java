@@ -27,7 +27,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class StringArrayAdapter extends BaseAdapter {
+public class DialogStringArrayAdapter extends BaseAdapter {
 
     private String[] mData;
     private LayoutInflater mInflater;
@@ -41,7 +41,7 @@ public class StringArrayAdapter extends BaseAdapter {
         TextView text1;
     }
 
-    public StringArrayAdapter(Context context, String[] data) {
+    public DialogStringArrayAdapter(Context context, String[] data) {
         mData = data;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

@@ -44,6 +44,7 @@
         android:scaleType="fitXY" />
 
     <View
+        android:id="@+id/gradient"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_alignParentBottom="true"
