@@ -30,6 +30,7 @@ import java.util.Map;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.fragments.MediaGenreSelectionFragment;
 import pct.droid.fragments.MediaListFragment;
 
@@ -58,10 +59,10 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if(mHasGenreTabs > 0 && position == 0) {
-            return PopcornApplication.getAppContext().getString(R.string.genres).toUpperCase(new Locale(PopcornApplication.getSystemLanguage()));
+            return PopcornApplication.getAppContext().getString(R.string.genres).toUpperCase(LocaleUtils.getCurrentAsLocale());
         }
         position -= mHasGenreTabs;
-        return mTabs.get(position).getLabel().toUpperCase(new Locale(PopcornApplication.getSystemLanguage()));
+        return mTabs.get(position).getLabel().toUpperCase(LocaleUtils.getCurrentAsLocale());
     }
 
     @Override

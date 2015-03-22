@@ -40,6 +40,7 @@ import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.AnimUtils;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 
 
@@ -84,7 +85,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 		GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
 		layoutParams.height = mItemHeight;
 		layoutParams.width = mItemWidth;
-		if (position % mColumns == 0) {
+        int mod = LocaleUtils.currentLocaleIsRTL() ? 1 : 0;
+		if (position % mColumns == mod) {
 			layoutParams.setMargins(double_margin, top_margin, mMargin, mMargin);
 		} else if (position % mColumns == mColumns - 1) {
 			layoutParams.setMargins(mMargin, top_margin, double_margin, mMargin);
