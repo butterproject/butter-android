@@ -219,7 +219,7 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mTitle.setText(mEpisode.title);
         Date airedDate = new Date((long)mEpisode.aired * 1000);
-        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", new Locale(LocaleUtils.getCurrent())).format(airedDate)));
+        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrentAsLocale()).format(airedDate)));
 
         mSynopsis.setText(mEpisode.overview);
 
