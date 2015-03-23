@@ -63,7 +63,7 @@ import pct.droid.dialogfragments.LoadingDetailDialogFragment;
  *
  * This fragment can be instantiated with ether a SEARCH mode, or a NORMAL mode. SEARCH mode simply does not load any initial data.
  */
-public class MediaListFragment extends Fragment implements MediaProvider.Callback, LoadingDetailDialogFragment.Callback {
+public class MediaListFragment extends Fragment implements LoadingDetailDialogFragment.Callback {
 
 	public static final String EXTRA_PROVIDER = "extra_provider";
 	public static final String EXTRA_SORT = "extra_sort";
@@ -135,15 +135,13 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
         if (mTotalItemCount > 0 && !(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
             mAdapter.clearItems();
             mFilters.genre = genre;
-            mProvider.getList(mFilters, this);
-            if(isAdded())
-                setState(State.LOADING);
+            mProvider.getList(mFilters, mCallback);
+            setState(State.LOADING);
         }
     }
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setRetainInstance(true);
 	}
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -202,7 +200,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 
 		//don't load initial data in search mode
 		if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
-			mProvider.getList(mFilters, this);/* fetch new items */
+			mProvider.getList(mFilters, mCallback);/* fetch new items */
 			setState(State.LOADING);
 		} else updateUI();
 	}
@@ -294,78 +292,83 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 		mFilters.keywords = searchQuery;
 		mFilters.page = 1;
 		mPage = 1;
-		mProvider.getList(mFilters, this);
+		mProvider.getList(mFilters, mCallback);
 	}
 
-
-	@Override
-	@DebugLog
-	public void onSuccess(final ArrayList<Media> items) {
-		mItems.clear();
-		if (null != items) mItems.addAll(items);
-
-		//fragment may be detached, so we dont want to update the UI
-		if (!isAdded()) return;
-
-		mEndOfListReached = false;
-
-		mPage = mPage + 1;
-		ThreadUtils.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				mAdapter.setItems(items);
-				mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
-				setState(State.LOADED);
-			}
-		});
-	}
-
-	@Override
-	@DebugLog
-	public void onFailure(Exception e) {
-        if(!mIsAttached) {
+    private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
+        @Override
+        @DebugLog
+        public void onSuccess(final ArrayList<Media> items) {
+            mItems.clear();
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (mAdapter == null) {
-                        return;
-                    }
-
-                    mAdapter.removeLoading();
                     setState(State.LOADED);
                 }
             });
-        } else if (e.getMessage() != null && e.getMessage().equals(getString(R.string.movies_error))) {
-			mEndOfListReached = true;
-			ThreadUtils.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (mAdapter == null) {
-						return;
-					}
+            if (null != items) mItems.addAll(items);
 
-					mAdapter.removeLoading();
-					setState(State.LOADED);
-				}
-			});
-		} else {
-			e.printStackTrace();
-			LogUtils.e(e.getMessage());
-			if (mRetries > 1) {
-				ThreadUtils.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
-						setState(State.LOADED);
-					}
-				});
-			} else {
-				mProvider.getList(null, this);
-			}
-			mRetries++;
-		}
-	}
+            //fragment may be detached, so we dont want to update the UI
+            if (!isAdded()) return;
 
+            mEndOfListReached = false;
+
+            mPage = mPage + 1;
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.setItems(items);
+                    mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
+                }
+            });
+        }
+
+        @Override
+        @DebugLog
+        public void onFailure(Exception e) {
+            if(!mIsAttached) {
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter == null) {
+                            return;
+                        }
+
+                        mAdapter.removeLoading();
+                        setState(State.LOADED);
+                    }
+                });
+            } else if (e.getMessage() != null && e.getMessage().equals(getString(R.string.movies_error))) {
+                mEndOfListReached = true;
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter == null) {
+                            return;
+                        }
+
+                        mAdapter.removeLoading();
+                        setState(State.LOADED);
+                    }
+                });
+            } else {
+                e.printStackTrace();
+                LogUtils.e(e.getMessage());
+                if (mRetries > 1) {
+                    ThreadUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                            setState(State.LOADED);
+                        }
+                    });
+                } else {
+                    mProvider.getList(null, this);
+                }
+                mRetries++;
+            }
+        }
+    };
 
     private MediaGridAdapter.OnItemClickListener mOnItemClickListener = new MediaGridAdapter.OnItemClickListener() {
         @Override
@@ -430,7 +433,7 @@ public class MediaListFragment extends Fragment implements MediaProvider.Callbac
 					mLoadingTreshold)) {
 				MediaProvider.Filters filters = mFilters;
 				filters.page = mPage;
-				mProvider.getList(mItems, filters, MediaListFragment.this);
+				mProvider.getList(mItems, filters, mCallback);
 
 				mFilters = filters;
 

@@ -181,10 +181,7 @@ public class FormatSRT extends TimedTextFileFormat {
             file.add(index++, "");
         }
 
-        String[] toReturn = new String[file.size()];
-        for (int i = 0; i < toReturn.length; i++) {
-            toReturn[i] = file.get(i);
-        }
+        String[] toReturn = file.toArray(new String[file.size()]);
         return toReturn;
     }
 

@@ -33,12 +33,10 @@ public class OneShotDividerDecorator extends RecyclerView.ItemDecoration {
 
 	private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
 	private int mPosition;
-    private int mSpacing;
 
 	public OneShotDividerDecorator(Context context, int position) {
 		final TypedArray a = context.obtainStyledAttributes(ATTRS);
 		mDivider = a.getDrawable(0);
-        mSpacing = context.getResources().getDimensionPixelSize(R.dimen.list_divider_spacing);
 		a.recycle();
 		mPosition = position;
 	}
