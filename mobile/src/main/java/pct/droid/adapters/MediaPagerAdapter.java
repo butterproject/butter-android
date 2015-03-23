@@ -42,6 +42,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     private MediaProvider mProvider;
     private String mGenre;
     private int mHasGenreTabs = 0;
+    private Fragment mGenreFragment;
 
     public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<MediaProvider.NavInfo> tabs) {
         super(fm);
@@ -70,7 +71,9 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         Fragment frag;
 
         if(mHasGenreTabs > 0 && position == 0) {
-            frag = MediaGenreSelectionFragment.newInstance(mProvider, new MediaGenreSelectionFragment.Listener() {
+            if(mGenreFragment != null)
+                return mGenreFragment;
+            mGenreFragment = frag = MediaGenreSelectionFragment.newInstance(mProvider, new MediaGenreSelectionFragment.Listener() {
                 @Override
                 public void onGenreSelected(String genre) {
                     mGenre = genre;
@@ -97,6 +100,11 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
             String tag = f.getTag();
             mFragTags.put(position, tag);
         }
+
+        if(obj instanceof MediaGenreSelectionFragment && mGenreFragment != null) {
+            return mGenreFragment;
+        }
+
         return obj;
     }
 

@@ -64,7 +64,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     public abstract List<NavInfo> getNavigation();
 
     public int getDefaultNavigationIndex() {
-        return 2;
+        return 1;
     }
 
     public List<Genre> getGenres() {

@@ -39,8 +39,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -49,13 +47,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Genre;
-import pct.droid.base.providers.media.models.Media;
 
 public class GenreAdapter extends RecyclerView.Adapter {
 
+    private Context mContext;
+    private View mSelectedItem;
+    private int mSelectedPos = 0;
     private List<Genre> mData;
-    private LayoutInflater mInflater;
-    private GenreAdapter.OnItemClickListener mItemClickListener;
+    private OnItemSelectionListener mItemSelectionListener;
+
+    private int mSelectedColor, mNormalColor;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ViewHolder(View v) {
@@ -69,18 +70,25 @@ public class GenreAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            if (mItemClickListener != null) {
-                int position = getPosition();
-                Genre item = getItem(position);
-                mItemClickListener.onItemClick(view, item, position);
+            if (mItemSelectionListener != null) {
+                mSelectedPos = getPosition();
+                mSelectedItem.setBackgroundColor(mNormalColor);
+                mSelectedItem = itemView;
+                mSelectedItem.setBackgroundColor(mSelectedColor);
+
+                mItemSelectionListener.onItemSelect(view, getItem(mSelectedPos), mSelectedPos);
             }
         }
 
     }
 
-    public GenreAdapter(Context context, List<Genre> data) {
+    public GenreAdapter(Context context, List<Genre> data, int selectedPos) {
+        mContext = context;
         mData = data;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mSelectedPos = selectedPos;
+
+        mSelectedColor = context.getResources().getColor(R.color.selectable_focused);
+        mNormalColor = context.getResources().getColor(android.R.color.transparent);
     }
 
     @Override
@@ -90,7 +98,13 @@ public class GenreAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder)holder).text1.setText(getItem(position).getLabelId());
+        ViewHolder viewHolder = (ViewHolder) holder;
+
+        if(mSelectedPos == position && mSelectedItem == null)
+            mSelectedItem = viewHolder.itemView;
+
+        viewHolder.itemView.setBackgroundColor(mSelectedPos == position ? mSelectedColor : mNormalColor);
+        viewHolder.text1.setText(getItem(position).getLabelId());
     }
 
     @Override
@@ -107,11 +121,11 @@ public class GenreAdapter extends RecyclerView.Adapter {
         return mData.get(position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mItemClickListener = listener;
+    public void setOnItemSelectionListener(OnItemSelectionListener listener) {
+        mItemSelectionListener = listener;
     }
 
-    public interface OnItemClickListener {
-        public void onItemClick(View v, Genre item, int position);
+    public interface OnItemSelectionListener {
+        public void onItemSelect(View v, Genre item, int position);
     }
 }
