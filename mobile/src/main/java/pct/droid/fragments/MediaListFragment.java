@@ -133,6 +133,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     public void changeGenre(String genre) {
         if (mTotalItemCount > 0 && !(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
+            mProvider.cancel();
             mAdapter.clearItems();
             mFilters.genre = genre;
             mProvider.getList(mFilters, mCallback);
@@ -298,7 +299,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
         @DebugLog
-        public void onSuccess(final ArrayList<Media> items) {
+        public void onSuccess(final ArrayList<Media> items, boolean changed) {
+            if(!changed) return; // nothing changed according to the provider, so don't do anything
+
             mItems.clear();
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
@@ -309,7 +312,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             if (null != items) mItems.addAll(items);
 
             //fragment may be detached, so we dont want to update the UI
-            if (!isAdded()) return;
+            if (!isAdded())
+                return;
 
             mEndOfListReached = false;
 
@@ -326,7 +330,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         @Override
         @DebugLog
         public void onFailure(Exception e) {
-            if(!mIsAttached) {
+            if(!mIsAttached || e.getMessage().equals("Canceled")) {
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
