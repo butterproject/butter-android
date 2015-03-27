@@ -72,7 +72,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public interface Callback {
-        public void onSuccess(ArrayList<Media> items);
+        public void onSuccess(ArrayList<Media> items, boolean changed);
 
         public void onFailure(Exception e);
     }

@@ -178,7 +178,7 @@ public class YTSProvider extends MediaProvider {
 						callback.onFailure(new NetworkErrorException(result.status_message));
 					} else {
 						ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
-						callback.onSuccess(formattedData);
+						callback.onSuccess(formattedData, true);
 						return;
 					}
 				}
@@ -283,7 +283,7 @@ public class YTSProvider extends MediaProvider {
 
                                 final ArrayList<Media> returnData = new ArrayList<>();
                                 returnData.add(movie);
-                                callback.onSuccess(returnData);
+                                callback.onSuccess(returnData, true);
                             }
                         });
 

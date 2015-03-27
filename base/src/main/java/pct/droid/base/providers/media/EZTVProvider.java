@@ -144,14 +144,20 @@ public class EZTVProvider extends MediaProvider {
 				try {
 					if (response.isSuccessful()) {
 						String responseStr = response.body().string();
-						ArrayList<LinkedTreeMap<String, Object>> list =
-								(ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
+
+                        ArrayList<LinkedTreeMap<String, Object>> list = null;
+                        if(responseStr.isEmpty()) {
+                            list = new ArrayList<>();
+                        } else {
+                            list = (ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
+                        }
+
 						EZTVReponse result = new EZTVReponse(list);
 						if (list == null) {
 							callback.onFailure(new NetworkErrorException("Empty response"));
 						} else {
 							ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
-							callback.onSuccess(formattedData);
+							callback.onSuccess(formattedData, list.size() > 0);
 							return;
 						}
 					}
@@ -187,7 +193,7 @@ public class EZTVProvider extends MediaProvider {
 						ArrayList<Media> formattedData = result.formatDetailForPopcorn();
 
 						if (formattedData.size() > 0) {
-							callback.onSuccess(formattedData);
+							callback.onSuccess(formattedData, true);
 							return;
 						}
 						callback.onFailure(new IllegalStateException("Empty list"));
@@ -311,48 +317,44 @@ public class EZTVProvider extends MediaProvider {
     @Override
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
-        tabs.add(new NavInfo(Filters.Sort.DATE, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.last_updated)));
         tabs.add(new NavInfo(Filters.Sort.POPULARITY, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.popular_now)));
         tabs.add(new NavInfo(Filters.Sort.RATING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.top_rated)));
+        tabs.add(new NavInfo(Filters.Sort.DATE, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.last_updated)));
         tabs.add(new NavInfo(Filters.Sort.YEAR, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.year)));
         tabs.add(new NavInfo(Filters.Sort.ALPHABET, Filters.Order.ASC, PopcornApplication.getAppContext().getString(R.string.a_to_z)));
         return tabs;
     }
 
     @Override
-    public int getDefaultNavigationIndex() {
-        return 1;
-    }
-
-    /*
-    @Override
     public List<Genre> getGenres() {
         List<Genre> returnList = new ArrayList<>();
         returnList.add(new Genre(null, R.string.genre_all));
-        returnList.add(new Genre("action", R.string.genre_action));
-        returnList.add(new Genre("adventure", R.string.genre_adventure));
-        returnList.add(new Genre("animation", R.string.genre_animation));
-        returnList.add(new Genre("biography", R.string.genre_biography));
-        returnList.add(new Genre("comedy", R.string.genre_comedy));
-        returnList.add(new Genre("crime", R.string.genre_crime));
-        returnList.add(new Genre("documentary", R.string.genre_documentary));
-        returnList.add(new Genre("drama", R.string.genre_drama));
-        returnList.add(new Genre("family", R.string.genre_family));
-        returnList.add(new Genre("fantasy", R.string.genre_fantasy));
-        returnList.add(new Genre("filmnoir", R.string.genre_film_noir));
-        returnList.add(new Genre("history", R.string.genre_history));
-        returnList.add(new Genre("horror", R.string.genre_horror));
-        returnList.add(new Genre("music", R.string.genre_music));
-        returnList.add(new Genre("musical", R.string.genre_musical));
-        returnList.add(new Genre("mystery", R.string.genre_mystery));
-        returnList.add(new Genre("romance", R.string.genre_romance));
-        returnList.add(new Genre("scifi", R.string.genre_sci_fi));
-        returnList.add(new Genre("short", R.string.genre_short));
-        returnList.add(new Genre("sport", R.string.genre_sport));
-        returnList.add(new Genre("thriller", R.string.genre_thriller));
-        returnList.add(new Genre("war", R.string.genre_war));
-        returnList.add(new Genre("western", R.string.genre_western));
+        returnList.add(new Genre("Action", R.string.genre_action));
+        returnList.add(new Genre("Adventure", R.string.genre_adventure));
+        returnList.add(new Genre("Animation", R.string.genre_animation));
+        returnList.add(new Genre("Children", R.string.genre_children));
+        returnList.add(new Genre("Comedy", R.string.genre_comedy));
+        returnList.add(new Genre("Crime", R.string.genre_crime));
+        returnList.add(new Genre("Documentary", R.string.genre_documentary));
+        returnList.add(new Genre("Drama", R.string.genre_drama));
+        returnList.add(new Genre("Family", R.string.genre_family));
+        returnList.add(new Genre("Fantasy", R.string.genre_fantasy));
+        returnList.add(new Genre("Game Show", R.string.genre_game_show));
+        returnList.add(new Genre("Home and Garden", R.string.genre_home_garden));
+        returnList.add(new Genre("Horror", R.string.genre_horror));
+        returnList.add(new Genre("Mini Series", R.string.genre_mini_series));
+        returnList.add(new Genre("Mystery", R.string.genre_mystery));
+        returnList.add(new Genre("News", R.string.genre_news));
+        returnList.add(new Genre("Reality", R.string.genre_reality));
+        returnList.add(new Genre("Romance", R.string.genre_romance));
+        returnList.add(new Genre("Science Fiction", R.string.genre_sci_fi));
+        returnList.add(new Genre("Soap", R.string.genre_soap));
+        returnList.add(new Genre("Special Interest", R.string.genre_special_interest));
+        returnList.add(new Genre("Sport", R.string.genre_sport));
+        returnList.add(new Genre("Suspense", R.string.genre_suspense));
+        returnList.add(new Genre("Talk Show", R.string.genre_talk_show));
+        returnList.add(new Genre("Thriller", R.string.genre_thriller));
+        returnList.add(new Genre("Western", R.string.genre_western));
         return returnList;
     }
-    */
 }
