@@ -30,6 +30,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.MediaProvider;
@@ -74,16 +75,22 @@ public abstract class BaseProvider {
     }
 
     public void cancel() {
-        // Cancel in asynctask to prevent networkOnMainThreadException
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                getClient().cancel(MediaProvider.MEDIA_CALL);
-                getClient().cancel(MetaProvider.META_CALL);
-                getClient().cancel(SubsProvider.SUBS_CALL);
-                return null;
-            }
-        }.execute();
+        // Cancel in asynctask to prevent networkOnMainThreadException but make it blocking to prevent network calls to be made and then immediately cancelled.
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    getClient().cancel(MediaProvider.MEDIA_CALL);
+                    getClient().cancel(MetaProvider.META_CALL);
+                    getClient().cancel(SubsProvider.SUBS_CALL);
+                    return null;
+                }
+            }.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

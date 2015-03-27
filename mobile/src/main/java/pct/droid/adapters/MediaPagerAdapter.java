@@ -77,6 +77,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
                 @Override
                 public void onGenreSelected(String genre) {
                     mGenre = genre;
+                    mProvider.cancel();
                     for(int i = 0; i < getCount(); i++) {
                         MediaListFragment mediaListFragment = getMediaListFragment(i);
                         if(mediaListFragment != null)
