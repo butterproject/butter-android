@@ -133,7 +133,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     public void changeGenre(String genre) {
         if (mTotalItemCount > 0 && !(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
-            mProvider.cancel();
             mAdapter.clearItems();
             mFilters.genre = genre;
             mProvider.getList(mFilters, mCallback);
