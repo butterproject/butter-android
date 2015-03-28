@@ -43,8 +43,8 @@ import pct.droid.base.providers.subs.SubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
-    private static final String mApiUrl = "http://eztvapi.re/";
-    private static final String mMirrorApiUrl = "http://api.popcorntime.io/";
+    private static final String API_URL = "http://eztvapi.re/";
+    private static final String MIRROR_URL = "http://api.popcorntime.io/";
     private static final SubsProvider sSubsProvider = new OpenSubsProvider();
     private static final MetaProvider sMetaProvider = new TraktProvider();
     private static final MediaProvider sMediaProvider = new EZTVProvider();
@@ -101,7 +101,7 @@ public class EZTVProvider extends MediaProvider {
 
 		params.add(new BasicNameValuePair("sort", sort));
 
-		String url = mApiUrl + "shows/";
+		String url = API_URL + "shows/";
 		if (filters.page != null) {
 			url += filters.page;
 		} else {
@@ -130,10 +130,10 @@ public class EZTVProvider extends MediaProvider {
 			@Override
 			public void onFailure(Request request, IOException e) {
 				String url = requestBuilder.build().urlString();
-				if (url.equals(mMirrorApiUrl)) {
+				if (url.equals(MIRROR_URL)) {
 					callback.onFailure(e);
 				} else {
-					url = url.replace(mApiUrl, mMirrorApiUrl);
+					url = url.replace(API_URL, MIRROR_URL);
 					requestBuilder.url(url);
 					fetchList(currentList, requestBuilder, callback);
 				}
@@ -172,7 +172,7 @@ public class EZTVProvider extends MediaProvider {
 	@Override
 	public Call getDetail(String videoId, final Callback callback) {
 		Request.Builder requestBuilder = new Request.Builder();
-		requestBuilder.url(mApiUrl + "show/" + videoId);
+		requestBuilder.url(API_URL + "show/" + videoId);
 		requestBuilder.tag(MEDIA_CALL);
 
 		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
