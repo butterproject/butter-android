@@ -95,4 +95,12 @@ public class WrappingViewPager extends ViewPager {
  
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
+    @Override
+    protected void onPageScrolled(int position, float offset, int offsetPixels) {
+        super.onPageScrolled(position, offset, offsetPixels);
+
+        invalidate();
+        requestLayout();
+    }
 }
