@@ -44,6 +44,7 @@
 	<string name="watch_trailer">Watch trailer</string>
 	<string name="disable_subs">Disable subtitles</string>
 	<string name="no_subs">No subtitles</string>
+    <string name="no_subs_available">No subtitles available</string>
 	<string name="subtitles">Subtitles</string>
 	<string name="quality">Quality</string>
 	<string name="trailer">Trailer</string>
