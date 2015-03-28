@@ -26,6 +26,8 @@
 	<string name="loading_movies">Loading movies…</string>
     <string name="loading_subs">Loading subs…</string>
 	<string name="error_files">Error: Couldn\'t write files</string>
+    <string name="overview_not_available">Sorry! There is no overview available.</string>
+    <string name="episode">Episode</string>
 
     <!-- Genres -->
     <string name="genre_all">All</string>
@@ -62,6 +64,35 @@
     <string name="genre_thriller">Thriller</string>
     <string name="genre_war">War</string>
     <string name="genre_western">Western</string>
+
+    <!-- Anime: -->
+    <string name="genre_cars">Cars</string>
+    <string name="genre_dementia">Dementia</string>
+    <string name="genre_demons">Demons</string>
+    <string name="genre_ecchi">Ecchi</string>
+    <string name="genre_game">Game</string>
+    <string name="genre_harem">Harem</string>
+    <string name="genre_josei">Josei</string>
+    <string name="genre_kids">Kids</string>
+    <string name="genre_magic">Magic</string>
+    <string name="genre_martial_arts">Martial Arts</string>
+    <string name="genre_mecha">Mecha</string>
+    <string name="genre_military">Military</string>
+    <string name="genre_police">Police</string>
+    <string name="genre_parody">Parody</string>
+    <string name="genre_psychological">Psychological</string>
+    <string name="genre_samurai">Samurai</string>
+    <string name="genre_school">School</string>
+    <string name="genre_seinen">Seinen</string>
+    <string name="genre_shoujo">Shoujo</string>
+    <string name="genre_shoujo_ai">Shoujo Ai</string>
+    <string name="genre_shounen">Shounen</string>
+    <string name="genre_shounen_ai">Shounen Ai</string>
+    <string name="genre_slice_of_life">Slice of Life</string>
+    <string name="genre_space">Space</string>
+    <string name="genre_super_power">Super Power</string>
+    <string name="genre_supernatural">Supernatural</string>
+    <string name="genre_vampire">Vampire</string>
 
     <!-- Possible tabs -->
     <string name="popular_now">POPULAR NOW</string>

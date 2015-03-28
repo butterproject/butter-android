@@ -123,7 +123,7 @@ public class PreferencesActivity extends BaseActivity
 				new PrefItem.OnClickListener() {
 					@Override
 					public void onClick(final PrefItem item) {
-						String[] items = {getString(R.string.title_movies), getString(R.string.title_shows)};
+						String[] items = {getString(R.string.title_movies), getString(R.string.title_shows), getString(R.string.title_anime)};
 
 						openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE,
 								(int) item.getValue(), new DialogInterface.OnClickListener() {

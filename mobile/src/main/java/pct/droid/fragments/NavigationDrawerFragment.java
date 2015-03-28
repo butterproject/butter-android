@@ -44,6 +44,7 @@ import pct.droid.adapters.decorators.OneShotDividerDecorator;
 import pct.droid.base.Constants;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
+import pct.droid.base.providers.media.HaruProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.utils.IntentUtils;
@@ -129,13 +130,14 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 		navItems.add(new NavDrawerItem(true));
 		navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies, new YTSProvider()));
 		navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv, new EZTVProvider()));
+        navItems.add(new NavDrawerItem(getString(R.string.title_anime), R.drawable.ic_nav_anime, new HaruProvider()));
 		navItems.add(new NavDrawerItem(getString(R.string.share), R.drawable.ic_nav_share, mOnShareClickListener));
 		navItems.add(new NavDrawerItem(getString(R.string.preferences), R.drawable.ic_nav_settings, mOnSettingsClickListener));
 
 		mAdapter = new NavigationAdapter(getActivity(), this, navItems);
 		mAdapter.setOnItemClickListener(this);
 
-		mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 2));
+		mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 3));
 		mRecyclerView.setHasFixedSize(true);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		mRecyclerView.setAdapter(mAdapter);
