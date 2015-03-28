@@ -113,7 +113,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	private float mVol;
 
 	private boolean mIsFirstBrightnessGesture = true;
-	private float mRestoreBrightness = -1f;
+	private float mRestoreAutoBrightness = -1f;
 
 
 	@Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -201,14 +201,15 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	public void onStop() {
 		super.onStop();
 		//restore brightness
-		if (mRestoreBrightness != -1f) {
-			int brightness = (int) (mRestoreBrightness * 255f);
-			Settings.System.putInt(getActionBarActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightness);
-		} else {
-			Settings.System
-					.putInt(getActionBarActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
-							Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
-		}
+        if (mRestoreAutoBrightness != -1f) {
+            int brightness = (int) (mRestoreAutoBrightness*255f);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS,
+                    brightness);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+        }
 	}
 
 	@Override public void onDestroyView() {
@@ -330,20 +331,27 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		}
 	}
 
-	private void doVolumeTouch(float y_changed) {
-		if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
-			return;
-		float delta = -((y_changed * 2f / mSurfaceYDisplayRange) * mAudioMax);
-		mVol += delta;
+    private void doVolumeTouch(float y_changed) {
+        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
+            return;
+        float delta = - ((y_changed / mSurfaceYDisplayRange) * mAudioMax);
+        mVol += delta;
         int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
-		if (delta != 0f) {
-			setAudioVolume(vol);
-		}
-	}
+        if (delta != 0f) {
+            setAudioVolume(vol);
+        }
+    }
 
 	private void setAudioVolume(int vol) {
-		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
-		mTouchAction = TOUCH_VOLUME;
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
+
+        /* Since android 4.3, the safe volume warning dialog is displayed only with the FLAG_SHOW_UI flag.
+         * We don't want to always show the default UI volume, so show it only when volume is not set. */
+        int newVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (vol != newVol)
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, AudioManager.FLAG_SHOW_UI);
+
+        mTouchAction = TOUCH_VOLUME;
 		showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol));
 	}
 
@@ -351,17 +359,15 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		float brightnesstemp = 0.6f;
 		try {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO &&
-					Settings.System.getInt(getActionBarActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) ==
-							Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-				Settings.System.putInt(getActionBarActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
-						Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-				mRestoreBrightness = -1f;
+                    Settings.System.getInt(getActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
+                Settings.System.putInt(getActivity().getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS_MODE,
+                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                mRestoreAutoBrightness = android.provider.Settings.System.getInt(getActivity().getContentResolver(),
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
 			} else {
-				mRestoreBrightness = brightnesstemp =
-						android.provider.Settings.System.getInt(getActionBarActivity().getContentResolver(),
-								android.provider.Settings.System
-										.SCREEN_BRIGHTNESS) /
-								255.0f;
+                brightnesstemp = android.provider.Settings.System.getInt(getActivity().getContentResolver(),
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
 			}
 		} catch (Settings.SettingNotFoundException e) {
 			e.printStackTrace();
@@ -373,15 +379,15 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	}
 
 	private void doBrightnessTouch(float y_changed) {
-		if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
-			return;
-		if (mIsFirstBrightnessGesture) initBrightnessTouch();
-		mTouchAction = TOUCH_BRIGHTNESS;
+        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
+            return;
+        if (mIsFirstBrightnessGesture) initBrightnessTouch();
+        mTouchAction = TOUCH_BRIGHTNESS;
 
-		// Set delta : 2f is arbitrary for now, it possibly will change in the future
-		float delta = -y_changed / mSurfaceYDisplayRange * 2f;
+        // Set delta : 2f is arbitrary for now, it possibly will change in the future
+        float delta = - y_changed / mSurfaceYDisplayRange;
 
-		changeBrightness(delta);
+        changeBrightness(delta);
 	}
 
 	private void changeBrightness(float delta) {
