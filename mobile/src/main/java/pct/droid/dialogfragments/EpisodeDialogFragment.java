@@ -218,7 +218,8 @@ public class EpisodeDialogFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
 
         mTitle.setText(mEpisode.title);
-        Date airedDate = new Date((long)mEpisode.aired * 1000);
+        mAired.setVisibility(mEpisode.aired > 0 ? View.VISIBLE : View.GONE);
+        Date airedDate = new Date((long) mEpisode.aired * 1000);
         mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrentAsLocale()).format(airedDate)));
 
         mSynopsis.setText(mEpisode.overview);
@@ -251,60 +252,64 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mSubtitles.setText(R.string.loading_subs);
         mSubtitles.setClickable(false);
-        mSubsProvider.getList(mShow, mEpisode, new SubsProvider.Callback() {
-            @Override
-            public void onSuccess(Map<String, String> subtitles) {
-                if(!mAttached) return;
+        if(mSubsProvider != null) {
+            mSubsProvider.getList(mShow, mEpisode, new SubsProvider.Callback() {
+                @Override
+                public void onSuccess(Map<String, String> subtitles) {
+                    if (!mAttached) return;
 
-                mEpisode.subtitles = subtitles;
+                    mEpisode.subtitles = subtitles;
 
-                String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
-                Arrays.sort(languages);
-                final String[] adapterLanguages = new String[languages.length + 1];
-                adapterLanguages[0] = "no-subs";
-                System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
+                    String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
+                    Arrays.sort(languages);
+                    final String[] adapterLanguages = new String[languages.length + 1];
+                    adapterLanguages[0] = "no-subs";
+                    System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
 
-                String[] readableNames = new String[adapterLanguages.length];
-                for (int i = 0; i < readableNames.length; i++) {
-                    String language = adapterLanguages[i];
-                    if (language.equals("no-subs")) {
-                        readableNames[i] = getString(R.string.no_subs);
+                    String[] readableNames = new String[adapterLanguages.length];
+                    for (int i = 0; i < readableNames.length; i++) {
+                        String language = adapterLanguages[i];
+                        if (language.equals("no-subs")) {
+                            readableNames[i] = getString(R.string.no_subs);
+                        } else {
+                            Locale locale = LocaleUtils.toLocale(language);
+                            readableNames[i] = locale.getDisplayName(locale);
+                        }
+                    }
+
+                    mSubtitles.setListener(new OptionSelector.SelectorListener() {
+                        @Override
+                        public void onSelectionChanged(int position, String value) {
+                            onSubtitleLanguageSelected(adapterLanguages[position]);
+                        }
+                    });
+                    mSubtitles.setData(readableNames);
+                    ThreadUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSubtitles.setClickable(true);
+                        }
+                    });
+
+                    String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
+                    if (subtitles.containsKey(defaultSubtitle)) {
+                        onSubtitleLanguageSelected(defaultSubtitle);
+                        mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
                     } else {
-                        Locale locale = LocaleUtils.toLocale(language);
-                        readableNames[i] = locale.getDisplayName(locale);
+                        onSubtitleLanguageSelected("no-subs");
+                        mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf("no-subs"));
                     }
                 }
 
-                mSubtitles.setListener(new OptionSelector.SelectorListener() {
-                    @Override
-                    public void onSelectionChanged(int position, String value) {
-                        onSubtitleLanguageSelected(adapterLanguages[position]);
-                    }
-                });
-                mSubtitles.setData(readableNames);
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSubtitles.setClickable(true);
-                    }
-                });
-
-                String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
-                if (subtitles.containsKey(defaultSubtitle)) {
-                    onSubtitleLanguageSelected(defaultSubtitle);
-                    mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
-                } else {
-                    onSubtitleLanguageSelected("no-subs");
-                    mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf("no-subs"));
+                @Override
+                public void onFailure(Exception e) {
+                    mSubtitles.setData(new String[0]);
+                    mSubtitles.setClickable(true);
                 }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                mSubtitles.setData(new String[0]);
-                mSubtitles.setClickable(true);
-            }
-        });
+            });
+        } else {
+            mSubtitles.setText(R.string.no_subs_available);
+        }
 
         mScrollView.setListener(new BottomSheetScrollView.Listener() {
             @Override
@@ -332,16 +337,20 @@ public class EpisodeDialogFragment extends DialogFragment {
             }
         });
 
-        mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode, new MetaProvider.Callback() {
-            @Override
-            public void onResult(MetaProvider.MetaData metaData, Exception e) {
-                String imageUrl = mEpisode.headerImage;
-                if (e == null) {
-                    imageUrl = metaData.images.poster;
+        if(mMetaProvider != null) {
+            mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode, new MetaProvider.Callback() {
+                @Override
+                public void onResult(MetaProvider.MetaData metaData, Exception e) {
+                    String imageUrl = mEpisode.headerImage;
+                    if (e == null) {
+                        imageUrl = metaData.images.poster;
+                    }
+                    Picasso.with(mHeaderImage.getContext()).load(imageUrl).into(mHeaderImage);
                 }
-                Picasso.with(mHeaderImage.getContext()).load(imageUrl).into(mHeaderImage);
-            }
-        });
+            });
+        } else {
+            Picasso.with(mHeaderImage.getContext()).load(mEpisode.headerImage).into(mHeaderImage);
+        }
     }
 
     @Override

@@ -61,9 +61,14 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
-        Double rating = Double.parseDouble(sShow.rating);
         mTitle.setText(sShow.title);
-        mRating.setProgress(rating.intValue());
+        if(!sShow.rating.equals("-1")) {
+            Double rating = Double.parseDouble(sShow.rating);
+            mRating.setProgress(rating.intValue());
+            mRating.setVisibility(View.VISIBLE);
+        } else {
+            mRating.setVisibility(View.GONE);
+        }
 
         String metaDataStr = sShow.year;
 
