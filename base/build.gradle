@@ -53,7 +53,6 @@ dependencies {
     compile 'com.uwetrottmann:trakt-java:4.3.0'
 
     compile 'com.koushikdutta.async:androidasync:2.0.5'
-    compile 'com.google.android.gms:play-services-cast:6.5.+'
 
     compile project(':vlc')
     compile project(':xmlrpc')
