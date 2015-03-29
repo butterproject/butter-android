@@ -25,14 +25,15 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.connectsdk.device.ConnectableDevice;
+
 import pct.droid.R;
-import pct.droid.base.casting.CastingDevice;
-import pct.droid.base.casting.CastingDeviceAdapter;
-import pct.droid.base.casting.CastingManager;
+import pct.droid.base.connectsdk.BeamDeviceAdapter;
+import pct.droid.base.connectsdk.BeamManager;
 
 public class CastDeviceSelectorDialogFragment extends DialogFragment {
 
-    private CastingDeviceAdapter mAdapter;
+    private BeamDeviceAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,18 +42,18 @@ public class CastDeviceSelectorDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mAdapter = new CastingDeviceAdapter(getActivity());
+        mAdapter = new BeamDeviceAdapter(getActivity());
         AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
                 .setSingleChoiceItems(mAdapter, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int position) {
-                        CastingDevice device;
+                        ConnectableDevice device;
                         if(position == 0) {
                             device = null;
                         } else {
                             device = mAdapter.getItem(position);
                         }
-                        CastingManager.getInstance(getActivity()).setDevice(device);
+                        BeamManager.getInstance(getActivity()).setDevice(device);
                         dismiss();
                     }
                 })
