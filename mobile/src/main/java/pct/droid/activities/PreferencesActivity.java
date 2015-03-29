@@ -119,12 +119,11 @@ public class PreferencesActivity extends BaseActivity
 		mPrefItems = new ArrayList<>();
 		mPrefItems.add(getResources().getString(R.string.general));
 
+        final String[] items = {getString(R.string.title_movies), getString(R.string.title_shows), getString(R.string.title_anime)};
 		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.default_view, Prefs.DEFAULT_VIEW, 0,
 				new PrefItem.OnClickListener() {
 					@Override
 					public void onClick(final PrefItem item) {
-						String[] items = {getString(R.string.title_movies), getString(R.string.title_shows), getString(R.string.title_anime)};
-
 						openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE,
 								(int) item.getValue(), new DialogInterface.OnClickListener() {
 									@Override
@@ -138,10 +137,7 @@ public class PreferencesActivity extends BaseActivity
 				new PrefItem.SubTitleGenerator() {
 					@Override
 					public String get(PrefItem item) {
-						if ((Integer) item.getValue() == 1) {
-							return getString(R.string.title_shows);
-						}
-						return getString(R.string.title_movies);
+						return items[(Integer)item.getValue()];
 					}
 				}));
 
