@@ -71,11 +71,11 @@ public class BeamDeviceAdapter extends BaseAdapter {
         mDevices = mBeamManager.getDevices();
         mKeys = new ArrayList<>(mDevices.keySet());
 
-        mBeamManager.addListener(mListener);
+        mBeamManager.addDiscoveryListener(mListener);
     }
 
     public void destroy() {
-        mBeamManager.removeListener(mListener);
+        mBeamManager.removeDiscoveryListener(mListener);
     }
 
     @Override

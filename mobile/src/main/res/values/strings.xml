@@ -157,4 +157,8 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="share_text">Have you tried Popcorn Time for Android? It\'s awesome! https://popcorntime.io/</string>
 	<string name="share_dialog_title">Share with</string>
 
+    <!-- Beam dialog -->
+    <string name="connected_to">Connected to</string>
+    <string name="disconnect">Disconnect</string>
+
 </resources>

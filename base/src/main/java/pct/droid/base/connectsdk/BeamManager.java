@@ -35,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ import timber.log.Timber;
  * <p/>
  * Wrapper for ConnectSDK
  */
-public class BeamManager implements ConnectableDeviceListener {
+public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerListener {
 
     private static BeamManager sInstance;
 
@@ -57,6 +58,7 @@ public class BeamManager implements ConnectableDeviceListener {
     private LaunchSession mLaunchSession;
     private MediaControl mMediaControl;
     private Boolean mConnected = false;
+    private BeamListener mListener = null;
 
     private BeamManager(Context context) {
         mContext = context;
@@ -69,6 +71,7 @@ public class BeamManager implements ConnectableDeviceListener {
                 MediaControl.Any
         ));
         mDiscoveryManager.start();
+        mDiscoveryManager.addListener(this);
 
         Intent castServerService = new Intent(context, BeamServerService.class);
         context.startService(castServerService);
@@ -83,6 +86,7 @@ public class BeamManager implements ConnectableDeviceListener {
     }
 
     public void onDestroy() {
+        mDiscoveryManager.removeListener(this);
         mDiscoveryManager.stop();
         mDiscoveryManager.onDestroy();
         Intent castServerService = new Intent(mContext, BeamServerService.class);
@@ -91,6 +95,10 @@ public class BeamManager implements ConnectableDeviceListener {
 
     public Map<String, ConnectableDevice> getDevices() {
         return mDiscoveryManager.getCompatibleDevices();
+    }
+
+    public ConnectableDevice getConnectedDevice() {
+        return mCurrentDevice;
     }
 
     public boolean hasCastDevices() {
@@ -149,7 +157,7 @@ public class BeamManager implements ConnectableDeviceListener {
         return false;
     }
 
-    public void setDevice(ConnectableDevice castingDevice) {
+    public void connect(ConnectableDevice castingDevice) {
         if(castingDevice == mCurrentDevice) return;
 
         if(mCurrentDevice != null) {
@@ -165,37 +173,80 @@ public class BeamManager implements ConnectableDeviceListener {
         }
     }
 
-    public void addListener(DiscoveryManagerListener listener) {
+    public void disconnect() {
+        if(mCurrentDevice != null) {
+            mConnected = false;
+
+            mCurrentDevice.disconnect();
+            mCurrentDevice.removeListener(this);
+        }
+
+        mCurrentDevice = null;
+
+        if(mListener != null) {
+            mListener.updateBeamIcon();
+        }
+    }
+
+    public void addDiscoveryListener(DiscoveryManagerListener listener) {
         mDiscoveryManager.addListener(listener);
     }
 
-    public void removeListener(DiscoveryManagerListener listener) {
+    public void removeDiscoveryListener(DiscoveryManagerListener listener) {
         mDiscoveryManager.removeListener(listener);
+    }
+
+    public void setListener(BeamListener listener) {
+        mListener = listener;
     }
 
     @Override
     public void onDeviceReady(ConnectableDevice device) {
         mConnected = true;
+        if(mListener != null)
+            mListener.updateBeamIcon();
     }
 
     @Override
     public void onDeviceDisconnected(ConnectableDevice device) {
         mConnected = false;
+        if(mListener != null)
+            mListener.updateBeamIcon();
     }
 
     @Override
-    public void onPairingRequired(ConnectableDevice device, DeviceService service, DeviceService.PairingType pairingType) {
+    public void onPairingRequired(ConnectableDevice device, DeviceService service, DeviceService.PairingType pairingType) { }
+
+    @Override
+    public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) { }
+
+    @Override
+    public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) { }
+
+    @Override
+    public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
+        if(mListener != null)
+            mListener.updateBeamIcon();
+    }
+
+    @Override
+    public void onDeviceUpdated(DiscoveryManager manager, ConnectableDevice device) {
 
     }
 
     @Override
-    public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {
-
+    public void onDeviceRemoved(DiscoveryManager manager, ConnectableDevice device) {
+        if(mListener != null)
+            mListener.updateBeamIcon();
     }
 
     @Override
-    public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) {
+    public void onDiscoveryFailed(DiscoveryManager manager, ServiceCommandError error) {
 
+    }
+
+    public interface BeamListener {
+        public void updateBeamIcon();
     }
 
 }
