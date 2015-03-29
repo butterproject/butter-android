@@ -43,7 +43,7 @@ import butterknife.InjectView;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
-import pct.droid.base.casting.CastingManager;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Movie;
@@ -201,9 +201,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 					SubsProvider.download(MainActivity.this, media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-                            CastingManager cm = CastingManager.getInstance(MainActivity.this);
+                            BeamManager cm = BeamManager.getInstance(MainActivity.this);
                             if(cm.isConnected()) {
-                                CastingManager.getInstance(MainActivity.this).loadMedia(media, location, false);
+                                BeamManager.getInstance(MainActivity.this).loadMedia(media, location, false);
                             } else {
                                 VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
                             }
@@ -211,9 +211,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-                            CastingManager cm = CastingManager.getInstance(MainActivity.this);
+                            BeamManager cm = BeamManager.getInstance(MainActivity.this);
                             if(cm.isConnected()) {
-                                CastingManager.getInstance(MainActivity.this).loadMedia(media, location, false);
+                                BeamManager.getInstance(MainActivity.this).loadMedia(media, location, false);
                             } else {
                                 VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
                             }

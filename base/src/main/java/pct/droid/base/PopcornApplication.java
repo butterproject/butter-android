@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
+import com.connectsdk.service.CastService;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -33,7 +34,7 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.io.IOException;
 
-import pct.droid.base.casting.CastingManager;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;
@@ -104,6 +105,8 @@ public class PopcornApplication extends VLCApplication {
         Picasso.setSingletonInstance(builder.build());
 
         PopcornUpdater.getInstance(this).checkUpdates(false);
+
+        CastService.setApplicationID(Constants.CAST_ID);
     }
 
     @Override
@@ -115,7 +118,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        CastingManager.getInstance(getAppContext()).onDestroy();
+        BeamManager.getInstance(getAppContext()).onDestroy();
     }
 
     public static String getSystemLanguage() {

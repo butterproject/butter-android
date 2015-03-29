@@ -83,8 +83,8 @@
 			android:screenOrientation="sensorLandscape" />
 
         <service android:name=".base.torrent.TorrentService" />
-        <service android:name=".base.casting.server.CastingServerService" />
-        <service android:name=".base.casting.dlna.DLNAService" />
+        <service android:name=".base.connectsdk.server.BeamServerService" />
+        <service android:name=".base.connectsdk.dlna.DLNAService" />
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>

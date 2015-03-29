@@ -38,8 +38,8 @@ import java.util.Map;
 
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
-import pct.droid.base.casting.CastingManager;
-import pct.droid.base.casting.server.CastingServer;
+import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
@@ -187,9 +187,9 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
 
             boolean playingExternal;
-            if(CastingManager.getInstance(getActivity()).isConnected()) {
-                CastingServer.setCurrentVideo(location);
-                playingExternal = !CastingManager.getInstance(getActivity()).loadMedia(mStreamInfo.getMedia(), CastingServer.getVideoURL(), false);
+            if(BeamManager.getInstance(getActivity()).isConnected()) {
+                BeamServer.setCurrentVideo(location);
+                playingExternal = !BeamManager.getInstance(getActivity()).loadMedia(mStreamInfo.getMedia(), BeamServer.getVideoURL(), false);
             } else {
                 playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
             }
@@ -252,7 +252,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     @DebugLog
     public void cancelStream() {
-        CastingManager.getInstance(getActivity()).stop();
+        BeamManager.getInstance(getActivity()).stop();
         if (mService != null) {
             mService.stopStreaming();
         }

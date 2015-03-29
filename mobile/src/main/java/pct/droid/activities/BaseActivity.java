@@ -26,18 +26,21 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.connectsdk.device.ConnectableDevice;
+import com.connectsdk.discovery.DiscoveryManager;
+import com.connectsdk.discovery.DiscoveryManagerListener;
+import com.connectsdk.service.command.ServiceCommandError;
+
 import butterknife.ButterKnife;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.casting.CastingDevice;
-import pct.droid.base.casting.CastingListener;
-import pct.droid.base.casting.CastingManager;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.dialogfragments.CastDeviceSelectorDialogFragment;
 
-public class BaseActivity extends ActionBarActivity implements CastingListener {
+public class BaseActivity extends ActionBarActivity implements DiscoveryManagerListener {
 
 	protected Handler mHandler;
     private Boolean mShowCasting = false, mCastingVisible = false;
@@ -56,13 +59,13 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
 		super.onResume();
-        CastingManager.getInstance(this).addListener(this);
+        BeamManager.getInstance(this).addListener(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-        CastingManager.getInstance(this).removeListener(this);
+        BeamManager.getInstance(this).removeListener(this);
 	}
 
 	@Override
@@ -97,7 +100,7 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 
         getMenuInflater().inflate(R.menu.activity_base, menu);
 
-        mCastingVisible = mShowCasting && CastingManager.getInstance(this).hasCastDevices();
+        mCastingVisible = mShowCasting && BeamManager.getInstance(this).hasCastDevices();
         menu.findItem(R.id.action_casting).setVisible(mCastingVisible);
 
         return true;
@@ -121,56 +124,26 @@ public class BaseActivity extends ActionBarActivity implements CastingListener {
 	}
 
     @Override
-    public void onDeviceDetected(CastingDevice device) {
+    public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
         if(mShowCasting && !mCastingVisible) {
             supportInvalidateOptionsMenu();
         }
     }
 
     @Override
-    public void onDeviceRemoved(CastingDevice device) {
+    public void onDeviceUpdated(DiscoveryManager manager, ConnectableDevice device) {
+
+    }
+
+    @Override
+    public void onDeviceRemoved(DiscoveryManager manager, ConnectableDevice device) {
         if(mShowCasting && mCastingVisible) {
             supportInvalidateOptionsMenu();
         }
     }
 
     @Override
-    public void onConnected(CastingDevice device) {
-
-    }
-
-    @Override
-    public void onDisconnected() {
-
-    }
-
-    @Override
-    public void onCommandFailed(String command, String message) {
-
-    }
-
-    @Override
-    public void onConnectionFailed() {
-
-    }
-
-    @Override
-    public void onDeviceSelected(CastingDevice device) {
-
-    }
-
-    @Override
-    public void onVolumeChanged(double value, boolean isMute) {
-
-    }
-
-    @Override
-    public void onReady() {
-
-    }
-
-    @Override
-    public void onPlayBackChanged(boolean isPlaying, float position) {
+    public void onDiscoveryFailed(DiscoveryManager manager, ServiceCommandError error) {
 
     }
 }
