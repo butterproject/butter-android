@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.1.0'
         classpath 'org.robolectric:robolectric-gradle-plugin:0.14.+'
     }
 }
@@ -52,6 +52,9 @@ android {
         release {
             minifyEnabled false
         }
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
