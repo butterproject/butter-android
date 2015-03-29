@@ -29,11 +29,13 @@
         <item>BBB, MKV 1080p h264 High 4.1 3 Mbps 30 FPS AAC 356 Kbps</item>
         <item>BBB, MKV 1080p h264 High 4.1 3 Mbps 30 FPS MP3 160 Kbps</item>
         <item>BBB, MKV 1080p h264 High 4.1 3 Mbps 30 FPS AC3 (5.1) 320 Kbps</item>
-        <item>BBB, MKV 1080p h265 2248.5 Kbps 30 FPS MP3? 238.58 Kbps</item>
-        <item>BBB, MKV 4K h265 5741.7 Kbps 30 FPS MP3? 238.58 Kbps</item>
+        <item>BBB, MP4 1080p h265 High 4.1 3 Mbps 30 FPS AAC 356 Kbps</item>
+        <item>BBB, MP4 1080p h265 High 4.1 3 Mbps 30 FPS AC3 (5.1) 320 Kbps</item>
+        <item>BBB, MKV 1080p h265 High 4.1 3 Mbps 30 FPS AAC 356 Kbps</item>
         <item>BBB, AVI 1080p XviD 4376 Kbps 30 FPS MP3 160 Kbps</item>
         <item>BBB, WebM 1080p VP8 917 Kbps 30 FPS Vorbis 324 Kbps</item>
         <item>BBB, WebM 1080p VP9 1064 Kbps 30 FPS Vorbis 128 Kbps</item>
+        <item>BBB, MP4 2K h265 High 5.1 8.9 Mbps 60 FPS MP3 160 Kbps</item>
         <item>BBB, MP4 2K h264 High 5.1 8.9 Mbps 60 FPS MP3 160 Kbps</item>
         <item>BBB, MP4 4K h264 High 5.1 12.4 Mbps 60 FPS MP3 160 Kbps</item>
         <item>TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS AC3 (5.1) 640 Kbps</item>
@@ -55,11 +57,13 @@
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
-        <item>http://www.libde265.org/hevc-bitstreams/bbb-1920x1080-cfg02.mkv</item>
-        <item>http://www.libde265.org/hevc-bitstreams/bbb-3840x2160-cfg02.mkv</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_ac3.mp4</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mkv</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
+        <item>http://get.popcorntime.io/nwtests/bbb_sunflower_h265_2160p_60fps_normal_mp3.mp4</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
         <item>http://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
