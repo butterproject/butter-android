@@ -28,6 +28,7 @@ public class DLNAHttpServer {
     ServerSocket welcomeSocket;
 
     int port = 49291;
+    int alternativePort = 39201;
 
     boolean running = false;
 
@@ -46,6 +47,11 @@ public class DLNAHttpServer {
         try {
             welcomeSocket = new ServerSocket(this.port);
         } catch (IOException ex) {
+            try {
+                welcomeSocket = new ServerSocket(this.alternativePort);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             ex.printStackTrace();
         }
 

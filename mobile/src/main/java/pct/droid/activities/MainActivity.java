@@ -107,7 +107,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		mNavigationDrawerFragment.selectItem(providerId);
 	}
 
-	@Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+        supportInvalidateOptionsMenu();
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_overview, menu);
@@ -170,6 +176,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 				final String location = files[index];
 				if (location.equals("dialog")) {
 					final EditText dialogInput = new EditText(MainActivity.this);
+                    dialogInput.setText("http://download.wavetlan.com/SVV/Media/HTTP/MP4/ConvertedFiles/QuickTime/QuickTime_test13_5m19s_AVC_VBR_324kbps_640x480_25fps_AAC-LCv4_CBR_93.4kbps_Stereo_44100Hz.mp4");
 					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
 							.setView(dialogInput)
 							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
@@ -180,11 +187,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 									media.videoId = "dialogtestvideo";
 									media.title = "User input test video";
 
-									VideoPlayerActivity.startActivity(MainActivity.this, dialogInput.getText().toString(), media);
+                                    String location = dialogInput.getText().toString();
+
+                                    BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                                    if(bm.isConnected()) {
+                                        BeamPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                    } else {
+                                        VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                    }
 								}
 							});
-				}
-				if (YouTubeData.isYouTubeUrl(location)) {
+                    builder.show();
+				} else if (YouTubeData.isYouTubeUrl(location)) {
 					Intent i = new Intent(MainActivity.this, TrailerPlayerActivity.class);
                     Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 					media.title = file_types[index];
@@ -201,9 +215,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 					SubsProvider.download(MainActivity.this, media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-                            BeamManager cm = BeamManager.getInstance(MainActivity.this);
-                            if(cm.isConnected()) {
-                                BeamManager.getInstance(MainActivity.this).loadMedia(media, location, false);
+                            BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                            if(bm.isConnected()) {
+                                BeamPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
                             } else {
                                 VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
                             }
@@ -211,11 +225,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-                            BeamManager cm = BeamManager.getInstance(MainActivity.this);
-                            if(cm.isConnected()) {
-                                BeamManager.getInstance(MainActivity.this).loadMedia(media, location, false);
+                            BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                            if(bm.isConnected()) {
+                                BeamPlayerActivity.startActivity(MainActivity.this, location, media, null, "en", 0);
                             } else {
-                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, "en", 0);
                             }
 						}
 					});

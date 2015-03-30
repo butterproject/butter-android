@@ -163,6 +163,12 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        supportInvalidateOptionsMenu();
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void playStream(BaseStreamLoadingFragment.StreamInfo streamInfo) {

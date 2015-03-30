@@ -39,12 +39,17 @@ import java.text.DecimalFormat;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
+import timber.log.Timber;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
@@ -116,7 +121,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     private void updateStatus(final DownloadStatus status) {
-        if(!mAttached) return;
+        if (!mAttached) return;
 
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
@@ -139,7 +144,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     @Override
     protected void updateView(State state, Object extra) {
-
         switch (state) {
             case UNINITIALISED:
                 mTertiaryTextView.setText(null);
@@ -187,9 +191,14 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
-    protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
-                                       String subtitleLanguage,
-                                       int resumePosition) {
-        VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+    protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality, String subtitleLanguage, int resumePosition) {
+        Timber.d("startVideoPlayer");
+        if(BeamManager.getInstance(activity).isConnected()) {
+            BeamPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+        } else {
+            if (!DefaultPlayer.start(getActivity(), media, subtitleLanguage, location)) {
+                VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+            }
+        }
     }
 }

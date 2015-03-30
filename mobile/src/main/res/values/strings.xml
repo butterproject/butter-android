@@ -160,5 +160,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <!-- Beam dialog -->
     <string name="connected_to">Connected to</string>
     <string name="disconnect">Disconnect</string>
+    <string name="select_beaming">Select device for beaming</string>
 
 </resources>

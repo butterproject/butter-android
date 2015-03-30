@@ -669,6 +669,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
             doc.appendChild(didlRoot);
             return xmlToString(doc, false);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

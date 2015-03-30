@@ -40,7 +40,6 @@ import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 import timber.log.Timber;
@@ -90,8 +89,8 @@ public class PopcornApplication extends VLCApplication {
             statusFile.delete();
         }
 
-        LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.i("Chosen cache location: " + directory);
+        Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
+        Timber.i("Chosen cache location: " + directory);
 
 
         if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
@@ -106,7 +105,7 @@ public class PopcornApplication extends VLCApplication {
 
         PopcornUpdater.getInstance(this).checkUpdates(false);
 
-        CastService.setApplicationID(Constants.CAST_ID);
+
     }
 
     @Override

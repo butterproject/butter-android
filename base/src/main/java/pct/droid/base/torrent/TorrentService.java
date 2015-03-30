@@ -83,7 +83,7 @@ public class TorrentService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mWakeLock.isHeld())
+        if(mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
         mThread.interrupt();
     }
@@ -146,24 +146,26 @@ public class TorrentService extends Service {
                 File torrentFileDir = new File(saveDirectory, "files");
                 File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
 
-                int fileCreationTries = 0;
-                while(fileCreationTries < 4) {
-                    try {
-                        if(torrentFileDir.mkdirs() || torrentFileDir.isDirectory()) {
-                            torrentFile.createNewFile();
-                            fileCreationTries = 4;
+                if(!torrentFile.exists()) {
+                    int fileCreationTries = 0;
+                    while (fileCreationTries < 4) {
+                        try {
+                            if (torrentFileDir.mkdirs() || torrentFileDir.isDirectory()) {
+                                torrentFile.createNewFile();
+                                fileCreationTries = 4;
+                            }
+                        } catch (IOException e) {
+                            Timber.e(e, "Error on file create");
+                            fileCreationTries++;
                         }
-                    } catch (IOException e) {
-                        Timber.e(e, "Error on file create");
-                        fileCreationTries++;
                     }
-                }
 
-                if(!getTorrentFile(torrentUrl, torrentFile) || !torrentFile.exists()) {
-                    for(Listener listener : mListener) {
-                        listener.onStreamError(new IOException("No such file or directory"));
+                    if (!getTorrentFile(torrentUrl, torrentFile) || !torrentFile.exists()) {
+                        for (Listener listener : mListener) {
+                            listener.onStreamError(new IOException("No such file or directory"));
+                        }
+                        return;
                     }
-                    return;
                 }
 
                 mCurrentTorrent = mTorrentSession.addTorrent(torrentFile, saveDirectory);
@@ -195,7 +197,7 @@ public class TorrentService extends Service {
     }
 
     public void stopStreaming() {
-        if(mWakeLock.isHeld())
+        if(mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
         mIsStreaming = false;

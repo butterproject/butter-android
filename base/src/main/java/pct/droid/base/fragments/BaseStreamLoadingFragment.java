@@ -186,21 +186,9 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             //play with default 'external' player
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
 
-            boolean playingExternal;
-            if(BeamManager.getInstance(getActivity()).isConnected()) {
-                BeamServer.setCurrentVideo(location);
-                playingExternal = !BeamManager.getInstance(getActivity()).loadMedia(mStreamInfo.getMedia(), BeamServer.getVideoURL(), false);
-            } else {
-                playingExternal = DefaultPlayer.start(getActivity(), mStreamInfo.getMedia(), mSubtitleLanguage, location);
-            }
-
-            if (!playingExternal) {
-                //play internally
-                mService.removeListener(BaseStreamLoadingFragment.this);
-                startPlayerActivity(getActivity(), "file://" + location, mStreamInfo.getMedia(), mStreamInfo.getQuality(),
-                        mStreamInfo.getSubtitleLanguage(), 0);
-                getActivity().finish();
-            }
+            mService.removeListener(BaseStreamLoadingFragment.this);
+            startPlayerActivity(getActivity(), location, mStreamInfo.getMedia(), mStreamInfo.getQuality(), mStreamInfo.getSubtitleLanguage(), 0);
+            getActivity().finish();
         }
     }
 
@@ -252,7 +240,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     @DebugLog
     public void cancelStream() {
-        BeamManager.getInstance(getActivity()).stop();
         if (mService != null) {
             mService.stopStreaming();
         }

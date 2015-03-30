@@ -68,11 +68,11 @@ import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.FileSelectorDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import timber.log.Timber;
 
 public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
 
@@ -132,6 +132,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+        TorrentService.bindHere(getActivity(), mServiceConnection);
+
 		mMedia = mCallback.getData();
 
 		//start subtitles
@@ -145,7 +147,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			mLibVLC = VLCInstance.getLibVlcInstance();
 			mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
 		} catch (LibVlcException e) {
-			LogUtils.d("LibVLC initialisation failed");
+			Timber.d("LibVLC initialisation failed");
 			return;
 		}
 
@@ -164,7 +166,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		EventHandler em = EventHandler.getInstance();
 		em.addHandler(mVlcEventHandler);
 
-		LogUtils.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
+		Timber.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
 		mLibVLC.eventVideoPlayerActivityCreated(true);
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
@@ -221,8 +223,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
 
 
-		if (mService != null)
-			mService.stopStreaming();
+		if (mService != null) {
+            getActivity().unbindService(mServiceConnection);
+            mService.stopStreaming();
+        }
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 	}
@@ -499,7 +503,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		// sanity check
 		if (dw * dh == 0 || mVideoWidth * mVideoHeight == 0) {
-			LogUtils.e("Invalid surface size");
+			Timber.e("Invalid surface size");
 			return;
 		}
 
@@ -713,15 +717,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 					fragment.checkSubs();
 					break;
 				default:
-					LogUtils.e(String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
+					Timber.e(String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
 					break;
 			}
 			fragment.updatePlayPauseState();
 		}
 	}
 
-
-	/* not used? */
 	protected ServiceConnection mServiceConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
@@ -735,21 +737,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		}
 	};
 
+	@Override
+	public void onStreamStarted() { }
 
 	@Override
-	public void onStreamStarted() {
-
-	}
+	public void onStreamError(Exception e) { }
 
 	@Override
-	public void onStreamError(Exception e) {
-
-	}
-
-	@Override
-	public void onStreamReady(File videoLocation) {
-
-	}
+	public void onStreamReady(File videoLocation) { }
 
 	@Override
 	public void onStreamProgress(DownloadStatus status) {
@@ -767,13 +762,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			if (format == PixelFormat.RGBX_8888)
-				LogUtils.d("Pixel format is RGBX_8888");
+				Timber.d("Pixel format is RGBX_8888");
 			else if (format == PixelFormat.RGB_565)
-				LogUtils.d("Pixel format is RGB_565");
+				Timber.d("Pixel format is RGB_565");
 			else if (format == ImageFormat.YV12)
-				LogUtils.d("Pixel format is YV12");
+				Timber.d("Pixel format is YV12");
 			else
-				LogUtils.d("Pixel format is other/unknown");
+				Timber.d("Pixel format is other/unknown");
 			if (mLibVLC != null)
 				mLibVLC.attachSurface(holder.getSurface(), BaseVideoPlayerFragment.this);
 		}

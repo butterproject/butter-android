@@ -64,8 +64,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -84,6 +86,8 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     private String mSessionId;
 
     private Timer timer;
+
+    private AirPlayServiceSubscription<PlayStateListener> mPlayStateSubscription = new AirPlayServiceSubscription<>();
 
     @Override
     public CapabilityPriorityLevel getPriorityLevel(Class<? extends CapabilityMethods> clazz) {
@@ -202,7 +206,6 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     @Override
     public void getPosition(final PositionListener listener) {
         getPlaybackPosition(new PlaybackPositionListener() {
-
             @Override
             public void onGetPlaybackPositionSuccess(long duration, long position) {
                 Util.postSuccess(listener, position);
@@ -319,7 +322,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     @Override
     public ServiceSubscription<PlayStateListener> subscribePlayState(
             PlayStateListener listener) {
-        Util.postError(listener, ServiceCommandError.notSupported());
+        mPlayStateSubscription.addListener(listener);
         return null;
     }
 
@@ -668,17 +671,34 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
             @Override
             public void run() {
                 Log.d("Timer", "Timer");
-                getPlaybackPosition(new PlaybackPositionListener() {
-
+                getPlaybackInfo(new ResponseListener<Object>() {
                     @Override
-                    public void onGetPlaybackPositionSuccess(long duration, long position) {
-                        if (position >= duration) {
-                            stopTimer();
+                    public void onSuccess(Object object) {
+                        PlayStateStatus playState = PlayStateStatus.Unknown;
+                        try {
+                            JSONObject response = new PListParser().parse(object.toString());
+                            if (!response.has("rate")) {
+                                playState = PlayStateStatus.Finished;
+                                stopTimer();
+                            } else {
+                                int rate = response.getInt("rate");
+                                if (rate == 0) {
+                                    playState = PlayStateStatus.Paused;
+                                } else if (rate == 1) {
+                                    playState = PlayStateStatus.Playing;
+                                }
+                            }
+
+                            for (PlayStateListener listener : mPlayStateSubscription.getListeners()) {
+                                Util.postSuccess(listener, playState);
+                            }
+                        } catch (Exception e) {
                         }
                     }
 
                     @Override
-                    public void onGetPlaybackPositionFailed(ServiceCommandError error) {
+                    public void onError(ServiceCommandError error) {
+
                     }
                 });
             }
@@ -692,5 +712,27 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         timer = null;
     }
 
+    public class AirPlayServiceSubscription<T> implements ServiceSubscription<T> {
+        private Set<T> mListeners = new HashSet<>();
+
+        @Override
+        public void unsubscribe() { }
+
+        @Override
+        public T addListener(T listener) {
+            mListeners.add(listener);
+            return listener;
+        }
+
+        @Override
+        public void removeListener(T listener) {
+            mListeners.remove(listener);
+        }
+
+        @Override
+        public List<T> getListeners() {
+            return new ArrayList<>(mListeners);
+        }
+    }
 
 }

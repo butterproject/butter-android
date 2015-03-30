@@ -60,7 +60,7 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
                             dismiss();
                         }
                     })
-                    .setTitle("Select casting device")
+                    .setTitle(R.string.select_beaming)
                     .setNegativeButton(R.string.cancel,
                             new DialogInterface.OnClickListener() {
                                 @Override
