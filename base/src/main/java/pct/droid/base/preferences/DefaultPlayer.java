@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.FileUtils;
@@ -88,25 +89,15 @@ public class DefaultPlayer {
         if (playerData.length > 1) {
             if (media.subtitles.size() > 0) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
-                File newLocation = new File(location.replace("." + FileUtils.getFileExtension(location), ".srt"));
-
-                if (subLanguage != null && !subLanguage.equals("no-subs")) {
-                    try {
-                        newLocation.getParentFile().mkdirs();
-                        newLocation.createNewFile();
-                        FileUtils.copy(subsLocation, newLocation);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    newLocation.delete();
-                }
+                BeamServer.setCurrentSubs(subsLocation);
             }
+
+            BeamServer.setCurrentVideo(location);
 
             Intent intent = new Intent();
             intent.setClassName(playerData[1], playerData[0]);
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse("file://" + location), "video/mp4");
+            intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
             context.startActivity(intent);
             return true;
         }

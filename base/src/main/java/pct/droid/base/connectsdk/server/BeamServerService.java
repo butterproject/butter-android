@@ -22,9 +22,9 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import pct.droid.base.Constants;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
+import timber.log.Timber;
 
 public class BeamServerService extends Service {
 
@@ -39,7 +39,7 @@ public class BeamServerService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtils.i("CastingServer", "Starting CastingServer");
+        Timber.i("Starting CastingServer");
         mServer = new BeamServer(NetworkUtils.getWifiIPAddress(), Constants.SERVER_PORT);
         mServer.start();
 
@@ -56,7 +56,7 @@ public class BeamServerService extends Service {
      */
     @Override
     public void onDestroy() {
-        LogUtils.i("CastingServer", "Destroying CastingServer");
+        Timber.i("Destroying CastingServer");
         mServer.stop();
         super.onDestroy();
     }

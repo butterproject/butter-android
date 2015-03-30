@@ -64,7 +64,9 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 		mMedia = getIntent().getParcelableExtra(DATA);
 		mQuality = getIntent().getStringExtra(QUALITY);
 		mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
-		mLocation = getIntent().getStringExtra(LOCATION);
+        mLocation = getIntent().getStringExtra(LOCATION);
+        if(!mLocation.startsWith("file://") && !mLocation.startsWith("http://") && !mLocation.startsWith("https://"))
+		    mLocation = "file://" + getIntent().getStringExtra(LOCATION);
 
         mVideoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
         mVideoPlayerFragment.loadMedia();

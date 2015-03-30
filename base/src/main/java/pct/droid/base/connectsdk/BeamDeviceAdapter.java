@@ -80,15 +80,12 @@ public class BeamDeviceAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mDevices.size() + 1;
+        return mDevices.size();
     }
 
     @Override
     public ConnectableDevice getItem(int position) {
-        if(position == 0) {
-            return null;
-        }
-        return mDevices.get(mKeys.get(position - 1));
+        return mDevices.get(mKeys.get(position));
     }
 
     @Override
@@ -107,40 +104,34 @@ public class BeamDeviceAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if(position != 0) {
-            ConnectableDevice device = getItem(position);
+        ConnectableDevice device = getItem(position);
 
-            for(DeviceService service : device.getServices()) {
-                if(service instanceof CastService) {
-                    holder.icon.setImageResource(R.drawable.ic_googlecast);
-                    holder.text2.setText("Google Cast");
-                    break;
-                } else if(service instanceof DLNAService) {
-                    holder.icon.setImageResource(R.drawable.ic_dlna);
-                    holder.text2.setText("DLNA");
-                    break;
-                } else if(service instanceof AirPlayService) {
-                    holder.icon.setImageResource(R.drawable.ic_airplay);
-                    holder.text2.setText("AirPlay");
-                    break;
-                } else if(service instanceof RokuService) {
-                    // TODO: add roku icon
-                    holder.icon.setImageResource(R.drawable.ic_dlna);
-                    holder.text2.setText("Roku");
-                    break;
-                } else {
-                    holder.icon.setImageResource(R.drawable.ic_dlna);
-                    holder.text2.setText("Remote");
-                    break;
-                }
+        for(DeviceService service : device.getServices()) {
+            if(service instanceof CastService) {
+                holder.icon.setImageResource(R.drawable.ic_googlecast);
+                holder.text2.setText("Google Cast");
+                break;
+            } else if(service instanceof DLNAService) {
+                holder.icon.setImageResource(R.drawable.ic_dlna);
+                holder.text2.setText("DLNA");
+                break;
+            } else if(service instanceof AirPlayService) {
+                holder.icon.setImageResource(R.drawable.ic_airplay);
+                holder.text2.setText("AirPlay");
+                break;
+            } else if(service instanceof RokuService) {
+                // TODO: add roku icon
+                holder.icon.setImageResource(R.drawable.ic_dlna);
+                holder.text2.setText("Roku");
+                break;
+            } else {
+                holder.icon.setImageResource(R.drawable.ic_dlna);
+                holder.text2.setText("Remote");
+                break;
             }
-
-            holder.text1.setText(device.getFriendlyName());
-        } else {
-            holder.icon.setImageResource(R.drawable.ic_notif_logo);
-            holder.text1.setText("Local");
-            holder.text2.setText("Popcorn Time");
         }
+
+        holder.text1.setText(device.getFriendlyName());
 
         return convertView;
     }
