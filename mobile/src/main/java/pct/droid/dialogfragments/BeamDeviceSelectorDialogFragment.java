@@ -50,12 +50,7 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
                     .setSingleChoiceItems(mAdapter, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
-                            ConnectableDevice device;
-                            if (position == 0) {
-                                device = null;
-                            } else {
-                                device = mAdapter.getItem(position);
-                            }
+                            ConnectableDevice device = mAdapter.getItem(position);
                             BeamManager.getInstance(getActivity()).connect(device);
                             dismiss();
                         }

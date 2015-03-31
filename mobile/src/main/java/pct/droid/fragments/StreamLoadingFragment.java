@@ -110,10 +110,13 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     private void loadBackgroundImage() {
         StreamInfo info = mCallback.getStreamInformation();
           /* attempt to load background image */
-        if (null != info) {
+        if (null != info && null != info.getMedia()) {
             String url;
-            if (info.isShow()) url = info.getShow().image;
-            else url = info.getMedia().image;
+            if (info.isShow()) {
+                url = info.getShow().image;
+            }else {
+                url = info.getMedia().image;
+            }
 
             if (!TextUtils.isEmpty(url))
                 Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
