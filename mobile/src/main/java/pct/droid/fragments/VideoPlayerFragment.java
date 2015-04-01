@@ -168,19 +168,17 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 					mToolbar.getPaddingBottom());
 		}
 
-		if (null != mCallback.getData()) {
-			Media media = mCallback.getData();
-			if (media != null && media.title != null) {
-				if (null != mCallback.getQuality()) {
+		if (null != mStreamInfo) {
+			if (mMedia != null && mMedia.title != null) {
+				if (null != mStreamInfo.getQuality()) {
 					getActionBarActivity().getSupportActionBar().setTitle(
-							getString(R.string.now_playing) + ": " + media.title + " (" + mCallback.getQuality() + ")");
+							getString(R.string.now_playing) + ": " + mMedia.title + " (" + mStreamInfo.getQuality() + ")");
 				} else {
-					getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + media.title);
+					getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
 				}
 			} else {
 				getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
 			}
-
 		} else {
 			getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
 		}

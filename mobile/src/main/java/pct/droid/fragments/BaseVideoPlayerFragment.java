@@ -65,6 +65,7 @@ import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
@@ -90,7 +91,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 	private int mStreamerProgress = 0;
 
-	private Media mMedia;
+    protected StreamInfo mStreamInfo;
+	protected Media mMedia;
 	private String mCurrentSubsLang = "no-subs";
 	private TimedTextObject mSubs;
 	private Caption mLastSub = null;
@@ -134,11 +136,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         TorrentService.bindHere(getActivity(), mServiceConnection);
 
-		mMedia = mCallback.getData();
+        mStreamInfo = mCallback.getInfo();
+		mMedia = mStreamInfo.getMedia();
 
 		//start subtitles
-		if (null != mCallback.getSubtitles()) {
-			mCurrentSubsLang = mCallback.getSubtitles();
+		if (null != mStreamInfo.getSubtitleLanguage()) {
+			mCurrentSubsLang = mStreamInfo.getSubtitleLanguage();
 			startSubtitles();
 		}
 
@@ -236,8 +239,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	 */
 	@SuppressWarnings({"unchecked"})
 	public void loadMedia() {
-		if (mLocation == null && null != mCallback.getLocation()) {
-            mLocation = mCallback.getLocation();
+		if (mLocation == null && null != mStreamInfo && null != mStreamInfo.getVideoLocation()) {
+            mLocation = mStreamInfo.getVideoLocation();
 		}
 
 		getVideoSurface().setKeepScreenOn(true);
@@ -786,13 +789,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 
 	public interface Callback {
-		Media getData();
-
-		String getQuality();
-
-		String getSubtitles();
-
-		String getLocation();
+		StreamInfo getInfo();
 	}
 
 }

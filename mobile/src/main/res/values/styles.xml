@@ -55,6 +55,8 @@
 
     <style name="Theme.PopcornTime.Detail" parent="Theme.PopcornTime.TransparentStatusBar"/>
 
+    <style name="Theme.PopcornTime.RemoteControl" parent="Theme.PopcornTime.TransparentStatusBar"/>
+
 	<style name="ActivityFadeAnimation" parent="@android:style/Animation.Activity">
 		<item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
 		<item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>

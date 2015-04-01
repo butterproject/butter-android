@@ -6,6 +6,7 @@ import android.view.View;
 
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.torrent.StreamInfo;
 
 public abstract class BaseDetailFragment extends Fragment {
 
@@ -24,7 +25,7 @@ public abstract class BaseDetailFragment extends Fragment {
     }
 
     public interface FragmentListener {
-        public void playStream(BaseStreamLoadingFragment.StreamInfo streamInfo);
+        public void playStream(StreamInfo streamInfo);
     }
 
 }
