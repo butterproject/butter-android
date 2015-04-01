@@ -24,38 +24,53 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
+import pct.droid.activities.BaseActivity;
 import pct.droid.base.connectsdk.BeamManager;
-import pct.droid.base.connectsdk.server.BeamServer;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
+import pct.droid.base.utils.AnimUtils;
+import pct.droid.dialogfragments.LoadingBeamingDialogFragment;
+import pct.droid.dialogfragments.OptionDialogFragment;
 import timber.log.Timber;
 
 public class BeamPlayerFragment extends Fragment {
 
-    private VideoPlayerFragment.Callback mCallback;
-    private Activity mActivity;
+    private StreamInfo mStreamInfo;
+    private Media mMedia;
+    private BaseActivity mActivity;
     private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
     private VolumeControl mVolumeControl;
     private TorrentService mService;
     private boolean mHasVolumeControl = false, mIsPlaying = false;
     private int mRetries = 0;
+    private LoadingBeamingDialogFragment mLoadingDialog;
 
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
     @InjectView(R.id.play_button)
-    Button mPlayButton;
+    ImageButton mPlayButton;
+    @InjectView(R.id.cover_image)
+    ImageView mCoverImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,10 +82,37 @@ public class BeamPlayerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity = getActivity();
-        mCallback = (VideoPlayerFragment.Callback) mActivity;
+        mActivity = (BaseActivity) getActivity();
+        mActivity.setSupportActionBar(mToolbar);
+
+        mLoadingDialog = LoadingBeamingDialogFragment.newInstance();
+        mLoadingDialog.show(getChildFragmentManager(), "overlay_fragment");
+
+        mStreamInfo = ((VideoPlayerFragment.Callback) mActivity).getInfo();
+        if(mStreamInfo.isShow()) {
+            mMedia = mStreamInfo.getShow();
+        } else {
+            mMedia = mStreamInfo.getMedia();
+        }
 
         TorrentService.bindHere(getActivity(), mServiceConnection);
+
+        if (mMedia.image != null && !mMedia.image.equals("")) {
+            Picasso.with(mCoverImage.getContext()).load(mMedia.image)
+                    .into(mCoverImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            AnimUtils.fadeIn(mCoverImage);
+                        }
+
+                        @Override
+                        public void onError() {}
+                    });
+        }
+
+        mActivity.getSupportActionBar().setTitle(getString(R.string.now_playing));
+        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_mtrl_alpha);
 
         startVideo();
     }
@@ -86,7 +128,7 @@ public class BeamPlayerFragment extends Fragment {
     }
 
     private void startVideo() {
-        mBeamManager.playVideo(mCallback.getData(), mCallback.getLocation(), false, new MediaPlayer.LaunchListener() {
+        mBeamManager.playVideo(mStreamInfo, false, new MediaPlayer.LaunchListener() {
             @Override
             public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                 mMediaControl = object.mediaControl;
@@ -101,7 +143,25 @@ public class BeamPlayerFragment extends Fragment {
             @Override
             public void onError(ServiceCommandError error) {
                 Timber.e(error.getCause(), error.getMessage());
-                if(mRetries > 2) return;
+                if(mRetries > 2) {
+                    if(mLoadingDialog.isVisible()) {
+                        mLoadingDialog.dismiss();
+                    }
+
+                    OptionDialogFragment.show(mActivity, getChildFragmentManager(), R.string.unknown_error, R.string.beaming_failed, android.R.string.yes, android.R.string.no, new OptionDialogFragment.Listener() {
+                        @Override
+                        public void onSelectionPositive() {
+                            startVideo();
+                        }
+
+                        @Override
+                        public void onSelectionNegative() {
+                            getActivity().finish();
+                        }
+                    });
+
+                    return;
+                }
 
                 startVideo();
                 mRetries++;
@@ -118,7 +178,6 @@ public class BeamPlayerFragment extends Fragment {
             mIsPlaying = true;
             mMediaControl.play(null);
         }
-        mPlayButton.setText(mIsPlaying ? "Pause" : "Play");
         mMediaControl.getPlayState(mPlayStateListener);
     }
 
@@ -126,11 +185,31 @@ public class BeamPlayerFragment extends Fragment {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
-            mPlayButton.setText(mIsPlaying ? "Pause" : "Play");
+            mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
+
+            if(mLoadingDialog.isVisible() && mIsPlaying) {
+                mLoadingDialog.dismiss();
+            }
         }
 
         @Override
-        public void onError(ServiceCommandError error) { }
+        public void onError(ServiceCommandError error) {
+            if(mLoadingDialog.isVisible() && error.getCode() == 500) {
+                mLoadingDialog.dismiss();
+
+                OptionDialogFragment.show(mActivity, getChildFragmentManager(), R.string.unknown_error, R.string.beaming_failed, android.R.string.yes, android.R.string.no, new OptionDialogFragment.Listener() {
+                    @Override
+                    public void onSelectionPositive() {
+                        startVideo();
+                    }
+
+                    @Override
+                    public void onSelectionNegative() {
+                        getActivity().finish();
+                    }
+                });
+            }
+        }
     };
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {

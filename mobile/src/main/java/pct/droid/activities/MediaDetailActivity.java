@@ -28,6 +28,7 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -171,7 +172,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void playStream(BaseStreamLoadingFragment.StreamInfo streamInfo) {
+    public void playStream(StreamInfo streamInfo) {
         if (PrefUtils.get(this, Prefs.WIFI_ONLY, true) &&
                 !NetworkUtils.isWifiConnected(this) &&
                 NetworkUtils.isNetworkConnected(this)) {

@@ -104,8 +104,6 @@ public class PopcornApplication extends VLCApplication {
         Picasso.setSingletonInstance(builder.build());
 
         PopcornUpdater.getInstance(this).checkUpdates(false);
-
-
     }
 
     @Override
@@ -116,8 +114,8 @@ public class PopcornApplication extends VLCApplication {
 
     @Override
     public void onTerminate() {
-        super.onTerminate();
         BeamManager.getInstance(getAppContext()).onDestroy();
+        super.onTerminate();
     }
 
     public static String getSystemLanguage() {

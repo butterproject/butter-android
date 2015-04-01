@@ -49,6 +49,7 @@ import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaContainerFragment;
@@ -96,7 +97,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 			String streamUrl = data.toString();
 			try {
 				streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-				StreamLoadingActivity.startActivity(this, new StreamLoadingFragment.StreamInfo(streamUrl));
+				StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl));
+                finish();
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
@@ -191,9 +193,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
                                     BeamManager bm = BeamManager.getInstance(MainActivity.this);
                                     if(bm.isConnected()) {
-                                        BeamPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                        BeamPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
                                     } else {
-                                        VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                        VideoPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
                                     }
 								}
 							});
@@ -216,10 +218,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 						@Override
 						public void onFailure(Request request, IOException e) {
                             BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                            
                             if(bm.isConnected()) {
-                                BeamPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                BeamPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
                             } else {
-                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
                             }
 						}
 
@@ -227,9 +230,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 						public void onResponse(Response response) throws IOException {
                             BeamManager bm = BeamManager.getInstance(MainActivity.this);
                             if(bm.isConnected()) {
-                                BeamPlayerActivity.startActivity(MainActivity.this, location, media, null, "en", 0);
+                                BeamPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, "en", null, location), 0);
                             } else {
-                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, "en", 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, "en", null, location), 0);
                             }
 						}
 					});

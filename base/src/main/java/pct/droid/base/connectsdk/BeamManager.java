@@ -50,6 +50,8 @@ import pct.droid.base.Constants;
 import pct.droid.base.R;
 import pct.droid.base.connectsdk.server.BeamServerService;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.torrent.StreamInfo;
 import timber.log.Timber;
 
 /**
@@ -182,17 +184,18 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         return true;
     }
 
-    public boolean playVideo(Media media, String location) {
-        return playVideo(media, location, false, null);
+    public void playVideo(StreamInfo info) {
+        playVideo(info, false, null);
     }
 
-    public boolean playVideo(Media media, String location, Boolean subs) {
-        return playVideo(media, location, subs, null);
+    public void playVideo(StreamInfo info, Boolean subs) {
+        playVideo(info, subs, null);
     }
 
-    public boolean playVideo(Media media, String location, Boolean subs, final MediaPlayer.LaunchListener listener) {
-        if (!mConnected) return false;
+    public void playVideo(StreamInfo info, Boolean subs, final MediaPlayer.LaunchListener listener) {
+        if (!mConnected) listener.onError(ServiceCommandError.getError(503));
 
+        String location = info.getVideoLocation();
         try {
             URL url = new URL(location);
             URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
@@ -205,10 +208,19 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         String title = "";
         String imageUrl = "";
-        if(null != media) {
-            title = media.title == null ? "" : media.title;
-            imageUrl = media.image == null ? "https://popcorntime.io/images/header-logo.png" : media.image;
+        Media media = info.getMedia();
+        if(media != null) {
+            if (info.isShow()) {
+                Show show = info.getShow();
+                title = show.title == null ? "" : show.title;
+                title += media.title == null ? "" : ": " + media.title;
+                imageUrl = show.image;
+            } else {
+                title = media.title == null ? "" : media.title;
+                imageUrl = media.image;
+            }
         }
+        imageUrl = imageUrl == null ? "https://popcorntime.io/images/header-logo.png" : imageUrl;
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
         mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
@@ -226,8 +238,6 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                     listener.onError(error);
             }
         });
-
-        return false;
     }
 
     public void connect(ConnectableDevice castingDevice) {

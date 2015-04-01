@@ -18,6 +18,7 @@
 package pct.droid.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -28,50 +29,50 @@ import pct.droid.R;
 import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
 
     private BeamManager mBeamManager = BeamManager.getInstance(this);
-    private Media mMedia;
-    private String mQuality;
-    private String mSubtitleLanguage;
-    private String mLocation;
+    private StreamInfo mStreamInfo;
+    private String mTitle = "";
 
-    public static Intent startActivity(Activity activity, String streamUrl, Media data) {
-        return startActivity(activity, streamUrl, data, null, null, 0);
+    public static Intent startActivity(Context context, StreamInfo info) {
+        return startActivity(context, info, 0);
     }
 
-    public static Intent startActivity(Activity activity, String streamUrl, Media data, String quality, String subtitleLanguage, long resumePosition) {
-        Intent i = new Intent(activity, BeamPlayerActivity.class);
-        i.putExtra(DATA, data);
-        i.putExtra(QUALITY, quality);
-        i.putExtra(SUBTITLES, subtitleLanguage);
-        i.putExtra(LOCATION, streamUrl);
+    public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
+        Intent i = new Intent(context, BeamPlayerActivity.class);
+        i.putExtra(INFO, info);
         //todo: resume position
-        activity.startActivity(i);
+        context.startActivity(i);
         return i;
     }
 
-    public final static String LOCATION = "stream_url";
-    public final static String DATA = "video_data";
-    public final static String QUALITY = "quality";
-    public final static String SUBTITLES = "subtitles";
+    public final static String INFO = "stream_info";
     public final static String RESUME_POSITION = "resume_position";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
 
-        mMedia = getIntent().getParcelableExtra(DATA);
-        mQuality = getIntent().getStringExtra(QUALITY);
-        mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
-        mLocation = getIntent().getStringExtra(LOCATION);
-        if(!mLocation.startsWith("http://") && !mLocation.startsWith("https://")) {
-            BeamServer.setCurrentVideo(mLocation);
-            mLocation = BeamServer.getVideoURL();
+        mStreamInfo = getIntent().getParcelableExtra(INFO);
+
+        if(mStreamInfo.isShow()) {
+            mTitle = mStreamInfo.getShow().title;
+        } else {
+            if(mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
+                mTitle = mStreamInfo.getMedia().title;
         }
+
+        String location = mStreamInfo.getVideoLocation();
+        if(!location.startsWith("http://") && !location.startsWith("https://")) {
+            BeamServer.setCurrentVideo(location);
+            location = BeamServer.getVideoURL();
+        }
+        mStreamInfo.setVideoLocation(location);
 
         /*
         File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
@@ -95,7 +96,7 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     }
 
     private void showExitDialog() {
-        OptionDialogFragment.show(getFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mMedia.title), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
+        OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
             @Override
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
@@ -109,23 +110,8 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     }
 
     @Override
-    public Media getData() {
-        return mMedia;
-    }
-
-    @Override
-    public String getQuality() {
-        return mQuality;
-    }
-
-    @Override
-    public String getSubtitles() {
-        return mSubtitleLanguage;
-    }
-
-    @Override
-    public String getLocation() {
-        return mLocation;
+    public StreamInfo getInfo() {
+        return mStreamInfo;
     }
 
 }

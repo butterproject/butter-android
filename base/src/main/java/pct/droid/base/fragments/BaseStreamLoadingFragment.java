@@ -48,6 +48,7 @@ import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
@@ -79,7 +80,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     private Boolean mPlayerStarted = false, mHasSubs = false;
     private TorrentService mService;
 
-    private StreamInfo mStreamInfo;
+    protected StreamInfo mStreamInfo;
 
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
 
@@ -137,16 +138,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     /**
      * Start the internal player for a streaming torrent
      *
-     * @param activity
      * @param location
-     * @param media
-     * @param quality
-     * @param subtitleLanguage
      * @param resumePosition
      */
-    protected abstract void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
-                                                String subtitleLanguage,
-                                                int resumePosition);
+    protected abstract void startPlayerActivity(String location, int resumePosition);
 
     @DebugLog
     private void setState(final State state) {
@@ -187,7 +182,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
 
             mService.removeListener(BaseStreamLoadingFragment.this);
-            startPlayerActivity(getActivity(), location, mStreamInfo.getMedia(), mStreamInfo.getQuality(), mStreamInfo.getSubtitleLanguage(), 0);
+            startPlayerActivity(location, 0);
             getActivity().finish();
         }
     }
@@ -310,9 +305,9 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             mSubsStatus = SubsStatus.SUCCESS;
 
             //load subtitles
-            if (data.subtitles != null && data.subtitles.size() > 0 && mStreamInfo.mSubtitleLanguage != null) {
+            if (data.subtitles != null && data.subtitles.size() > 0 && mStreamInfo.getSubtitleLanguage() != null) {
                 mHasSubs = true;
-                mSubtitleLanguage = mStreamInfo.mSubtitleLanguage;
+                mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
                 if (!mSubtitleLanguage.equals("no-subs")) {
                     SubsProvider.download(getActivity(), data, mSubtitleLanguage, new Callback() {
                         @Override
@@ -357,95 +352,5 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     public interface FragmentListener {
         StreamInfo getStreamInformation();
     }
-
-
-    /**
-     * Container for all information needed to start a stream
-     */
-    public static class StreamInfo implements Parcelable {
-        private Media mMedia;
-        private String mSubtitleLanguage;
-        private String mQuality;
-        private String mTorrentUrl;
-        private Show mShow;
-
-        public StreamInfo(String torrentUrl) {
-            this(null, null, torrentUrl, null, null);
-        }
-
-        public StreamInfo(Media media, String torrentUrl, String subtitleLanguage, String quality) {
-            this(media, null, torrentUrl, subtitleLanguage, quality);
-        }
-
-        public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality) {
-            mMedia = media;
-            mShow = show;
-            mTorrentUrl = torrentUrl;
-            mSubtitleLanguage = subtitleLanguage;
-            mQuality = quality;
-        }
-
-        public boolean isShow() {
-            return null != mShow;
-        }
-
-        public Show getShow() {
-            return mShow;
-        }
-
-        public Media getMedia() {
-            return mMedia;
-        }
-
-        public String getSubtitleLanguage() {
-            return mSubtitleLanguage;
-        }
-
-        public String getQuality() {
-            return mQuality;
-        }
-
-        public String getTorrentUrl() {
-            return mTorrentUrl;
-        }
-
-        public void setSubtitleLanguage(String subtitleLanguage) {
-            mSubtitleLanguage = subtitleLanguage;
-        }
-
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeParcelable(this.mMedia, 0);
-            dest.writeString(this.mSubtitleLanguage);
-            dest.writeString(this.mQuality);
-            dest.writeString(this.mTorrentUrl);
-            dest.writeParcelable(this.mShow, 0);
-        }
-
-        private StreamInfo(Parcel in) {
-            this.mMedia = in.readParcelable(Media.class.getClassLoader());
-            this.mSubtitleLanguage = in.readString();
-            this.mQuality = in.readString();
-            this.mTorrentUrl = in.readString();
-            this.mShow = in.readParcelable(Show.class.getClassLoader());
-        }
-
-        public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
-            public StreamInfo createFromParcel(Parcel source) {
-                return new StreamInfo(source);
-            }
-
-            public StreamInfo[] newArray(int size) {
-                return new StreamInfo[size];
-            }
-        };
-    }
-
 
 }

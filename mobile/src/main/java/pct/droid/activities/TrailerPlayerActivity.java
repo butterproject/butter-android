@@ -34,13 +34,14 @@ import java.net.URLDecoder;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class TrailerPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
 
+    private StreamInfo mStreamInfo;
     private Media mMedia;
-    private String mLocation;
     private VideoPlayerFragment mVideoPlayerFragment;
 
     public static Intent startActivity(Activity activity, String youTubeUrl, Media data) {
@@ -62,6 +63,8 @@ public class TrailerPlayerActivity extends BaseActivity implements VideoPlayerFr
         mMedia.title += " " + getString(R.string.trailer);
         String youTubeUrl = getIntent().getStringExtra(LOCATION);
 
+        mStreamInfo = new StreamInfo(mMedia, null, null, null, null, youTubeUrl);
+
         mVideoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
         mVideoPlayerFragment.enableSubsButton(false);
 
@@ -80,23 +83,8 @@ public class TrailerPlayerActivity extends BaseActivity implements VideoPlayerFr
     }
 
     @Override
-    public Media getData() {
-        return mMedia;
-    }
-
-    @Override
-    public String getQuality() {
-        return null;
-    }
-
-    @Override
-    public String getSubtitles() {
-        return null;
-    }
-
-    @Override
-    public String getLocation() {
-        return mLocation;
+    public StreamInfo getInfo() {
+        return mStreamInfo;
     }
 
     private class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {
@@ -165,7 +153,7 @@ public class TrailerPlayerActivity extends BaseActivity implements VideoPlayerFr
                     throw new RuntimeException("Invalid NULL Url.");
                 }
 
-                mLocation = URLDecoder.decode(result.toString());
+                mStreamInfo.setVideoLocation(URLDecoder.decode(result.toString()));
                 mVideoPlayerFragment.loadMedia();
             } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Error playing video!", e);

@@ -162,7 +162,6 @@
                     app:optionIcon="@drawable/ic_av_subs"
                     app:optionText="@string/subtitles"
                     />
-
                 <View
                     android:id="@+id/option_div_1"
                     android:layout_width="match_parent"

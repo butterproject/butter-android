@@ -80,6 +80,7 @@
 			android:screenOrientation="sensorLandscape" />
         <activity
             android:name="pct.droid.activities.BeamPlayerActivity"
+            android:theme="@style/Theme.PopcornTime.RemoteControl"
             android:screenOrientation="sensorPortrait" />
 		<activity
 			android:name="pct.droid.activities.TrailerPlayerActivity"

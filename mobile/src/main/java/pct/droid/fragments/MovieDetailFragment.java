@@ -33,6 +33,7 @@ import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -278,7 +279,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @OnClick(R.id.play_button)
     public void play() {
         String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
+        StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
     }
 

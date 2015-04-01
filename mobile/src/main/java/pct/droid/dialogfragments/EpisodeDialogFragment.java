@@ -56,6 +56,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -374,7 +375,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void playClick() {
         smoothDismiss();
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
+        StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 

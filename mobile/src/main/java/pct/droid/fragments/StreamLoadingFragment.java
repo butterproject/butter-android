@@ -19,6 +19,7 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,6 +48,7 @@ import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 import timber.log.Timber;
@@ -54,6 +56,7 @@ import timber.log.Timber;
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     private boolean mAttached = false;
+    private Context mContext;
 
     View mRoot;
     @InjectView(R.id.progress_indicator)
@@ -92,6 +95,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mContext = activity;
         mAttached = true;
     }
 
@@ -194,13 +198,15 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
-    protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality, String subtitleLanguage, int resumePosition) {
+    protected void startPlayerActivity(String location, int resumePosition) {
         Timber.d("startVideoPlayer");
-        if(BeamManager.getInstance(activity).isConnected()) {
-            BeamPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+        mStreamInfo.setVideoLocation(location);
+        if(BeamManager.getInstance(mContext).isConnected()) {
+            BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
         } else {
-            if (!DefaultPlayer.start(getActivity(), media, subtitleLanguage, location)) {
-                VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+            boolean playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+            if (!playingExternal) {
+                VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
             }
         }
     }

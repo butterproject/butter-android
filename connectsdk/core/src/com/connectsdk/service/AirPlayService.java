@@ -677,20 +677,26 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                         PlayStateStatus playState = PlayStateStatus.Unknown;
                         try {
                             JSONObject response = new PListParser().parse(object.toString());
-                            if (!response.has("rate")) {
-                                playState = PlayStateStatus.Finished;
-                                stopTimer();
-                            } else {
-                                int rate = response.getInt("rate");
-                                if (rate == 0) {
-                                    playState = PlayStateStatus.Paused;
-                                } else if (rate == 1) {
-                                    playState = PlayStateStatus.Playing;
+                            if(response.length() > 0) {
+                                if (!response.has("rate")) {
+                                    playState = PlayStateStatus.Finished;
+                                    stopTimer();
+                                } else {
+                                    int rate = response.getInt("rate");
+                                    if (rate == 0) {
+                                        playState = PlayStateStatus.Paused;
+                                    } else if (rate == 1) {
+                                        playState = PlayStateStatus.Playing;
+                                    }
                                 }
-                            }
 
-                            for (PlayStateListener listener : mPlayStateSubscription.getListeners()) {
-                                Util.postSuccess(listener, playState);
+                                for (PlayStateListener listener : mPlayStateSubscription.getListeners()) {
+                                    Util.postSuccess(listener, playState);
+                                }
+                            } else {
+                                for (PlayStateListener listener : mPlayStateSubscription.getListeners()) {
+                                    Util.postError(listener, ServiceCommandError.getError(500));
+                                }
                             }
                         } catch (Exception e) {
                         }
