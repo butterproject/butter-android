@@ -35,6 +35,7 @@ import java.net.URLDecoder;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.VideoPlayerFragment;
 
@@ -85,6 +86,11 @@ public class TrailerPlayerActivity extends BaseActivity implements VideoPlayerFr
     @Override
     public StreamInfo getInfo() {
         return mStreamInfo;
+    }
+
+    @Override
+    public TorrentService getService() {
+        return null;
     }
 
     private class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {

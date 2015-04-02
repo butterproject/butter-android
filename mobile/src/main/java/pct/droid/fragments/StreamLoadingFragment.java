@@ -209,5 +209,9 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
             }
         }
+
+        if(mContext instanceof Activity) {
+            ((Activity) mContext).finish();
+        }
     }
 }

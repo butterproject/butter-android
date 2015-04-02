@@ -149,7 +149,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public Map<String, ConnectableDevice> getDevices() {
-        return mDiscoveryManager.getCompatibleDevices();
+        Map<String, ConnectableDevice> devices = mDiscoveryManager.getCompatibleDevices();
+        for(String key : devices.keySet()) {
+            ConnectableDevice device = devices.get(key);
+            if(device.getServices().size() <= 0) {
+                devices.remove(key);
+            }
+        }
+        return devices;
     }
 
     public ConnectableDevice getConnectedDevice() {
@@ -169,7 +176,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public VolumeControl getVolumeControl() {
-        if(mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
+        if(mCurrentDevice != null && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
             return mCurrentDevice.getCapability(VolumeControl.class);
         }
         return null;

@@ -85,6 +85,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
     public final static String TAG = "Connect SDK";
 
     public final static String PLAY_STATE = "PlayState";
+    public final static String INFO = "info";
     public final static String CAST_SERVICE_VOLUME_SUBSCRIPTION_NAME = "volume";
     public final static String CAST_SERVICE_MUTE_SUBSCRIPTION_NAME = "mute";
 
@@ -391,7 +392,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
     @Override
     public ServiceSubscription<MediaInfoListener> subscribeMediaInfo(
             MediaInfoListener listener) {
-        URLServiceSubscription<MediaInfoListener> request = new URLServiceSubscription<MediaInfoListener>(this, "info", null, null);
+        URLServiceSubscription<MediaInfoListener> request = new URLServiceSubscription<MediaInfoListener>(this, INFO, null, null);
         request.addListener(listener);
         addSubscription(request);
 
@@ -428,7 +429,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
             public void onMetadataUpdated() {
                 if (subscriptions.size() > 0) {
                     for (URLServiceSubscription<?> subscription: subscriptions) {
-                        if (subscription.getTarget().equalsIgnoreCase("info")) {
+                        if (subscription.getTarget().equalsIgnoreCase(INFO)) {
                             for (int i = 0; i < subscription.getListeners().size(); i++) {
                                 MediaInfoListener listener = (MediaInfoListener) subscription.getListeners().get(i);
                                 getMediaInfo(listener);

@@ -18,23 +18,27 @@
 package pct.droid.activities;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.MenuItem;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
 
+    private TorrentService mService;
     private StreamInfo mStreamInfo;
     private String mTitle = "";
-    private VideoPlayerFragment mVideoPlayerFragment;
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -70,9 +74,17 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
         }
         mStreamInfo.setVideoLocation(location);
 
-        mVideoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
-        mVideoPlayerFragment.loadMedia();
+        VideoPlayerFragment videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+        videoPlayerFragment.loadMedia();
 	}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mService != null) {
+            unbindService(mServiceConnection);
+        }
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -93,6 +105,7 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
         OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
             @Override
             public void onSelectionPositive() {
+                mService.stopStreaming();
                 finish();
             }
 
@@ -105,5 +118,22 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
     public StreamInfo getInfo() {
 		return mStreamInfo;
 	}
+
+    @Override
+    public TorrentService getService() {
+        return mService;
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((TorrentService.ServiceBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
 }
 
