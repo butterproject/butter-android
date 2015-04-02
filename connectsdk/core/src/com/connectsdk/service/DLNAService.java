@@ -182,6 +182,10 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
         if (serviceList != null) {
             for (int i = 0; i < serviceList.size(); i++) {
+                if(!serviceList.get(i).baseURL.endsWith("/")) {
+                    serviceList.get(i).baseURL += "/";
+                }
+
                 if (serviceList.get(i).serviceType.contains(AV_TRANSPORT)) {
                     avTransportURL = String.format("%s%s", serviceList.get(i).baseURL, serviceList.get(i).controlURL);
                 }

@@ -551,6 +551,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                     Log.d(ID, response.headers);
                     Log.d(ID, "      ");
                     Log.d(ID, response.content);
+
                     if (response.statusCode == 200) {
                         Util.postSuccess(serviceCommand.getResponseListener(), response.content);
                     } else {
