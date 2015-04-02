@@ -46,5 +46,13 @@
         <item name="android:windowSharedElementExitTransition">@transition/movie_detail_shared_exit</item>
     </style>
 
+    <style name="Theme.PopcornTime.RemoteControl" parent="Theme.PopcornTime.TransparentStatusBar">
+        <item name="android:windowExitTransition">@transition/movie_detail_exit</item>
+        <item name="android:windowReenterTransition">@transition/movie_detail_exit</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/movie_detail_shared_exit</item>
+        <item name="android:windowSharedElementExitTransition">@transition/movie_detail_shared_exit</item>
+    </style>
+
 
 </resources>

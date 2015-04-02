@@ -18,10 +18,14 @@
 package pct.droid.activities;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.connectsdk.service.capability.MediaControl;
 
@@ -30,11 +34,13 @@ import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
 
+    private TorrentService mService;
     private BeamManager mBeamManager = BeamManager.getInstance(this);
     private StreamInfo mStreamInfo;
     private String mTitle = "";
@@ -56,7 +62,10 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
+
+        TorrentService.bindHere(this, mServiceConnection);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
@@ -81,6 +90,14 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mService != null) {
+            unbindService(mServiceConnection);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -100,6 +117,7 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
             @Override
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
+                mService.stopStreaming();
                 finish();
             }
 
@@ -113,5 +131,22 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     public StreamInfo getInfo() {
         return mStreamInfo;
     }
+
+    @Override
+    public TorrentService getService() {
+        return mService;
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((TorrentService.ServiceBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
 
 }

@@ -34,9 +34,8 @@
 
 package pct.droid.dialogfragments;
 
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -49,6 +48,8 @@ import butterknife.InjectView;
 import pct.droid.R;
 
 public class LoadingBeamingDialogFragment extends DialogFragment {
+
+    private DialogInterface.OnCancelListener mOnCancelListener;
 
     @InjectView(R.id.progress_textview)
     TextView mTextView;
@@ -75,12 +76,14 @@ public class LoadingBeamingDialogFragment extends DialogFragment {
         setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Transparent);
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog d =  super.onCreateDialog(savedInstanceState);
-        d.setCancelable(false);
-        return d;
+    public void onCancel(DialogInterface dialog) {
+        if(mOnCancelListener != null)
+            mOnCancelListener.onCancel(dialog);
+    }
+
+    public void setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) {
+        mOnCancelListener = onCancelListener;
     }
 
 }

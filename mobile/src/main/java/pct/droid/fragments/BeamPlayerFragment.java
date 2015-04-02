@@ -17,8 +17,8 @@
 
 package pct.droid.fragments;
 
-import android.app.Activity;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -30,19 +30,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
+import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BaseActivity;
+import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
@@ -54,16 +61,21 @@ import timber.log.Timber;
 
 public class BeamPlayerFragment extends Fragment {
 
+    public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
+
     private StreamInfo mStreamInfo;
     private Media mMedia;
-    private BaseActivity mActivity;
+    private BeamPlayerActivity mActivity;
     private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
     private VolumeControl mVolumeControl;
     private TorrentService mService;
-    private boolean mHasVolumeControl = false, mIsPlaying = false;
+    private boolean mHasVolumeControl = true, mHasSeekControl = true, mIsPlaying = false, mIsUserSeeking = false, mSeeking = false;
     private int mRetries = 0;
+    private long mTotalTimeDuration = 0;
     private LoadingBeamingDialogFragment mLoadingDialog;
+    private ScheduledThreadPoolExecutor mExecutor = new ScheduledThreadPoolExecutor(2);
+    private ScheduledFuture mTask;
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
@@ -71,31 +83,42 @@ public class BeamPlayerFragment extends Fragment {
     ImageButton mPlayButton;
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;
+    @InjectView(R.id.seekbar)
+    SeekBar mSeekBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_beamplayer, container, false);
         ButterKnife.inject(this, v);
+
+        mToolbar.getBackground().setAlpha(0);
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_mtrl_alpha);
+        mSeekBar.setOnSeekBarChangeListener(mSeekBarChangeListener);
+
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity = (BaseActivity) getActivity();
+        mActivity = (BeamPlayerActivity) getActivity();
         mActivity.setSupportActionBar(mToolbar);
 
         mLoadingDialog = LoadingBeamingDialogFragment.newInstance();
+        mLoadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                closePlayer();
+            }
+        });
         mLoadingDialog.show(getChildFragmentManager(), "overlay_fragment");
 
-        mStreamInfo = ((VideoPlayerFragment.Callback) mActivity).getInfo();
+        mStreamInfo = mActivity.getInfo();
         if(mStreamInfo.isShow()) {
             mMedia = mStreamInfo.getShow();
         } else {
             mMedia = mStreamInfo.getMedia();
         }
-
-        TorrentService.bindHere(getActivity(), mServiceConnection);
 
         if (mMedia.image != null && !mMedia.image.equals("")) {
             Picasso.with(mCoverImage.getContext()).load(mMedia.image)
@@ -112,19 +135,18 @@ public class BeamPlayerFragment extends Fragment {
 
         mActivity.getSupportActionBar().setTitle(getString(R.string.now_playing));
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_mtrl_alpha);
+
+        if(!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
+            mHasSeekControl = false;
+            mSeekBar.setVisibility(View.INVISIBLE);
+        }
+
+        if(!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set)) {
+            mHasVolumeControl = false;
+            // hide volume
+        }
 
         startVideo();
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mService != null) {
-            mActivity.unbindService(mServiceConnection);
-            mService.stopStreaming();
-        }
     }
 
     private void startVideo() {
@@ -136,8 +158,14 @@ public class BeamPlayerFragment extends Fragment {
                 mMediaControl.subscribePlayState(mPlayStateListener);
                 mMediaControl.getPlayState(mPlayStateListener);
 
-                mVolumeControl = BeamManager.getInstance(getActivity()).getVolumeControl();
-                if(mVolumeControl != null) mHasVolumeControl = true;
+                if(mHasVolumeControl) {
+                    mVolumeControl = BeamManager.getInstance(getActivity()).getVolumeControl();
+                }
+
+                if(mHasSeekControl) {
+                    startUpdating();
+                    mMediaControl.getDuration(mDurationListener);
+                }
             }
 
             @Override
@@ -156,7 +184,7 @@ public class BeamPlayerFragment extends Fragment {
 
                         @Override
                         public void onSelectionNegative() {
-                            getActivity().finish();
+                            closePlayer();
                         }
                     });
 
@@ -181,6 +209,41 @@ public class BeamPlayerFragment extends Fragment {
         mMediaControl.getPlayState(mPlayStateListener);
     }
 
+    @OnClick(R.id.forward_button)
+    public void forwardClick(View v) {
+        int newProgress = mSeekBar.getProgress() + (int) TimeUnit.MILLISECONDS.toSeconds(60);
+        if(newProgress > mTotalTimeDuration) newProgress = (int) mTotalTimeDuration;
+        mMediaControl.seek(newProgress, null);
+    }
+
+    @OnClick(R.id.backward_button)
+    public void backwardClick(View v) {
+        int newProgress = mSeekBar.getProgress() - (int) TimeUnit.MILLISECONDS.toSeconds(60);
+        if(newProgress < 0) newProgress = 0;
+        mMediaControl.seek(newProgress, null);
+    }
+
+    private void startUpdating() {
+        mTask = mExecutor.scheduleAtFixedRate(mPositionRunnable, 0, REFRESH_INTERVAL_MS, TimeUnit.MILLISECONDS);
+    }
+
+    private void stopUpdating() {
+        if(mTask != null) {
+            mTask.cancel(false);
+        }
+        for(Runnable r : mExecutor.getQueue()) {
+            mExecutor.remove(r);
+        }
+    }
+
+    private void closePlayer() {
+        if(mActivity != null && mActivity.getService() != null) {
+            mActivity.getService().stopStreaming();
+        }
+        mBeamManager.stopVideo();
+        getActivity().finish();
+    }
+
     private MediaControl.PlayStateListener mPlayStateListener = new MediaControl.PlayStateListener() {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
@@ -189,6 +252,10 @@ public class BeamPlayerFragment extends Fragment {
 
             if(mLoadingDialog.isVisible() && mIsPlaying) {
                 mLoadingDialog.dismiss();
+            }
+
+            if(mIsPlaying) {
+                mMediaControl.getDuration(mDurationListener);
             }
         }
 
@@ -205,22 +272,77 @@ public class BeamPlayerFragment extends Fragment {
 
                     @Override
                     public void onSelectionNegative() {
-                        getActivity().finish();
+                        closePlayer();
                     }
                 });
             }
         }
     };
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private MediaControl.DurationListener mDurationListener = new MediaControl.DurationListener() {
+        @Override public void onError(ServiceCommandError error) { }
+
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
+        public void onSuccess(Long duration) {
+            mTotalTimeDuration = duration;
+            mSeekBar.setMax(duration.intValue());
+            //durationTextView.setText(formatTime(duration.intValue()));
+        }
+    };
+
+    private Runnable mPositionRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            mMediaControl.getPosition(new MediaControl.PositionListener() {
+                @Override
+                public void onSuccess(Long position) {
+                    //Timber.d("Time %d", position);
+                    //positionTextView.setText(formatTime(position.intValue()));
+                    if(!mSeeking && !mIsUserSeeking)
+                        mSeekBar.setProgress(position.intValue());
+                }
+
+                @Override
+                public void onError(ServiceCommandError error) {
+
+                }
+            });
+        }
+    };
+
+    private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean userChange) {
+
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            mIsUserSeeking = true;
+            mSeekBar.setSecondaryProgress(seekBar.getProgress());
+            stopUpdating();
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mIsUserSeeking = false;
+            mSeekBar.setSecondaryProgress(0);
+            mSeeking = true;
+            mMediaControl.seek(seekBar.getProgress(), new ResponseListener<Object>() {
+                @Override
+                public void onSuccess(Object response) {
+                    mSeeking = false;
+                    startUpdating();
+                }
+
+                @Override
+                public void onError(ServiceCommandError error) {
+                    mSeeking = false;
+                    startUpdating();
+                }
+            });
         }
     };
+
 }

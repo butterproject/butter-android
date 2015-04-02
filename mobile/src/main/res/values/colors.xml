@@ -19,6 +19,7 @@
 <resources>
 
 	<color name="bg">#1F2224</color>
+    <color name="bg_dark">#141617</color>
     <color name="overlay">#33000000</color>
 
     <color name="selectable_focused">#22FFFFFF</color>

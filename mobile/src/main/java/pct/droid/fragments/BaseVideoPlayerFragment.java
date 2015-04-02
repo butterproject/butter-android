@@ -113,7 +113,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 
 	protected Callback mCallback;
-	private TorrentService mService;
 
 	/**
 	 * Handle libvlc asynchronous events
@@ -133,8 +132,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	@Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-        TorrentService.bindHere(getActivity(), mServiceConnection);
 
         mStreamInfo = mCallback.getInfo();
 		mMedia = mStreamInfo.getMedia();
@@ -175,6 +172,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 
         loadMedia();
+
+        if(mCallback.getService() != null)
+            mCallback.getService().addListener(BaseVideoPlayerFragment.this);
 	}
 
 	@Override public void onAttach(Activity activity) {
@@ -224,12 +224,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		// HW acceleration was temporarily disabled because of an error, restore the previous value.
 		if (mDisabledHardwareAcceleration)
 			mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
-
-
-		if (mService != null) {
-            getActivity().unbindService(mServiceConnection);
-            mService.stopStreaming();
-        }
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 	}
@@ -727,19 +721,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		}
 	}
 
-	protected ServiceConnection mServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			mService = ((TorrentService.ServiceBinder) service).getService();
-			mService.addListener(BaseVideoPlayerFragment.this);
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			mService = null;
-		}
-	};
-
 	@Override
 	public void onStreamStarted() { }
 
@@ -790,6 +771,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 	public interface Callback {
 		StreamInfo getInfo();
+        TorrentService getService();
 	}
 
 }
