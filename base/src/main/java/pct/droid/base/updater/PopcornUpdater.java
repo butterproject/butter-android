@@ -129,8 +129,9 @@ public class PopcornUpdater extends Observable {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 }
             }
+        } else {
+            sendNotification();
         }
-        sendNotification();
 
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -193,7 +194,7 @@ public class PopcornUpdater extends Observable {
             }
 
             Request request = new Request.Builder()
-                    .url(DATA_URL + "/" + variantStr + "/" + channelStr)
+                    .url(DATA_URL + "/" + variantStr)
                     .build();
 
             mHttpClient.newCall(request).enqueue(new Callback() {
