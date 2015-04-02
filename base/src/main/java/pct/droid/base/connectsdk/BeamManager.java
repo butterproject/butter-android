@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.Constants;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.connectsdk.server.BeamServerService;
 import pct.droid.base.providers.media.models.Media;
@@ -118,7 +119,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 .create();
 
         CastService.setApplicationID(Constants.CAST_ID);
-        DiscoveryManager.init(context);
+        DiscoveryManager.init(PopcornApplication.getAppContext());
         mDiscoveryManager = DiscoveryManager.getInstance();
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
         mDiscoveryManager.setCapabilityFilters(new CapabilityFilter(

@@ -37,6 +37,7 @@ import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -79,6 +80,8 @@ public class BeamPlayerFragment extends Fragment {
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
+    @InjectView(R.id.sliding_layout)
+    SlidingUpPanelLayout mPanel;
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
     @InjectView(R.id.cover_image)
@@ -143,7 +146,7 @@ public class BeamPlayerFragment extends Fragment {
 
         if(!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set)) {
             mHasVolumeControl = false;
-            // hide volume
+            mPanel.setEnableDragViewTouchEvents(false);
         }
 
         startVideo();
@@ -211,14 +214,14 @@ public class BeamPlayerFragment extends Fragment {
 
     @OnClick(R.id.forward_button)
     public void forwardClick(View v) {
-        int newProgress = mSeekBar.getProgress() + (int) TimeUnit.MILLISECONDS.toSeconds(60);
+        int newProgress = mSeekBar.getProgress() + 60000;
         if(newProgress > mTotalTimeDuration) newProgress = (int) mTotalTimeDuration;
         mMediaControl.seek(newProgress, null);
     }
 
     @OnClick(R.id.backward_button)
     public void backwardClick(View v) {
-        int newProgress = mSeekBar.getProgress() - (int) TimeUnit.MILLISECONDS.toSeconds(60);
+        int newProgress = mSeekBar.getProgress() - 60000;
         if(newProgress < 0) newProgress = 0;
         mMediaControl.seek(newProgress, null);
     }
