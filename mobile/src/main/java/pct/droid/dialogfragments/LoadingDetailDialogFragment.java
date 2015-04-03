@@ -19,7 +19,6 @@ package pct.droid.dialogfragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
@@ -38,16 +37,14 @@ public class LoadingDetailDialogFragment extends DialogFragment {
 
     private Callback mCallback;
 
-    public static final String EXTRA_ITEM_ID = "item_id";
-    public static final String EXTRA_PALETTE_COLOR = "palette_color";
+    public static final String EXTRA_MEDIA = "media_item";
     private MediaProvider mProvider;
     private Boolean mSavedInstanceState = false;
 
-    public static LoadingDetailDialogFragment newInstance(Media itemId, int paletteColor) {
+    public static LoadingDetailDialogFragment newInstance(Media item) {
         LoadingDetailDialogFragment frag = new LoadingDetailDialogFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_ITEM_ID, itemId);
-        args.putInt(EXTRA_PALETTE_COLOR, paletteColor);
+        args.putParcelable(EXTRA_MEDIA, item);
         frag.setArguments(args);
         return frag;
     }
@@ -87,8 +84,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Media media = getArguments().getParcelable(EXTRA_ITEM_ID);
-        final int paletteColor = getArguments().getInt(EXTRA_PALETTE_COLOR);
+        final Media media = getArguments().getParcelable(EXTRA_MEDIA);
 
         mProvider = media.getMediaProvider();
         mProvider.getDetail(media.videoId, new MediaProvider.Callback() {
@@ -98,10 +94,11 @@ public class LoadingDetailDialogFragment extends DialogFragment {
                         if (items.size() <= 0) return;
 
                         final Media item = items.get(0);
+                        item.color = media.color;
                         ThreadUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mCallback.onDetailLoadSuccess(item, paletteColor);
+                                mCallback.onDetailLoadSuccess(item);
                                 if (!mSavedInstanceState) dismiss();
                             }
                         });
@@ -135,7 +132,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     public interface Callback {
         void onDetailLoadFailure();
 
-        void onDetailLoadSuccess(Media item, int paletteColor);
+        void onDetailLoadSuccess(Media item);
     }
 
 

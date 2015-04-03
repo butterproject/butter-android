@@ -10,10 +10,7 @@ import pct.droid.base.torrent.StreamInfo;
 
 public abstract class BaseDetailFragment extends Fragment {
 
-    protected static final String COLOR = "palette_color";
-
     protected FragmentListener mCallback;
-    protected int mPaletteColor;
     protected MediaDetailActivity mActivity;
     protected View mRoot;
 

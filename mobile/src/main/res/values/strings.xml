@@ -162,6 +162,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="disconnect">Disconnect</string>
     <string name="select_beaming">Select device for beaming</string>
     <string name="starting_beam">Initialising video beaming...</string>
-    <string name="beaming_failed">The video could not play on your beaming device. Would you like to try again?</string>
+    <string name="beaming_failed">The video could not play on your beaming device. Would you like to try again? The app might need to download more parts before your device is able to play the video.</string>
 
 </resources>

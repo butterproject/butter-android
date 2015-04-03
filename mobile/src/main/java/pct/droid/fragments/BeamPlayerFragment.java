@@ -17,11 +17,13 @@
 
 package pct.droid.fragments;
 
-import android.content.ComponentName;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
-import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -30,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
@@ -49,15 +50,17 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
-import pct.droid.activities.BaseActivity;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
+import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.LoadingBeamingDialogFragment;
 import pct.droid.dialogfragments.OptionDialogFragment;
+import pct.droid.widget.SeekBar;
 import timber.log.Timber;
 
 public class BeamPlayerFragment extends Fragment {
@@ -101,6 +104,7 @@ public class BeamPlayerFragment extends Fragment {
         return v;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -123,6 +127,24 @@ public class BeamPlayerFragment extends Fragment {
             mMedia = mStreamInfo.getMedia();
         }
 
+        LayerDrawable progressDrawable;
+        if(VersionUtils.isLollipop()) {
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.progress_horizontal_material, null);
+            progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
+        } else {
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
+        }
+
+        progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        mSeekBar.setProgressDrawable(progressDrawable);
+        mSeekBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+
+        if(!VersionUtils.isJellyBean()) {
+            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
+        } else {
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
+        }
+
         if (mMedia.image != null && !mMedia.image.equals("")) {
             Picasso.with(mCoverImage.getContext()).load(mMedia.image)
                     .into(mCoverImage, new Callback() {
@@ -136,8 +158,8 @@ public class BeamPlayerFragment extends Fragment {
                     });
         }
 
-        mActivity.getSupportActionBar().setTitle(getString(R.string.now_playing));
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mActivity.getSupportActionBar().setTitle("");
 
         if(!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
             mHasSeekControl = false;
@@ -253,7 +275,7 @@ public class BeamPlayerFragment extends Fragment {
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
             mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
 
-            if(mLoadingDialog.isVisible() && mIsPlaying) {
+            if(mLoadingDialog.isVisible() && mIsPlaying && !isDetached()) {
                 mLoadingDialog.dismiss();
             }
 
@@ -316,19 +338,19 @@ public class BeamPlayerFragment extends Fragment {
 
     private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean userChange) {
+        public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean userChange) {
 
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
+        public void onStartTrackingTouch(android.widget.SeekBar seekBar) {
             mIsUserSeeking = true;
             mSeekBar.setSecondaryProgress(seekBar.getProgress());
             stopUpdating();
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
+        public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
             mIsUserSeeking = false;
             mSeekBar.setSecondaryProgress(0);
             mSeeking = true;

@@ -20,7 +20,7 @@ package pct.droid.base.utils;
 import android.content.Context;
 
 import pct.droid.base.Constants;
-import pct.droid.base.widget.ObscuredSharedPreferences;
+import pct.droid.base.content.ObscuredSharedPreferences;
 
 public class PrefUtils {
 
