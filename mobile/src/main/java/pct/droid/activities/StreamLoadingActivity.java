@@ -57,7 +57,7 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setBackgroundDrawableResource(android.R.color.black);
+        getWindow().setBackgroundDrawableResource(R.color.bg);
 
         super.onCreate(savedInstanceState, R.layout.activity_streamloading);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

@@ -49,6 +49,7 @@ import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 import timber.log.Timber;
@@ -114,12 +115,11 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     private void loadBackgroundImage() {
         StreamInfo info = mCallback.getStreamInformation();
           /* attempt to load background image */
-        if (null != info && null != info.getMedia()) {
-            String url;
-            if (info.isShow()) {
-                url = info.getShow().image;
-            }else {
-                url = info.getMedia().image;
+        if (null != info) {
+            Media media = info.isShow() ? info.getShow() : info.getMedia();
+            String url = media.image;
+            if(PixelUtils.isTablet(getActivity())) {
+                url = media.headerImage;
             }
 
             if (!TextUtils.isEmpty(url))
