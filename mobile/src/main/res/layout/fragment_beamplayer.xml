@@ -95,39 +95,35 @@
                     android:background="@color/bg">
                     <ImageButton
                         android:id="@+id/backward_button"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_av_rewind"
-                        android:background="@drawable/selectable_background"
+                        android:background="@drawable/selectable_background_circle"
                         />
                     <ImageButton
                         android:id="@+id/play_button"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
-                        android:layout_marginLeft="@dimen/activity_vertical_margin"
-                        android:layout_marginStart="@dimen/activity_vertical_margin"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_av_play"
-                        android:background="@drawable/selectable_background"
-                        />
+                        android:layout_marginLeft="@dimen/beamplayer_controls_margin"
+                        android:layout_marginRight="@dimen/beamplayer_controls_margin"
+                        android:src="@drawable/ic_av_play_button"
+                        android:background="@drawable/play_button_circle" />
                     <ImageButton
                         android:id="@+id/forward_button"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginLeft="@dimen/activity_vertical_margin"
-                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_av_forward"
-                        android:background="@drawable/selectable_background"
+                        android:background="@drawable/selectable_background_circle"
                         />
                 </LinearLayout>
 
-                <SeekBar
+                <pct.droid.widget.SeekBar
                     android:id="@+id/seekbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="32dp"
                     android:layout_marginLeft="-16dp"
                     android:layout_marginRight="-16dp"
                     android:layout_alignParentTop="true" />

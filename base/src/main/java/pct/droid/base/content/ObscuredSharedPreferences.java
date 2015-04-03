@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.widget;
+package pct.droid.base.content;
 
 import android.annotation.TargetApi;
 import android.content.Context;
