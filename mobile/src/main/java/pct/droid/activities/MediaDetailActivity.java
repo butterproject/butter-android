@@ -125,11 +125,6 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             mContent.setMinimumHeight(mTopHeight);
         }
 
-        if(VersionUtils.isLollipop()) {
-            int navigationBarHeight = PixelUtils.getNavigationBarHeight(this);
-            mContent.setPadding(mContent.getPaddingLeft(), mContent.getPaddingTop(), mContent.getPaddingRight(), mContent.getPaddingBottom() + navigationBarHeight);
-        }
-
         mFragment = null;
         if(sMedia.isMovie) {
             mFragment = MovieDetailFragment.newInstance((Movie) sMedia, mPaletteColor);

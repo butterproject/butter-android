@@ -24,6 +24,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyCharacterMap;
@@ -96,8 +97,34 @@ public class PixelUtils {
         return size.y;
     }
 
+    public static float getScreenDensity(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        return metrics.density;
+    }
+
     public static boolean screenIsPortrait(Context context) {
         return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
+
+    public static boolean isTablet(Context context) {
+        int widthPixels = getScreenWidth(context);
+        int heightPixels = getScreenHeight(context);
+        float density = getScreenDensity(context);
+
+        int dpi = 0;
+        if (widthPixels < heightPixels) {
+            dpi = (int) (widthPixels / density);
+        } else {
+            dpi = (int) (heightPixels / density);
+        }
+
+        return dpi < TABLET_MIN_DP_WEIGHT;
+    }
+
+
+    public static final int TABLET_MIN_DP_WEIGHT = 800;
 
 }

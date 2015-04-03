@@ -231,21 +231,22 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         imageUrl = imageUrl == null ? "https://popcorntime.io/images/header-logo.png" : imageUrl;
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
-        mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
-            @Override
-            public void onSuccess(MediaPlayer.MediaLaunchObject object) {
-                mLaunchSession = object.launchSession;
-                if(listener != null)
-                    listener.onSuccess(object);
-            }
-
-            @Override
-            public void onError(ServiceCommandError error) {
-                Timber.e(error.getMessage());
-                if(listener != null)
-                    listener.onError(error);
-            }
-        });
+        if(mCurrentDevice != null)
+            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
+                @Override
+                public void onSuccess(MediaPlayer.MediaLaunchObject object) {
+                    mLaunchSession = object.launchSession;
+                    if(listener != null)
+                        listener.onSuccess(object);
+                }
+    
+                @Override
+                public void onError(ServiceCommandError error) {
+                    Timber.e(error.getMessage());
+                    if(listener != null)
+                        listener.onError(error);
+                }
+            });
     }
 
     public void connect(ConnectableDevice castingDevice) {
