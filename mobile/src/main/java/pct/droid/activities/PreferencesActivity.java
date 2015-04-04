@@ -396,6 +396,208 @@ public class PreferencesActivity extends BaseActivity
 						return locale.getDisplayName(locale);
 					}
 				}));
+
+        mPrefItems.add(getResources().getString(R.string.torrents));
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_download_limit, R.string.download_speed, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        Bundle args = new Bundle();
+                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
+                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 102400);
+                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 0);
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+
+                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                            @Override
+                            public void onNewValue(int value) {
+                                item.saveValue(value);
+                            }
+                        });
+                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        int limit = (Integer) item.getValue();
+                        if(limit == 0) {
+                            return getString(R.string.unlimited);
+                        } else {
+                            return limit + " bytes/sec";
+                        }
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_upload_limit, R.string.upload_speed, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        Bundle args = new Bundle();
+                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
+                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 102400);
+                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 0);
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+
+                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                            @Override
+                            public void onNewValue(int value) {
+                                item.saveValue(value);
+                            }
+                        });
+                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        int limit = (Integer) item.getValue();
+                        if(limit == 0) {
+                            return getString(R.string.unlimited);
+                        } else {
+                            return limit + " bytes/sec";
+                        }
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_connections, R.string.max_connections, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        Bundle args = new Bundle();
+                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
+                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 200);
+                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 10);
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+
+                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                            @Override
+                            public void onNewValue(int value) {
+                                item.saveValue(value);
+                            }
+                        });
+                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        int limit = (Integer) item.getValue();
+                        return limit + " connections";
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_dht, R.string.dht_limit, Prefs.LIBTORRENT_DHT_LIMIT, 200,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        Bundle args = new Bundle();
+                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
+                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 200);
+                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 10);
+                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+
+                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                            @Override
+                            public void onNewValue(int value) {
+                                item.saveValue(value);
+                            }
+                        });
+                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        int limit = (Integer) item.getValue();
+                        return limit + " nodes";
+                    }
+                }));
+
+        mPrefItems.add(getResources().getString(R.string.advanced));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_storage_location, R.string.storage_location, Prefs.STORAGE_LOCATION,
+                StorageUtils.getIdealCacheDirectory(this),
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        String[] items = {getString(R.string.storage_automatic), getString(R.string.storage_choose)};
+
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int position) {
+                                        if (position == 0) {
+                                            item.clearValue();
+                                        } else {
+                                            mDirectoryChooserFragment = DirectoryChooserFragment.newInstance("pct.droid", null);
+                                            mDirectoryChooserFragment.show(getFragmentManager(), "pref_fragment");
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return item.getValue().toString();
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_remove_cache, R.string.remove_cache, Prefs.REMOVE_CACHE, true,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+                        PrefUtils.save(PreferencesActivity.this, Prefs.REMOVE_CACHE, !(boolean) item.getValue());
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        boolean enabled = (boolean) item.getValue();
+                        return enabled ? getString(R.string.enabled) : getString(R.string.disabled);
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_hw_accel, R.string.hw_acceleration, Prefs.HW_ACCELERATION,
+                LibVLC.HW_ACCELERATION_AUTOMATIC,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        String[] items = {getString(R.string.hw_automatic), getString(R.string.disabled), getString(R.string.hw_decoding),
+                                getString(R.string.hw_full)};
+
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE,
+                                (int) item.getValue() + 1, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int position) {
+                                        item.saveValue(position - 1);
+                                        dialog.dismiss();
+                                    }
+                                });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        switch ((int) item.getValue()) {
+                            case LibVLC.HW_ACCELERATION_DECODING:
+                                return getString(R.string.hw_decoding);
+                            case LibVLC.HW_ACCELERATION_DISABLED:
+                                return getString(R.string.disabled);
+                            case LibVLC.HW_ACCELERATION_FULL:
+                                return getString(R.string.hw_full);
+                            default:
+                            case LibVLC.HW_ACCELERATION_AUTOMATIC:
+                                return getString(R.string.hw_automatic);
+                        }
+                    }
+                }));
+
 		mPrefItems.add(getResources().getString(R.string.updates));
 		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_auto_update, R.string.auto_updates, Prefs.AUTOMATIC_UPDATES, true,
 				new PrefItem.OnClickListener() {
@@ -427,84 +629,6 @@ public class PreferencesActivity extends BaseActivity
 						String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM, Locale.getDefault()).format(timeStamp);
 						String date = DateFormat.format("dd-MM-yyy", cal).toString();
 						return getString(R.string.last_check) + " :" + date + " " + time;
-					}
-				}));
-
-		mPrefItems.add(getResources().getString(R.string.advanced));
-		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_storage_location, R.string.storage_location, Prefs.STORAGE_LOCATION,
-				StorageUtils.getIdealCacheDirectory(this),
-				new PrefItem.OnClickListener() {
-					@Override
-					public void onClick(final PrefItem item) {
-						String[] items = {getString(R.string.storage_automatic), getString(R.string.storage_choose)};
-
-						openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.NORMAL, -1,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int position) {
-										if (position == 0) {
-											item.clearValue();
-										} else {
-											mDirectoryChooserFragment = DirectoryChooserFragment.newInstance("pct.droid", null);
-											mDirectoryChooserFragment.show(getFragmentManager(), "pref_fragment");
-											dialog.dismiss();
-										}
-									}
-								});
-					}
-				},
-				new PrefItem.SubTitleGenerator() {
-					@Override
-					public String get(PrefItem item) {
-						return item.getValue().toString();
-					}
-				}));
-		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_remove_cache, R.string.remove_cache, Prefs.REMOVE_CACHE, true,
-				new PrefItem.OnClickListener() {
-					@Override
-					public void onClick(PrefItem item) {
-						PrefUtils.save(PreferencesActivity.this, Prefs.REMOVE_CACHE, !(boolean) item.getValue());
-					}
-				},
-				new PrefItem.SubTitleGenerator() {
-					@Override
-					public String get(PrefItem item) {
-						boolean enabled = (boolean) item.getValue();
-						return enabled ? getString(R.string.enabled) : getString(R.string.disabled);
-					}
-				}));
-		mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_hw_accel, R.string.hw_acceleration, Prefs.HW_ACCELERATION,
-				LibVLC.HW_ACCELERATION_AUTOMATIC,
-				new PrefItem.OnClickListener() {
-					@Override
-					public void onClick(final PrefItem item) {
-						String[] items = {getString(R.string.hw_automatic), getString(R.string.disabled), getString(R.string.hw_decoding),
-								getString(R.string.hw_full)};
-
-						openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE,
-								(int) item.getValue() + 1, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int position) {
-										item.saveValue(position - 1);
-										dialog.dismiss();
-									}
-								});
-					}
-				},
-				new PrefItem.SubTitleGenerator() {
-					@Override
-					public String get(PrefItem item) {
-						switch ((int) item.getValue()) {
-							case LibVLC.HW_ACCELERATION_DECODING:
-								return getString(R.string.hw_decoding);
-							case LibVLC.HW_ACCELERATION_DISABLED:
-								return getString(R.string.disabled);
-							case LibVLC.HW_ACCELERATION_FULL:
-								return getString(R.string.hw_full);
-							default:
-							case LibVLC.HW_ACCELERATION_AUTOMATIC:
-								return getString(R.string.hw_automatic);
-						}
 					}
 				}));
 
