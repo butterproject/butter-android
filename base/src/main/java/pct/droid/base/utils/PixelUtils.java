@@ -121,7 +121,7 @@ public class PixelUtils {
             dpi = (int) (heightPixels / density);
         }
 
-        return dpi < TABLET_MIN_DP_WEIGHT;
+        return dpi > TABLET_MIN_DP_WEIGHT;
     }
 
 
