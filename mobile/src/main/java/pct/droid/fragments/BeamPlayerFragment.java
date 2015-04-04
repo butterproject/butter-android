@@ -130,11 +130,11 @@ public class BeamPlayerFragment extends Fragment {
         LayerDrawable progressDrawable;
         if(VersionUtils.isLollipop()) {
             progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.progress_horizontal_material, null);
-            progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
         } else {
-            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal_bigtrack);
         }
 
+        progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
         mSeekBar.setProgressDrawable(progressDrawable);
         mSeekBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
