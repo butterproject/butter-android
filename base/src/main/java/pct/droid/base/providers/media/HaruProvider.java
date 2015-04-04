@@ -388,7 +388,10 @@ public class HaruProvider extends MediaProvider {
                 media.title = (String) item.get("name");
                 media.videoId = item.get("id").toString();
                 media.imdbId = "mal-" + media.videoId;
-                String year = item.get("aired").toString().split(", ")[1];
+                String year = item.get("aired").toString();
+                if(year.contains(", ")) {
+                    year = year.split(", ")[1];
+                }
                 if (year.contains(" ")) {
                     year = year.split(" ")[0];
                 }
