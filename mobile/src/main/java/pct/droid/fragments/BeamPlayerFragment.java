@@ -91,17 +91,23 @@ public class BeamPlayerFragment extends Fragment {
     ImageView mCoverImage;
     @InjectView(R.id.seekbar)
     SeekBar mSeekBar;
+    @InjectView(R.id.volumebar)
+    SeekBar mVolumeBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_beamplayer, container, false);
+        return inflater.inflate(R.layout.fragment_beamplayer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
         ButterKnife.inject(this, v);
 
         mToolbar.getBackground().setAlpha(0);
         mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_mtrl_alpha);
         mSeekBar.setOnSeekBarChangeListener(mSeekBarChangeListener);
-
-        return v;
+        mVolumeBar.setOnSeekBarChangeListener(mVolumeBarChangeListener);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -128,16 +134,24 @@ public class BeamPlayerFragment extends Fragment {
         }
 
         LayerDrawable progressDrawable;
+        LayerDrawable volumeDrawable;
         if(VersionUtils.isLollipop()) {
             progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.progress_horizontal_material, null);
+            volumeDrawable = (LayerDrawable) getResources().getDrawable(android.R.drawable.progress_horizontal, null);
         } else {
             progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal_bigtrack);
+            volumeDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
         }
 
         progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        volumeDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+
         mSeekBar.setProgressDrawable(progressDrawable);
         mSeekBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+
+        mVolumeBar.setProgressDrawable(volumeDrawable);
+        mVolumeBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
 
         if(!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
@@ -166,9 +180,10 @@ public class BeamPlayerFragment extends Fragment {
             mSeekBar.setVisibility(View.INVISIBLE);
         }
 
-        if(!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set)) {
+        if(!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
             mHasVolumeControl = false;
-            mPanel.setEnableDragViewTouchEvents(false);
+            mPanel.setEnabled(false);
+            mPanel.setTouchEnabled(false);
         }
 
         startVideo();
@@ -185,6 +200,8 @@ public class BeamPlayerFragment extends Fragment {
 
                 if(mHasVolumeControl) {
                     mVolumeControl = BeamManager.getInstance(getActivity()).getVolumeControl();
+                    mVolumeControl.subscribeVolume(mVolumeListener);
+                    mVolumeControl.getVolume(mVolumeListener);
                 }
 
                 if(mHasSeekControl) {
@@ -315,6 +332,16 @@ public class BeamPlayerFragment extends Fragment {
         }
     };
 
+    private VolumeControl.VolumeListener mVolumeListener = new VolumeControl.VolumeListener() {
+        @Override
+        public void onSuccess(Float volume) {
+            mVolumeBar.setProgress((int) (volume * 100.0f));
+        }
+
+        @Override
+        public void onError(ServiceCommandError error) { }
+    };
+
     private Runnable mPositionRunnable = new Runnable() {
         @Override
         public void run() {
@@ -322,8 +349,6 @@ public class BeamPlayerFragment extends Fragment {
             mMediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long position) {
-                    //Timber.d("Time %d", position);
-                    //positionTextView.setText(formatTime(position.intValue()));
                     if(!mSeeking && !mIsUserSeeking)
                         mSeekBar.setProgress(position.intValue());
                 }
@@ -367,6 +392,17 @@ public class BeamPlayerFragment extends Fragment {
                     startUpdating();
                 }
             });
+        }
+    };
+
+    public SeekBar.OnSeekBarChangeListener mVolumeBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override public void onStopTrackingTouch(android.widget.SeekBar seekBar) { }
+        @Override public void onStartTrackingTouch(android.widget.SeekBar seekBar) { }
+
+        @Override
+        public void onProgressChanged(android.widget.SeekBar seekBar, int position, boolean fromUser) {
+            if (fromUser)
+                mVolumeControl.setVolume((float) mVolumeBar.getProgress() / 100.0f, null);
         }
     };
 

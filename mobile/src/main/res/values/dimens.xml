@@ -72,6 +72,7 @@
 
     <dimen name="optionselector_icon_margin_start">16dp</dimen>
     <dimen name="optionselector_text_margin_start">72dp</dimen>
+    <dimen name="optionselector_volume_margin_start">56dp</dimen>
     <dimen name="optionselector_text_margin_end">16dp</dimen>
     <dimen name="optionselecter_margin_end">32dp</dimen>
     <dimen name="optionselector_text_size">15sp</dimen>
