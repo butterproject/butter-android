@@ -18,57 +18,73 @@
 package pct.droid.activities;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.MenuItem;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
 
-	private Media mMedia;
-	private String mQuality;
-	private String mSubtitleLanguage;
-	private String mLocation;
-    private VideoPlayerFragment mVideoPlayerFragment;
+    private TorrentService mService;
+    private StreamInfo mStreamInfo;
+    private String mTitle = "";
 
-	public static Intent startActivity(Activity activity, String streamUrl, Media data) {
-		return startActivity(activity, streamUrl, data, null, null, 0);
-	}
+    public static Intent startActivity(Context context, StreamInfo info) {
+        return startActivity(context, info, 0);
+    }
 
-	public static Intent startActivity(Activity activity, String streamUrl, Media data, String quality, String subtitleLanguage, long resumePosition) {
-		Intent i = new Intent(activity, VideoPlayerActivity.class);
-		i.putExtra(DATA, data);
-		i.putExtra(QUALITY, quality);
-		i.putExtra(SUBTITLES, subtitleLanguage);
-		i.putExtra(LOCATION, streamUrl);
-		//todo: resume position;
-		activity.startActivity(i);
-		return i;
-	}
+    public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
+        Intent i = new Intent(context, VideoPlayerActivity.class);
+        i.putExtra(INFO, info);
+        //todo: resume position
+        context.startActivity(i);
+        return i;
+    }
 
-	public final static String LOCATION = "stream_url";
-	public final static String DATA = "video_data";
-	public final static String QUALITY = "quality";
-	public final static String SUBTITLES = "subtitles";
-	public final static String RESUME_POSITION = "resume_position";
+    public final static String INFO = "stream_info";
+    public final static String RESUME_POSITION = "resume_position";
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
-		mMedia = getIntent().getParcelableExtra(DATA);
-		mQuality = getIntent().getStringExtra(QUALITY);
-		mSubtitleLanguage = getIntent().getStringExtra(SUBTITLES);
-		mLocation = getIntent().getStringExtra(LOCATION);
+        mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-        mVideoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
-        mVideoPlayerFragment.loadMedia();
+        if(mStreamInfo.isShow()) {
+            mTitle = mStreamInfo.getShow().title;
+        } else {
+            if(mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
+                mTitle = mStreamInfo.getMedia().title;
+        }
+
+        String location = mStreamInfo.getVideoLocation();
+        if(!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
+            location = "file://" + location;
+        }
+        mStreamInfo.setVideoLocation(location);
+
+        VideoPlayerFragment videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+        videoPlayerFragment.loadMedia();
 	}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mService != null) {
+            unbindService(mServiceConnection);
+        }
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -86,9 +102,10 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
     }
 
     private void showExitDialog() {
-        OptionDialogFragment.show(getFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mMedia.title), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
+        OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
             @Override
             public void onSelectionPositive() {
+                mService.stopStreaming();
                 finish();
             }
 
@@ -98,23 +115,25 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
     }
 
 	@Override
-    public Media getData() {
-		return mMedia;
+    public StreamInfo getInfo() {
+		return mStreamInfo;
 	}
 
-	@Override
-    public String getQuality() {
-		return mQuality;
-	}
+    @Override
+    public TorrentService getService() {
+        return mService;
+    }
 
-	@Override
-    public String getSubtitles() {
-		return mSubtitleLanguage;
-	}
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((TorrentService.ServiceBinder) service).getService();
+        }
 
-	@Override
-    public String getLocation() {
-		return mLocation;
-	}
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
 }
 

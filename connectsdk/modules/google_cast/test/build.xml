@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="Connect-SDK-Android-Google-Cast-Test" default="test-run" basedir=".">
+	<description>
+	    Unit tests with Robolectric for module Connect-SDK-Android-Google-Cast 
+	</description>
+	
+	<!-- use environment variables -->
+	<property environment="env"/>
+	
+	<!-- set global properties for this build, if you have libraries, include them here with a relative path...I have samples as library1, library2, library3, located on the same level as your project, but you  may need to modified this to get it to work for your setup. -->
+	
+	<property name="libs.dir" value="./libs/"/>
+	<property name="build.dir" value="./build/"/>
+	<property name="android.google-cast.classpath" value="./../bin/classes/"/>
+	<property name="android.core.classpath" value="./../../../core/bin/classes/"/>
+	<property name="test.report.dir" value="./test-reports/"/>
+	<property name="test.html.dir" value="./test-report-html/"/>
+	<property name="source.dir" value="./src/"/>    
+	
+	<property name="appcompat" value="${env.ANDROID_HOME}/extras/android/support/v7/appcompat/libs/android-support-v7-appcompat.jar"/>
+	<property name="mediarouter" value="${env.ANDROID_HOME}/extras/android/support/v7/mediarouter/libs/android-support-v7-mediarouter.jar"/>
+	<property name="play_services" value="${env.ANDROID_HOME}/extras/google/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar"/>
+
+	    
+	<filelist id="android_jars" dir="${env.ANDROID_HOME}/platforms/android-19">
+	    <file name="android.jar"/>
+	</filelist>
+	
+	<filelist id="libs_jars" dir="${libs.dir}">
+	    <file name="junit-4.10.jar"/>
+	    <file name="mockito-all-1.9.5.jar"/>
+	    <file name="powermock-mockito-1.5.6-full.jar"/>
+	    <file name="robolectric-2.4-jar-with-dependencies.jar"/>
+	</filelist>
+	
+	
+	<path id="compile_classpath">
+	    <filelist refid="libs_jars"/>
+	    <filelist refid="android_jars"/>
+	    <pathelement path="${appcompat}"/>
+	    <pathelement path="${mediarouter}"/>
+	    <pathelement path="${play_services}"/>
+	    <pathelement path="${android.google-cast.classpath}"/>
+	    <pathelement path="${android.core.classpath}"/>
+	    <pathelement path="${build.dir}"/>
+
+	</path>
+	
+	<!-- targets -->
+	
+	<target name="init">
+	    <!-- Create the time stamp -->
+	    <tstamp/>
+	    <mkdir dir="${build.dir}"/>
+	    <echo message="${env.ANDROID_HOME}"/>
+	</target>
+	
+	<target name="compile" depends="init" description="compile test source">
+	    <javac srcdir="${source.dir}" destdir="${build.dir}" debug="true" >
+	        <classpath refid="compile_classpath" />
+	    </javac>
+	
+	    <copy todir="build">
+	        <fileset dir="src" includes="**/*.xml,**/*.properties,**/*.txt,**/*.ico" />
+	    </copy>
+	</target>
+	
+	<target name="test-run" depends="compile" description="Run JUnit tests">
+	    <mkdir dir="${test.report.dir}"/>
+	    <echo message="Running JUnit Tests in directory ${source.dir}..."/>
+	    <junit showoutput="true" printsummary="yes" failureproperty="junit.failure" fork="yes" forkmode="once" maxmemory="512m">
+	        <formatter type="plain"/>
+	        <formatter type="xml"/>
+	        <batchtest todir="${test.report.dir}">
+	            <fileset dir="${source.dir}">
+	                <include name="**/*Test.java"/>
+	            </fileset>
+	        </batchtest>
+	        <classpath refid="compile_classpath"/>
+	    </junit>
+	    <fail if="junit.failure" message="Unit test(s) failed. See reports!"/>
+	</target>
+	
+	<target name="test-report-junit" depends="test-run" description="Generate JUnit HTML reports">
+	    <mkdir dir="${test.html.dir}"/>
+	    <junitreport todir="${test.report.dir}">
+	        <fileset dir="${test.report.dir}" includes="TEST-*.xml"/>
+	        <report format="frames" todir="${test.html.dir}"/>
+	    </junitreport>  
+	</target>
+	
+	<target name="clean" description="Clean Up" >
+	    <delete dir="${build.dir}"/>
+	    <delete dir="${test.report.dir}"/>
+	    <delete dir="${test.html.dir}"/>
+	    <delete file="${basedir}/tmp/cached-robolectric-classes.jar"/>
+	</target>
+</project>

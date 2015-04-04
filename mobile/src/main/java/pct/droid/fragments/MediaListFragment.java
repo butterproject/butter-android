@@ -17,7 +17,6 @@
 
 package pct.droid.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -45,9 +44,9 @@ import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.LoadingDetailDialogFragment;
+import timber.log.Timber;
 
 /**
  * This fragment is the main screen for viewing a collection of media items.
@@ -342,7 +341,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 });
             } else {
                 e.printStackTrace();
-                LogUtils.e(e.getMessage());
+                Timber.e(e.getMessage());
                 if (mRetries > 1) {
                     ThreadUtils.runOnUiThread(new Runnable() {
                         @Override
@@ -371,7 +370,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 
                 if (coverImage.getDrawable() == null) {
-                    showLoadingDialog(item, -1);
+                    showLoadingDialog(item);
                     return;
                 }
 
@@ -386,18 +385,19 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         } else {
                             paletteColor = vibrantColor;
                         }
-                        showLoadingDialog(item, paletteColor);
+                        item.color = paletteColor;
+                        showLoadingDialog(item);
                     }
                 });
             } else {
-                showLoadingDialog(item, -1);
+                showLoadingDialog(item);
             }
 
         }
     };
 
-    private void showLoadingDialog(Media item, int paletteColor) {
-        LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(item, paletteColor);
+    private void showLoadingDialog(Media item) {
+        LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(item);
         loadingFragment.setTargetFragment(MediaListFragment.this, LOADING_DIALOG_FRAGMENT);
         loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
     }
@@ -447,7 +447,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
      * @param item
      */
     @Override
-    public void onDetailLoadSuccess(final Media item, final int paletteColor) {
-        MediaDetailActivity.startActivity(mContext, item, paletteColor);
+    public void onDetailLoadSuccess(final Media item) {
+        MediaDetailActivity.startActivity(mContext, item);
     }
 }

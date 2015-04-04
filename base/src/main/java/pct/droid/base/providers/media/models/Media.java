@@ -17,6 +17,7 @@
 
 package pct.droid.base.providers.media.models;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -40,6 +41,7 @@ public class Media implements Parcelable {
     public String fullImage;
     public String headerImage;
     public Map<String, String> subtitles;
+    public int color = Color.parseColor("#1976D2");
     protected SubsProvider mSubsProvider = null;
     protected MediaProvider mMediaProvider = null;
 
@@ -59,6 +61,7 @@ public class Media implements Parcelable {
         image = in.readString();
         fullImage = in.readString();
         headerImage = in.readString();
+        color = in.readInt();
 
         String className = in.readString();
         mSubsProvider = null;
@@ -109,6 +112,7 @@ public class Media implements Parcelable {
         dest.writeString(image);
         dest.writeString(fullImage);
         dest.writeString(headerImage);
+        dest.writeInt(color);
         dest.writeString(mSubsProvider != null ? mSubsProvider.getClass().getCanonicalName() : "");
         dest.writeString(mMediaProvider != null ? mMediaProvider.getClass().getCanonicalName() : "");
         if (subtitles != null) {

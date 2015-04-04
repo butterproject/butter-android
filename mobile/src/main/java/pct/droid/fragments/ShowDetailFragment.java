@@ -72,19 +72,14 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;
 
-    public static ShowDetailFragment newInstance(Show show, int color) {
+    public static ShowDetailFragment newInstance(Show show) {
         sShow = show;
-        Bundle b = new Bundle();
-        b.putInt(COLOR, color);
-        ShowDetailFragment showDetailFragment = new ShowDetailFragment();
-        showDetailFragment.setArguments(b);
-        return showDetailFragment;
+        return new ShowDetailFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -148,7 +143,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
             }
 
             Picasso.with(mCoverImage.getContext()).load(sShow.image).into(mCoverImage);
-            mTabs.setIndicatorColor(mPaletteColor);
+            mTabs.setIndicatorColor(sShow.color);
         } else {
             mBackground.post(new Runnable() {
                 @Override
@@ -172,10 +167,10 @@ public class ShowDetailFragment extends BaseDetailFragment {
             availableSeasons.remove(availableSeasons.indexOf(0));
 
         for(int seasonInt : availableSeasons) {
-            fragments.add(ShowDetailSeasonFragment.newInstance(sShow, seasonInt, mPaletteColor));
+            fragments.add(ShowDetailSeasonFragment.newInstance(sShow, seasonInt));
         }
         if(hasSpecial)
-            fragments.add(ShowDetailSeasonFragment.newInstance(sShow, 0, mPaletteColor));
+            fragments.add(ShowDetailSeasonFragment.newInstance(sShow, 0));
 
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
 
@@ -222,7 +217,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
                         mTabs.setTranslationY(0);
                     } else {
                         mShadow.setAlpha(0);
-                        mTabs.setBackgroundColor(mPaletteColor);
+                        mTabs.setBackgroundColor(sShow.color);
                         mTabs.setTranslationY(scrollY - headerHeight);
                     }
                 }

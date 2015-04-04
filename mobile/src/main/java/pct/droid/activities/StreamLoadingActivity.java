@@ -27,23 +27,24 @@ import android.view.View;
 import android.view.WindowManager;
 
 import pct.droid.R;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.fragments.StreamLoadingFragment;
 
 public class StreamLoadingActivity extends BaseActivity implements StreamLoadingFragment.FragmentListener {
 
     public final static String EXTRA_INFO = "mInfo";
 
-    private StreamLoadingFragment.StreamInfo mInfo;
+    private StreamInfo mInfo;
     private StreamLoadingFragment mFragment;
 
-    public static Intent startActivity(Activity activity, StreamLoadingFragment.StreamInfo info) {
+    public static Intent startActivity(Activity activity, StreamInfo info) {
         Intent i = new Intent(activity, StreamLoadingActivity.class);
         i.putExtra(EXTRA_INFO, info);
         activity.startActivity(i);
         return i;
     }
 
-    public static Intent startActivity(Activity activity, StreamLoadingFragment.StreamInfo info, Pair<View,String>... elements) {
+    public static Intent startActivity(Activity activity, StreamInfo info, Pair<View,String>... elements) {
         Intent i = new Intent(activity, StreamLoadingActivity.class);
         i.putExtra(EXTRA_INFO, info);
 
@@ -70,14 +71,13 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
 
 
     @Override
-    public StreamLoadingFragment.StreamInfo getStreamInformation() {
+    public StreamInfo getStreamInformation() {
         return mInfo;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         mFragment.cancelStream();
     }
 }

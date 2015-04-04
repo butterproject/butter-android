@@ -43,12 +43,13 @@ import butterknife.InjectView;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
-import pct.droid.base.casting.CastingManager;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaContainerFragment;
@@ -96,7 +97,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 			String streamUrl = data.toString();
 			try {
 				streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-				StreamLoadingActivity.startActivity(this, new StreamLoadingFragment.StreamInfo(streamUrl));
+				StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl));
+                finish();
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
@@ -107,7 +109,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		mNavigationDrawerFragment.selectItem(providerId);
 	}
 
-	@Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+        supportInvalidateOptionsMenu();
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_overview, menu);
@@ -170,6 +178,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 				final String location = files[index];
 				if (location.equals("dialog")) {
 					final EditText dialogInput = new EditText(MainActivity.this);
+                    dialogInput.setText("http://download.wavetlan.com/SVV/Media/HTTP/MP4/ConvertedFiles/QuickTime/QuickTime_test13_5m19s_AVC_VBR_324kbps_640x480_25fps_AAC-LCv4_CBR_93.4kbps_Stereo_44100Hz.mp4");
 					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
 							.setView(dialogInput)
 							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
@@ -180,11 +189,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 									media.videoId = "dialogtestvideo";
 									media.title = "User input test video";
 
-									VideoPlayerActivity.startActivity(MainActivity.this, dialogInput.getText().toString(), media);
+                                    String location = dialogInput.getText().toString();
+
+                                    BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                                    if(bm.isConnected()) {
+                                        BeamPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
+                                    } else {
+                                        VideoPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
+                                    }
 								}
 							});
-				}
-				if (YouTubeData.isYouTubeUrl(location)) {
+                    builder.show();
+				} else if (YouTubeData.isYouTubeUrl(location)) {
 					Intent i = new Intent(MainActivity.this, TrailerPlayerActivity.class);
                     Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 					media.title = file_types[index];
@@ -201,21 +217,22 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 					SubsProvider.download(MainActivity.this, media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-                            CastingManager cm = CastingManager.getInstance(MainActivity.this);
-                            if(cm.isConnected()) {
-                                CastingManager.getInstance(MainActivity.this).loadMedia(media, location, false);
+                            BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                            
+                            if(bm.isConnected()) {
+                                BeamPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
                             } else {
-                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, null, null, location), 0);
                             }
 						}
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-                            CastingManager cm = CastingManager.getInstance(MainActivity.this);
-                            if(cm.isConnected()) {
-                                CastingManager.getInstance(MainActivity.this).loadMedia(media, location, false);
+                            BeamManager bm = BeamManager.getInstance(MainActivity.this);
+                            if(bm.isConnected()) {
+                                BeamPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, "en", null, location), 0);
                             } else {
-                                VideoPlayerActivity.startActivity(MainActivity.this, location, media, null, null, 0);
+                                VideoPlayerActivity.startActivity(MainActivity.this, new StreamInfo(media, null, null, "en", null, location), 0);
                             }
 						}
 					});

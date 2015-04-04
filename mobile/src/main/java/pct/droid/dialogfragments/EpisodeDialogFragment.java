@@ -56,6 +56,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -71,7 +72,6 @@ public class EpisodeDialogFragment extends DialogFragment {
 
     public static final String EXTRA_EPISODE = "episode";
     public static final String EXTRA_SHOW = "show";
-    public static final String EXTRA_COLOR = "palette";
 
     private static final int ANIM_SPEED = 200;
 
@@ -83,7 +83,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Episode mEpisode;
     private Show mShow;
-    private int mPaletteColor;
 
     @InjectView(R.id.scrollview)
     BottomSheetScrollView mScrollView;
@@ -106,12 +105,11 @@ public class EpisodeDialogFragment extends DialogFragment {
     @InjectView(R.id.quality)
     OptionSelector mQuality;
 
-    public static EpisodeDialogFragment newInstance(Show show, Episode episode, int color) {
+    public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_SHOW, show);
         args.putParcelable(EXTRA_EPISODE, episode);
-        args.putInt(EXTRA_COLOR, color);
         frag.setArguments(args);
         return frag;
     }
@@ -124,9 +122,9 @@ public class EpisodeDialogFragment extends DialogFragment {
         ButterKnife.inject(this, v);
 
         if(!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
         } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
         }
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mPlaceholder.getLayoutParams();
@@ -145,7 +143,6 @@ public class EpisodeDialogFragment extends DialogFragment {
         mActivity = getActivity();
         mThreshold = PixelUtils.getPixelsFromDp(mActivity, 220);
         mBottom = PixelUtils.getPixelsFromDp(mActivity, 33);
-        mPaletteColor = getArguments().getInt(EXTRA_COLOR);
         mShow = getArguments().getParcelable(EXTRA_SHOW);
         mEpisode = getArguments().getParcelable(EXTRA_EPISODE);
         mMetaProvider = mEpisode.getMetaProvider();
@@ -374,7 +371,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void playClick() {
         smoothDismiss();
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
+        StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 

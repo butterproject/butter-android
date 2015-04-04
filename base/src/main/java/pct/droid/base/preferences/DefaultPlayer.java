@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.FileUtils;
@@ -79,34 +80,25 @@ public class DefaultPlayer {
     /**
      * Start default video player if set, otherwise return {@code false} so that the application can handle the video itself
      *
-     * @param context  Context
      * @param location Video location
      * @return {@code true} if activity started, {@code false} otherwise
      */
-    public static boolean start(Context context, Media media, String subLanguage, String location) {
+    public static boolean start(Media media, String subLanguage, String location) {
+        Context context = PopcornApplication.getAppContext();
         String[] playerData = PrefUtils.get(context, Prefs.DEFAULT_PLAYER, "").split(DELIMITER);
         if (playerData.length > 1) {
-            if (media.subtitles.size() > 0) {
+            if(null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
-                File newLocation = new File(location.replace("." + FileUtils.getFileExtension(location), ".srt"));
-
-                if (subLanguage != null && !subLanguage.equals("no-subs")) {
-                    try {
-                        newLocation.getParentFile().mkdirs();
-                        newLocation.createNewFile();
-                        FileUtils.copy(subsLocation, newLocation);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    newLocation.delete();
-                }
+                BeamServer.setCurrentSubs(subsLocation);
             }
+
+            BeamServer.setCurrentVideo(location);
 
             Intent intent = new Intent();
             intent.setClassName(playerData[1], playerData[0]);
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse("file://" + location), "video/mp4");
+            intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             return true;
         }

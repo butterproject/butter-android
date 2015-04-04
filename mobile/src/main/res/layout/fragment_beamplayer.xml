@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <ImageView
+        android:id="@+id/popcorn_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
+        android:alpha="0.7"
+        android:src="@drawable/popcorn_logo" />
+
+    <ImageView
+        android:id="@+id/cover_image"
+        tools:visibility="visible"
+        tools:src="@drawable/ab_gradient"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="68dp"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/ab_gradient" />
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true" />
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="112dp"
+        sothree:umanoShadowHeight="0dp"
+        sothree:umanoFadeColor="@android:color/transparent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="112dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/base_gradient" />
+
+                <LinearLayout
+                    android:id="@+id/sliding_top_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@color/bg">
+                    <ImageButton
+                        android:id="@+id/backward_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_av_rewind"
+                        android:background="@drawable/selectable_background_circle"
+                        />
+                    <ImageButton
+                        android:id="@+id/play_button"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginLeft="@dimen/beamplayer_controls_margin"
+                        android:layout_marginRight="@dimen/beamplayer_controls_margin"
+                        android:src="@drawable/ic_av_play"
+                        android:background="@drawable/play_button_circle" />
+                    <ImageButton
+                        android:id="@+id/forward_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_av_forward"
+                        android:background="@drawable/selectable_background_circle"
+                        />
+                </LinearLayout>
+
+                <pct.droid.widget.SeekBar
+                    android:id="@+id/seekbar"
+                    android:duplicateParentState="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="-16dp"
+                    android:layout_marginRight="-16dp"
+                    android:layout_alignParentTop="true" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/sliding_bottom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:minHeight="68dp"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:gravity="center_vertical"
+                android:background="@color/bg_dark">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@drawable/base_gradient_reverse" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal">
+
+                    <pct.droid.widget.SeekBar
+                        android:id="@+id/volumebar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/optionselector_volume_margin_start"
+                        android:layout_marginStart="@dimen/optionselector_volume_margin_start"
+                        android:layout_marginRight="@dimen/optionselector_text_margin_end"
+                        android:layout_marginEnd="@dimen/optionselector_text_margin_end"
+                        android:layout_gravity="center_vertical"
+                        android:duplicateParentState="false"
+                        android:progress="100"
+                        android:max="100" />
+
+                    <ImageView
+                        android:id="@android:id/icon"
+                        android:layout_width="@dimen/context_icon"
+                        android:layout_height="@dimen/context_icon"
+                        android:layout_marginLeft="@dimen/optionselector_icon_margin_start"
+                        android:layout_marginStart="@dimen/optionselector_icon_margin_start"
+                        android:layout_gravity="center_vertical|start"
+                        tools:src="@drawable/ic_launcher"
+                        android:src="@drawable/ic_av_volume"
+                        android:duplicateParentState="true" />
+
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</RelativeLayout>

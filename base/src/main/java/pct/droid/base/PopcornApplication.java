@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
+import com.connectsdk.service.CastService;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -33,13 +34,12 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.io.IOException;
 
-import pct.droid.base.casting.CastingManager;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
-import pct.droid.base.utils.LogUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 import timber.log.Timber;
@@ -89,8 +89,8 @@ public class PopcornApplication extends VLCApplication {
             statusFile.delete();
         }
 
-        LogUtils.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        LogUtils.i("Chosen cache location: " + directory);
+        Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
+        Timber.i("Chosen cache location: " + directory);
 
 
         if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
@@ -114,8 +114,8 @@ public class PopcornApplication extends VLCApplication {
 
     @Override
     public void onTerminate() {
+        BeamManager.getInstance(getAppContext()).onDestroy();
         super.onTerminate();
-        CastingManager.getInstance(getAppContext()).onDestroy();
     }
 
     public static String getSystemLanguage() {

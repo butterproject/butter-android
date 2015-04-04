@@ -19,6 +19,7 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,17 +40,24 @@ import java.text.DecimalFormat;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
+import timber.log.Timber;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     private boolean mAttached = false;
+    private Context mContext;
 
     View mRoot;
     @InjectView(R.id.progress_indicator)
@@ -88,6 +96,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mContext = activity;
         mAttached = true;
     }
 
@@ -119,7 +128,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     private void updateStatus(final DownloadStatus status) {
-        if(!mAttached) return;
+        if (!mAttached) return;
 
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
@@ -142,7 +151,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     @Override
     protected void updateView(State state, Object extra) {
-
         switch (state) {
             case UNINITIALISED:
                 mTertiaryTextView.setText(null);
@@ -190,9 +198,20 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
-    protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
-                                       String subtitleLanguage,
-                                       int resumePosition) {
-        VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+    protected void startPlayerActivity(String location, int resumePosition) {
+        Timber.d("startVideoPlayer");
+        mStreamInfo.setVideoLocation(location);
+        if(BeamManager.getInstance(mContext).isConnected()) {
+            BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+        } else {
+            boolean playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+            if (!playingExternal) {
+                VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+            }
+        }
+
+        if(mContext instanceof Activity) {
+            ((Activity) mContext).finish();
+        }
     }
 }

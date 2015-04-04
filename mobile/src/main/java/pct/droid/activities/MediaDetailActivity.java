@@ -28,6 +28,7 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -46,7 +47,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     public static final String COLOR = "palette";
 
     private static Media sMedia;
-    private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight, mPaletteColor;
+    private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
     private Fragment mFragment;
 
@@ -68,9 +69,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     @InjectView(R.id.bg_image)
     ImageView mBgImage;
 
-    public static void startActivity(Context context, Media media, int paletteColor) {
+    public static void startActivity(Context context, Media media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);
-        if (paletteColor != -1) intent.putExtra(COLOR, paletteColor);
         if(media != null)
             sMedia = media;
         context.startActivity(intent);
@@ -101,7 +101,6 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         mIsTablet = mParallaxLayout == null;
 
         Intent intent = getIntent();
-        mPaletteColor = intent.getIntExtra(COLOR, getResources().getColor(R.color.primary));
 
         getSupportActionBar().setTitle(sMedia.title);
 
@@ -114,9 +113,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = -(parallaxHeight / 3);
             mContent.setMinimumHeight(mTopHeight / 3);
 
-            mParallaxColor.setBackgroundColor(mPaletteColor);
+            mParallaxColor.setBackgroundColor(sMedia.color);
             mParallaxColor.getBackground().setAlpha(0);
-            mToolbar.setBackgroundColor(mPaletteColor);
+            mToolbar.setBackgroundColor(sMedia.color);
             mToolbar.getBackground().setAlpha(0);
         } else {
             mTopHeight = (PixelUtils.getScreenHeight(this) / 2);
@@ -126,9 +125,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
         mFragment = null;
         if(sMedia.isMovie) {
-            mFragment = MovieDetailFragment.newInstance((Movie) sMedia, mPaletteColor);
+            mFragment = MovieDetailFragment.newInstance((Movie) sMedia);
         } else if(sMedia instanceof Show) {
-            mFragment = ShowDetailFragment.newInstance((Show) sMedia, mPaletteColor);
+            mFragment = ShowDetailFragment.newInstance((Show) sMedia);
         }
 
         if(mFragment != null) {
@@ -158,9 +157,15 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        supportInvalidateOptionsMenu();
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void playStream(BaseStreamLoadingFragment.StreamInfo streamInfo) {
+    public void playStream(StreamInfo streamInfo) {
         if (PrefUtils.get(this, Prefs.WIFI_ONLY, true) &&
                 !NetworkUtils.isWifiConnected(this) &&
                 NetworkUtils.isNetworkConnected(this)) {
@@ -214,7 +219,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                 if (mTopHeight - scrollY < 0) {
                     if (mTransparentBar) {
                         mTransparentBar = false;
-                        ActionBarBackground.changeColor(MediaDetailActivity.this, mPaletteColor, true);
+                        ActionBarBackground.changeColor(MediaDetailActivity.this, sMedia.color, true);
                     }
                 } else {
                     if (!mTransparentBar) {
