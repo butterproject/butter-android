@@ -17,6 +17,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -24,13 +25,13 @@
     android:background="@android:color/black">
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foregroundGravity="clip_horizontal|clip_vertical">
 
         <VideoView
-            android:id="@+id/trailerView"
+            android:id="@+id/trailer_view"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/player_subtitles_bottom_margin"
+        android:textDirection="anyRtl"
         android:gravity="center_horizontal" />
 
     <ProgressBar
@@ -76,21 +78,22 @@
             android:background="@drawable/player_controls_background">
 
             <RelativeLayout
-                android:id="@+id/timeBar"
+                android:id="@+id/time_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="@dimen/player_controls_distance">
 
                 <com.devspark.robototextview.widget.RobotoTextView
-                    android:id="@+id/currentTime"
+                    android:id="@+id/current_time"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:gravity="right"
-                    android:text="0:00" />
+                    android:gravity="right|end"
+                    tools:text="0:00" />
 
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/length_time"
@@ -98,14 +101,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:text="0:00" />
+                    android:gravity="left|start"
+                    tools:text="0:00" />
 
                 <SeekBar
                     android:id="@+id/control_bar"
-                    android:layout_toRightOf="@id/currentTime"
+                    android:layout_toRightOf="@id/current_time"
+                    android:layout_toEndOf="@id/current_time"
                     android:layout_toLeftOf="@id/length_time"
+                    android:layout_toStartOf="@id/length_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
@@ -115,51 +121,59 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"
-                android:layout_below="@id/timeBar"
+                android:layout_below="@id/time_bar"
                 android:background="@drawable/player_controls_play_bg"
                 android:src="@drawable/ic_av_play"
                 android:scaleType="centerInside" />
 
             <ImageButton
-                android:id="@+id/rewindButton"
+                android:id="@+id/rewind_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_below="@id/timeBar"
+                android:layout_below="@id/time_bar"
                 android:layout_toLeftOf="@id/play_button"
+                android:layout_toStartOf="@id/play_button"
                 android:layout_marginRight="@dimen/player_controls_distance"
+                android:layout_marginEnd="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_rewind"
                 android:scaleType="centerInside" />
 
             <ImageButton
-                android:id="@+id/forwardButton"
+                android:id="@+id/forward_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_below="@id/timeBar"
+                android:layout_below="@id/time_bar"
                 android:layout_toRightOf="@id/play_button"
+                android:layout_toEndOf="@id/play_button"
                 android:layout_marginLeft="@dimen/player_controls_distance"
+                android:layout_marginStart="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_forward"
                 android:scaleType="centerInside"/>
 
             <ImageButton
-                android:id="@+id/scaleButton"
+                android:id="@+id/scale_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_below="@id/timeBar"
-                android:layout_toLeftOf="@id/rewindButton"
+                android:layout_below="@id/time_bar"
+                android:layout_toLeftOf="@id/rewind_button"
+                android:layout_toStartOf="@id/rewind_button"
                 android:layout_marginRight="@dimen/player_controls_distance"
+                android:layout_marginEnd="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_aspect_ratio"
                 android:scaleType="centerInside"/>
 
             <ImageButton
-                android:id="@+id/subsButton"
+                android:id="@+id/subs_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_below="@id/timeBar"
-                android:layout_toRightOf="@id/forwardButton"
+                android:layout_below="@id/time_bar"
+                android:layout_toRightOf="@id/forward_button"
+                android:layout_toEndOf="@id/forward_button"
                 android:layout_marginLeft="@dimen/player_controls_distance"
+                android:layout_marginStart="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
                 android:src="@drawable/ic_av_subs"
                 android:scaleType="centerInside"/>

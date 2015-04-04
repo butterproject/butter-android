@@ -70,10 +70,10 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     ImageView mBgImage;
 
     public static void startActivity(Context context, Media media) {
-        Intent intent = new Intent(PopcornApplication.getAppContext(), MediaDetailActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        sMedia = media;
-        PopcornApplication.getAppContext().startActivity(intent);
+        Intent intent = new Intent(context, MediaDetailActivity.class);
+        if(media != null)
+            sMedia = media;
+        context.startActivity(intent);
     }
 
     @Override

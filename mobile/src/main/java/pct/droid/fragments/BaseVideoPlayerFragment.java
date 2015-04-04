@@ -126,6 +126,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        TorrentService.bindHere(getActivity(), mServiceConnection);
 		setRetainInstance(true);
 	}
 
@@ -137,9 +138,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mMedia = mStreamInfo.getMedia();
 
 		//start subtitles
-		if (null != mStreamInfo.getSubtitleLanguage()) {
-			mCurrentSubsLang = mStreamInfo.getSubtitleLanguage();
-			startSubtitles();
+		if (null != mCallback.getSubtitles()) {
+			mCurrentSubsLang = mCallback.getSubtitles();
+            if(!mCurrentSubsLang.equals("no-subs"))
+			    startSubtitles();
 		}
 
 
@@ -599,10 +601,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 			@Override
 			protected Void doInBackground(Void... voids) {
 				try {
-                    if(mSubsFile == null) {
-                        mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()),
-                                mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
-                    }
+                    mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
 					FileInputStream fileInputStream = new FileInputStream(mSubsFile);
 					FormatSRT formatSRT = new FormatSRT();
 					mSubs = formatSRT.parseFile(mSubsFile.toString(), FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
@@ -631,6 +630,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 				for (Caption caption : subtitles) {
 					if (currentTime >= caption.start.getMilliseconds() && currentTime <= caption.end.getMilliseconds()) {
 						mLastSub = caption;
+
 						showTimedCaptionText(caption);
 						break;
 					} else if (currentTime > caption.end.getMilliseconds()) {

@@ -123,10 +123,10 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
 
     private static void show(FragmentManager fm, String title, String[] items, int defaultPosition, int mode, DialogInterface.OnClickListener dialogClickListener) {
         Bundle args = new Bundle();
-        args.putString(StringArraySelectorDialogFragment.TITLE, title);
-        args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
-        args.putInt(StringArraySelectorDialogFragment.MODE, mode);
-        args.putInt(StringArraySelectorDialogFragment.POSITION, defaultPosition);
+        args.putString(TITLE, title);
+        args.putStringArray(ARRAY, items);
+        args.putInt(MODE, mode);
+        args.putInt(POSITION, defaultPosition);
 
         StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
         dialogFragment.setArguments(args);
