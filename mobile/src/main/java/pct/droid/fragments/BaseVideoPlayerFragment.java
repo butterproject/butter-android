@@ -126,7 +126,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        TorrentService.bindHere(getActivity(), mServiceConnection);
 		setRetainInstance(true);
 	}
 
@@ -138,8 +137,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 		mMedia = mStreamInfo.getMedia();
 
 		//start subtitles
-		if (null != mCallback.getSubtitles()) {
-			mCurrentSubsLang = mCallback.getSubtitles();
+		if (null != mStreamInfo.getSubtitleLanguage()) {
+			mCurrentSubsLang = mStreamInfo.getSubtitleLanguage();
             if(!mCurrentSubsLang.equals("no-subs"))
 			    startSubtitles();
 		}
