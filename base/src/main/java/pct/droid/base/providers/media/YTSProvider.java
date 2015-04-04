@@ -342,7 +342,8 @@ public class YTSProvider extends MediaProvider {
             LinkedTreeMap<String, Object> movieObj = data;
             if(movieObj == null) return movie;
 
-            movie.videoId = movieObj.get("id").toString();
+            Double id = (Double) movieObj.get("id");
+            movie.videoId = Integer.toString(id.intValue());
             movie.imdbId = (String) movieObj.get("imdb_code");
 
             movie.title = (String) movieObj.get("title");
@@ -395,7 +396,8 @@ public class YTSProvider extends MediaProvider {
 			for (LinkedTreeMap<String, Object> item : movies) {
 				Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
-				movie.videoId = item.get("id").toString();
+                Double id = (Double) item.get("id");
+                movie.videoId = Integer.toString(id.intValue());
                 movie.imdbId = (String) item.get("imdb_code");
 
 				int existingItem = isInResults(existingList, movie.videoId);
