@@ -19,6 +19,7 @@
 <resources>
 
 	<color name="bg">#1F2224</color>
+    <color name="bg_dark">#141617</color>
     <color name="overlay">#33000000</color>
 
     <color name="selectable_focused">#22FFFFFF</color>
@@ -34,7 +35,9 @@
     <color name="text_color">#FFFFFF</color>
     <color name="secondary_text_color">#AAFFFFFF</color>
 
+    <!-- Video player colors-->
     <color name="player_overlay">#55000000</color>
+    <color name="beamplayer_seekbar_track">#2A2E30</color>
 
     <!-- Nav drawer colors -->
     <color name="nav_drawer_color">#16171A</color>

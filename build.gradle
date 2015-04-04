@@ -22,10 +22,10 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "21.0.3"
+    appCompatVersion = "22.0.0"
     buildToolsVersion = "21.1.2"
-    targetSdk = 21
-    compileSdk = 21
+    targetSdk = 22
+    compileSdk = 22
     minSdk = 15
 }
 
@@ -33,9 +33,6 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
-        maven {
-            url "http://4thline.org/m2"
-        }
     }
 
     //let project evaluate its script first

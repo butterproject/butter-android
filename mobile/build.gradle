@@ -100,11 +100,10 @@ dependencies {
     compile 'net.rdrei.android.dirchooser:library:2.+@aar'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.+'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.+'
-
+    compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
         transitive = true;
     }
-
     compile project(':base')
     compile project(':vlc')
     compile project(':xmlrpc')

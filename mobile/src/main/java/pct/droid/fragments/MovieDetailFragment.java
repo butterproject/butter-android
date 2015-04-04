@@ -33,6 +33,7 @@ import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -72,19 +73,14 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;
 
-    public static MovieDetailFragment newInstance(Movie movie, int color) {
+    public static MovieDetailFragment newInstance(Movie movie) {
         sMovie = movie;
-        Bundle args = new Bundle();
-        args.putInt(COLOR, color);
-        MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-        movieDetailFragment.setArguments(args);
-        return movieDetailFragment;
+        return new MovieDetailFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -97,9 +93,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
         ButterKnife.inject(this, mRoot);
 
         if(!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
         } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
         }
 
         mTitle.setText(sMovie.title);
@@ -278,7 +274,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @OnClick(R.id.play_button)
     public void play() {
         String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
+        StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
     }
 

@@ -28,11 +28,10 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
     private static Show sShow;
     private List<Episode> mEpisodes = new ArrayList<>();
 
-    public static ShowDetailSeasonFragment newInstance(Show show, int season, int color) {
+    public static ShowDetailSeasonFragment newInstance(Show show, int season) {
         sShow = show;
         Bundle b = new Bundle();
         b.putInt(SEASON, season);
-        b.putInt(COLOR, color);
         ShowDetailSeasonFragment showDetailFragment = new ShowDetailSeasonFragment();
         showDetailFragment.setArguments(b);
         return showDetailFragment;
@@ -41,7 +40,6 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPaletteColor = getArguments().getInt(COLOR);
         int season = getArguments().getInt(SEASON);
 
         for(Episode episode : sShow.episodes) {
@@ -75,7 +73,7 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
-        EpisodeListAdapter adapter = new EpisodeListAdapter(inflater, mEpisodes, mPaletteColor);
+        EpisodeListAdapter adapter = new EpisodeListAdapter(inflater, mEpisodes, sShow.color);
 
         LinearList linearList = (LinearList) mRoot;
         linearList.setOnItemClickListener(mOnClickListener);
@@ -90,7 +88,7 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
             int position = ((LinearList) mRoot).indexOfChild(v);
             Episode episode = mEpisodes.get(position);
 
-            EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(sShow, episode, mPaletteColor);
+            EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(sShow, episode);
             fragment.show(getFragmentManager(), "episode_dialog");
 
             /*
