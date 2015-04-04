@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.AnimUtils;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
@@ -81,9 +83,13 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	SeekBar mControlBar;
 	@InjectView(R.id.play_button)
 	ImageButton mPlayButton;
-    @InjectView(R.id.subsButton)
+    @InjectView(R.id.forward_button)
+    ImageButton mForwardButton;
+    @InjectView(R.id.rewind_button)
+    ImageButton mRewindButton;
+    @InjectView(R.id.subs_button)
     ImageButton mSubsButton;
-	@InjectView(R.id.currentTime)
+	@InjectView(R.id.current_time)
 	TextView mCurrentTimeTextView;
 	@InjectView(R.id.length_time)
 	TextView lengthTime;
@@ -116,22 +122,31 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	private float mRestoreAutoBrightness = -1f;
 
 
-	@Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_videoplayer, container, false);
-		view.setOnTouchListener(new View.OnTouchListener() {
-			@Override public boolean onTouch(View v, MotionEvent event) {
-				return onTouchEvent(event);
-			}
-		});
-		return view;
+	@Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_videoplayer, container, false);
 	}
 
-	@Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+	@Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                return onTouchEvent(event);
+            }
+        });
 		ButterKnife.inject(this, view);
+
+        if(LocaleUtils.isRTL(LocaleUtils.getCurrentAsLocale())) {
+            Drawable forward = mForwardButton.getDrawable();
+            Drawable rewind = mRewindButton.getDrawable();
+            mRewindButton.setImageDrawable(forward);
+            mForwardButton.setImageDrawable(rewind);
+        }
 	}
 
-	@Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+	@Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		setRetainInstance(true);
 
@@ -598,22 +613,22 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 		togglePlayPause();
 	}
 
-	@OnClick(R.id.rewindButton)
+	@OnClick(R.id.rewind_button)
     void onRewindClick(){
 		seekBackwardClick();
 	}
 
-	@OnClick(R.id.forwardButton)
+	@OnClick(R.id.forward_button)
     void onForwardClick(){
 		seekForwardClick();
 	}
 
-	@OnClick(R.id.scaleButton)
+	@OnClick(R.id.scale_button)
     void onScaleClick(){
 		scaleClick();
 	}
 
-	@OnClick(R.id.subsButton)
+	@OnClick(R.id.subs_button)
     void onSubsClick(){
 		subsClick();
 	}

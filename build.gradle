@@ -1,3 +1,8 @@
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -46,6 +51,18 @@ allprojects {
             }
 
         }
+    }
+}
+
+gradle.buildFinished {
+    try {
+        File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
+        File targetFile = new File("./mobile/build/outputs/apk", "appetize.apk")
+        Path source = sourceFile.toPath()
+        Path target = targetFile.toPath()
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+    } catch(Exception e) {
+        e.printStackTrace()
     }
 }
 
