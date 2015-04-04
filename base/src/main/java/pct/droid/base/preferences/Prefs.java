@@ -34,4 +34,8 @@ public class Prefs {
     public static final String WIFI_ONLY = "wifi_only";
     public static final String LOCALE = "app_locale";
     public static final String DRAWER_LEARNED = "drawer_learned";
+    public static final String LIBTORRENT_DHT_LIMIT = "libtorrent_dhtlimit";
+    public static final String LIBTORRENT_CONNECTION_LIMIT = "libtorrent_connectionlimit";
+    public static final String LIBTORRENT_DOWNLOAD_LIMIT = "libtorrent_downloadlimit";
+    public static final String LIBTORRENT_UPLOAD_LIMIT = "libtorrent_uploadlimit";
 }

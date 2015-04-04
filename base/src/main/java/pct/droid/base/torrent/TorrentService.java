@@ -116,8 +116,6 @@ public class TorrentService extends Service {
                 mTorrentSession = new Session();
                 SessionSettings sessionSettings = mTorrentSession.getSettings();
                 sessionSettings.setAnonymousMode(true);
-                //sessionSettings.setActiveDHTLimit(150);
-                //sessionSettings.setConnectionsLimit(100);
                 mTorrentSession.setSettings(sessionSettings);
                 Timber.d("Init DHT");
                 mDHT = new DHT(mTorrentSession);
@@ -133,6 +131,13 @@ public class TorrentService extends Service {
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, THREAD_NAME);
         mWakeLock.acquire();
+
+        SessionSettings sessionSettings = mTorrentSession.getSettings();
+        sessionSettings.setActiveDHTLimit(PrefUtils.get(this, Prefs.LIBTORRENT_DHT_LIMIT, 200));
+        sessionSettings.setConnectionsLimit(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
+        sessionSettings.setDownloadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
+        sessionSettings.setUploadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
+        mTorrentSession.setSettings(sessionSettings);
 
         mHandler.post(new Runnable() {
             @Override
