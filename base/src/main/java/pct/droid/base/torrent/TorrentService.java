@@ -195,7 +195,7 @@ public class TorrentService extends Service {
     }
 
     public void stopStreaming() {
-        if(mWakeLock.isHeld())
+        if(mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
         mIsStreaming = false;
