@@ -186,6 +186,10 @@ public class BeamPlayerFragment extends Fragment {
             mPanel.setTouchEnabled(false);
         }
 
+        if(!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
+            mPlayButton.setEnabled(false);
+        }
+
         startVideo();
     }
 
@@ -253,14 +257,14 @@ public class BeamPlayerFragment extends Fragment {
 
     @OnClick(R.id.forward_button)
     public void forwardClick(View v) {
-        int newProgress = mSeekBar.getProgress() + 60000;
+        int newProgress = mSeekBar.getProgress() + 10000;
         if(newProgress > mTotalTimeDuration) newProgress = (int) mTotalTimeDuration;
         mMediaControl.seek(newProgress, null);
     }
 
     @OnClick(R.id.backward_button)
     public void backwardClick(View v) {
-        int newProgress = mSeekBar.getProgress() - 60000;
+        int newProgress = mSeekBar.getProgress() - 10000;
         if(newProgress < 0) newProgress = 0;
         mMediaControl.seek(newProgress, null);
     }
@@ -345,12 +349,15 @@ public class BeamPlayerFragment extends Fragment {
     private Runnable mPositionRunnable = new Runnable() {
         @Override
         public void run() {
-
             mMediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long position) {
                     if(!mSeeking && !mIsUserSeeking)
                         mSeekBar.setProgress(position.intValue());
+
+                    if(mLoadingDialog.isVisible() && !isDetached() && position > 0) {
+                        mLoadingDialog.dismiss();
+                    }
                 }
 
                 @Override
