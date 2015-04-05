@@ -32,7 +32,9 @@ import com.connectsdk.service.AirPlayService;
 import com.connectsdk.service.CastService;
 import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
+import com.connectsdk.service.NetcastTVService;
 import com.connectsdk.service.RokuService;
+import com.connectsdk.service.WebOSTVService;
 import com.connectsdk.service.command.ServiceCommandError;
 
 import java.util.ArrayList;
@@ -106,32 +108,46 @@ public class BeamDeviceAdapter extends BaseAdapter {
 
         ConnectableDevice device = getItem(position);
 
+        int imgResource = R.drawable.ic_dlna;
+        String serviceText = "";
         for(DeviceService service : device.getServices()) {
+            String addText = "";
             if(service instanceof CastService) {
-                holder.icon.setImageResource(R.drawable.ic_googlecast);
-                holder.text2.setText("Google Cast");
-                break;
+                imgResource = R.drawable.ic_googlecast;
+                addText += "Google Cast";
             } else if(service instanceof DLNAService) {
-                holder.icon.setImageResource(R.drawable.ic_dlna);
-                holder.text2.setText("DLNA");
-                break;
+                imgResource = R.drawable.ic_dlna;
+                addText += "DLNA";
             } else if(service instanceof AirPlayService) {
-                holder.icon.setImageResource(R.drawable.ic_airplay);
-                holder.text2.setText("AirPlay");
-                break;
+                imgResource = R.drawable.ic_airplay;
+                addText += "AirPlay";
             } else if(service instanceof RokuService) {
-                // TODO: add roku icon
-                holder.icon.setImageResource(R.drawable.ic_dlna);
-                holder.text2.setText("Roku");
-                break;
-            } else {
-                holder.icon.setImageResource(R.drawable.ic_dlna);
-                holder.text2.setText("Remote");
-                break;
+                imgResource = R.drawable.ic_dlna;
+                addText += "Roku";
+            } else if(service instanceof WebOSTVService) {
+                imgResource = R.drawable.ic_dlna;
+                addText += "webOS TV";
+            } else if(service instanceof NetcastTVService) {
+                imgResource = R.drawable.ic_dlna;
+                addText += "Netcast";
+            }
+
+            if(!addText.isEmpty()) {
+                if(serviceText.isEmpty()) {
+                    serviceText = addText;
+                } else {
+                    serviceText += ", " + addText;
+                }
             }
         }
 
+        if(serviceText.isEmpty()) {
+            serviceText = "Beaming Device";
+        }
+
+        holder.icon.setImageResource(imgResource);
         holder.text1.setText(device.getFriendlyName());
+        holder.text2.setText(serviceText);
 
         return convertView;
     }

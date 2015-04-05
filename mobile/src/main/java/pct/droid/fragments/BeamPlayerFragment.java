@@ -73,7 +73,6 @@ public class BeamPlayerFragment extends Fragment {
     private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
     private VolumeControl mVolumeControl;
-    private TorrentService mService;
     private boolean mHasVolumeControl = true, mHasSeekControl = true, mIsPlaying = false, mIsUserSeeking = false, mSeeking = false;
     private int mRetries = 0;
     private long mTotalTimeDuration = 0;
@@ -277,9 +276,12 @@ public class BeamPlayerFragment extends Fragment {
         if(mTask != null) {
             mTask.cancel(false);
         }
-        for(Runnable r : mExecutor.getQueue()) {
-            mExecutor.remove(r);
+        if(mExecutor != null) {
+            for (Runnable r : mExecutor.getQueue()) {
+                mExecutor.remove(r);
+            }
         }
+        mExecutor = null;
     }
 
     private void closePlayer() {
