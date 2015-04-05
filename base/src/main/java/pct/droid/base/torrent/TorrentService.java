@@ -128,6 +128,8 @@ public class TorrentService extends Service {
     public void streamTorrent(@NonNull final String torrentUrl) {
         if(mHandler == null || mIsStreaming) return;
 
+        Timber.d("Starting streaming");
+
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, THREAD_NAME);
         mWakeLock.acquire();
@@ -156,6 +158,7 @@ public class TorrentService extends Service {
                     while (fileCreationTries < 4) {
                         try {
                             if (torrentFileDir.mkdirs() || torrentFileDir.isDirectory()) {
+                                Timber.d("Creating torrent file");
                                 torrentFile.createNewFile();
                                 fileCreationTries = 4;
                             }
@@ -198,6 +201,8 @@ public class TorrentService extends Service {
                 mCurrentTorrent.resume();
 
                 mCurrentVideoLocation = new File(saveDirectory, torrentInfo.getFileAt(selectedFile).getPath());
+
+                Timber.d("Video location: %s", mCurrentVideoLocation);
 
                 for(Listener listener : mListener) {
                     listener.onStreamStarted();
