@@ -62,7 +62,7 @@
 	<string name="streaming_started">Streaming started</string>
 	<string name="waiting_for_subtitles">Waiting for subtitles</string>
 	<string name="seeds">seeds</string>
-    <string name="error_files">Error: Couldn\'t write files</string>
+    <string name="error_files">Error: Couldn\'t write files. Please try a different storage location.</string>
 
 	<!-- VideoPlayerActivity strings -->
 	<string name="now_playing">Now playing</string>

@@ -167,7 +167,7 @@ public class TorrentService extends Service {
 
                     if (!getTorrentFile(torrentUrl, torrentFile)) {
                         for (Listener listener : mListener) {
-                            listener.onStreamError(new IOException("Torent error"));
+                            listener.onStreamError(new IOException("Torrent error"));
                         }
                         return;
                     } else if (!torrentFile.exists()) {
