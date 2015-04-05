@@ -248,12 +248,17 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     @Override
     @DebugLog
-    public void onStreamError(Exception e) {
+    public void onStreamError(final Exception e) {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                State state = State.ERROR;
-                setState(State.ERROR, getString(R.string.error_files));
+                if(e.getMessage().equals("Write error")) {
+                    setState(State.ERROR, getString(R.string.error_files));
+                } else if(e.getMessage().equals("Torrent error")) {
+                    setState(State.ERROR, getString(R.string.torrent_failed));
+                } else {
+                    setState(State.ERROR, getString(R.string.unknown_error));
+                }
             }
         });
     }

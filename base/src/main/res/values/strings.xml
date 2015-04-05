@@ -29,6 +29,7 @@
     <string name="overview_not_available">Sorry! There is no overview available.</string>
     <string name="episode">Episode</string>
     <string name="unknown_error">Something went wrong</string>
+    <string name="torrent_failed">Failed to retrieve torrent</string>
 
     <!-- Genres -->
     <string name="genre_all">All</string>
