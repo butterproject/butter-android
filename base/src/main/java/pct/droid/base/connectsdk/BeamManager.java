@@ -78,12 +78,12 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     private BeamManager(Context context) {
         mContext = context;
 
-        mInput = new EditText(mContext);
+        mInput = new EditText(context);
         mInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-        mInputManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mPairingAlertDialog =
-            new AlertDialog.Builder(mContext)
+            new AlertDialog.Builder(context)
                 .setTitle(R.string.pairing_tv)
                 .setMessage(R.string.confirm_tv)
                 .setPositiveButton(android.R.string.ok, null)
@@ -96,7 +96,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 .create();
 
         mPairingCodeDialog =
-            new AlertDialog.Builder(mContext)
+            new AlertDialog.Builder(context)
                 .setTitle(R.string.enter_pairing_code)
                 .setView(mInput)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

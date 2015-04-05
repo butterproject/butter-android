@@ -217,7 +217,7 @@ public class BeamPlayerFragment extends Fragment {
             public void onError(ServiceCommandError error) {
                 Timber.e(error.getCause(), error.getMessage());
                 if(mRetries > 2) {
-                    if(mLoadingDialog.isVisible()) {
+                    if(mLoadingDialog.isVisible() && !getActivity().isFinishing()) {
                         mLoadingDialog.dismiss();
                     }
 
@@ -281,7 +281,6 @@ public class BeamPlayerFragment extends Fragment {
                 mExecutor.remove(r);
             }
         }
-        mExecutor = null;
     }
 
     private void closePlayer() {
@@ -298,7 +297,7 @@ public class BeamPlayerFragment extends Fragment {
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
             mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
 
-            if(mLoadingDialog.isVisible() && mIsPlaying && !isDetached()) {
+            if(mLoadingDialog.isVisible() && mIsPlaying && !getActivity().isFinishing()) {
                 mLoadingDialog.dismiss();
             }
 
@@ -309,7 +308,7 @@ public class BeamPlayerFragment extends Fragment {
 
         @Override
         public void onError(ServiceCommandError error) {
-            if(mLoadingDialog.isVisible() && error.getCode() == 500) {
+            if(mLoadingDialog.isVisible() && error.getCode() == 500 && !getActivity().isFinishing()) {
                 mLoadingDialog.dismiss();
 
                 OptionDialogFragment.show(mActivity, getChildFragmentManager(), R.string.unknown_error, R.string.beaming_failed, android.R.string.yes, android.R.string.no, new OptionDialogFragment.Listener() {
@@ -357,7 +356,7 @@ public class BeamPlayerFragment extends Fragment {
                     if(!mSeeking && !mIsUserSeeking)
                         mSeekBar.setProgress(position.intValue());
 
-                    if(mLoadingDialog.isVisible() && !isDetached() && position > 0) {
+                    if(mLoadingDialog.isVisible() && !getActivity().isFinishing() && position > 0) {
                         mLoadingDialog.dismiss();
                     }
                 }
