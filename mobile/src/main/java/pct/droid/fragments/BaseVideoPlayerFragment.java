@@ -100,6 +100,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     private boolean mEnded = false;
 	private boolean mSeeking = false;
+    private boolean mReadyToPlay = false;
 
 	private int mVideoHeight;
 	private int mVideoWidth;
@@ -172,17 +173,18 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 		PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 
-        loadMedia();
-
         if(mCallback.getService() != null)
             mCallback.getService().addListener(BaseVideoPlayerFragment.this);
+
+        if(mReadyToPlay) {
+            loadMedia();
+        }
 	}
 
 	@Override public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		if (activity instanceof Callback) mCallback = (Callback) activity;
 	}
-
 
 	@Override
 	public void onPause() {
@@ -234,14 +236,19 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 	 */
 	@SuppressWarnings({"unchecked"})
 	public void loadMedia() {
-		if (mLocation == null && null != mStreamInfo && null != mStreamInfo.getVideoLocation()) {
+        if (mStreamInfo != null && null != mStreamInfo.getVideoLocation()) {
             mLocation = mStreamInfo.getVideoLocation();
-		}
+		} else {
+            mReadyToPlay = true;
+            return;
+        }
 
 		getVideoSurface().setKeepScreenOn(true);
 
-		if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty())
-			return;
+		if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty()) {
+            mReadyToPlay = true;
+            return;
+        }
 
         if(!mLocation.startsWith("http"))
             mLocation = LibVLC.PathToURI(mLocation);

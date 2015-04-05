@@ -16,7 +16,13 @@
   ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/selectable_focused" />
-    <corners android:radius="2dp" />
-</shape>
+<ripple
+    android:color="#5FFF"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            <solid android:color="@color/selectable_focused" />
+            <corners android:radius="2dp" />
+        </shape>
+    </item>
+</ripple>

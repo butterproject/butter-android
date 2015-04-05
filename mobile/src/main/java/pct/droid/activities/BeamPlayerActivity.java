@@ -117,7 +117,8 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
             @Override
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
-                mService.stopStreaming();
+                if(mService != null)
+                    mService.stopStreaming();
                 finish();
             }
 
