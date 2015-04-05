@@ -58,6 +58,7 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+        TorrentService.bindHere(this, mServiceConnection);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
@@ -105,7 +106,8 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
         OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
             @Override
             public void onSelectionPositive() {
-                mService.stopStreaming();
+                if(mService != null)
+                    mService.stopStreaming();
                 finish();
             }
 

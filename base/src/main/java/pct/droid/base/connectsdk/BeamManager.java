@@ -84,8 +84,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         mPairingAlertDialog =
             new AlertDialog.Builder(mContext)
-                .setTitle("Pairing with TV")
-                .setMessage("Please confirm the connection on your TV")
+                .setTitle(R.string.pairing_tv)
+                .setMessage(R.string.confirm_tv)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -97,7 +97,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         mPairingCodeDialog =
             new AlertDialog.Builder(mContext)
-                .setTitle("Enter Pairing Code on TV")
+                .setTitle(R.string.enter_pairing_code)
                 .setView(mInput)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
