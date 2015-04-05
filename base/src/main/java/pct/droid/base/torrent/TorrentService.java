@@ -165,9 +165,14 @@ public class TorrentService extends Service {
                         }
                     }
 
-                    if (!getTorrentFile(torrentUrl, torrentFile) || !torrentFile.exists()) {
+                    if (!getTorrentFile(torrentUrl, torrentFile)) {
                         for (Listener listener : mListener) {
-                            listener.onStreamError(new IOException("No such file or directory"));
+                            listener.onStreamError(new IOException("Torent error"));
+                        }
+                        return;
+                    } else if (!torrentFile.exists()) {
+                        for (Listener listener : mListener) {
+                            listener.onStreamError(new IOException("Write error"));
                         }
                         return;
                     }
