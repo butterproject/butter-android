@@ -73,6 +73,7 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -95,6 +96,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     private String mSessionId;
 
     private ScheduledThreadPoolExecutor mExecutor;
+    private ScheduledFuture mTask;
 
     private List<URLServiceSubscription<?>> mSubscriptions;
 
@@ -562,7 +564,11 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                 }
             }
 
-            persistentHttpClient.executeAsync(requestData, requestIs, new MyResponseReceiver());
+            if(persistentHttpClient != null) {
+                persistentHttpClient.executeAsync(requestData, requestIs, new MyResponseReceiver());
+            } else {
+                stopTimer();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -686,10 +692,9 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
         mExecutor = new ScheduledThreadPoolExecutor(2);
 
-        mExecutor.scheduleAtFixedRate(new Runnable() {
+        mTask = mExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                Log.d("Timer", "Timer");
                 getPlaybackPosition(new PlaybackPositionListener() {
                     @Override
                     public void onGetPlaybackPositionSuccess(long duration, long position) {
@@ -705,7 +710,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
             }
         }, KEEP_ALIVE_PERIOD, KEEP_ALIVE_PERIOD, TimeUnit.MILLISECONDS);
 
-        mExecutor.scheduleAtFixedRate(new Runnable() {
+        mTask = mExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 getPlaybackInfo(new ResponseListener<Object>() {
@@ -761,9 +766,12 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     }
 
     private void stopTimer() {
-        if (mExecutor != null) {
-            for(Runnable runnable : mExecutor.getQueue()) {
-                mExecutor.remove(runnable);
+        if(mTask != null) {
+            mTask.cancel(false);
+        }
+        if(mExecutor != null) {
+            for (Runnable r : mExecutor.getQueue()) {
+                mExecutor.remove(r);
             }
         }
         mExecutor = null;
