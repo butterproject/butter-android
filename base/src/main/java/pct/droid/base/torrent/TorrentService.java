@@ -226,6 +226,8 @@ public class TorrentService extends Service {
         }
         FileUtils.recursiveDelete(torrentPath);
         saveDirectory.mkdirs();
+
+        Timber.d("Stopped torrent and removed files");
     }
 
     public boolean isStreaming() {

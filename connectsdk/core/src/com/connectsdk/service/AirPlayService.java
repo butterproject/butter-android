@@ -96,7 +96,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     private String mSessionId;
 
     private ScheduledThreadPoolExecutor mExecutor;
-    private ScheduledFuture mTask;
+    private ScheduledFuture mTask1, mTask2;
 
     private List<URLServiceSubscription<?>> mSubscriptions;
 
@@ -692,7 +692,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
         mExecutor = new ScheduledThreadPoolExecutor(2);
 
-        mTask = mExecutor.scheduleAtFixedRate(new Runnable() {
+        mTask1 = mExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 getPlaybackPosition(new PlaybackPositionListener() {
@@ -710,7 +710,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
             }
         }, KEEP_ALIVE_PERIOD, KEEP_ALIVE_PERIOD, TimeUnit.MILLISECONDS);
 
-        mTask = mExecutor.scheduleAtFixedRate(new Runnable() {
+        mTask2 = mExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 getPlaybackInfo(new ResponseListener<Object>() {
@@ -766,8 +766,11 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     }
 
     private void stopTimer() {
-        if(mTask != null) {
-            mTask.cancel(false);
+        if(mTask1 != null) {
+            mTask1.cancel(false);
+        }
+        if(mTask2 != null) {
+            mTask2.cancel(false);
         }
         if(mExecutor != null) {
             for (Runnable r : mExecutor.getQueue()) {
