@@ -253,6 +253,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if(!mLocation.startsWith("http"))
             mLocation = LibVLC.PathToURI(mLocation);
 
+        Timber.d("Trying to play file: %s", mLocation);
+
         mLibVLC.playMRL(mLocation);
         mEnded = false;
 

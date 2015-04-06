@@ -23,7 +23,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,6 @@ import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.connectsdk.BeamManager;
-import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
@@ -61,7 +59,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     View mRoot;
     @InjectView(R.id.progress_indicator)
-    ProgressBar progressIndicator;
+    ProgressBar mProgressIndicator;
     @InjectView(R.id.primary_textview)
     TextView mPrimaryTextView;
     @InjectView(R.id.secondary_textview)
@@ -96,7 +94,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mContext = activity;
         mAttached = true;
     }
 
@@ -109,6 +106,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mContext = getActivity();
         loadBackgroundImage();
     }
 
@@ -134,8 +132,8 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressIndicator.setIndeterminate(false);
-                progressIndicator.setProgress(status.bufferProgress);
+                mProgressIndicator.setIndeterminate(false);
+                mProgressIndicator.setProgress(status.bufferProgress);
                 mPrimaryTextView.setText(status.bufferProgress + "%");
 
                 if (status.downloadSpeed / 1024 < 1000) {
@@ -156,23 +154,23 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mTertiaryTextView.setText(null);
                 mPrimaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case ERROR:
                 if (null != extra && extra instanceof String)
                     mPrimaryTextView.setText((String) extra);
                 mSecondaryTextView.setText(null);
                 mTertiaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case BUFFERING:
                 mPrimaryTextView.setText(R.string.starting_buffering);
                 mTertiaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case STREAMING:
                 mPrimaryTextView.setText(R.string.streaming_started);
@@ -183,15 +181,15 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mPrimaryTextView.setText(R.string.waiting_for_subtitles);
                 mTertiaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case WAITING_TORRENT:
                 mPrimaryTextView.setText(R.string.waiting_torrent);
                 mTertiaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
 
         }
@@ -210,8 +208,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             }
         }
 
-        if(mContext instanceof Activity) {
-            ((Activity) mContext).finish();
-        }
+        setRetainInstance(false);
+        mCallback.playerStarted();
     }
 }

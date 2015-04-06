@@ -356,6 +356,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     public interface FragmentListener {
         StreamInfo getStreamInformation();
+        void playerStarted();
     }
 
 }
