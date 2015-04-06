@@ -34,7 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@android:id/icon"
+        android:layout_toEndOf="@android:id/icon"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:orientation="vertical">
         <TextView
             android:id="@android:id/text1"
