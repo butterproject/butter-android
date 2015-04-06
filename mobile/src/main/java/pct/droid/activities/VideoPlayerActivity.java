@@ -36,6 +36,7 @@ import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
 
+    private VideoPlayerFragment mFragment;
     private TorrentService mService;
     private StreamInfo mStreamInfo;
     private String mTitle = "";
@@ -75,8 +76,8 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
         }
         mStreamInfo.setVideoLocation(location);
 
-        VideoPlayerFragment videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
-        videoPlayerFragment.loadMedia();
+        mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+        mFragment.loadMedia();
 	}
 
     @Override

@@ -319,6 +319,7 @@ public class TorrentService extends Service {
         public void blockFinished(BlockFinishedAlert alert) {
             super.blockFinished(alert);
             TorrentHandle th = alert.getHandle();
+            if(!th.getInfoHash().equals(mCurrentTorrent.getInfoHash())) return;
             TorrentStatus status = th.getStatus();
             float progress = status.getProgress() * 100;
             int floorProgress = (int) Math.floor(progress);
