@@ -22,7 +22,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,6 +65,7 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
@@ -80,7 +83,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 	@InjectView(R.id.player_info)
 	TextView mPlayerInfo;
 	@InjectView(R.id.control_bar)
-	SeekBar mControlBar;
+    pct.droid.widget.SeekBar mControlBar;
 	@InjectView(R.id.play_button)
 	ImageButton mPlayButton;
     @InjectView(R.id.forward_button)
@@ -127,7 +130,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         return inflater.inflate(R.layout.fragment_videoplayer, container, false);
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -143,6 +147,19 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
             mRewindButton.setImageDrawable(forward);
             mForwardButton.setImageDrawable(rewind);
         }
+
+        int color = getResources().getColor(R.color.primary);
+        LayerDrawable progressDrawable;
+        if(!VersionUtils.isLollipop()) {
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
+        } else {
+            progressDrawable = (LayerDrawable) getResources().getDrawable(android.R.drawable.progress_horizontal, null);
+        }
+        progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        mControlBar.setProgressDrawable(progressDrawable);
+        mControlBar.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
 	}
 
 	@Override
