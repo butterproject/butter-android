@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -153,7 +154,12 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         if(!VersionUtils.isLollipop()) {
             progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
         } else {
-            progressDrawable = (LayerDrawable) getResources().getDrawable(android.R.drawable.progress_horizontal, null);
+            if(mControlBar.getProgressDrawable() instanceof StateListDrawable) {
+                StateListDrawable stateListDrawable = (StateListDrawable)mControlBar.getProgressDrawable();
+                progressDrawable = (LayerDrawable) stateListDrawable.getCurrent();
+            } else {
+                progressDrawable = (LayerDrawable)mControlBar.getProgressDrawable();
+            }
         }
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
