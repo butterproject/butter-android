@@ -295,6 +295,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     @Override
     public void onDeviceReady(ConnectableDevice device) {
+        if (mPairingAlertDialog.isShowing()) {
+            mPairingAlertDialog.dismiss();
+        }
+
         mConnected = true;
         if(mListener != null)
             mListener.updateBeamIcon();
