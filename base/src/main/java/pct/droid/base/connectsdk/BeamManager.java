@@ -309,7 +309,17 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     @Override
     public void onPairingRequired(ConnectableDevice device, DeviceService service, DeviceService.PairingType pairingType) {
-        // TODO: dialog
+        switch (pairingType) {
+            case FIRST_SCREEN:
+                mPairingAlertDialog.show();
+                break;
+            case PIN_CODE:
+                mPairingCodeDialog.show();
+                break;
+            case NONE:
+            default:
+                break;
+        }
     }
 
     @Override
