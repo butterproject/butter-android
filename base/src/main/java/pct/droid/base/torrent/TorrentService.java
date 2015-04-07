@@ -67,7 +67,7 @@ public class TorrentService extends Service {
 
     private String mCurrentTorrentUrl = "";
     private File mCurrentVideoLocation;
-    private boolean mIsStreaming = false;
+    private boolean mIsStreaming = false, mIsCanceled = false;
 
     private IBinder mBinder = new ServiceBinder();
     private List<Listener> mListener = new ArrayList<>();
@@ -128,6 +128,8 @@ public class TorrentService extends Service {
     public void streamTorrent(@NonNull final String torrentUrl) {
         if(mHandler == null || mIsStreaming) return;
 
+        mIsCanceled = false;
+
         Timber.d("Starting streaming");
 
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -181,6 +183,10 @@ public class TorrentService extends Service {
                     }
                 }
 
+                if(!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
+                    return;
+                }
+
                 mCurrentTorrent = mTorrentSession.addTorrent(torrentFile, saveDirectory);
                 mCurrentListener = new TorrentAlertAdapter(mCurrentTorrent);
                 mTorrentSession.addListener(mCurrentListener);
@@ -215,6 +221,7 @@ public class TorrentService extends Service {
         if(mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
+        mIsCanceled = true;
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
             mCurrentTorrent.pause();
