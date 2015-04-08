@@ -52,6 +52,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.ThreadUtils;
 import timber.log.Timber;
 
 public class TorrentService extends Service {
@@ -171,13 +172,23 @@ public class TorrentService extends Service {
                     }
 
                     if (!getTorrentFile(torrentUrl, torrentFile)) {
-                        for (Listener listener : mListener) {
-                            listener.onStreamError(new IOException("Torrent error"));
+                        for (final Listener listener : mListener) {
+                            ThreadUtils.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listener.onStreamError(new IOException("Write error"));
+                                }
+                            });
                         }
                         return;
                     } else if (!torrentFile.exists()) {
-                        for (Listener listener : mListener) {
-                            listener.onStreamError(new IOException("Write error"));
+                        for (final Listener listener : mListener) {
+                            ThreadUtils.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listener.onStreamError(new IOException("Write error"));
+                                }
+                            });
                         }
                         return;
                     }
@@ -210,8 +221,13 @@ public class TorrentService extends Service {
 
                 Timber.d("Video location: %s", mCurrentVideoLocation);
 
-                for(Listener listener : mListener) {
-                    listener.onStreamStarted();
+                for(final Listener listener : mListener) {
+                    ThreadUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onStreamStarted();
+                        }
+                    });
                 }
             }
         });
@@ -328,7 +344,7 @@ public class TorrentService extends Service {
             TorrentHandle th = alert.getHandle();
             if(!th.getInfoHash().equals(mCurrentTorrent.getInfoHash())) return;
             TorrentStatus status = th.getStatus();
-            float progress = status.getProgress() * 100;
+            final float progress = status.getProgress() * 100;
             int floorProgress = (int) Math.floor(progress);
             if(floorProgress % 5 == 0 && mLastLoggedProgress != floorProgress) {
                 mLastLoggedProgress = (int) Math.floor(progress);
@@ -336,18 +352,29 @@ public class TorrentService extends Service {
             }
             int bufferProgress = (int) Math.floor(progress * 12);
             if(bufferProgress > 100) bufferProgress = 100;
-            int seeds = status.getNumSeeds();
-            int downloadSpeed = status.getDownloadPayloadRate();
+            final int seeds = status.getNumSeeds();
+            final int downloadSpeed = status.getDownloadPayloadRate();
 
-            for(Listener listener : mListener) {
-                listener.onStreamProgress(new DownloadStatus(progress, bufferProgress, seeds, downloadSpeed));
+            for(final Listener listener : mListener) {
+                final int finalBufferProgress = bufferProgress;
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onStreamProgress(new DownloadStatus(progress, finalBufferProgress, seeds, downloadSpeed));
+                    }
+                });
             }
 
             if(bufferProgress == 100 && !mReady) {
                 mReady = true;
                 Timber.d("onStreamReady");
-                for(Listener listener : mListener) {
-                    listener.onStreamReady(mCurrentVideoLocation);
+                for(final Listener listener : mListener) {
+                    ThreadUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onStreamReady(mCurrentVideoLocation);
+                        }
+                    });
                 }
             }
         }

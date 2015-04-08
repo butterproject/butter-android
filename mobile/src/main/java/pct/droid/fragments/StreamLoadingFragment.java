@@ -210,7 +210,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             }
         }
 
-        setRetainInstance(false);
         mCallback.playerStarted();
     }
 }

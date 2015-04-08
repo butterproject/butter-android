@@ -22,11 +22,8 @@ import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -38,14 +35,10 @@ import java.util.Map;
 
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
-import pct.droid.base.connectsdk.BeamManager;
-import pct.droid.base.connectsdk.server.BeamServer;
-import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
-import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
@@ -183,7 +176,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
             mService.removeListener(BaseStreamLoadingFragment.this);
             startPlayerActivity(location, 0);
-            getActivity().finish();
         }
     }
 
@@ -249,18 +241,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     @DebugLog
     public void onStreamError(final Exception e) {
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(e.getMessage().equals("Write error")) {
-                    setState(State.ERROR, getString(R.string.error_files));
-                } else if(e.getMessage().equals("Torrent error")) {
-                    setState(State.ERROR, getString(R.string.torrent_failed));
-                } else {
-                    setState(State.ERROR, getString(R.string.unknown_error));
-                }
-            }
-        });
+        if(e.getMessage().equals("Write error")) {
+            setState(State.ERROR, getString(R.string.error_files));
+        } else if(e.getMessage().equals("Torrent error")) {
+            setState(State.ERROR, getString(R.string.torrent_failed));
+        } else {
+            setState(State.ERROR, getString(R.string.unknown_error));
+        }
     }
 
     /**
