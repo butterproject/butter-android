@@ -43,7 +43,7 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     private TorrentService mService;
     private BeamManager mBeamManager = BeamManager.getInstance(this);
     private StreamInfo mStreamInfo;
-    private String mTitle = "";
+    private String mTitle = getString(R.string.the_video);
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -70,7 +70,8 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
         if(mStreamInfo.isShow()) {
-            mTitle = mStreamInfo.getShow().title;
+            if(mStreamInfo.getShow() != null && mStreamInfo.getShow().title != null)
+                mTitle = mStreamInfo.getShow().title;
         } else {
             if(mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
                 mTitle = mStreamInfo.getMedia().title;
