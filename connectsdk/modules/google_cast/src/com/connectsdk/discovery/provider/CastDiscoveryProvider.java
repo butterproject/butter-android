@@ -235,6 +235,7 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
             super.onRouteAdded(router, route);
 
             CastDevice castDevice = CastDevice.getFromBundle(route.getExtras());
+            if(!castDevice.isOnLocalNetwork()) return;
             String uuid = castDevice.getDeviceId();
 
             ServiceDescription foundService = foundServices.get(uuid);
