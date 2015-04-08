@@ -38,6 +38,7 @@ import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
@@ -198,18 +199,22 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
+    @DebugLog
     protected void startPlayerActivity(String location, int resumePosition) {
-        Timber.d("startVideoPlayer");
-        mStreamInfo.setVideoLocation(location);
-        if(BeamManager.getInstance(mContext).isConnected()) {
-            BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
-        } else {
-            boolean playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
-            if (!playingExternal) {
-                VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+        if(getActivity() != null && !mPlayerStarted) {
+            mStreamInfo.setVideoLocation(location);
+            boolean playingExternal = false;
+            if (BeamManager.getInstance(mContext).isConnected()) {
+                BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+            } else {
+                playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+                if (!playingExternal) {
+                    VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+                }
             }
-        }
 
-        mCallback.playerStarted();
+            if(!playingExternal)
+                getActivity().finish();
+        }
     }
 }

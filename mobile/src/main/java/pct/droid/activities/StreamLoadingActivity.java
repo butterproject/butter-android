@@ -36,7 +36,6 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
 
     private StreamInfo mInfo;
     private StreamLoadingFragment mFragment;
-    private static boolean sPlayerStarted = false;
 
     public static Intent startActivity(Activity activity, StreamInfo info) {
         Intent i = new Intent(activity, StreamLoadingActivity.class);
@@ -68,19 +67,6 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
         mInfo = getIntent().getParcelableExtra(EXTRA_INFO);
 
         mFragment = (StreamLoadingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-
-        sPlayerStarted = false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(sPlayerStarted) {
-            if(mFragment != null) {
-                mFragment.cancelStream();
-            }
-            finish();
-        }
     }
 
     @Override
@@ -89,14 +75,10 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
     }
 
     @Override
-    public void playerStarted() {
-        sPlayerStarted = true;
-        finish();
-    }
-
-    @Override
     public void onBackPressed() {
-        mFragment.cancelStream();
+        if(mFragment != null) {
+            mFragment.cancelStream();
+        }
         super.onBackPressed();
     }
 }

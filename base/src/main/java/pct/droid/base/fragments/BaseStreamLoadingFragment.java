@@ -70,7 +70,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     protected FragmentListener mCallback;
     private SubsProvider mSubsProvider;
-    private Boolean mPlayerStarted = false, mHasSubs = false;
+    protected Boolean mPlayerStarted = false;
+    private Boolean mHasSubs = false;
     private TorrentService mService;
 
     protected StreamInfo mStreamInfo;
@@ -94,8 +95,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mStreamInfo = mCallback.getStreamInformation();
-        loadSubs();
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mStreamInfo = mCallback.getStreamInformation();
+                loadSubs();
+            }
+        });
     }
 
 
@@ -169,13 +175,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         }
 
         if (!mPlayerStarted) {
-            mPlayerStarted = true;
-
-            //play with default 'external' player
             //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
 
             mService.removeListener(BaseStreamLoadingFragment.this);
             startPlayerActivity(location, 0);
+
+            mPlayerStarted = true;
         }
     }
 
@@ -343,7 +348,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     public interface FragmentListener {
         StreamInfo getStreamInformation();
-        void playerStarted();
     }
 
 }
