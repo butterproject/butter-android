@@ -115,13 +115,15 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
           /* attempt to load background image */
         if (null != info) {
             Media media = info.isShow() ? info.getShow() : info.getMedia();
-            String url = media.image;
-            if(PixelUtils.isTablet(getActivity())) {
-                url = media.headerImage;
-            }
+            if(media != null) {
+                String url = media.image;
+                if (PixelUtils.isTablet(getActivity())) {
+                    url = media.headerImage;
+                }
 
-            if (!TextUtils.isEmpty(url))
-                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+                if (!TextUtils.isEmpty(url))
+                    Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+            }
         }
     }
 

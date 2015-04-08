@@ -132,6 +132,11 @@ public class BeamPlayerFragment extends Fragment {
             mMedia = mStreamInfo.getMedia();
         }
 
+        if(mMedia == null) {
+            mMedia = new Media(null, null);
+            mMedia.color = getResources().getColor(R.color.primary);
+        }
+
         LayerDrawable progressDrawable;
         LayerDrawable volumeDrawable;
         if(VersionUtils.isLollipop()) {
