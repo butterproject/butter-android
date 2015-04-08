@@ -1,22 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~ This file is part of Popcorn Time.
-  ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Запази</string>
   <string name="cancel">Отмени</string>
@@ -24,27 +7,36 @@
   <string name="ok">ОК</string>
   <string name="enabled">Включено</string>
   <string name="disabled">Изключено</string>
+  <string name="casting">Стриймване към други у-ва</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Заглавие , година , актьори</string>
   <string name="title_shows">Сериали</string>
   <string name="title_movies">Филми</string>
+  <string name="title_anime">Аниме</string>
+  <string name="genres">Жанрове</string>
   <string name="search">Търси</string>
   <string name="searching">Търсене...</string>
-  <string name="loading_data">Зареждане на данни...</string>
-  <string name="loading_details">Зареждане на детайли...</string>
   <string name="no_data_found">Не са открити данни</string>
   <string name="unknown_error">Нещо се обърка</string>
   <!--DetailActivity strings-->
   <string name="minutes">мин</string>
+  <string name="read_more">Прочети повече</string>
   <string name="watch_trailer">Изгледай трейлър</string>
   <string name="disable_subs">Изключи субтитри</string>
   <string name="no_subs">Няма субтитри</string>
+  <string name="no_subs_available">Няма налични субтитри</string>
   <string name="subtitles">Субтитри</string>
   <string name="quality">Качество</string>
   <string name="trailer">Трейлър</string>
   <string name="season">Сезон</string>
   <string name="episode">Епизод</string>
+  <string name="specials">Събития</string>
+  <string name="continuing">Продължаващ</string>
+  <string name="ended">Приключил</string>
+  <string name="aired">Излъчено: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Изчакване за торент</string>
+  <string name="starting_buffering">Начало на буферирането </string>
   <string name="streaming_started">Стриймването започна</string>
   <string name="waiting_for_subtitles">Изчакване за субтитри</string>
   <string name="seeds">сийдъри</string>
@@ -59,11 +51,15 @@
   <string name="fit_horizontal">Побери хоризонтално</string>
   <string name="fit_vertical">Побери вертикално</string>
   <string name="original_size">Оригинален</string>
+  <string name="comm_error">Проблем с комуникациите</string>
+  <string name="comm_message">Стана грешка по време на изземането на видеото. Това може да е заради проблеми с връзката или YouTube протоколи. Моля опитайте пак по-късно.</string>
+  <string name="leave_videoplayer_title">Сигурен ли сте?</string>
+  <string name="leave_videoplayer_message">Сигурни ли сте, че искате да напуснете видеоплейъра? %s ще спре да се възпроизвежда. </string>
   <!--TermsActivity strings-->
   <string name="accept">Приеми</string>
   <string name="leave">Напусни</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Настройки</string>
+  <string name="preferences">Предпочитания</string>
   <string name="general">Общи</string>
   <string name="default_view">Начален изглед</string>
   <string name="default_player">Начален видео плейър</string>
@@ -74,6 +70,8 @@
   <string name="internal_player">Вътрешен</string>
   <string name="subtitle_color">Цвят</string>
   <string name="subtitle_size">Размер</string>
+  <string name="subtitle_stroke_color">Очертание на цвят</string>
+  <string name="subtitle_stroke_width">Очертание на широчина</string>
   <string name="subtitle_language">Начален език</string>
   <string name="no_default_set">Без начален език</string>
   <string name="advanced">Разширени</string>
@@ -96,6 +94,12 @@
   <string name="tap_to_open">Цъкни,за да отвориш</string>
   <string name="report_a_bug">Докладвай за бъг</string>
   <string name="open_source_licenses">Лицензи с отворен код</string>
+  <string name="torrents">Торенти</string>
+  <string name="download_speed">Максимална скорост на теглене</string>
+  <string name="upload_speed">Максимална скорост на качване</string>
+  <string name="max_connections">Максимални общо връзки</string>
+  <string name="dht_limit">DHT ограничение</string>
+  <string name="unlimited">Неограничени</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Само чрез Wi-Fi</string>
   <string name="wifi_only_message">Може да стриймвате видеа само чрез Wi-Fi.Може да изключите това в \"предпочитания\" в случай,че искате да стриймвате чрез клетъчна връзка.</string>
@@ -109,7 +113,7 @@
 за да направят гледането на торент филми,колкото се може по-просто.\n\nНие сме проект с открит сорс код.Ние сме от цял свят.Ние
 обичаме нашите филми.И със сигурност обичаме пуканки!</string>
   <string name="website">Уебсайт</string>
-  <string name="discuss">Дискутирай</string>
+  <string name="forum">Форум</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
@@ -118,4 +122,10 @@
   <!--Share dialog-->
   <string name="share_text">Изпробвали ли сте Popcorn Time за Android? Страхотен е! https://popcorntime.io/</string>
   <string name="share_dialog_title">Сподели с</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Свързан към</string>
+  <string name="disconnect">Изключи</string>
+  <string name="select_beaming">Изберете устройство за излъчване</string>
+  <string name="starting_beam">Инициализиране на излъчване на видеото...</string>
+  <string name="beaming_failed">Видеото не може да се възпроизведе на устройството, на което се излъчва. Желаете ли да опитате отново? Приложението може да трябва да изтегли още части преди вашето устройство да има възможност да възпроизведе видеото.</string>
 </resources>

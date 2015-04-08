@@ -1,22 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~ This file is part of Popcorn Time.
-  ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Uložiť</string>
   <string name="cancel">Zrušiť</string>
@@ -24,25 +7,36 @@
   <string name="ok">OK</string>
   <string name="enabled">Zapnuté</string>
   <string name="disabled">Vypnuté</string>
+  <string name="casting">Obsadenie</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Názov, rok, herci</string>
   <string name="title_shows">Seriály</string>
   <string name="title_movies">Filmy</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Žánre</string>
   <string name="search">Vyhľadávať</string>
-  <string name="loading_data">Načítavam dáta...</string>
+  <string name="searching">Vyhľadavanie...</string>
   <string name="no_data_found">Neboli nájdené žiadne dáta</string>
   <string name="unknown_error">Niečo sa pokazilo</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
+  <string name="read_more">Čítať viac</string>
   <string name="watch_trailer">Pozrieť si trailer</string>
   <string name="disable_subs">Vypnúť titulky</string>
   <string name="no_subs">Žiadne titulky</string>
+  <string name="no_subs_available">Titulky nie sú k dispozícii</string>
   <string name="subtitles">Titulky</string>
   <string name="quality">Kvalita</string>
   <string name="trailer">Trailer</string>
   <string name="season">Séria</string>
   <string name="episode">Epizóda</string>
+  <string name="specials">Špeciality</string>
+  <string name="continuing">Pokračujúce</string>
+  <string name="ended">Ukončené</string>
+  <string name="aired">Odvysielané: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Čaká sa na torrent</string>
+  <string name="starting_buffering">Začína sa ukladanie do vyrovnávacej pamäte</string>
   <string name="streaming_started">Streamovanie začalo</string>
   <string name="waiting_for_subtitles">Čakám na titulky</string>
   <string name="seeds">seeds</string>
@@ -57,6 +51,10 @@
   <string name="fit_horizontal">Prispôsobiť na šírku</string>
   <string name="fit_vertical">Prispôsobiť na výšku</string>
   <string name="original_size">Pôvodné</string>
+  <string name="comm_error">Chyba pri komunikácii</string>
+  <string name="comm_message">Počas získavania videa nastala chyba. Tá môže byť spôsobená problémami so sieťou alebo s protokolmi YouTube. Skúste to opäť neskôr.</string>
+  <string name="leave_videoplayer_title">Are you sure?</string>
+  <string name="leave_videoplayer_message">Ste si istý, že chcete vypnúť prehrávač videa? %s zastaví prehrávanie.</string>
   <!--TermsActivity strings-->
   <string name="accept">Prijať</string>
   <string name="leave">Nechať pôvodné</string>
@@ -72,6 +70,8 @@
   <string name="internal_player">Vnútorný</string>
   <string name="subtitle_color">Farba</string>
   <string name="subtitle_size">Veľkosť</string>
+  <string name="subtitle_stroke_color">Farba obrysu</string>
+  <string name="subtitle_stroke_width">Šírka obrysu</string>
   <string name="subtitle_language">Predvolený jazyk</string>
   <string name="no_default_set">Žiaden predvolený jazyk</string>
   <string name="advanced">Pokročilé</string>
@@ -94,7 +94,38 @@
   <string name="tap_to_open">Otvorte ťuknutím</string>
   <string name="report_a_bug">Nahlásiť chybu</string>
   <string name="open_source_licenses">Opensourcové licencie</string>
+  <string name="torrents">Torrenty</string>
+  <string name="download_speed">Maximálna rýchlosť sťahovania</string>
+  <string name="upload_speed">Maximálna rýchlosť odosielania</string>
+  <string name="max_connections">Maximálne množstvo spojení</string>
+  <string name="dht_limit">DHT limit</string>
+  <string name="unlimited">Bez limitu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Iba cez Wi-Fi</string>
   <string name="wifi_only_message">Môžete streamovať videá len cez Wi-Fi. Túto možnosť môžete vypnúť v Nastaveniach, ak chcete používať mobilné dáta.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Zdielať</string>
+  <string name="drawer_open">Otvoriť navigačnú lištu</string>
+  <string name="drawer_close">Zatvoriť navigačnú lištu</string>
+  <string name="no_search_results">Neboli nájdené žiadne výsledky vyhľadávania</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time je výsledkom mnohých vývojárov a dizajnérov spojenia veľa API, aby 
+ ⇥⇥ sledovani filmov z torrentov bolo tak jednoduché, ako je to možné. \ n \n  Sme open source projekt. Sme z celého sveta. Milujeme
+ ⇥⇥ filmy. A kámo, milujeme popcorn.</string>
+  <string name="website">webová stránka</string>
+  <string name="forum">Fórum</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Už si vyskúšal Popcorn Time pre android? Je úžasný! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Zdieľať</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Pripojiť</string>
+  <string name="disconnect">Odpojiť</string>
+  <string name="select_beaming">Vyber zaradenie pre zobrazenie</string>
+  <string name="starting_beam">Inicializácia zobrazenia videa</string>
+  <string name="beaming_failed">Video nemôže byť prehraté na vašom zobrazovacom zariadení. Chcete to skúsiť opäť? Aplikácia možno potrebuje stiahnuť viac súčastí na prehrávanie videa na vašom zariadení. </string>
 </resources>
