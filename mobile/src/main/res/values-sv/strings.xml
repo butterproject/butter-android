@@ -1,22 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~ This file is part of Popcorn Time.
-  ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Spara</string>
   <string name="cancel">Avbryt</string>
@@ -24,27 +7,36 @@
   <string name="ok">OK</string>
   <string name="enabled">Aktiverad</string>
   <string name="disabled">Inaktiverad</string>
+  <string name="casting">Casting</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Titel, år, skådespelare</string>
-  <string name="title_shows">Shows</string>
+  <string name="title_shows">Serier</string>
   <string name="title_movies">Filmer</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Genrer</string>
   <string name="search">Sök</string>
   <string name="searching">Söker...</string>
-  <string name="loading_data">Laddar data...</string>
-  <string name="loading_details">Laddar information...</string>
   <string name="no_data_found">Ingen data hittades</string>
   <string name="unknown_error">Något gick fel</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
+  <string name="read_more">Läs mer</string>
   <string name="watch_trailer">Se trailer</string>
   <string name="disable_subs">Inaktivera undertexter</string>
   <string name="no_subs">Inga undertexter</string>
+  <string name="no_subs_available">Inga undertexter tillgängliga</string>
   <string name="subtitles">Undertexter</string>
   <string name="quality">Kvalité </string>
   <string name="trailer">Trailer</string>
   <string name="season">Säsong</string>
   <string name="episode">Episode</string>
+  <string name="specials">Specials</string>
+  <string name="continuing">Fortsätter</string>
+  <string name="ended">Avslutad </string>
+  <string name="aired">Sändes: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Väntar på torrent</string>
+  <string name="starting_buffering">Startar buffring</string>
   <string name="streaming_started">Streaming startade</string>
   <string name="waiting_for_subtitles">Väntar på undertexter</string>
   <string name="seeds">seeds</string>
@@ -59,6 +51,10 @@
   <string name="fit_horizontal">Passa horisontellt </string>
   <string name="fit_vertical">Passa vertikalt </string>
   <string name="original_size">Original</string>
+  <string name="comm_error">Kommunikations fel</string>
+  <string name="comm_message">Ett fel inträffade vid hämtning av videon. Detta kan bero på nätverksproblem eller YouTube-protokoll. Försök igen senare.</string>
+  <string name="leave_videoplayer_title">Är du säker?</string>
+  <string name="leave_videoplayer_message">Är du säker på att du vill lämna videospelaren? %s kommer att sluta spela.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accept</string>
   <string name="leave">Lämna</string>
@@ -74,13 +70,15 @@
   <string name="internal_player">Intern</string>
   <string name="subtitle_color">Färg</string>
   <string name="subtitle_size">Storlek</string>
+  <string name="subtitle_stroke_color">Kontur färg</string>
+  <string name="subtitle_stroke_width">Kontur bredd</string>
   <string name="subtitle_language">Standardspråk</string>
   <string name="no_default_set">Inget standardspråk</string>
   <string name="advanced">Avancerat</string>
   <string name="storage_location">Lagringsplats</string>
   <string name="storage_automatic">Automatisk</string>
   <string name="storage_choose">Välj plats</string>
-  <string name="not_writable">Plats inte skrivbar</string>
+  <string name="not_writable">Plats ej skrivbar</string>
   <string name="remove_cache">Ta bort cache om spelaren stäng</string>
   <string name="hw_acceleration">Hårdvaruacceleration</string>
   <string name="hw_automatic">Automatisk</string>
@@ -90,32 +88,44 @@
   <string name="auto_updates">Automatiska uppdateringar</string>
   <string name="check_for_updates">Leta uppdateringar</string>
   <string name="last_check">Senaste kontrollerad</string>
-  <string name="about">About</string>
+  <string name="about">Om</string>
   <string name="version">Version</string>
   <string name="changelog">Changelog</string>
   <string name="tap_to_open">Tryck för att öppna</string>
   <string name="report_a_bug">Rapportera ett fel</string>
   <string name="open_source_licenses">Öppen källkod-licenser</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Högsta nedladdningshastighet</string>
+  <string name="upload_speed">Högsta uppladdningshastighet</string>
+  <string name="max_connections">Högsta totala anslutningar</string>
+  <string name="dht_limit">DHT gräns</string>
+  <string name="unlimited">Obegränsad</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Endast Wi-Fi</string>
   <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>
   <!--NavigationDrawer-->
   <string name="share">Dela</string>
-  <string name="drawer_open">Öppen navigering låda</string>
-  <string name="drawer_close">Stäng navigering låda</string>
+  <string name="drawer_open">Öppna navigeringslåda</string>
+  <string name="drawer_close">Stäng navigeringslåda</string>
   <string name="no_search_results">Inga sökresultat hittades</string>
   <!--About fragment-->
   <string name="about_message">Popcorn Time är resultatet av många utvecklare och designers som har slagit ihop ett gäng APIs tillsammans för att göra 
 ⇥⇥upplevelsen att titta torrent filmer så enkla som möjligt. \ n \ nVi är ett open source-projekt. Vi är från hela världen. Vi
 ⇥⇥älskar våra filmer. Oh boy, vad vi älskar popcorn.</string>
   <string name="website">Websida </string>
-  <string name="discuss">Diskutera</string>
+  <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Har du provat Popcorn Time till Android? Den är grymt! https://popcorntime.io/</string>
+  <string name="share_text">Har du prövat Popcorn Time appen för Android? Den är grym! https://popcorntime.io/</string>
   <string name="share_dialog_title">Dela med</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Ansluten till</string>
+  <string name="disconnect">Koppla från</string>
+  <string name="select_beaming">Välj enhet för streaming</string>
+  <string name="starting_beam">Initierar video streaming...</string>
+  <string name="beaming_failed">Videon kunde inte spela på din streaming-enheten. Vill du försöka igen? Appen kan behöva ladda ner fler delar innan din enhet kan spela upp videon.</string>
 </resources>

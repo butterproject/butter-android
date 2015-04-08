@@ -1,66 +1,62 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~ This file is part of Popcorn Time.
-  ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Desar</string>
-  <string name="cancel">Cancel·lar</string>
-  <string name="close">Tancar</string>
-  <string name="ok">Acceptar</string>
+  <string name="save">Desa</string>
+  <string name="cancel">Cancel·la</string>
+  <string name="close">Tanca</string>
+  <string name="ok">D\'acord</string>
   <string name="enabled">Activat</string>
   <string name="disabled">Desactivat</string>
+  <string name="casting">Emetent</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Títol, any, actors</string>
   <string name="title_shows">Programes</string>
   <string name="title_movies">Pel·lícules</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Gèneres</string>
   <string name="search">Cerca</string>
-  <string name="searching">Cercant... </string>
-  <string name="loading_data">Carregant dades... </string>
-  <string name="loading_details">Carregant detalls... </string>
+  <string name="searching">S\'està cercant... </string>
   <string name="no_data_found">No s\'han trobat dades</string>
   <string name="unknown_error">Alguna cosa ha fallat</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
-  <string name="watch_trailer">Veure el tràiler</string>
-  <string name="disable_subs">Desactivar subtítols</string>
+  <string name="read_more">Més informació</string>
+  <string name="watch_trailer">Reprodueix el tràiler</string>
+  <string name="disable_subs">Desactiva els subtítols</string>
   <string name="no_subs">Sense subtítols</string>
+  <string name="no_subs_available">No hi ha subtítols disponibles</string>
   <string name="subtitles">Subtítols</string>
   <string name="quality">Qualitat</string>
   <string name="trailer">Tràiler</string>
   <string name="season">Temporada</string>
   <string name="episode">Episodi</string>
+  <string name="specials">Especials</string>
+  <string name="continuing">S\'està continuant</string>
+  <string name="ended">Finalitzat</string>
+  <string name="aired">Emesa: %s</string>
   <!--StreamLoadingActivity strings-->
-  <string name="streaming_started">Streaming iniciat</string>
-  <string name="waiting_for_subtitles">Esperant els subtítols</string>
+  <string name="waiting_torrent">S\'està esperant el torrent</string>
+  <string name="starting_buffering">S\'està iniciant la precàrrega</string>
+  <string name="streaming_started">S\'ha iniciat la transmissió</string>
+  <string name="waiting_for_subtitles">S\'estan esperant els subtítols</string>
   <string name="seeds">llavors</string>
   <!--VideoPlayerActivity strings-->
-  <string name="now_playing">Reproduint ara</string>
+  <string name="now_playing">S\'està reproduint</string>
   <string name="volume">Volum</string>
   <string name="brightness">Lluminositat</string>
-  <string name="hardware_acceleration_error_title">Error d\'acceleració per hardware</string>
-  <string name="hardware_acceleration_error_message">Hi ha hagut un error amb l\'acceleració per hardware. Vols desactivar-lo i provar de nou?</string>
+  <string name="hardware_acceleration_error_title">Error d\'acceleració per maquinari</string>
+  <string name="hardware_acceleration_error_message">S\'ha produït un error amb l\'acceleració per maquinari. Voleu desactivar-la i provar de nou?</string>
   <string name="best_fit">Millor encaix</string>
-  <string name="fill">Omplir</string>
+  <string name="fill">Omple</string>
   <string name="fit_horizontal">Encaix horitzontal</string>
   <string name="fit_vertical">Encaix vertical</string>
   <string name="original_size">Original</string>
+  <string name="comm_error">Error de comunicacions</string>
+  <string name="comm_message">S\'ha produït un error durant la localització del vídeo. Pot ser degut a errors de xarxa o als protocols de Youtube. Proveu-ho de nou més tard.</string>
+  <string name="leave_videoplayer_title">N\'esteu segur?</string>
+  <string name="leave_videoplayer_message">Segur que voleu abandonar el reproductor? %s deixarà de reproduir-se.</string>
   <!--TermsActivity strings-->
-  <string name="accept">Acceptar</string>
+  <string name="accept">Accepta</string>
   <string name="leave">Eixir</string>
   <!--SettingsActivity strings-->
   <string name="preferences">Configuració</string>
@@ -68,53 +64,69 @@
   <string name="default_view">Pantalla inicial per defecte</string>
   <string name="default_player">Reproductor per defecte</string>
   <string name="i18n_language">Idioma de l\'aplicació</string>
-  <string name="restart_effect">Reinicia l\'aplicació per tal d\'aplicar els canvis</string>
-  <string name="device_language">Idioma de l\'aparell</string>
-  <string name="stream_over_wifi_only">Streaming només per Wi-Fi</string>
+  <string name="restart_effect">Reinicieu l\'aplicació per aplicar els canvis</string>
+  <string name="device_language">Idioma del dispositiu</string>
+  <string name="stream_over_wifi_only">Transmissió només per Wi-Fi</string>
   <string name="internal_player">Intern</string>
   <string name="subtitle_color">Color</string>
   <string name="subtitle_size">Mida</string>
+  <string name="subtitle_stroke_color">Color del contorn</string>
+  <string name="subtitle_stroke_width">Amplada del contorn</string>
   <string name="subtitle_language">Idioma per defecte</string>
   <string name="no_default_set">No hi ha idioma per defecte</string>
   <string name="advanced">Avançat</string>
-  <string name="storage_location">Directori d\'emmagatzemament</string>
+  <string name="storage_location">Directori d\'emmagatzematge</string>
   <string name="storage_automatic">Automàtic</string>
-  <string name="storage_choose">Seleccionar directori</string>
+  <string name="storage_choose">Selecciona un directori</string>
   <string name="not_writable">No es pot escriure a aquest directori</string>
-  <string name="remove_cache">Eliminar el cache al tancar</string>
-  <string name="hw_acceleration">Acceleració per hardware</string>
-  <string name="hw_automatic">Automàtic</string>
-  <string name="hw_full">Ple</string>
-  <string name="hw_decoding">Només descodificar</string>
+  <string name="remove_cache">Elimina la memòria cau en tancar</string>
+  <string name="hw_acceleration">Acceleració per maquinari</string>
+  <string name="hw_automatic">Automàtica</string>
+  <string name="hw_full">Completa</string>
+  <string name="hw_decoding">Només descodificació</string>
   <string name="updates">Actualitzacions</string>
   <string name="auto_updates">Actualitzacions automàtiques</string>
-  <string name="check_for_updates">Comprovar si hi ha actualitzacions</string>
+  <string name="check_for_updates">Comprova si hi ha actualitzacions</string>
   <string name="last_check">Última comprovació</string>
-  <string name="about">Sobre</string>
+  <string name="about">Quant a</string>
   <string name="version">Versió</string>
   <string name="changelog">Registre de canvis</string>
-  <string name="tap_to_open">Pitja per a obrir</string>
+  <string name="tap_to_open">Toqueu per obrir</string>
   <string name="report_a_bug">Reporta un error</string>
   <string name="open_source_licenses">Llicències de codi obert</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Velocitat de baixada màxima</string>
+  <string name="upload_speed">Velocitat de pujada màxima</string>
+  <string name="max_connections">Connexions màximes totals</string>
+  <string name="dht_limit">Límit DHT</string>
+  <string name="unlimited">Sense límit</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Només Wi-Fi</string>
-  <string name="wifi_only_message">Només pots reproduir vídeos per Wi-Fi. Pots desactivar-ho a preferències si vols fer streaming a través d\'una connexió mòbil.</string>
+  <string name="wifi_only_message">Només es poden transmetre vídeos per Wi-Fi. Si voleu transmetre per una connexió mòbil podeu desactivar aquesta opció a la configuració.</string>
   <!--NavigationDrawer-->
-  <string name="share">Compartir</string>
-  <string name="drawer_open">Obrir el navegador</string>
-  <string name="drawer_close">Tancar el navegador</string>
+  <string name="share">Comparteix</string>
+  <string name="drawer_open">Obre el navegador</string>
+  <string name="drawer_close">Tanca el navegador</string>
   <string name="no_search_results">No s\'han trobat resultats</string>
   <!--About fragment-->
   <string name="about_message">Popcorn Time és el resultat de molts desenvolupadors i dissenyadors ajuntant un grapat d\'APIs per tal de simplificar
-⇥⇥tant com es pugui l\'experiència de veure pel·lícules torrent. Som d\'arreu del món. Ens encanten les nostres pelis. I noi, ens encanten les crispetes.</string>
+⇥⇥tant com es pugui l\'experiència de veure pel·lícules torrent. Som un projecte de codi obert. Som d\'arreu del món. Ens encanten
+⇥⇥les nostres pelis. I noi, ens encanten les crispetes.</string>
   <string name="website">Lloc web</string>
-  <string name="discuss">Fòrum</string>
+  <string name="forum">Fòrum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
-  <string name="blog">Blog</string>
+  <string name="blog">Bloc</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Has provat Popcorn Time per a Android? És fantàstic! https://popcorntime.io</string>
-  <string name="share_dialog_title">Compartir amb </string>
+  <string name="share_text">Heu provat Popcorn Time per a Android? És fantàstic! https://popcorntime.io</string>
+  <string name="share_dialog_title">Compartiu amb </string>
+  <!--Beam dialog-->
+  <string name="connected_to">Connectat a</string>
+  <string name="disconnect">Desconnecta</string>
+  <string name="select_beaming">Selecciona un dispositiu pel beaming</string>
+  <string name="starting_beam">Iniciant el beaming de vídeo</string>
+  <string name="beaming_failed">El vídeo no s\'ha pogut reproduir al teu dispositiu beaming. T\'agradaria intentar-ho de nou? L\'aplicació podria necessitar descarregar més parts abans que el teu dispositiu pugui reproduir el vídeo.</string>
+  <string name="the_video">El vídeo</string>
 </resources>

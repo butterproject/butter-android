@@ -1,50 +1,42 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~ This file is part of Popcorn Time.
-  ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Guardar</string>
   <string name="cancel">Cancelar</string>
   <string name="close">Fechar</string>
   <string name="ok">OK</string>
-  <string name="enabled">Ativado</string>
-  <string name="disabled">Desativado</string>
+  <string name="enabled">Ativo</string>
+  <string name="disabled">Inativo</string>
+  <string name="casting">Emissão</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Título, ano, atores</string>
   <string name="title_shows">Séries</string>
   <string name="title_movies">Filmes</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Categorias</string>
   <string name="search">Pesquisar</string>
   <string name="searching">A pesquisar...</string>
-  <string name="loading_data">A carregar dados...</string>
-  <string name="loading_details">A carregar detalhes...</string>
   <string name="no_data_found">Dados não encontrados</string>
   <string name="unknown_error">Aconteceu algo de errado</string>
   <!--DetailActivity strings-->
   <string name="minutes">min.</string>
+  <string name="read_more">Ler mais</string>
   <string name="watch_trailer">Ver trailer</string>
   <string name="disable_subs">Desativar legendas</string>
   <string name="no_subs">Sem legendas</string>
+  <string name="no_subs_available">Sem legendas disponíveis</string>
   <string name="subtitles">Legendas</string>
   <string name="quality">Qualidade</string>
   <string name="trailer">Trailer</string>
   <string name="season">Temporada</string>
   <string name="episode">Episódio</string>
+  <string name="specials">Especiais</string>
+  <string name="continuing">Em curso</string>
+  <string name="ended">Terminou</string>
+  <string name="aired">Data de emissão: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">A aguardar por torrent</string>
+  <string name="starting_buffering">A iniciar transferência</string>
   <string name="streaming_started">Reprodução iniciada</string>
   <string name="waiting_for_subtitles">A aguardar pelas legendas</string>
   <string name="seeds">sementes</string>
@@ -59,6 +51,10 @@
   <string name="fit_horizontal">Ajustar horizontalmente</string>
   <string name="fit_vertical">Ajustar verticalmente</string>
   <string name="original_size">Original</string>
+  <string name="comm_error">Erro de comunicação</string>
+  <string name="comm_message">Ocorreu um erro durante a transferência do vídeo. Poderá dever-se a problemas de rede ou de protocolos do Youtube. Por favor, tenta mais tarde.</string>
+  <string name="leave_videoplayer_title">Tens a certeza?</string>
+  <string name="leave_videoplayer_message">Tens a certeza que queres sair do leitor de vídeo? A reprodução de %s será terminada.</string>
   <!--TermsActivity strings-->
   <string name="accept">Aceitar</string>
   <string name="leave">Sair</string>
@@ -70,10 +66,12 @@
   <string name="i18n_language">Idioma da aplicação</string>
   <string name="restart_effect">Reinicia a aplicação para as alterações serem aplicadas</string>
   <string name="device_language">Idioma do dispositivo</string>
-  <string name="stream_over_wifi_only">Reproduzir apenas através de Wi-Fi</string>
+  <string name="stream_over_wifi_only">Reproduzir apenas por Wi-Fi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Cor</string>
   <string name="subtitle_size">Tamanho</string>
+  <string name="subtitle_stroke_color">Cor do contorno</string>
+  <string name="subtitle_stroke_width">Espessura do contorno</string>
   <string name="subtitle_language">Idioma predefinido</string>
   <string name="no_default_set">Sem idioma predefinido</string>
   <string name="advanced">Avançadas</string>
@@ -96,6 +94,12 @@
   <string name="tap_to_open">Toca para abrir</string>
   <string name="report_a_bug">Comunicar um erro</string>
   <string name="open_source_licenses">Licenças de código aberto</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Velocidade máxima de receção</string>
+  <string name="upload_speed">Velocidade máxima de envio</string>
+  <string name="max_connections">Máximo de ligações totais</string>
+  <string name="dht_limit">Limite DHT</string>
+  <string name="unlimited">Ilimitado</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Apenas podes reproduzir vídeo através de Wi-Fi. Desativa esta opção nas Definições se quiseres reproduzir através de uma rede móvel.</string>
@@ -109,7 +113,7 @@
 		experiência de ver um filme ou uma série tão simples quanto possível.\n\nSomos um projeto de código aberto. Somos do mundo inteiro.
 		Adoramos os nossos filmes. E acredita, adoramos pipocas.</string>
   <string name="website">Página Web</string>
-  <string name="discuss">Fórum</string>
+  <string name="forum">Fórum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
@@ -118,4 +122,10 @@
   <!--Share dialog-->
   <string name="share_text">Já experimentaste o Popcorn Time para Android? É espetacular! https://popcorntime.io/</string>
   <string name="share_dialog_title">Partilha com</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Ligado a</string>
+  <string name="disconnect">Desligar</string>
+  <string name="select_beaming">Escolhe o dispositivo para transmitir</string>
+  <string name="starting_beam">A iniciar transmissão de vídeo...</string>
+  <string name="beaming_failed">O vídeo não pôde ser reproduzido no teu dispositivo de transmissão. Queres tentar novamente? A aplicação pode precisar de receber mais dados até que o teu dispositivo seja capaz de reproduzir o vídeo.</string>
 </resources>

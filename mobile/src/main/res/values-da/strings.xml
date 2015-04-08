@@ -1,22 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~ This file is part of Popcorn Time.
-  ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="save">Gem</string>
   <string name="cancel">Annullér</string>
@@ -24,27 +7,36 @@
   <string name="ok">OK</string>
   <string name="enabled">Aktiveret</string>
   <string name="disabled">Deaktiveret</string>
+  <string name="casting">Udsende</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Titel, år, skuespillere</string>
   <string name="title_shows">Serier</string>
   <string name="title_movies">Film</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Genrer</string>
   <string name="search">Søg</string>
   <string name="searching">Søger...</string>
-  <string name="loading_data">Indlæser data...</string>
-  <string name="loading_details">Indlæser detaljer...</string>
   <string name="no_data_found">Ingen data fundet</string>
   <string name="unknown_error">Noget gik galt</string>
   <!--DetailActivity strings-->
   <string name="minutes">min.</string>
+  <string name="read_more">Læs mere</string>
   <string name="watch_trailer">Se trailer</string>
   <string name="disable_subs">Deaktivér undertekster</string>
   <string name="no_subs">Ingen undertekster</string>
+  <string name="no_subs_available">Ingen tilgængelige undertekster</string>
   <string name="subtitles">Undertekster</string>
   <string name="quality">Kvalitet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Sæson</string>
   <string name="episode">Episode</string>
+  <string name="specials">Særudsendelser</string>
+  <string name="continuing">Fortsætter</string>
+  <string name="ended">Slut</string>
+  <string name="aired">Sendt: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Venter på torrent</string>
+  <string name="starting_buffering">Gemmer i bufferen</string>
   <string name="streaming_started">Streaming startet</string>
   <string name="waiting_for_subtitles">Venter på undertekster</string>
   <string name="seeds">seeds</string>
@@ -59,6 +51,10 @@
   <string name="fit_horizontal">Tilpasset vandret</string>
   <string name="fit_vertical">Tilpasset lodret</string>
   <string name="original_size">Oprindelig </string>
+  <string name="comm_error">Kommunikationsfejl</string>
+  <string name="comm_message">Der opstod en fejl under hentningen af videoen. Det kan skyldes netværksproblemer eller YouTube-protokoller. Prøv venligst igen senere.</string>
+  <string name="leave_videoplayer_title">Er du sikker?</string>
+  <string name="leave_videoplayer_message">Er du sikker på at du vil forlade videoafspilleren? %s vil stoppe med at afspille.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accepter</string>
   <string name="leave">Forlad</string>
@@ -74,6 +70,8 @@
   <string name="internal_player">Indbygget</string>
   <string name="subtitle_color">Farve</string>
   <string name="subtitle_size">Størrelse</string>
+  <string name="subtitle_stroke_color">Omrids farve</string>
+  <string name="subtitle_stroke_width">Omrids bredde</string>
   <string name="subtitle_language">Standardsprog</string>
   <string name="no_default_set">Intet standardsprog</string>
   <string name="advanced">Avanceret</string>
@@ -96,6 +94,12 @@
   <string name="tap_to_open">Tryk for at åbne</string>
   <string name="report_a_bug">Reportér en fejl</string>
   <string name="open_source_licenses">Open-source licenser</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Højeste downloadhastighed</string>
+  <string name="upload_speed">Højeste uploadhastighed</string>
+  <string name="max_connections">Højeste antal forbindelser</string>
+  <string name="dht_limit">DHT-grænse</string>
+  <string name="unlimited">Ubegrænset</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan kun streame videoer via Wi-Fi. Du kan deaktivere dette i indstillinger, hvis du vil streame via mobilnetværk</string>
@@ -107,7 +111,7 @@
   <!--About fragment-->
   <string name="about_message">Popcorn Time! er resultatet af mange udviklere og designere, som har sammensat nogle API\'er for at gøre oplevelsen af at se torrent-film så enkelt som muligt.</string>
   <string name="website">Hjemmeside</string>
-  <string name="discuss">Discuss</string>
+  <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
@@ -117,4 +121,10 @@
   <string name="share_text">Har du prøvet Popcorn Time for Android? Det er vildt godt!
 https://popcorntime.io/</string>
   <string name="share_dialog_title">Del med</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Forbundet til</string>
+  <string name="disconnect">Afbryd</string>
+  <string name="select_beaming">Vælg enhed til beaming</string>
+  <string name="starting_beam">Starter beaming af video...</string>
+  <string name="beaming_failed">Videoen kunne ikke afspille på din beaming-enhed. Vil du prøve igen? Appen skal måske downloade flere dele før din enhed er i stand til at afspille videoen.</string>
 </resources>
