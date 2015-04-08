@@ -112,6 +112,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
     @Override
     protected void onResume() {
         super.onResume();
+        String title = mNavigationDrawerFragment.getCurrentItem().getTitle();
+        setTitle(null != title ? title : getString(R.string.app_name));
         supportInvalidateOptionsMenu();
     }
 
