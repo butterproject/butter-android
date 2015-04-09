@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import pct.droid.R;
@@ -59,7 +58,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if(mHasGenreTabs > 0 && position == 0) {
+        if (mHasGenreTabs > 0 && position == 0) {
             return PopcornApplication.getAppContext().getString(R.string.genres).toUpperCase(LocaleUtils.getCurrentAsLocale());
         }
         position -= mHasGenreTabs;
@@ -70,17 +69,17 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment frag;
 
-        if(mHasGenreTabs > 0 && position == 0) {
-            if(mGenreFragment != null)
+        if (mHasGenreTabs > 0 && position == 0) {
+            if (mGenreFragment != null)
                 return mGenreFragment;
             mGenreFragment = frag = MediaGenreSelectionFragment.newInstance(mProvider, new MediaGenreSelectionFragment.Listener() {
                 @Override
                 public void onGenreSelected(String genre) {
                     mGenre = genre;
                     mProvider.cancel();
-                    for(int i = 0; i < getCount(); i++) {
+                    for (int i = 0; i < getCount(); i++) {
                         MediaListFragment mediaListFragment = getMediaListFragment(i);
-                        if(mediaListFragment != null)
+                        if (mediaListFragment != null)
                             mediaListFragment.changeGenre(genre);
                     }
                 }
@@ -102,7 +101,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
             mFragTags.put(position, tag);
         }
 
-        if(obj instanceof MediaGenreSelectionFragment && mGenreFragment != null) {
+        if (obj instanceof MediaGenreSelectionFragment && mGenreFragment != null) {
             return mGenreFragment;
         }
 
@@ -110,7 +109,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     }
 
     public MediaListFragment getMediaListFragment(int position) {
-        if(mFragTags.size() > position) {
+        if (mFragTags.size() > position) {
             String tag = mFragTags.get(position);
             if (tag != null) {
                 Fragment frag = mFragmentManager.findFragmentByTag(tag);

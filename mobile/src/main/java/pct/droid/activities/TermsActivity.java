@@ -27,7 +27,7 @@ import pct.droid.R;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.utils.ToolbarUtils;
 
-public class TermsActivity extends BaseActivity {
+public class TermsActivity extends PopcornBaseActivity {
 
     public static String TERMS_ACCEPTED = "terms_accepted";
 
@@ -39,7 +39,7 @@ public class TermsActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_terms);
         setSupportActionBar(toolbar);
 
-		ToolbarUtils.updateToolbarHeight(this,toolbar);
+        ToolbarUtils.updateToolbarHeight(this, toolbar);
     }
 
     public void acceptClick(View v) {

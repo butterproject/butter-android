@@ -106,7 +106,7 @@ public class MediaGenreSelectionFragment extends Fragment {
         @Override
         public void onItemSelect(View v, Genre item, int position) {
             mSelectedPos = position;
-            if(mListener != null)
+            if (mListener != null)
                 mListener.onGenreSelected(item.getKey());
         }
     };

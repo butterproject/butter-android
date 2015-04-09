@@ -30,7 +30,7 @@ import pct.droid.R;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.fragments.StreamLoadingFragment;
 
-public class StreamLoadingActivity extends BaseActivity implements StreamLoadingFragment.FragmentListener {
+public class StreamLoadingActivity extends PopcornBaseActivity implements StreamLoadingFragment.FragmentListener {
 
     public final static String EXTRA_INFO = "mInfo";
 
@@ -44,12 +44,12 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
         return i;
     }
 
-    public static Intent startActivity(Activity activity, StreamInfo info, Pair<View,String>... elements) {
+    public static Intent startActivity(Activity activity, StreamInfo info, Pair<View, String>... elements) {
         Intent i = new Intent(activity, StreamLoadingActivity.class);
         i.putExtra(EXTRA_INFO, info);
 
         ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(activity,elements);
+                ActivityOptionsCompat.makeSceneTransitionAnimation(activity, elements);
         ActivityCompat.startActivity(activity, i, options.toBundle());
         return i;
     }
@@ -70,13 +70,22 @@ public class StreamLoadingActivity extends BaseActivity implements StreamLoading
     }
 
     @Override
+    protected void onTorrentServiceConnected() {
+        super.onTorrentServiceConnected();
+
+        if (null != mFragment) {
+            mFragment.onTorrentServiceConnected();
+        }
+    }
+
+    @Override
     public StreamInfo getStreamInformation() {
         return mInfo;
     }
 
     @Override
     public void onBackPressed() {
-        if(mFragment != null) {
+        if (mFragment != null) {
             mFragment.cancelStream();
         }
         super.onBackPressed();

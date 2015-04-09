@@ -83,40 +83,40 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mInputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mPairingAlertDialog =
-            new AlertDialog.Builder(context)
-                .setTitle(R.string.pairing_tv)
-                .setMessage(R.string.confirm_tv)
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create();
+                new AlertDialog.Builder(context)
+                        .setTitle(R.string.pairing_tv)
+                        .setMessage(R.string.confirm_tv)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
 
         mPairingCodeDialog =
-            new AlertDialog.Builder(context)
-                .setTitle(R.string.enter_pairing_code)
-                .setView(mInput)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        if (mCurrentDevice != null) {
-                            String value = mInput.getText().toString().trim();
-                            mCurrentDevice.sendPairingKey(value);
-                            mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
-                        }
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                        mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
-                    }
-                })
-                .create();
+                new AlertDialog.Builder(context)
+                        .setTitle(R.string.enter_pairing_code)
+                        .setView(mInput)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                if (mCurrentDevice != null) {
+                                    String value = mInput.getText().toString().trim();
+                                    mCurrentDevice.sendPairingKey(value);
+                                    mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                                mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
+                            }
+                        })
+                        .create();
 
         CastService.setApplicationID(Constants.CAST_ID);
         DiscoveryManager.init(PopcornApplication.getAppContext());
@@ -151,9 +151,9 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     public Map<String, ConnectableDevice> getDevices() {
         Map<String, ConnectableDevice> devices = mDiscoveryManager.getCompatibleDevices();
-        for(String key : devices.keySet()) {
+        for (String key : devices.keySet()) {
             ConnectableDevice device = devices.get(key);
-            if(device.getServices().size() <= 0) {
+            if (device.getServices().size() <= 0) {
                 devices.remove(key);
             }
         }
@@ -177,7 +177,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public VolumeControl getVolumeControl() {
-        if(mCurrentDevice != null && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
+        if (mCurrentDevice != null && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
             return mCurrentDevice.getCapability(VolumeControl.class);
         }
         return null;
@@ -217,7 +217,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         String title = "";
         String imageUrl = "";
         Media media = info.getMedia();
-        if(media != null) {
+        if (media != null) {
             if (info.isShow()) {
                 Show show = info.getShow();
                 title = show.title == null ? "" : show.title;
@@ -231,28 +231,28 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         imageUrl = imageUrl == null ? "https://popcorntime.io/images/header-logo.png" : imageUrl;
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
-        if(mCurrentDevice != null)
+        if (mCurrentDevice != null)
             mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
                 @Override
                 public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                     mLaunchSession = object.launchSession;
-                    if(listener != null)
+                    if (listener != null)
                         listener.onSuccess(object);
                 }
-    
+
                 @Override
                 public void onError(ServiceCommandError error) {
                     Timber.e(error.getMessage());
-                    if(listener != null)
+                    if (listener != null)
                         listener.onError(error);
                 }
             });
     }
 
     public void connect(ConnectableDevice castingDevice) {
-        if(castingDevice == mCurrentDevice) return;
+        if (castingDevice == mCurrentDevice) return;
 
-        if(mCurrentDevice != null) {
+        if (mCurrentDevice != null) {
             mCurrentDevice.removeListener(this);
             mCurrentDevice.disconnect();
             mConnected = false;
@@ -260,14 +260,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         mCurrentDevice = castingDevice;
 
-        if(castingDevice != null) {
+        if (castingDevice != null) {
             mCurrentDevice.addListener(this);
             mCurrentDevice.connect();
         }
     }
 
     public void disconnect() {
-        if(mCurrentDevice != null) {
+        if (mCurrentDevice != null) {
             mConnected = false;
 
             mCurrentDevice.disconnect();
@@ -276,7 +276,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         mCurrentDevice = null;
 
-        if(mListener != null) {
+        if (mListener != null) {
             mListener.updateBeamIcon();
         }
     }
@@ -300,14 +300,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         }
 
         mConnected = true;
-        if(mListener != null)
+        if (mListener != null)
             mListener.updateBeamIcon();
     }
 
     @Override
     public void onDeviceDisconnected(ConnectableDevice device) {
         mConnected = false;
-        if(mListener != null)
+        if (mListener != null)
             mListener.updateBeamIcon();
     }
 
@@ -327,7 +327,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     @Override
-    public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) { }
+    public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {
+    }
 
     @Override
     public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) {
@@ -336,7 +337,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     @Override
     public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
-        if(mListener != null)
+        if (mListener != null)
             mListener.updateBeamIcon();
     }
 
@@ -347,12 +348,12 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     @Override
     public void onDeviceRemoved(DiscoveryManager manager, ConnectableDevice device) {
-        if(device == mCurrentDevice) {
+        if (device == mCurrentDevice) {
             mConnected = false;
             mCurrentDevice = null;
         }
 
-        if(mListener != null)
+        if (mListener != null)
             mListener.updateBeamIcon();
     }
 

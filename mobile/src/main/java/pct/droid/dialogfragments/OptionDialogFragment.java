@@ -27,7 +27,7 @@ public class OptionDialogFragment extends DialogFragment {
                 .setPositiveButton(getArguments().getString(POS_BUT), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(mListener != null)
+                        if (mListener != null)
                             mListener.onSelectionPositive();
                         dialog.dismiss();
                     }
@@ -35,7 +35,7 @@ public class OptionDialogFragment extends DialogFragment {
                 .setNegativeButton(getArguments().getString(NEG_BUT), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(mListener != null)
+                        if (mListener != null)
                             mListener.onSelectionNegative();
                         dialog.dismiss();
                     }
@@ -65,6 +65,7 @@ public class OptionDialogFragment extends DialogFragment {
 
     public interface Listener {
         public void onSelectionPositive();
+
         public void onSelectionNegative();
     }
 

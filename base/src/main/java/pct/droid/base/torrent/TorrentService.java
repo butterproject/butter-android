@@ -84,7 +84,7 @@ public class TorrentService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mWakeLock != null && mWakeLock.isHeld())
+        if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
         mThread.interrupt();
     }
@@ -102,7 +102,7 @@ public class TorrentService extends Service {
     }
 
     private void start() {
-        if(mThread != null) return;
+        if (mThread != null) return;
 
         // TODO: Add notification
 
@@ -127,7 +127,7 @@ public class TorrentService extends Service {
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
-        if(mHandler == null || mIsStreaming) return;
+        if (mHandler == null || mIsStreaming) return;
 
         mIsCanceled = false;
 
@@ -156,7 +156,7 @@ public class TorrentService extends Service {
                 File torrentFileDir = new File(saveDirectory, "files");
                 File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
 
-                if(!torrentFile.exists()) {
+                if (!torrentFile.exists()) {
                     int fileCreationTries = 0;
                     while (fileCreationTries < 4) {
                         try {
@@ -194,7 +194,7 @@ public class TorrentService extends Service {
                     }
                 }
 
-                if(!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
+                if (!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
                     return;
                 }
 
@@ -221,7 +221,7 @@ public class TorrentService extends Service {
 
                 Timber.d("Video location: %s", mCurrentVideoLocation);
 
-                for(final Listener listener : mListener) {
+                for (final Listener listener : mListener) {
                     ThreadUtils.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -234,7 +234,7 @@ public class TorrentService extends Service {
     }
 
     public void stopStreaming() {
-        if(mWakeLock != null && mWakeLock.isHeld())
+        if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
         mIsCanceled = true;
@@ -275,11 +275,11 @@ public class TorrentService extends Service {
     }
 
     private boolean getTorrentFile(String torrentUrl, File destination) {
-        if(torrentUrl.startsWith("magnet")) {
+        if (torrentUrl.startsWith("magnet")) {
             Downloader d = new Downloader(mTorrentSession);
 
             Timber.d("Waiting for nodes in DHT");
-            if(mDHT.nodes() < 1) {
+            if (mDHT.nodes() < 1) {
                 mDHT.start();
                 mDHT.waitNodes(1);
             }
@@ -325,8 +325,11 @@ public class TorrentService extends Service {
 
     public interface Listener {
         public void onStreamStarted();
+
         public void onStreamError(Exception e);
+
         public void onStreamReady(File videoLocation);
+
         public void onStreamProgress(DownloadStatus status);
     }
 
@@ -342,20 +345,20 @@ public class TorrentService extends Service {
         public void blockFinished(BlockFinishedAlert alert) {
             super.blockFinished(alert);
             TorrentHandle th = alert.getHandle();
-            if(!th.getInfoHash().equals(mCurrentTorrent.getInfoHash())) return;
+            if (!th.getInfoHash().equals(mCurrentTorrent.getInfoHash())) return;
             TorrentStatus status = th.getStatus();
             final float progress = status.getProgress() * 100;
             int floorProgress = (int) Math.floor(progress);
-            if(floorProgress % 5 == 0 && mLastLoggedProgress != floorProgress) {
+            if (floorProgress % 5 == 0 && mLastLoggedProgress != floorProgress) {
                 mLastLoggedProgress = (int) Math.floor(progress);
                 Timber.d("Torrent progress: %s", progress);
             }
             int bufferProgress = (int) Math.floor(progress * 12);
-            if(bufferProgress > 100) bufferProgress = 100;
+            if (bufferProgress > 100) bufferProgress = 100;
             final int seeds = status.getNumSeeds();
             final int downloadSpeed = status.getDownloadPayloadRate();
 
-            for(final Listener listener : mListener) {
+            for (final Listener listener : mListener) {
                 final int finalBufferProgress = bufferProgress;
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
@@ -365,10 +368,10 @@ public class TorrentService extends Service {
                 });
             }
 
-            if(bufferProgress == 100 && !mReady) {
+            if (bufferProgress == 100 && !mReady) {
                 mReady = true;
                 Timber.d("onStreamReady");
-                for(final Listener listener : mListener) {
+                for (final Listener listener : mListener) {
                     ThreadUtils.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

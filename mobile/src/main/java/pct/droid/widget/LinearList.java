@@ -11,32 +11,27 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class LinearList extends LinearLayout
-{
+public class LinearList extends LinearLayout {
     private Adapter mAdapter;
     private Observer mObserver = new Observer(this);
     private OnClickListener mOnItemClickListener;
 
-    public LinearList(Context context)
-    {
+    public LinearList(Context context) {
         super(context);
         setOrientation(VERTICAL);
     }
 
-    public LinearList(Context context, AttributeSet attrs)
-    {
+    public LinearList(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
     }
 
-    public LinearList(Context context, AttributeSet attrs, int defStyle)
-    {
+    public LinearList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setOrientation(VERTICAL);
     }
 
-    public void setAdapter(Adapter adapter)
-    {
+    public void setAdapter(Adapter adapter) {
         if (mAdapter != null)
             mAdapter.unregisterDataSetObserver(mObserver);
 
@@ -50,18 +45,15 @@ public class LinearList extends LinearLayout
         mOnItemClickListener = onItemClickListener;
     }
 
-    private class Observer extends DataSetObserver
-    {
+    private class Observer extends DataSetObserver {
         LinearList mContext;
 
-        public Observer(LinearList context)
-        {
+        public Observer(LinearList context) {
             mContext = context;
         }
 
         @Override
-        public void onChanged()
-        {
+        public void onChanged() {
             List<View> oldViews = new ArrayList<>(mContext.getChildCount());
 
             for (int i = 0; i < mContext.getChildCount(); i++)
@@ -71,8 +63,7 @@ public class LinearList extends LinearLayout
 
             mContext.removeAllViews();
 
-            for (int i = 0; i < mContext.mAdapter.getCount(); i++)
-            {
+            for (int i = 0; i < mContext.mAdapter.getCount(); i++) {
                 View convertView = iter.hasNext() ? iter.next() : null;
                 convertView = mContext.mAdapter.getView(i, convertView, mContext);
                 convertView.setOnClickListener(mOnItemClickListener);
@@ -83,8 +74,7 @@ public class LinearList extends LinearLayout
         }
 
         @Override
-        public void onInvalidated()
-        {
+        public void onInvalidated() {
             mContext.removeAllViews();
             super.onInvalidated();
         }

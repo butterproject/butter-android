@@ -28,7 +28,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -173,12 +172,12 @@ public class PopcornUpdater extends Observable {
             notifyObservers(STATUS_CHECKING);
 
             final String abi;
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 abi = Build.CPU_ABI.toLowerCase(Locale.US);
             } else {
                 abi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
             }
-            
+
             final String variantStr;
             if (mPackageName.contains("tv")) {
                 variantStr = "tv";
@@ -187,7 +186,7 @@ public class PopcornUpdater extends Observable {
             }
 
             final String channelStr;
-            if(BuildConfig.BUILD_TYPE.equals("release")) {
+            if (BuildConfig.BUILD_TYPE.equals("release")) {
                 channelStr = "release";
             } else {
                 channelStr = BuildConfig.GIT_BRANCH;
@@ -218,7 +217,7 @@ public class PopcornUpdater extends Observable {
                             }
 
                             UpdaterData.Arch channel = null;
-                            if(variant.containsKey(channelStr) && variant.get(channelStr).containsKey(abi)) {
+                            if (variant.containsKey(channelStr) && variant.get(channelStr).containsKey(abi)) {
                                 channel = variant.get(channelStr).get(abi);
                             }
 

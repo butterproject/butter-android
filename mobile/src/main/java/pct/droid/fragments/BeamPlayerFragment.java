@@ -19,7 +19,6 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
@@ -54,7 +53,6 @@ import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
@@ -126,20 +124,20 @@ public class BeamPlayerFragment extends Fragment {
         mLoadingDialog.show(getChildFragmentManager(), "overlay_fragment");
 
         mStreamInfo = mActivity.getInfo();
-        if(mStreamInfo.isShow()) {
+        if (mStreamInfo.isShow()) {
             mMedia = mStreamInfo.getShow();
         } else {
             mMedia = mStreamInfo.getMedia();
         }
 
-        if(mMedia == null) {
+        if (mMedia == null) {
             mMedia = new Media(null, null);
             mMedia.color = getResources().getColor(R.color.primary);
         }
 
         LayerDrawable progressDrawable;
         LayerDrawable volumeDrawable;
-        if(VersionUtils.isLollipop()) {
+        if (VersionUtils.isLollipop()) {
             progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.progress_horizontal_material, null);
             volumeDrawable = (LayerDrawable) getResources().getDrawable(android.R.drawable.progress_horizontal, null);
         } else {
@@ -157,7 +155,7 @@ public class BeamPlayerFragment extends Fragment {
         mVolumeBar.setProgressDrawable(volumeDrawable);
         mVolumeBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
 
-        if(!VersionUtils.isJellyBean()) {
+        if (!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
@@ -172,25 +170,26 @@ public class BeamPlayerFragment extends Fragment {
                         }
 
                         @Override
-                        public void onError() {}
+                        public void onError() {
+                        }
                     });
         }
 
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mActivity.getSupportActionBar().setTitle("");
 
-        if(!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
+        if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
             mHasSeekControl = false;
             mSeekBar.setVisibility(View.INVISIBLE);
         }
 
-        if(!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
+        if (!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
             mHasVolumeControl = false;
             mPanel.setEnabled(false);
             mPanel.setTouchEnabled(false);
         }
 
-        if(!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
+        if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
             mPlayButton.setEnabled(false);
         }
 
@@ -206,13 +205,13 @@ public class BeamPlayerFragment extends Fragment {
                 mMediaControl.subscribePlayState(mPlayStateListener);
                 mMediaControl.getPlayState(mPlayStateListener);
 
-                if(mHasVolumeControl) {
+                if (mHasVolumeControl) {
                     mVolumeControl = BeamManager.getInstance(getActivity()).getVolumeControl();
                     mVolumeControl.subscribeVolume(mVolumeListener);
                     mVolumeControl.getVolume(mVolumeListener);
                 }
 
-                if(mHasSeekControl) {
+                if (mHasSeekControl) {
                     startUpdating();
                     mMediaControl.getDuration(mDurationListener);
                 }
@@ -221,8 +220,8 @@ public class BeamPlayerFragment extends Fragment {
             @Override
             public void onError(ServiceCommandError error) {
                 Timber.e(error.getCause(), error.getMessage());
-                if(mRetries > 2) {
-                    if(mLoadingDialog.isVisible() && !getActivity().isFinishing()) {
+                if (mRetries > 2) {
+                    if (mLoadingDialog.isVisible() && !getActivity().isFinishing()) {
                         mLoadingDialog.dismiss();
                     }
 
@@ -249,7 +248,7 @@ public class BeamPlayerFragment extends Fragment {
 
     @OnClick(R.id.play_button)
     public void playPauseClick(View v) {
-        if(mIsPlaying) {
+        if (mIsPlaying) {
             mIsPlaying = false;
             mMediaControl.pause(null);
         } else {
@@ -262,14 +261,14 @@ public class BeamPlayerFragment extends Fragment {
     @OnClick(R.id.forward_button)
     public void forwardClick(View v) {
         int newProgress = mSeekBar.getProgress() + 10000;
-        if(newProgress > mTotalTimeDuration) newProgress = (int) mTotalTimeDuration;
+        if (newProgress > mTotalTimeDuration) newProgress = (int) mTotalTimeDuration;
         mMediaControl.seek(newProgress, null);
     }
 
     @OnClick(R.id.backward_button)
     public void backwardClick(View v) {
         int newProgress = mSeekBar.getProgress() - 10000;
-        if(newProgress < 0) newProgress = 0;
+        if (newProgress < 0) newProgress = 0;
         mMediaControl.seek(newProgress, null);
     }
 
@@ -278,10 +277,10 @@ public class BeamPlayerFragment extends Fragment {
     }
 
     private void stopUpdating() {
-        if(mTask != null) {
+        if (mTask != null) {
             mTask.cancel(false);
         }
-        if(mExecutor != null) {
+        if (mExecutor != null) {
             for (Runnable r : mExecutor.getQueue()) {
                 mExecutor.remove(r);
             }
@@ -289,7 +288,7 @@ public class BeamPlayerFragment extends Fragment {
     }
 
     private void closePlayer() {
-        if(mActivity != null && mActivity.getService() != null) {
+        if (mActivity != null && mActivity.getService() != null) {
             mActivity.getService().stopStreaming();
         }
         mBeamManager.stopVideo();
@@ -302,18 +301,18 @@ public class BeamPlayerFragment extends Fragment {
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
             mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
 
-            if(mLoadingDialog.isVisible() && mIsPlaying && !getActivity().isFinishing()) {
+            if (mLoadingDialog.isVisible() && mIsPlaying && !getActivity().isFinishing()) {
                 mLoadingDialog.dismiss();
             }
 
-            if(mIsPlaying) {
+            if (mIsPlaying) {
                 mMediaControl.getDuration(mDurationListener);
             }
         }
 
         @Override
         public void onError(ServiceCommandError error) {
-            if(mLoadingDialog.isVisible() && error.getCode() == 500 && !getActivity().isFinishing()) {
+            if (mLoadingDialog.isVisible() && error.getCode() == 500 && !getActivity().isFinishing()) {
                 mLoadingDialog.dismiss();
 
                 OptionDialogFragment.show(mActivity, getChildFragmentManager(), R.string.unknown_error, R.string.beaming_failed, android.R.string.yes, android.R.string.no, new OptionDialogFragment.Listener() {
@@ -332,7 +331,9 @@ public class BeamPlayerFragment extends Fragment {
     };
 
     private MediaControl.DurationListener mDurationListener = new MediaControl.DurationListener() {
-        @Override public void onError(ServiceCommandError error) { }
+        @Override
+        public void onError(ServiceCommandError error) {
+        }
 
         @Override
         public void onSuccess(Long duration) {
@@ -349,7 +350,8 @@ public class BeamPlayerFragment extends Fragment {
         }
 
         @Override
-        public void onError(ServiceCommandError error) { }
+        public void onError(ServiceCommandError error) {
+        }
     };
 
     private Runnable mPositionRunnable = new Runnable() {
@@ -358,10 +360,10 @@ public class BeamPlayerFragment extends Fragment {
             mMediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long position) {
-                    if(!mSeeking && !mIsUserSeeking)
+                    if (!mSeeking && !mIsUserSeeking)
                         mSeekBar.setProgress(position.intValue());
 
-                    if(mLoadingDialog.isVisible() && !getActivity().isFinishing() && position > 0) {
+                    if (mLoadingDialog.isVisible() && !getActivity().isFinishing() && position > 0) {
                         mLoadingDialog.dismiss();
                     }
                 }
@@ -409,8 +411,13 @@ public class BeamPlayerFragment extends Fragment {
     };
 
     public SeekBar.OnSeekBarChangeListener mVolumeBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override public void onStopTrackingTouch(android.widget.SeekBar seekBar) { }
-        @Override public void onStartTrackingTouch(android.widget.SeekBar seekBar) { }
+        @Override
+        public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStartTrackingTouch(android.widget.SeekBar seekBar) {
+        }
 
         @Override
         public void onProgressChanged(android.widget.SeekBar seekBar, int position, boolean fromUser) {

@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -87,7 +86,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
         ButterKnife.inject(this, mRoot);
-        if(VersionUtils.isJellyBean() && container != null) {
+        if (VersionUtils.isJellyBean() && container != null) {
             int minHeight = container.getMinimumHeight() + PixelUtils.getPixelsFromDp(mActivity, 48);
             mRoot.setMinimumHeight(minHeight);
             mViewPager.setMinimumHeight(minHeight);
@@ -96,7 +95,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
         mIsTablet = mCoverImage != null;
 
         List<Fragment> fragments = new ArrayList<>();
-        if(mIsTablet) {
+        if (mIsTablet) {
             Double rating = Double.parseDouble(sShow.rating);
             mTitle.setText(sShow.title);
             mRating.setProgress(rating.intValue());
@@ -163,13 +162,13 @@ public class ShowDetailFragment extends BaseDetailFragment {
         Collections.sort(availableSeasons);
 
         boolean hasSpecial = availableSeasons.indexOf(0) > -1;
-        if(hasSpecial)
+        if (hasSpecial)
             availableSeasons.remove(availableSeasons.indexOf(0));
 
-        for(int seasonInt : availableSeasons) {
+        for (int seasonInt : availableSeasons) {
             fragments.add(ShowDetailSeasonFragment.newInstance(sShow, seasonInt));
         }
-        if(hasSpecial)
+        if (hasSpecial)
             fragments.add(ShowDetailSeasonFragment.newInstance(sShow, 0));
 
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
@@ -207,8 +206,8 @@ public class ShowDetailFragment extends BaseDetailFragment {
     private ObservableParallaxScrollView.Listener mOnScrollListener = new ObservableParallaxScrollView.Listener() {
         @Override
         public void onScroll(int scrollY, ObservableParallaxScrollView.Direction direction) {
-            if(!mIsTablet) {
-                if(scrollY > 0) {
+            if (!mIsTablet) {
+                if (scrollY > 0) {
                     int headerHeight = mActivity.getHeaderHeight();
                     if (scrollY < headerHeight) {
                         float alpha = 1.0f - ((float) scrollY / (float) headerHeight);

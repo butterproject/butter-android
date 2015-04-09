@@ -51,7 +51,6 @@ import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
-import timber.log.Timber;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
@@ -116,7 +115,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
           /* attempt to load background image */
         if (null != info) {
             Media media = info.isShow() ? info.getShow() : info.getMedia();
-            if(media != null) {
+            if (media != null) {
                 String url = media.image;
                 if (PixelUtils.isTablet(getActivity())) {
                     url = media.headerImage;
@@ -201,7 +200,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     @DebugLog
     protected void startPlayerActivity(String location, int resumePosition) {
-        if(getActivity() != null && !mPlayerStarted) {
+        if (getActivity() != null && !mPlayerStarted) {
             mStreamInfo.setVideoLocation(location);
             boolean playingExternal = false;
             if (BeamManager.getInstance(mContext).isConnected()) {
@@ -213,7 +212,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 }
             }
 
-            if(!playingExternal)
+            if (!playingExternal)
                 getActivity().finish();
         }
     }

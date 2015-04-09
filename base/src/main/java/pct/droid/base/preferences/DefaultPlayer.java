@@ -24,7 +24,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,6 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class DefaultPlayer {
@@ -87,7 +85,7 @@ public class DefaultPlayer {
         Context context = PopcornApplication.getAppContext();
         String[] playerData = PrefUtils.get(context, Prefs.DEFAULT_PLAYER, "").split(DELIMITER);
         if (playerData.length > 1) {
-            if(null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
+            if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
                 BeamServer.setCurrentSubs(subsLocation);
             }

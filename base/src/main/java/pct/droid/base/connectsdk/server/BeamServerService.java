@@ -23,7 +23,6 @@ import android.os.IBinder;
 
 import pct.droid.base.Constants;
 import pct.droid.base.utils.NetworkUtils;
-import pct.droid.base.utils.PrefUtils;
 import timber.log.Timber;
 
 public class BeamServerService extends Service {
@@ -32,8 +31,9 @@ public class BeamServerService extends Service {
 
     /**
      * Start service and server
-     * @param intent Intent used for start
-     * @param flags Flags
+     *
+     * @param intent  Intent used for start
+     * @param flags   Flags
      * @param startId Id
      * @return Starting sticky or not?
      */

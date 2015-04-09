@@ -17,8 +17,6 @@
 
 package pct.droid.base.providers.subs;
 
-import android.os.Parcel;
-
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -162,7 +160,7 @@ public class YSubsProvider extends SubsProvider {
         }
 
         private String[] getKeys(HashMap<String, ?> map) {
-            if(map != null && map.size() > 0) {
+            if (map != null && map.size() > 0) {
                 return map.keySet().toArray(new String[map.size()]);
             }
             return new String[0];

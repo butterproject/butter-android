@@ -28,7 +28,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.R;
 import pct.droid.adapters.models.Option;
 
 public class FileArrayAdapter extends ArrayAdapter<Option> {
@@ -48,8 +47,8 @@ public class FileArrayAdapter extends ArrayAdapter<Option> {
         return mItems.get(i);
     }
 
-     @Override
-     public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(id, null);
@@ -61,18 +60,19 @@ public class FileArrayAdapter extends ArrayAdapter<Option> {
 
         Option option = mItems.get(position);
         if (option != null) {
-               holder.text1.setText(option.getName());
-               holder.text2.setText(option.getData());
+            holder.text1.setText(option.getName());
+            holder.text2.setText(option.getData());
         }
 
         return convertView;
-     }
+    }
 
     class ViewHolder {
         @InjectView(android.R.id.text1)
         TextView text1;
         @InjectView(android.R.id.text2)
         TextView text2;
+
         public ViewHolder(View v) {
             ButterKnife.inject(this, v);
         }

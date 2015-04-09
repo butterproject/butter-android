@@ -100,7 +100,7 @@ public class GenreAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
 
-        if(mSelectedPos == position && mSelectedItem == null)
+        if (mSelectedPos == position && mSelectedItem == null)
             mSelectedItem = viewHolder.itemView;
 
         viewHolder.itemView.setBackgroundColor(mSelectedPos == position ? mSelectedColor : mNormalColor);

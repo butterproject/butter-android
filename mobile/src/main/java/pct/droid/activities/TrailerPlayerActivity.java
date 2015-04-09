@@ -39,7 +39,7 @@ import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.VideoPlayerFragment;
 
-public class TrailerPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
+public class TrailerPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
     private StreamInfo mStreamInfo;
     private Media mMedia;
