@@ -124,8 +124,6 @@
                     android:duplicateParentState="false"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:layout_marginLeft="-16dp"
-                    android:layout_marginRight="-16dp"
                     android:layout_alignParentTop="true" />
 
             </RelativeLayout>
