@@ -18,10 +18,7 @@
 package pct.droid.base.fragments;
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
@@ -35,6 +32,7 @@ import java.util.Map;
 
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
+import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -102,21 +100,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                 loadSubs();
             }
         });
-    }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        TorrentService.bindHere(getActivity(), mServiceConnection);
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mService != null)
-            getActivity().unbindService(mServiceConnection);
+        if (!(getActivity() instanceof TorrentBaseActivity)) return;
     }
 
     @Override
@@ -125,6 +110,19 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         if (activity instanceof FragmentListener) mCallback = (FragmentListener) activity;
     }
 
+    public void onTorrentServiceConnected() {
+        mService = ((TorrentBaseActivity) getActivity()).getTorrentService();
+        mService.addListener(this);
+        startStream();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (null != mService) {
+            mService.removeListener(this);
+        }
+    }
 
     /**
      * Update the view based on a state.
@@ -194,24 +192,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         setState(State.WAITING_TORRENT);
     }
 
-
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
-            mService.addListener(BaseStreamLoadingFragment.this);
-
-            //kicks off the torrent stream
-            startStream();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-    };
-
-
     /**
      * Starts the torrent service streaming a torrent url
      */
@@ -246,9 +226,9 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     @DebugLog
     public void onStreamError(final Exception e) {
-        if(e.getMessage().equals("Write error")) {
+        if (e.getMessage().equals("Write error")) {
             setState(State.ERROR, getString(R.string.error_files));
-        } else if(e.getMessage().equals("Torrent error")) {
+        } else if (e.getMessage().equals("Torrent error")) {
             setState(State.ERROR, getString(R.string.torrent_failed));
         } else {
             setState(State.ERROR, getString(R.string.unknown_error));
@@ -321,27 +301,27 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     mSubsStatus = SubsStatus.SUCCESS;
                 }
             } else {
-			    mSubsProvider = data.getSubsProvider();
-				if (null != mSubsProvider) {
-					SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
-						@Override
-						public void onSuccess(Map<String, String> items) {
-							data.subtitles = items;
-							mSubsStatus = SubsStatus.SUCCESS;
-						}
+                mSubsProvider = data.getSubsProvider();
+                if (null != mSubsProvider) {
+                    SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
+                        @Override
+                        public void onSuccess(Map<String, String> items) {
+                            data.subtitles = items;
+                            mSubsStatus = SubsStatus.SUCCESS;
+                        }
 
-						@Override
-						public void onFailure(Exception e) {
-							mSubsStatus = SubsStatus.FAILURE;
-						}
-					};
+                        @Override
+                        public void onFailure(Exception e) {
+                            mSubsStatus = SubsStatus.FAILURE;
+                        }
+                    };
 
-					if (mStreamInfo.isShow()) {
-						mSubsProvider.getList(mStreamInfo.getShow(), (Episode) data, subsCallback);
-					} else {
-						mSubsProvider.getList((Movie) data, subsCallback);
-					}
-				}
+                    if (mStreamInfo.isShow()) {
+                        mSubsProvider.getList(mStreamInfo.getShow(), (Episode) data, subsCallback);
+                    } else {
+                        mSubsProvider.getList((Movie) data, subsCallback);
+                    }
+                }
             }
         }
     }

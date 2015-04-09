@@ -19,10 +19,7 @@ package pct.droid.base.providers.meta;
 
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-
 import pct.droid.base.providers.BaseProvider;
-import pct.droid.base.providers.media.models.Media;
 
 public abstract class MetaProvider extends BaseProvider {
     public static final String META_CALL = "meta_http_call";

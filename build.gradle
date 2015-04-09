@@ -1,6 +1,5 @@
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -43,11 +42,11 @@ allprojects {
             project.android.applicationVariants.all { variant ->
                 //add a generated crashlytics properties file if the project applies the crashlytics plugin
                 if (project.plugins.hasPlugin("io.fabric")) {
-                    createCrashlyticsProperties(project,variant)
+                    createCrashlyticsProperties(project, variant)
                 }
 
                 //rename output files
-                renameOutputFiles(project,variant)
+                renameOutputFiles(project, variant)
             }
 
         }
@@ -61,14 +60,16 @@ gradle.buildFinished {
         Path source = sourceFile.toPath()
         Path target = targetFile.toPath()
         Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
-    } catch(Exception e) {
+    } catch (Exception e) {
         e.printStackTrace()
     }
 }
 
-def createCrashlyticsProperties(Project project,variant) {
-    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb" // Valid keys of non-existing organization on Crashlytics to make local building possible
-    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93" // Valid keys of non-existing organization on Crashlytics to make local building possible
+def createCrashlyticsProperties(Project project, variant) {
+    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb"
+    // Valid keys of non-existing organization on Crashlytics to make local building possible
+    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93"
+    // Valid keys of non-existing organization on Crashlytics to make local building possible
 
     File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     def variantSuffix = variant.name.capitalize()
@@ -89,7 +90,7 @@ def createCrashlyticsProperties(Project project,variant) {
     }
 }
 
-def renameOutputFiles(Project project,variant) {
+def renameOutputFiles(Project project, variant) {
     variant.outputs.each { output ->
         def abi = output.getFilter(com.android.build.OutputFile.ABI);
         output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode

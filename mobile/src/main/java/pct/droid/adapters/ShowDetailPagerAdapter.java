@@ -23,14 +23,14 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
         mFragments = fragments;
         mContext = context;
 
-        if(mFragments.size() > 0)
+        if (mFragments.size() > 0)
             mHasAbout = mFragments.get(0) instanceof ShowDetailAboutFragment;
     }
 
     public void setFragments(List<Fragment> fragments) {
         mFragments = fragments;
 
-        if(mFragments.size() > 0)
+        if (mFragments.size() > 0)
             mHasAbout = mFragments.get(0) instanceof ShowDetailAboutFragment;
     }
 
@@ -46,9 +46,9 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if(mFragments.get(position) instanceof ShowDetailSeasonFragment) {
+        if (mFragments.get(position) instanceof ShowDetailSeasonFragment) {
             int seasonNumber = ((ShowDetailSeasonFragment) mFragments.get(position)).getSeasonNumber();
-            if(seasonNumber == 0)
+            if (seasonNumber == 0)
                 return mContext.getString(R.string.specials);
             return mContext.getString(R.string.season) + " " + seasonNumber;
         }

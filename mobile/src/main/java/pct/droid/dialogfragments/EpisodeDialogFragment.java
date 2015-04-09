@@ -29,7 +29,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -64,7 +63,6 @@ import pct.droid.base.utils.SortUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.fragments.StreamLoadingFragment;
 import pct.droid.widget.BottomSheetScrollView;
 import pct.droid.widget.OptionSelector;
 
@@ -121,7 +119,7 @@ public class EpisodeDialogFragment extends DialogFragment {
                 .fragment_dialog_episode, container, false);
         ButterKnife.inject(this, v);
 
-        if(!VersionUtils.isJellyBean()) {
+        if (!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
@@ -156,7 +154,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_BACK) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     smoothDismiss();
                 }
                 return true;
@@ -168,7 +166,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void smoothDismiss() {
         mOpened = false;
 
-        if(mScrollView.getScrollY() <= mBottom) {
+        if (mScrollView.getScrollY() <= mBottom) {
             dismiss();
             return;
         }
@@ -222,9 +220,9 @@ public class EpisodeDialogFragment extends DialogFragment {
         mSynopsis.setText(mEpisode.overview);
 
         String seasonStr = Integer.toString(mEpisode.season);
-        if(seasonStr.length() < 2) seasonStr = "0" + seasonStr;
+        if (seasonStr.length() < 2) seasonStr = "0" + seasonStr;
         String episodeStr = Integer.toString(mEpisode.episode);
-        if(episodeStr.length() < 2) episodeStr = "0" + episodeStr;
+        if (episodeStr.length() < 2) episodeStr = "0" + episodeStr;
 
         mInfo.setText("S" + seasonStr + "E" + episodeStr);
 
@@ -249,7 +247,7 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mSubtitles.setText(R.string.loading_subs);
         mSubtitles.setClickable(false);
-        if(mSubsProvider != null) {
+        if (mSubsProvider != null) {
             mSubsProvider.getList(mShow, mEpisode, new SubsProvider.Callback() {
                 @Override
                 public void onSuccess(Map<String, String> subtitles) {
@@ -317,7 +315,7 @@ public class EpisodeDialogFragment extends DialogFragment {
             public void onTouch(boolean touching) {
                 mTouching = touching;
                 int scrollY = mScrollView.getScrollY();
-                if(!mTouching && mOpened && scrollY <= mThreshold) {
+                if (!mTouching && mOpened && scrollY <= mThreshold) {
                     smoothDismiss();
                 }
             }
@@ -328,13 +326,13 @@ public class EpisodeDialogFragment extends DialogFragment {
 
             @Override
             public void onScrollEnd() {
-                if(!mTouching && mOpened && mScrollView.getScrollY() <= mThreshold) {
+                if (!mTouching && mOpened && mScrollView.getScrollY() <= mThreshold) {
                     smoothDismiss();
                 }
             }
         });
 
-        if(mMetaProvider != null) {
+        if (mMetaProvider != null) {
             mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode, new MetaProvider.Callback() {
                 @Override
                 public void onResult(MetaProvider.MetaData metaData, Exception e) {

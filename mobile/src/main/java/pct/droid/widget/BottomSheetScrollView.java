@@ -31,7 +31,9 @@ public class BottomSheetScrollView extends ScrollView {
     private Boolean mTouchDown = false, mIsScrolling = false;
     private Listener mListener = null;
 
-    public enum Direction {UP, DOWN};
+    public enum Direction {UP, DOWN}
+
+    ;
 
     public BottomSheetScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

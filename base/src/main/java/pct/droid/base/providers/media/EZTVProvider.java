@@ -49,42 +49,42 @@ public class EZTVProvider extends MediaProvider {
     private static final MetaProvider sMetaProvider = new TraktProvider();
     private static final MediaProvider sMediaProvider = new EZTVProvider();
 
-	@Override
-	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
-		final ArrayList<Media> currentList;
-		if (existingList == null) {
-			currentList = new ArrayList<>();
-		} else {
-			currentList = (ArrayList<Media>) existingList.clone();
-		}
+    @Override
+    public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
+        final ArrayList<Media> currentList;
+        if (existingList == null) {
+            currentList = new ArrayList<>();
+        } else {
+            currentList = (ArrayList<Media>) existingList.clone();
+        }
 
-		ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-		params.add(new BasicNameValuePair("limit", "30"));
+        ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("limit", "30"));
 
-		if (filters == null) {
-			filters = new Filters();
-		}
+        if (filters == null) {
+            filters = new Filters();
+        }
 
-		if (filters.keywords != null) {
-			params.add(new BasicNameValuePair("keywords", filters.keywords));
-		}
+        if (filters.keywords != null) {
+            params.add(new BasicNameValuePair("keywords", filters.keywords));
+        }
 
-		if (filters.genre != null) {
-			params.add(new BasicNameValuePair("genre", filters.genre));
-		}
+        if (filters.genre != null) {
+            params.add(new BasicNameValuePair("genre", filters.genre));
+        }
 
-		if (filters.order == Filters.Order.ASC) {
-			params.add(new BasicNameValuePair("order", "asc"));
-		} else {
-			params.add(new BasicNameValuePair("order", "desc"));
-		}
+        if (filters.order == Filters.Order.ASC) {
+            params.add(new BasicNameValuePair("order", "asc"));
+        } else {
+            params.add(new BasicNameValuePair("order", "desc"));
+        }
 
-		String sort = "";
-		switch (filters.sort) {
-			default:
-			case POPULARITY:
-				sort = "popularity";
-				break;
+        String sort = "";
+        switch (filters.sort) {
+            default:
+            case POPULARITY:
+                sort = "popularity";
+                break;
             case YEAR:
                 sort = "year";
                 break;
@@ -97,222 +97,221 @@ public class EZTVProvider extends MediaProvider {
             case ALPHABET:
                 sort = "name";
                 break;
-		}
+        }
 
-		params.add(new BasicNameValuePair("sort", sort));
+        params.add(new BasicNameValuePair("sort", sort));
 
-		String url = API_URL + "shows/";
-		if (filters.page != null) {
-			url += filters.page;
-		} else {
-			url += "1";
-		}
+        String url = API_URL + "shows/";
+        if (filters.page != null) {
+            url += filters.page;
+        } else {
+            url += "1";
+        }
 
-		Request.Builder requestBuilder = new Request.Builder();
-		String query = buildQuery(params);
-		requestBuilder.url(url + "?" + query);
-		requestBuilder.tag(MEDIA_CALL);
+        Request.Builder requestBuilder = new Request.Builder();
+        String query = buildQuery(params);
+        requestBuilder.url(url + "?" + query);
+        requestBuilder.tag(MEDIA_CALL);
 
-		return fetchList(currentList, requestBuilder, callback);
-	}
+        return fetchList(currentList, requestBuilder, callback);
+    }
 
-	/**
-	 * Fetch the list of movies from EZTV
-	 *
-	 * @param currentList Current shown list to be extended
-	 * @param requestBuilder Request to be executed
-	 * @param callback Network callback
-	 *
-	 * @return Call
-	 */
-	private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
-		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-			@Override
-			public void onFailure(Request request, IOException e) {
-				String url = requestBuilder.build().urlString();
-				if (url.equals(MIRROR_URL)) {
-					callback.onFailure(e);
-				} else {
-					url = url.replace(API_URL, MIRROR_URL);
-					requestBuilder.url(url);
-					fetchList(currentList, requestBuilder, callback);
-				}
-			}
+    /**
+     * Fetch the list of movies from EZTV
+     *
+     * @param currentList    Current shown list to be extended
+     * @param requestBuilder Request to be executed
+     * @param callback       Network callback
+     * @return Call
+     */
+    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                String url = requestBuilder.build().urlString();
+                if (url.equals(MIRROR_URL)) {
+                    callback.onFailure(e);
+                } else {
+                    url = url.replace(API_URL, MIRROR_URL);
+                    requestBuilder.url(url);
+                    fetchList(currentList, requestBuilder, callback);
+                }
+            }
 
-			@Override
-			public void onResponse(Response response) throws IOException {
-				try {
-					if (response.isSuccessful()) {
-						String responseStr = response.body().string();
+            @Override
+            public void onResponse(Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
 
                         ArrayList<LinkedTreeMap<String, Object>> list = null;
-                        if(responseStr.isEmpty()) {
+                        if (responseStr.isEmpty()) {
                             list = new ArrayList<>();
                         } else {
                             list = (ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
                         }
 
-						EZTVReponse result = new EZTVReponse(list);
-						if (list == null) {
-							callback.onFailure(new NetworkErrorException("Empty response"));
-						} else {
-							ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
-							callback.onSuccess(formattedData, list.size() > 0);
-							return;
-						}
-					}
-				} catch (Exception e) {
-					callback.onFailure(e);
-				}
+                        EZTVReponse result = new EZTVReponse(list);
+                        if (list == null) {
+                            callback.onFailure(new NetworkErrorException("Empty response"));
+                        } else {
+                            ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
+                            callback.onSuccess(formattedData, list.size() > 0);
+                            return;
+                        }
+                    }
+                } catch (Exception e) {
+                    callback.onFailure(e);
+                }
                 callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
-			}
-		});
-	}
+            }
+        });
+    }
 
-	@Override
-	public Call getDetail(String videoId, final Callback callback) {
-		Request.Builder requestBuilder = new Request.Builder();
-		requestBuilder.url(API_URL + "show/" + videoId);
-		requestBuilder.tag(MEDIA_CALL);
+    @Override
+    public Call getDetail(String videoId, final Callback callback) {
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(API_URL + "show/" + videoId);
+        requestBuilder.tag(MEDIA_CALL);
 
-		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-			@Override
-			public void onFailure(Request request, IOException e) {
-				callback.onFailure(e);
-			}
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                callback.onFailure(e);
+            }
 
-			@Override
-			public void onResponse(Response response) throws IOException {
-				if (response.isSuccessful()) {
-					String responseStr = response.body().string();
-					LinkedTreeMap<String, Object> map = mGson.fromJson(responseStr, LinkedTreeMap.class);
-					EZTVReponse result = new EZTVReponse(map);
-					if (map == null) {
-						callback.onFailure(new NetworkErrorException("Empty response"));
-					} else {
-						ArrayList<Media> formattedData = result.formatDetailForPopcorn();
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    LinkedTreeMap<String, Object> map = mGson.fromJson(responseStr, LinkedTreeMap.class);
+                    EZTVReponse result = new EZTVReponse(map);
+                    if (map == null) {
+                        callback.onFailure(new NetworkErrorException("Empty response"));
+                    } else {
+                        ArrayList<Media> formattedData = result.formatDetailForPopcorn();
 
-						if (formattedData.size() > 0) {
-							callback.onSuccess(formattedData, true);
-							return;
-						}
-						callback.onFailure(new IllegalStateException("Empty list"));
+                        if (formattedData.size() > 0) {
+                            callback.onSuccess(formattedData, true);
+                            return;
+                        }
+                        callback.onFailure(new IllegalStateException("Empty list"));
                         return;
-					}
-				}
+                    }
+                }
                 callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
-			}
-		});
-	}
+            }
+        });
+    }
 
-	private class EZTVReponse {
-		LinkedTreeMap<String, Object> showData;
-		ArrayList<LinkedTreeMap<String, Object>> showsList;
+    private class EZTVReponse {
+        LinkedTreeMap<String, Object> showData;
+        ArrayList<LinkedTreeMap<String, Object>> showsList;
 
-		public EZTVReponse(LinkedTreeMap<String, Object> showData) {
-			this.showData = showData;
-		}
+        public EZTVReponse(LinkedTreeMap<String, Object> showData) {
+            this.showData = showData;
+        }
 
-		public ArrayList<Media> formatDetailForPopcorn() {
-			ArrayList<Media> list = new ArrayList<>();
-			try {
-				Show show = new Show(sMediaProvider, sSubsProvider);
+        public ArrayList<Media> formatDetailForPopcorn() {
+            ArrayList<Media> list = new ArrayList<>();
+            try {
+                Show show = new Show(sMediaProvider, sSubsProvider);
 
-				show.title = (String) showData.get("title");
-				show.videoId = (String) showData.get("imdb_id");
-				show.imdbId = (String) showData.get("imdb_id");
-				show.tvdbId = (String) showData.get("tvdb_id");
-				show.seasons = ((Double) showData.get("num_seasons")).intValue();
-				show.year = (String) showData.get("year");
-				LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) showData.get("images");
-				show.image = images.get("poster").replace("/original/", "/medium/");
-				show.fullImage = images.get("poster");
-				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
+                show.title = (String) showData.get("title");
+                show.videoId = (String) showData.get("imdb_id");
+                show.imdbId = (String) showData.get("imdb_id");
+                show.tvdbId = (String) showData.get("tvdb_id");
+                show.seasons = ((Double) showData.get("num_seasons")).intValue();
+                show.year = (String) showData.get("year");
+                LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) showData.get("images");
+                show.image = images.get("poster").replace("/original/", "/medium/");
+                show.fullImage = images.get("poster");
+                show.headerImage = images.get("fanart").replace("/original/", "/medium/");
 
-                if(showData.get("status") != null) {
+                if (showData.get("status") != null) {
                     String status = (String) showData.get("status");
-                    if(status.equalsIgnoreCase("ended")) {
+                    if (status.equalsIgnoreCase("ended")) {
                         show.status = Show.Status.ENDED;
-                    } else if(status.equalsIgnoreCase("returning series")) {
+                    } else if (status.equalsIgnoreCase("returning series")) {
                         show.status = Show.Status.CONTINUING;
-                    } else if(status.equalsIgnoreCase("canceled")) {
+                    } else if (status.equalsIgnoreCase("canceled")) {
                         show.status = Show.Status.CANCELED;
                     }
                 }
 
-				show.country = (String) showData.get("country");
-				show.network = (String) showData.get("network");
-				show.synopsis = (String) showData.get("synopsis");
-				show.runtime = (String) showData.get("runtime");
-				show.airDay = (String) showData.get("air_day");
-				show.airTime = (String) showData.get("air_time");
-				show.genre = ((ArrayList<String>) showData.get("genres")).get(0);
-				show.rating = Double.toString(((LinkedTreeMap<String, Double>) showData.get("rating")).get("percentage") / 10);
+                show.country = (String) showData.get("country");
+                show.network = (String) showData.get("network");
+                show.synopsis = (String) showData.get("synopsis");
+                show.runtime = (String) showData.get("runtime");
+                show.airDay = (String) showData.get("air_day");
+                show.airTime = (String) showData.get("air_time");
+                show.genre = ((ArrayList<String>) showData.get("genres")).get(0);
+                show.rating = Double.toString(((LinkedTreeMap<String, Double>) showData.get("rating")).get("percentage") / 10);
 
-				ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
-				for (LinkedTreeMap<String, Object> episode : episodes) {
-					Episode episodeObject = new Episode(sMediaProvider, sSubsProvider, sMetaProvider);
-					LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
-							(LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
-					for (String key : torrents.keySet()) {
-						if (!key.equals("0")) {
-							LinkedTreeMap<String, Object> item = torrents.get(key);
-							Media.Torrent torrent = new Media.Torrent();
-							torrent.url = item.get("url").toString();
-							torrent.seeds = item.get("seeds").toString();
-							torrent.peers = item.get("peers").toString();
-							episodeObject.torrents.put(key, torrent);
-						}
-					}
+                ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
+                for (LinkedTreeMap<String, Object> episode : episodes) {
+                    Episode episodeObject = new Episode(sMediaProvider, sSubsProvider, sMetaProvider);
+                    LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
+                            (LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
+                    for (String key : torrents.keySet()) {
+                        if (!key.equals("0")) {
+                            LinkedTreeMap<String, Object> item = torrents.get(key);
+                            Media.Torrent torrent = new Media.Torrent();
+                            torrent.url = item.get("url").toString();
+                            torrent.seeds = item.get("seeds").toString();
+                            torrent.peers = item.get("peers").toString();
+                            episodeObject.torrents.put(key, torrent);
+                        }
+                    }
 
-					episodeObject.dateBased = (Boolean) episode.get("date_based");
-					episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
+                    episodeObject.dateBased = (Boolean) episode.get("date_based");
+                    episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
                     episodeObject.title = (String) episode.get("title");
-					episodeObject.overview = (String) episode.get("overview");
-					episodeObject.season = ((Double) episode.get("season")).intValue();
-					episodeObject.episode = ((Double) episode.get("episode")).intValue();
-					episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
+                    episodeObject.overview = (String) episode.get("overview");
+                    episodeObject.season = ((Double) episode.get("season")).intValue();
+                    episodeObject.episode = ((Double) episode.get("episode")).intValue();
+                    episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
                     episodeObject.imdbId = show.imdbId;
                     episodeObject.image = episodeObject.fullImage = episodeObject.headerImage = show.headerImage;
 
-					show.episodes.add(episodeObject);
-				}
+                    show.episodes.add(episodeObject);
+                }
 
-				list.add(show);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+                list.add(show);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-			return list;
-		}
+            return list;
+        }
 
-		public EZTVReponse(ArrayList<LinkedTreeMap<String, Object>> showsList) {
-			this.showsList = showsList;
-		}
+        public EZTVReponse(ArrayList<LinkedTreeMap<String, Object>> showsList) {
+            this.showsList = showsList;
+        }
 
-		public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
-			for (LinkedTreeMap<String, Object> item : showsList) {
-				Show show = new Show(sMediaProvider, sSubsProvider);
+        public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
+            for (LinkedTreeMap<String, Object> item : showsList) {
+                Show show = new Show(sMediaProvider, sSubsProvider);
 
-				show.title = (String) item.get("title");
-				show.videoId = (String) item.get("imdb_id");
-				show.seasons = (Integer) item.get("seasons");
-				show.tvdbId = (String) item.get("tvdb_id");
-				show.year = (String) item.get("year");
-				LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
-				show.image = images.get("poster").replace("/original/", "/medium/");
-				show.headerImage = images.get("fanart").replace("/original/", "/medium/");
+                show.title = (String) item.get("title");
+                show.videoId = (String) item.get("imdb_id");
+                show.seasons = (Integer) item.get("seasons");
+                show.tvdbId = (String) item.get("tvdb_id");
+                show.year = (String) item.get("year");
+                LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
+                show.image = images.get("poster").replace("/original/", "/medium/");
+                show.headerImage = images.get("fanart").replace("/original/", "/medium/");
 
-				existingList.add(show);
-			}
-			return existingList;
-		}
-	}
+                existingList.add(show);
+            }
+            return existingList;
+        }
+    }
 
-	@Override
+    @Override
     public int getLoadingMessage() {
-		return R.string.loading_shows;
-	}
+        return R.string.loading_shows;
+    }
 
     @Override
     public List<NavInfo> getNavigation() {

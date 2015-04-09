@@ -22,8 +22,6 @@ import android.content.res.Configuration;
 
 import java.util.Locale;
 
-import pct.droid.base.PopcornApplication;
-
 public class LocaleUtils {
 
     public static String getCurrent() {

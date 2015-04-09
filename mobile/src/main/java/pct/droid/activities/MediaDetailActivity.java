@@ -22,8 +22,6 @@ import com.squareup.picasso.Picasso;
 import butterknife.InjectView;
 import butterknife.Optional;
 import pct.droid.R;
-import pct.droid.base.PopcornApplication;
-import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
@@ -42,14 +40,11 @@ import pct.droid.utils.ActionBarBackground;
 import pct.droid.widget.ObservableParallaxScrollView;
 import timber.log.Timber;
 
-public class MediaDetailActivity extends BaseActivity implements BaseDetailFragment.FragmentListener {
-
-    public static final String COLOR = "palette";
+public class MediaDetailActivity extends PopcornBaseActivity implements BaseDetailFragment.FragmentListener {
 
     private static Media sMedia;
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
-    private Fragment mFragment;
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
@@ -71,7 +66,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
 
     public static void startActivity(Context context, Media media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);
-        if(media != null)
+        if (media != null)
             sMedia = media;
         context.startActivity(intent);
     }
@@ -90,7 +85,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         ActionBarBackground.fadeOut(this);
 
         // Get Title TextView from the Toolbar
-        if(mToolbar.getChildAt(0) instanceof TextView) {
+        if (mToolbar.getChildAt(0) instanceof TextView) {
             mToolbarTitle = (TextView) mToolbar.getChildAt(0);
         } else {
             mToolbarTitle = (TextView) mToolbar.getChildAt(1);
@@ -100,14 +95,12 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
         // mParallaxLayout doesn't exist? Then this is a tablet or big screen device
         mIsTablet = mParallaxLayout == null;
 
-        Intent intent = getIntent();
-
         getSupportActionBar().setTitle(sMedia.title);
 
         mScrollView.setListener(mOnScrollListener);
         mScrollView.setOverScrollEnabled(false);
         // Calculate toolbar scrolling variables
-        if(!mIsTablet) {
+        if (!mIsTablet) {
             int parallaxHeight = mParallaxLayout.getLayoutParams().height = PixelUtils.getScreenHeight(this);
             mTopHeight = (parallaxHeight / 3) * 2;
             ((LinearLayout.LayoutParams) mContent.getLayoutParams()).topMargin = -(parallaxHeight / 3);
@@ -123,20 +116,20 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
             mContent.setMinimumHeight(mTopHeight);
         }
 
-        mFragment = null;
-        if(sMedia.isMovie) {
-            mFragment = MovieDetailFragment.newInstance((Movie) sMedia);
-        } else if(sMedia instanceof Show) {
-            mFragment = ShowDetailFragment.newInstance((Show) sMedia);
+        Fragment fragment = null;
+        if (sMedia.isMovie) {
+            fragment = MovieDetailFragment.newInstance((Movie) sMedia);
+        } else if (sMedia instanceof Show) {
+            fragment = ShowDetailFragment.newInstance((Show) sMedia);
         }
 
-        if(mFragment != null) {
+        if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content, mFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
         }
 
         String imageUrl = sMedia.image;
-        if(mIsTablet || !PixelUtils.screenIsPortrait(this)) {
+        if (mIsTablet || !PixelUtils.screenIsPortrait(this)) {
             imageUrl = sMedia.headerImage;
         }
         Picasso.with(this).load(imageUrl).into(mBgImage, new Callback() {
@@ -161,6 +154,9 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
     protected void onResume() {
         super.onResume();
         supportInvalidateOptionsMenu();
+
+        if (null != mService)
+            mService.stopStreaming();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -171,9 +167,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                 NetworkUtils.isNetworkConnected(this)) {
             MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            Intent i = new Intent(this, StreamLoadingActivity.class);
-            i.putExtra(StreamLoadingActivity.EXTRA_INFO, streamInfo);
             if (VersionUtils.isLollipop()) {
+                mScrollView.smoothScrollTo(0, 0);
                 StreamLoadingActivity.startActivity(this, streamInfo, Pair.create((View) mBgImage, mBgImage.getTransitionName()));
             } else {
                 StreamLoadingActivity.startActivity(this, streamInfo);
@@ -200,8 +195,8 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                 Timber.d("mHeaderHeight: %d", mHeaderHeight);
             }
 
-            if(!mIsTablet) {
-                if(scrollY > 0) {
+            if (!mIsTablet) {
+                if (scrollY > 0) {
                     if (scrollY < mHeaderHeight) {
                         float diff = (float) scrollY / (float) mHeaderHeight;
                         int alpha = (int) Math.ceil(255 * diff);
@@ -229,7 +224,7 @@ public class MediaDetailActivity extends BaseActivity implements BaseDetailFragm
                 }
             }
 
-            if(mSubOnScrollListener != null) {
+            if (mSubOnScrollListener != null) {
                 mSubOnScrollListener.onScroll(scrollY, direction);
             }
         }

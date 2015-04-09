@@ -21,15 +21,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
-    public enum Status { CONTINUING, ENDED, CANCELED, NOT_AIRED_YET }
+    public enum Status {CONTINUING, ENDED, CANCELED, NOT_AIRED_YET}
 
     public String type = "show";
     public String imdbId = "";
@@ -56,9 +54,9 @@ public class Show extends Media implements Parcelable {
         runtime = in.readString();
 
         int statusInt = in.readInt();
-        if(statusInt == 0) {
+        if (statusInt == 0) {
             status = Status.CONTINUING;
-        } else if(statusInt == 1) {
+        } else if (statusInt == 1) {
             status = Status.ENDED;
         } else {
             status = null;

@@ -17,7 +17,6 @@
 
 package pct.droid.activities;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -27,18 +26,15 @@ import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.connectsdk.service.capability.MediaControl;
-
 import pct.droid.R;
 import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.connectsdk.server.BeamServer;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
-public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
+public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
     private TorrentService mService;
     private BeamManager mBeamManager = BeamManager.getInstance(this);
@@ -71,16 +67,16 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-        if(mStreamInfo.isShow()) {
-            if(mStreamInfo.getShow() != null && mStreamInfo.getShow().title != null)
+        if (mStreamInfo.isShow()) {
+            if (mStreamInfo.getShow() != null && mStreamInfo.getShow().title != null)
                 mTitle = mStreamInfo.getShow().title;
         } else {
-            if(mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
+            if (mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
                 mTitle = mStreamInfo.getMedia().title;
         }
 
         String location = mStreamInfo.getVideoLocation();
-        if(!location.startsWith("http://") && !location.startsWith("https://")) {
+        if (!location.startsWith("http://") && !location.startsWith("https://")) {
             BeamServer.setCurrentVideo(location);
             location = BeamServer.getVideoURL();
         }
@@ -120,7 +116,7 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
             @Override
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
-                if(mService != null)
+                if (mService != null)
                     mService.stopStreaming();
                 finish();
             }

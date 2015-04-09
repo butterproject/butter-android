@@ -17,7 +17,6 @@
 
 package pct.droid.activities;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -27,14 +26,12 @@ import android.os.IBinder;
 import android.view.MenuItem;
 
 import pct.droid.R;
-import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
-public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFragment.Callback {
+public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
     private VideoPlayerFragment mFragment;
     private TorrentService mService;
@@ -56,29 +53,29 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
     public final static String INFO = "stream_info";
     public final static String RESUME_POSITION = "resume_position";
 
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
         TorrentService.bindHere(this, mServiceConnection);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-        if(mStreamInfo.isShow()) {
+        if (mStreamInfo.isShow()) {
             mTitle = mStreamInfo.getShow().title;
         } else {
-            if(mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
+            if (mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
                 mTitle = mStreamInfo.getMedia().title;
         }
 
         String location = mStreamInfo.getVideoLocation();
-        if(!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
+        if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
             location = "file://" + location;
         }
         mStreamInfo.setVideoLocation(location);
 
         mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
         mFragment.loadMedia();
-	}
+    }
 
     @Override
     protected void onDestroy() {
@@ -88,39 +85,40 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerFrag
         }
     }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 showExitDialog();
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onBackPressed() {
-       showExitDialog();
+        showExitDialog();
     }
 
     private void showExitDialog() {
         OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
             @Override
             public void onSelectionPositive() {
-                if(mService != null)
+                if (mService != null)
                     mService.stopStreaming();
                 finish();
             }
 
             @Override
-            public void onSelectionNegative() {}
+            public void onSelectionNegative() {
+            }
         });
     }
 
-	@Override
+    @Override
     public StreamInfo getInfo() {
-		return mStreamInfo;
-	}
+        return mStreamInfo;
+    }
 
     @Override
     public TorrentService getService() {

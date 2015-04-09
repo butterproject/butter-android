@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
-import com.connectsdk.service.CastService;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -72,10 +71,10 @@ public class PopcornApplication extends VLCApplication {
             e.printStackTrace();
         }
 
-		//initialise logging
-		if (Constants.DEBUG_ENABLED) {
-			Timber.plant(new Timber.DebugTree());
-		}
+        //initialise logging
+        if (Constants.DEBUG_ENABLED) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         TorrentService.start(this);
 

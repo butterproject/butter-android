@@ -49,7 +49,7 @@ import pct.droid.base.providers.subs.YSubsProvider;
 public class YTSProvider extends MediaProvider {
 
     private static final YTSProvider sMediaProvider = new YTSProvider();
-	private static final String API_URL = "http://cloudflare.com/api/v2/";
+    private static final String API_URL = "http://cloudflare.com/api/v2/";
     private static final String MIRROR_URL = "http://reddit.com/api/v2/";
     private static final String MIRROR_URL2 = "http://eqwww.image.yt/api/v2/";
     public static String CURRENT_URL = API_URL;
@@ -66,43 +66,43 @@ public class YTSProvider extends MediaProvider {
         return client;
     }
 
-	@Override
-	public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
-		final ArrayList<Media> currentList;
-		if (existingList == null) {
-			currentList = new ArrayList<>();
-		} else {
-			currentList = (ArrayList<Media>) existingList.clone();
-		}
+    @Override
+    public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
+        final ArrayList<Media> currentList;
+        if (existingList == null) {
+            currentList = new ArrayList<>();
+        } else {
+            currentList = (ArrayList<Media>) existingList.clone();
+        }
 
-		ArrayList<BasicNameValuePair> params = new ArrayList<>();
-		params.add(new BasicNameValuePair("limit", "30"));
+        ArrayList<BasicNameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("limit", "30"));
 
-		if (filters == null) {
-			filters = new Filters();
-		}
+        if (filters == null) {
+            filters = new Filters();
+        }
 
-		if (filters.keywords != null) {
-			String keywords = filters.keywords.replaceAll("\\s", "% ");
-			params.add(new BasicNameValuePair("query_term", keywords));
-		}
+        if (filters.keywords != null) {
+            String keywords = filters.keywords.replaceAll("\\s", "% ");
+            params.add(new BasicNameValuePair("query_term", keywords));
+        }
 
-		if (filters.genre != null) {
-			params.add(new BasicNameValuePair("genre", filters.genre));
-		}
+        if (filters.genre != null) {
+            params.add(new BasicNameValuePair("genre", filters.genre));
+        }
 
-		if (filters.order == Filters.Order.ASC) {
-			params.add(new BasicNameValuePair("order_by", "asc"));
-		} else {
-			params.add(new BasicNameValuePair("order_by", "desc"));
-		}
+        if (filters.order == Filters.Order.ASC) {
+            params.add(new BasicNameValuePair("order_by", "asc"));
+        } else {
+            params.add(new BasicNameValuePair("order_by", "desc"));
+        }
 
-		String sort;
-		switch (filters.sort) {
-			default:
-			case POPULARITY:
-				sort = "seeds";
-				break;
+        String sort;
+        switch (filters.sort) {
+            default:
+            case POPULARITY:
+                sort = "seeds";
+                break;
             case YEAR:
                 sort = "year";
                 break;
@@ -115,80 +115,79 @@ public class YTSProvider extends MediaProvider {
             case ALPHABET:
                 sort = "title";
                 break;
-		}
+        }
 
-		params.add(new BasicNameValuePair("sort_by", sort));
+        params.add(new BasicNameValuePair("sort_by", sort));
 
-		if (filters.page != null) {
-			params.add(new BasicNameValuePair("page", Integer.toString(filters.page)));
-		}
+        if (filters.page != null) {
+            params.add(new BasicNameValuePair("page", Integer.toString(filters.page)));
+        }
 
-		Request.Builder requestBuilder = new Request.Builder();
-		String query = buildQuery(params);
-		requestBuilder.url(API_URL + "list_movies.json?" + query);
-		requestBuilder.tag(MEDIA_CALL);
+        Request.Builder requestBuilder = new Request.Builder();
+        String query = buildQuery(params);
+        requestBuilder.url(API_URL + "list_movies.json?" + query);
+        requestBuilder.tag(MEDIA_CALL);
 
-		return fetchList(currentList, requestBuilder, callback);
-	}
+        return fetchList(currentList, requestBuilder, callback);
+    }
 
-	/**
-	 * Fetch the list of movies from YTS
-	 *
-	 * @param currentList Current shown list to be extended
-	 * @param requestBuilder Request to be executed
-	 * @param callback Network callback
-	 *
-	 * @return Call
-	 */
-	private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
+    /**
+     * Fetch the list of movies from YTS
+     *
+     * @param currentList    Current shown list to be extended
+     * @param requestBuilder Request to be executed
+     * @param callback       Network callback
+     * @return Call
+     */
+    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
         requestBuilder.addHeader("Host", "eqwww.image.yt");
-		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-			@Override
-			public void onFailure(Request request, IOException e) {
-				if(generateFallback(requestBuilder)) {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                if (generateFallback(requestBuilder)) {
                     fetchList(currentList, requestBuilder, callback);
                 } else {
                     callback.onFailure(e);
                 }
-			}
+            }
 
-			@Override
-			public void onResponse(Response response) throws IOException {
-				if (response.isSuccessful()) {
-					String responseStr;
-					try {
-						responseStr = response.body().string();
-					} catch (SocketException e) {
-						onFailure(response.request(), new IOException("Socket failed"));
-						return;
-					}
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
 
-					YTSReponse result;
-					try {
-						result = mGson.fromJson(responseStr, YTSReponse.class);
-					} catch (IllegalStateException e) {
-						onFailure(response.request(), new IOException("JSON Failed"));
-						return;
-					} catch (JsonSyntaxException e) {
+                    YTSReponse result;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    } catch (JsonSyntaxException e) {
                         onFailure(response.request(), new IOException("JSON Failed"));
                         return;
                     }
 
-					if (result.status != null && result.status.equals("error")) {
-						callback.onFailure(new NetworkErrorException(result.status_message));
-					} else {
-						ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
-						callback.onSuccess(formattedData, true);
-						return;
-					}
-				}
+                    if (result.status != null && result.status.equals("error")) {
+                        callback.onFailure(new NetworkErrorException(result.status_message));
+                    } else {
+                        ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
+                        callback.onSuccess(formattedData, true);
+                        return;
+                    }
+                }
                 onFailure(response.request(), new IOException("Couldn't connect to YTS"));
-			}
-		});
-	}
+            }
+        });
+    }
 
-	@Override
-	public Call getDetail(String videoId, Callback callback) {
+    @Override
+    public Call getDetail(String videoId, Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(API_URL + "movie_details.json?movie_id=" + videoId);
         requestBuilder.addHeader("Host", "eqwww.image.yt");
@@ -198,51 +197,51 @@ public class YTSProvider extends MediaProvider {
     }
 
     private Call fetchDetail(final Request.Builder requestBuilder, final Callback callback) {
-		return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-			@Override
-			public void onFailure(Request request, IOException e) {
-                if(generateFallback(requestBuilder)) {
+        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                if (generateFallback(requestBuilder)) {
                     fetchDetail(requestBuilder, callback);
                 } else {
                     callback.onFailure(e);
                 }
-			}
+            }
 
-			@Override
-			public void onResponse(Response response) throws IOException {
-				if (response.isSuccessful()) {
-					String responseStr;
-					try {
-						responseStr = response.body().string();
-					} catch (SocketException e) {
-						onFailure(response.request(), new IOException("Socket failed"));
-						return;
-					}
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr;
+                    try {
+                        responseStr = response.body().string();
+                    } catch (SocketException e) {
+                        onFailure(response.request(), new IOException("Socket failed"));
+                        return;
+                    }
 
-					YTSReponse result;
-					try {
-						result = mGson.fromJson(responseStr, YTSReponse.class);
-					} catch (IllegalStateException e) {
-						onFailure(response.request(), new IOException("JSON Failed"));
-						return;
-					} catch (JsonSyntaxException e) {
+                    YTSReponse result;
+                    try {
+                        result = mGson.fromJson(responseStr, YTSReponse.class);
+                    } catch (IllegalStateException e) {
+                        onFailure(response.request(), new IOException("JSON Failed"));
+                        return;
+                    } catch (JsonSyntaxException e) {
                         onFailure(response.request(), new IOException("JSON Failed"));
                         return;
                     }
 
-					if (result.status != null && result.status.equals("error")) {
-						callback.onFailure(new NetworkErrorException(result.status_message));
-					} else {
-						final Movie movie = result.formatDetailForPopcorn();
+                    if (result.status != null && result.status.equals("error")) {
+                        callback.onFailure(new NetworkErrorException(result.status_message));
+                    } else {
+                        final Movie movie = result.formatDetailForPopcorn();
 
                         TraktProvider traktProvider = new TraktProvider();
 
                         traktProvider.getMovieMeta(movie.imdbId, new MetaProvider.Callback() {
                             @Override
                             public void onResult(MetaProvider.MetaData metaData, Exception e) {
-                                if(e == null) {
+                                if (e == null) {
                                     if (metaData.images != null) {
-                                        if(metaData.images.poster != null) {
+                                        if (metaData.images.poster != null) {
                                             movie.image = metaData.images.poster.replace("/original/", "/medium/");
                                             movie.fullImage = metaData.images.poster;
                                         }
@@ -299,7 +298,7 @@ public class YTSProvider extends MediaProvider {
         String url = requestBuilder.build().urlString();
         if (url.contains(MIRROR_URL2)) {
             return false;
-        } else if(url.contains(MIRROR_URL)) {
+        } else if (url.contains(MIRROR_URL)) {
             url = url.replace(MIRROR_URL, MIRROR_URL2);
             CURRENT_URL = MIRROR_URL2;
         } else {
@@ -310,37 +309,36 @@ public class YTSProvider extends MediaProvider {
         return true;
     }
 
-	private class YTSReponse {
-		public String status;
-		public String status_message;
-		public LinkedTreeMap<String, Object> data;
+    private class YTSReponse {
+        public String status;
+        public String status_message;
+        public LinkedTreeMap<String, Object> data;
 
-		/**
-		 * Test if there is an item that already exists
-		 *
-		 * @param results List with items
-		 * @param id Id of item to check for
-		 *
-		 * @return Return the index of the item in the results
-		 */
-		private int isInResults(ArrayList<Media> results, String id) {
-			int i = 0;
-			for (Media item : results) {
-				if (item.videoId.equals(id)) return i;
-				i++;
-			}
-			return -1;
-		}
+        /**
+         * Test if there is an item that already exists
+         *
+         * @param results List with items
+         * @param id      Id of item to check for
+         * @return Return the index of the item in the results
+         */
+        private int isInResults(ArrayList<Media> results, String id) {
+            int i = 0;
+            for (Media item : results) {
+                if (item.videoId.equals(id)) return i;
+                i++;
+            }
+            return -1;
+        }
 
-		/**
-		 * Format data for the application
-		 *
-		 * @return List with items
-		 */
-		public Movie formatDetailForPopcorn() {
+        /**
+         * Format data for the application
+         *
+         * @return List with items
+         */
+        public Movie formatDetailForPopcorn() {
             Movie movie = new Movie(sMediaProvider, sSubsProvider);
             LinkedTreeMap<String, Object> movieObj = data;
-            if(movieObj == null) return movie;
+            if (movieObj == null) return movie;
 
             Double id = (Double) movieObj.get("id");
             movie.videoId = Integer.toString(id.intValue());
@@ -354,10 +352,10 @@ public class YTSProvider extends MediaProvider {
 
             ArrayList<LinkedTreeMap<String, Object>> torrents =
                     (ArrayList<LinkedTreeMap<String, Object>>) movieObj.get("torrents");
-            if(torrents != null) {
+            if (torrents != null) {
                 for (LinkedTreeMap<String, Object> torrentObj : torrents) {
                     String quality = (String) torrentObj.get("quality");
-                    if(quality == null || quality.equals("3D")) continue;
+                    if (quality == null || quality.equals("3D")) continue;
 
                     Media.Torrent torrent = new Media.Torrent();
 
@@ -378,47 +376,46 @@ public class YTSProvider extends MediaProvider {
 
 
             return movie;
-		}
+        }
 
-		/**
-		 * Format data for the application
-		 *
-		 * @param existingList List to be extended
-		 *
-		 * @return List with items
-		 */
-		public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
+        /**
+         * Format data for the application
+         *
+         * @param existingList List to be extended
+         * @return List with items
+         */
+        public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
             ArrayList<LinkedTreeMap<String, Object>> movies = new ArrayList<>();
-            if(data != null) {
+            if (data != null) {
                 movies = (ArrayList<LinkedTreeMap<String, Object>>) data.get("movies");
             }
 
-			for (LinkedTreeMap<String, Object> item : movies) {
-				Movie movie = new Movie(sMediaProvider, sSubsProvider);
+            for (LinkedTreeMap<String, Object> item : movies) {
+                Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
                 Double id = (Double) item.get("id");
                 movie.videoId = Integer.toString(id.intValue());
                 movie.imdbId = (String) item.get("imdb_code");
 
-				int existingItem = isInResults(existingList, movie.videoId);
-				if (existingItem == -1) {
+                int existingItem = isInResults(existingList, movie.videoId);
+                if (existingItem == -1) {
                     movie.title = (String) item.get("title");
                     Double year = (Double) item.get("year");
                     movie.year = Integer.toString(year.intValue());
                     movie.rating = item.get("rating").toString();
-                    movie.genre = ((ArrayList<String>)item.get("genres")).get(0);
+                    movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
                     movie.image = (String) item.get("medium_cover_image");
 
-                    if(movie.image != null) {
+                    if (movie.image != null) {
                         movie.image = movie.image.replace("medium-cover", "large-cover");
                     }
 
                     ArrayList<LinkedTreeMap<String, Object>> torrents =
                             (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
-                    if(torrents != null) {
+                    if (torrents != null) {
                         for (LinkedTreeMap<String, Object> torrentObj : torrents) {
                             String quality = (String) torrentObj.get("quality");
-                            if(quality == null || quality.equals("3D")) continue;
+                            if (quality == null || quality.equals("3D")) continue;
 
                             Media.Torrent torrent = new Media.Torrent();
 
@@ -438,16 +435,16 @@ public class YTSProvider extends MediaProvider {
                     }
 
                     existingList.add(movie);
-				}
-			}
-			return existingList;
-		}
-	}
+                }
+            }
+            return existingList;
+        }
+    }
 
-	@Override
+    @Override
     public int getLoadingMessage() {
-		return R.string.loading_movies;
-	}
+        return R.string.loading_movies;
+    }
 
     @Override
     public List<NavInfo> getNavigation() {

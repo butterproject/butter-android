@@ -98,7 +98,7 @@ public class BeamDeviceAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.casting_dialog_listitem, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
@@ -110,30 +110,30 @@ public class BeamDeviceAdapter extends BaseAdapter {
 
         int imgResource = R.drawable.ic_dlna;
         String serviceText = "";
-        for(DeviceService service : device.getServices()) {
+        for (DeviceService service : device.getServices()) {
             String addText = "";
-            if(service instanceof CastService) {
+            if (service instanceof CastService) {
                 imgResource = R.drawable.ic_googlecast;
                 addText += "Google Cast";
-            } else if(service instanceof DLNAService) {
+            } else if (service instanceof DLNAService) {
                 imgResource = R.drawable.ic_dlna;
                 addText += "DLNA";
-            } else if(service instanceof AirPlayService) {
+            } else if (service instanceof AirPlayService) {
                 imgResource = R.drawable.ic_airplay;
                 addText += "AirPlay";
-            } else if(service instanceof RokuService) {
+            } else if (service instanceof RokuService) {
                 imgResource = R.drawable.ic_dlna;
                 addText += "Roku";
-            } else if(service instanceof WebOSTVService) {
+            } else if (service instanceof WebOSTVService) {
                 imgResource = R.drawable.ic_dlna;
                 addText += "webOS TV";
-            } else if(service instanceof NetcastTVService) {
+            } else if (service instanceof NetcastTVService) {
                 imgResource = R.drawable.ic_dlna;
                 addText += "Netcast";
             }
 
-            if(!addText.isEmpty()) {
-                if(serviceText.isEmpty()) {
+            if (!addText.isEmpty()) {
+                if (serviceText.isEmpty()) {
                     serviceText = addText;
                 } else {
                     serviceText += ", " + addText;
@@ -141,7 +141,7 @@ public class BeamDeviceAdapter extends BaseAdapter {
             }
         }
 
-        if(serviceText.isEmpty()) {
+        if (serviceText.isEmpty()) {
             serviceText = "Beaming Device";
         }
 

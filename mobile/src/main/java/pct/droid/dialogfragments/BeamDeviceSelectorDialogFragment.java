@@ -44,7 +44,7 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder;
         final BeamManager beamManager = BeamManager.getInstance(getActivity());
-        if(!beamManager.isConnected()) {
+        if (!beamManager.isConnected()) {
             mAdapter = new BeamDeviceAdapter(getActivity());
             builder = new AlertDialog.Builder(getActivity())
                     .setSingleChoiceItems(mAdapter, -1, new DialogInterface.OnClickListener() {
@@ -85,7 +85,7 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(null != mAdapter)
+        if (null != mAdapter)
             mAdapter.destroy();
     }
 

@@ -15,21 +15,21 @@ import pct.droid.base.utils.VersionUtils;
 public class WrappingViewPager extends ViewPager {
 
     private Boolean mAnimStarted = false;
- 
+
     public WrappingViewPager(Context context) {
         super(context);
     }
- 
-    public WrappingViewPager(Context context, AttributeSet attrs){
+
+    public WrappingViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
- 
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if(!mAnimStarted && null != getAdapter()) {
+        if (!mAnimStarted && null != getAdapter()) {
             int height = 0;
             View child = ((FragmentPagerAdapter) getAdapter()).getItem(getCurrentItem()).getView();
             if (child != null) {
@@ -81,7 +81,7 @@ public class WrappingViewPager extends ViewPager {
                     }
                 });
 
-                if(heightChange > 0) {
+                if (heightChange > 0) {
                     a.setDuration(50);
                 } else {
                     a.setDuration(500);
@@ -92,7 +92,7 @@ public class WrappingViewPager extends ViewPager {
                 heightMeasureSpec = newHeight;
             }
         }
- 
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 

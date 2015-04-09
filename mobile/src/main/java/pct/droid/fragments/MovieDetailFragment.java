@@ -87,19 +87,19 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_moviedetail, container, false);
-        if(VersionUtils.isJellyBean() && container != null) {
+        if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
         ButterKnife.inject(this, mRoot);
 
-        if(!VersionUtils.isJellyBean()) {
+        if (!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
         }
 
         mTitle.setText(sMovie.title);
-        if(!sMovie.rating.equals("-1")) {
+        if (!sMovie.rating.equals("-1")) {
             Double rating = Double.parseDouble(sMovie.rating);
             mRating.setProgress(rating.intValue());
             mRating.setVisibility(View.VISIBLE);
@@ -127,10 +127,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 public void run() {
                     boolean ellipsized = false;
                     Layout layout = mSynopsis.getLayout();
-                    if(layout == null) return;
+                    if (layout == null) return;
                     int lines = layout.getLineCount();
-                    if(lines > 0) {
-                        int ellipsisCount = layout.getEllipsisCount(lines-1);
+                    if (lines > 0) {
+                        int ellipsisCount = layout.getEllipsisCount(lines - 1);
                         if (ellipsisCount > 0) {
                             ellipsized = true;
                         }
@@ -143,7 +143,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mReadMore.setVisibility(View.GONE);
         }
 
-        mWatchTrailer.setVisibility(sMovie.trailer == null || sMovie.trailer.isEmpty() ? View.GONE: View.VISIBLE);
+        mWatchTrailer.setVisibility(sMovie.trailer == null || sMovie.trailer.isEmpty() ? View.GONE : View.VISIBLE);
 
         mSubtitles.setFragmentManager(getFragmentManager());
         mQuality.setFragmentManager(getFragmentManager());
@@ -153,7 +153,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         mSubtitles.setText(R.string.loading_subs);
         mSubtitles.setClickable(false);
 
-        if(sMovie.getSubsProvider() != null) {
+        if (sMovie.getSubsProvider() != null) {
             sMovie.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
                 @Override
                 public void onSuccess(Map<String, String> subtitles) {
@@ -213,7 +213,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mSubtitles.setText(R.string.no_subs_available);
         }
 
-        if(sMovie.torrents.size() > 0) {
+        if (sMovie.torrents.size() > 0) {
             final String[] qualities = sMovie.torrents.keySet().toArray(new String[sMovie.torrents.size()]);
             SortUtils.sortQualities(qualities);
             mQuality.setData(qualities);
@@ -228,7 +228,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mQuality.setDefault(qualities.length - 1);
         }
 
-        if(mCoverImage != null) {
+        if (mCoverImage != null) {
             Picasso.with(mCoverImage.getContext()).load(sMovie.image).into(mCoverImage);
         }
 

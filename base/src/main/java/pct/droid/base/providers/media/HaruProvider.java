@@ -324,7 +324,7 @@ public class HaruProvider extends MediaProvider {
                             episode.season = 1;
                             episode.episode = Integer.parseInt(name.group(1));
 
-                            if(!episodeMap.containsKey(episode.episode)) {
+                            if (!episodeMap.containsKey(episode.episode)) {
                                 episode.aired = -1;
                                 episode.title = PopcornApplication.getAppContext().getString(R.string.episode) + " " + episode.episode;
                                 episode.overview = PopcornApplication.getAppContext().getString(R.string.overview_not_available);
@@ -389,7 +389,7 @@ public class HaruProvider extends MediaProvider {
                 media.videoId = item.get("id").toString();
                 media.imdbId = "mal-" + media.videoId;
                 String year = item.get("aired").toString();
-                if(year.contains(", ")) {
+                if (year.contains(", ")) {
                     year = year.split(", ")[1];
                 }
                 if (year.contains(" ")) {

@@ -8,7 +8,10 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 public class ObservableParallaxScrollView extends ParallaxScrollView {
 
     private Listener mListener = null;
-    public enum Direction {UP, DOWN};
+
+    public enum Direction {UP, DOWN}
+
+    ;
 
     public ObservableParallaxScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

@@ -42,8 +42,8 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
         super.onCreate(savedInstanceState);
         int season = getArguments().getInt(SEASON);
 
-        for(Episode episode : sShow.episodes) {
-            if(episode.season == season) {
+        for (Episode episode : sShow.episodes) {
+            if (episode.season == season) {
                 mEpisodes.add(episode);
             }
         }
@@ -51,9 +51,9 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
         Collections.sort(mEpisodes, new Comparator<Episode>() {
             @Override
             public int compare(Episode lhs, Episode rhs) {
-                if(lhs.episode < rhs.episode) {
+                if (lhs.episode < rhs.episode) {
                     return -1;
-                } else if(lhs.episode > rhs.episode) {
+                } else if (lhs.episode > rhs.episode) {
                     return 1;
                 }
                 return 0;
@@ -69,7 +69,7 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail_season, container, false);
-        if(VersionUtils.isJellyBean() && container != null) {
+        if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 

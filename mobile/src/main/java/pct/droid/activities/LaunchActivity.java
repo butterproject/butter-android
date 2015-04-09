@@ -26,7 +26,7 @@ import io.fabric.sdk.android.Fabric;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 
-public class LaunchActivity extends BaseActivity {
+public class LaunchActivity extends PopcornBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

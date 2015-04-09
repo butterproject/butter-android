@@ -59,7 +59,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
 
     public abstract Call getDetail(String videoId, Callback callback);
 
-	public abstract int getLoadingMessage();
+    public abstract int getLoadingMessage();
 
     public abstract List<NavInfo> getNavigation();
 
@@ -78,7 +78,10 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public static class Filters {
-        public enum Order {ASC, DESC};
+        public enum Order {ASC, DESC}
+
+        ;
+
         public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET}
 
         public String keywords = null;

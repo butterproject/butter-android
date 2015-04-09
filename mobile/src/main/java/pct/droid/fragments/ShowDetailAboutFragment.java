@@ -57,12 +57,12 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_detail_about, container, false);
         ButterKnife.inject(this, mRoot);
-        if(VersionUtils.isJellyBean() && container != null) {
+        if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
         mTitle.setText(sShow.title);
-        if(!sShow.rating.equals("-1")) {
+        if (!sShow.rating.equals("-1")) {
             Double rating = Double.parseDouble(sShow.rating);
             mRating.setProgress(rating.intValue());
             mRating.setVisibility(View.VISIBLE);

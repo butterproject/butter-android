@@ -78,7 +78,7 @@ public class LoadingBeamingDialogFragment extends DialogFragment {
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        if(mOnCancelListener != null)
+        if (mOnCancelListener != null)
             mOnCancelListener.onCancel(dialog);
     }
 
