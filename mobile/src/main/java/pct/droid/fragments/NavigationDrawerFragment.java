@@ -153,9 +153,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 
 	private View.OnClickListener mOnShareClickListener = new View.OnClickListener() {
 		@Override public void onClick(View v) {
-			String text = getString(R.string.share_text);
-
-			startActivity(IntentUtils.getSendIntent(getActivity(), getString(R.string.share_dialog_title), String.format("%s %s", text,
+			String message = getString(R.string.share_message);
+			startActivity(IntentUtils.getSendIntent(getActivity(), getString(R.string.share_dialog_title), String.format("%s %s", message,
 					Constants.POPCORN_URL)));
 		}
 	};
