@@ -160,7 +160,7 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="twitter">Twitter</string>
 
 	<!-- Share dialog -->
-	<string name="share_text">Have you tried Popcorn Time for Android? It\'s awesome! https://popcorntime.io/</string>
+	<string name="share_message">Have you tried Popcorn Time for Android? It\'s awesome!</string>
 	<string name="share_dialog_title">Share with</string>
 
     <!-- Beam dialog -->
