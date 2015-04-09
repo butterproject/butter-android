@@ -24,8 +24,6 @@ import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.message.BasicNameValuePair;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,25 +56,25 @@ public class EZTVProvider extends MediaProvider {
             currentList = (ArrayList<Media>) existingList.clone();
         }
 
-        ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("limit", "30"));
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new NameValuePair("limit", "30"));
 
         if (filters == null) {
             filters = new Filters();
         }
 
         if (filters.keywords != null) {
-            params.add(new BasicNameValuePair("keywords", filters.keywords));
+            params.add(new NameValuePair("keywords", filters.keywords));
         }
 
         if (filters.genre != null) {
-            params.add(new BasicNameValuePair("genre", filters.genre));
+            params.add(new NameValuePair("genre", filters.genre));
         }
 
         if (filters.order == Filters.Order.ASC) {
-            params.add(new BasicNameValuePair("order", "asc"));
+            params.add(new NameValuePair("order", "asc"));
         } else {
-            params.add(new BasicNameValuePair("order", "desc"));
+            params.add(new NameValuePair("order", "desc"));
         }
 
         String sort = "";
@@ -99,7 +97,7 @@ public class EZTVProvider extends MediaProvider {
                 break;
         }
 
-        params.add(new BasicNameValuePair("sort", sort));
+        params.add(new NameValuePair("sort", sort));
 
         String url = API_URL + "shows/";
         if (filters.page != null) {
@@ -113,7 +111,7 @@ public class EZTVProvider extends MediaProvider {
         requestBuilder.url(url + "?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
-        return fetchList(currentList, requestBuilder, callback);
+        return fetchList(currentList, requestBuilder, filters, callback);
     }
 
     /**
@@ -124,7 +122,7 @@ public class EZTVProvider extends MediaProvider {
      * @param callback       Network callback
      * @return Call
      */
-    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
+    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -134,7 +132,7 @@ public class EZTVProvider extends MediaProvider {
                 } else {
                     url = url.replace(API_URL, MIRROR_URL);
                     requestBuilder.url(url);
-                    fetchList(currentList, requestBuilder, callback);
+                    fetchList(currentList, requestBuilder, filters, callback);
                 }
             }
 
@@ -156,7 +154,7 @@ public class EZTVProvider extends MediaProvider {
                             callback.onFailure(new NetworkErrorException("Empty response"));
                         } else {
                             ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
-                            callback.onSuccess(formattedData, list.size() > 0);
+                            callback.onSuccess(filters, formattedData, list.size() > 0);
                             return;
                         }
                     }
@@ -192,7 +190,7 @@ public class EZTVProvider extends MediaProvider {
                         ArrayList<Media> formattedData = result.formatDetailForPopcorn();
 
                         if (formattedData.size() > 0) {
-                            callback.onSuccess(formattedData, true);
+                            callback.onSuccess(null, formattedData, true);
                             return;
                         }
                         callback.onFailure(new IllegalStateException("Empty list"));

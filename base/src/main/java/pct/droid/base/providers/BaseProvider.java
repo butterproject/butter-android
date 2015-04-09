@@ -99,7 +99,7 @@ public abstract class BaseProvider {
      * @param valuePairs List with key-value items
      * @return Query string
      */
-    protected String buildQuery(List<BasicNameValuePair> valuePairs) {
+    protected String buildQuery(List<NameValuePair> valuePairs) {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
@@ -116,6 +116,24 @@ public abstract class BaseProvider {
 
 
         return stringBuilder.toString();
+    }
+
+    public class NameValuePair {
+        private String mName;
+        private String mValue;
+
+        public NameValuePair(String name, String value) {
+            mName = name;
+            mValue = value;
+        }
+
+        public String getName() {
+            return mName;
+        }
+
+        public String getValue() {
+            return mValue;
+        }
     }
 
 }
