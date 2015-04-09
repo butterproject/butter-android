@@ -407,7 +407,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             mVisibleItemCount = mLayoutManager.getChildCount();
-            mTotalItemCount = mLayoutManager.getItemCount();
+            mTotalItemCount = mLayoutManager.getItemCount() - (mAdapter.isLoading() ? 1 : 0);
             mFirstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
 
             if (mState == State.LOADING_PAGE) {
