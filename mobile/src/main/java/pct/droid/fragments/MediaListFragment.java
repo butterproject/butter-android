@@ -34,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.Call;
+
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -101,8 +103,10 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
     private MediaProvider mProvider;
+    private Call mCurrentCall;
     private int mPage = 1;
     private MediaProvider.Filters mFilters = new MediaProvider.Filters();
+    private String mGenre;
 
     @InjectView(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
@@ -130,10 +134,13 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     }
 
     public void changeGenre(String genre) {
-        if (mTotalItemCount > 0 && !(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
+        if (!(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
+            if(mCurrentCall != null)
+                mCurrentCall.cancel();
             mAdapter.clearItems();
-            mFilters.genre = genre;
-            mProvider.getList(mFilters, mCallback);
+            mGenre = mFilters.genre = genre;
+            mFilters.page = 1;
+            mCurrentCall = mProvider.getList(mFilters, mCallback);
             setState(State.LOADING);
         }
     }
@@ -190,7 +197,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         //don't load initial data in search mode
         if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
-            mProvider.getList(mFilters, mCallback);/* fetch new items */
+            mCurrentCall = mProvider.getList(mFilters, mCallback);/* fetch new items */
             setState(State.LOADING);
         } else updateUI();
     }
@@ -277,14 +284,19 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mFilters.keywords = searchQuery;
         mFilters.page = 1;
         mPage = 1;
-        mProvider.getList(mFilters, mCallback);
+        mCurrentCall = mProvider.getList(mFilters, mCallback);
     }
 
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
         @DebugLog
-        public void onSuccess(final ArrayList<Media> items, boolean changed) {
-            if (!changed) return; // nothing changed according to the provider, so don't do anything
+        public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
+            if (!(mGenre == null ? "" : mGenre).equals(filters.genre == null ? "" : filters.genre)) return; // nothing changed according to the provider, so don't do anything
+            if(!changed) {
+                setState(State.LOADED);
+                return;
+            }
+
 
             mItems.clear();
             ThreadUtils.runOnUiThread(new Runnable() {
@@ -351,7 +363,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         }
                     });
                 } else {
-                    mProvider.getList(null, this);
+                    mCurrentCall = mProvider.getList(null, this);
                 }
                 mRetries++;
             }
@@ -418,11 +430,11 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 }
             }
 
-            if (!mEndOfListReached && !(mState == State.LOADING_PAGE) && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
+            if (!mEndOfListReached && !(mState == State.LOADING_PAGE) && !(mState == State.LOADING) && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
                     mLoadingTreshold)) {
                 MediaProvider.Filters filters = mFilters;
                 filters.page = mPage;
-                mProvider.getList(mItems, filters, mCallback);
+                mCurrentCall = mProvider.getList(mItems, filters, mCallback);
 
                 mFilters = filters;
 

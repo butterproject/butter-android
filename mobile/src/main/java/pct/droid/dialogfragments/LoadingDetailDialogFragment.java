@@ -89,7 +89,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
         mProvider = media.getMediaProvider();
         mProvider.getDetail(media.videoId, new MediaProvider.Callback() {
                     @Override
-                    public void onSuccess(ArrayList<Media> items, boolean changed) {
+                    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
                         if (!isAdded()) return;
                         if (items.size() <= 0) return;
 

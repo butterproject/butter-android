@@ -27,8 +27,6 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.message.BasicNameValuePair;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
@@ -75,8 +73,8 @@ public class YTSProvider extends MediaProvider {
             currentList = (ArrayList<Media>) existingList.clone();
         }
 
-        ArrayList<BasicNameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("limit", "30"));
+        ArrayList<NameValuePair> params = new ArrayList<>();
+        params.add(new NameValuePair("limit", "30"));
 
         if (filters == null) {
             filters = new Filters();
@@ -84,17 +82,17 @@ public class YTSProvider extends MediaProvider {
 
         if (filters.keywords != null) {
             String keywords = filters.keywords.replaceAll("\\s", "% ");
-            params.add(new BasicNameValuePair("query_term", keywords));
+            params.add(new NameValuePair("query_term", keywords));
         }
 
         if (filters.genre != null) {
-            params.add(new BasicNameValuePair("genre", filters.genre));
+            params.add(new NameValuePair("genre", filters.genre));
         }
 
         if (filters.order == Filters.Order.ASC) {
-            params.add(new BasicNameValuePair("order_by", "asc"));
+            params.add(new NameValuePair("order_by", "asc"));
         } else {
-            params.add(new BasicNameValuePair("order_by", "desc"));
+            params.add(new NameValuePair("order_by", "desc"));
         }
 
         String sort;
@@ -117,10 +115,10 @@ public class YTSProvider extends MediaProvider {
                 break;
         }
 
-        params.add(new BasicNameValuePair("sort_by", sort));
+        params.add(new NameValuePair("sort_by", sort));
 
         if (filters.page != null) {
-            params.add(new BasicNameValuePair("page", Integer.toString(filters.page)));
+            params.add(new NameValuePair("page", Integer.toString(filters.page)));
         }
 
         Request.Builder requestBuilder = new Request.Builder();
@@ -128,7 +126,7 @@ public class YTSProvider extends MediaProvider {
         requestBuilder.url(API_URL + "list_movies.json?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
-        return fetchList(currentList, requestBuilder, callback);
+        return fetchList(currentList, requestBuilder, filters, callback);
     }
 
     /**
@@ -139,13 +137,13 @@ public class YTSProvider extends MediaProvider {
      * @param callback       Network callback
      * @return Call
      */
-    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Callback callback) {
+    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
         requestBuilder.addHeader("Host", "eqwww.image.yt");
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 if (generateFallback(requestBuilder)) {
-                    fetchList(currentList, requestBuilder, callback);
+                    fetchList(currentList, requestBuilder, filters, callback);
                 } else {
                     callback.onFailure(e);
                 }
@@ -177,7 +175,7 @@ public class YTSProvider extends MediaProvider {
                         callback.onFailure(new NetworkErrorException(result.status_message));
                     } else {
                         ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
-                        callback.onSuccess(formattedData, true);
+                        callback.onSuccess(filters, formattedData, true);
                         return;
                     }
                 }
@@ -282,7 +280,7 @@ public class YTSProvider extends MediaProvider {
 
                                 final ArrayList<Media> returnData = new ArrayList<>();
                                 returnData.add(movie);
-                                callback.onSuccess(returnData, true);
+                                callback.onSuccess(null, returnData, true);
                             }
                         });
 

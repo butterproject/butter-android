@@ -43,8 +43,8 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
      * @param filters  Filters the provider can use to sort or search
      * @param callback MediaProvider callback
      */
-    public void getList(Filters filters, Callback callback) {
-        getList(null, filters, callback);
+    public Call getList(Filters filters, Callback callback) {
+        return getList(null, filters, callback);
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public interface Callback {
-        public void onSuccess(ArrayList<Media> items, boolean changed);
+        public void onSuccess(Filters filters, ArrayList<Media> items, boolean changed);
 
         public void onFailure(Exception e);
     }
