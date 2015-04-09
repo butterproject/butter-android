@@ -43,7 +43,7 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     private TorrentService mService;
     private BeamManager mBeamManager = BeamManager.getInstance(this);
     private StreamInfo mStreamInfo;
-    private String mTitle = getString(R.string.the_video);
+    private String mTitle;
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -64,6 +64,8 @@ public class BeamPlayerActivity extends BaseActivity implements VideoPlayerFragm
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
+
+        mTitle = getString(R.string.the_video);
 
         TorrentService.bindHere(this, mServiceConnection);
 
