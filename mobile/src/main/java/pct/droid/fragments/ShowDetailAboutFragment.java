@@ -72,7 +72,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
 
         String metaDataStr = sShow.year;
 
-        if (sShow.status != null) {
+        if (sShow.status != Show.Status.UNKNOWN) {
             metaDataStr += " • ";
             if (sShow.status == Show.Status.CONTINUING) {
                 metaDataStr += getString(R.string.continuing);
