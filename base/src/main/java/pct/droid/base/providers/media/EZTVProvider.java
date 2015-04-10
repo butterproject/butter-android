@@ -232,6 +232,8 @@ public class EZTVProvider extends MediaProvider {
                         show.status = Show.Status.ENDED;
                     } else if (status.equalsIgnoreCase("returning series")) {
                         show.status = Show.Status.CONTINUING;
+                    } else if (status.equalsIgnoreCase("in production")) {
+                        show.status = Show.Status.CONTINUING;
                     } else if (status.equalsIgnoreCase("canceled")) {
                         show.status = Show.Status.CANCELED;
                     }
