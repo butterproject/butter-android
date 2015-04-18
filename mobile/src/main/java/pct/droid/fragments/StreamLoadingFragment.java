@@ -1,10 +1,28 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +38,28 @@ import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import hugo.weaving.DebugLog;
 import pct.droid.R;
+import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
+    private boolean mAttached = false;
+    private Context mContext;
+
     View mRoot;
     @InjectView(R.id.progress_indicator)
-    ProgressBar progressIndicator;
+    ProgressBar mProgressIndicator;
     @InjectView(R.id.primary_textview)
     TextView mPrimaryTextView;
     @InjectView(R.id.secondary_textview)
@@ -65,8 +92,21 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mAttached = true;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAttached = false;
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mContext = getActivity();
         loadBackgroundImage();
     }
 
@@ -74,22 +114,28 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         StreamInfo info = mCallback.getStreamInformation();
           /* attempt to load background image */
         if (null != info) {
-            String url;
-            if (info.isShow()) url = info.getShow().image;
-            else url = info.getMedia().image;
+            Media media = info.isShow() ? info.getShow() : info.getMedia();
+            if (media != null) {
+                String url = media.image;
+                if (PixelUtils.isTablet(getActivity())) {
+                    url = media.headerImage;
+                }
 
-            if (!TextUtils.isEmpty(url))
-                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+                if (!TextUtils.isEmpty(url))
+                    Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+            }
         }
     }
 
     private void updateStatus(final DownloadStatus status) {
+        if (!mAttached) return;
+
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressIndicator.setIndeterminate(false);
-                progressIndicator.setProgress(status.bufferProgress);
+                mProgressIndicator.setIndeterminate(false);
+                mProgressIndicator.setProgress(status.bufferProgress);
                 mPrimaryTextView.setText(status.bufferProgress + "%");
 
                 if (status.downloadSpeed / 1024 < 1000) {
@@ -105,29 +151,28 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     @Override
     protected void updateView(State state, Object extra) {
-
         switch (state) {
             case UNINITIALISED:
                 mTertiaryTextView.setText(null);
                 mPrimaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case ERROR:
                 if (null != extra && extra instanceof String)
                     mPrimaryTextView.setText((String) extra);
                 mSecondaryTextView.setText(null);
                 mTertiaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case BUFFERING:
                 mPrimaryTextView.setText(R.string.starting_buffering);
                 mTertiaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case STREAMING:
                 mPrimaryTextView.setText(R.string.streaming_started);
@@ -138,24 +183,37 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mPrimaryTextView.setText(R.string.waiting_for_subtitles);
                 mTertiaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
             case WAITING_TORRENT:
                 mPrimaryTextView.setText(R.string.waiting_torrent);
                 mTertiaryTextView.setText(null);
                 mSecondaryTextView.setText(null);
-                progressIndicator.setIndeterminate(true);
-                progressIndicator.setProgress(0);
+                mProgressIndicator.setIndeterminate(true);
+                mProgressIndicator.setProgress(0);
                 break;
 
         }
     }
 
     @Override
-    protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
-                                       String subtitleLanguage,
-                                       int resumePosition) {
-        VideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
+    @DebugLog
+    protected void startPlayerActivity(String location, int resumePosition) {
+        if (getActivity() != null && !mPlayerStarted) {
+            mStreamInfo.setVideoLocation(location);
+            boolean playingExternal = false;
+            if (BeamManager.getInstance(mContext).isConnected()) {
+                BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+            } else {
+                playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+                if (!playingExternal) {
+                    VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+                }
+            }
+
+            if (!playingExternal)
+                getActivity().finish();
+        }
     }
 }

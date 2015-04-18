@@ -6,13 +6,13 @@ Allow any Android user to watch movies easily streaming from torrents, without a
 Visit the project's website at <http://popcorntime.io>.
 
 * [Continuous Integration](http://ci.popcorntime.io/job/Popcorn-Android/)
-* [Issue Tracker](https://git.popcorntime.io/jira/browse/PTA)
+* [Issue Tracker](https://git.popcorntime.io/popcorntime/android/issues)
 
 ## Community
 
 Keep track of Popcorn Time development and community activity.
 
-* Follow Popcorn Time on [Twitter](https://twitter.com/popcorntimetv), [Facebook](https://www.facebook.com/PopcornTimeTv) and [Google+](https://plus.google.com/+Getpopcorntime).
+* Follow Popcorn Time on [Twitter](https://twitter.com/popcorntimetv), [Facebook](https://www.facebook.com/PopcornTimeTv) and [Google+](https://plus.google.com/+PopcorntimeIo).
 * Read and subscribe to the [The Official Popcorn Time Blog](http://blog.popcorntime.io).
 * Join in discussions on the [Popcorn Time Forum](https://discuss.popcorntime.io)
 * Connect with us on IRC at `#popcorntime` on freenode ([web access](http://webchat.freenode.net/?channels=popcorntime))
@@ -44,32 +44,41 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
      |    |-- build.gradle               # base build script
      |    `-- src
      |          |-- main
-     |          |     |-- assets         # base module assets
-     |          |     |-- java           # base module java code
-     |          |     `-- res            # base module resources
+     |                |-- assets         # base module assets
+     |                |-- java           # base module java code
+     |                `-- res            # base module resources
     `|-- mobile                          # mobile module (smartphone/tablet application)
      |    |-- build.gradle               # mobile build script
      |    `-- src
      |          |-- main
-     |          |     |-- java           # mobile module java code
-     |          |     `-- res            # mobile module resources
+     |                |-- java           # mobile module java code
+     |                `-- res            # mobile module resources
     `|-- tv                              # tv module (Android TV application)
      |    |-- build.gradle               # tv build script
      |    `-- src
      |          |-- main
-     |          |     |-- java           # tv module java code
-     |          |     `-- res            # tv module resources
+     |                |-- java           # tv module java code
+     |                `-- res            # tv module resources
     `|-- vlc                             # vlc module (VLC mediaplayer library)
      |    |-- build.gradle               # vlc module build script
      |    `-- src
      |          |-- main
-     |          |     |-- jniLibs        # native LibVLC libraries
-     |          |     |-- java           # LibVLC Java code
+     |                |-- jniLibs        # native LibVLC libraries
+     |                |-- java           # LibVLC Java code
     `|-- xmlrpc                          # xmlrpc module
      |    |-- build.gradle               # xmlrpc build script
      |    `-- src
      |          |-- main
-     |          |     |-- java           # xmlrpc module java code
+     |                |-- java           # xmlrpc module java code
+    `|-- connectsdk                      # connectsdk module
+          |-- build.gradle               # connectsdk build script
+          `-- src
+          |     |-- java                 # connectsdk module java code
+          `-- core
+          |     |-- src                  # connectsdk module core java code
+          `-- modules
+                |-- google_cast
+                      |-- src            # connectsdk module google cast java code
 
 ## Versioning
 
@@ -109,4 +118,4 @@ Note: some dependencies are external libraries, which might be covered by a diff
 
 If you want to contact us: [hello@popcorntime.io](mailto:hello@popcorntime.io)
 
-Copyright (c) 2014 Popcorn Time Foundation - Released under the [GPL V3 license](https://git.popcorntime.io/stash/projects/PA/repos/popcorn-android/browse/LICENSE.md).
+Copyright (c) 2014 Popcorn Time Foundation - Released under the [GPL V3 license](https://git.popcorntime.io/popcorntime/android/blob/development/LICENSE.md).

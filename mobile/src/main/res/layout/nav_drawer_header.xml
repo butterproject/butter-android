@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>    <!-- Currently there is no content to show in the navigation header, so elements are hidden -->
+<?xml version="1.0" encoding="utf-8"?>    <!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->    <!-- Currently there is no content to show in the navigation header, so elements are hidden -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
@@ -28,7 +43,7 @@
 	<!--app:border_width="1dp"-->
 	<!--app:border_color="#E4E4E4"-->
 
-	<TextView
+	<com.devspark.robototextview.widget.RobotoTextView
 		android:id="@+id/title_textview"
 		tools:text="Lauren Ipsum"
 		android:visibility="gone"
@@ -42,7 +57,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
 
-	<TextView
+	<com.devspark.robototextview.widget.RobotoTextView
 		android:id="@+id/subtitle_textview"
 		tools:text="524 hours watched"
 		android:visibility="gone"

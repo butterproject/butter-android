@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="update_available">Actualizare nouă disponibilă</string>
+  <string name="press_install">Apasă pentru instalare</string>
+  <string name="loading_data">Se încarcă date...</string>
+  <string name="loading_details">Se încarcă detalii...</string>
+  <string name="loading_shows">Se încarcă seriale TV...</string>
+  <string name="loading_movies">Se încarcă filme...</string>
+  <string name="loading_subs">Se încarcă subtitrări...</string>
+  <string name="error_files">Eroare: nu s-au putut scrie fișierele</string>
+  <string name="overview_not_available">Ne pare rău! Nu există prezentare generală disponibilă.</string>
+  <string name="episode">Episod</string>
+  <string name="unknown_error">Ceva nu a mers bine</string>
+  <!--Genres-->
+  <string name="genre_all">Toate</string>
+  <string name="genre_action">Acțiune</string>
+  <string name="genre_adventure">Aventură</string>
+  <string name="genre_animation">Animație</string>
+  <string name="genre_biography">Biografic</string>
+  <string name="genre_comedy">Comedie</string>
+  <string name="genre_crime">Crimă</string>
+  <string name="genre_children">Copii</string>
+  <string name="genre_documentary">Documentar</string>
+  <string name="genre_drama">Dramă</string>
+  <string name="genre_family">Familie</string>
+  <string name="genre_fantasy">Fantezie</string>
+  <string name="genre_film_noir">Film-Noir</string>
+  <string name="genre_game_show">Jocuri</string>
+  <string name="genre_history">Istoric</string>
+  <string name="genre_home_garden">Casă și grădină</string>
+  <string name="genre_horror">Groază</string>
+  <string name="genre_mini_series">Mini seriale</string>
+  <string name="genre_music">Muzică</string>
+  <string name="genre_musical">Muzical</string>
+  <string name="genre_mystery">Mister</string>
+  <string name="genre_news">Știri</string>
+  <string name="genre_reality">Realitate</string>
+  <string name="genre_romance">Romantic</string>
+  <string name="genre_sci_fi">SF</string>
+  <string name="genre_short">Scurt-metraj</string>
+  <string name="genre_special_interest">Interes special</string>
+  <string name="genre_soap">Telenovelă</string>
+  <string name="genre_sport">Sport</string>
+  <string name="genre_suspense">Suspans</string>
+  <string name="genre_talk_show">Dezbatere</string>
+  <string name="genre_thriller">Groază</string>
+  <string name="genre_war">Război</string>
+  <string name="genre_western">Western</string>
+  <!--Anime:-->
+  <string name="genre_cars">Mașini</string>
+  <string name="genre_dementia">Demență</string>
+  <string name="genre_demons">Demoni</string>
+  <string name="genre_ecchi">Ecchi</string>
+  <string name="genre_game">Joc</string>
+  <string name="genre_harem">Harem</string>
+  <string name="genre_josei">Josei</string>
+  <string name="genre_kids">Copii</string>
+  <string name="genre_magic">Magie</string>
+  <string name="genre_martial_arts">Arte marțiale</string>
+  <string name="genre_mecha">Mecha</string>
+  <string name="genre_military">Militar</string>
+  <string name="genre_police">Poliție</string>
+  <string name="genre_parody">Parodie</string>
+  <string name="genre_psychological">Psihologic</string>
+  <string name="genre_samurai">Samurai</string>
+  <string name="genre_school">Școală</string>
+  <string name="genre_seinen">Seinen</string>
+  <string name="genre_shoujo">Shoujo</string>
+  <string name="genre_shoujo_ai">Shoujo Ai</string>
+  <string name="genre_shounen">Shounen</string>
+  <string name="genre_shounen_ai">Shounen Ai</string>
+  <string name="genre_slice_of_life">Frântură din viață</string>
+  <string name="genre_space">Spațiu</string>
+  <string name="genre_super_power">Super putere</string>
+  <string name="genre_supernatural">Supranatural</string>
+  <string name="genre_vampire">Vampir</string>
+  <!--Possible tabs-->
+  <string name="popular_now">FILME POPULARE</string>
+  <string name="top_rated">CELE MAI APRECIATE</string>
+  <string name="release_date">DATĂ LANSARE</string>
+  <string name="last_updated">ULTIMA ACTUALIZATĂ</string>
+  <string name="year">AN</string>
+  <string name="a_to_z">A - Z</string>
+  <!--BeamManager-->
+  <string name="pairing_tv">Se asociează cu TV-ul.</string>
+</resources>

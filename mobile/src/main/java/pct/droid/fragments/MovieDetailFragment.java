@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,10 +32,14 @@ import pct.droid.activities.TrailerPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SortUtils;
 import pct.droid.base.utils.StringUtils;
+import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
@@ -42,8 +47,9 @@ import pct.droid.widget.OptionSelector;
 
 public class MovieDetailFragment extends BaseDetailFragment {
 
-    private Movie mMovie;
+    private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
+    private Boolean mAttached = false;
 
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
@@ -67,65 +73,64 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;
 
-    public static MovieDetailFragment newInstance(Movie movie, int color) {
-        Bundle b = new Bundle();
-        b.putParcelable(DATA, movie);
-        b.putInt(COLOR, color);
-        MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-        movieDetailFragment.setArguments(b);
-        return movieDetailFragment;
+    public static MovieDetailFragment newInstance(Movie movie) {
+        sMovie = movie;
+        return new MovieDetailFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMovie = getArguments().getParcelable(DATA);
-        mPaletteColor = getArguments().getInt(COLOR, getResources().getColor(R.color.primary));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_moviedetail, container, false);
-        if(VersionUtils.isJellyBean() && container != null) {
+        if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
         ButterKnife.inject(this, mRoot);
 
-        if(VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+        if (!VersionUtils.isJellyBean()) {
+            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
         } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mPaletteColor));
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
         }
 
-        Double rating = Double.parseDouble(mMovie.rating);
-        mTitle.setText(mMovie.title);
-        mRating.setProgress(rating.intValue());
-
-        String metaDataStr = mMovie.year;
-        if (!TextUtils.isEmpty(mMovie.runtime)) {
-            metaDataStr += " • ";
-            metaDataStr += mMovie.runtime + " " + getString(R.string.minutes);
+        mTitle.setText(sMovie.title);
+        if (!sMovie.rating.equals("-1")) {
+            Double rating = Double.parseDouble(sMovie.rating);
+            mRating.setProgress(rating.intValue());
+            mRating.setVisibility(View.VISIBLE);
+        } else {
+            mRating.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(mMovie.genre)) {
+        String metaDataStr = sMovie.year;
+        if (!TextUtils.isEmpty(sMovie.runtime)) {
             metaDataStr += " • ";
-            metaDataStr += mMovie.genre;
+            metaDataStr += sMovie.runtime + " " + getString(R.string.minutes);
+        }
+
+        if (!TextUtils.isEmpty(sMovie.genre)) {
+            metaDataStr += " • ";
+            metaDataStr += sMovie.genre;
         }
 
         mMeta.setText(metaDataStr);
 
-        if (!TextUtils.isEmpty(mMovie.synopsis)) {
-            mSynopsis.setText(mMovie.synopsis);
+        if (!TextUtils.isEmpty(sMovie.synopsis)) {
+            mSynopsis.setText(sMovie.synopsis);
             mSynopsis.post(new Runnable() {
                 @Override
                 public void run() {
                     boolean ellipsized = false;
                     Layout layout = mSynopsis.getLayout();
-                    if(layout == null) return;
+                    if (layout == null) return;
                     int lines = layout.getLineCount();
-                    if(lines > 0) {
-                        int ellipsisCount = layout.getEllipsisCount(lines-1);
+                    if (lines > 0) {
+                        int ellipsisCount = layout.getEllipsisCount(lines - 1);
                         if (ellipsisCount > 0) {
                             ellipsized = true;
                         }
@@ -138,62 +143,93 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mReadMore.setVisibility(View.GONE);
         }
 
-        if (mMovie.trailer == null) {
-            mWatchTrailer.setVisibility(View.GONE);
-        }
+        mWatchTrailer.setVisibility(sMovie.trailer == null || sMovie.trailer.isEmpty() ? View.GONE : View.VISIBLE);
 
         mSubtitles.setFragmentManager(getFragmentManager());
         mQuality.setFragmentManager(getFragmentManager());
         mSubtitles.setTitle(R.string.subtitles);
         mQuality.setTitle(R.string.quality);
 
-        String[] languages = mMovie.subtitles.keySet().toArray(new String[mMovie.subtitles.size()]);
-        Arrays.sort(languages);
-        final String[] adapterLanguages = new String[languages.length + 1];
-        adapterLanguages[0] = "no-subs";
-        System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
+        mSubtitles.setText(R.string.loading_subs);
+        mSubtitles.setClickable(false);
 
-        String[] readableNames = new String[adapterLanguages.length];
-        for (int i = 0; i < readableNames.length; i++) {
-            String language = adapterLanguages[i];
-            if (language.equals("no-subs")) {
-                readableNames[i] = getString(R.string.no_subs);
-            } else {
-                Locale locale = LocaleUtils.toLocale(language);
-                readableNames[i] = locale.getDisplayName(locale);
-            }
+        if (sMovie.getSubsProvider() != null) {
+            sMovie.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
+                @Override
+                public void onSuccess(Map<String, String> subtitles) {
+                    if (!mAttached) return;
+
+                    sMovie.subtitles = subtitles;
+
+                    String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
+                    Arrays.sort(languages);
+                    final String[] adapterLanguages = new String[languages.length + 1];
+                    adapterLanguages[0] = "no-subs";
+                    System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
+
+                    String[] readableNames = new String[adapterLanguages.length];
+                    for (int i = 0; i < readableNames.length; i++) {
+                        String language = adapterLanguages[i];
+                        if (language.equals("no-subs")) {
+                            readableNames[i] = getString(R.string.no_subs);
+                        } else {
+                            Locale locale = LocaleUtils.toLocale(language);
+                            readableNames[i] = locale.getDisplayName(locale);
+                        }
+                    }
+
+                    mSubtitles.setListener(new OptionSelector.SelectorListener() {
+                        @Override
+                        public void onSelectionChanged(int position, String value) {
+                            onSubtitleLanguageSelected(adapterLanguages[position]);
+                        }
+                    });
+                    mSubtitles.setData(readableNames);
+                    ThreadUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSubtitles.setClickable(true);
+                        }
+                    });
+
+                    String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
+                    if (subtitles.containsKey(defaultSubtitle)) {
+                        onSubtitleLanguageSelected(defaultSubtitle);
+                        mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
+                    } else {
+                        onSubtitleLanguageSelected("no-subs");
+                        mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf("no-subs"));
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    mSubtitles.setData(new String[0]);
+                    mSubtitles.setClickable(true);
+                }
+            });
+        } else {
+            mSubtitles.setClickable(false);
+            mSubtitles.setText(R.string.no_subs_available);
         }
-        mSubtitles.setData(readableNames);
 
-        final String[] qualities = mMovie.torrents.keySet().toArray(new String[mMovie.torrents.size()]);
-        Arrays.sort(qualities);
-        mQuality.setData(qualities);
-
-        mSubtitles.setListener(new OptionSelector.SelectorListener() {
-            @Override
-            public void onSelectionChanged(int position, String value) {
-                onSubtitleLanguageSelected(adapterLanguages[position]);
-            }
-        });
-        mQuality.setListener(new OptionSelector.SelectorListener() {
-            @Override
-            public void onSelectionChanged(int position, String value) {
-                mSelectedQuality = value;
-            }
-        });
-
-        mSelectedQuality = qualities[qualities.length - 1];
-        mQuality.setText(mSelectedQuality);
-        mQuality.setDefault(qualities.length - 1);
-
-        String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
-        if (mMovie.subtitles.containsKey(defaultSubtitle)) {
-            onSubtitleLanguageSelected(defaultSubtitle);
-            mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
+        if (sMovie.torrents.size() > 0) {
+            final String[] qualities = sMovie.torrents.keySet().toArray(new String[sMovie.torrents.size()]);
+            SortUtils.sortQualities(qualities);
+            mQuality.setData(qualities);
+            mQuality.setListener(new OptionSelector.SelectorListener() {
+                @Override
+                public void onSelectionChanged(int position, String value) {
+                    mSelectedQuality = value;
+                }
+            });
+            mSelectedQuality = qualities[qualities.length - 1];
+            mQuality.setText(mSelectedQuality);
+            mQuality.setDefault(qualities.length - 1);
         }
 
-        if(mCoverImage != null) {
-            Picasso.with(mCoverImage.getContext()).load(mMovie.image).into(mCoverImage);
+        if (mCoverImage != null) {
+            Picasso.with(mCoverImage.getContext()).load(sMovie.image).into(mCoverImage);
         }
 
         return mRoot;
@@ -202,8 +238,15 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mAttached = true;
         if (activity instanceof FragmentListener)
             mCallback = (FragmentListener) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAttached = false;
     }
 
     @OnClick(R.id.read_more)
@@ -212,36 +255,46 @@ public class MovieDetailFragment extends BaseDetailFragment {
             return;
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle b = new Bundle();
-        b.putString("text", mMovie.synopsis);
+        b.putString("text", sMovie.synopsis);
         synopsisDialogFragment.setArguments(b);
-        synopsisDialogFragment.show(mActivity.getFragmentManager(), "overlay_fragment");
+        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
         Intent trailerIntent = new Intent(mActivity, TrailerPlayerActivity.class);
-        if (!YouTubeData.isYouTubeUrl(mMovie.trailer)) {
+        if (!YouTubeData.isYouTubeUrl(sMovie.trailer)) {
             trailerIntent = new Intent(mActivity, VideoPlayerActivity.class);
         }
-        trailerIntent.putExtra(TrailerPlayerActivity.DATA, mMovie);
-        trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, mMovie.trailer);
+        trailerIntent.putExtra(TrailerPlayerActivity.DATA, sMovie);
+        trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, sMovie.trailer);
         startActivity(trailerIntent);
     }
 
     @OnClick(R.id.play_button)
     public void play() {
-        String streamUrl = mMovie.torrents.get(mSelectedQuality).url;
-        StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(mMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
+        String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
+        StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
     }
 
     private void onSubtitleLanguageSelected(String language) {
         mSelectedSubtitleLanguage = language;
         if (!language.equals("no-subs")) {
-            Locale locale = LocaleUtils.toLocale(language);
-            mSubtitles.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
+            final Locale locale = LocaleUtils.toLocale(language);
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSubtitles.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
+                }
+            });
         } else {
-            mSubtitles.setText(R.string.no_subs);
+            ThreadUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSubtitles.setText(R.string.no_subs);
+                }
+            });
         }
     }
 }

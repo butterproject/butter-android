@@ -1,3 +1,20 @@
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <ScrollView xmlns:tools="http://schemas.android.com/tools"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="match_parent"
@@ -18,7 +35,7 @@
 			android:src="@drawable/popcorn_logo"
 			android:layout_height="wrap_content" />
 
-		<TextView
+		<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/message_textview"
 			android:layout_width="wrap_content"
 			android:layout_below="@+id/logo_imageview"
@@ -33,10 +50,11 @@
             android:layout_below="@id/message_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/popcorn_button"
                 android:drawableTop="@drawable/icon_popcorn"
                 android:text="@string/website"
@@ -44,15 +62,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/discuss_button"
                 android:drawableTop="@drawable/icon_discourse"
-                android:text="@string/discuss"
+                android:text="@string/forum"
                 style="@style/AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/blog_button"
                 android:drawableTop="@drawable/icon_blog"
                 android:text="@string/blog"
@@ -68,7 +86,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/twitter_button"
                 android:drawableTop="@drawable/icon_twitter"
                 android:text="@string/twitter"
@@ -76,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/facebook_button"
                 android:drawableTop="@drawable/icon_facebook"
                 android:text="@string/facebook"
@@ -84,9 +102,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/git_button"
-                android:drawableTop="@drawable/icon_stash"
+                android:drawableTop="@drawable/icon_git"
                 android:text="@string/git"
                 android:layout_marginBottom="64dp"
                 style="@style/AboutButton"

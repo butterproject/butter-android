@@ -17,8 +17,7 @@ import butterknife.InjectView;
 import pct.droid.R;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
-public class OptionSelector extends LinearLayout
-{
+public class OptionSelector extends LinearLayout {
 
     View mView;
     @InjectView(android.R.id.text1)
@@ -31,19 +30,16 @@ public class OptionSelector extends LinearLayout
     private int mDefaultOption = -1, mTitle;
     private SelectorListener mListener;
 
-    public OptionSelector(Context context)
-    {
+    public OptionSelector(Context context) {
         super(context);
     }
 
-    public OptionSelector(Context context, AttributeSet attrs)
-    {
+    public OptionSelector(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, android.R.style.Widget_Button);
     }
 
-    public OptionSelector(Context context, AttributeSet attrs, int defStyle)
-    {
+    public OptionSelector(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs, defStyle);
     }
@@ -52,14 +48,14 @@ public class OptionSelector extends LinearLayout
         setClickable(true);
         setFocusable(true);
 
-        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = layoutInflater.inflate(R.layout.optionselector, this);
         ButterKnife.inject(this, mView);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OptionSelector, defStyle, 0);
 
         String str = a.getString(R.styleable.OptionSelector_optionText);
-        if(!TextUtils.isEmpty(str)) {
+        if (!TextUtils.isEmpty(str)) {
             mText.setText(str);
         }
 
@@ -104,18 +100,18 @@ public class OptionSelector extends LinearLayout
     OnClickListener mOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(mFragmentManager == null) return;
+            if (mFragmentManager == null) return;
             StringArraySelectorDialogFragment.showSingleChoice(mFragmentManager, mTitle, mData, mDefaultOption,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int position) {
-                        if(mListener != null)
-                            mListener.onSelectionChanged(position, mData[position]);
-                        mDefaultOption = position;
-                        setText(mData[position]);
-                        dialog.dismiss();
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position) {
+                            if (mListener != null)
+                                mListener.onSelectionChanged(position, mData[position]);
+                            mDefaultOption = position;
+                            setText(mData[position]);
+                            dialog.dismiss();
+                        }
                     }
-                }
             );
         }
     };

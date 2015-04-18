@@ -1,3 +1,20 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.updater;
 
 import android.annotation.TargetApi;
@@ -11,7 +28,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -112,8 +128,9 @@ public class PopcornUpdater extends Observable {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 }
             }
+        } else {
+            sendNotification();
         }
-        sendNotification();
 
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -155,12 +172,12 @@ public class PopcornUpdater extends Observable {
             notifyObservers(STATUS_CHECKING);
 
             final String abi;
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 abi = Build.CPU_ABI.toLowerCase(Locale.US);
             } else {
                 abi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
             }
-            
+
             final String variantStr;
             if (mPackageName.contains("tv")) {
                 variantStr = "tv";
@@ -169,14 +186,14 @@ public class PopcornUpdater extends Observable {
             }
 
             final String channelStr;
-            if(BuildConfig.BUILD_TYPE.equals("release")) {
+            if (BuildConfig.BUILD_TYPE.equals("release")) {
                 channelStr = "release";
             } else {
                 channelStr = BuildConfig.GIT_BRANCH;
             }
 
             Request request = new Request.Builder()
-                    .url(DATA_URL + "/" + variantStr + "/" + channelStr)
+                    .url(DATA_URL + "/" + variantStr)
                     .build();
 
             mHttpClient.newCall(request).enqueue(new Callback() {
@@ -200,7 +217,7 @@ public class PopcornUpdater extends Observable {
                             }
 
                             UpdaterData.Arch channel = null;
-                            if(variant.containsKey(channelStr) && variant.get(channelStr).containsKey(abi)) {
+                            if (variant.containsKey(channelStr) && variant.get(channelStr).containsKey(abi)) {
                                 channel = variant.get(channelStr).get(abi);
                             }
 

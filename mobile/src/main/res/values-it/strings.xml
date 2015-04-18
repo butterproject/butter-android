@@ -7,64 +7,79 @@
   <string name="ok">OK</string>
   <string name="enabled">Attivo</string>
   <string name="disabled">Disattivato</string>
+  <string name="casting">Trasmissione contenuti a distanza</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Titolo, Anno, Attori</string>
   <string name="title_shows">Serie</string>
   <string name="title_movies">Film</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Generi</string>
   <string name="search">Cerca</string>
   <string name="searching">Ricerca...</string>
-  <string name="loading_data">Caricamento Dati...</string>
-  <string name="loading_details">Caricamento dettagli...</string>
   <string name="no_data_found">Nessun dato trovato</string>
   <string name="unknown_error">Qualcosa è andato storto</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
+  <string name="read_more">Leggi di più</string>
   <string name="watch_trailer">Guarda il Trailer</string>
   <string name="disable_subs">Disattiva sottotitoli</string>
-  <string name="no_subs">Niente sottotitoli</string>
+  <string name="no_subs">Nessun sottotitolo</string>
+  <string name="no_subs_available">Nessun sottotitolo disponibile</string>
   <string name="subtitles">Sottotitoli</string>
   <string name="quality">Qualità</string>
   <string name="trailer">Trailer</string>
   <string name="season">Stagione</string>
   <string name="episode">Episodio</string>
+  <string name="specials">Speciali</string>
+  <string name="continuing">In corso</string>
+  <string name="ended">Finito</string>
+  <string name="aired">Trasmesso il: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Aspettando il torrent</string>
+  <string name="starting_buffering">Inizio buffering</string>
   <string name="streaming_started">Streraming avviato</string>
   <string name="waiting_for_subtitles">Aspettando i sottotitoli...</string>
-  <string name="seeds">Seeds</string>
+  <string name="seeds">Fonti</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">In riproduzione</string>
   <string name="volume">Volume</string>
   <string name="brightness">Luminosità</string>
   <string name="hardware_acceleration_error_title">Errore di Accelerazione Hardware</string>
-  <string name="hardware_acceleration_error_message">Si è verificato un errore con l\'accelerazione dell\'Hardware. Vuole disattivarla e riprovare?</string>
+  <string name="hardware_acceleration_error_message">Si è verificato un errore con l\'accelerazione Hardware. Vuole disattivarla e riprovare?</string>
   <string name="best_fit">Soluzione migliore</string>
   <string name="fill">Riempi</string>
-  <string name="fit_horizontal">Riempi orizzontalmente</string>
-  <string name="fit_vertical">Riempi verticalmente</string>
+  <string name="fit_horizontal">Adatta orizzontalmente</string>
+  <string name="fit_vertical">Adatta verticalmente</string>
   <string name="original_size">Originale</string>
+  <string name="comm_error">Errore comunicazioni</string>
+  <string name="comm_message">Si è verificato un errore durante il recupero del video. Questo potrebbe essere dovuto a problemi di rete o ai protocolli di YouTube. Si prega di riprovare più tardi.</string>
+  <string name="leave_videoplayer_title">Sei sicuro?</string>
+  <string name="leave_videoplayer_message">Sei sicuro di voler uscire dal player? %s verrà terminato.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accetta</string>
   <string name="leave">Abbandona</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Opzioni</string>
+  <string name="preferences">Preferenze</string>
   <string name="general">Generali</string>
   <string name="default_view">Visualizzazione predefinita</string>
   <string name="default_player">Riproduttore predefinito</string>
   <string name="i18n_language">Lingua dell\'applicazione</string>
-  <string name="restart_effect">Devi riavviare l\'applicazione perché i cambiamenti abbiano effetto</string>
+  <string name="restart_effect">Riavvia l\'applicazione perché i cambiamenti abbiano effetto</string>
   <string name="device_language">Lingua del dispositivo</string>
   <string name="stream_over_wifi_only">Attiva lo stream solo quando connesso al wifi</string>
   <string name="internal_player">Interno</string>
   <string name="subtitle_color">Colore</string>
   <string name="subtitle_size">Dimensione</string>
+  <string name="subtitle_stroke_color">Colore del contorno</string>
+  <string name="subtitle_stroke_width">Larghezza contorno</string>
   <string name="subtitle_language">Lingua predefinita</string>
   <string name="no_default_set">Nessuna lingua predefinita</string>
   <string name="advanced">Avanzate</string>
-  <string name="storage_location">Memoria di archiviazione</string>
+  <string name="storage_location">Percorso di memorizzazione</string>
   <string name="storage_automatic">Automatico</string>
-  <string name="storage_choose">Seleziona Destinazione</string>
+  <string name="storage_choose">Seleziona destinazione</string>
   <string name="not_writable">Destinazione non scrivibile</string>
-  <string name="remove_cache">Rimuovi Cache alla chiusura</string>
+  <string name="remove_cache">Rimuovi files temporanei alla chiusura</string>
   <string name="hw_acceleration">Accelerazione hardware</string>
   <string name="hw_automatic">Automatico</string>
   <string name="hw_full">Massima</string>
@@ -78,21 +93,27 @@
   <string name="changelog">Cambiamenti</string>
   <string name="tap_to_open">Tocca per aprire</string>
   <string name="report_a_bug">Segnala un Bug</string>
-  <string name="open_source_licenses">License Open-Source</string>
+  <string name="open_source_licenses">Licenza Open-Source</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Massima velocità in download</string>
+  <string name="upload_speed">Massima velocità in upload</string>
+  <string name="max_connections">Massime connessioni totali</string>
+  <string name="dht_limit">Limite DHT</string>
+  <string name="unlimited">Illimitato</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Solo wifi</string>
-  <string name="wifi_only_message">Puoi visualizzare i video solo da una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>
+  <string name="wifi_only_message">Puoi visualizzare i video solo con una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>
   <!--NavigationDrawer-->
   <string name="share">Condividi</string>
   <string name="drawer_open">Apri cartella di navigazione</string>
   <string name="drawer_close">Chiudi cartella di navigazione</string>
   <string name="no_search_results">Nessun risultato trovato</string>
   <!--About fragment-->
-  <string name="about_message">Popcorn Time! è il risultato di tanti sviluppatori e Designers che hanno lavorato alle API insieme per rendere
-⇥⇥l\'esperienza di vedere i film torrent più semplice possibile.\n\nSiamo un progetto Open Source. Veniamo da tutto il mondo, amiamo
-⇥⇥i nostri filme. E, ragazzi, quanto amiamo i Popcorn!</string>
+  <string name="about_message">Popcorn Time è il risultato di tanti sviluppatori e progettisti che hanno aggregato molte API per rendere
+⇥⇥la visualizzazione di film torrent più semplice possibile.\n\nSiamo un progetto Open Source. Veniamo da tutto il mondo, amiamo
+⇥⇥i nostri films. E, ragazzi, quanto amiamo i popcorn!</string>
   <string name="website">Sito</string>
-  <string name="discuss">Discussioni</string>
+  <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
@@ -102,4 +123,10 @@
   <string name="share_text">Hai provato Popcorn Time per Android? È fantastico!
 https://popcorntime.io/</string>
   <string name="share_dialog_title">Condividi con:</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Connesso a</string>
+  <string name="disconnect">Disconnetti</string>
+  <string name="select_beaming">Seleziona il dispositivo per il mirroring</string>
+  <string name="starting_beam">Inizializzo il mirroring del video...</string>
+  <string name="beaming_failed">C\'è stato un errore, il video non è stato riprodotto sul tuo dispositivo. Prova di nuovo, l\'applicazione potrebbe dover scaricare parti aggiuntive prima che il dispositivo possa riprodurre il video.</string>
 </resources>

@@ -1,3 +1,20 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.providers.media.models;
 
 import android.os.Parcel;
@@ -5,6 +22,9 @@ import android.os.Parcelable;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.providers.subs.SubsProvider;
 
 public class Movie extends Media implements Parcelable {
     public String type = "movie";
@@ -15,8 +35,9 @@ public class Movie extends Media implements Parcelable {
     public String certification = "n/a";
     public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
 
-    public Movie() {
-
+    public Movie(MediaProvider mediaProvider, SubsProvider subsProvider) {
+        super(mediaProvider, subsProvider);
+        isMovie = true;
     }
 
     protected Movie(Parcel in) {
@@ -70,4 +91,5 @@ public class Movie extends Media implements Parcelable {
             return new Movie[size];
         }
     };
+
 }
