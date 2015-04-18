@@ -160,6 +160,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
             } else {
                 progressDrawable = (LayerDrawable) mControlBar.getProgressDrawable();
             }
+            progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setAlpha(85);
         }
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -536,7 +537,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser && isSeeking()) {
+            if (fromUser && isSeeking() && progress <= (getDuration() / 100 * seekBar.getSecondaryProgress())) {
                 setLastSub(null);
                 setCurrentTime(progress);
                 VideoPlayerFragment.this.onProgressChanged(getCurrentTime(), getDuration());
