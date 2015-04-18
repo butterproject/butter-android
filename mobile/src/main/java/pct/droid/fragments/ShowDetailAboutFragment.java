@@ -24,7 +24,7 @@ import pct.droid.dialogfragments.SynopsisDialogFragment;
 
 public class ShowDetailAboutFragment extends BaseDetailFragment {
 
-    private Show mShow;
+    private static Show sShow;
 
     @InjectView(R.id.title)
     TextView mTitle;
@@ -41,7 +41,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
 
     public static ShowDetailAboutFragment newInstance(Show show) {
         Bundle b = new Bundle();
-        b.putParcelable(DATA, show);
+        sShow = show;
         ShowDetailAboutFragment showDetailFragment = new ShowDetailAboutFragment();
         showDetailFragment.setArguments(b);
         return showDetailFragment;
@@ -50,7 +50,6 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mShow = getArguments().getParcelable(DATA);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -58,34 +57,39 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_detail_about, container, false);
         ButterKnife.inject(this, mRoot);
-        if(VersionUtils.isJellyBean() && container != null) {
+        if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
-        Double rating = Double.parseDouble(mShow.rating);
-        mTitle.setText(mShow.title);
-        mRating.setProgress(rating.intValue());
+        mTitle.setText(sShow.title);
+        if (!sShow.rating.equals("-1")) {
+            Double rating = Double.parseDouble(sShow.rating);
+            mRating.setProgress(rating.intValue());
+            mRating.setVisibility(View.VISIBLE);
+        } else {
+            mRating.setVisibility(View.GONE);
+        }
 
-        String metaDataStr = mShow.year;
+        String metaDataStr = sShow.year;
 
-        if (mShow.status != null) {
+        if (sShow.status != Show.Status.UNKNOWN) {
             metaDataStr += " • ";
-            if (mShow.status == Show.Status.CONTINUING) {
+            if (sShow.status == Show.Status.CONTINUING) {
                 metaDataStr += getString(R.string.continuing);
             } else {
                 metaDataStr += getString(R.string.ended);
             }
         }
 
-        if (!TextUtils.isEmpty(mShow.genre)) {
+        if (!TextUtils.isEmpty(sShow.genre)) {
             metaDataStr += " • ";
-            metaDataStr += mShow.genre;
+            metaDataStr += sShow.genre;
         }
 
         mMeta.setText(metaDataStr);
 
-        if (!TextUtils.isEmpty(mShow.synopsis)) {
-            mSynopsis.setText(mShow.synopsis);
+        if (!TextUtils.isEmpty(sShow.synopsis)) {
+            mSynopsis.setText(sShow.synopsis);
             mSynopsis.post(new Runnable() {
                 @Override
                 public void run() {
@@ -115,9 +119,9 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
             return;
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle b = new Bundle();
-        b.putString("text", mShow.synopsis);
+        b.putString("text", sShow.synopsis);
         synopsisDialogFragment.setArguments(b);
-        synopsisDialogFragment.show(mActivity.getFragmentManager(), "overlay_fragment");
+        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
 }

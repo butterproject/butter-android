@@ -7,27 +7,36 @@
   <string name="ok">OK</string>
   <string name="enabled">Omogočeno</string>
   <string name="disabled">Onemogočeno</string>
+  <string name="casting">Prenos/Predstavitev</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Naslov, leto, igralci</string>
   <string name="title_shows">Oddaje</string>
   <string name="title_movies">Filmi</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Zvrsti</string>
   <string name="search">Iskanje</string>
   <string name="searching">Iskanje...</string>
-  <string name="loading_data">Nalaganje podatkov...</string>
-  <string name="loading_details">Nalaganje podrobnosti...</string>
   <string name="no_data_found">Ni najdenih podatkov</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
+  <string name="read_more">Več o tem</string>
   <string name="watch_trailer">Napovednik</string>
   <string name="disable_subs">Onemogoči podnapise</string>
   <string name="no_subs">Ni podnapisov</string>
+  <string name="no_subs_available">Podnapisi niso na voljo</string>
   <string name="subtitles">Podnapisi</string>
   <string name="quality">Kvaliteta</string>
   <string name="trailer">Napovednik</string>
   <string name="season">Sezona</string>
   <string name="episode">Epizoda</string>
+  <string name="specials">Posebne</string>
+  <string name="continuing">Nadaljuje</string>
+  <string name="ended">Končano</string>
+  <string name="aired">Na sporedu: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Čakanje na torent</string>
+  <string name="starting_buffering">Začetek prednalaganja</string>
   <string name="streaming_started">Začetek prenosa</string>
   <string name="waiting_for_subtitles">Čakam na podnapise</string>
   <string name="seeds">sejalci</string>
@@ -42,11 +51,15 @@
   <string name="fit_horizontal">Prilagodi vodoravno </string>
   <string name="fit_vertical">Prilagodi navpično</string>
   <string name="original_size">Originalno</string>
+  <string name="comm_error">Napaka pri komunikaciji</string>
+  <string name="comm_message">Napaka je nastala med pridobivanjem videa. To je lahko nastalo zaradi mrežne povezave ali zaradi YouTube protokolov. Prosimo poskusite ponovno kasneje.</string>
+  <string name="leave_videoplayer_title">Ali ste sigurni?</string>
+  <string name="leave_videoplayer_message">Ali ste sigurni da želite zapustiti video predvajalnik? %s bo prenehal s predvajanjem.</string>
   <!--TermsActivity strings-->
   <string name="accept">Sprejmi</string>
   <string name="leave">Zapusti</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Nastavitve</string>
+  <string name="preferences">Nastavitve</string>
   <string name="general">Splošno</string>
   <string name="default_view">Privzeto večnamenski pogled</string>
   <string name="default_player">Privzeto video predvajalnik</string>
@@ -57,6 +70,8 @@
   <string name="internal_player">Notranji</string>
   <string name="subtitle_color">Barva</string>
   <string name="subtitle_size">Velikost</string>
+  <string name="subtitle_stroke_color">Zunanja obrobna barva</string>
+  <string name="subtitle_stroke_width">Zunanja obrobna širina</string>
   <string name="subtitle_language">Privzeti jezik</string>
   <string name="no_default_set">Brez privzetega jezika</string>
   <string name="advanced">Napredno</string>
@@ -79,6 +94,12 @@
   <string name="tap_to_open">Odpri z dotikom</string>
   <string name="report_a_bug">Prijavi napako</string>
   <string name="open_source_licenses">Odprto-kodne licence</string>
+  <string name="torrents">Torenti</string>
+  <string name="download_speed">Najvišje hitrost prenosa</string>
+  <string name="upload_speed">Najvišje hitrost nalaganja</string>
+  <string name="max_connections">Najvišje skupne povezave</string>
+  <string name="dht_limit">DHT omejitev</string>
+  <string name="unlimited">Neomejeno</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Samo Wi-Fi</string>
   <string name="wifi_only_message">Video vsebine lahko prenašaš samo preko Wi-Fi. Lahko pa to tudi onemogočiš v nastavitvah, če želiš prenašat preko mobilne povezave.</string>
@@ -91,7 +112,7 @@
   <string name="about_message">Popcorn Time je rezultat mnogih razvijalcev in oblikovalcev kateri so združili kup API-jev skupaj, da bi omogočili
 ⇥⇥izkušnjo ob gledanju filmskih torentov na najenostavnejši način.\n\nSmo odprto kodni projekt. Prihajamo iz vseh koncev sveta. Imamo ⇥⇥radi naše filme. In obožujemo kokice.</string>
   <string name="website">Spletna stran</string>
-  <string name="discuss">Pogovor</string>
+  <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
@@ -100,4 +121,10 @@
   <!--Share dialog-->
   <string name="share_text">Ali ste poskusili Popcorn Time za Android? To je čudovito! https://popcorntime.io/</string>
   <string name="share_dialog_title">Deli z</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Povezan z</string>
+  <string name="disconnect">Izključeno</string>
+  <string name="select_beaming">Izberi napravo za \'\'beaming\'\'</string>
+  <string name="starting_beam">Začenjam video \'\'beaming\'\'...</string>
+  <string name="beaming_failed">Video vsebine ni mogoče predvajati na vaši \'\'beaming\'\' napravi. Ali bi radi ponovno poskusili? Mogoče mora aplikacija prenesti več delčkov preden je vaša naprava sposobna predvajati video.</string>
 </resources>

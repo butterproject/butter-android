@@ -1,3 +1,7 @@
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardCopyOption
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -5,38 +9,30 @@ buildscript {
         //temporary to solve hugo error
         mavenCentral()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.android.tools.build:gradle:1.1.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.7'
-        classpath 'io.fabric.tools:gradle:1.+'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 ext {
-    appCompatVersion = "21.0.3"
+    appCompatVersion = "22.0.0"
     buildToolsVersion = "21.1.2"
-    targetSdk = 21
-    compileSdk = 21
+    targetSdk = 22
+    compileSdk = 22
     minSdk = 15
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        mavenCentral()
     }
-
-    project.ext.crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?:
-            "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb" // Valid keys of non-existing organization on Crashlytics to make local building possible
-
-    project.ext.crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93" // Valid keys of
-    // non-existing
-    // organization on Crashlytics to make local building possible
 
     //let project evaluate its script first
     project.afterEvaluate {
@@ -46,46 +42,55 @@ allprojects {
             project.android.applicationVariants.all { variant ->
                 //add a generated crashlytics properties file if the project applies the crashlytics plugin
                 if (project.plugins.hasPlugin("io.fabric")) {
-                    //for some reason on 2 different machines crashlytics tasks are named differently,
-                    //one with a crashlytics prefix, and one with a fabric prefix
-                    if (project.tasks.findByName("crashlyticsGenerateResources${variant.name.capitalize()}")!=null)
-                        createCrashlyticsProperties(project,variant,"crashlytics")
-                    else
-                        createCrashlyticsProperties(project,variant,"fabric")
+                    createCrashlyticsProperties(project, variant)
                 }
 
                 //rename output files
-                renameOutputFiles(project,variant)
+                renameOutputFiles(project, variant)
             }
 
         }
     }
 }
 
-def createCrashlyticsProperties(Project project,variant,String prefix) {
-    println prefix
+gradle.buildFinished {
+    try {
+        File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
+        File targetFile = new File("./mobile/build/outputs/apk", "appetize.apk")
+        Path source = sourceFile.toPath()
+        Path target = targetFile.toPath()
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+    } catch (Exception e) {
+        e.printStackTrace()
+    }
+}
 
+def createCrashlyticsProperties(Project project, variant) {
+    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb"
+    // Valid keys of non-existing organization on Crashlytics to make local building possible
+    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93"
+    // Valid keys of non-existing organization on Crashlytics to make local building possible
 
     File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     def variantSuffix = variant.name.capitalize()
-    def generateResourcesTask = project.tasks.getByName("${prefix}GenerateResources${variantSuffix}")
-    def generatePropertiesTask = project.task("${prefix}GenerateProperties${variantSuffix}") << {
+    def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
+    def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
         Properties properties = new Properties()
         println "...copying apiSecret for ${variant.name}"
         properties.put("apiSecret", crashlyticsSecret)
-//        println "...copying apiKey for ${variant.name}"
-//        properties.put("apiKey", crashlyticsKey)
+        println "...copying apiKey for ${variant.name}"
+        properties.put("apiKey", crashlyticsKey)
         properties.store(new FileWriter(crashlyticsProperties), "")
     }
     generateResourcesTask.dependsOn generatePropertiesTask
-    def cleanResourcesTask = project.tasks.getByName("${prefix}CleanupResourcesAfterUpload${variantSuffix}")
-    cleanResourcesTask.doLast {
+    def assembleTask = project.tasks.getByName("assemble${variantSuffix}")
+    assembleTask.doLast {
         println "...removing crashlytics.properties"
         crashlyticsProperties.delete()
     }
 }
 
-def renameOutputFiles(Project project,variant) {
+def renameOutputFiles(Project project, variant) {
     variant.outputs.each { output ->
         def abi = output.getFilter(com.android.build.OutputFile.ABI);
         output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode

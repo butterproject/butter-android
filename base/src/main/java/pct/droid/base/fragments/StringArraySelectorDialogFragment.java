@@ -1,4 +1,21 @@
-package pct.droid.base.fragments;
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package pct.droid.dialogfragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,8 +26,8 @@ import android.support.v4.app.FragmentManager;
 
 import java.util.List;
 
+import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.R;
 
 public class StringArraySelectorDialogFragment extends DialogFragment {
 
@@ -56,7 +73,7 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
 
         builder
                 .setTitle(title)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -106,10 +123,10 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
 
     private static void show(FragmentManager fm, String title, String[] items, int defaultPosition, int mode, DialogInterface.OnClickListener dialogClickListener) {
         Bundle args = new Bundle();
-        args.putString(StringArraySelectorDialogFragment.TITLE, title);
-        args.putStringArray(StringArraySelectorDialogFragment.ARRAY, items);
-        args.putInt(StringArraySelectorDialogFragment.MODE, mode);
-        args.putInt(StringArraySelectorDialogFragment.POSITION, defaultPosition);
+        args.putString(TITLE, title);
+        args.putStringArray(ARRAY, items);
+        args.putInt(MODE, mode);
+        args.putInt(POSITION, defaultPosition);
 
         StringArraySelectorDialogFragment dialogFragment = new StringArraySelectorDialogFragment();
         dialogFragment.setArguments(args);

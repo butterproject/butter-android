@@ -1,6 +1,5 @@
 package pct.droid.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,11 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.providers.media.models.Episode;
 
 public class EpisodeListAdapter extends BaseAdapter {
 
-    private List<Show.Episode> mData;
+    private List<Episode> mData;
     private LayoutInflater mInflater;
     private int mColor = 0x0;
 
@@ -25,13 +24,13 @@ public class EpisodeListAdapter extends BaseAdapter {
             ButterKnife.inject(this, v);
         }
 
-        @InjectView(R.id.number)
+        @InjectView(R.id.info)
         TextView number;
         @InjectView(R.id.title)
         TextView title;
     }
 
-    public EpisodeListAdapter(LayoutInflater inflater, List<Show.Episode> data, int color) {
+    public EpisodeListAdapter(LayoutInflater inflater, List<Episode> data, int color) {
         mData = data;
         mInflater = inflater;
         mColor = color;
@@ -43,7 +42,7 @@ public class EpisodeListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Show.Episode getItem(int position) {
+    public Episode getItem(int position) {
         return mData.get(position);
     }
 
@@ -63,7 +62,7 @@ public class EpisodeListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Show.Episode episode = getItem(position);
+        Episode episode = getItem(position);
         holder.title.setText(episode.title);
         holder.number.setText("E" + episode.episode);
         holder.number.setTextColor(mColor);

@@ -59,7 +59,7 @@
                     android:max="10"
                     android:progress="5"/>
                 <com.devspark.robototextview.widget.RobotoTextView
-                    android:id="@+id/meta"
+                    android:id="@+id/aired"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/detail_meta_margin_top"
@@ -68,21 +68,6 @@
                     android:textSize="@dimen/detail_meta_text_size"
                     android:textColor="@color/secondary_text_color" />
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/play_button"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="-36dp"
-                android:layout_below="@id/title_header"
-                android:src="@drawable/ic_av_play_button"
-                android:background="@drawable/play_button_circle"
-                android:transitionName="fab"
-                android:elevation="5dp" />
 
             <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/synopsis"
@@ -130,10 +115,11 @@
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingLeft="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="48sp"
         android:layout_below="@id/main_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/detail_vertical_offset"
         android:background="@android:color/transparent"
         app:pstsDividerColor="@android:color/white" />
 

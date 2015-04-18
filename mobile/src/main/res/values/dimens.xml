@@ -1,16 +1,30 @@
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="first_keyline">16dp</dimen>
-    <dimen name="second_keyline">72dp</dimen>
-    <dimen name="toolbar_horizontal_padding">4dp</dimen>
-
     <dimen name="list_vertical_padding">8dp</dimen>
     <dimen name="list_divider_spacing">8dp</dimen>
 
     <dimen name="list_text_size">16sp</dimen>
+    <dimen name="list_text_margin_horizontal">16dp</dimen>
 
     <dimen name="iconlist_item_height">56dp</dimen>
     <dimen name="iconlist_icon_width">24dp</dimen>
@@ -29,7 +43,9 @@
     <dimen name="action_margin">32dp</dimen>
     <dimen name="context_icon">28dp</dimen>
     <dimen name="divider_margin">72dp</dimen>
-    <dimen name="keyline">72dp</dimen>
+    <dimen name="first_keyline">16dp</dimen>
+    <dimen name="second_keyline">72dp</dimen>
+    <dimen name="toolbar_horizontal_padding">4dp</dimen>
 
     <dimen name="parallax_header_height">428dp</dimen>
 
@@ -40,6 +56,7 @@
     <dimen name="player_controls_distance">8dp</dimen>
     <dimen name="player_subtitles_bottom_margin">16dp</dimen>
     <dimen name="player_subtitles_default_text_size">16dp</dimen>
+    <dimen name="beamplayer_controls_margin">48dp</dimen>
 
     <dimen name="settings_subheader_text_size">14sp</dimen>
 
@@ -55,9 +72,16 @@
 
     <dimen name="optionselector_icon_margin_start">16dp</dimen>
     <dimen name="optionselector_text_margin_start">72dp</dimen>
+    <dimen name="optionselector_volume_margin_start">56dp</dimen>
     <dimen name="optionselector_text_margin_end">16dp</dimen>
     <dimen name="optionselecter_margin_end">32dp</dimen>
     <dimen name="optionselector_text_size">15sp</dimen>
+
+    <dimen name="griditem_title_horizontal">16dp</dimen>
+    <dimen name="griditem_title_bottom">16dp</dimen>
+    <dimen name="griditem_title_top">4dp</dimen>
+    <dimen name="griditem_title_textsize">14dp</dimen>
+    <dimen name="griditem_year_textsize">12dp</dimen>
 
 	<!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
      https://developer.android.com/design/patterns/navigation-drawer.html -->

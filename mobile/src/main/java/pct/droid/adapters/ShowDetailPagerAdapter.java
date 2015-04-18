@@ -10,6 +10,7 @@ import java.util.List;
 
 import pct.droid.R;
 import pct.droid.fragments.ShowDetailAboutFragment;
+import pct.droid.fragments.ShowDetailSeasonFragment;
 
 public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
 
@@ -22,14 +23,14 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
         mFragments = fragments;
         mContext = context;
 
-        if(mFragments.size() > 0)
+        if (mFragments.size() > 0)
             mHasAbout = mFragments.get(0) instanceof ShowDetailAboutFragment;
     }
 
     public void setFragments(List<Fragment> fragments) {
         mFragments = fragments;
 
-        if(mFragments.size() > 0)
+        if (mFragments.size() > 0)
             mHasAbout = mFragments.get(0) instanceof ShowDetailAboutFragment;
     }
 
@@ -45,14 +46,13 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        int season = position;
-        if(mHasAbout) {
-            if(season == 0)
-                return mContext.getString(R.string.about);
-        } else {
-            season = season + 1;
+        if (mFragments.get(position) instanceof ShowDetailSeasonFragment) {
+            int seasonNumber = ((ShowDetailSeasonFragment) mFragments.get(position)).getSeasonNumber();
+            if (seasonNumber == 0)
+                return mContext.getString(R.string.specials);
+            return mContext.getString(R.string.season) + " " + seasonNumber;
         }
-        return mContext.getString(R.string.season) + " " + season;
+        return mContext.getString(R.string.about);
     }
 
 }

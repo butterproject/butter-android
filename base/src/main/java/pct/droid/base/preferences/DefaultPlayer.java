@@ -1,3 +1,20 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.preferences;
 
 import android.content.Context;
@@ -7,15 +24,14 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.connectsdk.server.BeamServer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class DefaultPlayer {
@@ -62,34 +78,25 @@ public class DefaultPlayer {
     /**
      * Start default video player if set, otherwise return {@code false} so that the application can handle the video itself
      *
-     * @param context  Context
      * @param location Video location
      * @return {@code true} if activity started, {@code false} otherwise
      */
-    public static boolean start(Context context, Media media, String subLanguage, String location) {
+    public static boolean start(Media media, String subLanguage, String location) {
+        Context context = PopcornApplication.getAppContext();
         String[] playerData = PrefUtils.get(context, Prefs.DEFAULT_PLAYER, "").split(DELIMITER);
         if (playerData.length > 1) {
-            if (media.subtitles.size() > 0) {
+            if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
-                File newLocation = new File(location.replace("." + FileUtils.getFileExtension(location), ".srt"));
-
-                if (subLanguage != null && !subLanguage.equals("no-subs")) {
-                    try {
-                        newLocation.getParentFile().mkdirs();
-                        newLocation.createNewFile();
-                        FileUtils.copy(subsLocation, newLocation);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    newLocation.delete();
-                }
+                BeamServer.setCurrentSubs(subsLocation);
             }
+
+            BeamServer.setCurrentVideo(location);
 
             Intent intent = new Intent();
             intent.setClassName(playerData[1], playerData[0]);
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse("file://" + location), "video/mp4");
+            intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             return true;
         }
