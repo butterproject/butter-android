@@ -29,7 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.connectsdk.server.BeamServer;
+import pct.droid.base.beaming.server.BeamServer;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.PrefUtils;
@@ -91,6 +92,7 @@ public class DefaultPlayer {
             }
 
             BeamServer.setCurrentVideo(location);
+            BeamServerService.getServer().start();
 
             Intent intent = new Intent();
             intent.setClassName(playerData[1], playerData[0]);

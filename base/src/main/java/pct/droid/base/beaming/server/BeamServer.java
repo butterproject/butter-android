@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.connectsdk.server;
+package pct.droid.base.beaming.server;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
@@ -140,15 +140,19 @@ public class BeamServer {
 
         PowerManager powerManager = (PowerManager) PopcornApplication.getAppContext().getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CastingServer");
+        mWakeLock.acquire();
         WifiManager wifiManager = (WifiManager) PopcornApplication.getAppContext().getSystemService(Context.WIFI_SERVICE);
         mWifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "CastingServer");
+        mWifiLock.acquire();
     }
 
     public void stop() {
-        mHttpServer.stop();
-        mAsyncServer.stop();
-        mWifiLock.release();
-        mWakeLock.release();
+        try {
+            mHttpServer.stop();
+            mAsyncServer.stop();
+            mWifiLock.release();
+            mWakeLock.release();
+        } catch (Exception e) {}
     }
 
     public static class FileType {

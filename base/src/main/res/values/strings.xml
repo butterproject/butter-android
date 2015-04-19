@@ -30,6 +30,7 @@
     <string name="episode">Episode</string>
     <string name="unknown_error">Something went wrong</string>
     <string name="torrent_failed">Failed to retrieve torrent</string>
+    <string name="running">Running in background</string>
 
     <!-- Genres -->
     <string name="genre_all">All</string>
