@@ -66,7 +66,7 @@ public class FileSelectorDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_dialog_fileselector, container);
         list = (ListView) view.findViewById(android.R.id.list);
 
-        currentDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        currentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         fill(currentDir);
 
         return view;
