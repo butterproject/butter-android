@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.connectsdk.server;
+package pct.droid.base.beaming.server;
 
 import android.app.Service;
 import android.content.Intent;
@@ -27,7 +27,7 @@ import timber.log.Timber;
 
 public class BeamServerService extends Service {
 
-    private BeamServer mServer;
+    private static BeamServer sServer;
 
     /**
      * Start service and server
@@ -40,8 +40,7 @@ public class BeamServerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.i("Starting CastingServer");
-        mServer = new BeamServer(NetworkUtils.getWifiIPAddress(), Constants.SERVER_PORT);
-        mServer.start();
+        sServer = new BeamServer(NetworkUtils.getWifiIPAddress(), Constants.SERVER_PORT);
 
         return START_STICKY;
     }
@@ -57,7 +56,10 @@ public class BeamServerService extends Service {
     @Override
     public void onDestroy() {
         Timber.i("Destroying CastingServer");
-        mServer.stop();
         super.onDestroy();
+    }
+
+    public static BeamServer getServer() {
+        return sServer;
     }
 }

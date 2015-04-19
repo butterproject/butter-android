@@ -33,7 +33,7 @@ import org.videolan.vlc.VLCApplication;
 import java.io.File;
 import java.io.IOException;
 
-import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;

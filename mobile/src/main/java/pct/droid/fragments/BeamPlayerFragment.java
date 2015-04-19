@@ -52,7 +52,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
-import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;

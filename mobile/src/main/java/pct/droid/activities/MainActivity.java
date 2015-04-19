@@ -43,7 +43,7 @@ import butterknife.InjectView;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
-import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Movie;
