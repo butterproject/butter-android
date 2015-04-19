@@ -31,4 +31,8 @@ public class VPNManager {
         context.bindService(vpnService, connection, Context.BIND_AUTO_CREATE);
     }
 
+    public void start() {
+
+    }
+
 }
