@@ -137,8 +137,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         //start subtitles
         if (null != mStreamInfo.getSubtitleLanguage()) {
             mCurrentSubsLang = mStreamInfo.getSubtitleLanguage();
-            if (!mCurrentSubsLang.equals("no-subs"))
+            if (!mCurrentSubsLang.equals("no-subs")) {
+                mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
                 startSubtitles();
+            }
         }
 
 
@@ -605,7 +607,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
                     FileInputStream fileInputStream = new FileInputStream(mSubsFile);
                     FormatSRT formatSRT = new FormatSRT();
                     mSubs = formatSRT.parseFile(mSubsFile.toString(), FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
@@ -675,6 +676,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
             @Override
             public void onResponse(Response response) throws IOException {
+                mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
                 startSubtitles();
             }
         });
