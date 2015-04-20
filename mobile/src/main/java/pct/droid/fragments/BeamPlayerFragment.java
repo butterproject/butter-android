@@ -153,6 +153,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
                 progressDrawable = (LayerDrawable) mSeekBar.getProgressDrawable();
             }
             volumeDrawable = progressDrawable;
+            volumeDrawable.mutate();
             progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setAlpha(85);
         }
 
@@ -175,16 +176,16 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
 
         if (mMedia.image != null && !mMedia.image.equals("")) {
             Picasso.with(mCoverImage.getContext()).load(mMedia.image)
-                    .into(mCoverImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            AnimUtils.fadeIn(mCoverImage);
-                        }
+                .into(mCoverImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        AnimUtils.fadeIn(mCoverImage);
+                    }
 
-                        @Override
-                        public void onError() {
-                        }
-                    });
+                    @Override
+                    public void onError() {
+                    }
+                });
         }
 
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
