@@ -159,6 +159,16 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 public void onSuccess(Map<String, String> subtitles) {
                     if (!mAttached) return;
 
+                    if(subtitles == null) {
+                        ThreadUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mSubtitles.setText(R.string.no_subs_available);
+                            }
+                        });
+                        return;
+                    }
+
                     sMovie.subtitles = subtitles;
 
                     String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
