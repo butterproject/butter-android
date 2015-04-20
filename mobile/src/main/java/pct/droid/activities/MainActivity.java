@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -78,7 +79,6 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
 
         ToolbarUtils.updateToolbarHeight(this, mToolbar);
 
-
         // Set up the drawer.
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark));
@@ -103,7 +103,7 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
             }
         }
 
-        if (null != savedInstanceState) return;//dont reselect item if saved state exists
+        if (null != savedInstanceState) return;
         int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
         mNavigationDrawerFragment.selectItem(providerId);
     }
@@ -116,6 +116,15 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         supportInvalidateOptionsMenu();
         if (mNavigationDrawerFragment.getCurrentItem() != null && mNavigationDrawerFragment.getCurrentItem().getTitle() != null) {
             setTitle(mNavigationDrawerFragment.getCurrentItem().getTitle());
+        }
+    }
+
+    @Override
+    public void onVPNServiceReady() {
+        try {
+            mVPNManager.startVPN();
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
