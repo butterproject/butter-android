@@ -9,6 +9,7 @@ import android.support.v4.util.Pair;
 import android.view.View;
 
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
 
@@ -16,17 +17,17 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 
 	public final static String EXTRA_INFO = "mInfo";
 
-	private BaseStreamLoadingFragment.StreamInfo mInfo;
+	private StreamInfo mInfo;
 	private BaseStreamLoadingFragment mFragment;
 
-	public static Intent startActivity(Activity activity, BaseStreamLoadingFragment.StreamInfo info) {
+	public static Intent startActivity(Activity activity, StreamInfo info) {
 		Intent i = new Intent(activity, PTVStreamLoadingActivity.class);
 		i.putExtra(EXTRA_INFO, info);
 		activity.startActivity(i);
 		return i;
 	}
 
-	public static Intent startActivity(Activity activity, BaseStreamLoadingFragment.StreamInfo info, Pair<View, String>... elements) {
+	public static Intent startActivity(Activity activity, StreamInfo info, Pair<View, String>... elements) {
 		Intent i = new Intent(activity, PTVStreamLoadingActivity.class);
 		i.putExtra(EXTRA_INFO, info);
 
@@ -49,7 +50,7 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 	}
 
 	@Override
-	public BaseStreamLoadingFragment.StreamInfo getStreamInformation() {
+	public StreamInfo getStreamInformation() {
 		return mInfo;
 	}
 

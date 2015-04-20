@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.dialogfragments;
+package pct.droid.base.dialogfragments;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pct.droid.R;
-import pct.droid.adapters.FileArrayAdapter;
-import pct.droid.adapters.models.Option;
+import pct.droid.base.R;
+import pct.droid.base.adapters.FileArrayAdapter;
+import pct.droid.base.adapters.models.Option;
 
 public class FileSelectorDialogFragment extends DialogFragment {
 

@@ -51,6 +51,8 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.providers.subs.YSubsProvider;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.tv.BuildConfig;
 import pct.droid.tv.R;
@@ -126,7 +128,7 @@ public class PTVOverviewFragment extends BrowseFragment {
 	private void loadData() {
 		mShowsProvider.getList(null, null, new MediaProvider.Callback() {
 			@DebugLog
-			@Override public void onSuccess(ArrayList<Media> items) {
+			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 				List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
 				mShowAdapter.clear();
 				mShowAdapter.addAll(0, list);
@@ -142,7 +144,7 @@ public class PTVOverviewFragment extends BrowseFragment {
 
 		mMoviesProvider.getList(null, null, new MediaProvider.Callback() {
 			@DebugLog
-			@Override public void onSuccess(ArrayList<Media> items) {
+			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 				List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
 				mMoviesAdapter.clear();
 				mMoviesAdapter.addAll(0, list);
@@ -197,7 +199,7 @@ public class PTVOverviewFragment extends BrowseFragment {
 	}
 
 	private void setupShows() {
-		HeaderItem showsHeader = new HeaderItem(0, getString(R.string.top_shows),
+		HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows),
 				null);
 		OverviewCardPresenter overviewCardPresenter = new OverviewCardPresenter(getActivity());
 		mShowAdapter = new ArrayObjectAdapter(overviewCardPresenter);
@@ -283,16 +285,16 @@ public class PTVOverviewFragment extends BrowseFragment {
 							.setPositiveButton("Start", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									Movie media = new YTSProvider.YTSMovie();
+									Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 
 									media.videoId = "dialogtestvideo";
 									media.title = "User input test video";
 
-									PTVVideoPlayerActivity.startActivity(getActivity(), dialogInput.getText().toString(), media);
+									PTVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location), 0);
 								}
 							});
 				}
-					final Movie media = new YTSProvider.YTSMovie();
+				final Movie media = new Movie(new YTSProvider(), new YSubsProvider());
 					media.videoId = "bigbucksbunny";
 					media.title = file_types[index];
 					media.subtitles = new HashMap<String, String>();
@@ -301,12 +303,12 @@ public class PTVOverviewFragment extends BrowseFragment {
 					SubsProvider.download(getActivity(), media, "en", new Callback() {
 						@Override
 						public void onFailure(Request request, IOException e) {
-							PTVVideoPlayerActivity.startActivity(getActivity(), location, media, null, null, 0);
+							PTVVideoPlayerActivity.startActivity(getActivity(),new StreamInfo(media, null, null, null, null, location));
 						}
 
 						@Override
 						public void onResponse(Response response) throws IOException {
-							PTVVideoPlayerActivity.startActivity(getActivity(), location, media, null, "en", 0);
+							PTVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
 						}
 					});
 			}

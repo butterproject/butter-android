@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.fragments;
+package pct.droid.base.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -53,8 +53,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
-import pct.droid.R;
-import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.R;
+import pct.droid.base.dialogfragments.FileSelectorDialogFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
@@ -68,11 +68,11 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
-import pct.droid.dialogfragments.FileSelectorDialogFragment;
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import timber.log.Timber;
 
 public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
+
+    public final static String RESUME_POSITION = "resume_position";
 
     private LibVLC mLibVLC;
     private String mLocation;
@@ -168,7 +168,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         Timber.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
         mLibVLC.eventVideoPlayerActivityCreated(true);
 
-        PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        PrefUtils.save(getActivity(), RESUME_POSITION, 0);
 
         if (mCallback.getService() != null)
             mCallback.getService().addListener(BaseVideoPlayerFragment.this);
@@ -190,7 +190,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         if (mLibVLC != null) {
             long currentTime = mLibVLC.getTime();
-            PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, currentTime);
+            PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
 
             /*
              * Pausing here generates errors because the vout is constantly
@@ -226,7 +226,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (mDisabledHardwareAcceleration)
             mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
 
-        PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        PrefUtils.save(getActivity(), RESUME_POSITION, 0);
     }
 
     /**
@@ -256,7 +256,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         mLibVLC.playMRL(mLocation);
         mEnded = false;
 
-        long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        long resumeTime = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
         if (resumeTime > 0) {
             setCurrentTime(resumeTime);
         }
@@ -278,7 +278,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     protected abstract void onErrorEncountered();
 
-    abstract void onHardwareAccelerationError();
+    protected abstract void onHardwareAccelerationError();
 
     protected abstract void showTimedCaptionText(Caption text);
 
@@ -302,11 +302,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (mLibVLC == null)
             return;
 
-        long resumePosition = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
         long length = mLibVLC.getLength();
         if (length > resumePosition && resumePosition > 0) {
             setCurrentTime(resumePosition);
-            PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+            PrefUtils.save(getActivity(), RESUME_POSITION, 0);
         }
     }
 
@@ -583,7 +583,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
 
-    void seek(int delta) {
+    public void seek(int delta) {
         if (mLibVLC.getLength() <= 0 && !mSeeking) return;
 
         long position = mLibVLC.getTime() + delta;

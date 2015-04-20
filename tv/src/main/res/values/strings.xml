@@ -7,6 +7,7 @@
 	<!-- Main screen -->
 	<string name="top_movies">Top Movies</string>
 	<string name="top_shows">Top TV Series</string>
+	<string name="latest_shows">Latest TV Series</string>
 	<string name="browse">Browse</string>
 	<string name="more">More</string>
 	<string name="tests">Tests</string>
