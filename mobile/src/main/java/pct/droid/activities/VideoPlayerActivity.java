@@ -51,7 +51,6 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     public final static String INFO = "stream_info";
-    public final static String RESUME_POSITION = "resume_position";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

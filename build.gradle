@@ -9,7 +9,6 @@ buildscript {
         //temporary to solve hugo error
         mavenCentral()
         jcenter()
-        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
@@ -39,16 +38,29 @@ allprojects {
         //only apply to projects that have the android plugin
         if (project.plugins.hasPlugin('com.android.application')) {
 
-            project.android.applicationVariants.all { variant ->
-                //add a generated crashlytics properties file if the project applies the crashlytics plugin
-                if (project.plugins.hasPlugin("io.fabric")) {
-                    createCrashlyticsProperties(project, variant)
+
+            project.android {
+                packagingOptions {
+                    exclude 'META-INF/beans.xml'
+                    exclude 'META-INF/DEPENDENCIES'
+                    exclude 'META-INF/LICENSE'
+                    exclude 'META-INF/NOTICE'
+                    exclude 'META-INF/LICENSE.txt'
+                    exclude 'META-INF/NOTICE.txt'
+                    exclude 'META-INF/DEPENDENCIES.txt'
                 }
 
-                //rename output files
-                renameOutputFiles(project, variant)
-            }
+                applicationVariants.all { variant ->
+                    //add a generated crashlytics properties file if the project applies the crashlytics plugin
+                    if (project.plugins.hasPlugin("io.fabric")) {
+                        createCrashlyticsProperties(project, variant)
+                    }
 
+                    //rename output files
+                    renameOutputFiles(project, variant)
+                }
+
+            }
         }
     }
 }
@@ -74,7 +86,8 @@ def createCrashlyticsProperties(Project project, variant) {
     File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     def variantSuffix = variant.name.capitalize()
     def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
-    def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
+
+    def generatePropertiesTask = project.task("crashlyticsGenerateProperties${variantSuffix}") << {
         Properties properties = new Properties()
         println "...copying apiSecret for ${variant.name}"
         properties.put("apiSecret", crashlyticsSecret)

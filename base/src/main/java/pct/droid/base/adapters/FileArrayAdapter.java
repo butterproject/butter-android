@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.adapters;
+package pct.droid.base.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -28,7 +28,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.adapters.models.Option;
+import pct.droid.base.adapters.models.Option;
 
 public class FileArrayAdapter extends ArrayAdapter<Option> {
 

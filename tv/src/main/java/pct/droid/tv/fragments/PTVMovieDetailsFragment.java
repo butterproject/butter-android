@@ -30,6 +30,7 @@ import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
@@ -201,7 +202,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 		mBackgroundUpdater.updateBackgroundAsync(item.headerImage);
 	}
 
-	@Override public void onSuccess(ArrayList<Media> items) {
+	@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 		if (!isAdded()) return;
 		if (null != mItem) mItem.setLoadingDetail(false);
 		if (null == items || items.size() == 0) return;
@@ -214,6 +215,7 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 				mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
 			}
 		});
+
 	}
 
 	@Override public void onFailure(Exception e) {
@@ -237,8 +239,8 @@ public class PTVMovieDetailsFragment extends DetailsFragment implements MediaPro
 			WatchAction action = (WatchAction) a;
 			Media.Torrent torrent = action.getTorrent();
 
-			BaseStreamLoadingFragment.StreamInfo info =
-					new BaseStreamLoadingFragment.StreamInfo(mItem.getMedia(), torrent.url, "no-subs",
+			StreamInfo info =
+					new StreamInfo(mItem.getMedia(), torrent.url, "no-subs",
 							action.getLabel2().toString());
 
 			PTVStreamLoadingActivity.startActivity(getActivity(), info);

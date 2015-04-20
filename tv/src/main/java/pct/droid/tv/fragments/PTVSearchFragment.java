@@ -105,7 +105,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		mSearchFilter.keywords = query;
 		mSearchFilter.page = 1;
 		mShowsProvider.getList(mSearchFilter, new MediaProvider.Callback() {
-			@Override public void onSuccess(ArrayList<Media> items) {
+			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 				List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
 				addRow(getString(R.string.show_results), list);
 			}
@@ -116,7 +116,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		});
 
 		mMovieProvider.getList(mSearchFilter, new MediaProvider.Callback() {
-					@Override public void onSuccess(ArrayList<Media> items) {
+			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 						List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
 						addRow(getString(R.string.movie_results), list);
 					}

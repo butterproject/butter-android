@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.adapters.models;
+package pct.droid.base.adapters.models;
 
 public class Option implements Comparable<Option> {
     private String name;
