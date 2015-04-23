@@ -50,7 +50,8 @@
 		<activity android:name=".activities.PTVSearchActivity" />
 		<activity android:name=".activities.PTVStreamLoadingActivity" />
 		<activity android:name=".activities.PTVVideoPlayerActivity" />
-		<!--<service android:name=".base.torrent.TorrentService" />-->
+
+		<service android:name="pct.droid.base.torrent.TorrentService" />
 	</application>
 
 </manifest>

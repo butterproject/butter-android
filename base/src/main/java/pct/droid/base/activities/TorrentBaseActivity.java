@@ -34,7 +34,7 @@ import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 
-public abstract class TorrentBaseActivity extends ActionBarActivity implements TorrentService.Listener {
+public abstract class TorrentBaseActivity extends ActionBarActivity implements TorrentService.Listener,TorrentActivity {
 
     protected Handler mHandler;
     protected TorrentService mService;
@@ -76,11 +76,11 @@ public abstract class TorrentBaseActivity extends ActionBarActivity implements T
         return mService;
     }
 
-    protected void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected() {
         // Placeholder
     }
 
-    protected void onTorrentServiceDisconnected() {
+    public void onTorrentServiceDisconnected() {
         // Placeholder
     }
 

@@ -1,0 +1,12 @@
+package pct.droid.base.activities;
+
+import pct.droid.base.torrent.TorrentService;
+
+public interface TorrentActivity {
+
+	TorrentService getTorrentService();
+
+	void onTorrentServiceConnected();
+
+	void onTorrentServiceDisconnected();
+}

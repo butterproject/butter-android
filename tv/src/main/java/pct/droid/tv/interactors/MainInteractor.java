@@ -128,11 +128,11 @@ public class MainInteractor implements MainInteractorInputInterface {
 
 	private void addRowSettingsHeader(Context context) {
 		headers.add(
-				new HeaderItem(context.getResources().getStringArray(R.array.categories).length, Capitalize.capitalize("settings"), null));
+				new HeaderItem(context.getResources().getStringArray(R.array.categories).length, Capitalize.capitalize("settings")));
 	}
 
 	private void addRowMediaHeader(Context context, int index) {
-		headers.add(new HeaderItem(index, Capitalize.capitalize(context.getResources().getStringArray(R.array.categories)[index]), null));
+		headers.add(new HeaderItem(index, Capitalize.capitalize(context.getResources().getStringArray(R.array.categories)[index])));
 	}
 
 	private void addRowAdapters(Context context) {

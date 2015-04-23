@@ -15,7 +15,9 @@ import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
@@ -24,7 +26,7 @@ import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.utils.BackgroundUpdater;
 
-public  class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
+public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 
 	View mRoot;
 	@InjectView(R.id.progressIndicator)
@@ -124,19 +126,12 @@ public  class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 	}
 
 	@Override protected void startPlayerActivity(String location, int resumePosition) {
-//		StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
-//
-//		PTVVideoPlayerActivity.startActivity(activity, location, media, quality, subtitleLanguage, resumePosition);
 
+		if (getActivity() != null && !mPlayerStarted) {
+			mStreamInfo.setVideoLocation(location);
+			PTVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, resumePosition);
+		}
 	}
-
-//	@Override
-//	protected void startPlayerActivity(FragmentActivity activity, String location, Media media, String quality,
-//			String subtitleLanguage,
-//			int resumePosition) {
-//
-//		String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
-//	}
 
 
 	protected void updateBackground() {
