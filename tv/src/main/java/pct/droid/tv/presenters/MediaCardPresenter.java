@@ -38,7 +38,7 @@ import pct.droid.tv.R;
  * A CardPresenter is used to generate Views and bind Objects to them on demand. 
  * It contains an Image CardView
  */
-public class OverviewCardPresenter extends Presenter {
+public class MediaCardPresenter extends Presenter {
 
 	private static Context mContext;
 	private static int mCardWidth;
@@ -47,7 +47,7 @@ public class OverviewCardPresenter extends Presenter {
 	private final int mDefaultInfoBackgroundColor;
 	private final int mDefaultSelectedInfoBackgroundColor;
 
-	public OverviewCardPresenter(Context context) {
+	public MediaCardPresenter(Context context) {
 		mDefaultSelectedInfoBackgroundColor = context.getResources().getColor(R.color.primary_dark);
 		mDefaultInfoBackgroundColor = context.getResources().getColor(R.color.default_background);
 		mCardWidth = (int) context.getResources().getDimension(R.dimen.card_width);
@@ -195,8 +195,8 @@ public class OverviewCardPresenter extends Presenter {
 
 
 	public static List<OverviewCardItem> convertMediaToOverview(List<Media> items) {
-		List<OverviewCardPresenter.OverviewCardItem> list = new ArrayList<>();
-		for (Media media : items) list.add(new OverviewCardPresenter.OverviewCardItem(media));
+		List<MediaCardPresenter.OverviewCardItem> list = new ArrayList<>();
+		for (Media media : items) list.add(new MediaCardPresenter.OverviewCardItem(media));
 		return list;
 	}
 }

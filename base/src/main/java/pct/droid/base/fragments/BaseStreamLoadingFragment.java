@@ -32,6 +32,7 @@ import java.util.Map;
 
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
+import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
@@ -101,7 +102,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             }
         });
 
-        if (!(getActivity() instanceof TorrentBaseActivity)) return;
+        if (!(getActivity() instanceof TorrentActivity)) return;
     }
 
     @Override
@@ -111,7 +112,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     public void onTorrentServiceConnected() {
-        mService = ((TorrentBaseActivity) getActivity()).getTorrentService();
+        mService = ((TorrentActivity) getActivity()).getTorrentService();
         mService.addListener(this);
         startStream();
     }

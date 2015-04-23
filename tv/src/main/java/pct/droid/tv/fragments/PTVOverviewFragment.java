@@ -16,7 +16,6 @@ package pct.droid.tv.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -53,7 +52,6 @@ import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.youtube.YouTubeData;
 import pct.droid.tv.BuildConfig;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMovieDetailActivity;
@@ -61,7 +59,7 @@ import pct.droid.tv.activities.PTVSearchActivity;
 import pct.droid.tv.activities.PTVShowDetailActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.presenters.MorePresenter;
-import pct.droid.tv.presenters.OverviewCardPresenter;
+import pct.droid.tv.presenters.MediaCardPresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
 
 /*
@@ -126,10 +124,12 @@ public class PTVOverviewFragment extends BrowseFragment {
 	}
 
 	private void loadData() {
-		mShowsProvider.getList(null, null, new MediaProvider.Callback() {
+		final MediaProvider.Filters filters = new MediaProvider.Filters();
+		filters.sort = MediaProvider.Filters.Sort.DATE;
+		mShowsProvider.getList(null, filters, new MediaProvider.Callback() {
 			@DebugLog
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-				List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
+				List<MediaCardPresenter.OverviewCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 				mShowAdapter.clear();
 				mShowAdapter.addAll(0, list);
 			}
@@ -145,7 +145,7 @@ public class PTVOverviewFragment extends BrowseFragment {
 		mMoviesProvider.getList(null, null, new MediaProvider.Callback() {
 			@DebugLog
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-				List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
+				List<MediaCardPresenter.OverviewCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 				mMoviesAdapter.clear();
 				mMoviesAdapter.addAll(0, list);
 			}
@@ -182,11 +182,10 @@ public class PTVOverviewFragment extends BrowseFragment {
 
 
 	private void setupMovies() {
-		HeaderItem moviesHeader = new HeaderItem(0, getString(R.string.top_movies),
-				null);
-		OverviewCardPresenter overviewCardPresenter = new OverviewCardPresenter(getActivity());
-		mMoviesAdapter = new ArrayObjectAdapter(overviewCardPresenter);
-		mMoviesAdapter.add(new OverviewCardPresenter.OverviewCardItem(true));
+		HeaderItem moviesHeader = new HeaderItem(0, getString(R.string.top_movies));
+		MediaCardPresenter mediaCardPresenter = new MediaCardPresenter(getActivity());
+		mMoviesAdapter = new ArrayObjectAdapter(mediaCardPresenter);
+		mMoviesAdapter.add(new MediaCardPresenter.OverviewCardItem(true));
 		mRowsAdapter.add(new ListRow(moviesHeader, mMoviesAdapter));
 	}
 
@@ -199,18 +198,16 @@ public class PTVOverviewFragment extends BrowseFragment {
 	}
 
 	private void setupShows() {
-		HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows),
-				null);
-		OverviewCardPresenter overviewCardPresenter = new OverviewCardPresenter(getActivity());
-		mShowAdapter = new ArrayObjectAdapter(overviewCardPresenter);
-		mShowAdapter.add(new OverviewCardPresenter.OverviewCardItem(true));
+		HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows));
+		MediaCardPresenter mediaCardPresenter = new MediaCardPresenter(getActivity());
+		mShowAdapter = new ArrayObjectAdapter(mediaCardPresenter);
+		mShowAdapter.add(new MediaCardPresenter.OverviewCardItem(true));
 
 		mRowsAdapter.add(new ListRow(showsHeader, mShowAdapter));
 	}
 
 	private void setupMore() {
-		HeaderItem gridHeader = new HeaderItem(0, getString(R.string.more),
-				null);
+		HeaderItem gridHeader = new HeaderItem(0, getString(R.string.more));
 
 		MorePresenter gridPresenter = new MorePresenter(getActivity());
 		ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
@@ -226,9 +223,9 @@ public class PTVOverviewFragment extends BrowseFragment {
 		public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
 				RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-			if (item instanceof OverviewCardPresenter.OverviewCardItem) {
+			if (item instanceof MediaCardPresenter.OverviewCardItem) {
 
-				OverviewCardPresenter.OverviewCardItem media = (OverviewCardPresenter.OverviewCardItem) item;
+				MediaCardPresenter.OverviewCardItem media = (MediaCardPresenter.OverviewCardItem) item;
 				if (media.isLoading()) return;
 				Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
 						getActivity(),
@@ -251,11 +248,11 @@ public class PTVOverviewFragment extends BrowseFragment {
 		@Override
 		public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
 				RowPresenter.ViewHolder rowViewHolder, Row row) {
-			if (item instanceof OverviewCardPresenter.OverviewCardItem) {
-				OverviewCardPresenter.OverviewCardItem overviewItem = (OverviewCardPresenter.OverviewCardItem) item;
+			if (item instanceof MediaCardPresenter.OverviewCardItem) {
+				MediaCardPresenter.OverviewCardItem overviewItem = (MediaCardPresenter.OverviewCardItem) item;
 				if (overviewItem.isLoading()) return;
 
-				mBackgroundUpdater.updateBackgroundAsync(((OverviewCardPresenter.OverviewCardItem) item).getMedia().headerImage);
+				mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.OverviewCardItem) item).getMedia().headerImage);
 			}
 
 		}

@@ -27,7 +27,7 @@ import pct.droid.base.providers.media.models.Show;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMovieDetailActivity;
 import pct.droid.tv.activities.PTVShowDetailActivity;
-import pct.droid.tv.presenters.OverviewCardPresenter;
+import pct.droid.tv.presenters.MediaCardPresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
 
 public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFragment
@@ -66,10 +66,9 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 	}
 
 	private ListRow createLoadingRow() {
-		HeaderItem loadingHeader = new HeaderItem(0, getString(R.string.search_results),
-				null);
-		ArrayObjectAdapter loadingRowAdapter = new ArrayObjectAdapter(new OverviewCardPresenter(getActivity()));
-		loadingRowAdapter.add(new OverviewCardPresenter.OverviewCardItem(true));
+		HeaderItem loadingHeader = new HeaderItem(0, getString(R.string.search_results));
+		ArrayObjectAdapter loadingRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
+		loadingRowAdapter.add(new MediaCardPresenter.OverviewCardItem(true));
 		return new ListRow(loadingHeader, loadingRowAdapter);
 	}
 
@@ -106,7 +105,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		mSearchFilter.page = 1;
 		mShowsProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-				List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
+				List<MediaCardPresenter.OverviewCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 				addRow(getString(R.string.show_results), list);
 			}
 
@@ -117,7 +116,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 
 		mMovieProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-						List<OverviewCardPresenter.OverviewCardItem> list = OverviewCardPresenter.convertMediaToOverview(items);
+						List<MediaCardPresenter.OverviewCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 						addRow(getString(R.string.movie_results), list);
 					}
 
@@ -130,12 +129,11 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 
 	}
 
-	private void addRow(String title, List<OverviewCardPresenter.OverviewCardItem> items) {
+	private void addRow(String title, List<MediaCardPresenter.OverviewCardItem> items) {
 		mRowsAdapter.remove(mLoadingRow);
 
-		HeaderItem header = new HeaderItem(0, title,
-				null);
-		ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new OverviewCardPresenter(getActivity()));
+		HeaderItem header = new HeaderItem(0, title);
+		ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
 		listRowAdapter.addAll(0, items);
 		mRowsAdapter.add(new ListRow(header, listRowAdapter));
 	}
@@ -148,8 +146,8 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		return new OnItemViewClickedListener() {
 			@Override public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object object, RowPresenter.ViewHolder rowViewHolder,
 					Row row) {
-				if (object instanceof OverviewCardPresenter.OverviewCardItem) {
-					OverviewCardPresenter.OverviewCardItem item = (OverviewCardPresenter.OverviewCardItem) object;
+				if (object instanceof MediaCardPresenter.OverviewCardItem) {
+					MediaCardPresenter.OverviewCardItem item = (MediaCardPresenter.OverviewCardItem) object;
 					Media media = item.getMedia();
 					if (media instanceof Movie) PTVMovieDetailActivity.startActivity(getActivity(), (Movie) media);
 					else if (media instanceof Show) PTVShowDetailActivity.startActivity(getActivity(), (Show) media);
@@ -163,8 +161,8 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		@Override
 		public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
 				RowPresenter.ViewHolder rowViewHolder, Row row) {
-			if (item instanceof OverviewCardPresenter.OverviewCardItem) {
-				OverviewCardPresenter.OverviewCardItem overviewItem = (OverviewCardPresenter.OverviewCardItem) item;
+			if (item instanceof MediaCardPresenter.OverviewCardItem) {
+				MediaCardPresenter.OverviewCardItem overviewItem = (MediaCardPresenter.OverviewCardItem) item;
 				if (overviewItem.isLoading()) return;
 
 				mBackgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);

@@ -30,13 +30,14 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 
-public abstract class PTVTorrentBaseActivity extends FragmentActivity implements TorrentService.Listener {
+public abstract class PTVTorrentBaseActivity extends FragmentActivity implements TorrentService.Listener,TorrentActivity {
 
     protected Handler mHandler;
     protected TorrentService mService;
@@ -76,14 +77,6 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
 
     public TorrentService getTorrentService() {
         return mService;
-    }
-
-    protected void onTorrentServiceConnected() {
-        // Placeholder
-    }
-
-    protected void onTorrentServiceDisconnected() {
-        // Placeholder
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {

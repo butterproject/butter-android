@@ -8,13 +8,14 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.tv.R;
 import pct.droid.tv.fragments.PTVMovieDetailsFragment;
+import pct.droid.tv.fragments.PTVShowDetailsFragment;
 
 
-public class PTVShowDetailActivity extends Activity implements PTVMovieDetailsFragment.Callback {
+public class PTVShowDetailActivity extends Activity implements PTVShowDetailsFragment.Callback {
 
 	public static final String EXTRA_ITEM = "item";
 	public static final String SHARED_ELEMENT_NAME = "hero";
-	private Media mItem;
+	private Show mItem;
 
 	public static Intent startActivity(Activity activity, Show item) {
 		return startActivity(activity, null, item);
@@ -38,7 +39,7 @@ public class PTVShowDetailActivity extends Activity implements PTVMovieDetailsFr
 		mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
 	}
 
-	@Override public Media getItem() {
+	@Override public Show getItem() {
 		return mItem;
 	}
 }

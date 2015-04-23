@@ -60,4 +60,16 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 
 		mFragment.cancelStream();
 	}
+
+	@Override public void onTorrentServiceDisconnected() {
+
+	}
+
+	@Override
+	public void onTorrentServiceConnected() {
+		if (null != mFragment) {
+			mFragment.onTorrentServiceConnected();
+		}
+	}
+
 }

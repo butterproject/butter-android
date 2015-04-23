@@ -102,5 +102,13 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 			mService = null;
 		}
 	};
+
+	@Override public void onTorrentServiceConnected() {
+		//todo::
+	}
+
+	@Override public void onTorrentServiceDisconnected() {
+//todo
+	}
 }
 
