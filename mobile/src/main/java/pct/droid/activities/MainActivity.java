@@ -122,7 +122,8 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
     @Override
     public void onVPNServiceReady() {
         try {
-            mVPNManager.startVPN();
+            if(!mVPNManager.isConnected())
+                mVPNManager.startVPN();
         } catch (RemoteException e) {
             e.printStackTrace();
         }

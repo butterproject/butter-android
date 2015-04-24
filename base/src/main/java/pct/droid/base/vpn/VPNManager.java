@@ -35,6 +35,7 @@ import java.io.InputStreamReader;
 
 import ht.vpn.android.api.IOpenVPNAPIService;
 import ht.vpn.android.api.IOpenVPNStatusCallback;
+import pct.droid.base.R;
 import pct.droid.base.utils.ThreadUtils;
 
 public class VPNManager {
@@ -103,10 +104,19 @@ public class VPNManager {
             }
             br.readLine();
 
-            mService.startVPN(config);
+            mService.startVPN("Popcorn Time", config);
         } catch (IOException | RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        try {
+            return mService.isConnectedOrConnecting();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Bundle data) {

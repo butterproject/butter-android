@@ -44,6 +44,11 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
         BeamManager.getInstance(this).setListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         mVPNManager = VPNManager.start(this);
     }
 
@@ -51,6 +56,11 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     protected void onPause() {
         super.onPause();
         BeamManager.getInstance(this).setListener(null);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         mVPNManager.stop();
     }
 
