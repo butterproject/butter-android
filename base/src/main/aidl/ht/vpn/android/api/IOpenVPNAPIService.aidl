@@ -20,7 +20,7 @@ interface IOpenVPNAPIService {
 	/** start a profile using a config as inline string. Make sure that all needed data is inlined,
 	 * e.g., using <ca>...</ca> or <auth-user-data>...</auth-user-data>
 	 * See the OpenVPN manual page for more on inlining files */
-	void startVPN (String inlineconfig);
+	void startVPN (String name, String inlineconfig);
 	
 	/** This permission framework is used  to avoid confused deputy style attack to the VPN
 	 * calling this will give null if the app is allowed to use the external API and an Intent
@@ -40,6 +40,8 @@ interface IOpenVPNAPIService {
 
     /* Resume the VPN (same as using the pause feature in the notifcation bar) */
     void resume();
+
+    boolean isConnectedOrConnecting();
     
     /**
       * Registers to receive OpenVPN Status Updates
