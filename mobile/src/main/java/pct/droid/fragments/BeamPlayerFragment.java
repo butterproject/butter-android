@@ -21,6 +21,7 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -50,9 +52,11 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
-import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
@@ -61,7 +65,7 @@ import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.widget.SeekBar;
 import timber.log.Timber;
 
-public class BeamPlayerFragment extends Fragment {
+public class BeamPlayerFragment extends Fragment implements TorrentService.Listener {
 
     public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
 
@@ -71,9 +75,10 @@ public class BeamPlayerFragment extends Fragment {
     private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
     private VolumeControl mVolumeControl;
-    private boolean mHasVolumeControl = true, mHasSeekControl = true, mIsPlaying = false, mIsUserSeeking = false, mSeeking = false;
+    private boolean mHasVolumeControl = true, mHasSeekControl = true, mIsPlaying = false, mIsUserSeeking = false, mProcessingSeeking = false;
     private int mRetries = 0;
     private long mTotalTimeDuration = 0;
+    private Float mDownloadProgress = 0f;
     private LoadingBeamingDialogFragment mLoadingDialog;
     private ScheduledThreadPoolExecutor mExecutor = new ScheduledThreadPoolExecutor(2);
     private ScheduledFuture mTask;
@@ -137,16 +142,24 @@ public class BeamPlayerFragment extends Fragment {
 
         LayerDrawable progressDrawable;
         LayerDrawable volumeDrawable;
-        if (VersionUtils.isLollipop()) {
-            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.progress_horizontal_material, null);
-            volumeDrawable = (LayerDrawable) getResources().getDrawable(android.R.drawable.progress_horizontal, null);
-        } else {
-            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal_bigtrack);
+        if (!VersionUtils.isLollipop()) {
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
             volumeDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
+        } else {
+            if (mSeekBar.getProgressDrawable() instanceof StateListDrawable) {
+                StateListDrawable stateListDrawable = (StateListDrawable) mSeekBar.getProgressDrawable();
+                progressDrawable = (LayerDrawable) stateListDrawable.getCurrent();
+            } else {
+                progressDrawable = (LayerDrawable) mSeekBar.getProgressDrawable();
+            }
+            volumeDrawable = progressDrawable;
+            volumeDrawable.mutate();
+            progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setAlpha(85);
         }
 
         progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
         volumeDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
 
         mSeekBar.setProgressDrawable(progressDrawable);
@@ -163,16 +176,16 @@ public class BeamPlayerFragment extends Fragment {
 
         if (mMedia.image != null && !mMedia.image.equals("")) {
             Picasso.with(mCoverImage.getContext()).load(mMedia.image)
-                    .into(mCoverImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            AnimUtils.fadeIn(mCoverImage);
-                        }
+                .into(mCoverImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        AnimUtils.fadeIn(mCoverImage);
+                    }
 
-                        @Override
-                        public void onError() {
-                        }
-                    });
+                    @Override
+                    public void onError() {
+                    }
+                });
         }
 
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -360,8 +373,11 @@ public class BeamPlayerFragment extends Fragment {
             mMediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long position) {
-                    if (!mSeeking && !mIsUserSeeking)
+                    if (!mIsUserSeeking) {
                         mSeekBar.setProgress(position.intValue());
+                        mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+                        mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
+                    }
 
                     if (mLoadingDialog.isVisible() && !getActivity().isFinishing() && position > 0) {
                         mLoadingDialog.dismiss();
@@ -378,35 +394,38 @@ public class BeamPlayerFragment extends Fragment {
 
     private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean userChange) {
+        public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
+            if (fromUser && !mProcessingSeeking && mIsUserSeeking && progress <= (mTotalTimeDuration / 100 * seekBar.getSecondaryProgress())) {
+                mSeekBar.setProgress(progress);
+                mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+                mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
 
+                mProcessingSeeking = true;
+                mMediaControl.seek(seekBar.getProgress(), new ResponseListener<Object>() {
+                    @Override
+                    public void onSuccess(Object response) {
+                        mProcessingSeeking = false;
+                        startUpdating();
+                    }
+
+                    @Override
+                    public void onError(ServiceCommandError error) {
+                        mProcessingSeeking = false;
+                        startUpdating();
+                    }
+                });
+            }
         }
 
         @Override
         public void onStartTrackingTouch(android.widget.SeekBar seekBar) {
             mIsUserSeeking = true;
-            mSeekBar.setSecondaryProgress(seekBar.getProgress());
             stopUpdating();
         }
 
         @Override
         public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
             mIsUserSeeking = false;
-            mSeekBar.setSecondaryProgress(0);
-            mSeeking = true;
-            mMediaControl.seek(seekBar.getProgress(), new ResponseListener<Object>() {
-                @Override
-                public void onSuccess(Object response) {
-                    mSeeking = false;
-                    startUpdating();
-                }
-
-                @Override
-                public void onError(ServiceCommandError error) {
-                    mSeeking = false;
-                    startUpdating();
-                }
-            });
         }
     };
 
@@ -426,4 +445,17 @@ public class BeamPlayerFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onStreamStarted() { }
+    @Override
+    public void onStreamError(Exception e) { }
+    @Override
+    public void onStreamReady(File videoLocation) { }
+
+    @Override
+    public void onStreamProgress(DownloadStatus status) {
+        mDownloadProgress = mTotalTimeDuration / 100 * status.progress;
+        mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+        mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
+    }
 }

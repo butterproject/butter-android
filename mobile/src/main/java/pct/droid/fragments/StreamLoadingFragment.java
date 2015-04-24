@@ -42,7 +42,7 @@ import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
-import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.providers.media.models.Media;
@@ -212,8 +212,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 }
             }
 
-            if (!playingExternal)
-                getActivity().finish();
+            getActivity().finish();
         }
     }
 }

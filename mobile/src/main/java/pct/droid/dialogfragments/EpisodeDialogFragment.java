@@ -175,7 +175,9 @@ public class EpisodeDialogFragment extends DialogFragment {
         mScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                dismiss();
+                try {
+                    dismiss();
+                } catch (Exception e) {}
             }
         }, ANIM_SPEED);
     }

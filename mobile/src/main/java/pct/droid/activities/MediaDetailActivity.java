@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.InjectView;
 import butterknife.Optional;
 import pct.droid.R;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
@@ -155,8 +156,10 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
         super.onResume();
         supportInvalidateOptionsMenu();
 
-        if (null != mService)
+        if (null != mService) {
             mService.stopStreaming();
+        }
+        BeamServerService.getServer().stop();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -167,6 +170,10 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
                 NetworkUtils.isNetworkConnected(this)) {
             MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
         } else {
+            if(mService != null) {
+                mService.startForeground();
+            }
+
             if (VersionUtils.isLollipop()) {
                 mScrollView.smoothScrollTo(0, 0);
                 StreamLoadingActivity.startActivity(this, streamInfo, Pair.create((View) mBgImage, mBgImage.getTransitionName()));

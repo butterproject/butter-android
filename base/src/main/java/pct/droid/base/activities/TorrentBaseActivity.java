@@ -55,10 +55,11 @@ public abstract class TorrentBaseActivity extends ActionBarActivity implements T
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (null != mService)
+    protected void onPause() {
+        super.onPause();
+        if (null != mService) {
             unbindService(mServiceConnection);
+        }
     }
 
     @Override
