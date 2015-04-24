@@ -62,19 +62,24 @@ allprojects {
 
             }
         }
+        println project.name;
+        if (project.name.equals("mobile")){
+            gradle.buildFinished {
+                try {
+                    File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
+                    File targetFile = new File("./mobile/build/outputs/apk", "appetize.apk")
+                    Path source = sourceFile.toPath()
+                    Path target = targetFile.toPath()
+                    if (sourceFile.exists()) {
+                        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace()
+                }
+            }
     }
 }
 
-gradle.buildFinished {
-    try {
-        File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-        File targetFile = new File("./mobile/build/outputs/apk", "appetize.apk")
-        Path source = sourceFile.toPath()
-        Path target = targetFile.toPath()
-        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
-    } catch (Exception e) {
-        e.printStackTrace()
-    }
 }
 
 def createCrashlyticsProperties(Project project, variant) {
