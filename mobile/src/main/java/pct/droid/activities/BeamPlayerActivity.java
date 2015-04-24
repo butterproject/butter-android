@@ -17,26 +17,25 @@
 
 package pct.droid.activities;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 
 import pct.droid.R;
-import pct.droid.base.connectsdk.BeamManager;
-import pct.droid.base.connectsdk.server.BeamServer;
+import pct.droid.base.beaming.BeamManager;
+import pct.droid.base.beaming.server.BeamServer;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
+import pct.droid.fragments.BeamPlayerFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
-    private TorrentService mService;
+    private BeamPlayerFragment mFragment;
     private BeamManager mBeamManager = BeamManager.getInstance(this);
     private StreamInfo mStreamInfo;
     private String mTitle;
@@ -61,9 +60,9 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
 
-        mTitle = getString(R.string.the_video);
+        BeamServerService.getServer().start();
 
-        TorrentService.bindHere(this, mServiceConnection);
+        mTitle = getString(R.string.the_video);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
@@ -86,14 +85,15 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
         File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
         BeamServer.setCurrentSubs(subsLocation);
          */
+
+        mFragment = (BeamPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.beam_fragment);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mService != null) {
-            unbindService(mServiceConnection);
-        }
+    protected void onStop() {
+        if(null != mService)
+            mService.removeListener(mFragment);
+        super.onStop();
     }
 
     @Override
@@ -116,6 +116,7 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
             @Override
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
+                BeamServerService.getServer().stop();
                 if (mService != null)
                     mService.stopStreaming();
                 finish();
@@ -129,7 +130,7 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
 
     @Override
     public StreamInfo getInfo() {
-        return mStreamInfo;
+          return mStreamInfo;
     }
 
     @Override
@@ -137,16 +138,9 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
         return mService;
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-    };
-
+    @Override
+    protected void onTorrentServiceConnected() {
+        super.onTorrentServiceConnected();
+        mService.addListener(mFragment);
+    }
 }

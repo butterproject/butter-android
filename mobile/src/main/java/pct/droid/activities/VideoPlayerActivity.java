@@ -17,12 +17,9 @@
 
 package pct.droid.activities;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.MenuItem;
 
 import pct.droid.R;
@@ -34,7 +31,6 @@ import pct.droid.fragments.VideoPlayerFragment;
 public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
     private VideoPlayerFragment mFragment;
-    private TorrentService mService;
     private StreamInfo mStreamInfo;
     private String mTitle = "";
 
@@ -55,7 +51,8 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
-        TorrentService.bindHere(this, mServiceConnection);
+
+        mTitle = getString(R.string.the_video);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
@@ -77,11 +74,10 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mService != null) {
-            unbindService(mServiceConnection);
-        }
+    protected void onStop() {
+        if(mService != null)
+            mService.removeListener(mFragment);
+        super.onStop();
     }
 
     @Override
@@ -124,16 +120,10 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
         return mService;
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-    };
+    @Override
+    protected void onTorrentServiceConnected() {
+        super.onTorrentServiceConnected();
+        mService.addListener(mFragment);
+    }
 }
 

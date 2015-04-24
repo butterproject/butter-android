@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.connectsdk;
+package pct.droid.base.beaming;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -49,7 +49,7 @@ import java.util.Map;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
-import pct.droid.base.connectsdk.server.BeamServerService;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;

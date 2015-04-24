@@ -27,6 +27,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
 import com.frostwire.jlibtorrent.DHT;
 import com.frostwire.jlibtorrent.Downloader;
@@ -49,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -61,6 +63,7 @@ public class TorrentService extends Service {
     private HandlerThread mThread;
     private Handler mHandler;
 
+    private final Integer mId = 3423423;
     private Session mTorrentSession;
     private DHT mDHT;
     private TorrentHandle mCurrentTorrent;
@@ -68,7 +71,7 @@ public class TorrentService extends Service {
 
     private String mCurrentTorrentUrl = "";
     private File mCurrentVideoLocation;
-    private boolean mIsStreaming = false, mIsCanceled = false;
+    private boolean mIsStreaming = false, mIsCanceled = false, mReady = false, mInForeground = false;
 
     private IBinder mBinder = new ServiceBinder();
     private List<Listener> mListener = new ArrayList<>();
@@ -101,10 +104,64 @@ public class TorrentService extends Service {
         return mBinder;
     }
 
-    private void start() {
-        if (mThread != null) return;
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        start();
+    }
 
-        // TODO: Add notification
+    @Override
+    public boolean onUnbind(Intent intent) {
+        super.onUnbind(intent);
+
+        if(!mInForeground) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mTorrentSession.pause();
+                    mDHT.stop();
+                    Timber.d("Pausing libtorrent session");
+                }
+            });
+        }
+
+        return true;
+    }
+
+    public void startForeground() {
+        if(mInForeground) return;
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notif_logo)
+                .setContentTitle("Popcorn Time")
+                .setContentText(getString(R.string.running))
+                .setOngoing(true)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE);
+
+        startForeground(mId, builder.build());
+        mInForeground = true;
+    }
+
+    public void stopForeground() {
+        mInForeground = false;
+        stopForeground(true);
+    }
+
+    private void start() {
+        if (mThread != null) {
+            if(mTorrentSession != null && mTorrentSession.isPaused()) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Timber.d("Resuming libtorrent session");
+                        mTorrentSession.resume();
+                        mDHT.start();
+                        Timber.d("Nodes in DHT: %s", mDHT.nodes());
+                    }
+                });
+            }
+            return;
+        }
 
         mThread = new HandlerThread(THREAD_NAME);
         mThread.start();
@@ -129,7 +186,10 @@ public class TorrentService extends Service {
     public void streamTorrent(@NonNull final String torrentUrl) {
         if (mHandler == null || mIsStreaming) return;
 
+        startForeground();
+
         mIsCanceled = false;
+        mReady = false;
 
         Timber.d("Starting streaming");
 
@@ -149,6 +209,8 @@ public class TorrentService extends Service {
             public void run() {
                 mIsStreaming = true;
                 mCurrentTorrentUrl = torrentUrl;
+
+                mDHT.waitNodes(30);
 
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
                 saveDirectory.mkdirs();
@@ -237,6 +299,8 @@ public class TorrentService extends Service {
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
+        stopForeground();
+
         mIsCanceled = true;
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
@@ -264,6 +328,14 @@ public class TorrentService extends Service {
 
     public String getCurrentTorrentUrl() {
         return mCurrentTorrentUrl;
+    }
+
+    public File getCurrentVideoLocation() {
+        return mCurrentVideoLocation;
+    }
+
+    public boolean isReady() {
+        return mReady;
     }
 
     public void addListener(@NonNull Listener listener) {
@@ -334,8 +406,6 @@ public class TorrentService extends Service {
     }
 
     protected class TorrentAlertAdapter extends com.frostwire.jlibtorrent.TorrentAlertAdapter {
-
-        private boolean mReady = false;
         private int mLastLoggedProgress = 0;
 
         public TorrentAlertAdapter(TorrentHandle th) {

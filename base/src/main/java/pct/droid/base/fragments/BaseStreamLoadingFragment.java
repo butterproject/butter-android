@@ -34,6 +34,7 @@ import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.activities.TorrentBaseActivity;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -118,8 +119,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         if (null != mService) {
             mService.removeListener(this);
         }
@@ -174,8 +175,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         }
 
         if (!mPlayerStarted) {
-            //todo: remove torrents listeners when closing activity and move service closing to detail/overview activities
-
             mService.removeListener(BaseStreamLoadingFragment.this);
             startPlayerActivity(location, 0);
 
@@ -187,7 +186,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     public void onResume() {
         super.onResume();
         if (mPlayerStarted) {
+            BeamServerService.getServer().stop();
             getActivity().onBackPressed();
+        }
+
+        if(mService != null && mService.isReady()) {
+            onStreamReady(mService.getCurrentVideoLocation());
         }
 
         setState(State.WAITING_TORRENT);

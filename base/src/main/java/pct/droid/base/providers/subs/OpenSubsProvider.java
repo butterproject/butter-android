@@ -81,7 +81,7 @@ public class OpenSubsProvider extends SubsProvider {
                                     }
 
                                     String url = item.get("SubDownloadLink").replace(".gz", ".srt");
-                                    String lang = item.get("ISO639").replace("pb", "pt-BR");
+                                    String lang = item.get("ISO639").replace("pb", "pt-br");
                                     int downloads = Integer.parseInt(item.get("SubDownloadsCnt"));
                                     int score = 0;
 

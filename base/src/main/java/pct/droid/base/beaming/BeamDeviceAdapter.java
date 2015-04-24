@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.connectsdk;
+package pct.droid.base.beaming;
 
 import android.content.Context;
 import android.view.LayoutInflater;

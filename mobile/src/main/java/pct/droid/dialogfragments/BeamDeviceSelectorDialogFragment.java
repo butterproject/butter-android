@@ -28,8 +28,8 @@ import android.os.Bundle;
 import com.connectsdk.device.ConnectableDevice;
 
 import pct.droid.R;
-import pct.droid.base.connectsdk.BeamDeviceAdapter;
-import pct.droid.base.connectsdk.BeamManager;
+import pct.droid.base.beaming.BeamDeviceAdapter;
+import pct.droid.base.beaming.BeamManager;
 
 public class BeamDeviceSelectorDialogFragment extends DialogFragment {
 
