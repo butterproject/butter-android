@@ -66,12 +66,13 @@ allprojects {
                 }
 
             }
+        } else if (project.plugins.hasPlugin('com.android.library')) {
+            //add the android sdk manager plugin to andriod projects
+            apply plugin: 'android-sdk-manager'
         }
 
-
-
         //copy apk to appetize apk
-        if (project.name.equals("mobile")){
+        if (project.name.equals("mobile")) {
             gradle.buildFinished {
                 try {
                     File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
@@ -85,8 +86,8 @@ allprojects {
                     e.printStackTrace()
                 }
             }
+        }
     }
-}
 
 }
 
