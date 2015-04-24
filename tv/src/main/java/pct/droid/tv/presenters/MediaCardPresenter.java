@@ -75,13 +75,13 @@ public class MediaCardPresenter extends Presenter {
 
 	@Override
 	public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object object) {
-		OverviewCardItem overview = (OverviewCardItem) object;
+		MediaCardItem overview = (MediaCardItem) object;
 
 		if (overview.isLoading()) onBindLoadingViewHolder(viewHolder, overview);
 		else onBindMediaViewHolder(viewHolder, overview);
 	}
 
-	public void onBindLoadingViewHolder(Presenter.ViewHolder viewHolder, OverviewCardItem overview) {
+	public void onBindLoadingViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
 		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 		cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
 		cardView.setMainImage(mContext.getResources().getDrawable(R.drawable.placeholder_inset));
@@ -89,7 +89,7 @@ public class MediaCardPresenter extends Presenter {
 		cardView.setMainImageDimensions(mCardWidth, mCardHeight);
 	}
 
-	public void onBindMediaViewHolder(Presenter.ViewHolder viewHolder, OverviewCardItem overview) {
+	public void onBindMediaViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
 
 		Media item = overview.getMedia();
 		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
@@ -172,15 +172,15 @@ public class MediaCardPresenter extends Presenter {
 		}
 	}
 
-	public static class OverviewCardItem {
+	public static class MediaCardItem {
 		private Media mMedia;
 		private boolean mLoading;
 
-		public OverviewCardItem(Media media) {
+		public MediaCardItem(Media media) {
 			mMedia = media;
 		}
 
-		public OverviewCardItem(boolean loading) {
+		public MediaCardItem(boolean loading) {
 			mLoading = loading;
 		}
 
@@ -194,9 +194,9 @@ public class MediaCardPresenter extends Presenter {
 	}
 
 
-	public static List<OverviewCardItem> convertMediaToOverview(List<Media> items) {
-		List<MediaCardPresenter.OverviewCardItem> list = new ArrayList<>();
-		for (Media media : items) list.add(new MediaCardPresenter.OverviewCardItem(media));
+	public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
+		List<MediaCardItem> list = new ArrayList<>();
+		for (Media media : items) list.add(new MediaCardItem(media));
 		return list;
 	}
 }

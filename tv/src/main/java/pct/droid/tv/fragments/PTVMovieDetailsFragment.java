@@ -1,5 +1,7 @@
 package pct.droid.tv.fragments;
 
+import android.app.Fragment;
+import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
@@ -22,6 +24,18 @@ import pct.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
 	YTSProvider mMovieProvider = new YTSProvider();
+
+	public static Fragment newInstance(Media media, String hero) {
+		PTVMovieDetailsFragment fragment = new PTVMovieDetailsFragment();
+
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(EXTRA_ITEM, media);
+		bundle.putString(EXTRA_HERO_URL, hero);
+
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+
 
 	private Movie getMovieItem() {
 		return (Movie) getMediaItem();

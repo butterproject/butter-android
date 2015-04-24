@@ -22,11 +22,8 @@ import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.providers.media.models.Movie;
-import pct.droid.base.providers.media.models.Show;
 import pct.droid.tv.R;
-import pct.droid.tv.activities.PTVMovieDetailActivity;
-import pct.droid.tv.activities.PTVShowDetailActivity;
+import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.presenters.MediaCardPresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
 
@@ -68,7 +65,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 	private ListRow createLoadingRow() {
 		HeaderItem loadingHeader = new HeaderItem(0, getString(R.string.search_results));
 		ArrayObjectAdapter loadingRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
-		loadingRowAdapter.add(new MediaCardPresenter.OverviewCardItem(true));
+		loadingRowAdapter.add(new MediaCardPresenter.MediaCardItem(true));
 		return new ListRow(loadingHeader, loadingRowAdapter);
 	}
 
@@ -105,7 +102,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		mSearchFilter.page = 1;
 		mShowsProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-				List<MediaCardPresenter.OverviewCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
+				List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 				addRow(getString(R.string.show_results), list);
 			}
 
@@ -116,7 +113,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 
 		mMovieProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-						List<MediaCardPresenter.OverviewCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
+						List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 						addRow(getString(R.string.movie_results), list);
 					}
 
@@ -129,7 +126,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 
 	}
 
-	private void addRow(String title, List<MediaCardPresenter.OverviewCardItem> items) {
+	private void addRow(String title, List<MediaCardPresenter.MediaCardItem> items) {
 		mRowsAdapter.remove(mLoadingRow);
 
 		HeaderItem header = new HeaderItem(0, title);
@@ -146,13 +143,11 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		return new OnItemViewClickedListener() {
 			@Override public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object object, RowPresenter.ViewHolder rowViewHolder,
 					Row row) {
-				if (object instanceof MediaCardPresenter.OverviewCardItem) {
-					MediaCardPresenter.OverviewCardItem item = (MediaCardPresenter.OverviewCardItem) object;
+				if (object instanceof MediaCardPresenter.MediaCardItem) {
+					MediaCardPresenter.MediaCardItem item = (MediaCardPresenter.MediaCardItem) object;
 					Media media = item.getMedia();
-					if (media instanceof Movie) PTVMovieDetailActivity.startActivity(getActivity(), (Movie) media);
-					else if (media instanceof Show) PTVShowDetailActivity.startActivity(getActivity(), (Show) media);
+					PTVMediaDetailActivity.startActivity(getActivity(), media,media.headerImage,media.image);
 				}
-
 			}
 		};
 	}
@@ -161,8 +156,8 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 		@Override
 		public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
 				RowPresenter.ViewHolder rowViewHolder, Row row) {
-			if (item instanceof MediaCardPresenter.OverviewCardItem) {
-				MediaCardPresenter.OverviewCardItem overviewItem = (MediaCardPresenter.OverviewCardItem) item;
+			if (item instanceof MediaCardPresenter.MediaCardItem) {
+				MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
 				if (overviewItem.isLoading()) return;
 
 				mBackgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);

@@ -1,6 +1,7 @@
 package pct.droid.tv.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,231 +43,323 @@ import pct.droid.tv.R;
 
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
-	@InjectView(R.id.progress_indicator)
-	ProgressBar mProgressIndicator;
-	@InjectView(R.id.video_surface)
-	SurfaceView videoSurface;
-	@InjectView(R.id.subtitle_text)
-	TextView mSubtitleText;
-	@InjectView(R.id.control_layout)
-	ViewGroup mControlLayout;
-	@InjectView(R.id.player_info)
-	TextView mPlayerInfo;
-	@InjectView(R.id.control_bar)
-	ProgressBar mControlBar;
-	@InjectView(R.id.play_button)
-	ImageButton playButton;
-	@InjectView(R.id.currentTime)
-	TextView mCurrentTimeTextView;
-	@InjectView(R.id.length_time)
-	TextView lengthTime;
+    @InjectView(R.id.progress_indicator)
+    ProgressBar mProgressIndicator;
+    @InjectView(R.id.video_surface)
+    SurfaceView videoSurface;
+    @InjectView(R.id.subtitle_text)
+    TextView mSubtitleText;
+    @InjectView(R.id.control_layout)
+    ViewGroup mControlLayout;
+    @InjectView(R.id.player_info)
+    TextView mPlayerInfo;
+    @InjectView(R.id.control_bar)
+    ProgressBar mControlBar;
+    @InjectView(R.id.play_button)
+    ImageButton playButton;
+    @InjectView(R.id.currentTime)
+    TextView mCurrentTimeTextView;
+    @InjectView(R.id.length_time)
+    TextView lengthTime;
 
 
-	private static final int FADE_OUT_OVERLAY = 5000;
-	private static final int FADE_OUT_INFO = 1000;
+    private static final int FADE_OUT_OVERLAY = 5000;
+    private static final int FADE_OUT_INFO = 1000;
 
-	private boolean mOverlayVisible = true;
+    private boolean mOverlayVisible = true;
 
-	private Handler mDisplayHandler;
+    private Handler mDisplayHandler;
 
-	@Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_videoplayer, container, false);
-		return view;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_videoplayer, container, false);
+        return view;
+    }
 
-	@Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		ButterKnife.inject(this, view);
-	}
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.inject(this, view);
+    }
 
-	@Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		setRetainInstance(true);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
 
-		videoSurface.setVisibility(View.VISIBLE);
+        videoSurface.setVisibility(View.VISIBLE);
 
-		mDisplayHandler = new Handler(Looper.getMainLooper());
+        mDisplayHandler = new Handler(Looper.getMainLooper());
 
-		mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
-		mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
+        mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
 
-		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-	}
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
 
-	@Override protected SurfaceView getVideoSurface() {
-		return videoSurface;
-	}
-
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		showOverlay();
-		return false;
-	}
+    @Override
+    protected SurfaceView getVideoSurface() {
+        return videoSurface;
+    }
 
 
-	@Override
-	protected void onErrorEncountered() {
-		/* Encountered Error, exit player with a message */
-		AlertDialog dialog = new AlertDialog.Builder(getActivity())
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						getActivity().finish();
-					}
-				})
-				.setTitle("Encountered error")
-				.setMessage("Encountered error")
-				.create();
-		dialog.show();
-	}
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_BUTTON_B) {
+            return true;
+        }
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	public void showOverlay() {
-		if (!mOverlayVisible) {
-			updatePlayPauseState();
+        showOverlay();
 
-			AnimUtils.fadeIn(mControlLayout);
-		}
+        //taken from vlc
+//			switch (keyCode) {
+//				case KeyEvent.KEYCODE_F:
+//				case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+//					seekDelta(10000);
+//					return true;
+//				case KeyEvent.KEYCODE_R:
+//				case KeyEvent.KEYCODE_MEDIA_REWIND:
+//					seekDelta(-10000);
+//					return true;
+//				case KeyEvent.KEYCODE_BUTTON_R1:
+//					seekDelta(60000);
+//					return true;
+//				case KeyEvent.KEYCODE_BUTTON_L1:
+//					seekDelta(-60000);
+//					return true;
+//				case KeyEvent.KEYCODE_BUTTON_A:
+//					if (mOverlayProgress.getVisibility() == View.VISIBLE)
+//						return false;
+//				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+//				case KeyEvent.KEYCODE_MEDIA_PLAY:
+//				case KeyEvent.KEYCODE_MEDIA_PAUSE:
+//				case KeyEvent.KEYCODE_SPACE:
+//					if (mIsNavMenu)
+//						return navigateDvdMenu(keyCode);
+//					else
+//						doPlayPause();
+//					return true;
+//				case KeyEvent.KEYCODE_O:
+//				case KeyEvent.KEYCODE_BUTTON_Y:
+//				case KeyEvent.KEYCODE_MENU:
+//					showAdvancedOptions(mAdvOptions);
+//					return true;
+//				case KeyEvent.KEYCODE_V:
+//				case KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK:
+//				case KeyEvent.KEYCODE_BUTTON_X:
+//					onAudioSubClick(mTracks);
+//					return true;
+//				case KeyEvent.KEYCODE_N:
+//					showNavMenu();
+//					return true;
+//				case KeyEvent.KEYCODE_A:
+//					resizeVideo();
+//					return true;
+//				case KeyEvent.KEYCODE_M:
+//				case KeyEvent.KEYCODE_VOLUME_MUTE:
+//					updateMute();
+//					return true;
+//				case KeyEvent.KEYCODE_S:
+//				case KeyEvent.KEYCODE_MEDIA_STOP:
+//					finish();
+//					return true;
+//				case KeyEvent.KEYCODE_DPAD_UP:
+//				case KeyEvent.KEYCODE_DPAD_DOWN:
+//				case KeyEvent.KEYCODE_DPAD_LEFT:
+//				case KeyEvent.KEYCODE_DPAD_RIGHT:
+//				case KeyEvent.KEYCODE_DPAD_CENTER:
+//				case KeyEvent.KEYCODE_ENTER:
+//					if (mIsNavMenu)
+//						return navigateDvdMenu(keyCode);
+//					else
+//						return super.onKeyDown(keyCode, event);
+//				case KeyEvent.KEYCODE_J:
+//					delayAudio(-50000l);
+//					break;
+//				case KeyEvent.KEYCODE_K:
+//					delayAudio(50000l);
+//					break;
+//				case KeyEvent.KEYCODE_G:
+//					delaySubs(-50000l);
+//					break;
+//				case KeyEvent.KEYCODE_H:
+//					delaySubs(50000l);
+//					break;
+//			}
+        return true;
+    }
 
-		mOverlayVisible = true;
-		mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
-		mDisplayHandler.postDelayed(mOverlayHideRunnable, FADE_OUT_OVERLAY);
-	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	public void hideOverlay() {
-			AnimUtils.fadeOut(mControlLayout);
+    @Override
+    protected void onErrorEncountered() {
+        /* Encountered Error, exit player with a message */
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        getActivity().finish();
+                    }
+                })
+                .setTitle("Encountered error")
+                .setMessage("Encountered error")
+                .create();
+        dialog.show();
+    }
 
-			mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
-			mOverlayVisible = false;
-	}
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void showOverlay() {
+        if (!mOverlayVisible) {
+            updatePlayPauseState();
 
-	protected void showPlayerInfo(String text) {
-		mPlayerInfo.setVisibility(View.VISIBLE);
-		mPlayerInfo.setText(text);
-		mDisplayHandler.removeCallbacks(mInfoHideRunnable);
-		mDisplayHandler.postDelayed(mInfoHideRunnable, FADE_OUT_INFO);
-	}
+            AnimUtils.fadeIn(mControlLayout);
+        }
 
-	private void hidePlayerInfo() {
-		if (mPlayerInfo.getVisibility() == View.VISIBLE) {
-			Animation fadeOutAnim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-			mPlayerInfo.startAnimation(fadeOutAnim);
-		}
-		mPlayerInfo.setVisibility(View.INVISIBLE);
-	}
+        mOverlayVisible = true;
+        mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
+        mDisplayHandler.postDelayed(mOverlayHideRunnable, FADE_OUT_OVERLAY);
+    }
 
-	public void updatePlayPauseState() {
-		if (isPlaying()) {
-			playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
-		} else {
-			playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
-		}
-	}
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void hideOverlay() {
+        AnimUtils.fadeOut(mControlLayout);
 
-	@Override public void onHardwareAccelerationError() {
-		AlertDialog dialog = new AlertDialog.Builder(getActivity())
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						disableHardwareAcceleration();
-						loadMedia();
-					}
-				})
-				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						getActivity().finish();
-					}
-				})
-				.setTitle(R.string.hardware_acceleration_error_title)
-				.setMessage(R.string.hardware_acceleration_error_message)
-				.create();
-		if (!getActivity().isFinishing())
-			dialog.show();
-	}
+        mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
+        mOverlayVisible = false;
+    }
 
-	private Runnable mOverlayHideRunnable = new Runnable() {
-		@Override
-		public void run() {
-			hideOverlay();
-		}
-	};
+    protected void showPlayerInfo(String text) {
+        mPlayerInfo.setVisibility(View.VISIBLE);
+        mPlayerInfo.setText(text);
+        mDisplayHandler.removeCallbacks(mInfoHideRunnable);
+        mDisplayHandler.postDelayed(mInfoHideRunnable, FADE_OUT_INFO);
+    }
 
-	private Runnable mInfoHideRunnable = new Runnable() {
-		@Override
-		public void run() {
-			hidePlayerInfo();
-		}
-	};
+    private void hidePlayerInfo() {
+        if (mPlayerInfo.getVisibility() == View.VISIBLE) {
+            Animation fadeOutAnim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+            mPlayerInfo.startAnimation(fadeOutAnim);
+        }
+        mPlayerInfo.setVisibility(View.INVISIBLE);
+    }
 
-	@Override
-	protected void showTimedCaptionText(final Caption text) {
-		mDisplayHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				if (text == null) {
-					if (mSubtitleText.getText().length() > 0) {
-						mSubtitleText.setText("");
-					}
-					return;
-				}
-				SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
+    public void updatePlayPauseState() {
+        if (isPlaying()) {
+            playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
+        } else {
+            playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
+        }
+    }
 
-				ForegroundColorSpan[] toRemoveSpans = styledString.getSpans(0, styledString.length(), ForegroundColorSpan.class);
-				for (ForegroundColorSpan remove : toRemoveSpans) {
-					styledString.removeSpan(remove);
-				}
+    @Override
+    public void onHardwareAccelerationError() {
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        disableHardwareAcceleration();
+                        loadMedia();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        getActivity().finish();
+                    }
+                })
+                .setTitle(R.string.hardware_acceleration_error_title)
+                .setMessage(R.string.hardware_acceleration_error_message)
+                .create();
+        if (!getActivity().isFinishing())
+            dialog.show();
+    }
 
-				if (!mSubtitleText.getText().toString().equals(styledString.toString())) {
-					mSubtitleText.setText(styledString);
-				}
-			}
-		});
-	}
+    private Runnable mOverlayHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hideOverlay();
+        }
+    };
 
-	@Override
-	protected void setProgressVisible(boolean visible) {
-		mProgressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
-	}
+    private Runnable mInfoHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hidePlayerInfo();
+        }
+    };
 
-	/**
-	 * Updates the overlay when the media playback progress has changed
-	 *
-	 * @param currentTime
-	 * @param duration
-	 */
-	@Override
-	protected void onProgressChanged(long currentTime, long duration) {
-		mControlBar.setMax((int) duration);
-		mControlBar.setProgress((int) currentTime);
-		mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-		mControlBar.setSecondaryProgress(getStreamerProgress());
-		if (getCurrentTime() >= 0) mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
-		if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
+    @Override
+    protected void showTimedCaptionText(final Caption text) {
+        mDisplayHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (text == null) {
+                    if (mSubtitleText.getText().length() > 0) {
+                        mSubtitleText.setText("");
+                    }
+                    return;
+                }
+                SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
 
-		mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-		mControlBar.setSecondaryProgress(getStreamerProgress());
-	}
+                ForegroundColorSpan[] toRemoveSpans = styledString.getSpans(0, styledString.length(), ForegroundColorSpan.class);
+                for (ForegroundColorSpan remove : toRemoveSpans) {
+                    styledString.removeSpan(remove);
+                }
 
-	@OnClick(R.id.play_button) void onPlayPauseClick() {
-		togglePlayPause();
-	}
+                if (!mSubtitleText.getText().toString().equals(styledString.toString())) {
+                    mSubtitleText.setText(styledString);
+                }
+            }
+        });
+    }
 
-	@OnClick(R.id.rewindButton) void onRewindClick() {
-		seekBackwardClick();
-	}
+    @Override
+    protected void setProgressVisible(boolean visible) {
+        mProgressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
 
-	@OnClick(R.id.forwardButton) void onForwardClick() {
-		seekForwardClick();
-	}
+    /**
+     * Updates the overlay when the media playback progress has changed
+     *
+     * @param currentTime
+     * @param duration
+     */
+    @Override
+    protected void onProgressChanged(long currentTime, long duration) {
+        mControlBar.setMax((int) duration);
+        mControlBar.setProgress((int) currentTime);
+        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+        mControlBar.setSecondaryProgress(getStreamerProgress());
+        if (getCurrentTime() >= 0)
+            mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
+        if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
 
-	@OnClick(R.id.scaleButton) void onScaleClick() {
-		scaleClick();
-	}
+        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+        mControlBar.setSecondaryProgress(getStreamerProgress());
+    }
 
-	@OnClick(R.id.subsButton) void onSubsClick() {
-		subsClick();
-	}
+    @OnClick(R.id.play_button)
+    void onPlayPauseClick() {
+        togglePlayPause();
+    }
+
+    @OnClick(R.id.rewindButton)
+    void onRewindClick() {
+        seekBackwardClick();
+    }
+
+    @OnClick(R.id.forwardButton)
+    void onForwardClick() {
+        seekForwardClick();
+    }
+
+    @OnClick(R.id.scaleButton)
+    void onScaleClick() {
+        scaleClick();
+    }
+
+    @OnClick(R.id.subsButton)
+    void onSubsClick() {
+        subsClick();
+    }
 
 
 }

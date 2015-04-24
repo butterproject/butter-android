@@ -1,9 +1,12 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
@@ -40,6 +43,7 @@ import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
 import pct.droid.tv.presenters.EpisodeCardPresenter;
 import pct.droid.tv.presenters.ShowDetailsDescriptionPresenter;
@@ -47,19 +51,20 @@ import pct.droid.tv.utils.BackgroundUpdater;
 
 public abstract class PTVBaseDetailsFragment extends DetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
+	public static final String EXTRA_ITEM = "item";
+	public static final String EXTRA_HERO_URL = "hero_url";
+
 	private Callback mCallback;
 	private ArrayObjectAdapter mAdapter;
 	private ClassPresenterSelector mPresenterSelector;
-	private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
 	private Media mItem;
+	private String mHeroImage;
 
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		mItem = mCallback.getItem();
-		mBackgroundUpdater.initialise(getActivity(), R.drawable.default_background);
-
-		updateBackground();
+		mItem = getArguments().getParcelable(EXTRA_ITEM);
+		mHeroImage = getArguments().getString(EXTRA_HERO_URL);
 
 		setupAdapter();
 
@@ -94,7 +99,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (null != mBackgroundUpdater) mBackgroundUpdater.destroy();
 	}
 
 
@@ -112,10 +116,9 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 		headerPresenter.setStyleLarge(true);
 		headerPresenter.setOnActionClickedListener(this);
 
-		//
-		//		// Hook up transition element.
-		//		detailsPresenter.setSharedElementEnterTransition(getActivity(),
-		//				PTVShowDetailActivity.SHARED_ELEMENT_NAME);
+		// Hook up transition element.
+		headerPresenter.setSharedElementEnterTransition(getActivity(),
+						PTVMediaDetailActivity.SHARED_ELEMENT_NAME);
 
 		mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, headerPresenter);
 		mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
@@ -124,20 +127,25 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 	private DetailsOverviewRow createDetailsOverviewRow() {
 		final DetailsOverviewRow detailsRow = new DetailsOverviewRow(mItem);
 
-		Picasso.with(getActivity()).load(mItem.image).into(new Target() {
-			@Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+		Picasso.with(getActivity()).load(mHeroImage).into(new Target() {
+			@Override
+			public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 				detailsRow.setImageBitmap(getActivity(), bitmap);
 				mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
-			}
-
-			@Override public void onBitmapFailed(Drawable errorDrawable) {
 
 			}
 
-			@Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+			@Override
+			public void onBitmapFailed(Drawable errorDrawable) {
+				getActivity().startPostponedEnterTransition();
+			}
+
+			@Override
+			public void onPrepareLoad(Drawable placeHolderDrawable) {
 
 			}
 		});
+
 		return detailsRow;
 	}
 
@@ -147,12 +155,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 	}
 
 	abstract void addActions(Media item);
-
-	protected void updateBackground() {
-		Media item = mItem;
-		if (null == item) return;
-		mBackgroundUpdater.updateBackgroundAsync(item.headerImage);
-	}
 
 	@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 		if (!isAdded()) return;
@@ -179,7 +181,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 	}
 
 	public interface Callback {
-		Media getItem();
 	}
 
 }

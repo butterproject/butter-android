@@ -15,10 +15,7 @@ import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pct.droid.base.connectsdk.BeamManager;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
-import pct.droid.base.preferences.DefaultPlayer;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.ThreadUtils;
