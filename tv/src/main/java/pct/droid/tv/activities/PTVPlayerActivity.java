@@ -281,7 +281,7 @@ public class PTVPlayerActivity extends Activity {
 			mHandler.post(new Runnable() {
 				@Override
 				public void run() {
-					Intent intent = new Intent(PTVPlayerActivity.this, PTVMovieDetailActivity.class);
+					Intent intent = new Intent(PTVPlayerActivity.this, PTVMediaDetailActivity.class);
 					intent.putExtra(getResources().getString(R.string.movie), mSelectedMedia);
 					startActivity(intent);
 				}

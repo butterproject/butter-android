@@ -1,5 +1,7 @@
 package pct.droid.tv.fragments;
 
+import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
@@ -36,6 +38,18 @@ import pct.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
 	EZTVProvider mTvProvider = new EZTVProvider();
+
+	public static Fragment newInstance(Media media, String hero) {
+		PTVShowDetailsFragment fragment = new PTVShowDetailsFragment();
+
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(EXTRA_ITEM, media);
+		bundle.putString(EXTRA_HERO_URL, hero);
+
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+
 
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
