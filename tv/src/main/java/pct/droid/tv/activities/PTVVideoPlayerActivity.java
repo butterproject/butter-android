@@ -20,10 +20,6 @@ import pct.droid.tv.fragments.PTVVideoPlayerFragment;
 
 public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback {
 
-    //	private Media mMedia;
-//	private String mQuality;
-//	private String mSubtitleLanguage;
-//	private String mLocation;
     private PTVVideoPlayerFragment mFragment;
 
     public final static String INFO = "stream_info";
@@ -115,7 +111,15 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public void onTorrentServiceDisconnected() {
+        mService.addListener(mFragment);
 //todo
+    }
+
+    @Override
+    protected void onStop() {
+        if(mService != null)
+            mService.removeListener(mFragment);
+        super.onStop();
     }
 }
 

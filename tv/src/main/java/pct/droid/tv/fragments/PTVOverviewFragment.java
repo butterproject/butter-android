@@ -253,7 +253,7 @@ public class PTVOverviewFragment extends BrowseFragment {
                 MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
                 if (overviewItem.isLoading()) return;
 
-                mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().image);
+                mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
             }
 
         }

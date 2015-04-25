@@ -58,6 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.AnimUtils;
@@ -547,7 +548,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     };
 
     @Override
-    void onHardwareAccelerationError() {
+    public void onHardwareAccelerationError() {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
