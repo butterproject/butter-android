@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:baselineAligned="false"
@@ -9,6 +10,7 @@
 	<FrameLayout
 		android:id="@+id/frameLayout"
 		android:layout_width="match_parent"
+		tools:background="#88ffffff"
 		android:layout_height="match_parent"
 		android:foregroundGravity="clip_horizontal|clip_vertical">
 
@@ -39,6 +41,7 @@
 	<ProgressBar
 		android:id="@+id/progress_indicator"
 		android:layout_width="wrap_content"
+		style="?android:progressBarStyleLarge"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true" />
 
@@ -48,6 +51,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="@dimen/player_controls_margin"
 		android:layout_marginRight="@dimen/player_controls_margin"
+		android:layout_marginTop="@dimen/player_controls_margin"
 		android:layout_marginBottom="@dimen/player_controls_bottom_margin"
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentBottom="true" />
@@ -56,11 +60,16 @@
 		android:id="@+id/player_info"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		tools:text="Fit Screen"
 		android:layout_centerInParent="true"
+		android:background="@drawable/player_info_background"
 		android:layout_gravity="center"
-		android:padding="@dimen/player_controls_distance"
-		android:textColor="#ffffff"
-		android:textSize="24sp"
+		android:paddingTop="12dp"
+		android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+		android:paddingBottom="12dp"
+		android:paddingLeft="32dp"
+		android:paddingRight="32dp"
+		tools:visibility="visible"
 		android:visibility="invisible" />
 
 </RelativeLayout>

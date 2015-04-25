@@ -210,15 +210,16 @@ public class PTVOverviewFragment extends BrowseFragment {
     }
 
     private void setupMore() {
-        HeaderItem gridHeader = new HeaderItem(0, getString(R.string.more));
+        if (BuildConfig.DEBUG) {
+            HeaderItem gridHeader = new HeaderItem(0, getString(R.string.more));
 
-        MorePresenter gridPresenter = new MorePresenter(getActivity());
-        ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
-        gridRowAdapter.add(new MorePresenter.MoreItem(R.string.about, R.drawable.ic_about));
-        gridRowAdapter.add(new MorePresenter.MoreItem(R.string.settings, R.drawable.ic_settings));
-        if (BuildConfig.DEBUG)
+            MorePresenter gridPresenter = new MorePresenter(getActivity());
+            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
+//        gridRowAdapter.add(new MorePresenter.MoreItem(R.string.about, R.drawable.ic_about));
+//        gridRowAdapter.add(new MorePresenter.MoreItem(R.string.settings, R.drawable.ic_settings));
             gridRowAdapter.add(new MorePresenter.MoreItem(R.string.tests, R.drawable.ic_av_play));
-        mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+            mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+        }
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -235,9 +236,9 @@ public class PTVOverviewFragment extends BrowseFragment {
                         ((ImageCardView) itemViewHolder.view).getMainImageView(),
                         PTVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
                 if (media.getMedia() instanceof Movie)
-                    PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage,media.getMedia().image);
+                    PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
                 else if (media.getMedia() instanceof Show)
-                    PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage,media.getMedia().image);
+                    PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
             } else {
                 openPlayerTestDialog();
             }

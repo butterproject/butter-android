@@ -34,6 +34,7 @@ import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.activities.TorrentBaseActivity;
+import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
@@ -186,7 +187,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     public void onResume() {
         super.onResume();
         if (mPlayerStarted) {
-            BeamServerService.getServer().stop();
+            BeamServer beamService = BeamServerService.getServer();
+            if (beamService!=null) {
+                beamService.stop();
+            }
             getActivity().onBackPressed();
         }
 
