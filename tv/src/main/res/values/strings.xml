@@ -66,6 +66,7 @@
 
 	<!-- WifiOnlyDialogFragment -->
 	<string name="network_message">Check your internet connection</string>
+	<string name="choose_quality">Choose quality</string>
 
 
 </resources>

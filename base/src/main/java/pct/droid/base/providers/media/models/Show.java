@@ -87,7 +87,7 @@ public class Show extends Media implements Parcelable {
         dest.writeString(airDay);
         dest.writeString(airTime);
         dest.writeString(runtime);
-        dest.writeInt(status.ordinal());
+        dest.writeInt(null!=status?status.ordinal():Status.UNKNOWN.ordinal());
         dest.writeString(network);
         dest.writeString(country);
         dest.writeString(tvdbId);
