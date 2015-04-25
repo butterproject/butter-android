@@ -121,7 +121,7 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     @Override
-    protected void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
         mService.addListener(mFragment);
     }
