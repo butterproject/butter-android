@@ -175,9 +175,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (mCallback.getService() != null)
             mCallback.getService().addListener(BaseVideoPlayerFragment.this);
 
-        if (mReadyToPlay) {
+//        if (mReadyToPlay) {
             loadMedia();
-        }
+//        }
     }
 
     @Override

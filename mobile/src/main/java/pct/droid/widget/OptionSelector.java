@@ -15,7 +15,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import pct.droid.base.fragments.StringArraySelectorDialogFragment;
 
 public class OptionSelector extends LinearLayout {
 
