@@ -94,6 +94,14 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
         }
     };
 
+    public void onTorrentServiceConnected() {
+        // Placeholder
+    }
+
+    public void onTorrentServiceDisconnected() {
+        // Placeholder
+    }
+
     @Override
     public void onStreamStarted() {
 

@@ -43,12 +43,17 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoplayer);
 
-        TorrentService.bindHere(this, mServiceConnection);
-
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
 
+        String location = mStreamInfo.getVideoLocation();
+        if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
+            location = "file://" + location;
+        }
+        mStreamInfo.setVideoLocation(location);
+
         mFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        mFragment.loadMedia();
     }
 
 
@@ -72,16 +77,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         return super.onKeyDown(keyCode, event);
     }
 
-//	@Override
-//    public String getSubtitles() {
-//		return mSubtitleLanguage;
-//	}
-//
-//	@Override
-//    public String getLocation() {
-//		return mLocation;
-//	}
-
     @Override
     public StreamInfo getInfo() {
         return mStreamInfo;
@@ -92,28 +87,11 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         return mService;
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-    };
-
     @Override
     public void onTorrentServiceConnected() {
-        //todo::
+        mService.addListener(mFragment);
     }
 
-    @Override
-    public void onTorrentServiceDisconnected() {
-        mService.addListener(mFragment);
-//todo
-    }
 
     @Override
     protected void onStop() {
