@@ -72,7 +72,6 @@ public class StreamLoadingActivity extends PopcornBaseActivity implements Stream
     @Override
     protected void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
-
         if (null != mFragment) {
             mFragment.onTorrentServiceConnected();
         }
