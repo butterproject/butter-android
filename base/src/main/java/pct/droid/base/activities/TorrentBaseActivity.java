@@ -95,6 +95,7 @@ public abstract class TorrentBaseActivity extends ActionBarActivity implements T
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            mService.removeListener(TorrentBaseActivity.this);
             mService = null;
             onTorrentServiceDisconnected();
         }
