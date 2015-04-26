@@ -406,6 +406,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         // TODO: END, ASK USER TO CLOSE PLAYER?
     }
 
+    public abstract void onPlaybackEndReached();
+
     public void subsClick() {
         if (mMedia != null && mMedia.subtitles != null) {
             if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
