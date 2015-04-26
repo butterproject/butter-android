@@ -56,6 +56,12 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         mFragment.loadMedia();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mService != null)
+            mService.stopStreaming();
+        super.onDestroy();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -92,6 +98,13 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         mService.addListener(mFragment);
     }
 
+    @Override
+    public void onTorrentServiceDisconnected() {
+        if (null!=mFragment){
+            mService.addListener(mFragment);
+        }
+        super.onTorrentServiceDisconnected();
+    }
 
     @Override
     protected void onStop() {
