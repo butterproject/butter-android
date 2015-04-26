@@ -404,25 +404,31 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser && !mProcessingSeeking && mIsUserSeeking && progress <= (mTotalTimeDuration / 100 * seekBar.getSecondaryProgress())) {
-                mSeekBar.setProgress(progress);
-                mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-                mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
+            if(fromUser && !mProcessingSeeking && mIsUserSeeking) {
+                if (progress <= mDownloadProgress) {
+                    mSeekBar.setProgress(progress);
+                    mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+                    mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
 
-                mProcessingSeeking = true;
-                mMediaControl.seek(seekBar.getProgress(), new ResponseListener<Object>() {
-                    @Override
-                    public void onSuccess(Object response) {
-                        mProcessingSeeking = false;
-                        startUpdating();
-                    }
+                    mProcessingSeeking = true;
+                    mMediaControl.seek(mSeekBar.getProgress(), new ResponseListener<Object>() {
+                        @Override
+                        public void onSuccess(Object response) {
+                            mProcessingSeeking = false;
+                            startUpdating();
+                        }
 
-                    @Override
-                    public void onError(ServiceCommandError error) {
-                        mProcessingSeeking = false;
-                        startUpdating();
-                    }
-                });
+                        @Override
+                        public void onError(ServiceCommandError error) {
+                            mProcessingSeeking = false;
+                            startUpdating();
+                        }
+                    });
+                } else {
+                    mSeekBar.setProgress(mDownloadProgress.intValue());
+                    mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+                    mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
+                }
             }
         }
 
