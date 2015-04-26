@@ -13,8 +13,6 @@ public class PTVLaunchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Boolean firstRun = PrefUtils.get(this, Prefs.FIRST_RUN, true);
 		if (firstRun) {
-			//set first run flag to false
-			PrefUtils.save(this, Prefs.FIRST_RUN, false);
 			//run the welcome wizard
 			PTVWelcomeActivity.startActivity(this);
 		} else

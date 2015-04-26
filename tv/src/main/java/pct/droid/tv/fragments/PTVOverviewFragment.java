@@ -190,6 +190,21 @@ public class PTVOverviewFragment extends BrowseFragment {
         mMoviesAdapter = new ArrayObjectAdapter(mediaCardPresenter);
         mMoviesAdapter.add(new MediaCardPresenter.MediaCardItem(true));
         mRowsAdapter.add(new ListRow(moviesHeader, mMoviesAdapter));
+
+
+        HeaderItem moreMoviesHeader = new HeaderItem(1, getString(R.string.more_movies));
+
+        MorePresenter morePresenter = new MorePresenter(getActivity());
+        ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
+
+        //add items
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.top_rated, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.release_date, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.year, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.a_to_z, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.genres, 0));
+
+        mRowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
     }
 
     private void removeMovies() {

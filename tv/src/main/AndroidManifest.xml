@@ -1,60 +1,66 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="pct.droid.tv">
+    package="pct.droid.tv">
 
-	<!-- Features -->
-	<uses-feature
-		android:name="android.hardware.touchscreen"
-		android:required="false" />
+    <!-- Features -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
-	<uses-feature android:name="android.hardware.microphone"
-		android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
 
-	<uses-feature
-		android:name="android.software.leanback"
-		android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
 
-	<!-- Permissions -->
-	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-	<application
-		android:label="@string/app_name"
-		android:theme="@style/Theme.Popcorn.TV"
-		android:banner="@drawable/banner"
-		android:allowBackup="false"
-		android:name="pct.droid.base.PopcornApplication">
+    <application
+        android:name="pct.droid.base.PopcornApplication"
+        android:allowBackup="false"
+        android:banner="@drawable/banner"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Popcorn.TV">
 
-		<activity
-			android:name=".activities.PTVLaunchActivity"
-			android:theme="@style/Theme.HiddenActivity"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-			</intent-filter>
-		</activity>
+        <activity
+            android:name=".activities.PTVLaunchActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/Theme.HiddenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-		<!-- Activities -->
-		<activity android:name=".activities.PTVMainActivity"/>
+        <!-- Activities -->
+        <activity android:name=".activities.PTVMainActivity" />
 
-		<activity
-			android:name=".activities.PTVPlayerActivity"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".activities.PTVPlayerActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
-		<activity android:name=".activities.PTVWelcomeActivity" />
-		<activity android:name=".activities.PTVMediaDetailActivity" />
-		<activity android:name=".activities.PTVSearchActivity" />
-		<activity android:name=".activities.PTVStreamLoadingActivity" />
-		<activity android:name=".activities.PTVVideoPlayerActivity" />
+        <activity
+            android:name=".activities.PTVWelcomeActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.Popcorn.TV.Welcome" />
 
-		<service android:name="pct.droid.base.torrent.TorrentService" />
-	</application>
+        <activity android:name=".activities.PTVMediaDetailActivity" />
+        <activity android:name=".activities.PTVSearchActivity" />
+        <activity android:name=".activities.PTVStreamLoadingActivity" />
+        <activity android:name=".activities.PTVVideoPlayerActivity" />
+
+        <service android:name="pct.droid.base.torrent.TorrentService" />
+    </application>
 
 </manifest>
