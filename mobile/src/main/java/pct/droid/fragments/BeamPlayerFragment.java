@@ -140,27 +140,34 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
             mMedia.color = getResources().getColor(R.color.primary);
         }
 
+
         LayerDrawable progressDrawable;
         LayerDrawable volumeDrawable;
         if (!VersionUtils.isLollipop()) {
-            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal_bigtrack);
             volumeDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
         } else {
-            if (mSeekBar.getProgressDrawable() instanceof StateListDrawable) {
-                StateListDrawable stateListDrawable = (StateListDrawable) mSeekBar.getProgressDrawable();
-                progressDrawable = (LayerDrawable) stateListDrawable.getCurrent();
+            if (mVolumeBar.getProgressDrawable() instanceof StateListDrawable) {
+                StateListDrawable stateListDrawable = (StateListDrawable) mVolumeBar.getProgressDrawable();
+                volumeDrawable = (LayerDrawable) stateListDrawable.getCurrent();
             } else {
-                progressDrawable = (LayerDrawable) mSeekBar.getProgressDrawable();
+                volumeDrawable = (LayerDrawable) mVolumeBar.getProgressDrawable();
             }
-            volumeDrawable = progressDrawable;
-            volumeDrawable.mutate();
-            progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setAlpha(85);
+
+            progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.progress_horizontal_material);
+        }
+
+        if(volumeDrawable == null) {
+            volumeDrawable = (LayerDrawable) progressDrawable.mutate();
         }
 
         progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
         progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+
+        volumeDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
         volumeDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        volumeDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
 
         mSeekBar.setProgressDrawable(progressDrawable);
         mSeekBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
@@ -350,8 +357,10 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
 
         @Override
         public void onSuccess(Long duration) {
-            mTotalTimeDuration = duration;
-            mSeekBar.setMax(duration.intValue());
+            if(mTotalTimeDuration != duration) {
+                mTotalTimeDuration = duration;
+                mSeekBar.setMax(duration.intValue());
+            }
             //durationTextView.setText(formatTime(duration.intValue()));
         }
     };
