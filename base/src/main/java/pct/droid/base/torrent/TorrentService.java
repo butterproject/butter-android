@@ -87,6 +87,7 @@ public class TorrentService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Timber.d(getClass().getName()+": onDestroy");
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
         mThread.interrupt();
@@ -94,12 +95,14 @@ public class TorrentService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Timber.d(getClass().getName()+": onStartCommand");
         start();
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Timber.d(getClass().getName()+": onBind");
         start();
         return mBinder;
     }
@@ -107,12 +110,14 @@ public class TorrentService extends Service {
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
+        Timber.d(getClass().getName()+": onRebind");
         start();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         super.onUnbind(intent);
+        Timber.d(getClass().getName()+": onUnbind");
 
         if(!mInForeground) {
             mHandler.post(new Runnable() {
@@ -129,6 +134,7 @@ public class TorrentService extends Service {
     }
 
     public void startForeground() {
+        Timber.d(getClass().getName()+": startForeground");
         if(mInForeground) return;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
@@ -143,11 +149,13 @@ public class TorrentService extends Service {
     }
 
     public void stopForeground() {
+        Timber.d(getClass().getName()+": stopForeground");
         mInForeground = false;
         stopForeground(true);
     }
 
     private void start() {
+        Timber.d(getClass().getName()+": onStart");
         if (mThread != null) {
             if(mTorrentSession != null && mTorrentSession.isPaused()) {
                 mHandler.post(new Runnable() {
@@ -184,6 +192,7 @@ public class TorrentService extends Service {
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
+        Timber.d(getClass().getName()+": streamTorrent");
         if (mHandler == null || mIsStreaming) return;
 
         startForeground();
@@ -207,6 +216,7 @@ public class TorrentService extends Service {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                Timber.d(getClass().getName()+": streaming runnable");
                 mIsStreaming = true;
                 mCurrentTorrentUrl = torrentUrl;
 
@@ -216,20 +226,21 @@ public class TorrentService extends Service {
                 saveDirectory.mkdirs();
 
                 File torrentFileDir = new File(saveDirectory, "files");
+                torrentFileDir.mkdirs();
+
                 File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
 
                 if (!torrentFile.exists()) {
                     int fileCreationTries = 0;
                     while (fileCreationTries < 4) {
                         try {
+                            fileCreationTries++;
                             if (torrentFileDir.mkdirs() || torrentFileDir.isDirectory()) {
                                 Timber.d("Creating torrent file");
                                 torrentFile.createNewFile();
-                                fileCreationTries = 4;
                             }
                         } catch (IOException e) {
                             Timber.e(e, "Error on file create");
-                            fileCreationTries++;
                         }
                     }
 
@@ -300,6 +311,9 @@ public class TorrentService extends Service {
             mWakeLock.release();
 
         stopForeground();
+
+        //remove all callbacks from handler
+        mHandler.removeCallbacksAndMessages(null);
 
         mIsCanceled = true;
         mIsStreaming = false;
