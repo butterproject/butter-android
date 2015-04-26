@@ -47,7 +47,6 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     public final static String INFO = "stream_info";
-    public final static String RESUME_POSITION = "resume_position";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +118,14 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     @Override
     public TorrentService getService() {
         return mService;
+    }
+
+    @Override
+    public void onTorrentServiceDisconnected() {
+        if (null!=mFragment){
+            mService.removeListener(mFragment);
+        }
+        super.onTorrentServiceDisconnected();
     }
 
     @Override

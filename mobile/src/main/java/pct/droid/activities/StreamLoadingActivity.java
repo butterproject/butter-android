@@ -79,6 +79,14 @@ public class StreamLoadingActivity extends PopcornBaseActivity implements Stream
     }
 
     @Override
+    public void onTorrentServiceDisconnected() {
+        super.onTorrentServiceDisconnected();
+        if (null != mFragment) {
+            mFragment.onTorrentServiceDisconnected();
+        }
+    }
+
+    @Override
     public StreamInfo getStreamInformation() {
         return mInfo;
     }
