@@ -30,6 +30,8 @@ import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
+    public static final String RESUME_POSITION = "resume_position";
+
     private VideoPlayerFragment mFragment;
     private StreamInfo mStreamInfo;
     private String mTitle = "";
