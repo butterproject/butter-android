@@ -74,10 +74,10 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
         if(mService != null)
             mService.removeListener(mFragment);
-        super.onStop();
+        super.onPause();
     }
 
     @Override
@@ -118,14 +118,6 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     @Override
     public TorrentService getService() {
         return mService;
-    }
-
-    @Override
-    public void onTorrentServiceDisconnected() {
-        if (null!=mFragment){
-            mService.removeListener(mFragment);
-        }
-        super.onTorrentServiceDisconnected();
     }
 
     @Override
