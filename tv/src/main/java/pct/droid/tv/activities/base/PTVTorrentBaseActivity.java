@@ -89,6 +89,7 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            mService.removeListener(PTVTorrentBaseActivity.this);
             mService = null;
             onTorrentServiceDisconnected();
         }
