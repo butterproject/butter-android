@@ -62,7 +62,9 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 	}
 
 	@Override public void onTorrentServiceDisconnected() {
-
+		if (null != mFragment) {
+			mFragment.onTorrentServiceDisconnected();
+		}
 	}
 
 	@Override

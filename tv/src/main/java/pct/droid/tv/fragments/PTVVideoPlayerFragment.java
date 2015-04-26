@@ -189,6 +189,14 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
 
+    /**
+     * When playback has finished, finish the player activity
+     */
+    @Override
+    public void onPlaybackEndReached() {
+        getActivity().finish();
+    }
+
     @Override
     protected void onErrorEncountered() {
         /* Encountered Error, exit player with a message */
