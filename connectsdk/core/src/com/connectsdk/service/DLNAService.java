@@ -1,4 +1,21 @@
 /*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
  * DLNAService
  * Connect SDK
  *
@@ -32,6 +49,7 @@ import com.connectsdk.discovery.DiscoveryFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.provider.ssdp.Service;
 import com.connectsdk.etc.helper.DeviceServiceReachability;
+import com.connectsdk.etc.helper.HttpConnection;
 import com.connectsdk.service.capability.CapabilityMethods;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
@@ -49,19 +67,6 @@ import com.connectsdk.service.sessions.LaunchSession.LaunchSessionType;
 import com.connectsdk.service.upnp.DLNAHttpServer;
 import com.connectsdk.service.upnp.DLNAMediaInfoParser;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicHttpRequest;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -121,7 +126,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
     Context context;
 
     String avTransportURL, renderingControlURL, connectionControlURL;
-    HttpClient httpClient;
 
     DLNAHttpServer httpServer;
 
@@ -141,11 +145,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
     public DLNAService(ServiceDescription serviceDescription, ServiceConfig serviceConfig, Context context) {
         super(serviceDescription, serviceConfig);
-
-        httpClient = new DefaultHttpClient();
-        ClientConnectionManager mgr = httpClient.getConnectionManager();
-        HttpParams params = httpClient.getParams();
-        httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(params, mgr.getSchemeRegistry()), params);
         this.context = context;
         SIDList = new HashMap<String, String>();
         updateControlURL();
@@ -191,16 +190,23 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 }
 
                 if (serviceList.get(i).serviceType.contains(AV_TRANSPORT)) {
-                    avTransportURL = String.format("%s%s", serviceList.get(i).baseURL, serviceList.get(i).controlURL);
+                    avTransportURL = makeControlURL(serviceList.get(i).baseURL, serviceList.get(i).controlURL);
                 }
                 else if ((serviceList.get(i).serviceType.contains(RENDERING_CONTROL)) && !(serviceList.get(i).serviceType.contains(GROUP_RENDERING_CONTROL))) {
-                    renderingControlURL = String.format("%s%s", serviceList.get(i).baseURL, serviceList.get(i).controlURL);
+                    renderingControlURL = makeControlURL(serviceList.get(i).baseURL, serviceList.get(i).controlURL);
                 }
                 else if ((serviceList.get(i).serviceType.contains(CONNECTION_MANAGER)) ) {
-                    connectionControlURL = String.format("%s%s", serviceList.get(i).baseURL, serviceList.get(i).controlURL);
+                    connectionControlURL = makeControlURL(serviceList.get(i).baseURL, serviceList.get(i).controlURL);
                 }
             }
         }
+    }
+
+    String makeControlURL(String base, String path) {
+        if (path.startsWith("/")) {
+            return base + path.substring(1);
+        }
+        return base + path;
     }
 
     /******************
@@ -358,7 +364,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop,
-                          LaunchListener listener) {
+            LaunchListener listener) {
         String mediaUrl = null;
         String mimeType = null;
         String title = null;
@@ -495,17 +501,17 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
         String mode;
 
         switch (playMode) {
-            case RepeatAll:
-                mode = "REPEAT_ALL";
-                break;
-            case RepeatOne:
-                mode = "REPEAT_ONE";
-                break;
-            case Shuffle:
-                mode = "SHUFFLE";
-                break;
-            default:
-                mode = "NORMAL";
+        case RepeatAll:
+            mode = "REPEAT_ALL";
+            break;
+        case RepeatOne:
+            mode = "REPEAT_ONE";
+            break;
+        case Shuffle:
+            mode = "SHUFFLE";
+            break;
+        default:
+            mode = "NORMAL";
         }
 
         Map<String, String> parameters = new LinkedHashMap<String, String>();
@@ -712,6 +718,9 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
     }
 
     String encodeURL(String mediaURL) throws MalformedURLException, URISyntaxException, UnsupportedEncodingException {
+        if (mediaURL == null || mediaURL.isEmpty()) {
+            return "";
+        }
         String decodedURL = URLDecoder.decode(mediaURL, "UTF-8");
         if (decodedURL.equals(mediaURL)) {
             URL url = new URL(mediaURL);
@@ -778,39 +787,21 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                     return;
                 }
 
-                HttpPost post = new HttpPost(targetURL);
-                post.setHeader("Content-Type", "text/xml; charset=utf-8");
-                post.setHeader("SOAPAction", String.format("\"%s#%s\"", serviceURN, method));
-
                 try {
-                    post.setEntity(new StringEntity(payload));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
-                HttpResponse response;
-
-                try {
-                    response = httpClient.execute(post);
-
-                    int code = response.getStatusLine().getStatusCode();
-                    HttpEntity entity = response.getEntity();
-                    String message = "";
-                    if (entity != null) {
-                        message = EntityUtils.toString(entity, "UTF-8");
-                    }
+                    HttpConnection connection = HttpConnection.newInstance(URI.create(targetURL));
+                    connection.setHeader("Content-Type", "text/xml; charset=utf-8");
+                    connection.setHeader("SOAPAction", String.format("\"%s#%s\"", serviceURN, method));
+                    connection.setMethod(HttpConnection.Method.POST);
+                    connection.setPayload(payload);
+                    connection.execute();
+                    int code = connection.getResponseCode();
                     if (code == 200) {
-                        Util.postSuccess(command.getResponseListener(), message);
-                    }
-                    else {
-                        //TODO: throw DLNA error code and description insteadof HTTP
+                        Util.postSuccess(command.getResponseListener(), connection.getResponseString());
+                    } else {
                         Util.postError(command.getResponseListener(), ServiceCommandError.getError(code));
                     }
-                    response.getEntity().consumeContent();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Util.postError(command.getResponseListener(), new ServiceCommandError(0, e.getMessage(), null));
                 }
             }
         });
@@ -905,19 +896,17 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
         return "";
     }
 
-    private long convertStrTimeFormatToLong(String strTime) {
+    long convertStrTimeFormatToLong(String strTime) {
         long time = 0;
-        SimpleDateFormat df = new SimpleDateFormat("hh:mm:ss");
-
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
         try {
             Date d = df.parse(strTime);
             Date d2 = df.parse("00:00:00");
-
             time = d.getTime() - d2.getTime();
         } catch (ParseException e) {
-//            e.printStackTrace();
             Log.w("Connect SDK", "Invalid Time Format: " + strTime);
-            return 0;
+        } catch (NullPointerException e) {
+            Log.w("Connect SDK", "Null time argument");
         }
 
         return time;
@@ -952,7 +941,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
     @Override
     public ServiceSubscription<PlayStateListener> subscribePlayState(PlayStateListener listener) {
-        URLServiceSubscription<PlayStateListener> request = new URLServiceSubscription<MediaControl.PlayStateListener>(this, PLAY_STATE, null, null);
+        URLServiceSubscription<PlayStateListener> request = new URLServiceSubscription<PlayStateListener>(this, PLAY_STATE, null, null);
         request.addListener(listener);
         addSubscription(request);
         return request;
@@ -1067,8 +1056,9 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
             @Override
             public void run() {
-                if (listener != null)
+                if (listener != null) {
                     listener.onDisconnect(DLNAService.this, null);
+                }
             }
         });
     }
@@ -1094,7 +1084,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                     e.printStackTrace();
                 }
 
-                HttpHost host = new HttpHost(serviceDescription.getIpAddress(), serviceDescription.getPort());
                 List<Service> serviceList = serviceDescription.getServiceList();
 
                 if (serviceList != null) {
@@ -1104,28 +1093,21 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                             continue;
                         }
 
-                        BasicHttpRequest request = new BasicHttpRequest(SUBSCRIBE, eventSubURL);
-
-                        request.setHeader("CALLBACK", "<http://" + myIpAddress + ":" + httpServer.getPort() + eventSubURL + ">");
-                        request.setHeader("NT", "upnp:event");
-                        request.setHeader("TIMEOUT", "Second-" + TIMEOUT);
-                        request.setHeader("Connection", "close");
-                        request.setHeader("Content-length", "0");
-                        request.setHeader("USER-AGENT", "Android UPnp/1.1 ConnectSDK");
-
-                        HttpResponse response = null;
                         try {
-                            response = httpClient.execute(host, request);
-
-                            int code = response.getStatusLine().getStatusCode();
-
-                            if (code == 200) {
-                                SIDList.put(serviceList.get(i).serviceType, response.getFirstHeader("SID").getValue());
+                            HttpConnection connection = HttpConnection.newSubscriptionInstance(
+                                    new URI("http", "", serviceDescription.getIpAddress(), serviceDescription.getPort(), eventSubURL, "", ""));
+                            connection.setMethod(HttpConnection.Method.SUBSCRIBE);
+                            connection.setHeader("CALLBACK", "<http://" + myIpAddress + ":" + httpServer.getPort() + eventSubURL + ">");
+                            connection.setHeader("NT", "upnp:event");
+                            connection.setHeader("TIMEOUT", "Second-" + TIMEOUT);
+                            connection.setHeader("Connection", "close");
+                            connection.setHeader("Content-length", "0");
+                            connection.setHeader("USER-AGENT", "Android UPnp/1.1 ConnectSDK");
+                            connection.execute();
+                            if (connection.getResponseCode() == 200) {
+                                SIDList.put(serviceList.get(i).serviceType, connection.getResponseHeader("SID"));
                             }
-                            response.getEntity().consumeContent();
-                        } catch (ClientProtocolException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -1146,7 +1128,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
                     @Override
                     public void run() {
-                        HttpHost host = new HttpHost(serviceDescription.getIpAddress(), serviceDescription.getPort());
                         List<Service> serviceList = serviceDescription.getServiceList();
 
                         if (serviceList != null) {
@@ -1157,18 +1138,14 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                                 }
 
                                 String SID = SIDList.get(serviceList.get(i).serviceType);
-                                BasicHttpRequest request = new BasicHttpRequest(SUBSCRIBE, eventSubURL);
-                                request.setHeader("TIMEOUT", "Second-" + TIMEOUT);
-                                request.setHeader("SID", SID);
-
-                                HttpResponse response = null;
-
                                 try {
-                                    response = httpClient.execute(host, request);
-                                    response.getEntity().consumeContent();
-                                } catch (ClientProtocolException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
+                                    HttpConnection connection = HttpConnection.newSubscriptionInstance(
+                                            new URI("http", "", serviceDescription.getIpAddress(), serviceDescription.getPort(), eventSubURL, "", ""));
+                                    connection.setMethod(HttpConnection.Method.SUBSCRIBE);
+                                    connection.setHeader("TIMEOUT", "Second-" + TIMEOUT);
+                                    connection.setHeader("SID", SID);
+                                    connection.execute();
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -1195,26 +1172,18 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                         if (eventSubURL == null) {
                             continue;
                         }
-                        BasicHttpRequest request = new BasicHttpRequest(UNSUBSCRIBE, eventSubURL);
 
                         String sid = SIDList.get(serviceList.get(i).serviceType);
-                        request.setHeader("SID", sid);
-                        HttpResponse response = null;
-
                         try {
-                            HttpHost host = new HttpHost(serviceDescription.getIpAddress(), serviceDescription.getPort());
-
-                            response = httpClient.execute(host, request);
-
-                            int code = response.getStatusLine().getStatusCode();
-
-                            if (code == 200) {
+                            HttpConnection connection = HttpConnection.newSubscriptionInstance(
+                                    new URI("http", "", serviceDescription.getIpAddress(), serviceDescription.getPort(), eventSubURL, "", ""));
+                            connection.setMethod(HttpConnection.Method.UNSUBSCRIBE);
+                            connection.setHeader("SID", sid);
+                            connection.execute();
+                            if (connection.getResponseCode() == 200) {
                                 SIDList.remove(serviceList.get(i).serviceType);
                             }
-                            response.getEntity().consumeContent();
-                        } catch (ClientProtocolException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
