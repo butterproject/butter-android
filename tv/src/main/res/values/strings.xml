@@ -57,8 +57,8 @@
 	<!-- Categories -->
 
 	<!-- StreamLoadingActivity strings -->
-	<string name="waiting_torrent">Waiting for torrent</string>
-	<string name="starting_buffering">Starting buffering</string>
+	<string name="waiting_torrent">Connecting…</string>
+	<string name="starting_buffering">Buffering</string>
 	<string name="streaming_started">Streaming started</string>
 	<string name="waiting_for_subtitles">Waiting for subtitles</string>
 	<string name="seeds">seeds</string>
