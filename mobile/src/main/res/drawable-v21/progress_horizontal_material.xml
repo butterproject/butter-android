@@ -24,7 +24,7 @@
         <scale android:scaleWidth="100%">
             <nine-patch android:src="@drawable/progress_mtrl_alpha"
                 android:tint="?attr/colorControlActivated"
-                android:alpha="?android:attr/disabledAlpha" />
+                android:alpha="0.4" />
         </scale>
     </item>
     <item android:id="@android:id/progress">
