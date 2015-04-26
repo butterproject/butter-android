@@ -20,34 +20,13 @@
 
 package com.connectsdk.service;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.connectsdk.core.AppInfo;
 import com.connectsdk.core.Util;
 import com.connectsdk.discovery.DiscoveryFilter;
 import com.connectsdk.etc.helper.DeviceServiceReachability;
+import com.connectsdk.etc.helper.HttpConnection;
 import com.connectsdk.etc.helper.HttpMessage;
 import com.connectsdk.service.capability.CapabilityMethods;
 import com.connectsdk.service.capability.Launcher;
@@ -60,6 +39,16 @@ import com.connectsdk.service.config.ServiceConfig;
 import com.connectsdk.service.config.ServiceDescription;
 import com.connectsdk.service.sessions.LaunchSession;
 import com.connectsdk.service.sessions.LaunchSession.LaunchSessionType;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class DIALService extends DeviceService implements Launcher {
 
@@ -78,15 +67,8 @@ public class DIALService extends DeviceService implements Launcher {
             registeredApps.add(appId);
     }
 
-    HttpClient httpClient;
-
     public DIALService(ServiceDescription serviceDescription, ServiceConfig serviceConfig) {
         super(serviceDescription, serviceConfig);
-
-        httpClient = new DefaultHttpClient();
-        ClientConnectionManager mgr = httpClient.getConnectionManager();
-        HttpParams params = httpClient.getParams();
-        httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(params, mgr.getSchemeRegistry()), params);
     }
 
     @Override
@@ -442,62 +424,24 @@ public class DIALService extends DeviceService implements Launcher {
                 ServiceCommand<ResponseListener<Object>> command = (ServiceCommand<ResponseListener<Object>>) mCommand;
                 Object payload = command.getPayload();
 
-                HttpRequestBase request = command.getRequest();
-                HttpResponse response = null;
-                int code = -1;
-
-                if (payload != null && command.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)) {
-                    request.setHeader(HttpMessage.CONTENT_TYPE_HEADER, "text/plain; charset=\"utf-8\"");
-                    HttpPost post = (HttpPost) request;
-                    HttpEntity entity = null;
-                    try {
-                        if (payload instanceof String) {
-                            entity = new StringEntity((String) payload);
-
-                        } else if (payload instanceof JSONObject) {
-                            entity = new StringEntity(payload.toString());
-                        }
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        //  Error is handled below if entity is null;
-                    }
-
-                    if (entity == null) {
-                        Util.postError(command.getResponseListener(), new ServiceCommandError(0, "Unknown Error while preparing to send message", null));
-
-                        return;
-                    }
-
-                    post.setEntity(entity);
-                }
-
                 try {
-                    response = httpClient.execute(request);
-
-                    code = response.getStatusLine().getStatusCode();
-
-                    if (code == 200) { 
-                        HttpEntity entity = response.getEntity();
-                        String message = EntityUtils.toString(entity, "UTF-8");
-
-                        Util.postSuccess(command.getResponseListener(), message);
-                    } else if (code == 201) {
-                        String locationPath = response.getHeaders("Location")[0].getValue();
-
-                        Util.postSuccess(command.getResponseListener(), locationPath);
+                    HttpConnection connection = HttpConnection.newInstance(URI.create(mCommand.getTarget()));
+                    if (payload != null && command.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)) {
+                        connection.setHeader(HttpMessage.CONTENT_TYPE_HEADER, "text/plain; charset=\"utf-8\"");
+                        connection.setMethod(HttpConnection.Method.POST);
+                        connection.setPayload(payload.toString());
                     }
-                    else {
+                    connection.execute();
+                    int code = connection.getResponseCode();
+                    if (code == 200) {
+                        Util.postSuccess(command.getResponseListener(), connection.getResponseString());
+                    } else if (code == 201) {
+                        Util.postSuccess(command.getResponseListener(), connection.getResponseHeader("Location"));
+                    } else {
                         Util.postError(command.getResponseListener(), ServiceCommandError.getError(code));
                     }
-                } catch (IllegalStateException e) {
-                    //  TODO:  Find out why this is needed.
-                    e.printStackTrace();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    Util.postError(command.getResponseListener(), new ServiceCommandError(0, e.getMessage(), null));
                 }
             }
         });
