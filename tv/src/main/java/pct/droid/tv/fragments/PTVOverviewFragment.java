@@ -116,10 +116,10 @@ public class PTVOverviewFragment extends BrowseFragment {
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
-        // set fastLane (or headers) background color
+        // set fastLane (or headers) background colorr
         setBrandColor(getResources().getColor(R.color.primary));
         // set search icon color
-        setSearchAffordanceColor(getResources().getColor(R.color.primary_dark));
+        setSearchAffordanceColor(getResources().getColor(R.color.accent));
     }
 
     private void loadData() {
