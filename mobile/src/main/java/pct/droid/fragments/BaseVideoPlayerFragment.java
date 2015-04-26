@@ -694,16 +694,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             if (fragment == null) return;
 
             switch (msg.getData().getInt("event")) {
-                case EventHandler.MediaParsedChanged:
-                    break;
                 case EventHandler.MediaPlayerPlaying:
                     fragment.resumeVideo();
                     fragment.setProgressVisible(false);
                     fragment.showOverlay();
-                    break;
-                case EventHandler.MediaPlayerPaused:
-                    break;
-                case EventHandler.MediaPlayerStopped:
                     break;
                 case EventHandler.MediaPlayerEndReached:
                     fragment.endReached();
@@ -718,9 +712,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 case EventHandler.MediaPlayerPositionChanged:
                     fragment.onProgressChanged(fragment.getCurrentTime(), fragment.getDuration());
                     fragment.checkSubs();
-                    break;
-                default:
-                    Timber.e(String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
                     break;
             }
             fragment.updatePlayPauseState();
@@ -746,7 +737,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             mStreamerProgress = newProgress;
         }
     }
-
 
     /**
      * attach and disattach surface to the lib
@@ -780,7 +770,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     public interface Callback {
         StreamInfo getInfo();
-
         TorrentService getService();
     }
 
