@@ -235,6 +235,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     }
 
     @Override
+    public void onPlaybackEndReached() {
+        //todod:
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         //restore brightness
