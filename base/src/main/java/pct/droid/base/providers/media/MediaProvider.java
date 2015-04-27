@@ -92,11 +92,13 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public static class NavInfo {
+        private int mId;
         private Filters.Sort mSort;
         private Filters.Order mDefOrder;
         private String mLabel;
 
-        public NavInfo(Filters.Sort sort, Filters.Order defOrder, String label) {
+        public NavInfo(int id,Filters.Sort sort, Filters.Order defOrder, String label) {
+            mId = id;
             mSort = sort;
             mDefOrder = defOrder;
             mLabel = label;
@@ -104,6 +106,10 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
 
         public Filters.Sort getFilter() {
             return mSort;
+        }
+
+        public int getId() {
+            return mId;
         }
 
         public Filters.Order getOrder() {

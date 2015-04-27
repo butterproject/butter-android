@@ -52,9 +52,11 @@ import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.BuildConfig;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
+import pct.droid.tv.activities.PTVMediaGridActivity;
 import pct.droid.tv.activities.PTVSearchActivity;
 import pct.droid.tv.activities.PTVSettingsActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
@@ -70,6 +72,8 @@ public class PTVOverviewFragment extends BrowseFragment {
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mListRowPresenter;
     private ArrayObjectAdapter mShowAdapter;
+
+//    private Handler mHanlder/
 
     private YTSProvider mMoviesProvider = new YTSProvider();
     private EZTVProvider mShowsProvider = new EZTVProvider();
@@ -92,7 +96,6 @@ public class PTVOverviewFragment extends BrowseFragment {
         mListRowPresenter.setShadowEnabled(false);
         mRowsAdapter = new ArrayObjectAdapter(mListRowPresenter);
         setAdapter(mRowsAdapter);
-
 
         setupUIElements();
 
@@ -119,13 +122,15 @@ public class PTVOverviewFragment extends BrowseFragment {
         // set fastLane (or headers) background colorr
         setBrandColor(getResources().getColor(R.color.primary));
         // set search icon color
-        setSearchAffordanceColor(getResources().getColor(R.color.accent));
+        setSearchAffordanceColor(getResources().getColor(R.color.primary_dark));
     }
 
     private void loadData() {
-        final MediaProvider.Filters filters = new MediaProvider.Filters();
-        filters.sort = MediaProvider.Filters.Sort.DATE;
-        mShowsProvider.getList(null, filters, new MediaProvider.Callback() {
+        final MediaProvider.Filters showsFilter = new MediaProvider.Filters();
+        showsFilter.sort = MediaProvider.Filters.Sort.DATE;
+        showsFilter.order = MediaProvider.Filters.Order.DESC;
+
+        mShowsProvider.getList(null, showsFilter, new MediaProvider.Callback() {
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
@@ -138,12 +143,20 @@ public class PTVOverviewFragment extends BrowseFragment {
             @Override
             public void onFailure(Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "error getting show list", Toast.LENGTH_SHORT).show();
-
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "error getting show list", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
-        mMoviesProvider.getList(null, null, new MediaProvider.Callback() {
+        final MediaProvider.Filters movieFilters = new MediaProvider.Filters();
+        movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
+        movieFilters.order = MediaProvider.Filters.Order.DESC;
+
+        mMoviesProvider.getList(null, movieFilters, new MediaProvider.Callback() {
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
@@ -156,8 +169,12 @@ public class PTVOverviewFragment extends BrowseFragment {
             @Override
             public void onFailure(Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "error getting movie list", Toast.LENGTH_SHORT).show();
-
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "error getting movie list", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -180,6 +197,8 @@ public class PTVOverviewFragment extends BrowseFragment {
     private void setupAdapters() {
         setupMovies();
         setupShows();
+        setupMoreMovies();
+        setupMoreShows();
         setupMore();
     }
 
@@ -190,21 +209,34 @@ public class PTVOverviewFragment extends BrowseFragment {
         mMoviesAdapter = new ArrayObjectAdapter(mediaCardPresenter);
         mMoviesAdapter.add(new MediaCardPresenter.MediaCardItem(true));
         mRowsAdapter.add(new ListRow(moviesHeader, mMoviesAdapter));
+    }
 
-
+    private void setupMoreMovies() {
         HeaderItem moreMoviesHeader = new HeaderItem(1, getString(R.string.more_movies));
-
         MorePresenter morePresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
 
         //add items
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_top_rated, R.string.top_rated, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_release_date, R.string.release_date, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_year, R.string.year, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_a_to_z, R.string.a_to_z, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_genres, R.string.genres, 0));
+        List<MediaProvider.NavInfo> navigation = mMoviesProvider.getNavigation();
+        for (MediaProvider.NavInfo info : navigation) {
+            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), 0, info));
+        }
 
         mRowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
+    }
+
+    private void setupMoreShows() {
+        HeaderItem moreHeader = new HeaderItem(1, getString(R.string.more_shows));
+        MorePresenter morePresenter = new MorePresenter(getActivity());
+        ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
+
+        //add items
+        List<MediaProvider.NavInfo> navigation = mShowsProvider.getNavigation();
+        for (MediaProvider.NavInfo info : navigation) {
+            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), 0, info));
+        }
+
+        mRowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
     }
 
     private void removeMovies() {
@@ -229,9 +261,9 @@ public class PTVOverviewFragment extends BrowseFragment {
         MorePresenter gridPresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
         if (BuildConfig.DEBUG) {
-            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, R.string.tests, R.drawable.ic_av_play));
+            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, getString(R.string.tests), R.drawable.ic_av_play, null));
         }
-        gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, R.string.tests, R.drawable.ic_settings));
+        gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, getString(R.string.preferences), R.drawable.ic_settings, null));
 
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
     }
@@ -267,6 +299,23 @@ public class PTVOverviewFragment extends BrowseFragment {
                 break;
             case R.id.more_item_settings:
                 PTVSettingsActivity.startActivity(getActivity());
+                break;
+            case R.id.yts_filter_a_to_z:
+            case R.id.yts_filter_release_date:
+            case R.id.yts_filter_popular_now:
+            case R.id.yts_filter_year:
+            case R.id.yts_filter_top_rated:
+                PTVMediaGridActivity.startActivity(getActivity(),moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.MOVIE, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
+                break;
+            case R.id.eztv_filter_a_to_z:
+            case R.id.eztv_filter_last_updated:
+            case R.id.eztv_filter_popular_now:
+            case R.id.eztv_filter_year:
+            case R.id.eztv_filter_top_rated:
+                PTVMediaGridActivity.startActivity(getActivity(),moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.SHOW, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
+                break;
+            case R.id.yts_filter_genres:
+                Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_LONG).show();
                 break;
         }
     }

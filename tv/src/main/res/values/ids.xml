@@ -3,11 +3,6 @@
 
 
     <item name="more_player_tests" type="id" />
-    <item name="more_item_movies_a_to_z" type="id" />
-    <item name="more_item_movies_genres" type="id" />
-    <item name="more_item_movies_year" type="id" />
-    <item name="more_item_movies_release_date" type="id" />
-    <item name="more_item_movies_top_rated" type="id" />
     <item name="more_item_settings" type="id" />
 
 

@@ -57,5 +57,5 @@ dependencies {
 
     compile project(':vlc')
     compile project(':xmlrpc')
-//    compile project(':connectsdk')
+    compile project(':connectsdk')
 }
