@@ -56,6 +56,7 @@ import pct.droid.tv.BuildConfig;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.activities.PTVSearchActivity;
+import pct.droid.tv.activities.PTVSettingsActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.presenters.MorePresenter;
 import pct.droid.tv.presenters.MediaCardPresenter;
@@ -65,7 +66,6 @@ import pct.droid.tv.utils.BackgroundUpdater;
  * Main class to show BrowseFragment with header and rows of videos
  */
 public class PTVOverviewFragment extends BrowseFragment {
-
 
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mListRowPresenter;
@@ -198,11 +198,11 @@ public class PTVOverviewFragment extends BrowseFragment {
         ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
 
         //add items
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.top_rated, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.release_date, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.year, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.a_to_z, 0));
-        moreRowAdapter.add(new MorePresenter.MoreItem(R.string.genres, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_top_rated, R.string.top_rated, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_release_date, R.string.release_date, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_year, R.string.year, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_a_to_z, R.string.a_to_z, 0));
+        moreRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_movies_genres, R.string.genres, 0));
 
         mRowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
     }
@@ -225,41 +225,52 @@ public class PTVOverviewFragment extends BrowseFragment {
     }
 
     private void setupMore() {
+        HeaderItem gridHeader = new HeaderItem(0, getString(R.string.more));
+        MorePresenter gridPresenter = new MorePresenter(getActivity());
+        ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
         if (BuildConfig.DEBUG) {
-            HeaderItem gridHeader = new HeaderItem(0, getString(R.string.more));
-
-            MorePresenter gridPresenter = new MorePresenter(getActivity());
-            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
-//        gridRowAdapter.add(new MorePresenter.MoreItem(R.string.about, R.drawable.ic_about));
-//        gridRowAdapter.add(new MorePresenter.MoreItem(R.string.settings, R.drawable.ic_settings));
-            gridRowAdapter.add(new MorePresenter.MoreItem(R.string.tests, R.drawable.ic_av_play));
-            mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, R.string.tests, R.drawable.ic_av_play));
         }
+        gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, R.string.tests, R.drawable.ic_settings));
+
+        mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-
             if (item instanceof MediaCardPresenter.MediaCardItem) {
-
-                MediaCardPresenter.MediaCardItem media = (MediaCardPresenter.MediaCardItem) item;
-                if (media.isLoading()) return;
-                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        PTVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
-                if (media.getMedia() instanceof Movie)
-                    PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
-                else if (media.getMedia() instanceof Show)
-                    PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
-            } else {
-                openPlayerTestDialog();
+                onMediaItemClicked((ImageCardView) itemViewHolder.view, (MediaCardPresenter.MediaCardItem) item);
+            } else if (item instanceof MorePresenter.MoreItem) {
+                onMoreItemClicked((MorePresenter.MoreItem) item);
             }
-
         }
     }
+
+    private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
+        if (media.isLoading()) return;
+        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                getActivity(),
+                view.getMainImageView(),
+                PTVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
+        if (media.getMedia() instanceof Movie)
+            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
+        else if (media.getMedia() instanceof Show)
+            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
+    }
+
+    private void onMoreItemClicked(MorePresenter.MoreItem moreItem) {
+        switch (moreItem.getId()) {
+            case R.id.more_player_tests:
+                openPlayerTestDialog();
+                break;
+            case R.id.more_item_settings:
+                PTVSettingsActivity.startActivity(getActivity());
+                break;
+        }
+    }
+
 
     private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
         @Override

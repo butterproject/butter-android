@@ -38,12 +38,18 @@ public class MorePresenter extends Presenter {
 
 	public static class MoreItem {
 
-		private int mTitle;
-		private int mIcon;
+		private final int mTitle;
+		private final int mIcon;
+		private final int mId;
 
-		public MoreItem(@StringRes int textId, @DrawableRes int iconResId) {
+		public MoreItem(int id,@StringRes int textId, @DrawableRes int iconResId) {
+			mId = id;
 			mIcon = iconResId;
 			mTitle = textId;
+		}
+
+		public int getId() {
+			return mId;
 		}
 	}
 

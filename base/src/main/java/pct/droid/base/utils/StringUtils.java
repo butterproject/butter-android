@@ -82,4 +82,8 @@ public class StringUtils {
         return str.substring(0, 1).toUpperCase(Locale.getDefault()) + str.substring(1, str.length());
     }
 
+    public static String colorToString(int color) {
+        return String.format("#%06X", 0xFFFFFF & color);
+    }
+
 }
