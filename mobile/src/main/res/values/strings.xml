@@ -24,8 +24,7 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
-    <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
+
     <string name="casting">Casting</string>
 
 	<!-- OverviewActivity strings -->
@@ -80,48 +79,7 @@
     <string name="leave_videoplayer_title">Are you sure?</string>
     <string name="leave_videoplayer_message">Are you sure you want to leave the video player? %s will stop playing.</string>
 
-	<!-- SettingsActivity strings -->
-	<string name="preferences">Preferences</string>
-	<string name="general">General</string>
-	<string name="default_view">Default overview</string>
-	<string name="default_player">Default video player</string>
-	<string name="i18n_language">App language</string>
-	<string name="restart_effect">Restart application for changes to take effect</string>
-	<string name="device_language">Device language</string>
-	<string name="stream_over_wifi_only">Only stream over Wi-Fi</string>
-	<string name="internal_player">Internal</string>
-	<string name="subtitle_color">Color</string>
-	<string name="subtitle_size">Size</string>
-    <string name="subtitle_stroke_color">Outline color</string>
-    <string name="subtitle_stroke_width">Outline width</string>
-	<string name="subtitle_language">Default language</string>
-	<string name="no_default_set">No default language</string>
-	<string name="advanced">Advanced</string>
-	<string name="storage_location">Storage location</string>
-	<string name="storage_automatic">Automatic</string>
-	<string name="storage_choose">Choose location</string>
-	<string name="not_writable">Location not writable</string>
-	<string name="remove_cache">Remove cache on player close</string>
-	<string name="hw_acceleration">Hardware acceleration</string>
-	<string name="hw_automatic">Automatic</string>
-	<string name="hw_full">Full</string>
-	<string name="hw_decoding">Decoding only</string>
-	<string name="updates">Updates</string>
-	<string name="auto_updates">Automatic updates</string>
-	<string name="check_for_updates">Check for updates</string>
-	<string name="last_check">Last check</string>
-	<string name="about">About</string>
-	<string name="version">Version</string>
-	<string name="changelog">Changelog</string>
-	<string name="tap_to_open">Tap to open</string>
-	<string name="report_a_bug">Report a bug</string>
-	<string name="open_source_licenses">Open-source licenses</string>
-    <string name="torrents">Torrents</string>
-    <string name="download_speed">Maximum download speed</string>
-    <string name="upload_speed">Maximum upload speed</string>
-    <string name="max_connections">Maximum total connections</string>
-    <string name="dht_limit">DHT limit</string>
-    <string name="unlimited">Unlimited</string>
+
 
 	<!-- WifiOnlyDialogFragment -->
 	<string name="wifi_only">Wi-Fi only</string>

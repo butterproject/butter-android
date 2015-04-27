@@ -14,8 +14,6 @@ import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMainActivity;
 
 public class PTVWelcomeFragment extends GuidedStepFragment {
-    public static final int ACTION_ACCEPT = 0;
-    public static final int ACTION_DECLINE = 1;
 
     @NonNull
     @Override
@@ -30,26 +28,29 @@ public class PTVWelcomeFragment extends GuidedStepFragment {
 
     @Override
     public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-        GuidedAction acceptAction = new GuidedAction.Builder().id(ACTION_ACCEPT).hasNext(true).title(getString(R.string.accept)).build();
-        GuidedAction declineAction = new GuidedAction.Builder().id(ACTION_DECLINE).hasNext(true).title(getString(R.string.leave)).build();
+        GuidedAction acceptAction = new GuidedAction.Builder().id(R.id.action_accept).hasNext(true).title(getString(R.string.accept)).build();
+        GuidedAction declineAction = new GuidedAction.Builder().id(R.id.action_decline).hasNext(true).title(getString(R.string.leave)).build();
         actions.add(acceptAction);
         actions.add(declineAction);
         super.onCreateActions(actions, savedInstanceState);
+
+        setSelectedActionPosition(0);
     }
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
-        if (action.getId() == ACTION_ACCEPT) {
-            //set first run flag to false, don't show welcome again
-            PrefUtils.save(getActivity(), Prefs.FIRST_RUN, false);
-            //start main activity
+        switch ((int) action.getId()) {
+            case R.id.action_accept:
+                //set first run flag to false, don't show welcome again
+                PrefUtils.save(getActivity(), Prefs.FIRST_RUN, false);
+                //start main activity
 
-            PTVMainActivity.startActivity(getActivity());
-            getActivity().finish();
-            return;
-        } else if (action.getId() == ACTION_DECLINE) {
-            getActivity().finish();
-            return;
+                PTVMainActivity.startActivity(getActivity());
+                getActivity().finish();
+                return;
+            case R.id.action_decline:
+                getActivity().finish();
+                return;
         }
         super.onGuidedActionClicked(action);
     }
