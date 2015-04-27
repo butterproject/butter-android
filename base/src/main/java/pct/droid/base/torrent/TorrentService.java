@@ -89,7 +89,7 @@ public class TorrentService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timber.d(getClass().getName() + ": onDestroy");
+        Timber.d("onDestroy");
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
         mThread.interrupt();
@@ -97,14 +97,14 @@ public class TorrentService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Timber.d(getClass().getName() + ": onStartCommand");
+        Timber.d("onStartCommand");
         initialize();
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Timber.d(getClass().getName() + ": onBind");
+        Timber.d("onBind");
         initialize();
         return mBinder;
     }
@@ -112,14 +112,14 @@ public class TorrentService extends Service {
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
-        Timber.d(getClass().getName() + ": onRebind");
+        Timber.d("onRebind");
         initialize();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         super.onUnbind(intent);
-        Timber.d(getClass().getName() + ": onUnbind");
+        Timber.d("onUnbind");
 
         if (!mInForeground) {
             mHandler.post(new Runnable() {
@@ -136,7 +136,7 @@ public class TorrentService extends Service {
     }
 
     public void startForeground() {
-        Timber.d(getClass().getName() + ": startForeground");
+        Timber.d("startForeground");
         if (mInForeground) return;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
@@ -151,7 +151,7 @@ public class TorrentService extends Service {
     }
 
     public void stopForeground() {
-        Timber.d(getClass().getName() + ": stopForeground");
+        Timber.d("stopForeground");
         mInForeground = false;
         stopForeground(true);
     }
@@ -161,7 +161,7 @@ public class TorrentService extends Service {
      * and start/resume the torrent session
      */
     private void initialize() {
-        Timber.d(getClass().getName() + ": initialize");
+        Timber.d("initialize");
         if (mThread != null) {
             mHandler.removeCallbacksAndMessages(null);
 
@@ -186,7 +186,6 @@ public class TorrentService extends Service {
                 });
 
             }
-            return;
         } else {
             if (mInitialised) return;
 
@@ -214,7 +213,7 @@ public class TorrentService extends Service {
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
-        Timber.d(getClass().getName() + ": streamTorrent");
+        Timber.d("streamTorrent");
 
         //attempt to initialize service
         initialize();
@@ -242,7 +241,7 @@ public class TorrentService extends Service {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Timber.d(getClass().getName() + ": streaming runnable");
+                Timber.d("streaming runnable");
                 mIsStreaming = true;
                 mCurrentTorrentUrl = torrentUrl;
 
