@@ -38,9 +38,7 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 	}
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_streamloading);
-		//todo: background manager
+		super.onCreate(savedInstanceState,R.layout.activity_streamloading);
 
 		if (!getIntent().hasExtra(EXTRA_INFO)) finish();
 

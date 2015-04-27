@@ -25,6 +25,7 @@ import java.util.TimerTask;
 
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.base.PTVBaseActivity;
 
 /*
 Movie media = new Movie();
@@ -49,7 +50,7 @@ SubsProvider.download(OverviewActivity.this, media, "en", new Callback() {
 });
  */
 
-public class PTVPlayerActivity extends Activity {
+public class PTVPlayerActivity extends PTVBaseActivity {
 
 	private static final String TAG = "PlayerActivity";
 
@@ -114,8 +115,7 @@ public class PTVPlayerActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_player);
+		super.onCreate(savedInstanceState,R.layout.activity_player);
 
 		mMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(mMetrics);

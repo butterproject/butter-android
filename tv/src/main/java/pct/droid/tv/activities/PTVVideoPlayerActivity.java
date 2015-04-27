@@ -40,8 +40,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_videoplayer);
+        super.onCreate(savedInstanceState,R.layout.activity_videoplayer);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 

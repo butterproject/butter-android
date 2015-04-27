@@ -17,12 +17,13 @@ import java.util.Map;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.base.PTVBaseActivity;
 import pct.droid.tv.fragments.PTVBaseDetailsFragment;
 import pct.droid.tv.fragments.PTVMovieDetailsFragment;
 import pct.droid.tv.fragments.PTVShowDetailsFragment;
 import pct.droid.tv.utils.BackgroundUpdater;
 
-public class PTVMediaDetailActivity extends Activity implements PTVMovieDetailsFragment.Callback {
+public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieDetailsFragment.Callback {
 
     public static final String EXTRA_ITEM = "item";
     public static final String EXTRA_BACKGROUND_URL = "background_url";
@@ -52,10 +53,10 @@ public class PTVMediaDetailActivity extends Activity implements PTVMovieDetailsF
     /**
      * Called when the activity is first created.
      */
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_media_details);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, R.layout.activity_media_details);
 
         mBackgroundUpdater.initialise(this, R.drawable.default_background);
         mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
