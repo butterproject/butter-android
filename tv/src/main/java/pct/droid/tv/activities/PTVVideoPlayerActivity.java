@@ -99,18 +99,10 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    public void onTorrentServiceDisconnected() {
-        if (null!=mFragment){
-            mService.addListener(mFragment);
-        }
-        super.onTorrentServiceDisconnected();
-    }
-
-    @Override
-    protected void onStop() {
+    protected void onPause() {
         if(mService != null)
             mService.removeListener(mFragment);
-        super.onStop();
+        super.onPause();
     }
 }
 
