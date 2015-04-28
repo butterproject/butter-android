@@ -45,6 +45,7 @@ import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.activities.PTVMediaGridActivity;
 import pct.droid.tv.presenters.MediaCardPresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
+import timber.log.Timber;
 
 
 /*
@@ -56,10 +57,13 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
 
     private static final int NUM_COLUMNS = 6;
 
+    private List<MediaCardPresenter.MediaCardItem> mItems = new ArrayList<>();
+
     private ArrayObjectAdapter mAdapter;
     private Callback mCallback;
 
     private BackgroundUpdater mBackgroundUpdater;
+    private int mCurrentPage=0;
 
 
     public static PTVMediaGridFragment newInstance() {
@@ -73,6 +77,7 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
 
         setTitle((String) getActivity().getTitle());
         setupFragment();
+
     }
 
     @Override
@@ -108,14 +113,25 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
         loadItems();
     }
 
+    private MediaProvider.Filters getFilters() {
+        MediaProvider.Filters filters = mCallback.getFilters();
+        filters.page = mCurrentPage;
+        return filters;
+    }
+
     private void loadItems() {
-        mProvider.getList(null, mCallback.getFilters(), new MediaProvider.Callback() {
+        mProvider.getList(null, getFilters(), new MediaProvider.Callback() {
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                mCurrentPage = filters.page;
                 List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-                mAdapter.clear();
-                mAdapter.addAll(0, list);
+
+                mItems.addAll(list);
+
+                int previousSize = mAdapter.size();
+                mAdapter.addAll(previousSize,list);
+                mAdapter.notifyArrayItemRangeChanged(previousSize,list.size());
             }
 
             @DebugLog
@@ -130,6 +146,11 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
                 });
             }
         });
+    }
+
+    private void loadMore() {
+        mCurrentPage++;
+        loadItems();
     }
 
     @Override
@@ -165,11 +186,27 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
 
             mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
         }
+
+        //really hacky way of making and 'endless' adapter
+
+        //trigger items to update
+        int itemPosition = mItems.indexOf(item);
+
+        //when we are within 3 rows of the end, load more items
+        if (itemPosition>getAdapter().size()-(NUM_COLUMNS*3)){
+            Timber.d("Loading more items: page "+mCurrentPage);
+            loadMore();
+        }
     }
 
     public interface Callback {
         MediaProvider.Filters getFilters();
 
         PTVMediaGridActivity.ProviderType getType();
+    }
+
+    private static class EndlessArrayAdapter extends ArrayObjectAdapter{
+
+
     }
 }
