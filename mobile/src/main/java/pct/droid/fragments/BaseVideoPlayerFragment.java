@@ -611,7 +611,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 try {
                     FileInputStream fileInputStream = new FileInputStream(mSubsFile);
                     FormatSRT formatSRT = new FormatSRT();
-                    mSubs = formatSRT.parseFile(mSubsFile.toString(), FileUtils.inputstreamToCharsetString(fileInputStream).split("\n"));
+                    mSubs = formatSRT.parseFile(mSubsFile.toString(), FileUtils.inputstreamToCharsetString(fileInputStream, mCurrentSubsLang).split("\n"));
                     checkSubs();
                 } catch (FileNotFoundException e) {
                     if (e.getMessage().contains("EBUSY")) {
