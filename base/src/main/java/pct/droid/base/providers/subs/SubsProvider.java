@@ -117,9 +117,9 @@ public abstract class SubsProvider extends BaseProvider {
                                 String urlString = response.request().urlString();
 
                                 if (urlString.contains(".zip") || urlString.contains(".gz")) {
-                                    SubsProvider.unpack(inputStream, srtPath);
+                                    SubsProvider.unpack(inputStream, srtPath, languageCode);
                                 } else if (SubsProvider.isSubFormat(urlString)) {
-                                    parseFormatAndSave(urlString, srtPath, inputStream);
+                                    parseFormatAndSave(urlString, srtPath, languageCode, inputStream);
                                 } else {
                                     callback.onFailure(response.request(), new IOException("FatalParsingException"));
                                     failure = true;
@@ -162,12 +162,13 @@ public abstract class SubsProvider extends BaseProvider {
     /**
      * Unpack ZIP and save SRT
      *
-     * @param is      InputStream from network
-     * @param srtPath Path where SRT should be saved
+     * @param is           InputStream from network
+     * @param srtPath      Path where SRT should be saved
+     * @param languageCode The language code
      * @throws IOException
      * @throws FatalParsingException
      */
-    private static void unpack(InputStream is, File srtPath) throws IOException, FatalParsingException {
+    private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException, FatalParsingException {
         String filename;
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         ZipEntry ze;
@@ -177,7 +178,7 @@ public abstract class SubsProvider extends BaseProvider {
             if (filename.contains("_MACOSX")) continue;
 
             if (isSubFormat(filename)) {
-                parseFormatAndSave(filename, srtPath, zis);
+                parseFormatAndSave(filename, srtPath, languageCode, zis);
                 try {
                     zis.closeEntry();
                 } catch (IOException e) {
@@ -208,15 +209,15 @@ public abstract class SubsProvider extends BaseProvider {
     /**
      * Parse the text, convert and save to SRT file
      *
-     * @param inputUrl    Original network location
-     * @param srtPath     Place where SRT should be saved
-     * @param inputStream InputStream of data
-     * @throws IOException
+     * @param inputUrl     Original network location
+     * @param srtPath      Place where SRT should be saved
+     * @param languageCode The language code
+     * @param inputStream  InputStream of data  @throws IOException
      */
-    private static void parseFormatAndSave(String inputUrl, File srtPath, InputStream inputStream) throws IOException {
+    private static void parseFormatAndSave(String inputUrl, File srtPath, String languageCode, InputStream inputStream) throws IOException {
         TimedTextObject subtitleObject = null;
 
-        String inputString = FileUtils.inputstreamToCharsetString(inputStream);
+        String inputString = FileUtils.inputstreamToCharsetString(inputStream, languageCode);
         String[] inputText = inputString.split("\n|\r\n");
 
         if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {
