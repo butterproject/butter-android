@@ -118,7 +118,7 @@ public class FileUtils {
 
         String detectedCharset = charsetDetector.getDetectedCharset();
         charsetDetector.reset();
-        if ("tr".equals(languageCode) && !"UTF-8".equals(detectedCharset)) {
+        if (languageCode != null && "tr".equals(languageCode) && !"UTF-8".equals(detectedCharset)) {
             detectedCharset = "ISO-8859-9";
         }
         if (detectedCharset == null || detectedCharset.isEmpty()) {
