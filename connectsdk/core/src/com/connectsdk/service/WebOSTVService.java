@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.java_websocket.client.WebSocketClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -202,20 +201,18 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
     WebOSTVMouseSocketConnection mouseSocket;
 
-    WebSocketClient mouseWebSocket;
     WebOSTVKeyboardInput keyboardInput;
 
     ConcurrentHashMap<String, String> mAppToAppIdMappings;
+
     ConcurrentHashMap<String, WebOSWebAppSession> mWebAppSessions;
 
     WebOSTVServiceSocketClient socket;
-    PairingType pairingType;
 
     List<String> permissions;
 
     public WebOSTVService(ServiceDescription serviceDescription, ServiceConfig serviceConfig) {
         super(serviceDescription, serviceConfig);
-
         setServiceDescription(serviceDescription);
 
         pairingType = PairingType.FIRST_SCREEN;
@@ -224,6 +221,10 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
         mWebAppSessions = new ConcurrentHashMap<String, WebOSWebAppSession>();
     }
 
+    @Override
+    public void setPairingType(PairingType pairingType) {
+        this.pairingType = pairingType;
+    }
 
     @Override
     public CapabilityPriorityLevel getPriorityLevel(Class<? extends CapabilityMethods> clazz) {
@@ -1255,10 +1256,25 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
     @Override
     public void displayImage(MediaInfo mediaInfo, MediaPlayer.LaunchListener listener) {
-        ImageInfo imageInfo = mediaInfo.getImages().get(0);
-        String iconSrc = imageInfo.getUrl();
+        String mediaUrl = null;
+        String mimeType = null;
+        String title = null;
+        String desc = null;
+        String iconSrc = null;
 
-        displayImage(mediaInfo.getUrl(), mediaInfo.getMimeType(), mediaInfo.getTitle(), mediaInfo.getDescription(), iconSrc, listener);
+        if (mediaInfo != null) {
+            mediaUrl = mediaInfo.getUrl();
+            mimeType = mediaInfo.getMimeType();
+            title = mediaInfo.getTitle();
+            desc = mediaInfo.getDescription();
+
+            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
+                ImageInfo imageInfo = mediaInfo.getImages().get(0);
+                iconSrc = imageInfo.getUrl();
+            }
+        }
+
+        displayImage(mediaUrl, mimeType, title, desc, iconSrc, listener);
     }
 
     @Override
@@ -1326,10 +1342,25 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
-        ImageInfo imageInfo = mediaInfo.getImages().get(0);
-        String iconSrc = imageInfo.getUrl();
+        String mediaUrl = null;
+        String mimeType = null;
+        String title = null;
+        String desc = null;
+        String iconSrc = null;
 
-        playMedia(mediaInfo.getUrl(), mediaInfo.getMimeType(), mediaInfo.getTitle(), mediaInfo.getDescription(), iconSrc, shouldLoop, listener);
+        if (mediaInfo != null) {
+            mediaUrl = mediaInfo.getUrl();
+            mimeType = mediaInfo.getMimeType();
+            title = mediaInfo.getTitle();
+            desc = mediaInfo.getDescription();
+
+            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
+                ImageInfo imageInfo = mediaInfo.getImages().get(0);
+                iconSrc = imageInfo.getUrl();
+            }
+        }
+
+        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
@@ -2411,7 +2442,7 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
     private void notifyPairingRequired() {
         if (listener != null) {
-            listener.onPairingRequired(this, PairingType.FIRST_SCREEN, null);
+            listener.onPairingRequired(this, pairingType, null);
         }
     }
 

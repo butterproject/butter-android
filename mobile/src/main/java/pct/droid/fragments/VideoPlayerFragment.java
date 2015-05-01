@@ -235,6 +235,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     }
 
     @Override
+    public void onPlaybackEndReached() {
+        //todod:
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         //restore brightness
@@ -449,8 +454,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                         getActionBarActivity().finish();
                     }
                 })
-                .setTitle("Encountered error")
-                .setMessage("Encountered error")
+                .setTitle(R.string.encountered_error_title)
+                .setMessage(R.string.encountered_error)
                 .create();
         dialog.show();
     }

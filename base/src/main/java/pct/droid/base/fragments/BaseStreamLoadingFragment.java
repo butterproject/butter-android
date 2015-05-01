@@ -117,6 +117,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         startStream();
     }
 
+    public void onTorrentServiceDisconnected() {
+        if(mService != null) {
+            mService.removeListener(this);
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();

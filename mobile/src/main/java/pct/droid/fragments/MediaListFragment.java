@@ -208,51 +208,56 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private void updateUI() {
         if (!isAdded()) return;
 
-        //animate recyclerview to full alpha
-        //		if (mRecyclerView.getAlpha() != 1.0f)
-        //			mRecyclerView.animate().alpha(1.0f).setDuration(100).start();
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //animate recyclerview to full alpha
+                //		if (mRecyclerView.getAlpha() != 1.0f)
+                //			mRecyclerView.animate().alpha(1.0f).setDuration(100).start();
 
-        //update loading message based on state
-        switch (mState) {
-            case LOADING_DETAIL:
-                mLoadingMessage = R.string.loading_details;
-                break;
-            case SEARCHING:
-                mLoadingMessage = R.string.searching;
-                break;
-            default:
-                int providerMessage = mProvider.getLoadingMessage();
-                mLoadingMessage = providerMessage > 0 ? providerMessage : R.string.loading_data;
-                break;
-        }
+                //update loading message based on state
+                switch (mState) {
+                    case LOADING_DETAIL:
+                        mLoadingMessage = R.string.loading_details;
+                        break;
+                    case SEARCHING:
+                        mLoadingMessage = R.string.searching;
+                        break;
+                    default:
+                        int providerMessage = mProvider.getLoadingMessage();
+                        mLoadingMessage = providerMessage > 0 ? providerMessage : R.string.loading_data;
+                        break;
+                }
 
-        switch (mState) {
-            case LOADING_DETAIL:
-            case SEARCHING:
-            case LOADING:
-                if (mAdapter.isLoading()) mAdapter.removeLoading();
-                //show the progress bar
-                mRecyclerView.setVisibility(View.VISIBLE);
-                //				mRecyclerView.animate().alpha(0.5f).setDuration(500).start();
-                mEmptyView.setVisibility(View.GONE);
-                mProgressOverlay.setVisibility(View.VISIBLE);
-                break;
-            case LOADED:
-                if (mAdapter.isLoading()) mAdapter.removeLoading();
-                mProgressOverlay.setVisibility(View.GONE);
-                boolean hasItems = mItems.size() > 0;
-                //show either the recyclerview or the empty view
-                mRecyclerView.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
-                mEmptyView.setVisibility(hasItems ? View.GONE : View.VISIBLE);
-                break;
-            case LOADING_PAGE:
-                //add a loading view to the adapter
-                if (!mAdapter.isLoading()) mAdapter.addLoading();
-                mEmptyView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                break;
-        }
-        updateLoadingMessage();
+                switch (mState) {
+                    case LOADING_DETAIL:
+                    case SEARCHING:
+                    case LOADING:
+                        if (mAdapter.isLoading()) mAdapter.removeLoading();
+                        //show the progress bar
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        //				mRecyclerView.animate().alpha(0.5f).setDuration(500).start();
+                        mEmptyView.setVisibility(View.GONE);
+                        mProgressOverlay.setVisibility(View.VISIBLE);
+                        break;
+                    case LOADED:
+                        if (mAdapter.isLoading()) mAdapter.removeLoading();
+                        mProgressOverlay.setVisibility(View.GONE);
+                        boolean hasItems = mItems.size() > 0;
+                        //show either the recyclerview or the empty view
+                        mRecyclerView.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
+                        mEmptyView.setVisibility(hasItems ? View.GONE : View.VISIBLE);
+                        break;
+                    case LOADING_PAGE:
+                        //add a loading view to the adapter
+                        if (!mAdapter.isLoading()) mAdapter.addLoading();
+                        mEmptyView.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        break;
+                }
+                updateLoadingMessage();
+            }
+        });
     }
 
     private void updateLoadingMessage() {
@@ -269,6 +274,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void triggerSearch(String searchQuery) {
         if (!isAdded()) return;
         if (null == mAdapter) return;
+
+        if(mCurrentCall != null)
+            mCurrentCall.cancel();
 
         mEndOfListReached = false;
 
@@ -363,7 +371,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         }
                     });
                 } else {
-                    mCurrentCall = mProvider.getList(null, this);
+                    mCurrentCall = mProvider.getList(mItems, mFilters, this);
                 }
                 mRetries++;
             }
@@ -430,7 +438,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 }
             }
 
-            if (!mEndOfListReached && !(mState == State.LOADING_PAGE) && !(mState == State.LOADING) && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
+            if (!mEndOfListReached && !(mState == State.SEARCHING) && !(mState == State.LOADING_PAGE) && !(mState == State.LOADING) && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
                     mLoadingTreshold)) {
                 MediaProvider.Filters filters = mFilters;
                 filters.page = mPage;
