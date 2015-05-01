@@ -22,16 +22,23 @@ package com.connectsdk.service.command;
 
 
 public class ServiceCommandError extends Error {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 4232138682873631468L;
 
-    int code;
-    Object payload;
+    protected int code;
 
-    public static ServiceCommandError notSupported() {
-        return new ServiceCommandError(503, "not supported", null);
+    protected Object payload;
+
+    public ServiceCommandError() {
+    }
+
+    public ServiceCommandError(String detailMessage) {
+        super(detailMessage);
+    }
+
+    public ServiceCommandError(int code, String detailMessage) {
+        super(detailMessage);
+        this.code = code;
     }
 
     public ServiceCommandError(int code, String desc, Object payload) {
@@ -40,12 +47,8 @@ public class ServiceCommandError extends Error {
         this.payload = payload;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public Object getPayload() {
-        return payload;
+    public static ServiceCommandError notSupported() {
+        return new NotSupportedServiceCommandError();
     }
 
     public static ServiceCommandError getError(int code) {
@@ -56,7 +59,7 @@ public class ServiceCommandError extends Error {
         else if (code == 401) {
             desc = "Unauthorized";
         }
-        else if (code == 500) { 
+        else if (code == 500) {
             desc = "Internal Server Error";
         }
         else if (code == 503) {
@@ -67,5 +70,13 @@ public class ServiceCommandError extends Error {
         }
 
         return new ServiceCommandError(code, desc, null);
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public Object getPayload() {
+        return payload;
     }
 }

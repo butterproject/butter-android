@@ -81,8 +81,7 @@ public class YTSProvider extends MediaProvider {
         }
 
         if (filters.keywords != null) {
-            String keywords = filters.keywords.replaceAll("\\s", "% ");
-            params.add(new NameValuePair("query_term", keywords));
+            params.add(new NameValuePair("query_term", filters.keywords));
         }
 
         if (filters.genre != null) {
@@ -173,6 +172,8 @@ public class YTSProvider extends MediaProvider {
 
                     if (result.status != null && result.status.equals("error")) {
                         callback.onFailure(new NetworkErrorException(result.status_message));
+                    } else if(result.data != null && ((result.data.get("movies") != null && ((ArrayList<LinkedTreeMap<String, Object>>)result.data.get("movies")).size() <= 0) || ((Double)result.data.get("movie_count")).intValue() <= currentList.size())) {
+                        callback.onFailure(new NetworkErrorException("No movies found"));
                     } else {
                         ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
                         callback.onSuccess(filters, formattedData, true);

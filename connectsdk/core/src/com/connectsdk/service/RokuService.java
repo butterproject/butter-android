@@ -31,6 +31,7 @@ import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.discovery.DiscoveryFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.etc.helper.DeviceServiceReachability;
+import com.connectsdk.etc.helper.HttpConnection;
 import com.connectsdk.etc.helper.HttpMessage;
 import com.connectsdk.service.capability.CapabilityMethods;
 import com.connectsdk.service.capability.KeyControl;
@@ -49,19 +50,6 @@ import com.connectsdk.service.config.ServiceDescription;
 import com.connectsdk.service.roku.RokuApplicationListParser;
 import com.connectsdk.service.sessions.LaunchSession;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.entity.AbstractHttpEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xml.sax.SAXException;
@@ -70,6 +58,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -98,17 +87,9 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
             registeredApps.add(appId);
     }
 
-    HttpClient httpClient;
-
     public RokuService(ServiceDescription serviceDescription,
             ServiceConfig serviceConfig) {
         super(serviceDescription, serviceConfig);
-
-        httpClient = new DefaultHttpClient();
-        ClientConnectionManager mgr = httpClient.getConnectionManager();
-        HttpParams params = httpClient.getParams();
-        httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(
-                params, mgr.getSchemeRegistry()), params);
     }
 
     @Override
@@ -756,10 +737,25 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
     @Override
     public void displayImage(MediaInfo mediaInfo,
             MediaPlayer.LaunchListener listener) {
-        ImageInfo imageInfo = mediaInfo.getImages().get(0);
-        String iconSrc = imageInfo.getUrl();
+        String mediaUrl = null;
+        String mimeType = null;
+        String title = null;
+        String desc = null;
+        String iconSrc = null;
 
-        displayImage(mediaInfo.getUrl(), mediaInfo.getMimeType(), mediaInfo.getTitle(), mediaInfo.getDescription(), iconSrc, listener);
+        if (mediaInfo != null) {
+            mediaUrl = mediaInfo.getUrl();
+            mimeType = mediaInfo.getMimeType();
+            title = mediaInfo.getTitle();
+            desc = mediaInfo.getDescription();
+
+            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
+                ImageInfo imageInfo = mediaInfo.getImages().get(0);
+                iconSrc = imageInfo.getUrl();
+            }
+        }
+
+        displayImage(mediaUrl, mimeType, title, desc, iconSrc, listener);
     }
 
     @Override
@@ -772,10 +768,25 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop,
             MediaPlayer.LaunchListener listener) {
-        ImageInfo imageInfo = mediaInfo.getImages().get(0);
-        String iconSrc = imageInfo.getUrl();
+        String mediaUrl = null;
+        String mimeType = null;
+        String title = null;
+        String desc = null;
+        String iconSrc = null;
 
-        playMedia(mediaInfo.getUrl(), mediaInfo.getMimeType(), mediaInfo.getTitle(), mediaInfo.getDescription(), iconSrc, shouldLoop, listener);
+        if (mediaInfo != null) {
+            mediaUrl = mediaInfo.getUrl();
+            mimeType = mediaInfo.getMimeType();
+            title = mediaInfo.getTitle();
+            desc = mediaInfo.getDescription();
+
+            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
+                ImageInfo imageInfo = mediaInfo.getImages().get(0);
+                iconSrc = imageInfo.getUrl();
+            }
+        }
+
+        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
@@ -906,7 +917,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
 
     @Override
     public void sendCommand(final ServiceCommand<?> mCommand) {
-        Thread thread = new Thread(new Runnable() {
+        Util.runInBackground(new Runnable() {
 
             @SuppressWarnings("unchecked")
             @Override
@@ -914,66 +925,30 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
                 ServiceCommand<ResponseListener<Object>> command = (ServiceCommand<ResponseListener<Object>>) mCommand;
                 Object payload = command.getPayload();
 
-                HttpRequestBase request = command.getRequest();
-                HttpResponse response = null;
-                int code = -1;
-
-                if (command.getHttpMethod().equalsIgnoreCase(
-                        ServiceCommand.TYPE_POST)) {
-                    HttpPost post = (HttpPost) request;
-                    AbstractHttpEntity entity = null;
-
-                    if (payload != null) {
-                        try {
-                            if (payload instanceof JSONObject) {
-                                entity = new StringEntity(payload.toString());
-                            }
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                            // Error is handled below if entity is null;
-                        }
-
-                        if (entity == null) {
-                            Util.postError(
-                                    command.getResponseListener(),
-                                    new ServiceCommandError(
-                                            0,
-                                            "Unknown Error while preparing to send message",
-                                            null));
-
-                            return;
-                        }
-
-                        post.setEntity(entity);
-                    }
-                }
-
                 try {
-                    if (httpClient != null) {
-                        response = httpClient.execute(request);
-
-                        code = response.getStatusLine().getStatusCode();
-
-                        if (code == 200 || code == 201) {
-                            HttpEntity entity = response.getEntity();
-                            String message = EntityUtils.toString(entity,
-                                    "UTF-8");
-
-                            Util.postSuccess(command.getResponseListener(),
-                                    message);
-                        } else {
-                            Util.postError(command.getResponseListener(),
-                                    ServiceCommandError.getError(code));
+                    Log.d("", "RESP " + command.getTarget());
+                    HttpConnection connection = HttpConnection.newInstance(URI.create(command.getTarget()));
+                    if (command.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)) {
+                        connection.setMethod(HttpConnection.Method.POST);
+                        if (payload != null) {
+                            connection.setPayload(payload.toString());
                         }
                     }
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
+                    connection.execute();
+                    int code = connection.getResponseCode();
+                    Log.d("", "RESP " + code);
+                    if (code == 200 || code == 201) {
+                        Util.postSuccess(command.getResponseListener(), connection.getResponseString());
+                    } else {
+                        Util.postError(command.getResponseListener(), ServiceCommandError.getError(code));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Util.postError(command.getResponseListener(), new ServiceCommandError(0, e.getMessage(), null));
                 }
+
             }
         });
-        thread.start();
     }
 
     private String requestURL(String action, String parameter) {

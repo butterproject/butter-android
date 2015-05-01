@@ -33,6 +33,7 @@ import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 
 public class DefaultPlayer {
@@ -86,18 +87,26 @@ public class DefaultPlayer {
         Context context = PopcornApplication.getAppContext();
         String[] playerData = PrefUtils.get(context, Prefs.DEFAULT_PLAYER, "").split(DELIMITER);
         if (playerData.length > 1) {
+            Intent intent = new Intent();
             if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
                 BeamServer.setCurrentSubs(subsLocation);
+                intent.putExtra("subs", new Uri[] { Uri.parse(BeamServer.getSubsURL()) });
+                intent.putExtra("subs.name", new String[] { LocaleUtils.toLocale(subLanguage).getDisplayLanguage() });
             }
 
             BeamServer.setCurrentVideo(location);
             BeamServerService.getServer().start();
 
-            Intent intent = new Intent();
             intent.setClassName(playerData[1], playerData[0]);
             intent.setAction(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
+
+            if(media != null) {
+                intent.putExtra("title", "Popcorn Time: " + media.title);
+            }
+            intent.putExtra("position", 0);
+
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             return true;
