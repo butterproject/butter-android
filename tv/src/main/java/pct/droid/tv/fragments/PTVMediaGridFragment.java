@@ -27,6 +27,7 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
@@ -75,9 +77,8 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle((String) getActivity().getTitle());
+        setTitle(StringUtils.capWords((String) getActivity().getTitle()));
         setupFragment();
-
     }
 
     @Override

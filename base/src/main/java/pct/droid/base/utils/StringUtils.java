@@ -82,6 +82,17 @@ public class StringUtils {
         return str.substring(0, 1).toUpperCase(Locale.getDefault()) + str.substring(1, str.length());
     }
 
+    public static String capWords(String givenString) {
+        String[] arr = givenString.split(" ");
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1)).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
     public static String colorToString(int color) {
         return String.format("#%06X", 0xFFFFFF & color);
     }
