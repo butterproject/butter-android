@@ -47,6 +47,7 @@ public class RecommendationService extends IntentService {
     private YTSProvider mMovieProvider = new YTSProvider();
 
     private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
+    private int TOTAL_COUNT=0;
 
 
     @Override
@@ -133,8 +134,9 @@ public class RecommendationService extends IntentService {
 
                 Timber.d("Recommendation - " + movie.title);
                 PRIORITY--;
+                TOTAL_COUNT--;
                 builder.setBackground(movie.image)
-                        .setId(count + 1)
+                        .setId(TOTAL_COUNT)
                         .setPriority(PRIORITY)
                         .setTitle(movie.title)
                         .setDescription(movie.tagline)
@@ -161,12 +163,15 @@ public class RecommendationService extends IntentService {
 
                 Timber.d("Recommendation - " + show.title);
 
+                Episode latestEpisode = findLatestEpisode(show);
+
                 PRIORITY--;
+                TOTAL_COUNT--;
                 builder.setBackground(show.image)
-                        .setId(count + 1)
+                        .setId(TOTAL_COUNT)
                         .setPriority(PRIORITY)
                         .setTitle(show.title)
-                        .setDescription(getString(R.string.episode_number_format,findLatestEpisode(show).episode))
+                        .setDescription(latestEpisode == null ? "" : getString(R.string.episode_number_format, latestEpisode.episode))
                         .setImage(show.image)
                         .setIntent(buildPendingIntent(show))
                         .build();
@@ -181,7 +186,8 @@ public class RecommendationService extends IntentService {
         }
     }
 
-    private Episode findLatestEpisode(Show show){
+    private Episode findLatestEpisode(Show show) {
+        if (show.episodes == null || show.episodes.size() == 0) return null;
         return show.episodes.get(show.episodes.size());
     }
 
