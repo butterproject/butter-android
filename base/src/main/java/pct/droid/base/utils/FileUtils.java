@@ -96,10 +96,11 @@ public class FileUtils {
      * Get the charset of the contents of an {@link InputStream}
      *
      * @param inputStream {@link InputStream}
+     * @param languageCode
      * @return Charset String name
      * @throws IOException
      */
-    public static String inputstreamToCharsetString(InputStream inputStream) throws IOException {
+    public static String inputstreamToCharsetString(InputStream inputStream, String languageCode) throws IOException {
         UniversalDetector charsetDetector = new UniversalDetector(null);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -117,6 +118,9 @@ public class FileUtils {
 
         String detectedCharset = charsetDetector.getDetectedCharset();
         charsetDetector.reset();
+        if (languageCode != null && "tr".equals(languageCode) && !"UTF-8".equals(detectedCharset)) {
+            detectedCharset = "ISO-8859-9";
+        }
         if (detectedCharset == null || detectedCharset.isEmpty()) {
             detectedCharset = "UTF-8";
         } else if ("MACCYRILLIC".equals(detectedCharset)) {
@@ -143,7 +147,7 @@ public class FileUtils {
      * @throws IOException
      */
     public static void saveStringFile(InputStream inputStream, File path) throws IOException {
-        String outputString = inputstreamToCharsetString(inputStream);
+        String outputString = inputstreamToCharsetString(inputStream, null);
         saveStringToFile(outputString, path, "UTF-8");
     }
 
