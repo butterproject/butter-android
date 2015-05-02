@@ -122,7 +122,7 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     }
 
     @Override
-    public void onStatusUpdate(String state, String message) {
+    public void onVPNStatusUpdate(VPNManager.State state, String message) {
 
     }
 }

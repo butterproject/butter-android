@@ -41,22 +41,25 @@ import pct.droid.R;
 import pct.droid.activities.PreferencesActivity;
 import pct.droid.adapters.NavigationAdapter;
 import pct.droid.adapters.decorators.OneShotDividerDecorator;
-import pct.droid.base.Constants;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.HaruProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
-import pct.droid.base.utils.IntentUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.vpn.VPNHTChecker;
+import pct.droid.base.vpn.VPNManager;
+import pct.droid.dialogfragments.VPNInfoDialogFragment;
 
-public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback,
-        NavigationAdapter.OnItemClickListener {
+public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback {
 
     /**
      * Remember the position of the selected item.
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+
+    // Central VPN menu item
+    private NavDrawerItem mVPNItem;
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      * views
@@ -131,17 +134,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
 
-        //todo: make list items dynamic
-        List<NavDrawerItem> navItems = new ArrayList<>();
-        navItems.add(new NavDrawerItem(true));
-        navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies, new YTSProvider()));
-        navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv, new EZTVProvider()));
-        navItems.add(new NavDrawerItem(getString(R.string.title_anime), R.drawable.ic_nav_anime, new HaruProvider()));
-        navItems.add(new NavDrawerItem(getString(R.string.share), R.drawable.ic_nav_share, mOnShareClickListener));
-        navItems.add(new NavDrawerItem(getString(R.string.preferences), R.drawable.ic_nav_settings, mOnSettingsClickListener));
-
-        mAdapter = new NavigationAdapter(getActivity(), this, navItems);
-        mAdapter.setOnItemClickListener(this);
+        mAdapter = new NavigationAdapter(getActivity(), this, initItems());
+        mAdapter.setOnItemClickListener(mOnItemClickListener);
 
         mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 3));
         mRecyclerView.setHasFixedSize(true);
@@ -150,20 +144,75 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         mRecyclerView.requestFocus();
     }
 
-    private View.OnClickListener mOnSettingsClickListener = new View.OnClickListener() {
+    public List<NavDrawerItem> initItems() {
+        //todo: make list items dynamic
+        List<NavDrawerItem> navItems = new ArrayList<>();
+        navItems.add(new NavDrawerItem(true));
+        navItems.add(new NavDrawerItem(getString(R.string.title_movies), R.drawable.ic_nav_movies, new YTSProvider()));
+        navItems.add(new NavDrawerItem(getString(R.string.title_shows), R.drawable.ic_nav_tv, new EZTVProvider()));
+        navItems.add(new NavDrawerItem(getString(R.string.title_anime), R.drawable.ic_nav_anime, new HaruProvider()));
+        if(PrefUtils.get(getActivity(), Prefs.SHOW_VPN, true) && VPNHTChecker.isDownloadAvailable(getActivity())) {
+            navItems.add(mVPNItem = new NavDrawerItem(getString(R.string.vpn), R.drawable.ic_nav_vpn, mOnVPNClickListener, VPNManager.getLatestInstance().isConnected()));
+        }
+        navItems.add(new NavDrawerItem(getString(R.string.preferences), R.drawable.ic_nav_settings, mOnSettingsClickListener));
+
+        if(mAdapter != null)
+            mAdapter.setItems(navItems);
+
+        VPNManager.State state = VPNManager.getCurrentState();
+        NavigationDrawerFragment.NavDrawerItem vpnItem = getVPNItem();
+        if(vpnItem != null) {
+            if (state.equals(VPNManager.State.DISCONNECTED)) {
+                vpnItem.setSwitchValue(false);
+                vpnItem.showProgress(false);
+            } else if(state.equals(VPNManager.State.CONNECTING)) {
+                vpnItem.showProgress(true);
+            } else if(state.equals(VPNManager.State.CONNECTED)) {
+                vpnItem.setSwitchValue(true);
+                vpnItem.showProgress(false);
+            }
+        }
+
+        return navItems;
+    }
+
+    private NavDrawerItem.OnClickListener mOnSettingsClickListener = new NavDrawerItem.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v, NavigationAdapter.ItemRowHolder rowHolder, int position) {
             PreferencesActivity.startActivity(getActivity());
             mDrawerLayout.closeDrawer(mNavigationDrawerContainer);
         }
     };
 
-    private View.OnClickListener mOnShareClickListener = new View.OnClickListener() {
+    private NavDrawerItem.OnClickListener mOnVPNClickListener = new NavDrawerItem.OnClickListener() {
         @Override
-        public void onClick(View v) {
-            String message = getString(R.string.share_message);
-            startActivity(IntentUtils.getSendIntent(getActivity(), getString(R.string.share_dialog_title), String.format("%s %s", message,
-                    Constants.POPCORN_URL)));
+        public void onClick(View v, NavigationAdapter.ItemRowHolder vh, int position) {
+            if(vh.getSwitch() != null) {
+                VPNManager manager = VPNManager.getLatestInstance();
+                if(manager.isVPNInstalled()) {
+                    if (!manager.isConnected()) {
+                        manager.connect();
+                        vh.getSwitch().setChecked(true);
+                    } else {
+                        manager.disconnect();
+                        vh.getSwitch().setChecked(false);
+                    }
+                } else {
+                    VPNInfoDialogFragment.show(getChildFragmentManager());
+                }
+            }
+        }
+    };
+
+    private NavigationAdapter.OnItemClickListener mOnItemClickListener = new NavigationAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View v, NavigationAdapter.ItemRowHolder vh, NavDrawerItem item, int position) {
+            if (null != item.getOnClickListener()) {
+                item.onClick(v, vh, position);
+                return;
+            }
+
+            selectItem(mAdapter.getCorrectPosition(position));
         }
     };
 
@@ -187,6 +236,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 
     public NavDrawerItem getCurrentItem() {
         return mAdapter.getItem(getSelectedPosition() + 1);
+    }
+
+    public NavDrawerItem getVPNItem() {
+        return mVPNItem;
     }
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -263,16 +316,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemClick(View v, NavDrawerItem item, int position) {
-        if (null != item.getmOnClickListener()) {
-            item.getmOnClickListener().onClick(v);
-            return;
-        }
-
-        selectItem(mAdapter.getCorrectPosition(position));
-    }
-
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
@@ -309,11 +352,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
      * Describes an item to be displayed in the navigation list
      */
     public static class NavDrawerItem {
-        private View.OnClickListener mOnClickListener;
-        private boolean mIsHeader = false;
+        private NavDrawerItem.OnClickListener mOnClickListener;
+        private boolean mIsHeader = false, mIsSwitch = false, mSwitchValue = false, mShowProgress = false;
         private String mTitle;
         private int mIcon;
         private MediaProvider mMediaProvider;
+        private NavigationAdapter.ItemRowHolder mRowHolder;
 
         public NavDrawerItem(String title, int icon) {
             mTitle = title;
@@ -325,13 +369,24 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
             mMediaProvider = mediaProvider;
         }
 
-        public NavDrawerItem(String title, int icon, View.OnClickListener listener) {
+        public NavDrawerItem(String title, int icon, OnClickListener listener) {
             this(title, icon);
             mOnClickListener = listener;
         }
 
+        public NavDrawerItem(String title, int icon, OnClickListener listener, boolean isSwitch) {
+            this(title, icon);
+            mOnClickListener = listener;
+            mIsSwitch = true;
+            mSwitchValue = isSwitch;
+        }
+
         public NavDrawerItem(boolean isHeader) {
             mIsHeader = true;
+        }
+
+        public void setRowHolder(NavigationAdapter.ItemRowHolder rowHolder) {
+            mRowHolder = rowHolder;
         }
 
         public String getTitle() {
@@ -350,14 +405,48 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
             return mIsHeader;
         }
 
+        public boolean isSwitch() {
+            return mIsSwitch;
+        }
+
+        public boolean getSwitchValue() {
+            return mSwitchValue;
+        }
+
         public boolean hasProvider() {
             return mMediaProvider != null;
         }
 
-        public View.OnClickListener getmOnClickListener() {
+        public OnClickListener getOnClickListener() {
             return mOnClickListener;
         }
-    }
 
+        public void onClick(View v, NavigationAdapter.ItemRowHolder itemRowHolder, int position) {
+            mOnClickListener.onClick(v, itemRowHolder, position);
+        }
+
+        public interface OnClickListener {
+            public void onClick(View v, NavigationAdapter.ItemRowHolder rowHolder, int position);
+        }
+
+        public void showProgress(boolean b) {
+            mShowProgress = b;
+            if(mRowHolder != null) {
+                mRowHolder.getProgressBar().setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+                if(mIsSwitch) {
+                    mRowHolder.getSwitch().setVisibility(b ? View.INVISIBLE : View.VISIBLE);
+                }
+            }
+        }
+
+        public boolean showProgress() {
+            return mShowProgress;
+        }
+
+        public void setSwitchValue(boolean b) {
+            if(mRowHolder != null)
+                mRowHolder.getSwitch().setChecked(b);
+        }
+    }
 
 }

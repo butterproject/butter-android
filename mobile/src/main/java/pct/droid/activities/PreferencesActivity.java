@@ -214,7 +214,7 @@ public class PreferencesActivity extends PopcornBaseActivity
 
                                         dialog.dismiss();
 
-                                        Toast.makeText(PreferencesActivity.this, R.string.restart_effect, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(PreferencesActivity.this, R.string.restart_effect, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     }
@@ -518,8 +518,6 @@ public class PreferencesActivity extends PopcornBaseActivity
                         return limit + " nodes";
                     }
                 }));
-
-        mPrefItems.add(getResources().getString(R.string.advanced));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_storage_location, R.string.storage_location, Prefs.STORAGE_LOCATION,
                 StorageUtils.getIdealCacheDirectory(this),
                 new PrefItem.OnClickListener() {
@@ -562,6 +560,8 @@ public class PreferencesActivity extends PopcornBaseActivity
                         return enabled ? getString(R.string.enabled) : getString(R.string.disabled);
                     }
                 }));
+
+        mPrefItems.add(getResources().getString(R.string.advanced));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_hw_accel, R.string.hw_acceleration, Prefs.HW_ACCELERATION,
                 LibVLC.HW_ACCELERATION_AUTOMATIC,
                 new PrefItem.OnClickListener() {
@@ -594,6 +594,20 @@ public class PreferencesActivity extends PopcornBaseActivity
                             case LibVLC.HW_ACCELERATION_AUTOMATIC:
                                 return getString(R.string.hw_automatic);
                         }
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_nav_vpn, R.string.show_vpn, Prefs.SHOW_VPN, true,
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(PrefItem item) {
+                        item.saveValue(!(boolean) item.getValue());
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        boolean enabled = (boolean) item.getValue();
+                        return enabled ? getString(R.string.enabled) : getString(R.string.disabled);
                     }
                 }));
 

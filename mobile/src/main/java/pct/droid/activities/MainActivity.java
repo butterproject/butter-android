@@ -22,7 +22,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -52,11 +51,13 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.vpn.VPNManager;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaContainerFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
 import pct.droid.utils.ToolbarUtils;
 import pct.droid.widget.ScrimInsetsFrameLayout;
+import timber.log.Timber;
 
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
@@ -117,15 +118,31 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         if (mNavigationDrawerFragment.getCurrentItem() != null && mNavigationDrawerFragment.getCurrentItem().getTitle() != null) {
             setTitle(mNavigationDrawerFragment.getCurrentItem().getTitle());
         }
+
+        mNavigationDrawerFragment.initItems();
     }
 
     @Override
     public void onVPNServiceReady() {
-        try {
-            if(!mVPNManager.isConnected())
-                mVPNManager.startVPN();
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        super.onVPNServiceReady();
+        mNavigationDrawerFragment.initItems();
+    }
+
+    @Override
+    public void onVPNStatusUpdate(VPNManager.State state, String message) {
+        super.onVPNStatusUpdate(state, message);
+        Timber.d("New state: %s", state);
+        NavigationDrawerFragment.NavDrawerItem vpnItem = mNavigationDrawerFragment.getVPNItem();
+        if(vpnItem != null) {
+            if (state.equals(VPNManager.State.DISCONNECTED)) {
+                vpnItem.setSwitchValue(false);
+                vpnItem.showProgress(false);
+            } else if(state.equals(VPNManager.State.CONNECTING)) {
+                vpnItem.showProgress(true);
+            } else if(state.equals(VPNManager.State.CONNECTED)) {
+                vpnItem.setSwitchValue(true);
+                vpnItem.showProgress(false);
+            }
         }
     }
 
