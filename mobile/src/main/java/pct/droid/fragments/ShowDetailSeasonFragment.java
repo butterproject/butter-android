@@ -42,6 +42,8 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
         super.onCreate(savedInstanceState);
         int season = getArguments().getInt(SEASON);
 
+        if(sShow == null) return;
+
         for (Episode episode : sShow.episodes) {
             if (episode.season == season) {
                 mEpisodes.add(episode);
