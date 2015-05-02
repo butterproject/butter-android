@@ -86,7 +86,7 @@ public class EpisodeCardPresenter extends Presenter {
 		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 		if (item.image != null) {
 			cardView.setTitleText(item.title);
-			cardView.setContentText(!TextUtils.isEmpty(item.genre) ? item.genre : item.year);
+			cardView.setContentText(String.format(mContext.getString(R.string.episode_number_format), item.episode));
 			cardView.setMainImageDimensions(mCardWidth, mCardHeight);
 
 			Target target = new Target() {

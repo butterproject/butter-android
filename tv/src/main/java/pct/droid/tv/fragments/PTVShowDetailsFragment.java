@@ -18,6 +18,8 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.widget.Toast;
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import pct.droid.base.dialogfragments.FileSelectorDialogFragment;
 import pct.droid.base.fragments.StringArraySelectorDialogFragment;
@@ -91,7 +94,13 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         // Add a Related items row
         EpisodeCardPresenter mediaCardPresenter = new EpisodeCardPresenter(getActivity());
 
-        final Map<Integer, List<Episode>> seasons = new LinkedHashMap<>();
+        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer lhs, Integer rhs) {
+                return lhs-rhs;
+            }
+        });
+
         for (Episode episode : getShowItem().episodes) {
 
             //create list if not there
@@ -119,16 +128,16 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
             });
         }
 
-        for (int i = 1; i < seasons.size() + 1; i++) {
+        for (Map.Entry<Integer,List<Episode>> entry: seasons.entrySet()){
 
             //setup season adapter
             final ArrayObjectAdapter seasonAdapter = new ArrayObjectAdapter(mediaCardPresenter);
-            if (seasons != null) {
-                for (Episode episode : seasons.get(i)) {
+            if (entry.getValue()!=null) {
+                for (Episode episode : entry.getValue()) {
                     seasonAdapter.add(episode);
                 }
 
-                HeaderItem header = new HeaderItem(i, String.format("Season %d", i));
+                HeaderItem header = new HeaderItem(entry.getKey(), String.format("Season %d", entry.getKey()));
                 getObjectArrayAdapter().add(new ListRow(header, seasonAdapter));
             }
         }

@@ -72,6 +72,7 @@
 	<string name="genres">Genres</string>
 	<string name="terms_and_conditions">Terms and Conditions</string>
 	<string name="view_terms">View terms</string>
+	<string name="episode_number_format">Episode %d</string>
 
 
 </resources>
