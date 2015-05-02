@@ -673,7 +673,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                     @Override
                     public void onClick(PrefItem item) {
                         Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(Constants.GIT_URL + "stash/projects/PA/repos/popcorn-android/browse/NOTICE.md"));
+                        i.setData(Uri.parse(Constants.GIT_URL + "popcorntime/android/blob/development/NOTICE.md"));
                         startActivity(i);
                     }
                 },
