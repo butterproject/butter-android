@@ -37,10 +37,18 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.util.HashMap;
 
 import pct.droid.base.io.UnicodeBOMInputStream;
 
 public class FileUtils {
+
+    private static HashMap<String, String> sOverrideMap;
+
+    static {
+        sOverrideMap = new HashMap<>();
+        sOverrideMap.put("tr", "ISO-8859-9");
+    }
 
     /**
      * Get contents of a file as String
@@ -85,8 +93,8 @@ public class FileUtils {
         if (file.isDirectory()) {
             String[] children = file.list();
             if (children == null) return;
-            for (int i = 0; i < children.length; i++) {
-                recursiveDelete(new File(file, children[i]));
+            for (String child : children) {
+                recursiveDelete(new File(file, child));
             }
         }
         file.delete();
@@ -96,7 +104,18 @@ public class FileUtils {
      * Get the charset of the contents of an {@link InputStream}
      *
      * @param inputStream {@link InputStream}
-     * @param languageCode
+     * @return Charset String name
+     * @throws IOException
+     */
+    public static String inputstreamToCharsetString(InputStream inputStream) throws IOException {
+        return inputstreamToCharsetString(inputStream, null);
+    }
+
+    /**
+     * Get the charset of the contents of an {@link InputStream}
+     *
+     * @param inputStream {@link InputStream}
+     * @param languageCode Language code for charset override
      * @return Charset String name
      * @throws IOException
      */
@@ -118,13 +137,15 @@ public class FileUtils {
 
         String detectedCharset = charsetDetector.getDetectedCharset();
         charsetDetector.reset();
-        if (languageCode != null && "tr".equals(languageCode) && !"UTF-8".equals(detectedCharset)) {
-            detectedCharset = "ISO-8859-9";
-        }
+
         if (detectedCharset == null || detectedCharset.isEmpty()) {
             detectedCharset = "UTF-8";
         } else if ("MACCYRILLIC".equals(detectedCharset)) {
             detectedCharset = "Windows-1256";
+        }
+
+        if (languageCode != null && sOverrideMap.containsKey(languageCode) && !detectedCharset.equals("UTF-8")) {
+            detectedCharset = sOverrideMap.get(languageCode);
         }
 
         byte[] stringBytes = byteArrayOutputStream.toByteArray();
