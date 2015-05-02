@@ -23,9 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.RemoteException;
 
 import java.io.BufferedReader;
@@ -35,22 +33,32 @@ import java.io.InputStreamReader;
 
 import ht.vpn.android.api.IOpenVPNAPIService;
 import ht.vpn.android.api.IOpenVPNStatusCallback;
-import pct.droid.base.R;
+import pct.droid.base.utils.PackageUtils;
 import pct.droid.base.utils.ThreadUtils;
+import timber.log.Timber;
 
 public class VPNManager {
+
+    public enum State {CONNECTED, CONNECTING, DISCONNECTED}
+
+    private static final int START_PROFILE_EMBEDDED = 1;
+    private static final int OPENVPN_PERMISSION = 2;
+    public static final String PACKAGE_VPNHT = "ht.vpn.android";
 
     private Activity mActivity;
     private IOpenVPNAPIService mService = null;
     private Listener mListener;
-
-    private static final int START_PROFILE_EMBEDDED = 1;
-    private static final int OPENVPN_PERMISSION = 2;
+    private static VPNManager sLatestInstance;
+    private static State sCurrentState = State.DISCONNECTED;
+    private boolean mIsInstalled = false;
 
     public static VPNManager start(Activity activity) {
         if(activity instanceof Listener) {
             VPNManager manager = new VPNManager(activity);
-            manager.init();
+            if(PackageUtils.isInstalled(activity, PACKAGE_VPNHT)) {
+                manager.init();
+            }
+            sLatestInstance = manager;
             return manager;
         }
         throw new UnsupportedOperationException("Activity does not implement VPNManager.Listener");
@@ -61,9 +69,21 @@ public class VPNManager {
         mListener = (Listener) mActivity;
     }
 
+    public static VPNManager getLatestInstance() {
+        if(sLatestInstance == null) {
+            sLatestInstance = new VPNManager(null);
+        }
+        return sLatestInstance;
+    }
+
+    public static State getCurrentState() {
+        return sCurrentState;
+    }
+
     private void init() {
+        mIsInstalled = true;
         Intent serviceIntent = new Intent(IOpenVPNAPIService.class.getName());
-        serviceIntent.setPackage("ht.vpn.android");
+        serviceIntent.setPackage(PACKAGE_VPNHT);
         mActivity.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -79,12 +99,27 @@ public class VPNManager {
         }
     }
 
-    public void startVPN() throws RemoteException {
-        Intent intent = mService.prepareVPNService();
-        if(intent == null) {
-            onActivityResult(START_PROFILE_EMBEDDED, Activity.RESULT_OK, null);
-        } else {
-            mActivity.startActivityForResult(intent, START_PROFILE_EMBEDDED);
+    public void connect() {
+        if(mActivity == null || mService == null) return;
+
+        try {
+            Intent intent = mService.prepareVPNService();
+            if (intent == null) {
+                onActivityResult(START_PROFILE_EMBEDDED, Activity.RESULT_OK, null);
+            } else {
+                mActivity.startActivityForResult(intent, START_PROFILE_EMBEDDED);
+            }
+        } catch(RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disconnect() {
+        if(mService == null) return;
+        try {
+                mService.disconnect();
+        } catch(RemoteException e) {
+            e.printStackTrace();
         }
     }
 
@@ -111,12 +146,18 @@ public class VPNManager {
     }
 
     public boolean isConnected() {
-        try {
-            return mService.isConnectedOrConnecting();
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if(mService != null) {
+            try {
+                return mService.isConnectedOrConnecting();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return false;
+    }
+
+    public boolean isVPNInstalled() {
+        return mIsInstalled;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Bundle data) {
@@ -149,8 +190,16 @@ public class VPNManager {
                 e.printStackTrace();
             }
 
-            if(mListener != null)
+            if(mListener != null) {
                 mListener.onVPNServiceReady();
+
+                try {
+                    if (mService.isConnectedOrConnecting())
+                        mListener.onVPNStatusUpdate(State.CONNECTED, "");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override
@@ -166,15 +215,26 @@ public class VPNManager {
                 @Override
                 public void run() {
                     if(mListener != null)
-                        mListener.onStatusUpdate(state, message);
+                        mListener.onVPNStatusUpdate(strToState(state), message);
                 }
             });
         }
     };
 
+    private State strToState(String state) {
+        if(state.equalsIgnoreCase("CONNECTED")) {
+            sCurrentState = State.CONNECTED;
+        } else if(state.equalsIgnoreCase("NOPROCESS") || state.equalsIgnoreCase("USER_VPN_PASSWORD_CANCELLED")) {
+            sCurrentState = State.DISCONNECTED;
+        } else {
+            sCurrentState = State.CONNECTING;
+        }
+        return sCurrentState;
+    }
+
     public interface Listener {
         public void onVPNServiceReady();
-        public void onStatusUpdate(String state, String message);
+        public void onVPNStatusUpdate(State state, String message);
     }
 
 }

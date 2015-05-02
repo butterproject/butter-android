@@ -15,20 +15,26 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.torrent;
-import android.content.BroadcastReceiver;
+package pct.droid.base.utils;
+
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
-public class TorrentBroadcastReceiver extends BroadcastReceiver {
+import java.util.List;
 
-    public static final String STOP = "pct.droid.base.torrent.TorrentBroadcastReceiver.STOP";
+public class PackageUtils {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equals(STOP)) {
-            TorrentService.stop();
+    public static boolean isInstalled(Context context, String packageName) {
+        final PackageManager pm = context.getPackageManager();
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        for (ApplicationInfo packageInfo : packages) {
+            if(packageInfo.packageName.equals(packageName))
+                return true;
         }
+
+        return false;
     }
 
 }
