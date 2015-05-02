@@ -1,15 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pct.droid.tv">
+    package="pct.droid.tv" >
 
     <!-- Features -->
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
-
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
@@ -23,6 +22,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -30,31 +30,28 @@
         android:allowBackup="false"
         android:banner="@drawable/banner"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Popcorn.TV">
-
+        android:theme="@style/Theme.Popcorn.TV" >
         <activity
             android:name=".activities.PTVLaunchActivity"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:theme="@style/Theme.HiddenActivity">
+            android:theme="@style/Theme.HiddenActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- Activities -->
         <activity android:name=".activities.PTVMainActivity" />
-
         <activity
             android:name=".activities.PTVPlayerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
         <activity
             android:name=".activities.PTVWelcomeActivity"
             android:noHistory="true"
             android:theme="@style/Theme.Popcorn.TV.Welcome" />
-
         <activity android:name=".activities.PTVMediaDetailActivity" />
         <activity android:name=".activities.PTVMediaGridActivity" />
         <activity android:name=".activities.PTVSearchActivity" />
@@ -63,6 +60,20 @@
         <activity android:name=".activities.PTVVideoPlayerActivity" />
 
         <service android:name="pct.droid.base.torrent.TorrentService" />
+
+        <receiver
+            android:name=".service.BootReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".service.RecommendationService"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>

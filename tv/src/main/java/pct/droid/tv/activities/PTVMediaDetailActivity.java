@@ -41,12 +41,16 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
     }
 
     public static Intent startActivity(Activity activity, Bundle options, Media item,String background,String hero) {
-        Intent intent = new Intent(activity, PTVMediaDetailActivity.class);
+        Intent intent = buildIntent(activity, item, background, hero);
+        activity.startActivity(intent, options);
+        return intent;
+    }
+
+    public static Intent buildIntent(Context context, Media item,String background,String hero){
+        Intent intent = new Intent(context, PTVMediaDetailActivity.class);
         intent.putExtra(EXTRA_ITEM, item);
         intent.putExtra(EXTRA_BACKGROUND_URL, background);
         intent.putExtra(EXTRA_HERO_URL, hero);
-        activity.startActivity(intent,options);
-//        ActivityCompat.startActivity(activity, intent, options);
         return intent;
     }
 
