@@ -17,6 +17,7 @@
 
 package pct.droid.base.torrent;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -59,6 +60,8 @@ import timber.log.Timber;
 
 public class TorrentService extends Service {
 
+    private static TorrentService sThis;
+
     private static final String THREAD_NAME = "TORRENT_SERVICE_THREAD";
     private HandlerThread mThread;
     private Handler mHandler;
@@ -71,7 +74,7 @@ public class TorrentService extends Service {
 
     private String mCurrentTorrentUrl = "";
     private File mCurrentVideoLocation;
-    private boolean mIsStreaming = false, mIsCanceled = false, mReady = false, mInForeground = false;
+    private boolean mIsStreaming = false, mIsCanceled = false, mReady = false, mInForeground = false, mIsBound = false;
 
     private boolean mInitialised = false;
 
@@ -87,6 +90,12 @@ public class TorrentService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        sThis = this;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         Timber.d("onDestroy");
@@ -98,19 +107,20 @@ public class TorrentService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.d("onStartCommand");
-        initialize();
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         Timber.d("onBind");
+        mIsBound = true;
         initialize();
         return mBinder;
     }
 
     @Override
     public void onRebind(Intent intent) {
+        mIsBound = true;
         super.onRebind(intent);
         Timber.d("onRebind");
         initialize();
@@ -121,16 +131,10 @@ public class TorrentService extends Service {
         super.onUnbind(intent);
         Timber.d("onUnbind");
 
-        if (!mInForeground) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mTorrentSession.pause();
-                    mDHT.stop();
-                    Timber.d("Pausing libtorrent session");
-                }
-            });
+        if(!mInForeground) {
+            pause();
         }
+        mIsBound = false;
 
         return true;
     }
@@ -139,11 +143,16 @@ public class TorrentService extends Service {
         Timber.d("startForeground");
         if (mInForeground) return;
 
+        Intent closeBroadcast = new Intent();
+        closeBroadcast.setAction(TorrentBroadcastReceiver.STOP);
+        PendingIntent sendBroadcastIntent = PendingIntent.getBroadcast(this, 0, closeBroadcast, PendingIntent.FLAG_CANCEL_CURRENT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
-                .setContentTitle("Popcorn Time")
-                .setContentText(getString(R.string.running))
+                .setContentTitle("Popcorn Time - " + getString(R.string.running))
+                .setContentText(getString(R.string.tap_to_close))
                 .setOngoing(true)
+                .setContentIntent(sendBroadcastIntent)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE);
 
         startForeground(mId, builder.build());
@@ -210,6 +219,17 @@ public class TorrentService extends Service {
                 }
             });
         }
+    }
+
+    private void pause() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mTorrentSession.pause();
+                mDHT.stop();
+                Timber.d("Pausing libtorrent session");
+            }
+        });
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
@@ -371,6 +391,10 @@ public class TorrentService extends Service {
         saveDirectory.mkdirs();
 
         Timber.d("Stopped torrent and removed files");
+
+        if(!mIsBound) {
+            pause();
+        }
     }
 
     public boolean isStreaming() {
@@ -508,6 +532,10 @@ public class TorrentService extends Service {
             super.torrentFinished(alert);
         }
 
+    }
+
+    protected static void stop() {
+        sThis.stopStreaming();
     }
 
 }
