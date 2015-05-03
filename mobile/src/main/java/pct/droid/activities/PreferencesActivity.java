@@ -641,7 +641,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                         cal.setTimeInMillis(timeStamp);
                         String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM, Locale.getDefault()).format(timeStamp);
                         String date = DateFormat.format("dd-MM-yyy", cal).toString();
-                        return getString(R.string.last_check) + " :" + date + " " + time;
+                        return getString(R.string.last_check) + ": " + date + " " + time;
                     }
                 }));
 
