@@ -140,7 +140,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             mAdapter.clearItems();
             mGenre = mFilters.genre = genre;
             mFilters.page = 1;
-            mCurrentCall = mProvider.getList(mFilters, mCallback);
+            mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);
             setState(State.LOADING);
         }
     }
@@ -197,7 +197,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         //don't load initial data in search mode
         if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
-            mCurrentCall = mProvider.getList(mFilters, mCallback);/* fetch new items */
+            mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
             setState(State.LOADING);
         } else updateUI();
     }
@@ -292,7 +292,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mFilters.keywords = searchQuery;
         mFilters.page = 1;
         mPage = 1;
-        mCurrentCall = mProvider.getList(mFilters, mCallback);
+        mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);
     }
 
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
@@ -304,7 +304,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 setState(State.LOADED);
                 return;
             }
-
 
             mItems.clear();
             ThreadUtils.runOnUiThread(new Runnable() {
@@ -371,7 +370,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         }
                     });
                 } else {
-                    mCurrentCall = mProvider.getList(mItems, mFilters, this);
+                    mCurrentCall = mProvider.getList(mItems, new MediaProvider.Filters(mFilters), this);
                 }
                 mRetries++;
             }
@@ -440,11 +439,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
             if (!mEndOfListReached && !(mState == State.SEARCHING) && !(mState == State.LOADING_PAGE) && !(mState == State.LOADING) && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
                     mLoadingTreshold)) {
-                MediaProvider.Filters filters = mFilters;
-                filters.page = mPage;
-                mCurrentCall = mProvider.getList(mItems, filters, mCallback);
 
-                mFilters = filters;
+                mFilters.page = mPage;
+                mCurrentCall = mProvider.getList(mItems, new MediaProvider.Filters(mFilters), mCallback);
 
                 mPreviousTotal = mTotalItemCount = mLayoutManager.getItemCount();
                 setState(State.LOADING_PAGE);
