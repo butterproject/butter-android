@@ -78,10 +78,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public static class Filters {
-        public enum Order {ASC, DESC}
-
-        ;
-
+        public enum Order {ASC, DESC};
         public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET}
 
         public String keywords = null;
@@ -89,6 +86,16 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
         public Order order = Order.DESC;
         public Sort sort = Sort.POPULARITY;
         public Integer page = null;
+
+        public Filters() { }
+
+        public Filters(Filters filters) {
+            keywords = filters.keywords;
+            genre = filters.genre;
+            order = filters.order;
+            sort = filters.sort;
+            page = filters.page;
+        }
     }
 
     public static class NavInfo {

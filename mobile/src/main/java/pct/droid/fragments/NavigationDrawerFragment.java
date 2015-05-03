@@ -426,7 +426,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         }
 
         public interface OnClickListener {
-            public void onClick(View v, NavigationAdapter.ItemRowHolder rowHolder, int position);
+            void onClick(View v, NavigationAdapter.ItemRowHolder rowHolder, int position);
         }
 
         public void showProgress(boolean b) {
