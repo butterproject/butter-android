@@ -17,17 +17,22 @@
 
 package pct.droid.base.activities;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 
 import java.io.File;
 
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
@@ -90,6 +95,7 @@ public abstract class TorrentBaseActivity extends ActionBarActivity implements T
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((TorrentService.ServiceBinder) service).getService();
             mService.addListener(TorrentBaseActivity.this);
+            mService.setCurrentActivity(TorrentBaseActivity.this);
             onTorrentServiceConnected();
         }
 
