@@ -43,14 +43,6 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
 
-    <View
-        android:id="@+id/gradient"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.6"
-        android:background="@drawable/griditem_gradient" />
-
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/year"
         android:layout_width="match_parent"
