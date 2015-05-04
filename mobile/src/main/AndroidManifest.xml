@@ -23,7 +23,7 @@
         android:supportsRtl="true">
 
         <activity
-            android:name="pct.droid.activities.LaunchActivity"
+            android:name=".activities.LaunchActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:theme="@style/Theme.HiddenActivity"
@@ -48,6 +48,7 @@
 				<data android:scheme="magnet" />
 			</intent-filter>
 		</activity>
+
 		<activity
 			android:name=".activities.MediaDetailActivity"
 			android:theme="@style/Theme.PopcornTime.Detail"
@@ -59,7 +60,7 @@
 		</activity>
 
         <activity
-            android:name="pct.droid.activities.SearchActivity"
+            android:name=".activities.SearchActivity"
             android:theme="@style/Theme.PopcornTime.Search" />
 
         <activity android:name=".activities.TermsActivity" />
@@ -73,17 +74,22 @@
             android:parentActivityName=".activities.MainActivity" />
 
 		<activity
-			android:name="pct.droid.activities.StreamLoadingActivity"
+            android:launchMode="singleTask"
+			android:name=".activities.StreamLoadingActivity"
             android:theme="@style/Theme.PopcornTime.Detail" />
+
 		<activity
-			android:name="pct.droid.activities.VideoPlayerActivity"
+            android:launchMode="singleTask"
+			android:name=".activities.VideoPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
+
         <activity
-            android:name="pct.droid.activities.BeamPlayerActivity"
+            android:name=".activities.BeamPlayerActivity"
             android:theme="@style/Theme.PopcornTime.RemoteControl"
             android:screenOrientation="sensorPortrait" />
+
 		<activity
-			android:name="pct.droid.activities.TrailerPlayerActivity"
+			android:name=".activities.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
         <service android:name=".base.torrent.TorrentService" />

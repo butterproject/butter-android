@@ -17,6 +17,7 @@
 
 package pct.droid.base.torrent;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -52,6 +53,7 @@ import java.util.List;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
+import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -82,6 +84,7 @@ public class TorrentService extends Service {
     private List<Listener> mListener = new ArrayList<>();
 
     private PowerManager.WakeLock mWakeLock;
+    private Class mCurrentActivityClass;
 
     public class ServiceBinder extends Binder {
         public TorrentService getService() {
@@ -131,31 +134,40 @@ public class TorrentService extends Service {
         super.onUnbind(intent);
         Timber.d("onUnbind");
 
-        if(!mInForeground) {
+        if(!mIsStreaming) {
             pause();
+        } else {
+            startForeground();
         }
         mIsBound = false;
 
         return true;
     }
 
+    public void setCurrentActivity(TorrentBaseActivity activity) {
+        mCurrentActivityClass = activity.getClass();
+    }
+
     public void startForeground() {
         Timber.d("startForeground");
         if (mInForeground) return;
 
-        Intent closeBroadcast = new Intent();
-        closeBroadcast.setAction(TorrentBroadcastReceiver.STOP);
-        PendingIntent sendBroadcastIntent = PendingIntent.getBroadcast(this, 0, closeBroadcast, PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent notificationIntent = new Intent(this, mCurrentActivityClass);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notif_logo)
-                .setContentTitle("Popcorn Time - " + getString(R.string.running))
-                .setContentText(getString(R.string.tap_to_close))
+                .setSmallIcon(pct.droid.base.R.drawable.ic_notif_logo)
+                .setContentTitle("Popcorn Time - " + getString(pct.droid.base.R.string.running))
+                .setContentText(getString(R.string.tap_to_resume))
                 .setOngoing(true)
-                .setContentIntent(sendBroadcastIntent)
+                .setContentIntent(pendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE);
 
-        startForeground(mId, builder.build());
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+
+        startForeground(mId, notification);
         mInForeground = true;
     }
 
@@ -170,6 +182,10 @@ public class TorrentService extends Service {
      * and start/resume the torrent session
      */
     private void initialize() {
+        if(mInForeground) {
+            stopForeground();
+        }
+
         Timber.d("initialize");
         if (mThread != null) {
             mHandler.removeCallbacksAndMessages(null);
@@ -239,8 +255,6 @@ public class TorrentService extends Service {
         initialize();
 
         if (mHandler == null || mIsStreaming) return;
-
-        startForeground();
 
         mIsCanceled = false;
         mReady = false;
