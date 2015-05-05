@@ -31,5 +31,6 @@ public class Constants {
     public static final String DISCUSS_URL = "https://discuss.popcorntime.io";
     public static final String TWITTER_URL = "https://twitter.com/PopcornTimeTv";
     public static final String CAST_ID = "887D0748";
+    public static final String UA_VERSION = "0.2.0";
 
 }
