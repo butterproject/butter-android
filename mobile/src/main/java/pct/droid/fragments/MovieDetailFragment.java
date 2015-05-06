@@ -3,9 +3,11 @@ package pct.droid.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -55,6 +57,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     ImageButton mPlayButton;
     @InjectView(R.id.title)
     TextView mTitle;
+    @InjectView(R.id.health)
+    ImageView mHealth;
     @InjectView(R.id.meta)
     TextView mMeta;
     @InjectView(R.id.synopsis)
@@ -231,9 +235,11 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 @Override
                 public void onSelectionChanged(int position, String value) {
                     mSelectedQuality = value;
+                    renderHealth(calculateHealth());
                 }
             });
             mSelectedQuality = qualities[qualities.length - 1];
+            renderHealth(calculateHealth());
             mQuality.setText(mSelectedQuality);
             mQuality.setDefault(qualities.length - 1);
         }
@@ -257,6 +263,53 @@ public class MovieDetailFragment extends BaseDetailFragment {
     public void onDetach() {
         super.onDetach();
         mAttached = false;
+    }
+
+    /*
+        Ported from the desktop version
+        https://git.popcorntime.io/popcorntime/desktop/blob/master/src/app/common.js
+     */
+
+    private int calculateHealth(){
+        Double seeds = Double.valueOf(sMovie.torrents.get(mSelectedQuality).seeds);
+        Double peers = Double.valueOf(sMovie.torrents.get(mSelectedQuality).peers);
+
+        Double ratio;
+        if (peers > 0)
+            ratio = seeds/peers;
+        else
+            ratio = seeds;
+
+        Double normalizedRatio = Math.min(ratio / 5 * 100, 100);
+        Double normalizedSeeds = Math.min(seeds / 30 * 100, 100);
+
+        Double weightedRatio = normalizedRatio * 0.6;
+        Double weightedSeeds = normalizedSeeds * 0.4;
+        Double weightedTotal = weightedRatio + weightedSeeds;
+
+        int scaledTotal = (int) ((weightedTotal * 3) / 100);
+
+        return scaledTotal;
+    }
+
+    private void renderHealth(int health){
+        mHealth.setVisibility(View.VISIBLE);
+        Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_poor, null);
+        switch (health){
+            case 0:
+                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_poor, null);
+                break;
+            case 1:
+                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_medium, null);
+                break;
+            case 2:
+                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_good, null);
+                break;
+            case 3:
+                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_excellent, null);
+                break;
+        }
+        mHealth.setImageDrawable(icon);
     }
 
     @OnClick(R.id.read_more)
