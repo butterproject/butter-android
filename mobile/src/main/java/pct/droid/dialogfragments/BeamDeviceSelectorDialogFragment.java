@@ -64,7 +64,8 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
                                 }
                             }
                     );
-        } else {
+            return builder.create();
+        } else if(beamManager.getConnectedDevice() != null) {
             builder = new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.connected_to) + " " + beamManager.getConnectedDevice().getFriendlyName())
                     .setNeutralButton(R.string.disconnect, new DialogInterface.OnClickListener() {
@@ -73,8 +74,9 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
                             beamManager.disconnect();
                         }
                     });
+            return builder.create();
         }
-        return builder.create();
+        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override
