@@ -48,6 +48,8 @@
     <string name="no_subs_available">No subtitles available</string>
 	<string name="subtitles">Subtitles</string>
 	<string name="quality">Quality</string>
+	<string name="download">Download</string>
+	<string name="error_no_torrent_app">No torrent app, please download one</string>
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
@@ -55,6 +57,7 @@
     <string name="continuing">Continuing</string>
     <string name="ended">Ended</string>
     <string name="aired">Aired: %s</string>
+
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
