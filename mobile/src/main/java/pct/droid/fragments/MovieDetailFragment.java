@@ -3,9 +3,12 @@ package pct.droid.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Layout;
@@ -18,10 +21,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -73,6 +79,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
+    @InjectView(R.id.download)
+    Button mDownload;
     @Optional
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;
@@ -339,6 +347,29 @@ public class MovieDetailFragment extends BaseDetailFragment {
         String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
         StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
+    }
+
+    @OnClick(R.id.download)
+    public void openTorrent(){
+        List<Intent> filteredShareIntents = new ArrayList<>();
+        Intent torrentIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(sMovie.torrents.get(mSelectedQuality).url));
+        List<ResolveInfo> resolveInfoList = getActivity().getPackageManager().queryIntentActivities(torrentIntent, 0);
+
+        for (ResolveInfo info : resolveInfoList) {
+            if (!info.activityInfo.packageName.contains("pct.droid")) {     //Black listing the app its self
+                Intent targetedShare = new Intent(Intent.ACTION_VIEW, Uri.parse(sMovie.torrents.get(mSelectedQuality).url));
+                targetedShare.setPackage(info.activityInfo.packageName);
+                filteredShareIntents.add(targetedShare);
+            }
+        }
+
+        if (filteredShareIntents.size() > 0){
+            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), "");
+            filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[] {}));
+            startActivity(filteredIntent);
+        } else {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_no_torrent_app), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void onSubtitleLanguageSelected(String language) {
