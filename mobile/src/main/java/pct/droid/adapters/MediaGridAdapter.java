@@ -295,9 +295,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             src.recycle();
 
             Paint paint = new Paint();
-            float gradientHeight = h / 4f;
-            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h,
-                    0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.CLAMP);
+            float gradientHeight = h / 2f;
+            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h, 0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.CLAMP);
             paint.setShader(shader);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
             canvas.drawRect(0, h - gradientHeight, w, h, paint);
