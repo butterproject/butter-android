@@ -21,8 +21,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -31,16 +35,20 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -102,6 +110,9 @@ public class EpisodeDialogFragment extends DialogFragment {
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
+    @InjectView(R.id.download)
+    Button mDownload;
+
 
     public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
@@ -177,7 +188,8 @@ public class EpisodeDialogFragment extends DialogFragment {
             public void run() {
                 try {
                     dismiss();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }, ANIM_SPEED);
     }
@@ -373,6 +385,29 @@ public class EpisodeDialogFragment extends DialogFragment {
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
         StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
+    }
+
+    @OnClick(R.id.download)
+    public void openTorrent() {
+        List<Intent> filteredShareIntents = new ArrayList<>();
+        Intent torrentIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mEpisode.torrents.get(mSelectedQuality).url));
+        List<ResolveInfo> resolveInfoList = getActivity().getPackageManager().queryIntentActivities(torrentIntent, 0);
+
+        for (ResolveInfo info : resolveInfoList) {
+            if (!info.activityInfo.packageName.contains("pct.droid")) {     //Black listing the app its self
+                Intent targetedShare = new Intent(Intent.ACTION_VIEW, Uri.parse(mEpisode.torrents.get(mSelectedQuality).url));
+                targetedShare.setPackage(info.activityInfo.packageName);
+                filteredShareIntents.add(targetedShare);
+            }
+        }
+
+        if (filteredShareIntents.size() > 0) {
+            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), "");
+            filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[]{}));
+            startActivity(filteredIntent);
+        } else {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_no_torrent_app), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.placeholder)

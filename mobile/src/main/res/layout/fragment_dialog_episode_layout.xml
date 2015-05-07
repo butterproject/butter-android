@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Popcorn Time.
   ~
   ~ Popcorn Time is free software: you can redistribute it and/or modify
@@ -21,132 +20,147 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <pct.droid.widget.BottomSheetScrollView
         android:id="@+id/scrollview"
-        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:scrollbars="none">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <View
                 android:id="@+id/placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
             <View
                 android:id="@+id/top"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
                 android:background="@drawable/base_gradient" />
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/bg"
-                android:clipChildren="true">
+                android:clipChildren="true"
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/detail_vertical_offset">
+
                     <RelativeLayout
                         android:id="@+id/header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/overlay"
                         android:clipChildren="true">
+
                         <ImageView
                             android:id="@+id/header_image"
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
-                            android:scaleType="centerCrop"
-                            android:contentDescription="@string/app_name" />
+                            android:contentDescription="@string/app_name"
+                            android:scaleType="centerCrop" />
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
                             android:alpha="0.7"
                             android:background="@drawable/base_gradient" />
+
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_marginLeft="@dimen/detail_horizontal_offset"
                             android:layout_marginStart="@dimen/detail_horizontal_offset"
+                            android:orientation="vertical"
                             android:paddingBottom="@dimen/detail_vertical_offset">
+
                             <com.devspark.robototextview.widget.RobotoTextView
                                 android:id="@+id/info"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                tools:text="S01E02"
+                                android:textAllCaps="true"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/detail_meta_text_size"
-                                android:textAllCaps="true"
-                                app:typeface="roboto_medium" />
+                                app:typeface="roboto_medium"
+                                tools:text="S01E02" />
+
                             <com.devspark.robototextview.widget.RobotoTextView
                                 android:id="@+id/title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="75dp"
                                 android:layout_marginEnd="75dp"
-                                tools:text="Show Title"
+                                android:layout_marginRight="75dp"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/detail_title_text_size"
-                                app:typeface="roboto_medium" />
+                                app:typeface="roboto_medium"
+                                tools:text="Show Title" />
                         </LinearLayout>
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/header"
-                        android:paddingTop="@dimen/detail_vertical_offset"
                         android:gravity="center_vertical"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/detail_vertical_offset">
+
                         <com.devspark.robototextview.widget.RobotoTextView
                             android:id="@+id/aired"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/detail_meta_margin_top"
                             android:layout_marginBottom="12dp"
+                            android:layout_marginTop="@dimen/detail_meta_margin_top"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/detail_horizontal_offset"
                             android:paddingLeft="@dimen/detail_horizontal_offset"
                             android:paddingRight="@dimen/detail_horizontal_offset"
                             android:paddingStart="@dimen/detail_horizontal_offset"
-                            android:paddingEnd="@dimen/detail_horizontal_offset"
-                            android:gravity="center_vertical"
-                            tools:text="Aired: 12 dec 2014"
+                            android:textColor="@color/secondary_text_color"
                             android:textSize="@dimen/detail_meta_text_size"
-                            android:textColor="@color/secondary_text_color" />
+                            tools:text="Aired: 12 dec 2014" />
+
                         <com.devspark.robototextview.widget.RobotoTextView
                             android:id="@+id/synopsis"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/aired"
+                            android:background="@drawable/selectable_background_list"
+                            android:ellipsize="end"
+                            android:maxLines="5"
+                            android:paddingEnd="@dimen/detail_horizontal_offset"
                             android:paddingLeft="@dimen/detail_horizontal_offset"
                             android:paddingRight="@dimen/detail_horizontal_offset"
                             android:paddingStart="@dimen/detail_horizontal_offset"
-                            android:paddingEnd="@dimen/detail_horizontal_offset"
-                            android:maxLines="5"
-                            android:ellipsize="end"
+                            android:textColor="@color/text_color"
                             android:textDirection="locale"
                             android:textSize="@dimen/detail_desc_text_size"
-                            android:textColor="@color/text_color"
-                            tools:text="Lorem ipsum dolor sit amet."
-                            android:background="@drawable/selectable_background_list" />
+                            tools:text="Lorem ipsum dolor sit amet." />
                     </RelativeLayout>
+
                     <ImageButton
                         android:id="@+id/play_button"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="16dp"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:layout_marginTop="152dp"
-                        android:src="@drawable/ic_av_play_button"
                         android:background="@drawable/play_button_circle"
-                        android:elevation="5dp" />
+                        android:elevation="5dp"
+                        android:src="@drawable/ic_av_play_button" />
                 </RelativeLayout>
 
                 <View
@@ -160,8 +174,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     app:optionIcon="@drawable/ic_av_subs"
-                    app:optionText="@string/subtitles"
-                    />
+                    app:optionText="@string/subtitles" />
+
                 <View
                     android:id="@+id/option_div_1"
                     android:layout_width="match_parent"
@@ -175,8 +189,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     app:optionIcon="@drawable/ic_action_quality"
-                    app:optionText="@string/quality"
-                    />
+                    app:optionText="@string/quality" />
+
+                <View
+                    android:id="@+id/end_div"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/quality"
+                    android:background="@color/div_white" />
+
+                <com.devspark.robototextview.widget.RobotoButton
+                    android:id="@+id/download"
+                    style="@style/DetailButton.PopcornTime"
+                    android:layout_below="@+id/end_div"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/download"
+                    app:typeface="roboto_medium" />
             </LinearLayout>
         </LinearLayout>
     </pct.droid.widget.BottomSheetScrollView>
