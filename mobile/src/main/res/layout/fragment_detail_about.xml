@@ -82,6 +82,18 @@
             android:ellipsize="end"
             android:textSize="@dimen/detail_desc_text_size"
             android:textColor="@color/text_color" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/health"
+            android:src="@drawable/ic_health_excellent"
+            android:maxHeight="20dp"
+            android:maxWidth="20dp"
+            android:layout_alignBottom="@+id/rating"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <LinearLayout
