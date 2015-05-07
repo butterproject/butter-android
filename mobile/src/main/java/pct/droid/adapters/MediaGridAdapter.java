@@ -18,6 +18,13 @@
 package pct.droid.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Shader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +35,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
@@ -101,7 +109,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             videoViewHolder.title.setText(item.title);
             videoViewHolder.year.setText(item.year);
 
-            videoViewHolder.gradient.setVisibility(View.GONE);
             videoViewHolder.coverImage.setVisibility(View.GONE);
             videoViewHolder.title.setVisibility(View.GONE);
             videoViewHolder.year.setVisibility(View.GONE);
@@ -109,11 +116,11 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (item.image != null && !item.image.equals("")) {
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                         .resize(mItemWidth, mItemHeight)
+                        .transform(DrawGradient.INSTANCE)
                         .into(videoViewHolder.coverImage, new Callback() {
                             @Override
                             public void onSuccess() {
                                 overviewItem.isImageError = false;
-                                AnimUtils.fadeIn(videoViewHolder.gradient);
                                 AnimUtils.fadeIn(videoViewHolder.coverImage);
                                 AnimUtils.fadeIn(videoViewHolder.title);
                                 AnimUtils.fadeIn(videoViewHolder.year);
@@ -214,8 +221,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView title;
         @InjectView(R.id.year)
         TextView year;
-        @InjectView(R.id.gradient)
-        View gradient;
 
         private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
@@ -275,4 +280,33 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    private static class DrawGradient implements Transformation {
+        static Transformation INSTANCE = new DrawGradient();
+
+        @Override
+        public Bitmap transform(Bitmap src) {
+            // Code borrowed from https://stackoverflow.com/questions/23657811/how-to-mask-bitmap-with-lineargradient-shader-properly
+            int w = src.getWidth();
+            int h = src.getHeight();
+            Bitmap overlay = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(overlay);
+
+            canvas.drawBitmap(src, 0, 0, null);
+            src.recycle();
+
+            Paint paint = new Paint();
+            float gradientHeight = h / 4f;
+            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h,
+                    0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+            canvas.drawRect(0, h - gradientHeight, w, h, paint);
+            return overlay;
+        }
+
+        @Override
+        public String key() {
+            return "gradient()";
+        }
+    }
 }
