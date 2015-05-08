@@ -41,7 +41,6 @@ import com.squareup.okhttp.Response;
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.IVideoPlayer;
 import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.LibVlcException;
 import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.WeakHandler;
 
@@ -144,13 +143,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
 
 
-        try {
-            mLibVLC = VLCInstance.getLibVlcInstance();
-            mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
-        } catch (LibVlcException e) {
-            Timber.d("LibVLC initialisation failed");
-            return;
-        }
+        mLibVLC = VLCInstance.get();
+        mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
 
         mVideoSurfaceHolder = getVideoSurface().getHolder();
         // Comment Chroma code out, experimental: will not work on all devices. To be added in settings later.
@@ -168,7 +162,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         em.addHandler(mVlcEventHandler);
 
         Timber.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
-        mLibVLC.eventVideoPlayerActivityCreated(true);
 
         PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
 
@@ -219,10 +212,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         EventHandler em = EventHandler.getInstance();
         em.removeHandler(mVlcEventHandler);
-
-        // MediaCodec opaque direct rendering should not be used anymore since there is no surface to attach.
-
-        mLibVLC.eventVideoPlayerActivityCreated(false);
 
         // HW acceleration was temporarily disabled because of an error, restore the previous value.
         if (mDisabledHardwareAcceleration)

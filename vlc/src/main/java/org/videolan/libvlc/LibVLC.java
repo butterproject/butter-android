@@ -57,11 +57,10 @@ public class LibVLC {
 
     public final static int MEDIA_NO_VIDEO   = 0x01;
     public final static int MEDIA_NO_HWACCEL = 0x02;
+    public final static int MEDIA_PAUSED = 0x4;
 
     private static final String DEFAULT_CODEC_LIST = "mediacodec,iomx,all";
     private static final boolean HAS_WINDOW_VOUT = LibVlcUtil.isGingerbreadOrLater();
-
-    private static LibVLC sInstance;
 
     /** libVLC instance C pointer */
     private long mLibVlcInstance = 0; // Read-only, reserved for JNI
@@ -87,6 +86,7 @@ public class LibVLC {
     private boolean frameSkip = false;
     private int networkCaching = 0;
     private boolean httpReconnect = false;
+    private boolean hdmiAudioEnabled = false;
 
     /** Path of application-specific cache */
     private String mCachePath = "";
@@ -102,8 +102,6 @@ public class LibVLC {
 
     public native void attachSubtitlesSurface(Surface surface);
     public native void detachSubtitlesSurface();
-
-    public native void eventVideoPlayerActivityCreated(boolean created);
 
     /* Load library before object instantiation */
     static {
@@ -155,38 +153,10 @@ public class LibVLC {
     }
 
     /**
-     * Singleton constructor of libVLC Without surface and vout to create the
-     * thumbnail and get information e.g. on the MediaLibraryActivity
-     *
-     * @return libVLC instance
-     */
-    public static LibVLC getInstance() {
-        synchronized (LibVLC.class) {
-            if (sInstance == null) {
-                /* First call */
-                sInstance = new LibVLC();
-            }
-            return sInstance;
-        }
-    }
-
-    /**
-     * Return an existing instance of libVLC Call it when it is NOT important
-     * that this fails
-     *
-     * @return libVLC instance OR null
-     */
-    public static LibVLC getExistingInstance() {
-        synchronized (LibVLC.class) {
-            return sInstance;
-        }
-    }
-
-    /**
      * Constructor
      * It is private because this class is a singleton.
      */
-    private LibVLC() {
+    public LibVLC() {
     }
 
     /**
@@ -207,17 +177,6 @@ public class LibVLC {
      * @param f the surface to draw
      */
     public native void setSurface(Surface f);
-
-    public static synchronized void restart(Context context) {
-        if (sInstance != null) {
-            try {
-                sInstance.destroy();
-                sInstance.init(context);
-            } catch (LibVlcException lve) {
-                Log.e(TAG, "Unable to reinit libvlc: " + lve);
-            }
-        }
-    }
 
     /**
      * those get/is* are called from native code to get settings values.
@@ -307,6 +266,16 @@ public class LibVLC {
     }
 
     public String[] getMediaOptions(boolean noHardwareAcceleration, boolean noVideo) {
+        final int flag = (noHardwareAcceleration ? MEDIA_NO_HWACCEL : 0) |
+                         (noVideo ? MEDIA_NO_VIDEO : 0);
+        return getMediaOptions(flag);
+    }
+
+    public String[] getMediaOptions(int flags) {
+        boolean noHardwareAcceleration = (flags & MEDIA_NO_HWACCEL) != 0;
+        boolean noVideo = (flags & MEDIA_NO_VIDEO) != 0;
+        final boolean paused = (flags & MEDIA_PAUSED) != 0;
+
         if (this.devHardwareDecoder != DEV_HW_DECODER_AUTOMATIC)
             noHardwareAcceleration = noVideo = false;
         else if (!noHardwareAcceleration)
@@ -330,14 +299,9 @@ public class LibVLC {
         }
         if (noVideo)
             options.add(":no-video");
-
+        if (paused)
+            options.add(":start-paused");
         return options.toArray(new String[options.size()]);
-    }
-
-    public String[] getMediaOptions(int flags) {
-        final boolean noHardwareAcceleration = (flags & MEDIA_NO_HWACCEL) != 0;
-        final boolean noVideo = (flags & MEDIA_NO_VIDEO) != 0;
-        return getMediaOptions(noHardwareAcceleration, noVideo); 
     }
 
     public String getSubtitlesEncoding() {
@@ -353,10 +317,11 @@ public class LibVLC {
     }
 
     public void setAout(int aout) {
-        if (aout == AOUT_OPENSLES && LibVlcUtil.isICSOrLater())
-            this.aout = AOUT_OPENSLES;
-        else
-            this.aout = AOUT_AUDIOTRACK;
+        final HWDecoderUtil.AudioOutput hwaout = HWDecoderUtil.getAudioOutputFromDevice();
+        if (hwaout == HWDecoderUtil.AudioOutput.AUDIOTRACK || hwaout == HWDecoderUtil.AudioOutput.OPENSLES)
+            aout = hwaout == HWDecoderUtil.AudioOutput.OPENSLES ? AOUT_OPENSLES : AOUT_AUDIOTRACK;
+
+        this.aout = aout == AOUT_OPENSLES ? AOUT_OPENSLES : AOUT_AUDIOTRACK;
     }
 
     public int getVout() {
@@ -370,6 +335,14 @@ public class LibVLC {
             this.vout = vout;
         if (this.vout == VOUT_ANDROID_SURFACE && HAS_WINDOW_VOUT)
             this.vout = VOUT_ANDROID_WINDOW;
+    }
+
+    public void setHdmiAudioEnabled(boolean enable) {
+        this.hdmiAudioEnabled = enable;
+    }
+
+    public boolean isHdmiAudioEnabled() {
+        return this.hdmiAudioEnabled;
     }
 
     public boolean useCompatSurface() {
@@ -660,6 +633,8 @@ public class LibVLC {
 
     public native int getVideoTracksCount();
 
+    public native int setVideoTrack(int index);
+
     public native int addSubtitleTrack(String path);
 
     public native Map<Integer,String> getSpuTrackDescription();
@@ -730,6 +705,12 @@ public class LibVLC {
     public native int getTitle();
     public native void setTitle(int title);
     public native int getChapterCountForTitle(int title);
+    public native int getChapterCount();
+    public native int getChapter();
+    public native String getChapterDescription(int title);
+    public native int previousChapter();
+    public native int nextChapter();
+    public native void setChapter(int chapter);
     public native int getTitleCount();
     public native void playerNavigate(int navigate);
 
