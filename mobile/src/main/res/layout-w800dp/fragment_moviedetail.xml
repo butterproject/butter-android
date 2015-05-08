@@ -48,16 +48,32 @@
                     tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras leo dolor, condimentum."
                     app:typeface="roboto_medium"
                     />
-                <RatingBar
-                    android:id="@+id/rating"
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/detail_rating_margin_top"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:isIndicator="true"
-                    android:max="10"
-                    android:progress="5"/>
+                    android:layout_marginTop="@dimen/detail_rating_margin_top">
+                    <RatingBar
+                        android:id="@+id/rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:isIndicator="true"
+                        android:max="10"
+                        android:progress="5"/>
+                    <pct.droid.widget.SquareImageView
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:maxWidth="20dp"
+                        android:id="@+id/health"
+                        android:src="@drawable/ic_health_unknown"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/meta"
                     android:layout_width="wrap_content"
