@@ -250,32 +250,36 @@ public class EZTVProvider extends MediaProvider {
 
                 ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
                 for (LinkedTreeMap<String, Object> episode : episodes) {
-                    Episode episodeObject = new Episode(sMediaProvider, sSubsProvider, sMetaProvider);
-                    LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
-                            (LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
-                    for (String key : torrents.keySet()) {
-                        if (!key.equals("0")) {
-                            LinkedTreeMap<String, Object> item = torrents.get(key);
-                            Media.Torrent torrent = new Media.Torrent();
-                            torrent.url = item.get("url").toString();
-                            torrent.seeds = ((Double) item.get("seeds")).intValue();
-                            torrent.peers = ((Double) item.get("peers")).intValue();
-                            episodeObject.torrents.put(key, torrent);
+                    try {
+                        Episode episodeObject = new Episode(sMediaProvider, sSubsProvider, sMetaProvider);
+                        LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
+                                (LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
+                        for (String key : torrents.keySet()) {
+                            if (!key.equals("0")) {
+                                LinkedTreeMap<String, Object> item = torrents.get(key);
+                                Media.Torrent torrent = new Media.Torrent();
+                                torrent.url = item.get("url").toString();
+                                torrent.seeds = ((Double) item.get("seeds")).intValue();
+                                torrent.peers = ((Double) item.get("peers")).intValue();
+                                episodeObject.torrents.put(key, torrent);
+                            }
                         }
+
+                        episodeObject.showName = show.title;
+                        episodeObject.dateBased = (Boolean) episode.get("date_based");
+                        episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
+                        episodeObject.title = (String) episode.get("title");
+                        episodeObject.overview = (String) episode.get("overview");
+                        episodeObject.season = ((Double) episode.get("season")).intValue();
+                        episodeObject.episode = ((Double) episode.get("episode")).intValue();
+                        episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
+                        episodeObject.imdbId = show.imdbId;
+                        episodeObject.image = episodeObject.fullImage = episodeObject.headerImage = show.headerImage;
+
+                        show.episodes.add(episodeObject);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    episodeObject.showName = show.title;
-                    episodeObject.dateBased = (Boolean) episode.get("date_based");
-                    episodeObject.aired = ((Double) episode.get("first_aired")).intValue();
-                    episodeObject.title = (String) episode.get("title");
-                    episodeObject.overview = (String) episode.get("overview");
-                    episodeObject.season = ((Double) episode.get("season")).intValue();
-                    episodeObject.episode = ((Double) episode.get("episode")).intValue();
-                    episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
-                    episodeObject.imdbId = show.imdbId;
-                    episodeObject.image = episodeObject.fullImage = episodeObject.headerImage = show.headerImage;
-
-                    show.episodes.add(episodeObject);
                 }
 
                 list.add(show);

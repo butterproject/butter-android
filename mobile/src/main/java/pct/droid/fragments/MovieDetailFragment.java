@@ -68,14 +68,14 @@ public class MovieDetailFragment extends BaseDetailFragment {
     Button mReadMore;
     @InjectView(R.id.watch_trailer)
     Button mWatchTrailer;
+    @InjectView(R.id.magnet)
+    ImageButton mOpenMagnet;
     @InjectView(R.id.rating)
     RatingBar mRating;
     @InjectView(R.id.subtitles)
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
-    @InjectView(R.id.magnet)
-    OptionSelector mOpenMagnet;
     @Optional
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;

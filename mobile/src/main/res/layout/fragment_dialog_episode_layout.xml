@@ -123,13 +123,27 @@
                             android:layout_marginBottom="12dp"
                             android:layout_marginTop="@dimen/detail_meta_margin_top"
                             android:gravity="center_vertical"
-                            android:paddingEnd="@dimen/detail_horizontal_offset"
-                            android:paddingLeft="@dimen/detail_horizontal_offset"
-                            android:paddingRight="@dimen/detail_horizontal_offset"
                             android:paddingStart="@dimen/detail_horizontal_offset"
+                            android:paddingLeft="@dimen/detail_horizontal_offset"
                             android:textColor="@color/secondary_text_color"
                             android:textSize="@dimen/detail_meta_text_size"
                             tools:text="Aired: 12 dec 2014" />
+
+                        <ImageButton
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@id/aired"
+                            android:layout_alignBottom="@id/aired"
+                            android:layout_toEndOf="@id/aired"
+                            android:layout_toRightOf="@id/aired"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginStart="6dp"
+                            android:id="@+id/magnet"
+                            android:src="@drawable/ic_action_magnet"
+                            android:background="@drawable/selectable_background"
+                            android:visibility="visible"
+                            tools:visibility="visible"
+                            android:scaleType="fitCenter" />
 
                         <com.devspark.robototextview.widget.RobotoTextView
                             android:id="@+id/synopsis"
@@ -190,21 +204,6 @@
                     android:layout_height="56dp"
                     app:optionIcon="@drawable/ic_action_quality"
                     app:optionText="@string/quality" />
-
-                <View
-                    android:id="@+id/option_div_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-                    android:layout_marginStart="@dimen/optionselector_text_margin_start"
-                    android:background="@color/div_white" />
-
-                <pct.droid.widget.OptionSelector
-                    android:id="@+id/magnet"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    app:optionIcon="@drawable/ic_action_magnet"
-                    app:optionText="@string/open_magnet" />
             </LinearLayout>
         </LinearLayout>
     </pct.droid.widget.BottomSheetScrollView>
