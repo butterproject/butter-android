@@ -44,15 +44,19 @@ public class OptionDialogFragment extends DialogFragment {
     }
 
     public static void show(FragmentManager fm, String title, String message, String positiveButton, String negativeButton, Listener listener) {
-        OptionDialogFragment dialogFragment = new OptionDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(TITLE, title);
-        args.putString(MESSAGE, message);
-        args.putString(POS_BUT, positiveButton);
-        args.putString(NEG_BUT, negativeButton);
-        dialogFragment.setListener(listener);
-        dialogFragment.setArguments(args);
-        dialogFragment.show(fm, "overlay_fragment");
+        try {
+            OptionDialogFragment dialogFragment = new OptionDialogFragment();
+            Bundle args = new Bundle();
+            args.putString(TITLE, title);
+            args.putString(MESSAGE, message);
+            args.putString(POS_BUT, positiveButton);
+            args.putString(NEG_BUT, negativeButton);
+            dialogFragment.setListener(listener);
+            dialogFragment.setArguments(args);
+            dialogFragment.show(fm, "overlay_fragment");
+        } catch (IllegalStateException e) {
+            // Eat exception
+        }
     }
 
     public static void show(Context context, FragmentManager fm, int titleRes, int messageRes, int posButtonRes, int negButtonRes, Listener listener) {
