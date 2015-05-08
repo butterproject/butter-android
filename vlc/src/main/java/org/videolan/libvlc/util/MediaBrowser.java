@@ -20,8 +20,11 @@
 
 package org.videolan.libvlc.util;
 
+import android.os.Build;
+
 import java.util.ArrayList;
 
+import org.videolan.vlc.BuildConfig;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaDiscoverer;
@@ -31,11 +34,12 @@ import org.videolan.libvlc.VLCObject;
 public class MediaBrowser {
     private static final String TAG = "LibVLC/util/MediaBrowser";
 
-    private static final String[] DISCOVERER_LIST = {
+    private static final String[] DISCOVERER_LIST = BuildConfig.DEBUG ? new String[]{
         "dsm", // Netbios discovery via libdsm
+        "upnp",
         // "bonjour",
         //  "mdns"
-    };
+    } : new String[]{"upnp"} ; //Only UPnP for release
 
     private LibVLC mLibVlc;
     private ArrayList<MediaDiscoverer> mMediaDiscoverers = new ArrayList<MediaDiscoverer>();
@@ -71,6 +75,7 @@ public class MediaBrowser {
     public MediaBrowser(LibVLC libvlc, EventListener listener) {
         mLibVlc = libvlc; // XXX mLibVlc.retain();
         mEventListener = listener;
+
     }
 
     private synchronized void reset() {
@@ -92,6 +97,15 @@ public class MediaBrowser {
      */
     public synchronized void release() {
         reset();
+    }
+
+    /**
+     * Reset this media browser and register a new EventListener
+     * @param eventListener new EventListener for this browser
+     */
+    public synchronized void changeEventListener(EventListener eventListener){
+        reset();
+        mEventListener = eventListener;
     }
 
     private void startMediaDiscoverer(String discovererName) {
