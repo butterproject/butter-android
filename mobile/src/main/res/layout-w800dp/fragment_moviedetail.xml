@@ -72,6 +72,17 @@
                         android:id="@+id/health"
                         android:src="@drawable/ic_health_unknown"
                         tools:visibility="visible" />
+                    <ImageButton
+                        android:layout_width="15dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginStart="6dp"
+                        android:id="@+id/magnet"
+                        android:src="@drawable/ic_action_magnet"
+                        android:background="@drawable/selectable_background"
+                        android:visibility="visible"
+                        tools:visibility="visible"
+                        android:scaleType="fitCenter" />
                 </LinearLayout>
 
                 <com.devspark.robototextview.widget.RobotoTextView
@@ -180,28 +191,9 @@
                 app:optionIcon="@drawable/ic_action_quality"
                 app:optionText="@string/quality"
                 />
-
-            <View
-                android:id="@+id/option_div_2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-                android:layout_marginStart="@dimen/optionselector_text_margin_start"
-                android:layout_below="@id/quality"
-                android:background="@color/div_white" />
-
-            <pct.droid.widget.OptionSelector
-                android:id="@+id/magnet"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_below="@id/option_div_2"
-                app:optionIcon="@drawable/ic_action_magnet"
-                app:optionText="@string/open_magnet" />
         </RelativeLayout>
         
     </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"

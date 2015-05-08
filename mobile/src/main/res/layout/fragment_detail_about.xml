@@ -66,13 +66,29 @@
             android:layout_alignBottom="@id/rating"
             android:layout_toEndOf="@id/rating"
             android:layout_toRightOf="@id/rating"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:maxWidth="20dp"
             android:id="@+id/health"
             android:src="@drawable/ic_health_unknown"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:visibility="visible" />
+
+        <ImageButton
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/health"
+            android:layout_alignBottom="@id/health"
+            android:layout_toEndOf="@id/health"
+            android:layout_toRightOf="@id/health"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:id="@+id/magnet"
+            android:src="@drawable/ic_action_magnet"
+            android:background="@drawable/selectable_background"
+            android:visibility="visible"
+            tools:visibility="visible"
+            android:scaleType="fitCenter" />
 
         <com.devspark.robototextview.widget.RobotoTextView
             android:id="@+id/meta"

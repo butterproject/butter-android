@@ -44,10 +44,8 @@ public class SquareImageView extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if(widthMeasureSpec < heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-        }
         super.onMeasure(heightMeasureSpec, heightMeasureSpec);
+        // This view is specifically for the magnet button, it is made square by the height. On purpose.
     }
 
 }

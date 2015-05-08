@@ -112,4 +112,6 @@
     <string name="confirm_tv">Please confirm the connection on your TV</string>
     <string name="enter_pairing_code">Enter Pairing Code on TV</string>
 
+    <string name="open_with">Open with</string>
+
 </resources>

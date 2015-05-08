@@ -20,6 +20,7 @@ package pct.droid.base.torrent;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Parcelable;
@@ -55,7 +56,7 @@ public class Magnet {
 
         List<Intent> filteredShareIntents = new ArrayList<>();
         Intent torrentIntent = new Intent(Intent.ACTION_VIEW, uri);
-        List<ResolveInfo> resolveInfoList = mContext.getPackageManager().queryIntentActivities(torrentIntent, 0);
+        List<ResolveInfo> resolveInfoList = mContext.getPackageManager().queryIntentActivities(torrentIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
         for (ResolveInfo info : resolveInfoList) {
             if (!info.activityInfo.packageName.contains("pct.droid")) {     // Black listing the app its self
@@ -66,7 +67,7 @@ public class Magnet {
         }
 
         if (filteredShareIntents.size() > 0){
-            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), "");
+            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), mContext.getString(R.string.open_with));
             filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[filteredShareIntents.size()]));
             mOpenIntent = filteredIntent;
             mCanOpen = true;

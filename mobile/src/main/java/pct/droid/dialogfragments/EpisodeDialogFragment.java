@@ -55,6 +55,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.base.preferences.Prefs;
@@ -113,7 +114,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     @InjectView(R.id.quality)
     OptionSelector mQuality;
     @InjectView(R.id.magnet)
-    OptionSelector mOpenMagnet;
+    @Optional
+    ImageButton mOpenMagnet;
 
     public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
@@ -127,8 +129,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout
-                .fragment_dialog_episode, container, false);
+        View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout.fragment_dialog_episode, container, false);
         ButterKnife.inject(this, v);
 
         if (!VersionUtils.isJellyBean()) {
@@ -372,6 +373,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     private void updateMagnet() {
+        if(mOpenMagnet == null) return;
+
         if(mMagnet == null) {
             mMagnet = new Magnet(mActivity, mEpisode.torrents.get(mSelectedQuality).url);
         }
@@ -403,6 +406,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 
+    @Optional
     @OnClick(R.id.magnet)
     public void openMagnet() {
         mMagnet.open(mActivity);
