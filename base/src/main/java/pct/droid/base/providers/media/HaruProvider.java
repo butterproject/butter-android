@@ -287,7 +287,7 @@ public class HaruProvider extends MediaProvider {
                     if (matcher.find()) {
                         String quality = matcher.group(1);
                         if (!movie.torrents.containsKey(quality)) {
-                            movie.torrents.put(quality, new Media.Torrent(item.get("magnet").toString(), "0", "0", null));
+                            movie.torrents.put(quality, new Media.Torrent(item.get("magnet").toString(), 0, 0, null));
                         }
                     }
                 }
@@ -334,7 +334,7 @@ public class HaruProvider extends MediaProvider {
                             }
 
                             if (!episode.torrents.containsKey(quality)) {
-                                episode.torrents.put(quality, new Media.Torrent(item.get("magnet").toString(), "0", "0", null));
+                                episode.torrents.put(quality, new Media.Torrent(item.get("magnet").toString(), 0, 0, null));
                             }
 
                             episodeMap.put(episode.episode, episode);

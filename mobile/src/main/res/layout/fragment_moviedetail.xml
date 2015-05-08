@@ -28,7 +28,7 @@
         android:alpha="0.7"
         android:background="@drawable/base_gradient" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,14 +51,12 @@
             android:id="@+id/main_div"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/about_fragment"
             android:background="@color/div_white" />
 
         <pct.droid.widget.OptionSelector
             android:id="@+id/subtitles"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_below="@id/main_div"
             app:optionIcon="@drawable/ic_av_subs"
             app:optionText="@string/subtitles" />
 
@@ -66,7 +64,6 @@
             android:id="@+id/option_div_1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/subtitles"
             android:layout_marginLeft="@dimen/optionselector_text_margin_start"
             android:layout_marginStart="@dimen/optionselector_text_margin_start"
             android:background="@color/div_white" />
@@ -75,28 +72,25 @@
             android:id="@+id/quality"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_below="@id/option_div_1"
             app:optionIcon="@drawable/ic_action_quality"
             app:optionText="@string/quality" />
 
         <View
-            android:id="@+id/end_div"
+            android:id="@+id/option_div_2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/quality"
+            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+            android:layout_marginStart="@dimen/optionselector_text_margin_start"
             android:background="@color/div_white" />
 
-        <com.devspark.robototextview.widget.RobotoButton
-            android:id="@+id/download"
-            style="@style/DetailButton.PopcornTime"
-            android:layout_below="@+id/end_div"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/download"
-            app:typeface="roboto_medium" />
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/magnet"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:optionIcon="@drawable/ic_action_magnet"
+            app:optionText="@string/open_magnet" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/play_button"

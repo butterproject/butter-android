@@ -192,22 +192,19 @@
                     app:optionText="@string/quality" />
 
                 <View
-                    android:id="@+id/end_div"
+                    android:id="@+id/option_div_2"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/quality"
+                    android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+                    android:layout_marginStart="@dimen/optionselector_text_margin_start"
                     android:background="@color/div_white" />
 
-                <com.devspark.robototextview.widget.RobotoButton
-                    android:id="@+id/download"
-                    style="@style/DetailButton.PopcornTime"
-                    android:layout_below="@+id/end_div"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/download"
-                    app:typeface="roboto_medium" />
+                <pct.droid.widget.OptionSelector
+                    android:id="@+id/magnet"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    app:optionIcon="@drawable/ic_action_magnet"
+                    app:optionText="@string/open_magnet" />
             </LinearLayout>
         </LinearLayout>
     </pct.droid.widget.BottomSheetScrollView>

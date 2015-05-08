@@ -258,8 +258,8 @@ public class EZTVProvider extends MediaProvider {
                             LinkedTreeMap<String, Object> item = torrents.get(key);
                             Media.Torrent torrent = new Media.Torrent();
                             torrent.url = item.get("url").toString();
-                            torrent.seeds = item.get("seeds").toString();
-                            torrent.peers = item.get("peers").toString();
+                            torrent.seeds = ((Double) item.get("seeds")).intValue();
+                            torrent.peers = ((Double) item.get("peers")).intValue();
                             episodeObject.torrents.put(key, torrent);
                         }
                     }

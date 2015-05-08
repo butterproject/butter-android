@@ -3,14 +3,9 @@ package pct.droid.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,13 +16,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,7 +33,9 @@ import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.Magnet;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentHealth;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -58,6 +52,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
     private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Boolean mAttached = false;
+    private Magnet mMagnet;
 
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
@@ -79,8 +74,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
-    @InjectView(R.id.download)
-    Button mDownload;
+    @InjectView(R.id.magnet)
+    OptionSelector mOpenMagnet;
     @Optional
     @InjectView(R.id.cover_image)
     ImageView mCoverImage;
@@ -243,13 +238,15 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 @Override
                 public void onSelectionChanged(int position, String value) {
                     mSelectedQuality = value;
-                    renderHealth(calculateHealth());
+                    renderHealth();
+                    updateMagnet();
                 }
             });
             mSelectedQuality = qualities[qualities.length - 1];
-            renderHealth(calculateHealth());
             mQuality.setText(mSelectedQuality);
             mQuality.setDefault(qualities.length - 1);
+            renderHealth();
+            updateMagnet();
         }
 
         if (mCoverImage != null) {
@@ -273,51 +270,26 @@ public class MovieDetailFragment extends BaseDetailFragment {
         mAttached = false;
     }
 
-    /*
-        Ported from the desktop version
-        https://git.popcorntime.io/popcorntime/desktop/blob/master/src/app/common.js
-     */
+    private void renderHealth() {
+        if(mHealth.getVisibility() == View.GONE) {
+            mHealth.setVisibility(View.VISIBLE);
+        }
 
-    private int calculateHealth(){
-        Double seeds = Double.valueOf(sMovie.torrents.get(mSelectedQuality).seeds);
-        Double peers = Double.valueOf(sMovie.torrents.get(mSelectedQuality).peers);
-
-        Double ratio;
-        if (peers > 0)
-            ratio = seeds/peers;
-        else
-            ratio = seeds;
-
-        Double normalizedRatio = Math.min(ratio / 5 * 100, 100);
-        Double normalizedSeeds = Math.min(seeds / 30 * 100, 100);
-
-        Double weightedRatio = normalizedRatio * 0.6;
-        Double weightedSeeds = normalizedSeeds * 0.4;
-        Double weightedTotal = weightedRatio + weightedSeeds;
-
-        int scaledTotal = (int) ((weightedTotal * 3) / 100);
-
-        return scaledTotal;
+        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get(mSelectedQuality).seeds, sMovie.torrents.get(mSelectedQuality).peers);
+        mHealth.setImageResource(health.getImageResource());
     }
 
-    private void renderHealth(int health){
-        mHealth.setVisibility(View.VISIBLE);
-        Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_poor, null);
-        switch (health){
-            case 0:
-                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_poor, null);
-                break;
-            case 1:
-                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_medium, null);
-                break;
-            case 2:
-                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_good, null);
-                break;
-            case 3:
-                icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_health_excellent, null);
-                break;
+    private void updateMagnet() {
+        if(mMagnet == null) {
+            mMagnet = new Magnet(mActivity, sMovie.torrents.get(mSelectedQuality).url);
         }
-        mHealth.setImageDrawable(icon);
+        mMagnet.setUrl(sMovie.torrents.get(mSelectedQuality).url);
+
+        if(!mMagnet.canOpen()) {
+            mOpenMagnet.setVisibility(View.GONE);
+        } else {
+            mOpenMagnet.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.read_more)
@@ -349,27 +321,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
         mCallback.playStream(streamInfo);
     }
 
-    @OnClick(R.id.download)
-    public void openTorrent(){
-        List<Intent> filteredShareIntents = new ArrayList<>();
-        Intent torrentIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(sMovie.torrents.get(mSelectedQuality).url));
-        List<ResolveInfo> resolveInfoList = getActivity().getPackageManager().queryIntentActivities(torrentIntent, 0);
-
-        for (ResolveInfo info : resolveInfoList) {
-            if (!info.activityInfo.packageName.contains("pct.droid")) {     //Black listing the app its self
-                Intent targetedShare = new Intent(Intent.ACTION_VIEW, Uri.parse(sMovie.torrents.get(mSelectedQuality).url));
-                targetedShare.setPackage(info.activityInfo.packageName);
-                filteredShareIntents.add(targetedShare);
-            }
-        }
-
-        if (filteredShareIntents.size() > 0){
-            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), "");
-            filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[] {}));
-            startActivity(filteredIntent);
-        } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_no_torrent_app), Toast.LENGTH_SHORT).show();
-        }
+    @OnClick(R.id.magnet)
+    public void openMagnet() {
+        mMagnet.open(mActivity);
     }
 
     private void onSubtitleLanguageSelected(String language) {

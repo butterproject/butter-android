@@ -63,6 +63,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.Magnet;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -89,6 +90,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Episode mEpisode;
     private Show mShow;
+    private Magnet mMagnet;
 
     @InjectView(R.id.scrollview)
     BottomSheetScrollView mScrollView;
@@ -110,9 +112,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
-    @InjectView(R.id.download)
-    Button mDownload;
-
+    @InjectView(R.id.magnet)
+    OptionSelector mOpenMagnet;
 
     public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
@@ -251,11 +252,13 @@ public class EpisodeDialogFragment extends DialogFragment {
         mSelectedQuality = qualities[qualities.length - 1];
         mQuality.setText(mSelectedQuality);
         mQuality.setDefault(qualities.length - 1);
+        updateMagnet();
 
         mQuality.setListener(new OptionSelector.SelectorListener() {
             @Override
             public void onSelectionChanged(int position, String value) {
                 mSelectedQuality = value;
+                updateMagnet();
             }
         });
 
@@ -368,6 +371,19 @@ public class EpisodeDialogFragment extends DialogFragment {
         mAttached = true;
     }
 
+    private void updateMagnet() {
+        if(mMagnet == null) {
+            mMagnet = new Magnet(mActivity, mEpisode.torrents.get(mSelectedQuality).url);
+        }
+        mMagnet.setUrl(mEpisode.torrents.get(mSelectedQuality).url);
+
+        if(!mMagnet.canOpen()) {
+            mOpenMagnet.setVisibility(View.GONE);
+        } else {
+            mOpenMagnet.setVisibility(View.VISIBLE);
+        }
+    }
+
     @OnClick(R.id.synopsis)
     public void readMoreClick(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
@@ -387,27 +403,9 @@ public class EpisodeDialogFragment extends DialogFragment {
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 
-    @OnClick(R.id.download)
-    public void openTorrent() {
-        List<Intent> filteredShareIntents = new ArrayList<>();
-        Intent torrentIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mEpisode.torrents.get(mSelectedQuality).url));
-        List<ResolveInfo> resolveInfoList = getActivity().getPackageManager().queryIntentActivities(torrentIntent, 0);
-
-        for (ResolveInfo info : resolveInfoList) {
-            if (!info.activityInfo.packageName.contains("pct.droid")) {     //Black listing the app its self
-                Intent targetedShare = new Intent(Intent.ACTION_VIEW, Uri.parse(mEpisode.torrents.get(mSelectedQuality).url));
-                targetedShare.setPackage(info.activityInfo.packageName);
-                filteredShareIntents.add(targetedShare);
-            }
-        }
-
-        if (filteredShareIntents.size() > 0) {
-            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), "");
-            filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[]{}));
-            startActivity(filteredIntent);
-        } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_no_torrent_app), Toast.LENGTH_SHORT).show();
-        }
+    @OnClick(R.id.magnet)
+    public void openMagnet() {
+        mMagnet.open(mActivity);
     }
 
     @OnClick(R.id.placeholder)
