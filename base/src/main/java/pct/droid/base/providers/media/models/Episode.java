@@ -28,6 +28,7 @@ import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 
 public class Episode extends Media implements Parcelable {
+    public String showName;
     public int aired;
     public int episode;
     public int season;
@@ -51,6 +52,7 @@ public class Episode extends Media implements Parcelable {
         title = in.readString();
         overview = in.readString();
         tvdbId = in.readString();
+        showName = in.readString();
         dateBased = in.readInt() == 1;
 
         String className = in.readString();
@@ -88,6 +90,7 @@ public class Episode extends Media implements Parcelable {
         dest.writeString(title);
         dest.writeString(overview);
         dest.writeString(tvdbId);
+        dest.writeString(showName);
         dest.writeInt(dateBased ? 1 : 0);
         dest.writeString(mMetaProvider != null ? mMetaProvider.getClass().getCanonicalName() : "");
         if (torrents != null) {

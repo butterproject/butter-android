@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
@@ -198,22 +199,27 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mActivity.getSupportActionBar().setTitle("");
 
-        if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
-            mHasSeekControl = false;
-            mSeekBar.setVisibility(View.INVISIBLE);
-        }
+        try {
+            if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
+                mHasSeekControl = false;
+                mSeekBar.setVisibility(View.INVISIBLE);
+            }
 
-        if (!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
-            mHasVolumeControl = false;
-            mPanel.setEnabled(false);
-            mPanel.setTouchEnabled(false);
-        }
+            if (!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
+                mHasVolumeControl = false;
+                mPanel.setEnabled(false);
+                mPanel.setTouchEnabled(false);
+            }
 
-        if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
-            mPlayButton.setEnabled(false);
-        }
+            if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
+                mPlayButton.setEnabled(false);
+            }
 
-        startVideo();
+            startVideo();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT);
+            getActivity().finish();
+        }
     }
 
     private void startVideo() {
@@ -268,6 +274,8 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
 
     @OnClick(R.id.play_button)
     public void playPauseClick(View v) {
+        if(mMediaControl == null) return;
+
         if (mIsPlaying) {
             mIsPlaying = false;
             mMediaControl.pause(null);

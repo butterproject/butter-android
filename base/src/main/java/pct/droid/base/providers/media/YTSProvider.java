@@ -18,10 +18,12 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.os.Build;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
@@ -34,6 +36,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Genre;
@@ -43,13 +46,14 @@ import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
+import pct.droid.base.utils.LocaleUtils;
 
 public class YTSProvider extends MediaProvider {
 
     private static final YTSProvider sMediaProvider = new YTSProvider();
     private static final String API_URL = "http://cloudflare.com/api/v2/";
     private static final String MIRROR_URL = "http://reddit.com/api/v2/";
-    private static final String MIRROR_URL2 = "http://eqwww.image.yt/api/v2/";
+    private static final String MIRROR_URL2 = "http://xor.image.yt/api/v2/";
     public static String CURRENT_URL = API_URL;
 
     private static final SubsProvider sSubsProvider = new YSubsProvider();
@@ -62,6 +66,12 @@ public class YTSProvider extends MediaProvider {
         proto.add(Protocol.HTTP_1_1);
         client.setProtocols(proto);
         return client;
+    }
+
+    @Override
+    protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
+        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrent(), Build.MODEL, Build.DISPLAY, Constants.UA_VERSION)).build();
+        return super.enqueue(request, requestCallback);
     }
 
     @Override
@@ -137,7 +147,7 @@ public class YTSProvider extends MediaProvider {
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
-        requestBuilder.addHeader("Host", "eqwww.image.yt");
+        requestBuilder.addHeader("Host", "xor.image.yt");
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -189,7 +199,7 @@ public class YTSProvider extends MediaProvider {
     public Call getDetail(String videoId, Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(API_URL + "movie_details.json?movie_id=" + videoId);
-        requestBuilder.addHeader("Host", "eqwww.image.yt");
+        requestBuilder.addHeader("Host", "xor.image.yt");
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchDetail(requestBuilder, callback);
@@ -354,12 +364,12 @@ public class YTSProvider extends MediaProvider {
             if (torrents != null) {
                 for (LinkedTreeMap<String, Object> torrentObj : torrents) {
                     String quality = (String) torrentObj.get("quality");
-                    if (quality == null || quality.equals("3D")) continue;
+                    if (quality == null) continue;
 
                     Media.Torrent torrent = new Media.Torrent();
 
-                    torrent.seeds = torrentObj.get("seeds").toString();
-                    torrent.peers = torrentObj.get("peers").toString();
+                    torrent.seeds = ((Double) torrentObj.get("seeds")).intValue();
+                    torrent.peers = ((Double) torrentObj.get("peers")).intValue();
                     torrent.hash = (String) torrentObj.get("hash");
                     try {
                         String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(movieObj.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
@@ -418,12 +428,11 @@ public class YTSProvider extends MediaProvider {
 
                             Media.Torrent torrent = new Media.Torrent();
 
-                            torrent.seeds = torrentObj.get("seeds").toString();
-                            torrent.peers = torrentObj.get("peers").toString();
+                            torrent.seeds = ((Double) torrentObj.get("seeds")).intValue();
+                            torrent.peers = ((Double) torrentObj.get("peers")).intValue();
                             torrent.hash = (String) torrentObj.get("hash");
                             try {
-                                String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
-                                torrent.url = magnet;
+                                torrent.url = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                                 torrent.url = (String) torrentObj.get("url");

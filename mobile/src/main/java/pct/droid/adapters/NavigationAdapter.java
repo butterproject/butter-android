@@ -25,6 +25,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -38,7 +40,7 @@ import pct.droid.fragments.NavigationDrawerFragment;
 public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnItemClickListener mItemClickListener;
-    private final List<NavigationDrawerFragment.NavDrawerItem> mItems;
+    private List<NavigationDrawerFragment.NavDrawerItem> mItems;
     final int HEADER = 0, ITEM = 1;
     final int mNormalColor, mCheckedColor, mCheckedBackgroundRes, mNormalBackgroundRes;
     private Callback mCallback;
@@ -52,6 +54,10 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mCheckedBackgroundRes = R.color.nav_drawer_selected_bg;
     }
 
+    public void setItems(List<NavigationDrawerFragment.NavDrawerItem> items) {
+        mItems = items;
+        notifyDataSetChanged();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,7 +67,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_header, parent, false);
                 return new HeaderHolder(v);
             case ITEM:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_icon_singleline_item, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_list_item, parent, false);
                 return new ItemRowHolder(v);
         }
         return null;
@@ -90,6 +96,22 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void onBindItemViewHolder(ItemRowHolder viewHolder, int position) {
         NavigationDrawerFragment.NavDrawerItem item = getItem(position);
+        item.setRowHolder(viewHolder);
+
+        if(item.isSwitch()) {
+            if(item.showProgress()) {
+                viewHolder.checkbox.setVisibility(View.INVISIBLE);
+                viewHolder.progressBar.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.checkbox.setVisibility(View.VISIBLE);
+                viewHolder.progressBar.setVisibility(View.INVISIBLE);
+            }
+            viewHolder.checkbox.setChecked(item.getSwitchValue());
+        } else {
+            viewHolder.checkbox.setVisibility(View.INVISIBLE);
+            viewHolder.progressBar.setVisibility(View.INVISIBLE);
+        }
+
 
         viewHolder.title.setText(item.getTitle());
 
@@ -126,7 +148,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     public interface OnItemClickListener {
-        public void onItemClick(View v, NavigationDrawerFragment.NavDrawerItem item, int position);
+        public void onItemClick(View v, ItemRowHolder vh,  NavigationDrawerFragment.NavDrawerItem item, int position);
     }
 
     public NavigationDrawerFragment.NavDrawerItem getItem(int position) {
@@ -145,11 +167,14 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public class ItemRowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         @InjectView(android.R.id.icon)
         ImageView icon;
         @InjectView(android.R.id.text1)
         TextView title;
+        @InjectView(android.R.id.checkbox)
+        Switch checkbox;
+        @InjectView(android.R.id.progress)
+        ProgressBar progressBar;
 
         public ItemRowHolder(View itemView) {
             super(itemView);
@@ -160,10 +185,17 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {
-                int position = getPosition();
+                int position = getAdapterPosition();
                 NavigationDrawerFragment.NavDrawerItem item = getItem(position);
-                mItemClickListener.onItemClick(view, item, position);
+                mItemClickListener.onItemClick(view, this, item, position);
             }
+        }
+
+        public Switch getSwitch() {
+            return checkbox;
+        }
+        public ProgressBar getProgressBar() {
+            return progressBar;
         }
     }
 

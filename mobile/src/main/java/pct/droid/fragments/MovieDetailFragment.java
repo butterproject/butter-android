@@ -33,7 +33,9 @@ import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.Magnet;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.TorrentHealth;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -50,11 +52,14 @@ public class MovieDetailFragment extends BaseDetailFragment {
     private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Boolean mAttached = false;
+    private Magnet mMagnet;
 
     @InjectView(R.id.play_button)
     ImageButton mPlayButton;
     @InjectView(R.id.title)
     TextView mTitle;
+    @InjectView(R.id.health)
+    ImageView mHealth;
     @InjectView(R.id.meta)
     TextView mMeta;
     @InjectView(R.id.synopsis)
@@ -63,6 +68,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     Button mReadMore;
     @InjectView(R.id.watch_trailer)
     Button mWatchTrailer;
+    @InjectView(R.id.magnet)
+    ImageButton mOpenMagnet;
     @InjectView(R.id.rating)
     RatingBar mRating;
     @InjectView(R.id.subtitles)
@@ -231,11 +238,15 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 @Override
                 public void onSelectionChanged(int position, String value) {
                     mSelectedQuality = value;
+                    renderHealth();
+                    updateMagnet();
                 }
             });
             mSelectedQuality = qualities[qualities.length - 1];
             mQuality.setText(mSelectedQuality);
             mQuality.setDefault(qualities.length - 1);
+            renderHealth();
+            updateMagnet();
         }
 
         if (mCoverImage != null) {
@@ -257,6 +268,28 @@ public class MovieDetailFragment extends BaseDetailFragment {
     public void onDetach() {
         super.onDetach();
         mAttached = false;
+    }
+
+    private void renderHealth() {
+        if(mHealth.getVisibility() == View.GONE) {
+            mHealth.setVisibility(View.VISIBLE);
+        }
+
+        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get(mSelectedQuality).seeds, sMovie.torrents.get(mSelectedQuality).peers);
+        mHealth.setImageResource(health.getImageResource());
+    }
+
+    private void updateMagnet() {
+        if(mMagnet == null) {
+            mMagnet = new Magnet(mActivity, sMovie.torrents.get(mSelectedQuality).url);
+        }
+        mMagnet.setUrl(sMovie.torrents.get(mSelectedQuality).url);
+
+        if(!mMagnet.canOpen()) {
+            mOpenMagnet.setVisibility(View.GONE);
+        } else {
+            mOpenMagnet.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.read_more)
@@ -286,6 +319,11 @@ public class MovieDetailFragment extends BaseDetailFragment {
         String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
         StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
+    }
+
+    @OnClick(R.id.magnet)
+    public void openMagnet() {
+        mMagnet.open(mActivity);
     }
 
     private void onSubtitleLanguageSelected(String language) {

@@ -1,4 +1,4 @@
-[Popcorn Time for Android](https://git.popcorntime.io/stash/projects/PA/repos/popcorn-android)  [![Build Status](http://ci.popcorntime.io/buildStatus/icon?job=Popcorn-Android)](http://ci.popcorntime.io/job/Popcorn-Android/)
+[Popcorn Time for Android](https://git.popcorntime.io/popcorntime/android)  [![Build Status](http://ci.popcorntime.io/buildStatus/icon?job=Popcorn-Android)](http://ci.popcorntime.io/job/Popcorn-Android/)
 ----
 
 Allow any Android user to watch movies easily streaming from torrents, without any particular knowledge.
@@ -19,7 +19,7 @@ Keep track of Popcorn Time development and community activity.
 
 ## Getting Involved
 
-Want to report a bug, request a feature, contribute or translate Popcorn Time? Check out our in-depth guide to [Contributing to Popcorn Time](https://git.popcorntime.io/stash/projects/PA/repos/popcorn-android/browse/CONTRIBUTING.md).
+Want to report a bug, request a feature, contribute or translate Popcorn Time? Check out our in-depth guide to [Contributing to Popcorn Time](CONTRIBUTING.md).
 
 ## Build Instructions ##
 

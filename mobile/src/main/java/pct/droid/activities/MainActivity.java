@@ -51,11 +51,13 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.vpn.VPNManager;
 import pct.droid.base.youtube.YouTubeData;
 import pct.droid.fragments.MediaContainerFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
 import pct.droid.utils.ToolbarUtils;
 import pct.droid.widget.ScrimInsetsFrameLayout;
+import timber.log.Timber;
 
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
@@ -77,7 +79,6 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         setShowCasting(true);
 
         ToolbarUtils.updateToolbarHeight(this, mToolbar);
-
 
         // Set up the drawer.
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -103,7 +104,7 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
             }
         }
 
-        if (null != savedInstanceState) return;//dont reselect item if saved state exists
+        if (null != savedInstanceState) return;
         int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
         mNavigationDrawerFragment.selectItem(providerId);
     }
@@ -116,6 +117,32 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         supportInvalidateOptionsMenu();
         if (mNavigationDrawerFragment.getCurrentItem() != null && mNavigationDrawerFragment.getCurrentItem().getTitle() != null) {
             setTitle(mNavigationDrawerFragment.getCurrentItem().getTitle());
+        }
+
+        mNavigationDrawerFragment.initItems();
+    }
+
+    @Override
+    public void onVPNServiceReady() {
+        super.onVPNServiceReady();
+        mNavigationDrawerFragment.initItems();
+    }
+
+    @Override
+    public void onVPNStatusUpdate(VPNManager.State state, String message) {
+        super.onVPNStatusUpdate(state, message);
+        Timber.d("New state: %s", state);
+        NavigationDrawerFragment.NavDrawerItem vpnItem = mNavigationDrawerFragment.getVPNItem();
+        if(vpnItem != null) {
+            if (state.equals(VPNManager.State.DISCONNECTED)) {
+                vpnItem.setSwitchValue(false);
+                vpnItem.showProgress(false);
+            } else if(state.equals(VPNManager.State.CONNECTING)) {
+                vpnItem.showProgress(true);
+            } else if(state.equals(VPNManager.State.CONNECTED)) {
+                vpnItem.setSwitchValue(true);
+                vpnItem.showProgress(false);
+            }
         }
     }
 

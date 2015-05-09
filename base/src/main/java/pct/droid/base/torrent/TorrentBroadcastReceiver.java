@@ -16,7 +16,6 @@
  */
 
 package pct.droid.base.torrent;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,4 +30,5 @@ public class TorrentBroadcastReceiver extends BroadcastReceiver {
             TorrentService.stop();
         }
     }
+
 }

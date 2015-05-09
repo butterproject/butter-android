@@ -17,9 +17,19 @@
 
 package pct.droid.base.torrent;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 

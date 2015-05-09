@@ -21,8 +21,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -31,22 +35,27 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.base.preferences.Prefs;
@@ -55,6 +64,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.torrent.Magnet;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -81,6 +91,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Episode mEpisode;
     private Show mShow;
+    private Magnet mMagnet;
 
     @InjectView(R.id.scrollview)
     BottomSheetScrollView mScrollView;
@@ -102,6 +113,9 @@ public class EpisodeDialogFragment extends DialogFragment {
     OptionSelector mSubtitles;
     @InjectView(R.id.quality)
     OptionSelector mQuality;
+    @InjectView(R.id.magnet)
+    @Optional
+    ImageButton mOpenMagnet;
 
     public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
@@ -115,8 +129,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout
-                .fragment_dialog_episode, container, false);
+        View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout.fragment_dialog_episode, container, false);
         ButterKnife.inject(this, v);
 
         if (!VersionUtils.isJellyBean()) {
@@ -177,7 +190,8 @@ public class EpisodeDialogFragment extends DialogFragment {
             public void run() {
                 try {
                     dismiss();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }, ANIM_SPEED);
     }
@@ -239,11 +253,13 @@ public class EpisodeDialogFragment extends DialogFragment {
         mSelectedQuality = qualities[qualities.length - 1];
         mQuality.setText(mSelectedQuality);
         mQuality.setDefault(qualities.length - 1);
+        updateMagnet();
 
         mQuality.setListener(new OptionSelector.SelectorListener() {
             @Override
             public void onSelectionChanged(int position, String value) {
                 mSelectedQuality = value;
+                updateMagnet();
             }
         });
 
@@ -356,6 +372,21 @@ public class EpisodeDialogFragment extends DialogFragment {
         mAttached = true;
     }
 
+    private void updateMagnet() {
+        if(mOpenMagnet == null) return;
+
+        if(mMagnet == null) {
+            mMagnet = new Magnet(mActivity, mEpisode.torrents.get(mSelectedQuality).url);
+        }
+        mMagnet.setUrl(mEpisode.torrents.get(mSelectedQuality).url);
+
+        if(!mMagnet.canOpen()) {
+            mOpenMagnet.setVisibility(View.GONE);
+        } else {
+            mOpenMagnet.setVisibility(View.VISIBLE);
+        }
+    }
+
     @OnClick(R.id.synopsis)
     public void readMoreClick(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
@@ -373,6 +404,12 @@ public class EpisodeDialogFragment extends DialogFragment {
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
         StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
+    }
+
+    @Optional
+    @OnClick(R.id.magnet)
+    public void openMagnet() {
+        mMagnet.open(mActivity);
     }
 
     @OnClick(R.id.placeholder)
