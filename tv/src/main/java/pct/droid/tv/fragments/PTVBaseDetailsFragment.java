@@ -17,9 +17,11 @@ import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
+import android.support.v17.leanback.widget.ObjectAdapter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.widget.Toast;
@@ -104,10 +106,17 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 
 	private void setupAdapter() {
 		mPresenterSelector = new ClassPresenterSelector();
-		mAdapter = new ArrayObjectAdapter(mPresenterSelector);
+		createPresenters(mPresenterSelector);
+
+		mAdapter = createAdapter(mPresenterSelector);
 		setAdapter(mAdapter);
 	}
 
+	abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
+
+	protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
+		return new ArrayObjectAdapter(selector);
+	}
 
 	private void setupDetailsOverviewRowPresenter() {
 		// Set detail background and style.
@@ -118,7 +127,7 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 
 		// Hook up transition element.
 		headerPresenter.setSharedElementEnterTransition(getActivity(),
-						PTVMediaDetailActivity.SHARED_ELEMENT_NAME);
+				PTVMediaDetailActivity.SHARED_ELEMENT_NAME);
 
 		mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, headerPresenter);
 		mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());

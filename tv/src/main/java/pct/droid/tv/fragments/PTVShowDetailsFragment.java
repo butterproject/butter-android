@@ -8,30 +8,22 @@ import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.DetailsOverviewRow;
-import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ListRow;
+import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.widget.Toast;
 
-import com.google.gson.internal.LinkedTreeMap;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import pct.droid.base.dialogfragments.FileSelectorDialogFragment;
-import pct.droid.base.fragments.StringArraySelectorDialogFragment;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Episode;
@@ -43,10 +35,16 @@ import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
 import pct.droid.tv.presenters.EpisodeCardPresenter;
 import pct.droid.tv.presenters.ShowDetailsDescriptionPresenter;
+import pct.droid.tv.presenters.showdetail.EpisodeRow;
+import pct.droid.tv.presenters.showdetail.EpisodeRowPresenter;
+import pct.droid.tv.presenters.showdetail.SeasonHeaderRow;
+import pct.droid.tv.presenters.showdetail.SeasonHeaderRowPresenter;
 
-public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
+public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener, EpisodeRowPresenter.Listener {
 
     EZTVProvider mTvProvider = new EZTVProvider();
+
+    private EpisodeAdapter episodeAdapter;
 
     public static Fragment newInstance(Media media, String hero) {
         PTVShowDetailsFragment fragment = new PTVShowDetailsFragment();
@@ -57,14 +55,6 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
 
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        setOnItemViewClickedListener(new EpisodeItemClickedListener());
     }
 
     public void loadDetails() {
@@ -81,6 +71,13 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
     }
 
     @Override
+    protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
+
+        this.episodeAdapter = new EpisodeAdapter(getActivity(), selector);
+        return new AlbumDetailsObjectAdapter(getActivity(), selector, episodeAdapter);
+    }
+
+    @Override
     void addActions(Media item) {
         //no actions yet
     }
@@ -90,14 +87,19 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         //no actions yet
     }
 
+    @Override
+    ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
+        selector.addClassPresenter(EpisodeRow.class, new EpisodeRowPresenter(this));
+        selector.addClassPresenter(SeasonHeaderRow.class, new SeasonHeaderRowPresenter());
+        return null;
+    }
+
     private void addSeasonsRow() {
         // Add a Related items row
-        EpisodeCardPresenter mediaCardPresenter = new EpisodeCardPresenter(getActivity());
-
         final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
             @Override
             public int compare(Integer lhs, Integer rhs) {
-                return lhs-rhs;
+                return lhs - rhs;
             }
         });
 
@@ -128,46 +130,51 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
             });
         }
 
-        for (Map.Entry<Integer,List<Episode>> entry: seasons.entrySet()){
+        episodeAdapter.setSeasons(seasons.descendingMap());
 
-            //setup season adapter
-            final ArrayObjectAdapter seasonAdapter = new ArrayObjectAdapter(mediaCardPresenter);
-            if (entry.getValue()!=null) {
-                for (Episode episode : entry.getValue()) {
-                    seasonAdapter.add(episode);
-                }
+        ((AlbumDetailsObjectAdapter) getObjectArrayAdapter()).notifyDataSetChanged();
+//        for (Map.Entry<Integer, List<Episode>> entry : seasons.entrySet()) {
+//            //setup season adapter
+//            final ArrayObjectAdapter seasonAdapter = new ArrayObjectAdapter(mediaCardPresenter);
+//            if (entry.getValue() != null) {
+//                for (Episode episode : entry.getValue()) {
+//                    seasonAdapter.add(episode);
+//                }
 
-                HeaderItem header = new HeaderItem(entry.getKey(), String.format("Season %d", entry.getKey()));
-                getObjectArrayAdapter().add(new ListRow(header, seasonAdapter));
-            }
-        }
+//                episodes.addAll(entry.getValue());
+//
+//                ((AlbumDetailsObjectAdapter) getObjectArrayAdapter()).notifyDataSetChanged();
+//                HeaderItem header = new HeaderItem(entry.getKey(), String.format("Season %d", entry.getKey()));
+//                getObjectArrayAdapter().add(new ListRow(header, seasonAdapter));
+//                getObjectArrayAdapter().add(seasonAdapter);
+//            }
+//        }
     }
 
+    @Override
+    public void onEpisodeRowClicked(EpisodeRow row) {
+        Episode episode = row.getEpisode();
 
-    private final class EpisodeItemClickedListener implements OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
-
-            Episode episode = (Episode) item;
-            //check for network
-            if (!NetworkUtils
-                    .isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
-            } else {
-                //start first torrent
-                if (episode.torrents.size() == 1) {
-                    final List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(episode
-                            .torrents.entrySet());
-                    onTorrentSelected(episode, torrents.get(0));
-                }
-                //ask user which torrent
-                else {
-                    showTorrentsDialog(episode, episode
-                            .torrents);
-                }
-
+        if (null == episode) {
+            return;
+        }
+        //check for network
+        if (!NetworkUtils
+                .isNetworkConnected(getActivity())) {
+            Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
+        } else {
+            //start first torrent
+            if (episode.torrents.size() == 1) {
+                final List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(episode
+                        .torrents.entrySet());
+                onTorrentSelected(episode, torrents.get(0));
             }
+            //ask user which torrent
+            else {
+                showTorrentsDialog(episode, episode
+                        .torrents);
+            }
+
         }
     }
 
@@ -199,5 +206,134 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
     void onDetailLoaded() {
         addSeasonsRow();
     }
+
+
+    private class EpisodeAdapter extends ArrayObjectAdapter {
+
+        private final Context context;
+        Map<Integer, List<Episode>> seasons;
+
+        private int mSize = -1;
+
+        public EpisodeAdapter(Context context, PresenterSelector presenter) {
+            super(presenter);
+            this.context = context;
+        }
+
+        public void setSeasons(Map<Integer, List<Episode>> seasons) {
+            this.seasons = seasons;
+        }
+
+        @Override
+        public int size() {
+            if (mSize == -1) {
+                mSize = calculateSize();
+            }
+            return mSize;
+        }
+
+        private int calculateSize() {
+            if (seasons == null) {
+                return -1;
+            }
+
+            int size = seasons.size();//the number of headers
+
+            for (Map.Entry<Integer, List<Episode>> entry : seasons.entrySet()) {
+                size += entry.getValue().size();
+            }
+
+            return size;
+        }
+
+        @Override
+        public Object get(int position) {
+
+            for (Map.Entry<Integer, List<Episode>> adapter : seasons.entrySet()) {
+
+                //season header
+                if (position == 0) {
+                    return new SeasonHeaderRow(context, position, adapter.getKey());
+                }
+                position -= 1;
+
+                //episode row
+                int size = adapter.getValue().size();
+                if (position < size) {
+                    return new EpisodeRow(context, position, adapter.getValue().get(position));
+                }
+                position -= size;
+            }
+            return new EpisodeRow(context, -1, null);
+        }
+
+    }
+
+
+    private class AlbumDetailsObjectAdapter extends ArrayObjectAdapter {
+        private final Context mContext;
+        private final EpisodeAdapter mEpisodeAdapter;
+
+        AlbumDetailsObjectAdapter(Context context, PresenterSelector presenter, EpisodeAdapter episodeAdapter) {
+            super(presenter);
+            this.mContext = context;
+            this.mEpisodeAdapter = episodeAdapter;
+//            this.mEpisodeAdapter.registerObserver(new ObjectAdapter.DataObserver() {
+//                public void onChanged() {
+////                    AlbumDetailsObjectAdapter.this.recalculateSize();
+//                    AlbumDetailsObjectAdapter.this.notifyChanged();
+//                }
+//
+//                public void onItemRangeChanged(int var1, int var2) {
+//                    if (var1 == 0) {
+//                        AlbumDetailsObjectAdapter.this.notifyItemRangeChanged(var1, 1);
+//                    }
+//
+//                }
+//
+//                public void onItemRangeInserted(int var1, int var2) {
+//                    if (var1 == 0) {
+////                        AlbumDetailsObjectAdapter.this.recalculateSize();
+//                        AlbumDetailsObjectAdapter.this.notifyItemRangeInserted(var1, 1);
+//                    }
+//
+//                }
+//
+//                public void onItemRangeRemoved(int var1, int var2) {
+//                    if (var1 == 0) {
+////                        AlbumDetailsObjectAdapter.this.recalculateSize();
+//                        AlbumDetailsObjectAdapter.this.notifyItemRangeRemoved(var1, 1);
+//                    }
+//
+//                }
+//            });
+        }
+//            this.mDetailsObjectAdapter = detailsAdapter;
+//            this.mSongTitleRow = titleRow;
+//            this.mSongFooterRow = footerRow;
+
+//            });
+//            this.recalculateSize();
+//        }
+
+        public void notifyDataSetChanged() {
+            this.notifyChanged();
+        }
+
+        public Object get(int position) {
+            if (position < this.size()) {
+                if (position == 0) return super.get(position);
+
+                return mEpisodeAdapter.get(position - 1);
+            }
+            return null;
+        }
+
+        public int size() {
+            return mEpisodeAdapter.size() + 1;
+        }
+
+    }
+
 
 }

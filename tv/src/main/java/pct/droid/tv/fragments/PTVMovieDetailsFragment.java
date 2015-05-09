@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
+import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.widget.Toast;
@@ -68,6 +69,11 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 						R.string.watch), quality, torrent));
 			}
 		}
+	}
+
+	@Override
+	ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
+		return null;
 	}
 
 	@Override public void onActionClicked(Action a) {
