@@ -33,5 +33,12 @@
     <color name="player_overlay">#55000000</color>
     <color name="default_background">#55000000</color>
 
+    <color name="leanback_track_main_text_color">#ffeeeeee</color>
+    <color name="leanback_track_secondary_text_color">#80eeeeee</color>
+    <color name="episode_row_background_color">#444</color>
+    <color name="episode_row_background_color_focused">#555</color>
+    <color name="leanback_track_title_background_color">#ff263238</color>
+    <color name="leanback_track_row_separator_highlight_color">#1affffff</color>
+
 
 </resources>
