@@ -17,6 +17,7 @@
 
 package pct.droid.base;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;

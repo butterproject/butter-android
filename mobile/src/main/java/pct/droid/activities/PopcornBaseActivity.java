@@ -30,11 +30,13 @@ import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.vpn.VPNManager;
 import pct.droid.dialogfragments.BeamDeviceSelectorDialogFragment;
 
-public class PopcornBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
+public class PopcornBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener, VPNManager.Listener {
 
     protected Boolean mShowCasting = false;
+    protected VPNManager mVPNManager;
 
     @Override
     protected void onResume() {
@@ -45,9 +47,21 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mVPNManager = VPNManager.start(this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         BeamManager.getInstance(this).setListener(null);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mVPNManager.stop();
     }
 
     protected void onHomePressed() {
@@ -102,4 +116,13 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
         mShowCasting = b;
     }
 
+    @Override
+    public void onVPNServiceReady() {
+
+    }
+
+    @Override
+    public void onVPNStatusUpdate(VPNManager.State state, String message) {
+
+    }
 }

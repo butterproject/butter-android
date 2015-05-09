@@ -139,15 +139,15 @@ public class Media implements Parcelable {
 
     public static class Torrent implements Parcelable {
         public String url;
-        public String seeds;
-        public String peers;
+        public Integer seeds;
+        public Integer peers;
         public String hash;
 
         public Torrent() {
 
         }
 
-        public Torrent(String url, String seeds, String peers, String hash) {
+        public Torrent(String url, Integer seeds, Integer peers, String hash) {
             this.url = url;
             this.seeds = seeds;
             this.peers = peers;
@@ -156,8 +156,8 @@ public class Media implements Parcelable {
 
         public Torrent(Parcel in) {
             url = in.readString();
-            seeds = in.readString();
-            peers = in.readString();
+            seeds = in.readInt();
+            peers = in.readInt();
             hash = in.readString();
         }
 
@@ -169,8 +169,8 @@ public class Media implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(url);
-            dest.writeString(seeds);
-            dest.writeString(peers);
+            dest.writeInt(seeds);
+            dest.writeInt(peers);
             dest.writeString(hash);
         }
 

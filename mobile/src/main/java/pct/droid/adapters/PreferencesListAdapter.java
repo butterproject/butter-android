@@ -17,6 +17,7 @@
 
 package pct.droid.adapters;
 
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pct.droid.R;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.PrefItem;
 
 public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -62,6 +64,7 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             PrefItem item = (PrefItem) mItems.get(position);
             itemViewHolder.itemView.setClickable(item.isClickable());
             itemViewHolder.icon.setImageResource(item.getIconResource());
+            itemViewHolder.icon.setColorFilter(PopcornApplication.getAppContext().getResources().getColor(R.color.text_color), PorterDuff.Mode.SRC_IN);
             itemViewHolder.text1.setText(item.getTitle());
             itemViewHolder.text2.setText(item.getSubTitle());
 

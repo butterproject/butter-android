@@ -31,6 +31,7 @@ import java.util.Map;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
+import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.utils.LocaleUtils;
@@ -103,7 +104,12 @@ public class DefaultPlayer {
             intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
 
             if(media != null) {
-                intent.putExtra("title", "Popcorn Time: " + media.title);
+                if(media.isMovie) {
+                    intent.putExtra("title", media.title);
+                } else {
+                    Episode episode = (Episode) media;
+                    intent.putExtra("title", String.format("%s S%dE%d - %s", episode.showName, episode.season, episode.episode, episode.title));
+                }
             }
             intent.putExtra("position", 0);
 

@@ -67,29 +67,15 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment frag;
-
         if (mHasGenreTabs > 0 && position == 0) {
             if (mGenreFragment != null)
                 return mGenreFragment;
-            mGenreFragment = frag = MediaGenreSelectionFragment.newInstance(mProvider, new MediaGenreSelectionFragment.Listener() {
-                @Override
-                public void onGenreSelected(String genre) {
-                    mGenre = genre;
-                    mProvider.cancel();
-                    for (int i = 0; i < getCount(); i++) {
-                        MediaListFragment mediaListFragment = getMediaListFragment(i);
-                        if (mediaListFragment != null)
-                            mediaListFragment.changeGenre(genre);
-                    }
-                }
-            });
-        } else {
-            position -= mHasGenreTabs;
-            frag = MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mProvider, mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
+            mGenreFragment = MediaGenreSelectionFragment.newInstance(mProvider, mMediaGenreSelectionFragment);
+            return mGenreFragment;
         }
 
-        return frag;
+        position -= mHasGenreTabs;
+        return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mProvider, mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
     }
 
     @Override
@@ -119,5 +105,18 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
+
+    private MediaGenreSelectionFragment.Listener mMediaGenreSelectionFragment = new MediaGenreSelectionFragment.Listener() {
+        @Override
+        public void onGenreSelected(String genre) {
+            mGenre = genre;
+            mProvider.cancel();
+            for (int i = 0; i < getCount(); i++) {
+                MediaListFragment mediaListFragment = getMediaListFragment(i);
+                if (mediaListFragment != null)
+                    mediaListFragment.changeGenre(genre);
+            }
+        }
+    };
 
 }

@@ -47,6 +47,7 @@
     <string name="no_subs_available">No subtitles available</string>
 
 	<string name="quality">Quality</string>
+	<string name="open_magnet">Open magnet</string>
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
@@ -54,6 +55,7 @@
     <string name="continuing">Continuing</string>
     <string name="ended">Ended</string>
     <string name="aired">Aired: %s</string>
+
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
@@ -78,6 +80,8 @@
     <string name="comm_message">An error occurred during the retrieval of the video. This could be due to network issues or YouTube protocols. Please try again later.</string>
     <string name="leave_videoplayer_title">Are you sure?</string>
     <string name="leave_videoplayer_message">Are you sure you want to leave the video player? %s will stop playing.</string>
+    <string name="encountered_error_title">Video error encountered</string>
+    <string name="encountered_error">The video player encountered a serious error. The video file could not be opened and/or played. The format was not recognised.</string>
 
 
 
@@ -90,6 +94,7 @@
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
 	<string name="no_search_results">No search results found</string>
+    <string name="vpn">VPN</string>
 
 	<!-- About fragment -->
     <string name="about_message">Popcorn Time is the result of many developers and designers putting a bunch of APIs together to make the
@@ -114,5 +119,12 @@
     <string name="starting_beam">Initialising video beaming...</string>
     <string name="beaming_failed">The video could not play on your beaming device. Would you like to try again? The app might need to download more parts before your device is able to play the video.</string>
     <string name="the_video">The video</string>
+
+    <!-- VPN dialog -->
+    <string name="vpn_not_installed">VPN.ht app not installed</string>
+    <string name="vpn_info">You need to have the VPN.ht app installed to use the VPN option from inside Popcorn Time. Not interested? Then you can just hide this button.</string>
+    <string name="vpn_download">Download app</string>
+    <string name="vpn_later">Come back later</string>
+    <string name="vpn_hide">Hide button</string>
 
 </resources>

@@ -37,6 +37,7 @@
     <string name="torrent_failed">Failed to retrieve torrent</string>
     <string name="running">Running in background</string>
     <string name="tap_to_close">Tap to close</string>
+    <string name="tap_to_resume">Tap to resume</string>
 	<string name="subtitles">Subtitles</string>
 	<string name="now_playing">Now playing</string>
 
@@ -179,6 +180,7 @@
     <string name="enter_pairing_code">Enter Pairing Code on TV</string>
 
     <!-- TermsActivity strings -->
+    <string name="open_with">Open with</string>
     <string name="terms" translatable="false">Your Acceptance\n\n
 By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
 Privacy Policy\n\n
