@@ -37,7 +37,11 @@ public class SortUtils {
                         return 0;
                     }
                 }
-                return -1;
+
+                if(lhs.equals("3D"))
+                    return 1;
+
+                return 0;
             }
         });
         return qualities;
