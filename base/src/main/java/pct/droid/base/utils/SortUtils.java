@@ -37,7 +37,7 @@ public class SortUtils {
                         return 0;
                     }
                 }
-                return 0;
+                return -1;
             }
         });
         return qualities;
