@@ -53,18 +53,6 @@ allprojects {
     }
 }
 
-gradle.buildFinished {
-    try {
-        File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-        File targetFile = new File("./mobile/build/outputs/apk", "appetize.apk")
-        Path source = sourceFile.toPath()
-        Path target = targetFile.toPath()
-        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
-    } catch (Exception e) {
-        e.printStackTrace()
-    }
-}
-
 def createCrashlyticsProperties(Project project, variant) {
     def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb"
     // Valid keys of non-existing organization on Crashlytics to make local building possible
