@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Сачувај</string>
+  <string name="cancel">Откажи</string>
+  <string name="close">Затвори</string>
+  <string name="ok">У реду</string>
+  <string name="enabled">Укључено</string>
+  <string name="disabled">Искључено</string>
+  <string name="casting">Кастинг</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Наслов, година, глумци</string>
+  <string name="title_shows">Серије</string>
+  <string name="title_movies">Филмови</string>
+  <string name="title_anime">Аниме</string>
+  <string name="genres">Жанрови</string>
+  <string name="search">Претрага</string>
+  <string name="searching">Претражујем...</string>
+  <string name="no_data_found">Подаци нису нађени</string>
+  <string name="unknown_error">Нешто није у реду</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">мин</string>
+  <string name="read_more">Прочитај више</string>
+  <string name="watch_trailer">Погледај трејлер</string>
+  <string name="disable_subs">Искључи титлове</string>
+  <string name="no_subs">Нема титлова</string>
+  <string name="no_subs_available">Титлови недоступни</string>
+  <string name="subtitles">Титлови</string>
+  <string name="quality">Квалитет</string>
+  <string name="trailer">Трејлер</string>
+  <string name="season">Сезона</string>
+  <string name="episode">Епизода</string>
+  <string name="specials">Специјали</string>
+  <string name="continuing">Актуелно</string>
+  <string name="ended">Завршено</string>
+  <string name="aired">Емитовано: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Чекање торента</string>
+  <string name="starting_buffering">Почетак баферовања</string>
+  <string name="streaming_started">Пренос је почео</string>
+  <string name="waiting_for_subtitles">Чекам титлове</string>
+  <string name="seeds">сејачи</string>
+  <string name="error_files">Грешка: фајлови се не могу уписивати. Покушајте са другом локацијом складиштења.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Пуштам</string>
+  <string name="volume">Јачина звука</string>
+  <string name="brightness">Осветљење</string>
+  <string name="hardware_acceleration_error_title">Грешка хардверског убрзања</string>
+  <string name="hardware_acceleration_error_message">Дошло је до грешке са хардверским убрзавањем. Желите ли да га искључите па покушате поново?</string>
+  <string name="best_fit">Уклопљено</string>
+  <string name="fill">Попуњено</string>
+  <string name="fit_horizontal">по хоризонтали</string>
+  <string name="fit_vertical">по вертикали</string>
+  <string name="original_size">Оригинално</string>
+  <string name="comm_error">Грешка у комуникацији</string>
+  <string name="comm_message">Дошло је до грешке током добављања видеа. Ово може бити због мрежних проблема или Јутјуб протокола. Покушајте поново касније.</string>
+  <string name="leave_videoplayer_title">Да ли сте сигурни?</string>
+  <string name="leave_videoplayer_message">Заиста желите да напустите видео плејер? %s ће прекинути са репродуковањем.</string>
+  <string name="encountered_error_title">Видео има грешку</string>
+  <string name="encountered_error">Видео плејер има озбиљну грешку. Видео фајл се не може отворити или пустити. Формат није препознат.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Прихватам</string>
+  <string name="leave">Не прихватам</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Поставке</string>
+  <string name="general">Опште</string>
+  <string name="default_view">Подразумевани преглед</string>
+  <string name="default_player">Подразумевани видео плејер</string>
+  <string name="i18n_language">Језик апликације</string>
+  <string name="restart_effect">Рестартуј апликацију како би промене биле видљиве</string>
+  <string name="device_language">Језик уређаја</string>
+  <string name="stream_over_wifi_only">Пренос само преко бежичне везе</string>
+  <string name="internal_player">Интерно</string>
+  <string name="subtitle_color">Боја</string>
+  <string name="subtitle_size">Величина</string>
+  <string name="subtitle_stroke_color">Боја линије</string>
+  <string name="subtitle_stroke_width">Дебљина линије</string>
+  <string name="subtitle_language">Подразумевани језик</string>
+  <string name="no_default_set">Нема подразумеваног језика</string>
+  <string name="advanced">Напредно</string>
+  <string name="storage_location">Локација складиштења</string>
+  <string name="storage_automatic">Аутоматски</string>
+  <string name="storage_choose">Одабери локацију</string>
+  <string name="not_writable">На овој локацији се не може уписивати</string>
+  <string name="remove_cache">Очисти кеш при затварању плејера</string>
+  <string name="hw_acceleration">Хардверско убрзавање</string>
+  <string name="hw_automatic">Аутоматски</string>
+  <string name="hw_full">Пуно</string>
+  <string name="hw_decoding">Само декодирање</string>
+  <string name="updates">Ажурирања</string>
+  <string name="auto_updates">Аутоматска ажурирања</string>
+  <string name="check_for_updates">Провера ажурирања</string>
+  <string name="last_check">Последња провера</string>
+  <string name="about">О нама</string>
+  <string name="version">Издање</string>
+  <string name="changelog">Списак измена</string>
+  <string name="tap_to_open">Додирни за отварање</string>
+  <string name="report_a_bug">Пријави проблем</string>
+  <string name="open_source_licenses">Лиценце отвореног кода</string>
+  <string name="torrents">Торенти</string>
+  <string name="download_speed">Највећа брзина преузимања</string>
+  <string name="upload_speed">Највећа брзина отпремања</string>
+  <string name="max_connections">Максималан број веза</string>
+  <string name="dht_limit">ДХТ ограничење</string>
+  <string name="unlimited">Неограничено</string>
+  <string name="show_vpn">Прикажи ВПН опције у менију</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Само бежично</string>
+  <string name="wifi_only_message">Снимке можете преносити само преко бежичне везе. Ово можете искључити у подешавањима ако желите да преносите преко мобилног интернета.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Подели</string>
+  <string name="drawer_open">Отвори навигациону фиоку </string>
+  <string name="drawer_close">Затвори навигациону фиоку</string>
+  <string name="no_search_results">Нема резултата претраге</string>
+  <string name="vpn">VPN</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time је направљен тако што је група програмера и дизајнера саставила гомиле АПИ-ја како
+⇥⇥би искуство гледања торент филмова учинила што једноставнијим.\n\nМи смо пројекат отвореног кода. Ми смо из целог света.
+		Ми волимо наше филмове. А, брате, волимо и кокице.</string>
+  <string name="website">Веб сајт</string>
+  <string name="forum">Форум</string>
+  <string name="google_plus">Гугл+</string>
+  <string name="facebook">Фејсбук</string>
+  <string name="git">Гит</string>
+  <string name="blog">Блог</string>
+  <string name="twitter">Твитер</string>
+  <!--Share dialog-->
+  <string name="share_message">Јеси ли пробао Popcorn Time за Андроид? Одличан је!</string>
+  <string name="share_dialog_title">Подели са</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Повезано на</string>
+  <string name="disconnect">Искључи се</string>
+  <string name="select_beaming">Одаберите уређај за повезивање</string>
+  <string name="starting_beam">Припрема видео повезивања...</string>
+  <string name="beaming_failed">Видео није могао да се репродукује на вашем уређају. Желите ли да покушате поново? Апликација ће можда преузети више делова пре него што уређај буде у могућности да пусти видео.</string>
+  <string name="the_video">Видео</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht апликација није инсталирана</string>
+  <string name="vpn_info">Морате инсталирати VPN.ht апликацију за коришћење ВПН опције унутар Popcorn Time. Нисте заинтересовани? Онда можете сакрити ово дугме.</string>
+  <string name="vpn_download">Преузми апликацију</string>
+  <string name="vpn_later">Врати се касније</string>
+  <string name="vpn_hide">Скриј дугме</string>
+</resources>
