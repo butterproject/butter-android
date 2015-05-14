@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Išsaugoti</string>
+  <string name="cancel">Nutraukti</string>
+  <string name="close">Uždaryti</string>
+  <string name="ok">Gerai</string>
+  <string name="enabled">Įjungta</string>
+  <string name="disabled">Išjungta</string>
+  <string name="casting">Perduodamas srautas</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Pavadinimas, metai, aktoriai</string>
+  <string name="title_shows">Laidos</string>
+  <string name="title_movies">Filmai</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Žanrai</string>
+  <string name="search">Paieška</string>
+  <string name="searching">Ieškoma...</string>
+  <string name="no_data_found">Duomenų nerasta</string>
+  <string name="unknown_error">Kažkas negerai</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Skaityti daugiau</string>
+  <string name="watch_trailer">Žiūrėti anonsą</string>
+  <string name="disable_subs">Išjungti subtitrus</string>
+  <string name="no_subs">Subtitrų nėra</string>
+  <string name="no_subs_available">Nėra prieinamų subtitrų</string>
+  <string name="subtitles">Subtitrai</string>
+  <string name="quality">Kokybė</string>
+  <string name="trailer">Anonsas</string>
+  <string name="season">Sezonas</string>
+  <string name="episode">Epizodas</string>
+  <string name="specials">Specialūs</string>
+  <string name="continuing">Tęsiama</string>
+  <string name="ended">Baigėsi</string>
+  <string name="aired">Rodyta: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Laukiama torento</string>
+  <string name="starting_buffering">Pradedama buferizacija</string>
+  <string name="streaming_started">Srauto perdavimas pradėtas</string>
+  <string name="waiting_for_subtitles">Laukiama subtitrų</string>
+  <string name="seeds">skleidėjai</string>
+  <string name="error_files">Klaida: neįmanoma įrašyti failų. Pamėginkite kitą saugyklos vietą.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Dabar atkuriama</string>
+  <string name="volume">Garsumas</string>
+  <string name="brightness">Šviesumas</string>
+  <string name="hardware_acceleration_error_title">HW spartinimo klaida</string>
+  <string name="hardware_acceleration_error_message">Įvyko klaida susijusi su aparatinės įrangos spartinimu. Ar norite jį išjungti ir pabandyti dar kartą?</string>
+  <string name="best_fit">Geriausiai tinkantis</string>
+  <string name="fill">Užpildyti</string>
+  <string name="fit_horizontal">Pritaikyti horizontaliai</string>
+  <string name="fit_vertical">Pritaikyti vertikaliai</string>
+  <string name="original_size">Originalus</string>
+  <string name="comm_error">Komunikacijos klaida</string>
+  <string name="comm_message">Įvyko klaida gaunant vaizdo įrašą. Tai galėjo nutikti dėl tinklo problemų ar YouTube protokolų. Pamėginti dar kartą vėliau.</string>
+  <string name="leave_videoplayer_title">Ar įsitikinęs?</string>
+  <string name="leave_videoplayer_message">Ar tikrai norite išeiti iš vaizdo grotuvo? %s sustabdys atkūrimą.</string>
+  <string name="encountered_error_title">Įvyko vaizdo atkūrimo klaida</string>
+  <string name="encountered_error">Vaizdo grotuvas susidūrė su rimta klaida. Vaizdo failas negali būti atidarytas ir/ar atkurtas. Formatas neatpažintas.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Sutikti</string>
+  <string name="leave">Išeiti</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Nuostatymai</string>
+  <string name="general">Pagrindiniai</string>
+  <string name="default_view">Numatytoji apžvalga</string>
+  <string name="default_player">Numatytasis vaizdo grotuvas</string>
+  <string name="i18n_language">Programos kalba</string>
+  <string name="restart_effect">Paleiskite programą iš naujo, norėdami pritaikyti pakeitimus</string>
+  <string name="device_language">Įrenginio kalba</string>
+  <string name="stream_over_wifi_only">Perduoti srautą tik per Wi-Fi</string>
+  <string name="internal_player">Vidinis</string>
+  <string name="subtitle_color">Spalva</string>
+  <string name="subtitle_size">Dydis</string>
+  <string name="subtitle_stroke_color">Kontūro spalva</string>
+  <string name="subtitle_stroke_width">Kontūro plotis</string>
+  <string name="subtitle_language">Numatytoji kalba</string>
+  <string name="no_default_set">Nėra numatytosios kalbos</string>
+  <string name="advanced">Papildomi</string>
+  <string name="storage_location">Saugyklos vieta</string>
+  <string name="storage_automatic">Automatiškai</string>
+  <string name="storage_choose">Pasirinkti vietą</string>
+  <string name="not_writable">Negalima įrašyti į šią vietą</string>
+  <string name="remove_cache">Išvalyti podėlį uždarius grotuvą</string>
+  <string name="hw_acceleration">Aparatinės įrangos spartinimas</string>
+  <string name="hw_automatic">Automatiškai</string>
+  <string name="hw_full">Pilnas</string>
+  <string name="hw_decoding">Tik dekodavimas</string>
+  <string name="updates">Atnaujinimai</string>
+  <string name="auto_updates">Automatiniai atnaujinimai</string>
+  <string name="check_for_updates">Ieškoti atnaujinimų</string>
+  <string name="last_check">Paskutinis patikrinimas</string>
+  <string name="about">Apie</string>
+  <string name="version">Versija</string>
+  <string name="changelog">Pakeitimų žurnalas</string>
+  <string name="tap_to_open">Spustelėkite, norėdami atidaryti</string>
+  <string name="report_a_bug">Pranešti apie klaidą</string>
+  <string name="open_source_licenses">Atvirojo kodo licenzijos</string>
+  <string name="torrents">Torentai</string>
+  <string name="download_speed">Maksimalus atsiuntimo greitis</string>
+  <string name="upload_speed">Maksimalus išsiuntimo greitis</string>
+  <string name="max_connections">Maksimalus prisijungimų skaičius</string>
+  <string name="dht_limit">DHT riba</string>
+  <string name="unlimited">Neribojama</string>
+  <string name="show_vpn">Rodyti VPN parinktį meniu</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Tik Wi-Fi</string>
+  <string name="wifi_only_message">Vaizdo įrašų galite perdauoti tik per Wi-Fi. Tai galite išjungti nustatymuose, jei norite perduoti srautą naudodami mobiliuosius duomenis.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Dalintis</string>
+  <string name="drawer_open">Atidaryti navigacijos stalčių</string>
+  <string name="drawer_close">Uždaryti navigacijos stalčių</string>
+  <string name="no_search_results">Nerasta paieškos rezultatų</string>
+  <string name="vpn">VPN</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time! yra rezultatas daugelio kūrėjų ir dizainerių, sujungusių krūvą API sąsajų į vieną visumą,
+		kad torrent filmų žiūrėjimas būtų kaip įmanoma paprastesnis.\n\nMes esame atvirojo kodo projektas. Mes esama iš viso pasaulio. Mes
+		mėgstame filmus. Ir žmogau, mes mėgstame spragėsius.</string>
+  <string name="website">Tinklalapis</string>
+  <string name="forum">Forumas</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Tinklaraštis</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">Ar išmėginote Popcorn Time, skirtą Android? Ji nuostabi!</string>
+  <string name="share_dialog_title">Dalintis su</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Prisijungta prie</string>
+  <string name="disconnect">Atsijungti</string>
+  <string name="select_beaming">Pasirinkite įrenginį projektavimui</string>
+  <string name="starting_beam">Inicijuojamas vaizdo projektavimas...</string>
+  <string name="beaming_failed">Vaizdo įrašas negali būti atkurtas projektavimo įrenginyje. Ar norite pamėginti dar kartą? Programai gali reikėti atsisiųsti daugiau dalių, kad įrenginys galėtų atkurti vaizdo įrašą.</string>
+  <string name="the_video">Vaizdo įrašas</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht programa neįdiegta</string>
+  <string name="vpn_info">Jums reikia įdiegti VPN.ht programą, jei norite naudoti VPN parinktį Popcorn Time programoje. Neįdomu? Tada tiesiog galite paslėpti šį mygtuką.</string>
+  <string name="vpn_download">Atsisiųsti programą</string>
+  <string name="vpn_later">Grįžti vėliau</string>
+  <string name="vpn_hide">Slėpti mygtuką</string>
+</resources>
