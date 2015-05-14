@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="update_available">Има нов ъпдейт</string>
+  <string name="press_install">Цъкни да инсталираш</string>
+  <string name="loading_data">Зареждане на данни...</string>
+  <string name="loading_details">Зареждани на детайли...</string>
+  <string name="loading_shows">Зареждане на сериали...</string>
+  <string name="loading_movies">Зареждане на филми...</string>
+  <string name="loading_subs">Зареждане на субтитри...</string>
+  <string name="error_files">Грешка: Файловете не можаха да бъдат записани</string>
+  <string name="overview_not_available">Съжаляваме! Няма наличен обзорен изглед.</string>
+  <string name="episode">Епизод</string>
+  <string name="unknown_error">Нещо се обърка</string>
+  <!--Genres-->
+  <string name="genre_all">Всички</string>
+  <string name="genre_action">Екшън</string>
+  <string name="genre_adventure">Приключенски</string>
+  <string name="genre_animation">Анимационни</string>
+  <string name="genre_biography">Биографични</string>
+  <string name="genre_comedy">Комедии</string>
+  <string name="genre_crime">Криминале</string>
+  <string name="genre_children">Детски</string>
+  <string name="genre_documentary">Документални</string>
+  <string name="genre_drama">Драма</string>
+  <string name="genre_family">Семейни</string>
+  <string name="genre_fantasy">Фантастика</string>
+  <string name="genre_film_noir">Филм-ноар</string>
+  <string name="genre_game_show">Tелевизионна игра</string>
+  <string name="genre_history">Исторически</string>
+  <string name="genre_home_garden">Дом и Градина</string>
+  <string name="genre_horror">Ужаси</string>
+  <string name="genre_mini_series">Мини-сериали</string>
+  <string name="genre_music">Музикални</string>
+  <string name="genre_musical">Мюзикъл</string>
+  <string name="genre_mystery">Мистерии</string>
+  <string name="genre_news">Новини</string>
+  <string name="genre_reality">Риалити шоу</string>
+  <string name="genre_romance">Романтични</string>
+  <string name="genre_sci_fi">Научна фантастика</string>
+  <string name="genre_short">Късометражни</string>
+  <string name="genre_special_interest">Специализирани интереси</string>
+  <string name="genre_soap">Сапунка</string>
+  <string name="genre_sport">Спортни</string>
+  <string name="genre_suspense">Съспенс</string>
+  <string name="genre_talk_show">Ток-шоу</string>
+  <string name="genre_thriller">Трилъри</string>
+  <string name="genre_war">Военни</string>
+  <string name="genre_western">Уестърни</string>
+  <!--Anime:-->
+  <string name="genre_cars">Коли</string>
+  <string name="genre_dementia">Дименция</string>
+  <string name="genre_demons">Демони</string>
+  <string name="genre_ecchi">Ечи</string>
+  <string name="genre_game">Игра</string>
+  <string name="genre_harem">Харем</string>
+  <string name="genre_josei">Джосей</string>
+  <string name="genre_kids">Детски</string>
+  <string name="genre_magic">Магически</string>
+  <string name="genre_martial_arts">Бойни изкуства</string>
+  <string name="genre_mecha">Мека</string>
+  <string name="genre_military">Военни</string>
+  <string name="genre_police">Полицейски</string>
+  <string name="genre_parody">Пародия</string>
+  <string name="genre_psychological">Психологически</string>
+  <string name="genre_samurai">Самурайски</string>
+  <string name="genre_school">Училищно</string>
+  <string name="genre_seinen">Сейнен</string>
+  <string name="genre_shoujo">Шоуджо</string>
+  <string name="genre_shoujo_ai">Шоуджо-ай</string>
+  <string name="genre_shounen">Шоунен</string>
+  <string name="genre_shounen_ai">Шоунен-ай</string>
+  <string name="genre_slice_of_life">Житейско</string>
+  <string name="genre_space">Космическо</string>
+  <string name="genre_super_power">Супер сили</string>
+  <string name="genre_supernatural">Супер естествено</string>
+  <string name="genre_vampire">Вампири</string>
+  <!--Possible tabs-->
+  <string name="popular_now">ПОПУЛЯРНИ</string>
+  <string name="top_rated">НАЙ-ХАРЕСВАНИ</string>
+  <string name="release_date">ДАТА НА ИЗЛИЗАНЕ</string>
+  <string name="last_updated">ПОСЛЕДНО ОБНОВЕНО</string>
+  <string name="year">ГОДИНА</string>
+  <string name="a_to_z">А - Я</string>
+  <!--BeamManager-->
+  <string name="pairing_tv">Сдвояване с ТВ</string>
+  <string name="enter_pairing_code">Въведете сдвояващ код на ТВ</string>
+</resources>

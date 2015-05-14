@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">ذخیره</string>
+  <string name="cancel">انصراف</string>
+  <string name="close">ببند</string>
+  <string name="ok">تائید</string>
+  <string name="enabled">فعال</string>
+  <string name="disabled">غیرفعال</string>
+  <string name="casting">ارسال ویدئو</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">نام٫ سال٫ هنرپیشه</string>
+  <string name="title_shows">سریال‌ها</string>
+  <string name="title_movies">فیلم‌ها</string>
+  <string name="title_anime">اَنیمه</string>
+  <string name="genres">دسته‌بندی‌ها</string>
+  <string name="search">جست‌و‌جو</string>
+  <string name="searching">در حال جست‌وجو...</string>
+  <string name="no_data_found">اطلاعات پیدا نشد</string>
+  <string name="unknown_error">مشکلی پیش آمد!</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">دقیقه</string>
+  <string name="read_more">بیشتر بخوانید</string>
+  <string name="watch_trailer">تماشای پیش‌پرده</string>
+  <string name="disable_subs">زیرنویس را غیرفعال کن</string>
+  <string name="no_subs">زیرنویس پیدا نشد</string>
+  <string name="no_subs_available">هیچ زیرنویسی یافت نشد</string>
+  <string name="subtitles">زیرنویس‌ها</string>
+  <string name="quality">کیفیت</string>
+  <string name="trailer">پیش‌پرده</string>
+  <string name="season">فصل</string>
+  <string name="episode">قسمت</string>
+  <string name="specials">علایق خاص</string>
+  <string name="continuing">ادامه</string>
+  <string name="ended">پایان یافت</string>
+  <string name="aired">زمان پخش: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">در انتظار تورنت</string>
+  <string name="starting_buffering">شروع میانگیری</string>
+  <string name="streaming_started">جریان داده‌ها شروع شد</string>
+  <string name="waiting_for_subtitles">در حال بارگذاری زیرنویس‌ها</string>
+  <string name="seeds">دانه‌</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">در حال پخش</string>
+  <string name="volume">صدا</string>
+  <string name="brightness">روشنایی</string>
+  <string name="hardware_acceleration_error_title">خطای شتاب‌دهنده‌ی سخت‌افزاری</string>
+  <string name="hardware_acceleration_error_message">شتاب‌دهنده‌ی سخت‌افزاری با مشکل مواجه شد. آیا می‌خواهید آن را غیرفعال و دوباره سعی کنید؟</string>
+  <string name="best_fit">بهترین تناسب</string>
+  <string name="fill">پوشش کامل</string>
+  <string name="fit_horizontal">تناسب افقی</string>
+  <string name="fit_vertical">تناسب عمودی</string>
+  <string name="original_size">اصلی</string>
+  <string name="comm_error">خطای ارتباطی</string>
+  <string name="comm_message">در هنگام دریافت ویدئو خطایی رخ داد. ممکن است به دلیل مشکلات شبکه‌ای یا پروتوکل‌های یوتیوب باشد.</string>
+  <string name="leave_videoplayer_title">آیا مطمئن هستید؟</string>
+  <string name="leave_videoplayer_message">آیا مطمئن هستید که می‌خواهید پلیر را ببندید؟ %s متوقف می‌شود.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">تائید</string>
+  <string name="leave">خروج</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">تنظیمات</string>
+  <string name="general">عمومی</string>
+  <string name="default_view">بررسی اجمالی</string>
+  <string name="default_player">ویدئو پلیر پیش‌فرض</string>
+  <string name="i18n_language">زبان برنامه</string>
+  <string name="restart_effect">برنامه را از نو راه‌اندازی کنید تا تغییرات اعمال شوند</string>
+  <string name="device_language">زبان سیستم</string>
+  <string name="stream_over_wifi_only">فقط از طریق Wi-Fi استریم کن</string>
+  <string name="internal_player">داخلی</string>
+  <string name="subtitle_color">رنگ</string>
+  <string name="subtitle_size">سایز</string>
+  <string name="subtitle_stroke_color">رنگ نوار دور</string>
+  <string name="subtitle_stroke_width">کلفتی نوار دور</string>
+  <string name="subtitle_language">زبان پیش‌فرض</string>
+  <string name="no_default_set">بدون زبان پیش‌فرض</string>
+  <string name="advanced">پیشرفته</string>
+  <string name="storage_location">مکان ذخیره‌ی اطلاعات</string>
+  <string name="storage_automatic">خودکار</string>
+  <string name="storage_choose">انتخاب مکان</string>
+  <string name="not_writable">محل مورد نظر قابل نوشتن نیست</string>
+  <string name="remove_cache">پاکسازی حافظه‌ی موقت پس از بستن برنامه</string>
+  <string name="hw_acceleration">شتاب‌دهنده‌ی سخت‌افزاری</string>
+  <string name="hw_automatic">خودکار</string>
+  <string name="hw_full">کامل</string>
+  <string name="hw_decoding">فقط برای دیکودینگ</string>
+  <string name="updates">به‌ روز رسانی‌ها</string>
+  <string name="auto_updates">به‌ روز رسانی خودکار </string>
+  <string name="check_for_updates">بررسی به روز رسانی‌ها</string>
+  <string name="last_check">بررسی قبلی</string>
+  <string name="about">درباره</string>
+  <string name="version">نسخه</string>
+  <string name="changelog">فهرست تغییرات</string>
+  <string name="tap_to_open">برای باز کردن کلیک کنید</string>
+  <string name="report_a_bug">گزارش خطا</string>
+  <string name="open_source_licenses">مجوزهای کدباز</string>
+  <string name="torrents">تورنت‌ها</string>
+  <string name="download_speed">حداکثر سرعت دانلود</string>
+  <string name="upload_speed">حداکثر سرعت آپلود</string>
+  <string name="max_connections">حداکثر تعداد اتصالات</string>
+  <string name="dht_limit">محدودیت DHT</string>
+  <string name="unlimited">نامحدود</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">فقط Wi-Fi</string>
+  <string name="wifi_only_message">فقط از طریق Wi-Fi میتوانید ویدئوها را استریم کنید. در قسمت تنظیمات می‌توانید این محدودیت را غیرفعال کنید.</string>
+  <!--NavigationDrawer-->
+  <string name="share">اشتراک</string>
+  <string name="drawer_open">منوی جابجایی را باز کن</string>
+  <string name="drawer_close">منوی جابجایی را ببند</string>
+  <string name="no_search_results">هیچ نتیجه‌ای پیدا نشد</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time نتیجه‌ی زحمات توسعه‌دهندگان و طراحان بسیاری‌ست که تعدادی API را با هم ترکیب کرده تا لذت تماشای فیلم‌های تورنت را تا جای ممکن ساده کنند.
+ما یک پروژه‌ی متن‌باز هستیم. ما از همه جای دنیا می‌آییم. فیلم‌هامون رو دوست داریم. و پسر، نمیدونی چقدر عاشق پاپکورن‌یم!</string>
+  <string name="website">وب‌سایت</string>
+  <string name="forum">فروم</string>
+  <string name="google_plus">گوگل+</string>
+  <string name="facebook">فیسبوک</string>
+  <string name="git">گیت</string>
+  <string name="blog">وب‌لاگ</string>
+  <string name="twitter">توییتر</string>
+  <!--Share dialog-->
+  <string name="share_text">پاپکورن تایم برای اندروید رو تا حالا امتحان کردی؟ عالیه! https://popcorntime.io/</string>
+  <string name="share_dialog_title">به اشتراک گزاری با</string>
+  <!--Beam dialog-->
+  <string name="connected_to">اتصال به </string>
+  <string name="disconnect">قطع ارتباط</string>
+  <string name="select_beaming">دستگاهی را برای استریم کردن انتخاب کنید</string>
+  <string name="starting_beam">آماده سازی برای استریم ویديو...</string>
+  <string name="beaming_failed">ویديو امکان پخش در دستگاه مورد نظر را ندارد. آیا می‌خواهید دوباره امتحان کنید؟ برنامه ممکن است احتیاج به دانلود مقدار بیشتری از ویديو را داشته باشد تا دستگاه شما بتواند آن را پخش کند.</string>
+</resources>

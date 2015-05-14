@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
 	<style name="Theme.PopcornTime" parent="Theme.Base">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
 		<!-- v21 specific customisations here -->
+        <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
+        <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
 	</style>
 
 	<style name="Theme.PopcornTime.NavigationDrawer" parent="Theme.PopcornTime">
@@ -13,6 +35,24 @@
 	<style name="Theme.PopcornTime.TransparentStatusBar" parent="Theme.PopcornTime">
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
 		<item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentNavigation">false</item>
 	</style>
+
+    <style name="Theme.PopcornTime.Detail" parent="Theme.PopcornTime.TransparentStatusBar">
+        <item name="android:windowExitTransition">@transition/movie_detail_exit</item>
+        <item name="android:windowReenterTransition">@transition/movie_detail_exit</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/movie_detail_shared_exit</item>
+        <item name="android:windowSharedElementExitTransition">@transition/movie_detail_shared_exit</item>
+    </style>
+
+    <style name="Theme.PopcornTime.RemoteControl" parent="Theme.PopcornTime.TransparentStatusBar">
+        <item name="android:windowExitTransition">@transition/movie_detail_exit</item>
+        <item name="android:windowReenterTransition">@transition/movie_detail_exit</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/movie_detail_shared_exit</item>
+        <item name="android:windowSharedElementExitTransition">@transition/movie_detail_shared_exit</item>
+    </style>
+
 
 </resources>

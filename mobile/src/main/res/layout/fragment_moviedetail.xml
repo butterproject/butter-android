@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+~ This file is part of Popcorn Time.
+~
+~ Popcorn Time is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU General Public License as published by
+~ the Free Software Foundation, either version 3 of the License, or
+~ (at your option) any later version.
+~
+~ Popcorn Time is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+~ GNU General Public License for more details.
+~
+~ You should have received a copy of the GNU General Public License
+~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp"
+        android:alpha="0.7"
+        android:background="@drawable/base_gradient" />
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top"
+        android:background="@color/bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/about_fragment"
+            layout="@layout/fragment_detail_about" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.08"
+            android:background="@android:color/white" />
+
+        <View
+            android:id="@+id/main_div"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/div_white" />
+
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/subtitles"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:optionIcon="@drawable/ic_av_subs"
+            app:optionText="@string/subtitles" />
+
+        <View
+            android:id="@+id/option_div_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+            android:layout_marginStart="@dimen/optionselector_text_margin_start"
+            android:background="@color/div_white" />
+
+        <pct.droid.widget.OptionSelector
+            android:id="@+id/quality"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:optionIcon="@drawable/ic_action_quality"
+            app:optionText="@string/quality" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/play_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/play_button_circle"
+        android:elevation="5dp"
+        android:src="@drawable/ic_av_play_button" />
+</RelativeLayout>

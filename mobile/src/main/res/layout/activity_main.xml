@@ -1,0 +1,60 @@
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.DrawerLayout
+	android:id="@+id/drawer_layout"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:fitsSystemWindows="true"
+	android:clipToPadding="false"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<!-- As the main content view, the view below consumes the entire
+		 space available using match_parent in both dimensions. -->
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<include layout="@layout/toolbar"/>
+
+		<FrameLayout
+			android:id="@+id/container"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1" />
+	</LinearLayout>
+
+	<pct.droid.widget.ScrimInsetsFrameLayout
+		android:id="@+id/navigation_drawer_container"
+		android:layout_width="@dimen/nav_drawer_width"
+		android:layout_gravity="start"
+		android:layout_height="match_parent"
+		android:fitsSystemWindows="true"
+		android:clipToPadding="false"
+		app:insetForeground="#2000">
+
+		<fragment
+			android:id="@+id/navigation_drawer_fragment"
+			class="pct.droid.fragments.NavigationDrawerFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+	</pct.droid.widget.ScrimInsetsFrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

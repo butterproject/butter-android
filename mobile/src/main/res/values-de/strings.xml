@@ -7,28 +7,39 @@
   <string name="ok">OK</string>
   <string name="enabled">Aktiviert</string>
   <string name="disabled">Deaktiviert</string>
+  <string name="casting">Besetzung</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Titel, Jahr, Schauspieler</string>
   <string name="title_shows">Shows</string>
   <string name="title_movies">Filme</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Genres</string>
   <string name="search">Suche</string>
-  <string name="loading_data">Daten werden geladen…</string>
+  <string name="searching">Suchvorgang…</string>
   <string name="no_data_found">Keine Daten gefunden</string>
   <string name="unknown_error">Irgendetwas ist schiefgelaufen</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
+  <string name="read_more">Weiterlesen</string>
   <string name="watch_trailer">Filmvorschau ansehen</string>
   <string name="disable_subs">Untertitel deaktivieren</string>
   <string name="no_subs">Keine Untertitel</string>
+  <string name="no_subs_available">Keine Untertitel verfügbar</string>
   <string name="subtitles">Untertitel</string>
   <string name="quality">Qualität</string>
   <string name="trailer">Filmvorschau</string>
   <string name="season">Staffel</string>
-  <string name="episode">Episode</string>
+  <string name="episode">Folge</string>
+  <string name="specials">Besonderheiten</string>
+  <string name="continuing">Läuft</string>
+  <string name="ended">Beendet</string>
+  <string name="aired">Ausgestrahlt: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Auf Torrent wird gewartet</string>
+  <string name="starting_buffering">Pufferung wird gestartet</string>
   <string name="streaming_started">Streaming gestartet</string>
   <string name="waiting_for_subtitles">Auf Untertitel wird gewartet</string>
-  <string name="seeds">seeds</string>
+  <string name="seeds">Seeds</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Läuft jetzt</string>
   <string name="volume">Lautstärke</string>
@@ -40,20 +51,27 @@
   <string name="fit_horizontal">Horizontal anpassen</string>
   <string name="fit_vertical">Vertikal anpassen</string>
   <string name="original_size">Original</string>
+  <string name="comm_error">Kommunikationsfehler</string>
+  <string name="comm_message">Während der Abruf der Videos ist ein Fehler aufgetreten. Dies könnte aufgrund von Netzwerkproblemen oder YouTube-Protokolle sein. Bitte versuchen Sie es später noch einmal.</string>
+  <string name="leave_videoplayer_title">Sind Sie sicher?</string>
+  <string name="leave_videoplayer_message">Sind Sie sicher, dass Sie den Videoabspieler verlassen möchten? Wiedergabe von %s wird gestoppt.</string>
   <!--TermsActivity strings-->
   <string name="accept">Annehmen</string>
   <string name="leave">Verlassen</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Einstellungen</string>
+  <string name="preferences">Einstellungen</string>
   <string name="general">Allgemein</string>
   <string name="default_view">Standardübersicht</string>
   <string name="default_player">Standard-Videoabspieler</string>
   <string name="i18n_language">Appsprache</string>
+  <string name="restart_effect">Starten Sie die Anwendung neu, damit die Änderungen wirksam werden</string>
   <string name="device_language">Gerätesprache</string>
   <string name="stream_over_wifi_only">Nur über Wi-Fi streamen</string>
   <string name="internal_player">Intern</string>
   <string name="subtitle_color">Farbe</string>
   <string name="subtitle_size">Größe</string>
+  <string name="subtitle_stroke_color">Umrissfarbe</string>
+  <string name="subtitle_stroke_width">Umrissbreite</string>
   <string name="subtitle_language">Standardsprache</string>
   <string name="no_default_set">Keine Standardsprache</string>
   <string name="advanced">Erweitert</string>
@@ -76,6 +94,36 @@
   <string name="tap_to_open">Tippen Sie zum Öffnen</string>
   <string name="report_a_bug">Einen Fehler melden</string>
   <string name="open_source_licenses">Open-Source-Lizenzen</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Maximale Herunterladegeschwindigkeit</string>
+  <string name="upload_speed">Maximale Hochladegeschwindigkeit</string>
+  <string name="max_connections">Maximale Gesamtverbindungen</string>
+  <string name="dht_limit">DHT-Begrenzung</string>
+  <string name="unlimited">Unbegrenzt</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Nur Wi-Fi</string>
+  <string name="wifi_only_message">Sie können nur Videos über Wi-Fi streamen. Dies können Sie in den Einstellungen deaktivieren, wenn über eine Mobilfunkverbindung gestreamt werden soll.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Teilen</string>
+  <string name="drawer_open">Navigation Schublade öffnen</string>
+  <string name="drawer_close">Navigation Schublade schließen</string>
+  <string name="no_search_results">Keine Suchergebnisse gefunden</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time ist das Resultat von Entwickern und Graphiker, die einen Haufen an Programmierschnittstellen verknüpft haben um das Erlebnis beim Schauen von Filmen mittels Torrents so simpel wie nur möglich zu gestalten.\n\nWir sind ein Open-Source-Projekt. Wir kommen von überall her. Wir lieben unsere Filme und wir lieben Popcorn.</string>
+  <string name="website">Webseite</string>
+  <string name="forum">Forum</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">Haben Sie Popcorn Time für Android versucht? Es ist super! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Teilen mit</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Verbunden mit</string>
+  <string name="disconnect">Trennen</string>
+  <string name="select_beaming">Gerät zum Beamen auswählen</string>
+  <string name="starting_beam">Videobeamen wird initialisiert...</string>
+  <string name="beaming_failed">Das Video konnte nicht auf dem Beamer abgespielt spielen. Möchten Sie esnoch einmal versuchen? Die App muss möglicherweise weitere Teile herunterladen, bevor Ihr Gerät in der Lage ist das Video abzuspielen.</string>
 </resources>

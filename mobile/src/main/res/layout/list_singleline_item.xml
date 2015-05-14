@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/navlist_item_height"
+    android:focusable="true"
+    android:focusableInTouchMode="false"
+    android:background="@drawable/selectable_background_list">
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@android:id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_text_margin_horizontal"
+        android:layout_marginStart="@dimen/list_text_margin_horizontal"
+        android:layout_marginRight="@dimen/list_text_margin_horizontal"
+        android:layout_marginEnd="@dimen/list_text_margin_horizontal"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textSize="@dimen/list_text_size"
+        android:textColor="@color/text_color"
+        tools:text="Title Text" />
+
+    <CheckBox
+        android:id="@android:id/checkbox"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_gravity="end|center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/iconlist_icon_margin_horizontal"
+        android:layout_marginEnd="@dimen/iconlist_icon_margin_horizontal" />
+
+</FrameLayout>

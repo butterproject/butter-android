@@ -1,101 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="pct.droid"
-	android:installLocation="auto">
+    package="pct.droid"
+    android:installLocation="auto">
 
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-	<application
-		android:allowBackup="true"
-		android:icon="@drawable/ic_launcher"
-		android:logo="@drawable/ic_logo"
-		android:label="@string/app_name"
-		android:theme="@style/Theme.PopcornTime"
-		android:name=".base.PopcornApplication"
-		android:supportsRtl="true">
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:logo="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.PopcornTime"
+        android:name=".base.PopcornApplication"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".activities.LaunchActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/Theme.HiddenActivity"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
 		<activity
-			android:name="pct.droid.activities.LaunchActivity"
-			android:label="@string/app_name"
-			android:noHistory="true"
-			android:theme="@style/Theme.HiddenActivity"
-			android:windowSoftInputMode="adjustPan">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-
-		<activity
-			android:name="pct.droid.activities.OverviewActivity"
+			android:name=".activities.MainActivity"
+            android:label="@null"
 			android:theme="@style/Theme.PopcornTime.NavigationDrawer"
 			android:windowSoftInputMode="adjustPan">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
 				<data android:scheme="magnet" />
 			</intent-filter>
 		</activity>
+
 		<activity
-			android:name="pct.droid.activities.MovieDetailActivity"
-			android:theme="@style/Theme.PopcornTime.TransparentStatusBar"
-			android:parentActivityName=".activities.OverviewActivity">
+			android:name=".activities.MediaDetailActivity"
+			android:theme="@style/Theme.PopcornTime.Detail"
+			android:parentActivityName=".activities.MainActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".activities.OverviewActivity" />
+				android:value=".activities.MainActivity" />
 		</activity>
 
-		<activity
-			android:name="pct.droid.activities.SearchActivity"
-			android:theme="@style/Theme.PopcornTime.Search" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:theme="@style/Theme.PopcornTime.Search" />
+
+        <activity android:name=".activities.TermsActivity" />
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/about" />
+
+        <activity
+            android:name=".activities.PreferencesActivity"
+            android:parentActivityName=".activities.MainActivity" />
 
 		<activity
-			android:name="pct.droid.activities.ShowDetailActivity"
-			android:theme="@style/Theme.PopcornTime.TransparentStatusBar"
-			android:parentActivityName=".activities.OverviewActivity">
-			<!-- Parent activity meta-data to support 4.0 and lower -->
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".activities.OverviewActivity" />
-		</activity>
-
-		<activity android:name=".activities.TermsActivity" />
+            android:launchMode="singleTask"
+			android:name=".activities.StreamLoadingActivity"
+            android:theme="@style/Theme.PopcornTime.Detail" />
 
 		<activity
-			android:name=".activities.AboutActivity"
-			android:label="@string/about" />
-
-		<activity
-			android:name=".activities.PreferencesActivity"
-			android:parentActivityName=".activities.OverviewActivity" />
-
-		<activity
-			android:name="pct.droid.activities.StreamLoadingActivity"
-			android:screenOrientation="sensorLandscape" />
-		<activity
-			android:name="pct.droid.activities.VideoPlayerActivity"
-			android:screenOrientation="sensorLandscape" />
-		<activity
-			android:name="pct.droid.activities.TrailerPlayerActivity"
+            android:launchMode="singleTask"
+			android:name=".activities.VideoPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
-		<service
-			android:name=".base.services.StreamerService"
-			android:process=":node" />
+        <activity
+            android:name=".activities.BeamPlayerActivity"
+            android:theme="@style/Theme.PopcornTime.RemoteControl"
+            android:screenOrientation="sensorPortrait" />
 
-        <meta-data
-            android:name="com.crashlytics.ApiKey"
-            android:value="7c4365e4bce79980f5f4d6c70026bdee5dcba8fb" />
+		<activity
+			android:name=".activities.TrailerPlayerActivity"
+			android:screenOrientation="sensorLandscape" />
+
+        <service android:name=".base.torrent.TorrentService" />
+        <service android:name=".base.beaming.server.BeamServerService" />
+
+        <receiver android:name=".base.torrent.TorrentBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="pct.droid.base.torrent.TorrentBroadcastReceiver.STOP" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>
 
 </manifest>

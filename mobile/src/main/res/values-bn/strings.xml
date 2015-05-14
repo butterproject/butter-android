@@ -7,27 +7,36 @@
   <string name="ok">ঠিক আছে</string>
   <string name="enabled">সক্রিয়</string>
   <string name="disabled">নিষ্ক্রিয়</string>
+  <string name="casting">কাস্টিং</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">শিরোনাম, বছর, অভিনেতা</string>
   <string name="title_shows">অনুষ্ঠান</string>
   <string name="title_movies">চলচ্চিত্র</string>
+  <string name="title_anime">অ্যানিমে</string>
+  <string name="genres">ধরন</string>
   <string name="search">অনুসন্ধান</string>
   <string name="searching">অনুসন্ধান হচ্ছে...</string>
-  <string name="loading_data">তথ্য লোড হচ্ছে...</string>
-  <string name="loading_details">বিস্তারিত লোড হচ্ছে...</string>
   <string name="no_data_found">কোন উপাত্ত পাওয়া যায়নি</string>
   <string name="unknown_error">কিছুতে ত্রুটি হয়েছে</string>
   <!--DetailActivity strings-->
   <string name="minutes">মিনিট</string>
+  <string name="read_more">আরও পড়ুন</string>
   <string name="watch_trailer">ট্রেইলার দেখুন</string>
   <string name="disable_subs">সাবটাইটেল নিষ্ক্রিয়</string>
   <string name="no_subs">কোন সাবটাইটেল নেই</string>
+  <string name="no_subs_available">কোন সাবটাইটেল উপলব্ধ নেই</string>
   <string name="subtitles">সাবটাইটেল</string>
   <string name="quality">গুণমান</string>
   <string name="trailer">ট্রেইলার</string>
   <string name="season">মৌসুম</string>
   <string name="episode">পর্ব</string>
+  <string name="specials">বিশেষ</string>
+  <string name="continuing">অব্যাহত</string>
+  <string name="ended">সমাপ্ত হয়েছে</string>
+  <string name="aired">প্রচারিত: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">টরেন্টের জন্য অপেক্ষারত</string>
+  <string name="starting_buffering">বাফারিং শুরু হচ্ছে</string>
   <string name="streaming_started">স্ট্রিমিং শুরু হয়েছে</string>
   <string name="waiting_for_subtitles">সাবটাইটেলের জন্য অপেক্ষারত</string>
   <string name="seeds">সিড</string>
@@ -42,11 +51,15 @@
   <string name="fit_horizontal">অনুভূমিক মাপসই</string>
   <string name="fit_vertical">উল্লম্ব মাপসই</string>
   <string name="original_size">আসল</string>
+  <string name="comm_error">যোগাযোগ ত্রুটি</string>
+  <string name="comm_message">ভিডিও পুনরুদ্ধার করার সময় একটি ত্রুটি ঘটেছে। এটি নেটওয়ার্ক বিষয় বা ইউটিউব প্রোটোকলের কারণে হতে পারে। দয়া করে পরে আবার চেষ্টা করুন।</string>
+  <string name="leave_videoplayer_title">আপনি কি নিশ্চিত?</string>
+  <string name="leave_videoplayer_message">আপনি কি ভিডিও প্লেয়ার ছেড়ে চলে যাওয়ার ব্যাপারে নিশ্চিত? %s চালানো বন্ধ হয়ে যাবে।</string>
   <!--TermsActivity strings-->
   <string name="accept">গ্রহণ</string>
   <string name="leave">ত্যাগ</string>
   <!--SettingsActivity strings-->
-  <string name="settings">সেটিংস</string>
+  <string name="preferences">পছন্দসমূহ</string>
   <string name="general">সাধারণ</string>
   <string name="default_view">ডিফল্ট অবলোকন</string>
   <string name="default_player">ডিফল্ট ভিডিও প্লেয়ার</string>
@@ -57,6 +70,8 @@
   <string name="internal_player">অভ্যন্তরীণ</string>
   <string name="subtitle_color">রং</string>
   <string name="subtitle_size">আকার</string>
+  <string name="subtitle_stroke_color">রুপরেখার রং</string>
+  <string name="subtitle_stroke_width">রুপরেখার প্রস্থ</string>
   <string name="subtitle_language">ডিফল্ট ভাষা</string>
   <string name="no_default_set">কোন ডিফল্ট ভাষা নেই</string>
   <string name="advanced">উন্নত</string>
@@ -78,7 +93,13 @@
   <string name="changelog">পরিবর্তনলগ</string>
   <string name="tap_to_open">খুলতে টোকা দিন</string>
   <string name="report_a_bug">একটি ত্রুটির অভিযোগ করুন</string>
-  <string name="open_source_licenses">মুক্ত উত্সের লাইসেন্স</string>
+  <string name="open_source_licenses">মুক্ত-উৎসের লাইসেন্স</string>
+  <string name="torrents">টরেন্ট</string>
+  <string name="download_speed">সর্বোচ্চ ডাউনলোডের গতি</string>
+  <string name="upload_speed">সর্বোচ্চ আপলোডের গতি</string>
+  <string name="max_connections">সর্বোচ্চ মোট সংযোগ</string>
+  <string name="dht_limit">DHT সীমা</string>
+  <string name="unlimited">সীমাহীন</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">ওয়াই-ফাই শুধুমাত্র</string>
   <string name="wifi_only_message">আপনি শুধুমাত্র ওয়াই-ফাইয়ের মাধ্যমে ভিডিও স্ট্রিম করতে পারবেন। আপনি যদি মোবাইল থেকে স্ট্রিম করতে চান, তাহলে আপনি পছন্দসমূহ থেকে নিষ্ক্রিয় করতে পারবেন।</string>
@@ -88,11 +109,11 @@
   <string name="drawer_close">পরিভ্রমণ ড্রয়ার বন্ধ করুন</string>
   <string name="no_search_results">অনুসন্ধানের কোন ফলাফল পাওয়া যায়নি</string>
   <!--About fragment-->
-  <string name="about_message">পপকর্ন টাইম! অনেক অনেক ডেভেলপার এবং ডিজাইনারদের কাজের ফলাফল
+  <string name="about_message">পপকর্ন টাইম! অনেক অনেক উন্নয়নকারী এবং ডিজাইনারদের কাজের ফলাফল
 ⇥⇥যা যতটা সম্ভব সহজে টরেন্ট চলচ্চিত্র দেখার অভিজ্ঞতা দিতে একসঙ্গে একগুচ্ছ API স্থাপন করে।\n\nআমরা একটি ওপেন সোর্স প্রকল্প। আমরা বিশ্বের সব জায়গা থেকে এসেছি।
 ⇥⇥আমরা আমাদের চলচ্চিত্র ভালোবাসি।</string>
   <string name="website">ওয়েবসাইট</string>
-  <string name="discuss">আলোচনা</string>
+  <string name="forum">ফোরাম</string>
   <string name="google_plus">গুগল+</string>
   <string name="facebook">ফেসবুক</string>
   <string name="git">Git</string>
@@ -101,4 +122,10 @@
   <!--Share dialog-->
   <string name="share_text">আপনি কি এনন্ড্রয়েডের জন্য পপকর্ন টাইম ব্যবহার করে দেখেছেন? এটি চমৎকার! https://popcorntime.io/</string>
   <string name="share_dialog_title">এতে ভাগ করুন</string>
+  <!--Beam dialog-->
+  <string name="connected_to">এতে সংযুক্ত</string>
+  <string name="disconnect">বিচ্ছিন্ন করুন</string>
+  <string name="select_beaming">বীমিং করার জন্য ডিভাইস নির্বাচন করুন</string>
+  <string name="starting_beam">ভিডিও বীমিং শুরু হচ্ছে...</string>
+  <string name="beaming_failed">এই ভিডিও আপনার বীমিং ডিভাইসে চালু হবে না। আপনি কি আবার চেষ্টা করতে চান? আপনার ডিভাইসে ভিডিও চালানোর পূর্বে অ্যাপ্লিকেশনটির ভিডিওর আরো অংশ ডাউনলোড করার প্রয়োজন হতে পারে।</string>
 </resources>

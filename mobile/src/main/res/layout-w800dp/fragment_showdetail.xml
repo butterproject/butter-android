@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:background="@color/bg">
+    
+    <LinearLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <ImageView
+            android:id="@+id/cover_image"
+            android:layout_width="310dp"
+            android:layout_height="465dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:background="@android:color/white" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/title_header"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:paddingLeft="@dimen/detail_title_header_offset"
+                android:paddingStart="@dimen/detail_title_header_offset"
+                android:paddingRight="@dimen/detail_title_header_offset"
+                android:paddingEnd="@dimen/detail_title_header_offset"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:background="@color/detail_header_title_bg">
+                <pct.droid.widget.AutoResizeRobotoTextView
+                    android:id="@+id/title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:maxHeight="80dp"
+                    android:textSize="42sp"
+                    android:textColor="@color/text_color"
+                    android:textDirection="locale"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras leo dolor, condimentum."
+                    app:typeface="roboto_medium"
+                    />
+                <RatingBar
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/detail_rating_margin_top"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:isIndicator="true"
+                    android:max="10"
+                    android:progress="5"/>
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/aired"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/detail_meta_margin_top"
+                    android:gravity="center_vertical"
+                    tools:text="2013 • 94 min • Animation"
+                    android:textSize="@dimen/detail_meta_text_size"
+                    android:textColor="@color/secondary_text_color" />
+            </LinearLayout>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_header"
+                android:layout_toLeftOf="@id/play_button"
+                android:layout_toStartOf="@id/play_button"
+                android:layout_marginTop="@dimen/detail_vertical_offset"
+                android:layout_marginLeft="@dimen/detail_title_header_offset"
+                android:layout_marginStart="@dimen/detail_title_header_offset"
+                android:layout_marginEnd="@dimen/detail_small_offset"
+                android:layout_marginRight="@dimen/detail_small_offset"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                android:textDirection="locale"
+                android:maxLines="5"
+                android:ellipsize="end"
+                android:textSize="@dimen/detail_desc_text_size"
+                android:textColor="@color/text_color" />
+
+            <LinearLayout
+                android:id="@+id/info_buttons"
+                android:orientation="horizontal"
+                android:layout_below="@id/synopsis"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/detail_infobutton_offset"
+                android:layout_marginStart="@dimen/detail_infobutton_offset"
+                android:layout_marginRight="@dimen/detail_infobutton_offset"
+                android:layout_marginEnd="@dimen/detail_infobutton_offset"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="@dimen/detail_vertical_offset"
+                >
+                <com.devspark.robototextview.widget.RobotoButton
+                    style="@style/DetailButton.PopcornTime"
+                    android:id="@+id/read_more"
+                    android:layout_marginRight="@dimen/detail_button_margin"
+                    android:layout_marginEnd="@dimen/detail_button_margin"
+                    android:text="@string/read_more"
+                    app:typeface="roboto_medium"  />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="wrap_content"
+        android:layout_height="48sp"
+        android:layout_below="@id/main_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/detail_vertical_offset"
+        android:background="@android:color/transparent"
+        app:pstsDividerColor="@android:color/white" />
+
+    <pct.droid.widget.WrappingViewPager
+        android:id="@+id/pager"
+        android:layout_below="@id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdgeLength="0dp"
+        android:background="@color/bg" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        android:alpha="0.08"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Guardar</string>
+  <string name="cancel">Cancelar</string>
+  <string name="close">Cerrar</string>
+  <string name="ok">Ok</string>
+  <string name="enabled">Habilitado</string>
+  <string name="disabled">Deshabilitado</string>
+  <string name="casting">Transmitiendo</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Título, año, actores</string>
+  <string name="title_shows">Programas</string>
+  <string name="title_movies">Películas</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Géneros</string>
+  <string name="search">Buscar</string>
+  <string name="searching">Buscando...</string>
+  <string name="no_data_found">No se encontraron datos</string>
+  <string name="unknown_error">Algo salió mal</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Leer más</string>
+  <string name="watch_trailer">Ver trailer</string>
+  <string name="disable_subs">Desactivar subtítulos</string>
+  <string name="no_subs">Sin subtítulos</string>
+  <string name="no_subs_available">No hay subtítulos disponibles</string>
+  <string name="subtitles">Subtítulos</string>
+  <string name="quality">Calidad</string>
+  <string name="trailer">Trailer</string>
+  <string name="season">Temporada</string>
+  <string name="episode">Episodio</string>
+  <string name="specials">Especiales</string>
+  <string name="continuing">Continúa</string>
+  <string name="ended">Finalizada</string>
+  <string name="aired">Emitido: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Esperando el archivo torrent</string>
+  <string name="starting_buffering">Iniciando almacenamiento</string>
+  <string name="streaming_started">Transmisión iniciada</string>
+  <string name="waiting_for_subtitles">Esperando los subtítulos</string>
+  <string name="seeds">fuentes</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Reproduciendo ahora</string>
+  <string name="volume">Volúmen</string>
+  <string name="brightness">Brillo</string>
+  <string name="hardware_acceleration_error_title">Error de aceleración por hardware</string>
+  <string name="hardware_acceleration_error_message">Ocurrió un error con la aceleración por hardware. ¿Deseas desactivarla e intentarlo de nuevo?</string>
+  <string name="best_fit">Ajuste perfecto</string>
+  <string name="fill">Rellenar</string>
+  <string name="fit_horizontal">Ajuste horizontal</string>
+  <string name="fit_vertical">Ajuste vertical</string>
+  <string name="original_size">Original</string>
+  <string name="comm_error">Error de comunicaciones</string>
+  <string name="comm_message">Se produjo un error durante la recuperación del video. Esto podría deberse a problemas de red o de protocolos de YouTube. Por favor, inténtelo más tarde.</string>
+  <string name="leave_videoplayer_title">¿Estás seguro?</string>
+  <string name="leave_videoplayer_message">¿Estás seguro que quieres cerrar el programa? %s detendrá la reproducción.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Aceptar</string>
+  <string name="leave">Abandonar</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Preferencias</string>
+  <string name="general">General</string>
+  <string name="default_view">Vista inicial predeterminada</string>
+  <string name="default_player">Reproductor predeterminado</string>
+  <string name="i18n_language">Idioma de la aplicación</string>
+  <string name="restart_effect">Reiniciar la aplicación para que los cambios tengan efecto</string>
+  <string name="device_language">Idioma del dispositivo </string>
+  <string name="stream_over_wifi_only">Reproducir sólo por Wi-Fi</string>
+  <string name="internal_player">Interno</string>
+  <string name="subtitle_color">Color</string>
+  <string name="subtitle_size">Tamaño</string>
+  <string name="subtitle_stroke_color">Color del borde</string>
+  <string name="subtitle_stroke_width">Grosor del borde</string>
+  <string name="subtitle_language">Idioma predeterminado</string>
+  <string name="no_default_set">Sin idioma predeterminado</string>
+  <string name="advanced">Avanzadas</string>
+  <string name="storage_location">Ubicación de almacenamiento</string>
+  <string name="storage_automatic">Automático</string>
+  <string name="storage_choose">Seleccionar ubicación</string>
+  <string name="not_writable">La ubicación es de sólo lectura</string>
+  <string name="remove_cache">Eliminar caché al salir</string>
+  <string name="hw_acceleration">Aceleración por hardware</string>
+  <string name="hw_automatic">Automático</string>
+  <string name="hw_full">Completa</string>
+  <string name="hw_decoding">Sólo decodificación</string>
+  <string name="updates">Actualizaciones</string>
+  <string name="auto_updates">Actualizaciones automáticas</string>
+  <string name="check_for_updates">Comprobar actualizaciones</string>
+  <string name="last_check">Última comprobación</string>
+  <string name="about">Acerca de</string>
+  <string name="version">Versión</string>
+  <string name="changelog">Historial</string>
+  <string name="tap_to_open">Toca para abrir</string>
+  <string name="report_a_bug">Informar de un error</string>
+  <string name="open_source_licenses">Licencias de código abierto</string>
+  <string name="torrents">Archivos</string>
+  <string name="download_speed">Velocidad máxima de bajada</string>
+  <string name="upload_speed">Velocidad máxima de subida</string>
+  <string name="max_connections">Total de conexiones, máximo:</string>
+  <string name="dht_limit">Límite DHT</string>
+  <string name="unlimited">Ilimitadas</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Sólo Wi-Fi</string>
+  <string name="wifi_only_message">La reproducción de videos sólo es posible a través de Wi-Fi. Puedes desactivar esto en \"Configuración\" si deseas utilizar tu conexión de datos móviles.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Compartir</string>
+  <string name="drawer_open">Abrir panel lateral</string>
+  <string name="drawer_close">Cerrar panel lateral</string>
+  <string name="no_search_results">No se encontraron resultados de la búsqueda</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time es el resultado de muchos desarrolladores y diseñadores que juntaron diversas APIs para que la experiencia de ver películas por torrent fuera lo más simple posible.\n\nSomos un proyecto de código abierto. Somos de todas partes del mundo. Nos encantan las películas. Y por supuesto, amamos las palomitas de maíz.</string>
+  <string name="website">Página web</string>
+  <string name="forum">Foro</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_text">¿Has probado Popcorn Time para Android? ¡Es impresionante! https://popcorntime.io/</string>
+  <string name="share_dialog_title">Compartir con</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Conectado a</string>
+  <string name="disconnect">Desconectar</string>
+  <string name="select_beaming">Seleccionar dispositivo para transmitir</string>
+  <string name="starting_beam">Iniciando transmisión de video...</string>
+  <string name="beaming_failed">El video no puede reproducirse en el dispositivo de transmisión. ¿Te gustaría intentarlo de nuevo? La aplicación quizás requiera descargar más partes para que el dispositivo sea capaz de reproducir el video</string>
+</resources>

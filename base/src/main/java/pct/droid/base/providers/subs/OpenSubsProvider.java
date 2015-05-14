@@ -1,3 +1,20 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.providers.subs;
 
 import org.apache.http.MethodNotSupportedException;
@@ -10,8 +27,9 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Episode;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 
 public class OpenSubsProvider extends SubsProvider {
 
@@ -25,7 +43,7 @@ public class OpenSubsProvider extends SubsProvider {
     }
 
     @Override
-    public void getList(final Show show, final Show.Episode episode, final Callback callback) {
+    public void getList(final Show show, final Episode episode, final Callback callback) {
         login(new XMLRPCCallback() {
             @Override
             public void onSuccess(long id, Object result) {
@@ -63,7 +81,7 @@ public class OpenSubsProvider extends SubsProvider {
                                     }
 
                                     String url = item.get("SubDownloadLink").replace(".gz", ".srt");
-                                    String lang = item.get("ISO639").replace("pb", "pt-BR");
+                                    String lang = item.get("ISO639").replace("pb", "pt-br");
                                     int downloads = Integer.parseInt(item.get("SubDownloadsCnt"));
                                     int score = 0;
 
