@@ -7,27 +7,36 @@
   <string name="ok">Εντάξει</string>
   <string name="enabled">Ενεργοποιημένο</string>
   <string name="disabled">Απενεργοποιημένο</string>
+  <string name="casting">Casting</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Τίτλος, έτος, ηθοποιοί</string>
   <string name="title_shows">Σειρές</string>
   <string name="title_movies">Ταινίες</string>
+  <string name="title_anime">Άνιμε</string>
+  <string name="genres">Είδη</string>
   <string name="search">Αναζήτηση</string>
   <string name="searching">Γίνεται αναζήτηση...</string>
-  <string name="loading_data">Φόρτωση δεδομένων...</string>
-  <string name="loading_details">Φόρτωση λεπτομερειών...</string>
   <string name="no_data_found">Δεν βρέθηκαν δεδομένα</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
   <!--DetailActivity strings-->
   <string name="minutes">λεπτά</string>
+  <string name="read_more">Διαβάστε περισσότερα</string>
   <string name="watch_trailer">Προβολή τρέιλερ</string>
   <string name="disable_subs">Απενεργοποίηση υποτίτλων</string>
   <string name="no_subs">Χωρίς υπότιτλους</string>
+  <string name="no_subs_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
   <string name="subtitles">Υπότιτλοι</string>
   <string name="quality">Ποιότητα</string>
   <string name="trailer">Τρέιλερ</string>
   <string name="season">Κύκλος</string>
   <string name="episode">Επεισόδιο</string>
+  <string name="specials">Ειδικά</string>
+  <string name="continuing">Συνεχίζεται</string>
+  <string name="ended">Τελείωσε</string>
+  <string name="aired">Προβλήθηκε: %s</string>
   <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Αναμονή για torrent</string>
+  <string name="starting_buffering">Εκκίνηση φόρτωσης</string>
   <string name="streaming_started">Άρχισε η ροή δεδομένων</string>
   <string name="waiting_for_subtitles">Αναμονή για υπότιτλους</string>
   <string name="seeds">τροφοδότες</string>
@@ -42,11 +51,15 @@
   <string name="fit_horizontal">Οριζόντια προσαρμογή</string>
   <string name="fit_vertical">Κάθετη προσαρμογή</string>
   <string name="original_size">Αρχική</string>
+  <string name="comm_error">Σφάλμα επικοινωνίας</string>
+  <string name="comm_message">Προκλήθηκε σφάλμα κατά την ανάκτηση του βίντεο. Αυτό θα μπορούσε να συμβεί λόγω προβλημάτων με το δίκτυο ή λόγω των πρωτοκόλλων του YouTube. Παρακαλώ προσπαθήστε αργότερα.</string>
+  <string name="leave_videoplayer_title">Είστε σίγουροι;</string>
+  <string name="leave_videoplayer_message">Είστε σίγουροι ότι θέλετε να βγείτε από το πρόγραμμα αναπαραγωγής βίντεο; Θα σταματήσει η αναπαραγωγή του %s.</string>
   <!--TermsActivity strings-->
   <string name="accept">Αποδοχή</string>
   <string name="leave">Αποχώρηση</string>
   <!--SettingsActivity strings-->
-  <string name="settings">Ρυθμίσεις</string>
+  <string name="preferences">Προτιμήσεις</string>
   <string name="general">Γενικά</string>
   <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
   <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>
@@ -57,6 +70,8 @@
   <string name="internal_player">Εσωτερικό</string>
   <string name="subtitle_color">Χρώμα</string>
   <string name="subtitle_size">Μέγεθος</string>
+  <string name="subtitle_stroke_color">Χρώμα περιγράμματος</string>
+  <string name="subtitle_stroke_width">Πλάτος περιγράμματος</string>
   <string name="subtitle_language">Προκαθορισμένη γλώσσα</string>
   <string name="no_default_set">Καμία προκαθορισμένη γλώσσα</string>
   <string name="advanced">Προχωρημένες</string>
@@ -79,6 +94,12 @@
   <string name="tap_to_open">Πατήστε για άνοιγμα</string>
   <string name="report_a_bug">Αναφορά προβλήματος</string>
   <string name="open_source_licenses">Άδειες ανοιχτού κώδικα</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Μέγιστη ταχύτητα λήψης</string>
+  <string name="upload_speed">Μέγιστη ταχύτητα αποστολής</string>
+  <string name="max_connections">Μέγιστες συνολικές συνδέσεις</string>
+  <string name="dht_limit">Όριο DHT</string>
+  <string name="unlimited">Απεριόριστο</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Μόνο Wi-Fi</string>
   <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>
@@ -92,7 +113,7 @@
 		εμπειρία της προβολής ταινιών μέσω torrent όσο το δυνατόν απλούστερη.\n\nΕίμαστε ένα έργο ανοιχτού κώδικα. Είμαστε από όλο τον κόσμο.
 		Αγαπάμε τις ταινίες μας. Και ο φίλε, αγαπάμε το ποπκόρν.</string>
   <string name="website">Ιστοσελίδα</string>
-  <string name="discuss">Συζήτηση</string>
+  <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
   <string name="facebook">Facebook</string>
   <string name="git">Git</string>
@@ -101,4 +122,10 @@
   <!--Share dialog-->
   <string name="share_text">Δοκιμάσατε το Popcorn Time για το Android; Είναι καταπληκτικό! https://popcorntime.io/</string>
   <string name="share_dialog_title">Μοιραστείτε το με</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Συνδεδεμένο με</string>
+  <string name="disconnect">Αποσύνδεση</string>
+  <string name="select_beaming">Επιλέξτε συσκευή για beaming</string>
+  <string name="starting_beam">Γίνεται εκκίνηση του βίντεο beaming...</string>
+  <string name="beaming_failed">Δεν ήταν δυνατή η αναπαραγωγή του βίντεο στην beaming συσκευή σας. Θέλετε να δοκιμάσετε ξανά; Η εφαρμογή μπορεί να χρειάζεται να κάνει λήψη περισσότερων κομματιών για να μπορέσει η συσκευή σας να παίξει το βίντεο.</string>
 </resources>

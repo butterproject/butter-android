@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+~ This file is part of Popcorn Time.
+~
+~ Popcorn Time is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU General Public License as published by
+~ the Free Software Foundation, either version 3 of the License, or
+~ (at your option) any later version.
+~
+~ Popcorn Time is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+~ GNU General Public License for more details.
+~
+~ You should have received a copy of the GNU General Public License
+~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+
+    <RelativeLayout
+        android:id="@+id/base_info_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:paddingLeft="@dimen/detail_horizontal_offset"
+        android:paddingRight="@dimen/detail_horizontal_offset"
+        android:paddingStart="@dimen/detail_horizontal_offset"
+        android:paddingEnd="@dimen/detail_horizontal_offset"
+        android:paddingBottom="@dimen/detail_vertical_offset"
+        android:paddingTop="@dimen/detail_vertical_offset"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Show Title"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/detail_title_text_size"
+            app:typeface="roboto_medium" />
+
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="@dimen/detail_rating_margin_top"
+            android:clickable="false"
+            android:focusable="false"
+            android:isIndicator="true"
+            android:max="10"
+            android:progress="5"/>
+
+        <pct.droid.widget.SquareImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/rating"
+            android:layout_alignBottom="@id/rating"
+            android:layout_toEndOf="@id/rating"
+            android:layout_toRightOf="@id/rating"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:maxWidth="20dp"
+            android:id="@+id/health"
+            android:src="@drawable/ic_health_unknown"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageButton
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/health"
+            android:layout_alignBottom="@id/health"
+            android:layout_toEndOf="@id/health"
+            android:layout_toRightOf="@id/health"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:id="@+id/magnet"
+            android:src="@drawable/ic_action_magnet"
+            android:background="@drawable/selectable_background"
+            android:visibility="visible"
+            tools:visibility="visible"
+            android:scaleType="fitCenter" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/meta"
+            android:layout_below="@id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_meta_margin_top"
+            android:gravity="center_vertical"
+            tools:text="2013 ● 94 min ● Animation"
+            android:textSize="@dimen/detail_meta_text_size"
+            android:textColor="@color/secondary_text_color" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/meta"
+            android:layout_marginTop="@dimen/detail_vertical_offset"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac scelerisque diam. Etiam porttitor nibh vitae purus luctus, a efficitur orci aliquam. Nulla varius mollis nisi at sagittis. Nam consectetur augue eu consequat feugiat. Aliquam."
+            android:textDirection="locale"
+            android:maxLines="5"
+            android:ellipsize="end"
+            android:textSize="@dimen/detail_desc_text_size"
+            android:textColor="@color/text_color" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/info_buttons"
+        android:orientation="horizontal"
+        android:layout_below="@id/base_info_block"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/detail_vertical_offset"
+        >
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/DetailButton.PopcornTime"
+            android:id="@+id/read_more"
+            android:layout_marginRight="@dimen/detail_button_margin"
+            android:layout_marginEnd="@dimen/detail_button_margin"
+            android:text="@string/read_more"
+            app:typeface="roboto_medium"  />
+
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/DetailButton.PopcornTime"
+            android:visibility="gone"
+            android:id="@+id/watch_trailer"
+            android:text="@string/watch_trailer"
+            app:typeface="roboto_medium"  />
+    </LinearLayout>
+
+</RelativeLayout>

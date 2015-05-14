@@ -1,3 +1,20 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.providers.subs;
 
 import android.content.Context;
@@ -21,9 +38,10 @@ import java.util.zip.ZipInputStream;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.BaseProvider;
-import pct.droid.base.providers.media.types.Media;
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Episode;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.subs.FatalParsingException;
 import pct.droid.base.subs.FormatASS;
 import pct.droid.base.subs.FormatSRT;
@@ -39,7 +57,7 @@ public abstract class SubsProvider extends BaseProvider {
 
     public abstract void getList(Movie movie, Callback callback);
 
-    public abstract void getList(Show media, Show.Episode episode, Callback callback);
+    public abstract void getList(Show media, Episode episode, Callback callback);
 
     public interface Callback {
         public void onSuccess(Map<String, String> items);
@@ -99,9 +117,9 @@ public abstract class SubsProvider extends BaseProvider {
                                 String urlString = response.request().urlString();
 
                                 if (urlString.contains(".zip") || urlString.contains(".gz")) {
-                                    SubsProvider.unpack(inputStream, srtPath);
+                                    SubsProvider.unpack(inputStream, srtPath, languageCode);
                                 } else if (SubsProvider.isSubFormat(urlString)) {
-                                    parseFormatAndSave(urlString, srtPath, inputStream);
+                                    parseFormatAndSave(urlString, srtPath, languageCode, inputStream);
                                 } else {
                                     callback.onFailure(response.request(), new IOException("FatalParsingException"));
                                     failure = true;
@@ -144,12 +162,13 @@ public abstract class SubsProvider extends BaseProvider {
     /**
      * Unpack ZIP and save SRT
      *
-     * @param is      InputStream from network
-     * @param srtPath Path where SRT should be saved
+     * @param is           InputStream from network
+     * @param srtPath      Path where SRT should be saved
+     * @param languageCode The language code
      * @throws IOException
      * @throws FatalParsingException
      */
-    private static void unpack(InputStream is, File srtPath) throws IOException, FatalParsingException {
+    private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException, FatalParsingException {
         String filename;
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         ZipEntry ze;
@@ -159,7 +178,7 @@ public abstract class SubsProvider extends BaseProvider {
             if (filename.contains("_MACOSX")) continue;
 
             if (isSubFormat(filename)) {
-                parseFormatAndSave(filename, srtPath, zis);
+                parseFormatAndSave(filename, srtPath, languageCode, zis);
                 try {
                     zis.closeEntry();
                 } catch (IOException e) {
@@ -190,15 +209,15 @@ public abstract class SubsProvider extends BaseProvider {
     /**
      * Parse the text, convert and save to SRT file
      *
-     * @param inputUrl    Original network location
-     * @param srtPath     Place where SRT should be saved
-     * @param inputStream InputStream of data
-     * @throws IOException
+     * @param inputUrl     Original network location
+     * @param srtPath      Place where SRT should be saved
+     * @param languageCode The language code
+     * @param inputStream  InputStream of data  @throws IOException
      */
-    private static void parseFormatAndSave(String inputUrl, File srtPath, InputStream inputStream) throws IOException {
+    private static void parseFormatAndSave(String inputUrl, File srtPath, String languageCode, InputStream inputStream) throws IOException {
         TimedTextObject subtitleObject = null;
 
-        String inputString = FileUtils.inputstreamToCharsetString(inputStream);
+        String inputString = FileUtils.inputstreamToCharsetString(inputStream, languageCode);
         String[] inputText = inputString.split("\n|\r\n");
 
         if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {

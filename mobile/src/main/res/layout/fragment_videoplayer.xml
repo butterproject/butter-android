@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:background="@android:color/black">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="clip_horizontal|clip_vertical">
+
+        <VideoView
+            android:id="@+id/trailer_view"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <SurfaceView
+            android:id="@+id/video_surface"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <pct.droid.widget.StrokedRobotoTextView
+        android:id="@+id/subtitle_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/player_subtitles_bottom_margin"
+        android:textDirection="anyRtl"
+        android:gravity="center_horizontal" />
+
+    <ProgressBar
+        android:id="@+id/progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <RelativeLayout
+        android:id="@+id/control_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/player_controls_margin"
+        android:layout_marginRight="@dimen/player_controls_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/player_controls_bottom_margin"
+        android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/player_controls_padding"
+            android:background="@drawable/player_controls_background">
+
+            <RelativeLayout
+                android:id="@+id/time_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/player_controls_distance">
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/current_time"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="right|end"
+                    tools:text="0:00" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/length_time"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="left|start"
+                    tools:text="0:00" />
+
+                <pct.droid.widget.SeekBar
+                    android:id="@+id/control_bar"
+                    android:layout_toRightOf="@id/current_time"
+                    android:layout_toEndOf="@id/current_time"
+                    android:layout_toLeftOf="@id/length_time"
+                    android:layout_toStartOf="@id/length_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/play_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/time_bar"
+                android:background="@drawable/player_controls_play_bg"
+                android:src="@drawable/ic_av_play"
+                android:scaleType="centerInside" />
+
+            <ImageButton
+                android:id="@+id/rewind_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_toLeftOf="@id/play_button"
+                android:layout_toStartOf="@id/play_button"
+                android:layout_marginRight="@dimen/player_controls_distance"
+                android:layout_marginEnd="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_rewind"
+                android:scaleType="centerInside" />
+
+            <ImageButton
+                android:id="@+id/forward_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_toRightOf="@id/play_button"
+                android:layout_toEndOf="@id/play_button"
+                android:layout_marginLeft="@dimen/player_controls_distance"
+                android:layout_marginStart="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_forward"
+                android:scaleType="centerInside"/>
+
+            <ImageButton
+                android:id="@+id/scale_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_toLeftOf="@id/rewind_button"
+                android:layout_toStartOf="@id/rewind_button"
+                android:layout_marginRight="@dimen/player_controls_distance"
+                android:layout_marginEnd="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_aspect_ratio"
+                android:scaleType="centerInside"/>
+
+            <ImageButton
+                android:id="@+id/subs_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_toRightOf="@id/forward_button"
+                android:layout_toEndOf="@id/forward_button"
+                android:layout_marginLeft="@dimen/player_controls_distance"
+                android:layout_marginStart="@dimen/player_controls_distance"
+                android:background="@drawable/selectable_background"
+                android:src="@drawable/ic_av_subs"
+                android:scaleType="centerInside"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/player_overlay"
+        android:fitsSystemWindows="true" />
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/player_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:padding="@dimen/player_controls_distance"
+        android:background="@drawable/player_controls_background"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><!-- File created by the Android Action Bar Style Generator
-
-     Copyright (C) 2011 The Android Open Source Project
-     Copyright (C) 2012 readyState Software Ltd
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-          http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Popcorn Time.
+  ~
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  -->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -38,6 +37,11 @@
 		<item name="android:listDivider">@drawable/list_divider</item>
 		<!--<item name="windowActionBarOverlay">true</item>-->
 		<item name="android:windowBackground">@color/bg</item>
+        <item name="android:ratingBarStyle">@style/RatingBar.PopcornTime</item>
+
+        <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
+        <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
 	</style>
 
 	<style name="Theme.PopcornTime" parent="Theme.Base">
@@ -49,12 +53,9 @@
 		<item name="android:windowAnimationStyle">@style/ActivityFadeAnimation</item>
 	</style>
 
-	<style name="Theme.Dialog.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
-		<item name="android:windowIsFloating">true</item>
-		<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:backgroundDimEnabled">true</item>
-	</style>
+    <style name="Theme.PopcornTime.Detail" parent="Theme.PopcornTime.TransparentStatusBar"/>
+
+    <style name="Theme.PopcornTime.RemoteControl" parent="Theme.PopcornTime.TransparentStatusBar"/>
 
 	<style name="ActivityFadeAnimation" parent="@android:style/Animation.Activity">
 		<item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
@@ -63,7 +64,31 @@
 		<item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
 	</style>
 
-	<style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="Theme.Dialog.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="Theme.Dialog.Episode" parent="Theme.Dialog.Transparent">
+        <!-- Fill the screen -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">bottom</item>
+
+        <item name="android:windowBackground">@color/overlay</item>
+        <item name="android:windowIsFloating">false</item>
+
+        <item name="android:windowAnimationStyle">@style/Theme.Dialog.Episode.Anim</item>
+    </style>
+
+    <style name="Theme.Dialog.Episode.Anim">
+        <item name="android:windowEnterAnimation">@anim/episode_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/episode_fade_out</item>
+    </style>
+
+    <style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 		<item name="colorControlNormal">@android:color/white</item>
 		<item name="colorAccent">@android:color/white</item>
 	</style>
@@ -81,30 +106,66 @@
 		<item name="android:maxHeight">16dip</item>
 	</style>
 
-	<style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
-		<item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
-		</item>
-		<item name="android:indeterminateDrawable">
-			@drawable/scrubber_progress_horizontal_holo_light
-		</item>
-		<item name="android:minHeight">13dip</item>
-		<item name="android:maxHeight">13dip</item>
-		<item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
-		<item name="android:thumbOffset">16dip</item>
-		<item name="android:paddingLeft">16dip</item>
-		<item name="android:paddingRight">16dip</item>
-	</style>
+    <style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal</item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
 
-	<style name="AboutButton" parent="android:Widget.Button">
-		<item name="android:layout_marginTop">32dp</item>
-		<item name="android:drawablePadding">16dp</item>
-		<item name="android:layout_gravity">center_horizontal</item>
-		<item name="android:layout_centerHorizontal">true</item>
-        <item name="android:padding">16dp</item>
-		<item name="android:gravity">center</item>
-		<item name="android:textColor">@color/text_color</item>
-		<item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
-		<item name="android:background">?attr/selectableItemBackground</item>
-	</style>
+    <style name="AboutButton" parent="android:Widget.Button">
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="RatingBar.PopcornTime" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:maxHeight">16dp</item>
+    </style>
+
+    <style name="DetailButton.PopcornTime" parent="android:Widget.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/detail_button_text_size</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:radius">2dp</item>
+        <item name="android:background">@drawable/selectable_background_rounded</item>
+    </style>
+
+    <!-- Fix Toolbar metrics -->
+    <style name="Custom.Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="maxButtonHeight">48dp</item>
+        <item name="android:paddingLeft">@dimen/toolbar_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/toolbar_horizontal_padding</item>
+        <item name="contentInsetStart">@dimen/first_keyline</item>
+    </style>
+
+    <style name="Custom.Widget.Toolbar.Button.Navigation" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">48dp</item>
+    </style>
+
+    <style name="Custom.Widget.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
 
 </resources>

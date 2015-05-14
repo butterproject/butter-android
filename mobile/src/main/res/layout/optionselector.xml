@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal"
+    android:duplicateParentState="true"
+    android:background="@drawable/selectable_background">
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="@dimen/context_icon"
+        android:layout_height="@dimen/context_icon"
+        android:layout_marginLeft="@dimen/optionselector_icon_margin_start"
+        android:layout_marginStart="@dimen/optionselector_icon_margin_start"
+        android:layout_gravity="center_vertical|start"
+        tools:src="@drawable/ic_launcher"
+        android:duplicateParentState="true" />
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@android:id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+        android:layout_marginStart="@dimen/optionselector_text_margin_start"
+        android:layout_marginRight="@dimen/optionselector_text_margin_end"
+        android:layout_marginEnd="@dimen/optionselector_text_margin_end"
+        android:layout_gravity="center_vertical"
+        android:duplicateParentState="true"
+        android:lines="1"
+        android:gravity="start"
+        android:textDirection="locale"
+        tools:text="@string/app_name"
+        android:textSize="@dimen/optionselector_text_size"
+        android:textColor="@android:color/white" />
+
+</FrameLayout>

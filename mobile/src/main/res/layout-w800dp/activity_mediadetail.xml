@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="@dimen/detail_card_margin"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/popcorn_logo"
+        android:alpha="0.6" />
+
+    <ProgressBar
+        android:id="@+id/header_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/logo"
+        android:alpha="0.6"
+        android:paddingTop="20dp"
+        style="?android:attr/progressBarStyle" />
+
+    <ImageView
+        android:id="@+id/bg_image"
+        android:transitionName="background"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0.18"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/ab_gradient" />
+
+    <pct.droid.widget.ObservableParallaxScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdgeLength="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <!-- Placeholder view for parallax -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <FrameLayout
+                android:id="@+id/content"
+                android:transitionName="content"
+                android:layout_marginLeft="@dimen/detail_card_margin"
+                android:layout_marginRight="@dimen/detail_card_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:background="@color/bg"
+                android:elevation="4dp" />
+        </LinearLayout>
+
+    </pct.droid.widget.ObservableParallaxScrollView>
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+         />
+
+</RelativeLayout>

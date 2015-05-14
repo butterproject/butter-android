@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="parallax_header_height">288dp</dimen>
+
+    <dimen name="detail_card_margin">96dp</dimen>
+    <dimen name="detail_title_text_size">32sp</dimen>
+    <dimen name="detail_title_header_offset">32dp</dimen>
+    <dimen name="detail_small_offset">24dp</dimen>
+    <dimen name="detail_infobutton_offset">24dp</dimen>
+    <dimen name="detail_vertical_offset">32dp</dimen>
+
+    <dimen name="first_keyline">24dp</dimen>
+    <dimen name="second_keyline">80dp</dimen>
+    <dimen name="toolbar_horizontal_padding">12dp</dimen>
+
+</resources>

@@ -1,21 +1,35 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.utils;
 
-import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.ViewGroup;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-
-import pct.droid.base.R;
 
 public class PixelUtils {
 
@@ -44,37 +58,67 @@ public class PixelUtils {
 
     public static int getStatusBarHeight(Context context) {
         int statusBarHeight = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+            statusBarHeight = resources.getDimensionPixelSize(resourceId);
         }
         return statusBarHeight;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public static int getNavigationBarHeight(Context context) {
+        int navigationBarHeight = 0;
+        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+        boolean hasHomeKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_HOME);
+        if (!hasBackKey && !hasHomeKey) {
+            // 99% sure there is a navigation bar
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                navigationBarHeight = resources.getDimensionPixelSize(resourceId);
+            }
+        }
+        return navigationBarHeight;
+    }
+
     public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            Point size = new Point();
-            display.getSize(size);
-            return size.x;
-        }
-        return display.getWidth();
+        Point size = new Point();
+        display.getSize(size);
+        return size.x;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            Point size = new Point();
-            display.getSize(size);
-            return size.y;
-        }
-        return display.getHeight();
+        Point size = new Point();
+        display.getSize(size);
+        return size.y;
+    }
+
+    public static float getScreenDensity(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        return metrics.density;
+    }
+
+    public static boolean screenIsPortrait(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    public static boolean isTablet(Context context) {
+        int widthPixels = getScreenWidth(context);
+        float density = getScreenDensity(context);
+
+        int dpi = (int) (widthPixels / density);
+
+        return dpi > TABLET_MIN_DP_WEIGHT;
     }
 
 
+    public static final int TABLET_MIN_DP_WEIGHT = 800;
 
 }

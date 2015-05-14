@@ -1,3 +1,20 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.base.providers.subs;
 
 import com.squareup.okhttp.Request;
@@ -10,64 +27,65 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import pct.droid.base.providers.media.types.Movie;
-import pct.droid.base.providers.media.types.Show;
+import pct.droid.base.providers.media.models.Episode;
+import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.media.models.Show;
 
 public class YSubsProvider extends SubsProvider {
 
-    protected String mApiUrl = "http://api.yifysubtitles.com/subs/";
-    protected String mMirrorApiUrl = "http://api.ysubs.com/subs/";
-    protected String mPrefix = "http://www.yifysubtitles.com/";
-    protected HashMap<String, String> mLanguageMapping = new HashMap<String, String>();
+    private static final String API_URL = "http://api.yifysubtitles.com/subs/";
+    private static final String MIRROR_URL = "http://api.ysubs.com/subs/";
+    private static final String PREFIX = "http://www.yifysubtitles.com/";
+    private static final HashMap<String, String> LANGUAGE_MAPPING = new HashMap<String, String>();
 
-    public YSubsProvider() {
-        mLanguageMapping.put("albanian", "sq");
-        mLanguageMapping.put("arabic", "ar");
-        mLanguageMapping.put("bengali", "bn");
-        mLanguageMapping.put("brazilian-portuguese", "pt-br");
-        mLanguageMapping.put("bulgarian", "bg");
-        mLanguageMapping.put("bosnian", "bs");
-        mLanguageMapping.put("chinese", "zh");
-        mLanguageMapping.put("croatian", "hr");
-        mLanguageMapping.put("czech", "cs");
-        mLanguageMapping.put("danish", "da");
-        mLanguageMapping.put("dutch", "nl");
-        mLanguageMapping.put("english", "en");
-        mLanguageMapping.put("estonian", "et");
-        mLanguageMapping.put("farsi-persian", "fa");
-        mLanguageMapping.put("finnish", "fi");
-        mLanguageMapping.put("french", "fr");
-        mLanguageMapping.put("german", "de");
-        mLanguageMapping.put("greek", "el");
-        mLanguageMapping.put("hebrew", "he");
-        mLanguageMapping.put("hungarian", "hu");
-        mLanguageMapping.put("indonesian", "id");
-        mLanguageMapping.put("italian", "it");
-        mLanguageMapping.put("japanese", "ja");
-        mLanguageMapping.put("korean", "ko");
-        mLanguageMapping.put("lithuanian", "lt");
-        mLanguageMapping.put("macedonian", "mk");
-        mLanguageMapping.put("malay", "ms");
-        mLanguageMapping.put("norwegian", "no");
-        mLanguageMapping.put("polish", "pl");
-        mLanguageMapping.put("portuguese", "pt");
-        mLanguageMapping.put("romanian", "ro");
-        mLanguageMapping.put("russian", "ru");
-        mLanguageMapping.put("serbian", "sr");
-        mLanguageMapping.put("slovenian", "sl");
-        mLanguageMapping.put("spanish", "es");
-        mLanguageMapping.put("swedish", "sv");
-        mLanguageMapping.put("thai", "th");
-        mLanguageMapping.put("turkish", "tr");
-        mLanguageMapping.put("urdu", "ur");
-        mLanguageMapping.put("ukrainian", "uk");
-        mLanguageMapping.put("vietnamese", "vi");
+    static {
+        LANGUAGE_MAPPING.put("albanian", "sq");
+        LANGUAGE_MAPPING.put("arabic", "ar");
+        LANGUAGE_MAPPING.put("bengali", "bn");
+        LANGUAGE_MAPPING.put("brazilian-portuguese", "pt-br");
+        LANGUAGE_MAPPING.put("bulgarian", "bg");
+        LANGUAGE_MAPPING.put("bosnian", "bs");
+        LANGUAGE_MAPPING.put("chinese", "zh");
+        LANGUAGE_MAPPING.put("croatian", "hr");
+        LANGUAGE_MAPPING.put("czech", "cs");
+        LANGUAGE_MAPPING.put("danish", "da");
+        LANGUAGE_MAPPING.put("dutch", "nl");
+        LANGUAGE_MAPPING.put("english", "en");
+        LANGUAGE_MAPPING.put("estonian", "et");
+        LANGUAGE_MAPPING.put("farsi-persian", "fa");
+        LANGUAGE_MAPPING.put("finnish", "fi");
+        LANGUAGE_MAPPING.put("french", "fr");
+        LANGUAGE_MAPPING.put("german", "de");
+        LANGUAGE_MAPPING.put("greek", "el");
+        LANGUAGE_MAPPING.put("hebrew", "he");
+        LANGUAGE_MAPPING.put("hungarian", "hu");
+        LANGUAGE_MAPPING.put("indonesian", "id");
+        LANGUAGE_MAPPING.put("italian", "it");
+        LANGUAGE_MAPPING.put("japanese", "ja");
+        LANGUAGE_MAPPING.put("korean", "ko");
+        LANGUAGE_MAPPING.put("lithuanian", "lt");
+        LANGUAGE_MAPPING.put("macedonian", "mk");
+        LANGUAGE_MAPPING.put("malay", "ms");
+        LANGUAGE_MAPPING.put("norwegian", "no");
+        LANGUAGE_MAPPING.put("polish", "pl");
+        LANGUAGE_MAPPING.put("portuguese", "pt");
+        LANGUAGE_MAPPING.put("romanian", "ro");
+        LANGUAGE_MAPPING.put("russian", "ru");
+        LANGUAGE_MAPPING.put("serbian", "sr");
+        LANGUAGE_MAPPING.put("slovenian", "sl");
+        LANGUAGE_MAPPING.put("spanish", "es");
+        LANGUAGE_MAPPING.put("swedish", "sv");
+        LANGUAGE_MAPPING.put("thai", "th");
+        LANGUAGE_MAPPING.put("turkish", "tr");
+        LANGUAGE_MAPPING.put("urdu", "ur");
+        LANGUAGE_MAPPING.put("ukrainian", "uk");
+        LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
     @Override
     public void getList(final Movie media, final Callback callback) {
         final Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(mApiUrl + media.imdbId);
+        requestBuilder.url(API_URL + media.imdbId);
         requestBuilder.tag(SUBS_CALL);
 
         fetch(requestBuilder, media, new Callback() {
@@ -78,14 +96,14 @@ public class YSubsProvider extends SubsProvider {
 
             @Override
             public void onFailure(Exception e) {
-                requestBuilder.url(mMirrorApiUrl + media.imdbId);
+                requestBuilder.url(MIRROR_URL + media.imdbId);
                 fetch(requestBuilder, media, callback);
             }
         });
     }
 
     @Override
-    public void getList(Show media, Show.Episode episode, Callback callback) {
+    public void getList(Show media, Episode episode, Callback callback) {
         // Show subtitles not supported
         callback.onFailure(new MethodNotSupportedException("Show subtitles not supported"));
     }
@@ -102,7 +120,7 @@ public class YSubsProvider extends SubsProvider {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-                    callback.onSuccess(result.formatForPopcorn(mPrefix, mLanguageMapping).get(media.imdbId));
+                    callback.onSuccess(result.formatForPopcorn(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
             }
         });
@@ -115,7 +133,7 @@ public class YSubsProvider extends SubsProvider {
 
         public Map<String, Map<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
             Map<String, Map<String, String>> returnMap = new HashMap<>();
-            if (success) {
+            if (success && subs != null) {
                 String[] imdbIds = getKeys(subs);
                 for (String imdbId : imdbIds) {
                     HashMap<String, String> imdbMap = new HashMap<>();
@@ -142,7 +160,7 @@ public class YSubsProvider extends SubsProvider {
         }
 
         private String[] getKeys(HashMap<String, ?> map) {
-            if(map.size() > 0 && map != null) {
+            if (map != null && map.size() > 0) {
                 return map.keySet().toArray(new String[map.size()]);
             }
             return new String[0];
