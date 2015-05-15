@@ -89,7 +89,7 @@ public class PTVOverviewFragment extends BrowseFragment {
 
         //setup background updater
         mBackgroundUpdater = new BackgroundUpdater();
-        mBackgroundUpdater.initialise(getActivity(), R.drawable.default_row_background);
+        mBackgroundUpdater.initialise(getActivity(), R.color.black);
 
         //setup main adapter
         mListRowPresenter = new ListRowPresenter();

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <LinearLayout
         android:id="@+id/progressOverlay"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="4"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -22,17 +30,33 @@
             android:id="@+id/primary_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/loading_data" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/loading_data"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@android:color/white"
+            tools:text="22%" />
 
         <TextView
             android:id="@+id/secondary_textview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            tools:text="122kb/s" />
 
         <TextView
             android:id="@+id/tertiary_textview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            tools:text="22 Peers" />
     </LinearLayout>
 
-</FrameLayout>
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

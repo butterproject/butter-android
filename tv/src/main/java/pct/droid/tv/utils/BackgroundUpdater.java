@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.v17.leanback.app.BackgroundManager;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -15,7 +14,6 @@ import java.util.TimerTask;
 
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
-import pct.droid.tv.R;
 
 public class BackgroundUpdater {
 
@@ -23,7 +21,7 @@ public class BackgroundUpdater {
     private int mDisplayWidth;
     private int mDisplayHeight;
     private static int BACKGROUND_UPDATE_DELAY = 300;
-    private Drawable mDefaultBackground;
+    private int mDefaultBackground;
     private Context mContext;
     private Target mBackgroundImageTarget;
     private Timer mBackgroundTimer;
@@ -36,7 +34,7 @@ public class BackgroundUpdater {
         mBackgroundManager = BackgroundManager.getInstance(activity);
         mBackgroundManager.attach(activity.getWindow());
         mBackgroundImageTarget = new PicassoBackgroundManagerTarget(mBackgroundManager);
-        mDefaultBackground = mContext.getResources().getDrawable(defaultBackground);
+        mDefaultBackground = defaultBackground;
         mDisplayWidth = PixelUtils.getScreenWidth(mContext);
         mDisplayHeight = PixelUtils.getScreenWidth(mContext);
     }
@@ -67,7 +65,7 @@ public class BackgroundUpdater {
 
         //load default background image
         if (null == uri) {
-            Picasso.with(mContext).load(R.drawable.default_background).into(mBackgroundImageTarget);
+            Picasso.with(mContext).load(mDefaultBackground).into(mBackgroundImageTarget);
             return;
         }
 
@@ -78,13 +76,13 @@ public class BackgroundUpdater {
                 .into(mBackgroundImageTarget);
     }
 
-    protected void setDefaultBackground(Drawable background) {
-        mDefaultBackground = background;
-    }
+//    protected void setDefaultBackground(Drawable background) {
+//        mDefaultBackground = background;
+//    }
 
 
     protected void setDefaultBackground(int resourceId) {
-        mDefaultBackground = mContext.getResources().getDrawable(resourceId);
+        mDefaultBackground = resourceId;
     }
 
     /**
@@ -100,7 +98,7 @@ public class BackgroundUpdater {
      * Clears the background immediately
      */
     public void clearBackground() {
-        mBackgroundManager.setDrawable(mDefaultBackground);
+        mBackgroundManager.setThemeDrawableResourceId(mDefaultBackground);
     }
 
     private class UpdateBackgroundTask extends TimerTask {

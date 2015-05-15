@@ -49,7 +49,7 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mBackgroundUpdater.initialise(getActivity(), R.drawable.default_background);
+		mBackgroundUpdater.initialise(getActivity(), R.color.black);
 		updateBackground();
 	}
 

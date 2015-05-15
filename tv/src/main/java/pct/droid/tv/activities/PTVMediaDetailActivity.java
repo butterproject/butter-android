@@ -1,11 +1,13 @@
 package pct.droid.tv.activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
 import pct.droid.tv.fragments.PTVBaseDetailsFragment;
@@ -58,18 +61,21 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
      * Called when the activity is first created.
      */
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_media_details);
 
-        mBackgroundUpdater.initialise(this, R.drawable.default_background);
+        mBackgroundUpdater.initialise(this, R.color.black);
         mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
         String backgroundImage = getIntent().getStringExtra(EXTRA_BACKGROUND_URL);
         String heroImage = getIntent().getStringExtra(EXTRA_HERO_URL);
 
         updateBackground(backgroundImage);
 
-        postponeEnterTransition();
+        if (VersionUtils.isLollipop()) {
+            postponeEnterTransition();
+        }
         if (mItem instanceof Movie) {
 //            .addSharedElement(View sharedElement, String name)
             getFragmentManager().beginTransaction().replace(R.id.fragment, PTVMovieDetailsFragment.newInstance(mItem, heroImage)).commit();
@@ -77,7 +83,9 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
             getFragmentManager().beginTransaction().replace(R.id.fragment, PTVShowDetailsFragment.newInstance(mItem, heroImage)).commit();
         }
         getFragmentManager().executePendingTransactions();
-        startPostponedEnterTransition();
+        if (VersionUtils.isLollipop()) {
+            startPostponedEnterTransition();
+        }
     }
 
     @Override
