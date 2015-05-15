@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="update_available">Доступно новое обновление</string>
+  <string name="press_install">Нажмите для установки</string>
+  <string name="loading_data">Загрузка данных...</string>
+  <string name="loading_details">Загрузка данных...</string>
+  <string name="loading_shows">Загрузка шоу...</string>
+  <string name="loading_movies">Загрузка фильмов...</string>
+  <string name="loading_subs">Загрузка субтитров...</string>
+  <string name="error_files">Ошибка: не удалось записать файлы</string>
+  <string name="overview_not_available">Извините!
+Обзор не доступен.</string>
+  <string name="episode">Эпизод</string>
+  <string name="unknown_error">Что-то пошло не так</string>
+  <string name="torrent_failed">Не удалось получить торрент</string>
+  <!--Genres-->
+  <string name="genre_all">Все</string>
+  <string name="genre_action">Боевик</string>
+  <string name="genre_adventure">Приключения</string>
+  <string name="genre_animation">Анимационный</string>
+  <string name="genre_biography">Биография</string>
+  <string name="genre_comedy">Комедия</string>
+  <string name="genre_crime">Криминальный</string>
+  <string name="genre_children">Детское</string>
+  <string name="genre_documentary">Документальный</string>
+  <string name="genre_drama">Драма</string>
+  <string name="genre_family">Семейный</string>
+  <string name="genre_fantasy">Фантастика</string>
+  <string name="genre_film_noir">Нуар</string>
+  <string name="genre_game_show">Игровое шоу</string>
+  <string name="genre_history">Исторический</string>
+  <string name="genre_home_garden">Дом и сад</string>
+  <string name="genre_horror">Ужасы</string>
+  <string name="genre_mini_series">Мини-сериалы</string>
+  <string name="genre_music">Музыкальный</string>
+  <string name="genre_musical">Мюзикл</string>
+  <string name="genre_mystery">Мистика</string>
+  <string name="genre_news">Новости</string>
+  <string name="genre_reality">Реалити-шоу</string>
+  <string name="genre_romance">Романтический</string>
+  <string name="genre_sci_fi">Научная фантастика</string>
+  <string name="genre_short">Короткометражный</string>
+  <string name="genre_special_interest">Специальные интересы</string>
+  <string name="genre_soap">Мыльная опера</string>
+  <string name="genre_sport">Спортивный</string>
+  <string name="genre_suspense">Саспенс</string>
+  <string name="genre_talk_show">Ток-шоу</string>
+  <string name="genre_thriller">Триллер</string>
+  <string name="genre_war">Военный</string>
+  <string name="genre_western">Вестерн</string>
+  <!--Anime:-->
+  <string name="genre_cars">Автомобили</string>
+  <string name="genre_dementia">
+        Деменция
+        </string>
+  <string name="genre_demons">Демоны</string>
+  <string name="genre_ecchi">
+        Этти
+        </string>
+  <string name="genre_game">
+        Игра
+        </string>
+  <string name="genre_harem">
+        Гарем
+        </string>
+  <string name="genre_josei">
+        Дзёсэй
+        </string>
+  <string name="genre_kids">Дети</string>
+  <string name="genre_magic">Волшебство</string>
+  <string name="genre_martial_arts">Боевые искусства</string>
+  <string name="genre_mecha">
+        Меха
+        </string>
+  <string name="genre_military">Военный</string>
+  <string name="genre_police">
+        Полиция
+        </string>
+  <string name="genre_parody">Пародия</string>
+  <string name="genre_psychological">Психологический</string>
+  <string name="genre_samurai">
+        Самурай
+        </string>
+  <string name="genre_school">
+        Школа
+        </string>
+  <string name="genre_seinen">
+        Сэйнэн
+        </string>
+  <string name="genre_shoujo">
+        Сёдзё
+        </string>
+  <string name="genre_shoujo_ai">
+        Сёдзё-Ай</string>
+  <string name="genre_shounen">
+        Сёнэн
+        </string>
+  <string name="genre_shounen_ai">
+        Сёнэн-Ай
+        </string>
+  <string name="genre_slice_of_life">Slice of Life</string>
+  <string name="genre_space">
+        Космос
+        </string>
+  <string name="genre_super_power">
+        Супер Сила
+        </string>
+  <string name="genre_supernatural">Сверхъестественный</string>
+  <string name="genre_vampire">
+        Вампир
+        </string>
+  <!--Possible tabs-->
+  <string name="popular_now">Популярно сейчас</string>
+  <string name="top_rated">Топовые в рейтинге</string>
+  <string name="release_date">Дата релиза</string>
+  <string name="last_updated">ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ</string>
+  <string name="year">Год</string>
+  <string name="a_to_z">А - Я</string>
+  <!--BeamManager-->
+  <string name="pairing_tv">Сопряжение с TV</string>
+  <string name="confirm_tv">Пожалуйста, подтвердите соединение на TV</string>
+  <string name="enter_pairing_code">Введите код подключения на TV</string>
+</resources>

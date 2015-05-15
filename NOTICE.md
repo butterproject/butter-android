@@ -1,36 +1,37 @@
 This product includes the following libraries:
 
-* Android-DirectoryChooser - A directory chooser library for Android
+* [Android-DirectoryChooser](https://github.com/passy/Android-DirectoryChooser) - A directory chooser library for Android
 
-  <[https://github.com/passy/Android-DirectoryChooser](https://github.com/passy/Android-DirectoryChooser)>
+* [Android Support Library](http://developer.android.com/tools/support-library/index.html) - Google's support library
 
-* Android Support Library - Google's support library
+* [Butterknife](https://github.com/jakewharton/butterknife) - View "injection" library for Android
 
-  <[http://developer.android.com/tools/support-library/index.html](http://developer.android.com/tools/support-library/index.html)>
+* [google-gson](https://code.google.com/p/google-gson/) - A Java library to convert JSON to Java objects and vice-versa
 
-* Butterknife - View "injection" library for Android
+* [HoloColorPicker](https://github.com/LarsWerkman/HoloColorPicker) - An Android Holo themed colorpicker designed by Marie Schweiz
 
-  <[https://github.com/jakewharton/butterknife](https://github.com/jakewharton/butterknife)>
+* [ParallaxScroll](https://github.com/nirhart/ParallaxScroll) - Parallax ScrollView and ListView for Android
 
-* google-gson - A Java library to convert JSON to Java objects and vice-versa
+* [Picasso](http://square.github.io/picasso/) - A powerful image downloading and caching library for Android
 
-  <[https://code.google.com/p/google-gson/](https://code.google.com/p/google-gson/)>
+* [OkHttp](http://square.github.io/okhttp/) - An HTTP & SPDY client for Android and Java applications
 
-* HoloColorPicker - An Android Holo themed colorpicker designed by Marie Schweiz
+* [VLC](http://git.videolan.org/?p=vlc-ports/android.git;a=tree) - The mediaplayer that outrules everyone
 
-  <[https://github.com/LarsWerkman/HoloColorPicker](https://github.com/LarsWerkman/HoloColorPicker)>
+* [CircleImageView](https://github.com/hdodenhof/CircleImageView) - A circular ImageView for Android
 
-* ParallaxScroll - Parallax ScrollView and ListView for Android
+* [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip) - The Material version
 
-  <[https://github.com/nirhart/ParallaxScroll](https://github.com/nirhart/ParallaxScroll)>
+* [ChangeLogLib](https://github.com/gabrielemariotti/changeloglib) - Android Library to display your changelog
 
-* Picasso - A powerful image downloading and caching library for Android
+* [Android-RobotoTextView](https://github.com/johnkil/Android-RobotoTextView) - Implementation of a TextView and all its direct/indirect subclasses with native support for the Roboto fonts
 
-  <[http://square.github.io/picasso/](http://square.github.io/picasso/)>
+* [AndroidSlidingUpPanel](https://github.com/umano/AndroidSlidingUpPanel) - This library provides a simple way to add a draggable sliding up panel (popularized by Google Music and Google Maps) to your Android application.
 
-* OkHttp - An HTTP & SPDY client for Android and Java applications
-  <[http://square.github.io/okhttp/](http://square.github.io/okhttp/)>
+* [trakt-java](https://github.com/UweTrottmann/trakt-java) - A Java wrapper around the trakt v2 API using retrofit.
 
-* VLC - The mediaplayer that outrules everyone
+* [ConnectSDK](http://connectsdk.com) - Connect SDK is an open source framework that connects your mobile apps with multiple media device platforms.
 
-  <[http://git.videolan.org/?p=vlc-ports/android.git;a=tree]](http://git.videolan.org/?p=vlc-ports/android.git;a=tree)>
+* [Timber](https://github.com/JakeWharton/timber) - Logging made easy
+
+* [AndroidAsync](https://github.com/koush/AndroidAsync) - Asynchronous socket, http (client+server), websocket, and socket.io library for android. Based on nio, not threads.
