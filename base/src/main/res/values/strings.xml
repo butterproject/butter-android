@@ -193,5 +193,6 @@ Ability to Accept Terms of Service\n\n
 By using \'POPCORN TIME\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
     <string name="accept">Accept</string>
     <string name="leave">Leave</string>
+    <string name="show_vpn">Show VPN option in menu</string>
 
 </resources>
