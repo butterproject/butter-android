@@ -26,18 +26,18 @@ public class EpisodeRowPresenter extends RowPresenter {
 
     public static class EpisodeRowViewHolder extends RowPresenter.ViewHolder {
 
-        public
+
         @InjectView(R.id.title_textview)
-        TextView titleTextView;
-        public
+        public TextView titleTextView;
+        @InjectView(R.id.background_view)
+        public View backgroundView;
         @InjectView(R.id.number_textview)
-        TextView numberTextView;
-        public
+        public TextView numberTextView;
         @InjectView(R.id.duration_textview)
-        TextView durationTextView;
-        public
+        public TextView durationTextView;
+
         @InjectView(R.id.synopsis_textview)
-        TextView synopsisTextView;
+        public TextView synopsisTextView;
 
         public EpisodeRowViewHolder(View view) {
             super(view);
@@ -51,12 +51,12 @@ public class EpisodeRowPresenter extends RowPresenter {
 
         final EpisodeRowViewHolder episodeViewHolder = (EpisodeRowViewHolder) viewHolder;
 
-        if (null==episodeRow.getEpisode()){
+        if (null == episodeRow.getEpisode()) {
             return;
         }
 
         ((EpisodeRowViewHolder) viewHolder).view.setClickable(true);
-        ((EpisodeRowViewHolder) viewHolder).view.setOnClickListener(new View.OnClickListener() {
+        ((EpisodeRowViewHolder) viewHolder).backgroundView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) mListener.onEpisodeRowClicked(episodeRow);
