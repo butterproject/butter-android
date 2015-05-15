@@ -130,14 +130,15 @@ public class PopcornApplication extends VLCApplication {
             sHttpClient = new OkHttpClient();
 
             int cacheSize = 10 * 1024 * 1024;
+            File cacheLocation = new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString()));
+            cacheLocation.mkdirs();
+            com.squareup.okhttp.Cache cache = null;
             try {
-                File cacheLocation = new File(PrefUtils.get(PopcornApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(PopcornApplication.getAppContext()).toString()));
-                cacheLocation.mkdirs();
-                com.squareup.okhttp.Cache cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
-                sHttpClient.setCache(cache);
-            } catch (IOException e) {
+                cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+            sHttpClient.setCache(cache);
         }
         return sHttpClient;
     }

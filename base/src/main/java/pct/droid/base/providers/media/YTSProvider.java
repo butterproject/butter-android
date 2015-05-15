@@ -132,7 +132,7 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(API_URL + "list_movies.json?" + query);
+        requestBuilder.url(CURRENT_URL + "list_movies.json?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, filters, callback);

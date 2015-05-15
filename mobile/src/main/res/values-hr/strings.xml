@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Spremi</string>
+  <string name="cancel">Odustani</string>
+  <string name="close">Zatvori</string>
+  <string name="ok">U redu</string>
+  <string name="enabled">Omogućeno</string>
+  <string name="disabled">Onemogućeno</string>
+  <string name="casting">Stremanje</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Naslov, godina, glumci</string>
+  <string name="title_shows">TV serije</string>
+  <string name="title_movies">Filmovi</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Žanrovi</string>
+  <string name="search">Pretraži</string>
+  <string name="searching">Pretraživanje...</string>
+  <string name="no_data_found">Nema pronađenih podataka</string>
+  <string name="unknown_error">Nešto je pošlo po krivu</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Pročitajte više</string>
+  <string name="watch_trailer">Pogledajte najavu</string>
+  <string name="disable_subs">Onemogući podnaslove</string>
+  <string name="no_subs">Nema podnaslova</string>
+  <string name="no_subs_available">Nema dostupnih podnaslova</string>
+  <string name="subtitles">Podnaslovi</string>
+  <string name="quality">Kvaliteta</string>
+  <string name="trailer">Najava</string>
+  <string name="season">Sezona</string>
+  <string name="episode">Epizoda</string>
+  <string name="specials">Dodatno</string>
+  <string name="continuing">Serija se još snima</string>
+  <string name="ended">Snimanje završilo</string>
+  <string name="aired">Datum emitiranja: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Čekanje torrenta</string>
+  <string name="starting_buffering">Pokretanje međuspremanja</string>
+  <string name="streaming_started">Streamanje pokrenuto</string>
+  <string name="waiting_for_subtitles">Čekanje podnaslova</string>
+  <string name="seeds">djelitelja</string>
+  <string name="error_files">Greška: nemoguće zapisivanje datoteka. Odaberite drugu lokaciju pohrane.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Trenutno gledate</string>
+  <string name="volume">Glasnoća zvuka</string>
+  <string name="brightness">Svjetlina</string>
+  <string name="hardware_acceleration_error_title">Greška hardverskog ubrzanja</string>
+  <string name="hardware_acceleration_error_message">Dogodila se greška pri hardverskom ubrzanju. Želite li ga onemogućiti i ponovno pokušati?</string>
+  <string name="best_fit">Najbolji prikaz</string>
+  <string name="fill">Ispuni</string>
+  <string name="fit_horizontal">Prilagodi vodoravno</string>
+  <string name="fit_vertical">Prilagodi okomito</string>
+  <string name="original_size">Izvorno</string>
+  <string name="comm_error">Greška komunikacije</string>
+  <string name="comm_message">Dogodila se greška tijekom preuzimanja videa. To mogu uzrokovati mrežni problemi ili Youtube protokol. Pokušajte ponovno kasnije.</string>
+  <string name="leave_videoplayer_title">Jeste li sigurni?</string>
+  <string name="leave_videoplayer_message">Sigurno želite napustiti video reproduktor? %s će se prestati reproducirati.</string>
+  <string name="encountered_error_title">Video greška se dogodila</string>
+  <string name="encountered_error">Video reproduktor je naišao na ozbiljnu grešku. Video datoteka se ne može otvoriti i/ili reproducirati. Format nije prepoznat.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Prihvaćam</string>
+  <string name="leave">Napusti</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Osobitosti</string>
+  <string name="general">Općenito</string>
+  <string name="default_view">Početni prikaz</string>
+  <string name="default_player">Zadani video reproduktor</string>
+  <string name="i18n_language">Jezik aplikacije</string>
+  <string name="restart_effect">Ponvno pokrenite aplikaciju za primjenu promjena</string>
+  <string name="device_language">Jezik uređaja</string>
+  <string name="stream_over_wifi_only">Samo stremaj putem Wi-Fi</string>
+  <string name="internal_player">Unutrašnji</string>
+  <string name="subtitle_color">Boja</string>
+  <string name="subtitle_size">Veličina</string>
+  <string name="subtitle_stroke_color">Boja obruba</string>
+  <string name="subtitle_stroke_width">Širina obruba</string>
+  <string name="subtitle_language">Zadani jezik</string>
+  <string name="no_default_set">Nema zadanog jezika</string>
+  <string name="advanced">Napredno</string>
+  <string name="storage_location">Lokacija pohrane</string>
+  <string name="storage_automatic">Automatska</string>
+  <string name="storage_choose">Odaberi lokaciju</string>
+  <string name="not_writable">Lokacija nije zapisiva</string>
+  <string name="remove_cache">Ukloni predmemoriju pri zatvaranju</string>
+  <string name="hw_acceleration">Hardversko ubrzanje</string>
+  <string name="hw_automatic">Automatsko</string>
+  <string name="hw_full">Potpuno</string>
+  <string name="hw_decoding">Samo dekôdiranje</string>
+  <string name="updates">Ažuriranje</string>
+  <string name="auto_updates">Automatsko ažuriranje</string>
+  <string name="check_for_updates">Provjeri ažuriranje</string>
+  <string name="last_check">Posljednja provjera</string>
+  <string name="about">O aplikaciji</string>
+  <string name="version">Inačica</string>
+  <string name="changelog">Zapis promjena</string>
+  <string name="tap_to_open">Dodirni za otvaranje</string>
+  <string name="report_a_bug">Prijavi grešku</string>
+  <string name="open_source_licenses">Licenca otvorenog kôda</string>
+  <string name="torrents">Torrenti</string>
+  <string name="download_speed">Najveća brzina preuzimanja</string>
+  <string name="upload_speed">Najveća brzina slanja</string>
+  <string name="max_connections">Najveći broj povezivanja</string>
+  <string name="dht_limit">DHT ograničenje</string>
+  <string name="unlimited">Neograničeno</string>
+  <string name="show_vpn">Prikaži VPN mogućnost u izborniku</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Samo Wi-Fi</string>
+  <string name="wifi_only_message">Možete samo streamati video snimke putem Wi-Fi. Ovo možete onemogućiti u postavkama ako želite streamati putem mobilne mreže.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Podijeli</string>
+  <string name="drawer_open">Otvori navigacijsku površinu</string>
+  <string name="drawer_close">Zatvori navigacijsku površinu</string>
+  <string name="no_search_results">Nema traženih rezultata</string>
+  <string name="vpn">VPN</string>
+  <!--About fragment-->
+  <string name="about_message">Popcorn Time je rezultat truda mnogo razvijatelja i dizajnera koji su spojili hrpu API-ija zajedno kako bi učinili
+		iskustvo gledanja filmova putem torrenta što jednostavnijim.\n\nOvo je projekt otvorenog kôda. Mi smo sa svih strana svijeta. Volimo
+		gledati filmove. A najviše od svega, volimo kokice.</string>
+  <string name="website">Web stranica</string>
+  <string name="forum">Forum</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">Jeste li isprobali Popcorn Time za Android? Fenomenalan je!</string>
+  <string name="share_dialog_title">Podijelite s</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Povezano s</string>
+  <string name="disconnect">Odspoji</string>
+  <string name="select_beaming">Odaberi uređaj za prijem</string>
+  <string name="starting_beam">Pokretanje odašiljanja videa...</string>
+  <string name="beaming_failed">Video snimka se ne može reproducirati na vašem uređaju prijema. Želite li ponovno pokušati? Aplikacija možda treba preuzeti dodatne komponente kako bi vaš uređaj mogao reproducirati video snimku.</string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht aplikacija nije instalirana</string>
+  <string name="vpn_info">Morate imati VPN.ht aplikaciju instaliranu kako bi mogli koristiti VPN mogućnost unutar Popcorn Timea. Niste zainteresirani? Tada možete jednostavno sakriti ovu tipku.</string>
+  <string name="vpn_download">Preuzmi aplikaciju</string>
+  <string name="vpn_later">Vrati se kanije</string>
+  <string name="vpn_hide">Sakrij tipku</string>
+</resources>

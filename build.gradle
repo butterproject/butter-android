@@ -64,32 +64,14 @@ allprojects {
 
                     //rename output files
                     renameOutputFiles(project, variant)
-                }
-
             }
         } else if (project.plugins.hasPlugin('com.android.library')) {
             //add the android sdk manager plugin to andriod projects
             apply plugin: 'android-sdk-manager'
         }
 
-        //copy apk to appetize apk
-        if (project.name.equals("mobile")) {
-            gradle.buildFinished {
-                try {
-                    File sourceFile = new File("./mobile/build/outputs/apk", "mobile-x86-development-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-                    File targetFile = new File("./mobile/build/outputs/apk", "appetize.apk")
-                    Path source = sourceFile.toPath()
-                    Path target = targetFile.toPath()
-                    if (sourceFile.exists()) {
-                        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace()
-                }
-            }
         }
     }
-
 }
 
 def createCrashlyticsProperties(Project project, variant) {

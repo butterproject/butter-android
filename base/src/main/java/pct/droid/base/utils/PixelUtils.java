@@ -111,15 +111,9 @@ public class PixelUtils {
 
     public static boolean isTablet(Context context) {
         int widthPixels = getScreenWidth(context);
-        int heightPixels = getScreenHeight(context);
         float density = getScreenDensity(context);
 
-        int dpi = 0;
-        if (widthPixels < heightPixels) {
-            dpi = (int) (widthPixels / density);
-        } else {
-            dpi = (int) (heightPixels / density);
-        }
+        int dpi = (int) (widthPixels / density);
 
         return dpi > TABLET_MIN_DP_WEIGHT;
     }
