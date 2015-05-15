@@ -34,7 +34,8 @@ public class PTVWelcomeFragment extends GuidedStepFragment {
         actions.add(declineAction);
         super.onCreateActions(actions, savedInstanceState);
 
-        setSelectedActionPosition(0);
+        // Needs to be somewhere else, crashes fragment:
+        // setSelectedActionPosition(0);
     }
 
     @Override
