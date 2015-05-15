@@ -91,7 +91,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:library:1.+'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.+'
     compile 'com.sothree.slidinguppanel:library:3.0.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+    compile("com.crashlytics.sdk.android:crashlytics:${rootProject.ext.crashlyticsVersion}@aar") {
         transitive = true;
     }
     compile project(':base')
