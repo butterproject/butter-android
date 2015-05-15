@@ -17,7 +17,6 @@
 
 package pct.droid.base;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -25,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -42,6 +42,7 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import com.squareup.leakcanary.RefWatcher;
 import timber.log.Timber;
 
 public class PopcornApplication extends VLCApplication {
@@ -59,6 +60,8 @@ public class PopcornApplication extends VLCApplication {
     public void onCreate() {
         super.onCreate();
         sDefSystemLanguage = LocaleUtils.getCurrent();
+
+        LeakCanary.install(this);
 
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
