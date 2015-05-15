@@ -133,22 +133,6 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         episodeAdapter.setSeasons(seasons.descendingMap());
 
         ((AlbumDetailsObjectAdapter) getObjectArrayAdapter()).notifyDataSetChanged();
-//        for (Map.Entry<Integer, List<Episode>> entry : seasons.entrySet()) {
-//            //setup season adapter
-//            final ArrayObjectAdapter seasonAdapter = new ArrayObjectAdapter(mediaCardPresenter);
-//            if (entry.getValue() != null) {
-//                for (Episode episode : entry.getValue()) {
-//                    seasonAdapter.add(episode);
-//                }
-
-//                episodes.addAll(entry.getValue());
-//
-//                ((AlbumDetailsObjectAdapter) getObjectArrayAdapter()).notifyDataSetChanged();
-//                HeaderItem header = new HeaderItem(entry.getKey(), String.format("Season %d", entry.getKey()));
-//                getObjectArrayAdapter().add(new ListRow(header, seasonAdapter));
-//                getObjectArrayAdapter().add(seasonAdapter);
-//            }
-//        }
     }
 
     @Override

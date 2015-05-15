@@ -19,7 +19,7 @@
         android:layout_height="@dimen/leanback_episode_row_height">
 
         <LinearLayout
-            android:id="@+id/background"
+            android:id="@+id/background_view"
             android:background="@drawable/episode_row_selector"
             android:focusable="true"
             android:focusableInTouchMode="true"
