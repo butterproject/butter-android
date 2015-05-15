@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
+import android.view.View;
 
 import java.util.List;
 
@@ -33,9 +34,6 @@ public class PTVWelcomeFragment extends GuidedStepFragment {
         actions.add(acceptAction);
         actions.add(declineAction);
         super.onCreateActions(actions, savedInstanceState);
-
-        // Needs to be somewhere else, crashes fragment:
-        // setSelectedActionPosition(0);
     }
 
     @Override
