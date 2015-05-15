@@ -90,7 +90,7 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
     private void setupFragment() {
         //setup background updater
         mBackgroundUpdater = new BackgroundUpdater();
-        mBackgroundUpdater.initialise(getActivity(), R.drawable.default_row_background);
+        mBackgroundUpdater.initialise(getActivity(), R.color.black);
 
         VerticalGridPresenter gridPresenter = new VerticalGridPresenter();
         gridPresenter.setNumberOfColumns(NUM_COLUMNS);
