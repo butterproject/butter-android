@@ -11,9 +11,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.8'
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.9'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -23,6 +23,7 @@ buildscript {
 ext {
     appCompatVersion = "22.1.1"
     buildToolsVersion = "22.0.1"
+    crashlyticsVersion = "2.2.4"
     targetSdk = 22
     compileSdk = 22
     minSdk = 15
