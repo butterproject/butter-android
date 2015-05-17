@@ -45,6 +45,8 @@
 	<string name="disable_subs">Disable subtitles</string>
 	<string name="no_subs">No subtitles</string>
     <string name="no_subs_available">No subtitles available</string>
+    <string name="no_title_available">No name</string>
+    <string name="no_synopsis_available">No synopsis available</string>
 
 	<string name="quality">Quality</string>
 	<string name="open_magnet">Open magnet</string>
