@@ -1,5 +1,6 @@
 package pct.droid.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,12 @@ public class EpisodeListAdapter extends BaseAdapter {
         }
 
         Episode episode = getItem(position);
-        holder.title.setText(episode.title);
+
+        if (!TextUtils.isEmpty(episode.title))
+            holder.title.setText(episode.title);
+        else
+            holder.title.setText(R.string.no_title_available);
+
         holder.number.setText("E" + episode.episode);
         holder.number.setTextColor(mColor);
 

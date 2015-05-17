@@ -30,6 +30,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -228,12 +229,20 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mTitle.setText(mEpisode.title);
+        if (!TextUtils.isEmpty(mEpisode.title))
+            mTitle.setText(mEpisode.title);
+        else
+            mTitle.setText(R.string.no_title_available);
+
         mAired.setVisibility(mEpisode.aired > 0 ? View.VISIBLE : View.GONE);
         Date airedDate = new Date((long) mEpisode.aired * 1000);
         mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrentAsLocale()).format(airedDate)));
 
-        mSynopsis.setText(mEpisode.overview);
+        if (!TextUtils.isEmpty(mEpisode.overview))
+            mSynopsis.setText(mEpisode.overview);
+        else
+            mSynopsis.setText(R.string.no_synopsis_available);
+
 
         String seasonStr = Integer.toString(mEpisode.season);
         if (seasonStr.length() < 2) seasonStr = "0" + seasonStr;
@@ -373,14 +382,14 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     private void updateMagnet() {
-        if(mOpenMagnet == null) return;
+        if (mOpenMagnet == null) return;
 
-        if(mMagnet == null) {
+        if (mMagnet == null) {
             mMagnet = new Magnet(mActivity, mEpisode.torrents.get(mSelectedQuality).url);
         }
         mMagnet.setUrl(mEpisode.torrents.get(mSelectedQuality).url);
 
-        if(!mMagnet.canOpen()) {
+        if (!mMagnet.canOpen()) {
             mOpenMagnet.setVisibility(View.GONE);
         } else {
             mOpenMagnet.setVisibility(View.VISIBLE);

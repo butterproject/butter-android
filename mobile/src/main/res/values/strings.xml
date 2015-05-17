@@ -56,6 +56,8 @@
     <string name="continuing">Continuing</string>
     <string name="ended">Ended</string>
     <string name="aired">Aired: %s</string>
+	<string name="no_title_available">No name</string>
+	<string name="no_synopsis_available">No synopsis available</string>
 
 
 	<!-- StreamLoadingActivity strings -->
