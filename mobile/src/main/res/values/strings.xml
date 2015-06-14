@@ -79,6 +79,7 @@
 	<string name="fit_horizontal">Fit horizontal</string>
 	<string name="fit_vertical">Fit vertical</string>
 	<string name="original_size">Original</string>
+	<string name="reload_video">Reload video</string>
     <string name="comm_error">Communications Error</string>
     <string name="comm_message">An error occurred during the retrieval of the video. This could be due to network issues or YouTube protocols. Please try again later.</string>
     <string name="leave_videoplayer_title">Are you sure?</string>
@@ -155,7 +156,7 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="no_search_results">No search results found</string>
     <string name="vpn">VPN</string>
 
-	<!-- About fragment -->
+	<!-- AboutFragment -->
     <string name="about_message">Popcorn Time is the result of many developers and designers putting a bunch of APIs together to make the
 		experience of watching torrent movies as simple as possible.\n\nWe are an open source project. We are from all over the world. We
 		love our movies. And boy, do we love popcorn.</string>
