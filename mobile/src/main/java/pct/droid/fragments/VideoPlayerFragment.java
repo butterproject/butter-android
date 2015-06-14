@@ -372,6 +372,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
         if (seek && getDuration() > 0) {
             seek(jump);
+            jump = 0;
         }
 
         if (getDuration() > 0) {
