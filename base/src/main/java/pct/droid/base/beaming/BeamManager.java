@@ -118,7 +118,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                         })
                         .create();
 
-        CastService.setApplicationID(Constants.CAST_ID);
+        // CastService.setApplicationID(Constants.CAST_ID); Do not use since suspended by Google
         DiscoveryManager.init(PopcornApplication.getAppContext());
         mDiscoveryManager = DiscoveryManager.getInstance();
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
