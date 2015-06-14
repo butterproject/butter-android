@@ -98,11 +98,17 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             @Override
             public void run() {
                 mStreamInfo = mCallback.getStreamInformation();
+                if (mStreamInfo == null) {
+                    getActivity().finish();
+                    return;
+                }
                 loadSubs();
             }
         });
 
-        if (!(getActivity() instanceof TorrentBaseActivity)) return;
+        if (!(getActivity() instanceof TorrentBaseActivity)) {
+            throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
+        }
     }
 
     @Override
