@@ -36,6 +36,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
@@ -70,7 +71,7 @@ public class YTSProvider extends MediaProvider {
 
     @Override
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrent(), Build.MODEL, Build.DISPLAY, Constants.UA_VERSION)).build();
+        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrent(), Build.MODEL, Build.DISPLAY, BuildConfig.VERSION_NAME)).build();
         return super.enqueue(request, requestCallback);
     }
 
