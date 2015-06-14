@@ -388,7 +388,6 @@ public class TorrentService extends Service {
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
             mCurrentTorrent.pause();
-            mDHT.stop();
             mTorrentSession.removeListener(mCurrentListener);
             mTorrentSession.removeTorrent(mCurrentTorrent);
             mCurrentListener = null;
@@ -404,10 +403,6 @@ public class TorrentService extends Service {
         saveDirectory.mkdirs();
 
         Timber.d("Stopped torrent and removed files");
-
-        if(!mIsBound) {
-            pause();
-        }
     }
 
     public boolean isStreaming() {
