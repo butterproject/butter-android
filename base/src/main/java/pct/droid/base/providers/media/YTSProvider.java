@@ -18,6 +18,9 @@
 package pct.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import com.google.gson.JsonSyntaxException;
@@ -71,7 +74,16 @@ public class YTSProvider extends MediaProvider {
 
     @Override
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrent(), Build.MODEL, Build.DISPLAY, BuildConfig.VERSION_NAME)).build();
+        Context context = PopcornApplication.getAppContext();
+        PackageInfo pInfo;
+        String versionName = "0.0.0";
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            versionName = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrent(), Build.MODEL, Build.DISPLAY, versionName)).build();
         return super.enqueue(request, requestCallback);
     }
 
