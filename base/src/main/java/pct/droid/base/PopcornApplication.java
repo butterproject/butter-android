@@ -17,7 +17,6 @@
 
 package pct.droid.base;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -25,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
+import com.sjl.foreground.Foreground;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -32,7 +32,6 @@ import com.squareup.picasso.Picasso;
 import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
-import java.io.IOException;
 
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
@@ -59,6 +58,8 @@ public class PopcornApplication extends VLCApplication {
     public void onCreate() {
         super.onCreate();
         sDefSystemLanguage = LocaleUtils.getCurrent();
+
+        Foreground.init(this);
 
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
@@ -104,6 +105,8 @@ public class PopcornApplication extends VLCApplication {
         Picasso.setSingletonInstance(builder.build());
 
         PopcornUpdater.getInstance(this).checkUpdates(false);
+
+
     }
 
     @Override
@@ -114,6 +117,7 @@ public class PopcornApplication extends VLCApplication {
 
     @Override
     public void onTerminate() {
+        // Just, so that it exists. Cause it is not executed in production, the whole application is closed anyways on OS level.
         BeamManager.getInstance(getAppContext()).onDestroy();
         super.onTerminate();
     }
