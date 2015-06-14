@@ -33,7 +33,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -124,6 +124,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     private boolean mIsFirstBrightnessGesture = true;
     private float mRestoreAutoBrightness = -1f;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mShowReload = true;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -174,7 +179,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
 
-        getActionBarActivity().setSupportActionBar(mToolbar);
+        getAppCompatActivity().setSupportActionBar(mToolbar);
 
         videoSurface.setVisibility(View.VISIBLE);
 
@@ -210,18 +215,18 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         if (null != mStreamInfo) {
             if (mMedia != null && mMedia.title != null) {
                 if (null != mStreamInfo.getQuality()) {
-                    getActionBarActivity().getSupportActionBar().setTitle(
+                    getAppCompatActivity().getSupportActionBar().setTitle(
                             getString(R.string.now_playing) + ": " + mMedia.title + " (" + mStreamInfo.getQuality() + ")");
                 } else {
-                    getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
+                    getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
                 }
             } else {
-                getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
+                getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
             }
         } else {
-            getActionBarActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
+            getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
         }
-        getActionBarActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getAppCompatActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
@@ -231,7 +236,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
         mControlBar.setOnSeekBarChangeListener(mOnControlBarListener);
 
-        getActionBarActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        getAppCompatActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -261,8 +266,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     }
 
 
-    private ActionBarActivity getActionBarActivity() {
-        return (ActionBarActivity) getActivity();
+    private AppCompatActivity getAppCompatActivity() {
+        return (AppCompatActivity) getActivity();
     }
 
     @Override
@@ -273,7 +278,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
     public boolean onTouchEvent(MotionEvent event) {
         DisplayMetrics screen = new DisplayMetrics();
-        getActionBarActivity().getWindowManager().getDefaultDisplay().getMetrics(screen);
+        getAppCompatActivity().getWindowManager().getDefaultDisplay().getMetrics(screen);
 
         if (mSurfaceYDisplayRange == 0) {
             mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
@@ -416,9 +421,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        WindowManager.LayoutParams lp = getActionBarActivity().getWindow().getAttributes();
+        WindowManager.LayoutParams lp = getAppCompatActivity().getWindow().getAttributes();
         lp.screenBrightness = brightnesstemp;
-        getActionBarActivity().getWindow().setAttributes(lp);
+        getAppCompatActivity().getWindow().setAttributes(lp);
         mIsFirstBrightnessGesture = false;
     }
 
@@ -436,10 +441,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
     private void changeBrightness(float delta) {
         // Estimate and adjust Brightness
-        WindowManager.LayoutParams lp = getActionBarActivity().getWindow().getAttributes();
+        WindowManager.LayoutParams lp = getAppCompatActivity().getWindow().getAttributes();
         lp.screenBrightness = Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
         // Set Brightness
-        getActionBarActivity().getWindow().setAttributes(lp);
+        getAppCompatActivity().getWindow().setAttributes(lp);
         showPlayerInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness * 15));
     }
 
@@ -451,7 +456,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        getActionBarActivity().finish();
+                        getAppCompatActivity().finish();
                     }
                 })
                 .setTitle(R.string.encountered_error_title)
@@ -474,8 +479,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
                 mDecorView.setSystemUiVisibility(uiOptions);
             } else {
-                getActionBarActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-                getActionBarActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getAppCompatActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getAppCompatActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
 
             mLastSystemShowTime = System.currentTimeMillis();
@@ -497,8 +502,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                 int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
                 mDecorView.setSystemUiVisibility(uiOptions);
             } else {
-                getActionBarActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                getActionBarActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getAppCompatActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getAppCompatActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             }
 
             mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
@@ -564,13 +569,13 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        getActionBarActivity().finish();
+                        getAppCompatActivity().finish();
                     }
                 })
                 .setTitle(R.string.hardware_acceleration_error_title)
                 .setMessage(R.string.hardware_acceleration_error_message)
                 .create();
-        if (!getActionBarActivity().isFinishing())
+        if (!getAppCompatActivity().isFinishing())
             dialog.show();
     }
 
@@ -615,6 +620,12 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
     @Override
     protected void setProgressVisible(boolean visible) {
+        if(mProgressIndicator.getVisibility() == View.VISIBLE && visible)
+            return;
+
+        if(mProgressIndicator.getVisibility() == View.GONE && !visible)
+            return;
+
         mProgressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
