@@ -92,13 +92,6 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
 
             EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(sShow, episode);
             fragment.show(getFragmentManager(), "episode_dialog");
-
-            /*
-            String quality = episode.torrents.keySet().toArray(new String[1])[0];
-            Media.Torrent torrent = episode.torrents.get(quality);
-
-            StreamLoadingFragment.StreamInfo streamInfo = new StreamLoadingFragment.StreamInfo(episode, sShow, torrent.url, null, quality);
-            mActivity.playStream(streamInfo);*/
         }
     };
 
