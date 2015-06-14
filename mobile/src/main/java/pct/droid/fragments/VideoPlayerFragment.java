@@ -370,14 +370,13 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
             jump = (int) -getCurrentTime();
         }
 
+        long currentTime = getCurrentTime();
         if (seek && getDuration() > 0) {
             seek(jump);
-            jump = 0;
         }
 
         if (getDuration() > 0) {
-            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump),
-                    StringUtils.millisToString(getCurrentTime() + jump)));
+            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(currentTime + jump)));
         }
     }
 
