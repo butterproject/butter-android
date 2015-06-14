@@ -58,6 +58,11 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
+        if(mStreamInfo == null) {
+            finish();
+            return;
+        }
+
         if (mStreamInfo.isShow()) {
             mTitle = mStreamInfo.getShow().title;
         } else {

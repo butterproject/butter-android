@@ -44,6 +44,7 @@ import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.ThreadUtils;
@@ -345,7 +346,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         setState(State.LOADED);
                     }
                 });
-            } else if (e.getMessage() != null && e.getMessage().equals(getString(R.string.movies_error))) {
+            } else if (e.getMessage() != null && e.getMessage().equals(PopcornApplication.getAppContext().getString(R.string.movies_error))) {
                 mEndOfListReached = true;
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
