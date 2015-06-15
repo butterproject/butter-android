@@ -11,6 +11,10 @@
   <string name="overview_not_available">দুঃখিত! এখানে কোন আলোকপাত উপলব্ধ নেই।</string>
   <string name="episode">পর্ব</string>
   <string name="unknown_error">কিছুতে ত্রুটি হয়েছে</string>
+  <string name="torrent_failed">টরেন্ট পুনরুদ্ধার করতে ব্যর্থ</string>
+  <string name="running">পটভূমিতে চলমান</string>
+  <string name="tap_to_close">বন্ধ করতে টোকা দিন</string>
+  <string name="tap_to_resume">পুনঃসূচনা করতে টোকা দিন</string>
   <!--Genres-->
   <string name="genre_all">সব</string>
   <string name="genre_action">অ্যাকশন</string>

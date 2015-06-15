@@ -11,6 +11,10 @@
   <string name="overview_not_available">Prepáčte! Prehľad nie je k dispozícii.</string>
   <string name="episode">Epizóda</string>
   <string name="unknown_error">Niečo sa pokazilo</string>
+  <string name="torrent_failed">Chyba obnovenia torrentu</string>
+  <string name="running">Beží na pozadí</string>
+  <string name="tap_to_close">Poklepte pre zavretie</string>
+  <string name="tap_to_resume">Poklepte pre pokračovanie</string>
   <!--Genres-->
   <string name="genre_all">Všetko</string>
   <string name="genre_action">Akčné</string>

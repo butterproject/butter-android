@@ -40,6 +40,7 @@
   <string name="streaming_started">Voogedastamine algas</string>
   <string name="waiting_for_subtitles">Ootan subtiitreid</string>
   <string name="seeds">jagajaid</string>
+  <string name="error_files">Viga: Ei ole võimalik faile kirjutada. Palun proovi mõnda teist salvestamise kohta.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Hetkel mängib</string>
   <string name="volume">Heli</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Video esitamisel ilmnes viga. See võib olla seotud võrgu probleemidega või YouTube protokollidega. Palun proovige hiljem uuesti.</string>
   <string name="leave_videoplayer_title">Oled Sa kindel?</string>
   <string name="leave_videoplayer_message">Olete te kindel, et sooite lahkuda video esitamisest? %s lõpetab mängimise.</string>
+  <string name="encountered_error_title">Video viga</string>
+  <string name="encountered_error">Esitaja viga. Video faili ei olnud võimalik avada ja/või esitada. Tundmatu formaat. </string>
   <!--TermsActivity strings-->
   <string name="accept">Nõustu</string>
   <string name="leave">Lahku</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Maksimum arv ühendusi</string>
   <string name="dht_limit">DHT limiit</string>
   <string name="unlimited">Piiramatu</string>
+  <string name="show_vpn">Näita VPN valikut menüüs</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">ainult Wi-Fi</string>
   <string name="wifi_only_message">Videosi saab voogedastada ainult üle Wi-Fi võrgu. Sa võid selle seadetest välja lülitada kui soovid voogedastust kasutada üle telefoni võrgu.</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Ava navigeerimissahtel</string>
   <string name="drawer_close">Sulge navigeerimissahtel</string>
   <string name="no_search_results">Osingutulemusi ei leitud.</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time! on paljude tarkvara arendajate ja disainerite koostöö tulemus, kes on kokku pannud hulga einevaid liideseid, et teha torrenti filmide vaatamise kogemus võimalikult lihtsaks.Oleme avatud lähtekoodiga projekt. Me asume üle kogu maailma. Me armastame oma filme. Ja kurat, kus me armastame popcorni.</string>
   <string name="website">Koduleht</string>
   <string name="forum">Foorum</string>
@@ -118,8 +123,7 @@
   <string name="blog">Blogi</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Kas sa oled proovinud Popcorn Time`i Androidi jaoks? See on super!
-https://popcorntime.io/</string>
+  <string name="share_message">Oled sa proovinud Popcorn Time`i Androidi jaoks? See on mõnus!</string>
   <string name="share_dialog_title">Jaga</string>
   <!--Beam dialog-->
   <string name="connected_to">Ühendatud</string>
@@ -127,4 +131,11 @@ https://popcorntime.io/</string>
   <string name="select_beaming">Vali seade edastamiseks</string>
   <string name="starting_beam">Video edastamise käivitamine</string>
   <string name="beaming_failed">Seda videot ei ole võimalik esitada seadmel kuhu see edastatakse. Kas te soovite proovida uuesti? Võimalik, et programm peab alla laadima rohkem osasid, et video esitamine oleks võimalik.</string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht programm ei ole installeeritud</string>
+  <string name="vpn_info">Selleks, et kasutada VPN`i Popcorn`i siseselt peab sul olema installeeritud VPN.ht progamm. Ei ole huvitatud? Sa võid selle nuppu ka lihtsalt ära peita.</string>
+  <string name="vpn_download">Lae alla</string>
+  <string name="vpn_later">Tule hiljem tagasi</string>
+  <string name="vpn_hide">Peida nupp</string>
 </resources>

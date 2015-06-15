@@ -11,6 +11,10 @@
   <string name="overview_not_available">Съжаляваме! Няма наличен обзорен изглед.</string>
   <string name="episode">Епизод</string>
   <string name="unknown_error">Нещо се обърка</string>
+  <string name="torrent_failed">Провал в изтеглянето на торента</string>
+  <string name="running">Върви на фон</string>
+  <string name="tap_to_close">Цъкни да затвориш</string>
+  <string name="tap_to_resume">Цъкни да продължиш</string>
   <!--Genres-->
   <string name="genre_all">Всички</string>
   <string name="genre_action">Екшън</string>
@@ -83,5 +87,6 @@
   <string name="a_to_z">А - Я</string>
   <!--BeamManager-->
   <string name="pairing_tv">Сдвояване с ТВ</string>
+  <string name="confirm_tv">Моля потвърдете връзката на вашият ТВ</string>
   <string name="enter_pairing_code">Въведете сдвояващ код на ТВ</string>
 </resources>

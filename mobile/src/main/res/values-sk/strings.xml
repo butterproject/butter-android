@@ -40,6 +40,7 @@
   <string name="streaming_started">Streamovanie začalo</string>
   <string name="waiting_for_subtitles">Čakám na titulky</string>
   <string name="seeds">seeds</string>
+  <string name="error_files">Chyba: Nemôžem zapisovať súbory. Prosím použite iný priestor na uloženie.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Práve prerávam</string>
   <string name="volume">Hlasitosť</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Počas získavania videa nastala chyba. Tá môže byť spôsobená problémami so sieťou alebo s protokolmi YouTube. Skúste to opäť neskôr.</string>
   <string name="leave_videoplayer_title">Are you sure?</string>
   <string name="leave_videoplayer_message">Ste si istý, že chcete vypnúť prehrávač videa? %s zastaví prehrávanie.</string>
+  <string name="encountered_error_title">Vyskytla sa chyba videa</string>
+  <string name="encountered_error">V prehrávači videa sa vyskytla vážna chyba. Súbor s videom nie je možné otvoriť a/alebo prehrať. Formát nebol rozpoznaný.</string>
   <!--TermsActivity strings-->
   <string name="accept">Prijať</string>
   <string name="leave">Nechať pôvodné</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Maximálne množstvo spojení</string>
   <string name="dht_limit">DHT limit</string>
   <string name="unlimited">Bez limitu</string>
+  <string name="show_vpn">Zobraziť v ponuke možnosť VPN</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Iba cez Wi-Fi</string>
   <string name="wifi_only_message">Môžete streamovať videá len cez Wi-Fi. Túto možnosť môžete vypnúť v Nastaveniach, ak chcete používať mobilné dáta.</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Otvoriť navigačnú lištu</string>
   <string name="drawer_close">Zatvoriť navigačnú lištu</string>
   <string name="no_search_results">Neboli nájdené žiadne výsledky vyhľadávania</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time je výsledkom mnohých vývojárov a dizajnérov spojenia veľa API, aby 
  ⇥⇥ sledovani filmov z torrentov bolo tak jednoduché, ako je to možné. \ n \n  Sme open source projekt. Sme z celého sveta. Milujeme
  ⇥⇥ filmy. A kámo, milujeme popcorn.</string>
@@ -120,7 +125,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Už si vyskúšal Popcorn Time pre android? Je úžasný! https://popcorntime.io/</string>
+  <string name="share_message">Vyskúšali ste už Popcorn Time pre Android? Je úžasný!</string>
   <string name="share_dialog_title">Zdieľať</string>
   <!--Beam dialog-->
   <string name="connected_to">Pripojiť</string>
@@ -128,4 +133,11 @@
   <string name="select_beaming">Vyber zaradenie pre zobrazenie</string>
   <string name="starting_beam">Inicializácia zobrazenia videa</string>
   <string name="beaming_failed">Video nemôže byť prehraté na vašom zobrazovacom zariadení. Chcete to skúsiť opäť? Aplikácia možno potrebuje stiahnuť viac súčastí na prehrávanie videa na vašom zariadení. </string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht aplikácia nie je nainštalovaná</string>
+  <string name="vpn_info">Aby ste mohli použiť možnosť VPN priamo z aplikácie Popcorn Time, musíte mať nainštalovanú aplikáciu VPN.ht. Nezaujíma vás to? V tom prípade môžete toto tlačidlo jednoducho skryť.</string>
+  <string name="vpn_download">Stiahnuť aplikáciu</string>
+  <string name="vpn_later">Vrátiť sa späť neskôr</string>
+  <string name="vpn_hide">Skryť tlačidlo</string>
 </resources>

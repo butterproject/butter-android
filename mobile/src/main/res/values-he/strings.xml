@@ -40,6 +40,7 @@
   <string name="streaming_started">הזרמת מדיה החלה</string>
   <string name="waiting_for_subtitles">ממתין לכתוביות</string>
   <string name="seeds">מעלים</string>
+  <string name="error_files">שגיאה: אין אפשרות לכתוב קבצים. אנא נסו מקום אחסון אחר.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">פועל עכשיו</string>
   <string name="volume">שמע</string>
@@ -53,8 +54,10 @@
   <string name="original_size">מקורי</string>
   <string name="comm_error">שגיאת תקשורת</string>
   <string name="comm_message">שגיאה התרחשה. זה יכולה להיות בעיה ברשת או בעיה ב YouTube. בבקשה נסו מאוחר יותר.</string>
-  <string name="leave_videoplayer_title">בטוח?</string>
+  <string name="leave_videoplayer_title">האם אתם בטוחים?</string>
   <string name="leave_videoplayer_message">האם אתם בטוחים שברצונכם לצאת מנגן המדיה ? %s יופסק להתנגן.</string>
+  <string name="encountered_error_title">התרחשה שגיאה בוידאו</string>
+  <string name="encountered_error">נגן הוידאו נתקל בבעיה. הוידאו אינו יכול להתנגן \ להיפתח. הפורמט אינו נתמך.</string>
   <!--TermsActivity strings-->
   <string name="accept">הסכמה</string>
   <string name="leave">לעזוב</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">מקסימום חיבורים</string>
   <string name="dht_limit">הגבלת DHT</string>
   <string name="unlimited">ללא הגבלה</string>
+  <string name="show_vpn">הצג אפשרות VPN בתפריט</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi בלבד</string>
   <string name="wifi_only_message">הצפייה מתאפשרת דרך Wi-Fi בלבד כברירת מחדל. באפשרותך לשנות הגדרה זאת ולאפשר צפייה גם דרך האינטרנט של הרשת הסלולרית.</string>
@@ -108,25 +112,33 @@
   <string name="drawer_open">פתח שורת חיפוש</string>
   <string name="drawer_close">סגור שורת חיפוש</string>
   <string name="no_search_results">לא נמצאו תוצאות חיפוש</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time היא התוצאה של הרבה מפתחים ומעצבים שקיבצו מספר ממשקי תכנות יישומים כדאי
 ליצור את החוויה הטובה והפשוטה ביותר של צפייה בסרטים וסדרות דרך טורנטים.  אנחנו פרויקט קוד פתוח. אנחנו מכל העולם.
 
 אנחנו אוהבים סרטים וסדרות, אבל אהבה הכי גדולה שלנו היא לפופקורן.</string>
   <string name="website">אתר</string>
-  <string name="forum">פורום</string>
+  <string name="forum">קהילה</string>
   <string name="google_plus">גוגל+</string>
   <string name="facebook">פייסבוק</string>
   <string name="git">Git</string>
   <string name="blog">בלוג</string>
   <string name="twitter">טוויטר</string>
   <!--Share dialog-->
-  <string name="share_text">ניסית את Popcorn Time לאנדרואיד? https://popcorntime.io</string>
+  <string name="share_message">האם ניסיתם את פופקורן טיים לאנדרואיד? זה מדהים!</string>
   <string name="share_dialog_title">שתף עם</string>
   <!--Beam dialog-->
   <string name="connected_to">מחובר אל</string>
   <string name="disconnect">ניתוק</string>
   <string name="select_beaming">בחרו מכשיר לשידור</string>
   <string name="starting_beam">מאתחל שידור ווידאו...</string>
-  <string name="beaming_failed">Popcorn Time לא הצליחה לשדר אל המכשיר המשויך. אולי ננסה שוב? ייתכן ש Popcorn Time צריכה להוריד עוד כדי שהמכשיר המשויך יוכל לשדר את הווידאו.</string>
+  <string name="beaming_failed">Popcorn Time לא הצליחה לשדר אל המכשיר המשויך. אולי נסו שנית? ייתכן ש Popcorn Time צריכה להוריד יותר חלקים בכדי שהמכשיר המשויך יוכל לשדר את הווידאו.</string>
+  <string name="the_video">הוידאו</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">האפליקציה של VPN.ht אינה מותקנת</string>
+  <string name="vpn_info">בכדי להשתמש ב VPN אתם צריכים את האפליקציה של VPN.ht. לא מעוניינים? באפשרותכם להסתיר אופציה זאת בהגדרות.</string>
+  <string name="vpn_download">הורדת אפליקציה</string>
+  <string name="vpn_later">נסו מאוחר יותר</string>
+  <string name="vpn_hide">הסתר לחצן</string>
 </resources>

@@ -11,6 +11,10 @@
   <string name="overview_not_available">Συγνώμη! Δεν υπάρχει διαθέσιμη προεπισκόπηση.</string>
   <string name="episode">Επεισόδιο</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
+  <string name="torrent_failed">Αποτυχία ανάκτησης torrent</string>
+  <string name="running">Τρέχει στο παρασκήνιο</string>
+  <string name="tap_to_close">Πατήστε για κλείσιμο</string>
+  <string name="tap_to_resume">Πατήστε για συνέχιση</string>
   <!--Genres-->
   <string name="genre_all">Όλα</string>
   <string name="genre_action">Δράση</string>

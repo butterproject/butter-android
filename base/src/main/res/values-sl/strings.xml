@@ -11,6 +11,7 @@
   <string name="overview_not_available">Žal! Večnamenski pogled ni na voljo.</string>
   <string name="episode">Epizoda</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
+  <string name="torrent_failed">Pridobivanje torenta Neuspešno</string>
   <!--Genres-->
   <string name="genre_all">Vse</string>
   <string name="genre_action">Akcijski</string>

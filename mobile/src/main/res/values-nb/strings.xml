@@ -40,6 +40,7 @@
   <string name="streaming_started">Strømming startet</string>
   <string name="waiting_for_subtitles">Venter på undertekster</string>
   <string name="seeds">Delere</string>
+  <string name="error_files">Feil: Klarte ikke å skrive filer. Prøv et annet lagringssted.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Spilles nå</string>
   <string name="volume">Lydstyrke</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Det oppstod en feil under henting av videoen. Dette kan være på grunn av nettverksproblemer eller YouTube-protokoller. Vennligst prøv igjen senere.</string>
   <string name="leave_videoplayer_title">Er du sikker?</string>
   <string name="leave_videoplayer_message">Er du sikker på at du ønsker å forlate videospilleren? %s vil slutte å spille.</string>
+  <string name="encountered_error_title">Video feil oppstod</string>
+  <string name="encountered_error">Videospilleren kom over en alvorlig feil. Videofilen kunne ikke åpnes og/eller spilles. Formatet ble ikke gjenkjent.</string>
   <!--TermsActivity strings-->
   <string name="accept">aksepter</string>
   <string name="leave">Tilbake</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Maksimalt antall tilkoblinger</string>
   <string name="dht_limit">DHT-begrensing</string>
   <string name="unlimited">Ubegrenset</string>
+  <string name="show_vpn">Vis VPN valg i menyen</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan bare strømme video over Wi-Fi. Dette kan du endre i preferansene dine om du nå vil strømme over mobilt nettverk.</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Åpne navigasjonsskuff</string>
   <string name="drawer_close">Lukk navigasjonsskuff</string>
   <string name="no_search_results">Ingen søkeresultater funnet</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time er resultatet av at mange utviklere og designere har puset sammen en haug med API\'er for å
 gjøre opplevelsen av å se torrents så enkel som mulig.\n\nVi er et Åpne kildekode-prosjekt. Vi er fra hele verden. Vi
 elsker filmene våre. Og gjett om vi elsker popcorn.</string>
@@ -120,7 +125,7 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <string name="blog">Blogg</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Har du prøvd Popcorn Time for Android? Den er fabelaktig! https://popcorntime.io/</string>
+  <string name="share_message">Har du prøvd Popcorn Time for Android? Det fungerer kjempebra!</string>
   <string name="share_dialog_title">Del med</string>
   <!--Beam dialog-->
   <string name="connected_to">Koblet til</string>
@@ -128,4 +133,11 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <string name="select_beaming">Velg enhet for stråling</string>
   <string name="starting_beam">Iverksetter videostråling...</string>
   <string name="beaming_failed">Videoen kunne ikke spilles på din enhet for stråling. Har du lyst til å prøve igjen? Appen må kanskje laste ned flere deler før enheten er i stand til å spille av videoen.</string>
+  <string name="the_video">Videoen</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht app er ikke installert</string>
+  <string name="vpn_info">Du må ha VPN.ht appen installert for å bruke VPN alternativet inne i Popcorn Time. Ikke interessert? Da kan du bare skjule denne knappen.</string>
+  <string name="vpn_download">Last ned app</string>
+  <string name="vpn_later">Kom tilbake senere</string>
+  <string name="vpn_hide">Skjul knapp</string>
 </resources>

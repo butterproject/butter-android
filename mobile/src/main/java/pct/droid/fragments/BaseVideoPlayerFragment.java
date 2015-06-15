@@ -76,6 +76,7 @@ import timber.log.Timber;
 
 public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
 
+    private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
     private String mLocation;
 
@@ -254,8 +255,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         mLibVLC.playMRL(mLocation);
         mEnded = false;
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(mLibVLC.getLength() == 0) {

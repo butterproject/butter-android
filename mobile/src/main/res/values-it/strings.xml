@@ -40,6 +40,7 @@
   <string name="streaming_started">Streraming avviato</string>
   <string name="waiting_for_subtitles">Aspettando i sottotitoli...</string>
   <string name="seeds">Fonti</string>
+  <string name="error_files">Errore: Impossibile scrivere i files. Per cortesia prova una destinazione differente.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">In riproduzione</string>
   <string name="volume">Volume</string>
@@ -54,7 +55,9 @@
   <string name="comm_error">Errore comunicazioni</string>
   <string name="comm_message">Si è verificato un errore durante il recupero del video. Questo potrebbe essere dovuto a problemi di rete o ai protocolli di YouTube. Si prega di riprovare più tardi.</string>
   <string name="leave_videoplayer_title">Sei sicuro?</string>
-  <string name="leave_videoplayer_message">Sei sicuro di voler uscire dal player? %s verrà terminato.</string>
+  <string name="leave_videoplayer_message">Sei sicuro di voler uscire dal visualizzatore? %s verrà terminato.</string>
+  <string name="encountered_error_title">Errore video riscontrato</string>
+  <string name="encountered_error">Il lettore video ha riscontrato un errore serio. Il file video non può essere aperto e/o avviato. Il formato non è stato riconosciuto.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accetta</string>
   <string name="leave">Abbandona</string>
@@ -97,9 +100,10 @@
   <string name="torrents">Torrents</string>
   <string name="download_speed">Massima velocità in download</string>
   <string name="upload_speed">Massima velocità in upload</string>
-  <string name="max_connections">Massime connessioni totali</string>
+  <string name="max_connections">Connessioni massime totali</string>
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Illimitato</string>
+  <string name="show_vpn">Mostra l\'opzione VPN nel menu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Solo wifi</string>
   <string name="wifi_only_message">Puoi visualizzare i video solo con una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Apri cartella di navigazione</string>
   <string name="drawer_close">Chiudi cartella di navigazione</string>
   <string name="no_search_results">Nessun risultato trovato</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time è il risultato di tanti sviluppatori e progettisti che hanno aggregato molte API per rendere
 ⇥⇥la visualizzazione di film torrent più semplice possibile.\n\nSiamo un progetto Open Source. Veniamo da tutto il mondo, amiamo
 ⇥⇥i nostri films. E, ragazzi, quanto amiamo i popcorn!</string>
@@ -120,13 +125,19 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Hai provato Popcorn Time per Android? È fantastico!
-https://popcorntime.io/</string>
+  <string name="share_message">Hai provato Popcorn TIme per Android? E\' fantastico|</string>
   <string name="share_dialog_title">Condividi con:</string>
   <!--Beam dialog-->
   <string name="connected_to">Connesso a</string>
   <string name="disconnect">Disconnetti</string>
-  <string name="select_beaming">Seleziona il dispositivo per il mirroring</string>
-  <string name="starting_beam">Inizializzo il mirroring del video...</string>
+  <string name="select_beaming">Seleziona il dispositivo per la trasmissione</string>
+  <string name="starting_beam">Inizializzo la trasmissione del video...</string>
   <string name="beaming_failed">C\'è stato un errore, il video non è stato riprodotto sul tuo dispositivo. Prova di nuovo, l\'applicazione potrebbe dover scaricare parti aggiuntive prima che il dispositivo possa riprodurre il video.</string>
+  <string name="the_video">Il video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">App VPN.ht non installata</string>
+  <string name="vpn_info">Devi avere l\'app VPN.ht per poter utilizzare l\'opzione VPN da Popcorn Time. Non ti interessa? Allora puoi semplicemente nascondere questo pulsante.</string>
+  <string name="vpn_download">Scarica l\'app</string>
+  <string name="vpn_later">Torna di nuovo</string>
+  <string name="vpn_hide">Nascondi pulsante</string>
 </resources>

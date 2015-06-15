@@ -12,6 +12,9 @@
   <string name="episode">jakso</string>
   <string name="unknown_error">Jotain meni pieleen</string>
   <string name="torrent_failed">Torrentin haussa oli ongelma</string>
+  <string name="running">Pyörii taustalla</string>
+  <string name="tap_to_close">Sulje painamalla</string>
+  <string name="tap_to_resume">Palaa painamalla</string>
   <!--Genres-->
   <string name="genre_all">Kaikki</string>
   <string name="genre_action">Toiminta</string>

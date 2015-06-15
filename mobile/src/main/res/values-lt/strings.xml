@@ -62,7 +62,7 @@
   <string name="accept">Sutikti</string>
   <string name="leave">Išeiti</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Nuostatymai</string>
+  <string name="preferences">Nustatymai</string>
   <string name="general">Pagrindiniai</string>
   <string name="default_view">Numatytoji apžvalga</string>
   <string name="default_player">Numatytasis vaizdo grotuvas</string>
@@ -113,7 +113,7 @@
   <string name="drawer_close">Uždaryti navigacijos stalčių</string>
   <string name="no_search_results">Nerasta paieškos rezultatų</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time! yra rezultatas daugelio kūrėjų ir dizainerių, sujungusių krūvą API sąsajų į vieną visumą,
 		kad torrent filmų žiūrėjimas būtų kaip įmanoma paprastesnis.\n\nMes esame atvirojo kodo projektas. Mes esama iš viso pasaulio. Mes
 		mėgstame filmus. Ir žmogau, mes mėgstame spragėsius.</string>

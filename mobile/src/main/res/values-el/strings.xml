@@ -40,6 +40,7 @@
   <string name="streaming_started">Άρχισε η ροή δεδομένων</string>
   <string name="waiting_for_subtitles">Αναμονή για υπότιτλους</string>
   <string name="seeds">τροφοδότες</string>
+  <string name="error_files">Σφάλμα: Απέτυχε η εγγραφή αρχείων. Παρακαλώ δοκιμάστε μία διαφορετική τοποθεσία αποθήκευσης.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Παίζει τώρα</string>
   <string name="volume">Ένταση</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Προκλήθηκε σφάλμα κατά την ανάκτηση του βίντεο. Αυτό θα μπορούσε να συμβεί λόγω προβλημάτων με το δίκτυο ή λόγω των πρωτοκόλλων του YouTube. Παρακαλώ προσπαθήστε αργότερα.</string>
   <string name="leave_videoplayer_title">Είστε σίγουροι;</string>
   <string name="leave_videoplayer_message">Είστε σίγουροι ότι θέλετε να βγείτε από το πρόγραμμα αναπαραγωγής βίντεο; Θα σταματήσει η αναπαραγωγή του %s.</string>
+  <string name="encountered_error_title">Προέκυψε σφάλμα βίντεο</string>
+  <string name="encountered_error">Το πρόγραμμα αναπαραγωγής βίντεο συνάντησε ένα σοβαρό σφάλμα. Το αρχείο βίντεο δεν ήταν δυνατόν να ανοίξει και/ή να αναπαραχθεί. Η μορφοποίηση δεν αναγνωρίστηκε.</string>
   <!--TermsActivity strings-->
   <string name="accept">Αποδοχή</string>
   <string name="leave">Αποχώρηση</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Μέγιστες συνολικές συνδέσεις</string>
   <string name="dht_limit">Όριο DHT</string>
   <string name="unlimited">Απεριόριστο</string>
+  <string name="show_vpn">Εμφάνιση επιλογής VPN στο μενού</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Μόνο Wi-Fi</string>
   <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Άνοιγμα συρταριού πλοήγησης</string>
   <string name="drawer_close">Κλείσιμο συρταριού πλοήγησης</string>
   <string name="no_search_results">Δεν βρέθηκαν αποτελέσματα αναζήτησης</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Το Popcorn Time είναι το αποτέλεσμα πολλών προγραμματιστών και σχεδιαστών που χρησιμοποίησαν αρκετά API για να κάνουν την
 		εμπειρία της προβολής ταινιών μέσω torrent όσο το δυνατόν απλούστερη.\n\nΕίμαστε ένα έργο ανοιχτού κώδικα. Είμαστε από όλο τον κόσμο.
 		Αγαπάμε τις ταινίες μας. Και ο φίλε, αγαπάμε το ποπκόρν.</string>
@@ -120,7 +125,7 @@
   <string name="blog">Ιστολόγιο</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Δοκιμάσατε το Popcorn Time για το Android; Είναι καταπληκτικό! https://popcorntime.io/</string>
+  <string name="share_message">Έχετε δοκιμάσει το Popcorn Time για το Android; Είναι καταπληκτικό!</string>
   <string name="share_dialog_title">Μοιραστείτε το με</string>
   <!--Beam dialog-->
   <string name="connected_to">Συνδεδεμένο με</string>
@@ -128,4 +133,11 @@
   <string name="select_beaming">Επιλέξτε συσκευή για beaming</string>
   <string name="starting_beam">Γίνεται εκκίνηση του βίντεο beaming...</string>
   <string name="beaming_failed">Δεν ήταν δυνατή η αναπαραγωγή του βίντεο στην beaming συσκευή σας. Θέλετε να δοκιμάσετε ξανά; Η εφαρμογή μπορεί να χρειάζεται να κάνει λήψη περισσότερων κομματιών για να μπορέσει η συσκευή σας να παίξει το βίντεο.</string>
+  <string name="the_video">Το βίντεο</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">Η εφαρμογή του VPN.ht δεν είναι εγκατεστημένη</string>
+  <string name="vpn_info">Πρέπει να έχετε εγκατεστημένη την εφαρμογή του VPN.ht για να χρησιμοποιήσετε την επιλογή VPN μέσα από το Popcorn Time. Δεν ενδιαφέρεστε; Μπορείτε απλά να αποκρύψετε το κουμπί αυτό.</string>
+  <string name="vpn_download">Λήψη εφαρμογής</string>
+  <string name="vpn_later">Επιστρέψτε αργότερα</string>
+  <string name="vpn_hide">Απόκρυψη κουμπιού</string>
 </resources>

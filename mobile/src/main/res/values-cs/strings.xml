@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Uložit</string>
+  <string name="cancel">Zrušit</string>
+  <string name="close">Zavřít</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Povoleno</string>
+  <string name="disabled">Zakázáno</string>
+  <string name="casting">Obsazení</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Název, rok, herci</string>
+  <string name="title_shows">TV pořady</string>
+  <string name="title_movies">Fílmy</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Žánry</string>
+  <string name="search">Hledat</string>
+  <string name="searching">Hledání...</string>
+  <string name="no_data_found">Žádná data nenalezena</string>
+  <string name="unknown_error">Něco se nepovedlo</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min.</string>
+  <string name="read_more">Číst dále</string>
+  <string name="watch_trailer">Přehrát trailer</string>
+  <string name="disable_subs">Titulky vypnuty</string>
+  <string name="no_subs">Bez titulků</string>
+  <string name="no_subs_available">K dispozici nejsou žádné titulky</string>
+  <string name="subtitles">Titulky</string>
+  <string name="quality">Kvalita</string>
+  <string name="trailer">Trailer</string>
+  <string name="season">Řada</string>
+  <string name="episode">Díl</string>
+  <string name="specials">Speciály</string>
+  <string name="continuing">Pokračující</string>
+  <string name="ended">Ukončeno</string>
+  <string name="aired">Vysíláno: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Čekání na torrent</string>
+  <string name="starting_buffering">Spouštění načítání</string>
+  <string name="streaming_started">Vysílání započato</string>
+  <string name="waiting_for_subtitles">Čekání na titulky</string>
+  <string name="seeds">seedů:</string>
+  <string name="error_files">Chyba: Soubory nelze zapsat. Zkuste prosím zadat jiné úložiště.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Právě přehráváno</string>
+  <string name="volume">Hlasitost</string>
+  <string name="brightness">Jas</string>
+  <string name="hardware_acceleration_error_title">Chyba HW akcelerace</string>
+  <string name="hardware_acceleration_error_message">Vyskytla se chyba HW akcelerace. Chcete ji vypnout a spustit úlohu znovu?</string>
+  <string name="best_fit">Nejvhodnější velikost</string>
+  <string name="fill">Vyplnit</string>
+  <string name="fit_horizontal">Roztáhnout horizontálně</string>
+  <string name="fit_vertical">Roztáhnout vertikálně</string>
+  <string name="original_size">Originální</string>
+  <string name="comm_error">Chyba komunikace</string>
+  <string name="comm_message">Během stahování videa se vyskytla chyba. To může být způsobeno problémy se sítí nebo protokoly YouTube. Prosím, zkuste to později.</string>
+  <string name="leave_videoplayer_title">Jste si jisti?</string>
+  <string name="leave_videoplayer_message">Jste si jisti, že chcete opustit přehrávač? %s bude zastaveno.</string>
+  <string name="encountered_error_title">Chyba přehrávání </string>
+  <string name="encountered_error">Video přehrávač selhal. Tento video soubor nelze otevřít a/nebo přehrát. Formát nelze ověřit. </string>
+  <!--TermsActivity strings-->
+  <string name="accept">Přijmout</string>
+  <string name="leave">Opustit</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Nastavení</string>
+  <string name="general">Obecné</string>
+  <string name="default_view">Výchozí přehled</string>
+  <string name="default_player">Výchozí video přehrávač</string>
+  <string name="i18n_language">Jazyk aplikace</string>
+  <string name="restart_effect">K provedení změn restartujte aplikaci.</string>
+  <string name="device_language">Jazyk zařízení</string>
+  <string name="stream_over_wifi_only">Stream pouze přes Wi-Fi</string>
+  <string name="internal_player">Interní</string>
+  <string name="subtitle_color">Barva</string>
+  <string name="subtitle_size">Velikost</string>
+  <string name="subtitle_stroke_color">Barva pozadí</string>
+  <string name="subtitle_stroke_width">Šířka pozadí</string>
+  <string name="subtitle_language">Výchozí jazyk</string>
+  <string name="no_default_set">Žádný výchozí jazyk</string>
+  <string name="advanced">Pokročilé</string>
+  <string name="storage_location">Umístění úložiště</string>
+  <string name="storage_automatic">Automaticky</string>
+  <string name="storage_choose">Vybrat umístění</string>
+  <string name="not_writable">Do umístění se nedá zapisovat</string>
+  <string name="remove_cache">Vymazat cache při ukončení přehrávače</string>
+  <string name="hw_acceleration">Hardwarová akcelerace</string>
+  <string name="hw_automatic">Automatická</string>
+  <string name="hw_full">Úplná</string>
+  <string name="hw_decoding">Pouze dekódování</string>
+  <string name="updates">Aktualizace</string>
+  <string name="auto_updates">Automatické aktualizace</string>
+  <string name="check_for_updates">Vyhledávat aktualizace</string>
+  <string name="last_check">Poslední kontrola</string>
+  <string name="about">O Nás</string>
+  <string name="version">Verze</string>
+  <string name="changelog">Changelog</string>
+  <string name="tap_to_open">Ťuknutím otevřít</string>
+  <string name="report_a_bug">Nahlásit chybu</string>
+  <string name="open_source_licenses">Licence s otevřeným zdrojovým kódem</string>
+  <string name="torrents">Torrentů</string>
+  <string name="download_speed">Maximální rychlost stahování</string>
+  <string name="upload_speed">Maximální rychlost nahrávání</string>
+  <string name="max_connections">Maximální počet připojení</string>
+  <string name="dht_limit">DHT Limit</string>
+  <string name="unlimited">Bez limitu</string>
+  <string name="show_vpn">Zobrazit VPN volbu v menu </string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Pouze Wi-Fi</string>
+  <string name="wifi_only_message">Streamovat videa je povoleno pouze přes Wi-Fi. Tuto možnost lze zakázat v nastavení, pokud chcete streamovat přes mobilní připojení.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Sdílet</string>
+  <string name="drawer_open">Otevřít navigační okno</string>
+  <string name="drawer_close">Zavřít navigační okno</string>
+  <string name="no_search_results">Nenalezeny žádné výsledky hledání</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time je výsledek mnoha vývojářů a designerů dávajících dohromady několik API kódů, aby vytvořili
+⇥⇥co nejjednodušší zkušenost se sledováním torrent filmů.\n\nJsme projekt s otevřeným zdrojovým kódem. Jsme z celého světa. Milujeme
+⇥⇥naše filmy. A páni, jak moc milujeme popcorn.</string>
+  <string name="website">Webová stránka</string>
+  <string name="forum">Fórum</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">Už si zkusil Popcorn Time pro Android? Je to úžasné! </string>
+  <string name="share_dialog_title">Sdílet s</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Připojeno k</string>
+  <string name="disconnect">Odpojit</string>
+  <string name="select_beaming">Vyberte zařízení pro přenos</string>
+  <string name="starting_beam">Inicializování video přenosu...</string>
+  <string name="beaming_failed">Video nemohlo být přehráno na vašem přehrávacím zařízení. Chtěli byste se o to pokusit znovu? Aplikace bude nejspíše potřebovat stáhnout více částí před tím, než bude vaše zařízení připraveno pro přehrání videa.</string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht aplikace není nainstalována </string>
+  <string name="vpn_info">Musíte mít nainstalovanou aplikaci VPN.ht aby jste mohli použít VPN v aplikaci Popcorn Time. Nechcete používat VPN? Můžete jednoduše schovat tlačítko. </string>
+  <string name="vpn_download">Stáhnout aplikaci </string>
+  <string name="vpn_later">Vraťte se zpátky později </string>
+  <string name="vpn_hide">Schovat tlačítko </string>
+</resources>

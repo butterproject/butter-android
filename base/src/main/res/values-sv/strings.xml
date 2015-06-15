@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="update_available">Ny uppdatering tillgänglig.</string>
-  <string name="press_install">Tryck för att installera </string>
+  <string name="press_install">Tryck för att installera</string>
   <string name="loading_data">Laddar data...</string>
   <string name="loading_details">Laddar information.</string>
   <string name="loading_shows">Laddar serier...</string>
@@ -11,6 +11,10 @@
   <string name="overview_not_available">Tyvärr! Det finns ingen översikt tillgänglig.</string>
   <string name="episode">Episode</string>
   <string name="unknown_error">Något gick fel</string>
+  <string name="torrent_failed">Misslyckades med att hämta torrent</string>
+  <string name="running">Kör i bakgrunden</string>
+  <string name="tap_to_close">Tryck för att stänga</string>
+  <string name="tap_to_resume">Tryck för att fortsätta</string>
   <!--Genres-->
   <string name="genre_all">Allt</string>
   <string name="genre_action">Action</string>
@@ -77,7 +81,7 @@
   <!--Possible tabs-->
   <string name="popular_now">POPULÄRT NU</string>
   <string name="top_rated">TOPPBETYG</string>
-  <string name="release_date">RELEASE DATE</string>
+  <string name="release_date">RELEASE DATUM</string>
   <string name="last_updated">SENAST UPPDATERAD</string>
   <string name="year">ÅR</string>
   <string name="a_to_z">A - Z</string>

@@ -11,6 +11,10 @@
   <string name="overview_not_available">Desculpa! Não existe resumo disponível</string>
   <string name="episode">Episódio</string>
   <string name="unknown_error">Aconteceu algo de errado</string>
+  <string name="torrent_failed">Falha ao adquirir torrent</string>
+  <string name="running">A trabalhar em segundo plano</string>
+  <string name="tap_to_close">Toca para fechar</string>
+  <string name="tap_to_resume">Toca para continuar</string>
   <!--Genres-->
   <string name="genre_all">Todos</string>
   <string name="genre_action">Ação</string>

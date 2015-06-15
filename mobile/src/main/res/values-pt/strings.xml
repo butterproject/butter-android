@@ -35,11 +35,12 @@
   <string name="ended">Terminou</string>
   <string name="aired">Data de emissão: %s</string>
   <!--StreamLoadingActivity strings-->
-  <string name="waiting_torrent">A aguardar por torrent</string>
+  <string name="waiting_torrent">A aguardar pelo torrent</string>
   <string name="starting_buffering">A iniciar transferência</string>
   <string name="streaming_started">Reprodução iniciada</string>
   <string name="waiting_for_subtitles">A aguardar pelas legendas</string>
   <string name="seeds">sementes</string>
+  <string name="error_files">Erro: Não foi possível escrever os ficheiros. Tenta uma localização de armazenamento diferente.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">A reproduzir</string>
   <string name="volume">Volume</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Ocorreu um erro durante a transferência do vídeo. Poderá dever-se a problemas de rede ou de protocolos do Youtube. Por favor, tenta mais tarde.</string>
   <string name="leave_videoplayer_title">Tens a certeza?</string>
   <string name="leave_videoplayer_message">Tens a certeza que queres sair do leitor de vídeo? A reprodução de %s será terminada.</string>
+  <string name="encountered_error_title">Encontrado erro no vídeo</string>
+  <string name="encountered_error">Ocorreu um erro grave no leitor de vídeo. O ficheiro de vídeo não pode ser aberto e/ou reproduzido. O formato não é reconhecido.</string>
   <!--TermsActivity strings-->
   <string name="accept">Aceitar</string>
   <string name="leave">Sair</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Máximo de ligações totais</string>
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Ilimitado</string>
+  <string name="show_vpn">Mostrar opção de VPN no menu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Apenas podes reproduzir vídeo através de Wi-Fi. Desativa esta opção nas Definições se quiseres reproduzir através de uma rede móvel.</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Abrir gaveta de navegação</string>
   <string name="drawer_close">Fechar gaveta de navegação</string>
   <string name="no_search_results">Nenhum resultado encontrado</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">O Popcorn Time é o resultado de muitos programadores e designers combinarem uma carrada de APIs para tornar a
 		experiência de ver um filme ou uma série tão simples quanto possível.\n\nSomos um projeto de código aberto. Somos do mundo inteiro.
 		Adoramos os nossos filmes. E acredita, adoramos pipocas.</string>
@@ -120,7 +125,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Já experimentaste o Popcorn Time para Android? É espetacular! https://popcorntime.io/</string>
+  <string name="share_message">Já experimentaste o Popcorn Time para Android? É espetacular!</string>
   <string name="share_dialog_title">Partilha com</string>
   <!--Beam dialog-->
   <string name="connected_to">Ligado a</string>
@@ -128,4 +133,11 @@
   <string name="select_beaming">Escolhe o dispositivo para transmitir</string>
   <string name="starting_beam">A iniciar transmissão de vídeo...</string>
   <string name="beaming_failed">O vídeo não pôde ser reproduzido no teu dispositivo de transmissão. Queres tentar novamente? A aplicação pode precisar de receber mais dados até que o teu dispositivo seja capaz de reproduzir o vídeo.</string>
+  <string name="the_video">O vídeo</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">Aplicação VPN.ht não está instalada</string>
+  <string name="vpn_info">Precisas ter a aplicação VPN.ht instalada para usar a opção interna de VPN no Popcorn Time. Se não tiveres interesse, podes esconder este botão.</string>
+  <string name="vpn_download">Transferir aplicação</string>
+  <string name="vpn_later">Volta mais tarde</string>
+  <string name="vpn_hide">Esconder botão</string>
 </resources>
