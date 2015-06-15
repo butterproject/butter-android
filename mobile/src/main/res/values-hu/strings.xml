@@ -113,7 +113,7 @@
   <string name="drawer_close">Navigációs fiók bezárása</string>
   <string name="no_search_results">Nem található keresési eredmény</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">A Popcorn Time! számtalan fejlesztő és dizájner munkájának eredménye, akik összeraktak pár API-t, hogy a torrentes filmnézés élményét a lehető legegyszerűbbé tegyék.\n\n
 Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműködőink. Szeretjük a filmeket, és legfőképp a popcornt.</string>
   <string name="website">Weboldal</string>

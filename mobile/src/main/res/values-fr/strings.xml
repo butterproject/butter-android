@@ -40,6 +40,7 @@
   <string name="streaming_started">La lecture a commencé</string>
   <string name="waiting_for_subtitles">En attente des sous-titres…</string>
   <string name="seeds">Sources</string>
+  <string name="error_files">Erreur : Impossible de créer les fichiers. Réessayez en utilisant une autre destination.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">En cours de lecture</string>
   <string name="volume">Volume</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Une erreur s\'est produite lors de la récupération de la vidéo. Ceci pourrait être du à un problème de réseau ou de protocoles Youtube. Veuillez réessayer ultérieurement.</string>
   <string name="leave_videoplayer_title">Confirmer ?</string>
   <string name="leave_videoplayer_message">Voulez-vous vraiment interrompre la lecture de %s ?</string>
+  <string name="encountered_error_title">Erreur vidéo</string>
+  <string name="encountered_error">Le lecteur a rencontré une erreur sérieuse. Le fichier vidéo n\'a pas pu être ouvert et/ou joué. Le format est inconnu.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accepter</string>
   <string name="leave">Quitter</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Maximum de connexions</string>
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Illimité</string>
+  <string name="show_vpn">Montrer l\'option VPN dans le menu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi uniquement </string>
   <string name="wifi_only_message">Vous ne pouvez lire de vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences si vous souhaitez utiliser une connexion de données mobiles.</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Ouvrir la barre de navigation</string>
   <string name="drawer_close">Fermer la barre de navigation</string>
   <string name="no_search_results">Aucun résultat trouvé pour la recherche</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time est le fruit de nombreux développeurs et de graphistes qui ont rassemblé plusieurs API dans le but de rendre l\'expérience du streaming via torrent la plus simple possible. Nous construisons ce projet en open source depuis les quatre coins du monde. Nous adorons le cinéma… et le popcorn !</string>
   <string name="website">Site Internet</string>
   <string name="forum">Forum</string>
@@ -118,7 +123,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Avez-vous déjà essayé Popcorn Time pour Android ? C\'est génial ! https://popcorntime.io/</string>
+  <string name="share_message">Vous avez déjà essayé Popcorn Time pour Android ? C\'est renversant !</string>
   <string name="share_dialog_title">Partager avec</string>
   <!--Beam dialog-->
   <string name="connected_to">Connecté à</string>
@@ -126,4 +131,11 @@
   <string name="select_beaming">Sélectionnez un appareil de diffusion</string>
   <string name="starting_beam">Initialisation de la diffusion vidéo...</string>
   <string name="beaming_failed">Cette vidéo n\'a pas pu être jouée sur l\'appareil de diffusion. Voulez-vous réessayer ? L\'application pourrait télécharger d\'avantage de données avant que votre appareil ne puisse jouer la vidéo.</string>
+  <string name="the_video">La vidéo</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">L\'application VPN.ht n\'est pas installée</string>
+  <string name="vpn_info">Vous devez installer l\'application VPN.ht pour utiliser le VPN dans Popcorn Time. Pas intéressé ? Vous pouvez tout simplement cacher ce bouton.</string>
+  <string name="vpn_download">Télécharger l\'application</string>
+  <string name="vpn_later">Revenez plus tard</string>
+  <string name="vpn_hide">Cacher le bouton</string>
 </resources>

@@ -11,6 +11,10 @@
   <string name="overview_not_available">Entschuldigung! Es ist keine Übersicht verfügbar.</string>
   <string name="episode">Folge</string>
   <string name="unknown_error">Irgendetwas ist schiefgelaufen</string>
+  <string name="torrent_failed">Fehler beim Abrufen des Torrent</string>
+  <string name="running">Läuft im Hintergrund</string>
+  <string name="tap_to_close">Tippen Sie zum Schließen</string>
+  <string name="tap_to_resume">Tippen Sie zum Fortsetzen</string>
   <!--Genres-->
   <string name="genre_all">Alle</string>
   <string name="genre_action">Action</string>
@@ -55,13 +59,13 @@
   <string name="genre_harem">Harem</string>
   <string name="genre_josei">Josei</string>
   <string name="genre_kids">Kinder</string>
-  <string name="genre_magic">Zauber</string>
+  <string name="genre_magic">Magie</string>
   <string name="genre_martial_arts">Kampfsport</string>
   <string name="genre_mecha">Mech</string>
   <string name="genre_military">Militärwesen</string>
   <string name="genre_police">Polizei</string>
   <string name="genre_parody">Parodie</string>
-  <string name="genre_psychological">Psychologisch</string>
+  <string name="genre_psychological">Psychologie</string>
   <string name="genre_samurai">Samurai</string>
   <string name="genre_school">Schule</string>
   <string name="genre_seinen">Seinen</string>

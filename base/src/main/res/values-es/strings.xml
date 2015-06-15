@@ -8,9 +8,13 @@
   <string name="loading_movies">Cargando películas...</string>
   <string name="loading_subs">Cargando subtítulos...</string>
   <string name="error_files">Error: No se pudo escribir archivos</string>
-  <string name="overview_not_available">¡Lo siento! No hay descripción disponible.</string>
+  <string name="overview_not_available">¡Lo siento! No hay información disponible.</string>
   <string name="episode">Episodio</string>
   <string name="unknown_error">Algo ha salido mal</string>
+  <string name="torrent_failed">No se pudo recuperar el torrent</string>
+  <string name="running">Ejecutándose en segundo plano</string>
+  <string name="tap_to_close">Toque para cerrar</string>
+  <string name="tap_to_resume">Toque para reanudar</string>
   <!--Genres-->
   <string name="genre_all">Todos</string>
   <string name="genre_action">Acción</string>

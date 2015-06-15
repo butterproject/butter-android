@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Simpan</string>
+  <string name="cancel">Batal</string>
+  <string name="close">Tutup</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Dibenarkan</string>
+  <string name="disabled">Dilumpuhkan</string>
+  <string name="casting">Penstriman</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Tajuk, tahun, pelakon</string>
+  <string name="title_shows">Rancangan</string>
+  <string name="title_movies">Cereka</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Genre</string>
+  <string name="search">Gelintar</string>
+  <string name="searching">Menggelintar...</string>
+  <string name="no_data_found">Tiada data ditemui</string>
+  <string name="unknown_error">Ada masalah berlaku</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Baca lagi</string>
+  <string name="watch_trailer">Tonton treler</string>
+  <string name="disable_subs">Lumpuh sarikata</string>
+  <string name="no_subs">Tiada sarikata</string>
+  <string name="no_subs_available">Tiada sarikata tersedia</string>
+  <string name="subtitles">Sarikata</string>
+  <string name="quality">Kualiti</string>
+  <string name="trailer">Treler</string>
+  <string name="season">Musim</string>
+  <string name="episode">Episod</string>
+  <string name="specials">Istimewa</string>
+  <string name="continuing">Masih Berjalan</string>
+  <string name="ended">Tamat</string>
+  <string name="aired">Keudara: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Menunggu torrent</string>
+  <string name="starting_buffering">Memulakan penimbalan</string>
+  <string name="streaming_started">Penstriman bermula</string>
+  <string name="waiting_for_subtitles">Menunggu sarikata</string>
+  <string name="seeds">semaian</string>
+  <string name="error_files">Ralat: Tidak dapat tulis fail. Sila cuba lokasi storan yang berlainan.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Kini dimainkan</string>
+  <string name="volume">Volum</string>
+  <string name="brightness">Kecerahan</string>
+  <string name="hardware_acceleration_error_title">Ralat pemecutan HW</string>
+  <string name="hardware_acceleration_error_message">Satu ralat berlaku pada pemecutan perkakasan. Anda hendak lumpuhkannya dan cuba lagi sekali?</string>
+  <string name="best_fit">Suai muat</string>
+  <string name="fill">Memenuhi</string>
+  <string name="fit_horizontal">Suai mengufuk</string>
+  <string name="fit_vertical">Suai menegak</string>
+  <string name="original_size">Asal</string>
+  <string name="comm_error">Ralat Komunikasi</string>
+  <string name="comm_message">Satu ralat berlaku ketika memperoleh video. Ia berkemungkinan masalah rangkaian atau masalah protokol YouTube. Sila cuba lagi kemudian.</string>
+  <string name="leave_videoplayer_title">Anda pasti?</string>
+  <string name="leave_videoplayer_message">Anda pasti mahu menutup pemain video? %s akan berhenti main.</string>
+  <string name="encountered_error_title">Ralat video berlaku</string>
+  <string name="encountered_error">Pemain video mengalami ralat yang serius. Fail video tidak dapat dibuka dan/atau dimainkan. Format tidak dapat dikenalpasti.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Terima</string>
+  <string name="leave">Keluar</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Keutamaan</string>
+  <string name="general">Am</string>
+  <string name="default_view">Selayang pandang lalai</string>
+  <string name="default_player">Pemain video lalai</string>
+  <string name="i18n_language">Bahasa apl</string>
+  <string name="restart_effect">Mula semula aplikasi supaya perubahan berkesan</string>
+  <string name="device_language">Bahasa peranti</string>
+  <string name="stream_over_wifi_only">Hanya strim melalui Wi-Fi</string>
+  <string name="internal_player">Dalaman</string>
+  <string name="subtitle_color">Warna</string>
+  <string name="subtitle_size">Saiz</string>
+  <string name="subtitle_stroke_color">Warna garis luar</string>
+  <string name="subtitle_stroke_width">Lebar garis luar</string>
+  <string name="subtitle_language">Bahasa lalai</string>
+  <string name="no_default_set">Tiada bahasa lalai</string>
+  <string name="advanced">Lanjutan</string>
+  <string name="storage_location">Lokasi storan</string>
+  <string name="storage_automatic">Automatik</string>
+  <string name="storage_choose">Pilih lokasi</string>
+  <string name="not_writable">Lokasi tidak boleh ditulis</string>
+  <string name="remove_cache">Buang cache ketika pemain ditutup</string>
+  <string name="hw_acceleration">Pemecutan perkakasan</string>
+  <string name="hw_automatic">Automatik</string>
+  <string name="hw_full">Penuh</string>
+  <string name="hw_decoding">Penyahkodan sahaja</string>
+  <string name="updates">Kemaskini</string>
+  <string name="auto_updates">Kemaskini automatik</string>
+  <string name="check_for_updates">Periksa kemaskini</string>
+  <string name="last_check">Periksa terakhir</string>
+  <string name="about">Perihal</string>
+  <string name="version">Versi</string>
+  <string name="changelog">Log perubahan</string>
+  <string name="tap_to_open">Ketik untuk buka</string>
+  <string name="report_a_bug">Lapor pepijat</string>
+  <string name="open_source_licenses">Lesen sumber terbuka</string>
+  <string name="torrents">Torrent</string>
+  <string name="download_speed">Kelajuan muat turun maksimum</string>
+  <string name="upload_speed">Kelajuan muat naik maksimum</string>
+  <string name="max_connections">Jumlah sambungan maksimum</string>
+  <string name="dht_limit">Had DHT</string>
+  <string name="unlimited">Tanpa had</string>
+  <string name="show_vpn">Tunjuk pilihan VPN dalam menu</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi sahaja</string>
+  <string name="wifi_only_message">Anda hanya boleh strimkan video melalui Wi-Fi. Anda boleh lumpuhkannya dalam keutamaan jika anda mahu strimkan menerusi sambungan selular.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Kongsi</string>
+  <string name="drawer_open">Buka bekas navigasi</string>
+  <string name="drawer_close">Tutup bekas navigasi</string>
+  <string name="no_search_results">Tiada keputusan gelintar ditemui</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time adalah hasil usaha ramai pembangun dan pereka yang menggabungkan beberapa API supaya
+		pengalaman menonton cereka torrent menjadi mudah.\n\nKami merupakan projek sumber terbuka. Kami berasal dari pelbagai lokasi diseluruh dunia.
+		Kami menyukai cereka. Semestinya kami menyukai popcorn.</string>
+  <string name="website">Laman Sesawang</string>
+  <string name="forum">Forum</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">Pernahkan anda mencuba Popcorn Time di Android? Ia sangat mengujakan!</string>
+  <string name="share_dialog_title">Kongsi dengan</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Bersambung dengan</string>
+  <string name="disconnect">Terputus</string>
+  <string name="select_beaming">Pilih peranti untuk pemancaran</string>
+  <string name="starting_beam">Mengawalkan pemancaran video...</string>
+  <string name="beaming_failed">Video tidak dapat dimainkan dengan peranti pemancaran anda. Anda mahu cuba lagi sekali? Apl mungkin perlu memuat turun lagi komponen sebelum peranti anda dapat memainkan video.</string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">Apl VPN.ht tidak dipasang</string>
+  <string name="vpn_info">Anda perlukan apl VPN.ht dipasang untuk guna pilihan VPN dalam Popcorn Time. Jika tidak berminat? Anda boleh sembunyikan butang ini.</string>
+  <string name="vpn_download">Muat turun apl</string>
+  <string name="vpn_later">Jumpa lagi</string>
+  <string name="vpn_hide">Sembunyi butang</string>
+</resources>

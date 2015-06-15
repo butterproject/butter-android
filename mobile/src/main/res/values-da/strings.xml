@@ -7,7 +7,7 @@
   <string name="ok">OK</string>
   <string name="enabled">Aktiveret</string>
   <string name="disabled">Deaktiveret</string>
-  <string name="casting">Udsende</string>
+  <string name="casting">Casting</string>
   <!--OverviewActivity strings-->
   <string name="search_hint">Titel, år, skuespillere</string>
   <string name="title_shows">Serier</string>
@@ -40,6 +40,7 @@
   <string name="streaming_started">Streaming startet</string>
   <string name="waiting_for_subtitles">Venter på undertekster</string>
   <string name="seeds">seeds</string>
+  <string name="error_files">Fejl: Filerne kunne ikke gemmes. Prøv venligst en anden placering.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Afspilles nu</string>
   <string name="volume">Lydstyrke</string>
@@ -55,6 +56,8 @@
   <string name="comm_message">Der opstod en fejl under hentningen af videoen. Det kan skyldes netværksproblemer eller YouTube-protokoller. Prøv venligst igen senere.</string>
   <string name="leave_videoplayer_title">Er du sikker?</string>
   <string name="leave_videoplayer_message">Er du sikker på at du vil forlade videoafspilleren? %s vil stoppe med at afspille.</string>
+  <string name="encountered_error_title">Fandt fejl ved video</string>
+  <string name="encountered_error">Videoafspilleren stødte på en seriøs fejl. Videofilen kunne ikke åbnes og/eller afspilles. Formatet blev ikke genkendt.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accepter</string>
   <string name="leave">Forlad</string>
@@ -78,7 +81,7 @@
   <string name="storage_location">Placering af filer</string>
   <string name="storage_automatic">Automatisk</string>
   <string name="storage_choose">Vælg placering</string>
-  <string name="not_writable">Placering ikke skrivbar</string>
+  <string name="not_writable">Placeringen er skrivebeskyttet</string>
   <string name="remove_cache">Ryd cache når afspiller lukkes</string>
   <string name="hw_acceleration">Hardwareacceleration</string>
   <string name="hw_automatic">Automatisk</string>
@@ -92,7 +95,7 @@
   <string name="version">Version</string>
   <string name="changelog">Ændringslog</string>
   <string name="tap_to_open">Tryk for at åbne</string>
-  <string name="report_a_bug">Reportér en fejl</string>
+  <string name="report_a_bug">Rapportér en fejl</string>
   <string name="open_source_licenses">Open-source licenser</string>
   <string name="torrents">Torrents</string>
   <string name="download_speed">Højeste downloadhastighed</string>
@@ -100,6 +103,7 @@
   <string name="max_connections">Højeste antal forbindelser</string>
   <string name="dht_limit">DHT-grænse</string>
   <string name="unlimited">Ubegrænset</string>
+  <string name="show_vpn">Vis VPN-valg i menu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan kun streame videoer via Wi-Fi. Du kan deaktivere dette i indstillinger, hvis du vil streame via mobilnetværk</string>
@@ -108,7 +112,8 @@
   <string name="drawer_open">Åbn navigationsskuffe</string>
   <string name="drawer_close">Luk navigationsskuffe</string>
   <string name="no_search_results">Ingen søgeresultater fundet</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time! er resultatet af mange udviklere og designere, som har sammensat nogle API\'er for at gøre oplevelsen af at se torrent-film så enkelt som muligt.</string>
   <string name="website">Hjemmeside</string>
   <string name="forum">Forum</string>
@@ -118,8 +123,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Har du prøvet Popcorn Time for Android? Det er vildt godt!
-https://popcorntime.io/</string>
+  <string name="share_message">Har du prøvet Popcorn Time til Android? Den er fantastisk!</string>
   <string name="share_dialog_title">Del med</string>
   <!--Beam dialog-->
   <string name="connected_to">Forbundet til</string>
@@ -127,4 +131,11 @@ https://popcorntime.io/</string>
   <string name="select_beaming">Vælg enhed til beaming</string>
   <string name="starting_beam">Starter beaming af video...</string>
   <string name="beaming_failed">Videoen kunne ikke afspille på din beaming-enhed. Vil du prøve igen? Appen skal måske downloade flere dele før din enhed er i stand til at afspille videoen.</string>
+  <string name="the_video">Videoen</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht-app er ikke installeret</string>
+  <string name="vpn_info">VPN.ht-app skal være installeret før du kan bruge VPN-valg i Popcorn Time. Er du ikke interesseret? Så kan du skjule denne knap.</string>
+  <string name="vpn_download">Download app</string>
+  <string name="vpn_later">Vend tilbage senere</string>
+  <string name="vpn_hide">Skjul knap</string>
 </resources>

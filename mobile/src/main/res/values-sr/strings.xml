@@ -113,7 +113,7 @@
   <string name="drawer_close">Затвори навигациону фиоку</string>
   <string name="no_search_results">Нема резултата претраге</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time је направљен тако што је група програмера и дизајнера саставила гомиле АПИ-ја како
 ⇥⇥би искуство гледања торент филмова учинила што једноставнијим.\n\nМи смо пројекат отвореног кода. Ми смо из целог света.
 		Ми волимо наше филмове. А, брате, волимо и кокице.</string>

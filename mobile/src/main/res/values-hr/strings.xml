@@ -113,7 +113,7 @@
   <string name="drawer_close">Zatvori navigacijsku površinu</string>
   <string name="no_search_results">Nema traženih rezultata</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time je rezultat truda mnogo razvijatelja i dizajnera koji su spojili hrpu API-ija zajedno kako bi učinili
 		iskustvo gledanja filmova putem torrenta što jednostavnijim.\n\nOvo je projekt otvorenog kôda. Mi smo sa svih strana svijeta. Volimo
 		gledati filmove. A najviše od svega, volimo kokice.</string>
