@@ -17,6 +17,7 @@
 
 package pct.droid.base.utils;
 
+import org.mozilla.universalchardet.Constants;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.BufferedReader;
@@ -140,7 +141,8 @@ public class FileUtils {
         charsetDetector.reset();
 
         if (detectedCharset == null || detectedCharset.isEmpty()) {
-            detectedCharset = "UTF-8";
+            // UniversalDetector can't detect the charset so try to get charset from BOM.
+            detectedCharset = getCharsetFromBOM(bomInputStream.getBOM());
         } else if ("MACCYRILLIC".equals(detectedCharset)) {
             detectedCharset = "Windows-1256";
         }
@@ -256,4 +258,26 @@ public class FileUtils {
         outStream.close();
     }
 
+
+    /**
+     * Get the charset from BOM if available.
+     *
+     * @param bom BOM of the file
+     * @return Charset
+     */
+    public static String getCharsetFromBOM(UnicodeBOMInputStream.BOM bom) {
+        if (UnicodeBOMInputStream.BOM.UTF_32_BE.equals(bom)) {
+            return Constants.CHARSET_UTF_32BE;
+        } else if (UnicodeBOMInputStream.BOM.UTF_32_LE.equals(bom)) {
+            return Constants.CHARSET_UTF_32LE;
+        } else if (UnicodeBOMInputStream.BOM.UTF_8.equals(bom)) {
+            return Constants.CHARSET_UTF_8;
+        } else if (UnicodeBOMInputStream.BOM.UTF_16_BE.equals(bom)) {
+            return Constants.CHARSET_UTF_16BE;
+        } else if (UnicodeBOMInputStream.BOM.UTF_16_LE.equals(bom)) {
+            return Constants.CHARSET_UTF_16LE;
+        }
+
+        return "UTF-8";
+    }
 }
