@@ -89,4 +89,5 @@
   <string name="pairing_tv">Uparivanje s TV-om</string>
   <string name="confirm_tv">Potvrdite povezivanje na vašem TV-u</string>
   <string name="enter_pairing_code">Upišite kôd uparivanja na vašem TV-u</string>
+  <string name="open_with">Otvori s</string>
 </resources>

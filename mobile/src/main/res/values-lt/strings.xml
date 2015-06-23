@@ -27,6 +27,7 @@
   <string name="no_subs_available">Nėra prieinamų subtitrų</string>
   <string name="subtitles">Subtitrai</string>
   <string name="quality">Kokybė</string>
+  <string name="open_magnet">Atidaryti magnetinę nuorodą</string>
   <string name="trailer">Anonsas</string>
   <string name="season">Sezonas</string>
   <string name="episode">Epizodas</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Tęsiama</string>
   <string name="ended">Baigėsi</string>
   <string name="aired">Rodyta: %s</string>
+  <string name="no_title_available">Be vardo</string>
+  <string name="no_synopsis_available">Nėra trumpos apžvalgos</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Laukiama torento</string>
   <string name="starting_buffering">Pradedama buferizacija</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Pritaikyti horizontaliai</string>
   <string name="fit_vertical">Pritaikyti vertikaliai</string>
   <string name="original_size">Originalus</string>
+  <string name="reload_video">Iš naujo įkelti vaizdo įrašą</string>
   <string name="comm_error">Komunikacijos klaida</string>
   <string name="comm_message">Įvyko klaida gaunant vaizdo įrašą. Tai galėjo nutikti dėl tinklo problemų ar YouTube protokolų. Pamėginti dar kartą vėliau.</string>
   <string name="leave_videoplayer_title">Ar įsitikinęs?</string>
@@ -62,7 +66,7 @@
   <string name="accept">Sutikti</string>
   <string name="leave">Išeiti</string>
   <!--SettingsActivity strings-->
-  <string name="preferences">Nuostatymai</string>
+  <string name="preferences">Nustatymai</string>
   <string name="general">Pagrindiniai</string>
   <string name="default_view">Numatytoji apžvalga</string>
   <string name="default_player">Numatytasis vaizdo grotuvas</string>
@@ -113,7 +117,7 @@
   <string name="drawer_close">Uždaryti navigacijos stalčių</string>
   <string name="no_search_results">Nerasta paieškos rezultatų</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time! yra rezultatas daugelio kūrėjų ir dizainerių, sujungusių krūvą API sąsajų į vieną visumą,
 		kad torrent filmų žiūrėjimas būtų kaip įmanoma paprastesnis.\n\nMes esame atvirojo kodo projektas. Mes esama iš viso pasaulio. Mes
 		mėgstame filmus. Ir žmogau, mes mėgstame spragėsius.</string>
@@ -137,7 +141,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht programa neįdiegta</string>
   <string name="vpn_info">Jums reikia įdiegti VPN.ht programą, jei norite naudoti VPN parinktį Popcorn Time programoje. Neįdomu? Tada tiesiog galite paslėpti šį mygtuką.</string>
-  <string name="vpn_download">Atsisiųsti programą</string>
-  <string name="vpn_later">Grįžti vėliau</string>
-  <string name="vpn_hide">Slėpti mygtuką</string>
 </resources>

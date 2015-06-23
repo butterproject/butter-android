@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     Button mReadMore;
     @InjectView(R.id.info_buttons)
     LinearLayout mInfoButtons;
+    @InjectView(R.id.magnet)
+    ImageButton mOpenMagnet;
 
     public static ShowDetailAboutFragment newInstance(Show show) {
         Bundle b = new Bundle();
@@ -109,6 +112,8 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
         } else {
             mInfoButtons.setVisibility(View.GONE);
         }
+
+        mOpenMagnet.setVisibility(View.GONE);
 
         return mRoot;
     }

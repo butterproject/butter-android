@@ -27,6 +27,7 @@
   <string name="no_subs_available">কোন সাবটাইটেল উপলব্ধ নেই</string>
   <string name="subtitles">সাবটাইটেল</string>
   <string name="quality">গুণমান</string>
+  <string name="open_magnet">চুম্বক খুলুন</string>
   <string name="trailer">ট্রেইলার</string>
   <string name="season">মৌসুম</string>
   <string name="episode">পর্ব</string>
@@ -34,12 +35,15 @@
   <string name="continuing">অব্যাহত</string>
   <string name="ended">সমাপ্ত হয়েছে</string>
   <string name="aired">প্রচারিত: %s</string>
+  <string name="no_title_available">নাম নেই</string>
+  <string name="no_synopsis_available">কোন সারসংক্ষেপ উপলব্ধ নেই</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">টরেন্টের জন্য অপেক্ষারত</string>
   <string name="starting_buffering">বাফারিং শুরু হচ্ছে</string>
   <string name="streaming_started">স্ট্রিমিং শুরু হয়েছে</string>
   <string name="waiting_for_subtitles">সাবটাইটেলের জন্য অপেক্ষারত</string>
   <string name="seeds">সিড</string>
+  <string name="error_files">ত্রুটি: ফাইলসমূহ লেখা যাচ্ছে না। দয়া করে একটি ভিন্ন সঞ্চয়ের অবস্থানে চেষ্টা করুন।</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">এখন চলছে</string>
   <string name="volume">ভলিউম</string>
@@ -51,10 +55,13 @@
   <string name="fit_horizontal">অনুভূমিক মাপসই</string>
   <string name="fit_vertical">উল্লম্ব মাপসই</string>
   <string name="original_size">আসল</string>
+  <string name="reload_video">ভিডিও পুনঃলোড করুন</string>
   <string name="comm_error">যোগাযোগ ত্রুটি</string>
   <string name="comm_message">ভিডিও পুনরুদ্ধার করার সময় একটি ত্রুটি ঘটেছে। এটি নেটওয়ার্ক বিষয় বা ইউটিউব প্রোটোকলের কারণে হতে পারে। দয়া করে পরে আবার চেষ্টা করুন।</string>
   <string name="leave_videoplayer_title">আপনি কি নিশ্চিত?</string>
   <string name="leave_videoplayer_message">আপনি কি ভিডিও প্লেয়ার ছেড়ে চলে যাওয়ার ব্যাপারে নিশ্চিত? %s চালানো বন্ধ হয়ে যাবে।</string>
+  <string name="encountered_error_title">ভিডিও ত্রুটির সম্মুখীন হয়েছে</string>
+  <string name="encountered_error">ভিডিও প্লেয়ার একটি গুরুতর ত্রুটির সম্মুখীন হয়েছে। ভিডিও ফাইল খোলা এবং/অথবা চালানো যাবেনা। ফরম্যাটটি স্বীকৃত ছিল না।</string>
   <!--TermsActivity strings-->
   <string name="accept">গ্রহণ</string>
   <string name="leave">ত্যাগ</string>
@@ -100,6 +107,7 @@
   <string name="max_connections">সর্বোচ্চ মোট সংযোগ</string>
   <string name="dht_limit">DHT সীমা</string>
   <string name="unlimited">সীমাহীন</string>
+  <string name="show_vpn">মেনুতে VPN অপশন দেখান</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">ওয়াই-ফাই শুধুমাত্র</string>
   <string name="wifi_only_message">আপনি শুধুমাত্র ওয়াই-ফাইয়ের মাধ্যমে ভিডিও স্ট্রিম করতে পারবেন। আপনি যদি মোবাইল থেকে স্ট্রিম করতে চান, তাহলে আপনি পছন্দসমূহ থেকে নিষ্ক্রিয় করতে পারবেন।</string>
@@ -108,7 +116,8 @@
   <string name="drawer_open">পরিভ্রমণ ড্রয়ার খুলুন</string>
   <string name="drawer_close">পরিভ্রমণ ড্রয়ার বন্ধ করুন</string>
   <string name="no_search_results">অনুসন্ধানের কোন ফলাফল পাওয়া যায়নি</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">পপকর্ন টাইম! অনেক অনেক উন্নয়নকারী এবং ডিজাইনারদের কাজের ফলাফল
 ⇥⇥যা যতটা সম্ভব সহজে টরেন্ট চলচ্চিত্র দেখার অভিজ্ঞতা দিতে একসঙ্গে একগুচ্ছ API স্থাপন করে।\n\nআমরা একটি ওপেন সোর্স প্রকল্প। আমরা বিশ্বের সব জায়গা থেকে এসেছি।
 ⇥⇥আমরা আমাদের চলচ্চিত্র ভালোবাসি।</string>
@@ -120,7 +129,7 @@
   <string name="blog">ব্লগ</string>
   <string name="twitter">টুইটার</string>
   <!--Share dialog-->
-  <string name="share_text">আপনি কি এনন্ড্রয়েডের জন্য পপকর্ন টাইম ব্যবহার করে দেখেছেন? এটি চমৎকার! https://popcorntime.io/</string>
+  <string name="share_message">আপনি কি অ্যান্ড্রয়েড জন্য পপকর্ন ব্যবহার করছেন? এটা অসাধারণ!</string>
   <string name="share_dialog_title">এতে ভাগ করুন</string>
   <!--Beam dialog-->
   <string name="connected_to">এতে সংযুক্ত</string>
@@ -128,4 +137,8 @@
   <string name="select_beaming">বীমিং করার জন্য ডিভাইস নির্বাচন করুন</string>
   <string name="starting_beam">ভিডিও বীমিং শুরু হচ্ছে...</string>
   <string name="beaming_failed">এই ভিডিও আপনার বীমিং ডিভাইসে চালু হবে না। আপনি কি আবার চেষ্টা করতে চান? আপনার ডিভাইসে ভিডিও চালানোর পূর্বে অ্যাপ্লিকেশনটির ভিডিওর আরো অংশ ডাউনলোড করার প্রয়োজন হতে পারে।</string>
+  <string name="the_video">ভিডিও</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht অ্যাপ ইনস্টল করা হয়নি</string>
+  <string name="vpn_info">পপকর্ন টাইম থেকে VPN অপশনটি ব্যবহার করার জন্য আপনার VPN.ht অ্যাপ্লিকেশন ইনস্টল করা থাকতে হবে। আগ্রহী নন? তাহলে আপনি শুধু এই বোতামটি লুকিয়ে রাখতে পারেন।</string>
 </resources>

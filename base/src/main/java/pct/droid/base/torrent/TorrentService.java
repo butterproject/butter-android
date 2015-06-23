@@ -42,14 +42,20 @@ import com.frostwire.jlibtorrent.TorrentStatus;
 import com.frostwire.jlibtorrent.Utils;
 import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
 import com.frostwire.jlibtorrent.alerts.TorrentFinishedAlert;
+import com.sjl.foreground.Foreground;
+import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
@@ -96,6 +102,7 @@ public class TorrentService extends Service {
     public void onCreate() {
         super.onCreate();
         sThis = this;
+        Foreground.get().addListener(mForegroundListener);
     }
 
     @Override
@@ -133,12 +140,6 @@ public class TorrentService extends Service {
     public boolean onUnbind(Intent intent) {
         super.onUnbind(intent);
         Timber.d("onUnbind");
-
-        if(!mIsStreaming) {
-            pause();
-        } else {
-            startForeground();
-        }
         mIsBound = false;
 
         return true;
@@ -285,7 +286,9 @@ public class TorrentService extends Service {
                 File torrentFileDir = new File(saveDirectory, "files");
                 torrentFileDir.mkdirs();
 
-                File torrentFile = new File(torrentFileDir, System.currentTimeMillis() + ".torrent");
+                Random random = new Random();
+                long randomInt = System.currentTimeMillis() + random.nextInt();
+                File torrentFile = new File(torrentFileDir, randomInt + ".torrent");
 
                 if (!torrentFile.exists()) {
                     int fileCreationTries = 0;
@@ -328,7 +331,6 @@ public class TorrentService extends Service {
                     return;
                 }
 
-
                 mCurrentTorrent = mTorrentSession.addTorrent(torrentFile, saveDirectory);
                 mCurrentListener = new TorrentAlertAdapter(mCurrentTorrent);
                 mTorrentSession.addListener(mCurrentListener);
@@ -357,9 +359,6 @@ public class TorrentService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-
-                        //blocking call.
-                        mDHT.waitNodes(30);
                         mCurrentTorrent.setSequentialDownload(true);
                         mCurrentTorrent.resume();
                         for (final Listener listener : mListener) {
@@ -389,7 +388,6 @@ public class TorrentService extends Service {
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
             mCurrentTorrent.pause();
-            mDHT.stop();
             mTorrentSession.removeListener(mCurrentListener);
             mTorrentSession.removeTorrent(mCurrentTorrent);
             mCurrentListener = null;
@@ -405,10 +403,6 @@ public class TorrentService extends Service {
         saveDirectory.mkdirs();
 
         Timber.d("Stopped torrent and removed files");
-
-        if(!mIsBound) {
-            pause();
-        }
     }
 
     public boolean isStreaming() {
@@ -485,13 +479,13 @@ public class TorrentService extends Service {
     }
 
     public interface Listener {
-        public void onStreamStarted();
+        void onStreamStarted();
 
-        public void onStreamError(Exception e);
+        void onStreamError(Exception e);
 
-        public void onStreamReady(File videoLocation);
+        void onStreamReady(File videoLocation);
 
-        public void onStreamProgress(DownloadStatus status);
+        void onStreamProgress(DownloadStatus status);
     }
 
     protected class TorrentAlertAdapter extends com.frostwire.jlibtorrent.TorrentAlertAdapter {
@@ -551,5 +545,21 @@ public class TorrentService extends Service {
     protected static void stop() {
         sThis.stopStreaming();
     }
+
+    private Foreground.Listener mForegroundListener = new Foreground.Listener() {
+        @Override
+        public void onBecameForeground() {
+
+        }
+
+        @Override
+        public void onBecameBackground() {
+            if (!mIsStreaming) {
+                pause();
+            } else {
+                startForeground();
+            }
+        }
+    };
 
 }

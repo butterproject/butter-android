@@ -12,6 +12,9 @@
   <string name="episode">Díl</string>
   <string name="unknown_error">Něco se nepovedlo</string>
   <string name="torrent_failed">Neúspěšné obnovení torrentu</string>
+  <string name="running">Běží v pozadí </string>
+  <string name="tap_to_close">Ťuknutím zavřít </string>
+  <string name="tap_to_resume">Ťuknutím obnovit </string>
   <!--Genres-->
   <string name="genre_all">Vše</string>
   <string name="genre_action">Akční</string>

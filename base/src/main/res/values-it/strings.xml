@@ -8,9 +8,13 @@
   <string name="loading_movies">Caricamento film...</string>
   <string name="loading_subs">Caricamento sottotitoli...</string>
   <string name="error_files">Errore: impossibile scrivere i file</string>
-  <string name="overview_not_available">Mi dispiace! Nessuna panoramica disponibile.</string>
+  <string name="overview_not_available">Mi dispiace! Nessuna anteprima disponibile.</string>
   <string name="episode">Episodio</string>
   <string name="unknown_error">Qualcosa è andato storto</string>
+  <string name="torrent_failed">Errore nella ricezione del torrent</string>
+  <string name="running">Avviato in background</string>
+  <string name="tap_to_close">Tocca per chiudere</string>
+  <string name="tap_to_resume">Tocca per riprendere</string>
   <!--Genres-->
   <string name="genre_all">Tutti</string>
   <string name="genre_action">Azione</string>
@@ -25,7 +29,7 @@
   <string name="genre_family">Per famiglie</string>
   <string name="genre_fantasy">Fantasy</string>
   <string name="genre_film_noir">Film Giallo</string>
-  <string name="genre_game_show">Quiz televisivo</string>
+  <string name="genre_game_show">Telequiz</string>
   <string name="genre_history">Storico</string>
   <string name="genre_home_garden">Casa e Giardino</string>
   <string name="genre_horror">Horror</string>
@@ -38,7 +42,7 @@
   <string name="genre_romance">Romantico</string>
   <string name="genre_sci_fi">Fantascienza</string>
   <string name="genre_short">Cortometraggio</string>
-  <string name="genre_special_interest">Di interesse</string>
+  <string name="genre_special_interest">Di interesse Speciale</string>
   <string name="genre_soap">Soap Opera</string>
   <string name="genre_sport">Sport</string>
   <string name="genre_suspense">Suspense</string>
@@ -48,7 +52,7 @@
   <string name="genre_western">Western</string>
   <!--Anime:-->
   <string name="genre_cars">Macchine</string>
-  <string name="genre_dementia">Demenza</string>
+  <string name="genre_dementia">Demenziale</string>
   <string name="genre_demons">Demoni</string>
   <string name="genre_ecchi">Ecchi</string>
   <string name="genre_game">Gioco</string>
@@ -57,7 +61,7 @@
   <string name="genre_kids">Per bambini</string>
   <string name="genre_magic">Magia</string>
   <string name="genre_martial_arts">Arti Marziali</string>
-  <string name="genre_mecha">Mecha</string>
+  <string name="genre_mecha">Cyborg</string>
   <string name="genre_military">Militare</string>
   <string name="genre_police">Polizia</string>
   <string name="genre_parody">Parodia</string>
@@ -69,7 +73,7 @@
   <string name="genre_shoujo_ai">Shoujo Ai</string>
   <string name="genre_shounen">Shounen</string>
   <string name="genre_shounen_ai">Shounen Ai</string>
-  <string name="genre_slice_of_life">Fetta di Vita</string>
+  <string name="genre_slice_of_life">Spaccato di Vita</string>
   <string name="genre_space">Spazio</string>
   <string name="genre_super_power">Superpoteri</string>
   <string name="genre_supernatural">Sovrannaturale</string>
@@ -78,11 +82,11 @@
   <string name="popular_now">Popolari</string>
   <string name="top_rated">Più votati</string>
   <string name="release_date">Data di uscita</string>
-  <string name="last_updated">ULTIMO AGGIORNAMENTO</string>
+  <string name="last_updated">Ultimo Aggiornamento</string>
   <string name="year">Anno</string>
   <string name="a_to_z">A - Z</string>
   <!--BeamManager-->
-  <string name="pairing_tv">Connessione  con TV</string>
-  <string name="confirm_tv">Per favore, conferma l\'operazione sulla tua TV</string>
+  <string name="pairing_tv">Connessione con la TV</string>
+  <string name="confirm_tv">Per favore conferma la connessione sulla tua TV</string>
   <string name="enter_pairing_code">Inserisci il codice sulla tua TV</string>
 </resources>

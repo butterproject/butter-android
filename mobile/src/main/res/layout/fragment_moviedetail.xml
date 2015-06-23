@@ -64,8 +64,8 @@
             android:id="@+id/option_div_1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-            android:layout_marginStart="@dimen/optionselector_text_margin_start"
+            android:layout_marginLeft="48dp"
+            android:layout_marginStart="48dp"
             android:background="@color/div_white" />
 
         <pct.droid.widget.OptionSelector
