@@ -27,6 +27,7 @@
   <string name="no_subs_available">Ingen tilgængelige undertekster</string>
   <string name="subtitles">Undertekster</string>
   <string name="quality">Kvalitet</string>
+  <string name="open_magnet">Åbn magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Sæson</string>
   <string name="episode">Episode</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Fortsætter</string>
   <string name="ended">Slut</string>
   <string name="aired">Sendt: %s</string>
+  <string name="no_title_available">Intet navn</string>
+  <string name="no_synopsis_available">Ingen synopsis tilfgængelig</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Venter på torrent</string>
   <string name="starting_buffering">Gemmer i bufferen</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Tilpasset vandret</string>
   <string name="fit_vertical">Tilpasset lodret</string>
   <string name="original_size">Oprindelig </string>
+  <string name="reload_video">Genindlæs video</string>
   <string name="comm_error">Kommunikationsfejl</string>
   <string name="comm_message">Der opstod en fejl under hentningen af videoen. Det kan skyldes netværksproblemer eller YouTube-protokoller. Prøv venligst igen senere.</string>
   <string name="leave_videoplayer_title">Er du sikker?</string>
@@ -135,7 +139,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht-app er ikke installeret</string>
   <string name="vpn_info">VPN.ht-app skal være installeret før du kan bruge VPN-valg i Popcorn Time. Er du ikke interesseret? Så kan du skjule denne knap.</string>
-  <string name="vpn_download">Download app</string>
-  <string name="vpn_later">Vend tilbage senere</string>
-  <string name="vpn_hide">Skjul knap</string>
 </resources>

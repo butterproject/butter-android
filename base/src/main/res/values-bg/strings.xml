@@ -89,4 +89,5 @@
   <string name="pairing_tv">Сдвояване с ТВ</string>
   <string name="confirm_tv">Моля потвърдете връзката на вашият ТВ</string>
   <string name="enter_pairing_code">Въведете сдвояващ код на ТВ</string>
+  <string name="open_with">Отвори с/със</string>
 </resources>

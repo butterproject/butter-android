@@ -89,4 +89,5 @@
   <string name="pairing_tv">Poruojama su TV</string>
   <string name="confirm_tv">Patvirtinkite prisijungimą televizoriuje</string>
   <string name="enter_pairing_code">Įveskite poravimo kodą televizoriuje</string>
+  <string name="open_with">Atverti su</string>
 </resources>

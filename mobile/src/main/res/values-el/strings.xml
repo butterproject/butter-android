@@ -27,6 +27,7 @@
   <string name="no_subs_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
   <string name="subtitles">Υπότιτλοι</string>
   <string name="quality">Ποιότητα</string>
+  <string name="open_magnet">Άνοιγμα magnet</string>
   <string name="trailer">Τρέιλερ</string>
   <string name="season">Κύκλος</string>
   <string name="episode">Επεισόδιο</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Συνεχίζεται</string>
   <string name="ended">Τελείωσε</string>
   <string name="aired">Προβλήθηκε: %s</string>
+  <string name="no_title_available">Δεν υπάρχει όνομα</string>
+  <string name="no_synopsis_available">Δεν υπάρχει διαθέσιμη περίληψη</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Αναμονή για torrent</string>
   <string name="starting_buffering">Εκκίνηση φόρτωσης</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Οριζόντια προσαρμογή</string>
   <string name="fit_vertical">Κάθετη προσαρμογή</string>
   <string name="original_size">Αρχική</string>
+  <string name="reload_video">Εκ νέου φόρτωση βίντεο</string>
   <string name="comm_error">Σφάλμα επικοινωνίας</string>
   <string name="comm_message">Προκλήθηκε σφάλμα κατά την ανάκτηση του βίντεο. Αυτό θα μπορούσε να συμβεί λόγω προβλημάτων με το δίκτυο ή λόγω των πρωτοκόλλων του YouTube. Παρακαλώ προσπαθήστε αργότερα.</string>
   <string name="leave_videoplayer_title">Είστε σίγουροι;</string>
@@ -137,7 +141,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Η εφαρμογή του VPN.ht δεν είναι εγκατεστημένη</string>
   <string name="vpn_info">Πρέπει να έχετε εγκατεστημένη την εφαρμογή του VPN.ht για να χρησιμοποιήσετε την επιλογή VPN μέσα από το Popcorn Time. Δεν ενδιαφέρεστε; Μπορείτε απλά να αποκρύψετε το κουμπί αυτό.</string>
-  <string name="vpn_download">Λήψη εφαρμογής</string>
-  <string name="vpn_later">Επιστρέψτε αργότερα</string>
-  <string name="vpn_hide">Απόκρυψη κουμπιού</string>
 </resources>

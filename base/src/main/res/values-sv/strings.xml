@@ -89,4 +89,5 @@
   <string name="pairing_tv">Ihopkoppling med TV</string>
   <string name="confirm_tv">Var god bekräfta anslutningen på din TV</string>
   <string name="enter_pairing_code">Ange Parning kod på TV</string>
+  <string name="open_with">Öppna med</string>
 </resources>
