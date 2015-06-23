@@ -405,7 +405,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                     public void onClick(final PrefItem item) {
                         Bundle args = new Bundle();
                         args.putString(SeekBarDialogFragment.TITLE, item.getTitle());
-                        args.putInt(SeekBarDialogFragment.MAX_VALUE, 500);
+                        args.putInt(SeekBarDialogFragment.MAX_VALUE, 2000);
                         args.putInt(SeekBarDialogFragment.MIN_VALUE, 0);
                         args.putInt(SeekBarDialogFragment.DEFAULT_VALUE, (int) item.getValue() / 1000);
 
@@ -427,7 +427,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                         if (limit == 0) {
                             return getString(R.string.unlimited);
                         } else {
-                            return (limit/1000) + " Kb/s";
+                            return (limit/1000) + " kB/s";
                         }
                     }
                 }));
@@ -437,7 +437,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                     public void onClick(final PrefItem item) {
                         Bundle args = new Bundle();
                         args.putString(SeekBarDialogFragment.TITLE, item.getTitle());
-                        args.putInt(SeekBarDialogFragment.MAX_VALUE, 500);
+                        args.putInt(SeekBarDialogFragment.MAX_VALUE, 2000);
                         args.putInt(SeekBarDialogFragment.MIN_VALUE, 0);
                         args.putInt(SeekBarDialogFragment.DEFAULT_VALUE, (int) item.getValue() / 1000);
 
@@ -459,7 +459,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                         if (limit == 0) {
                             return getString(R.string.unlimited);
                         } else {
-                            return (limit/1000) + " Kb/s";
+                            return (limit/1000) + " kB/s";
                         }
                     }
                 }));
