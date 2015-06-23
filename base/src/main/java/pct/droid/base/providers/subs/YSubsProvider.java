@@ -103,7 +103,7 @@ public class YSubsProvider extends SubsProvider {
     }
 
     @Override
-    public void getList(Show media, Episode episode, Callback callback) {
+    public void getList(Episode episode, Callback callback) {
         // Show subtitles not supported
         callback.onFailure(new MethodNotSupportedException("Show subtitles not supported"));
     }

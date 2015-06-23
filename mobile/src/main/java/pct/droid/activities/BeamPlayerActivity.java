@@ -62,17 +62,9 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
 
         BeamServerService.getServer().start();
 
-        mTitle = getString(R.string.the_video);
-
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-        if (mStreamInfo.isShow()) {
-            if (mStreamInfo.getShow() != null && mStreamInfo.getShow().title != null)
-                mTitle = mStreamInfo.getShow().title;
-        } else {
-            if (mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
-                mTitle = mStreamInfo.getMedia().title;
-        }
+        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
 
         String location = mStreamInfo.getVideoLocation();
         if (!location.startsWith("http://") && !location.startsWith("https://")) {

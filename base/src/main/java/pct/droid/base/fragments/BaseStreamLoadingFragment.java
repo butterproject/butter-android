@@ -333,7 +333,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     };
 
                     if (mStreamInfo.isShow()) {
-                        mSubsProvider.getList(mStreamInfo.getShow(), (Episode) data, subsCallback);
+                        mSubsProvider.getList((Episode) data, subsCallback);
                     } else {
                         mSubsProvider.getList((Movie) data, subsCallback);
                     }

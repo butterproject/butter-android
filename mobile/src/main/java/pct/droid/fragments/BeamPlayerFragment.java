@@ -130,17 +130,11 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         mLoadingDialog.show(getChildFragmentManager(), "overlay_fragment");
 
         mStreamInfo = mActivity.getInfo();
-        if (mStreamInfo.isShow()) {
-            mMedia = mStreamInfo.getShow();
-        } else {
-            mMedia = mStreamInfo.getMedia();
-        }
+        int paletteColor = mStreamInfo.getPaletteColor();
 
-        if (mMedia == null) {
-            mMedia = new Media(null, null);
-            mMedia.color = getResources().getColor(R.color.primary);
+        if (paletteColor == -1) {
+            paletteColor = getResources().getColor(R.color.primary);
         }
-
 
         LayerDrawable progressDrawable;
         LayerDrawable volumeDrawable;
@@ -163,23 +157,23 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         }
 
         progressDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
-        progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
-        progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
+        progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
 
         volumeDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(getResources().getColor(R.color.beamplayer_seekbar_track), PorterDuff.Mode.SRC_IN);
-        volumeDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
-        volumeDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        volumeDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
+        volumeDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
 
         mSeekBar.setProgressDrawable(progressDrawable);
-        mSeekBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        mSeekBar.getThumbDrawable().setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
 
         mVolumeBar.setProgressDrawable(volumeDrawable);
-        mVolumeBar.getThumbDrawable().setColorFilter(mMedia.color, PorterDuff.Mode.SRC_IN);
+        mVolumeBar.getThumbDrawable().setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
 
         if (!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
+            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, paletteColor));
         } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mMedia.color));
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, paletteColor));
         }
 
         if (mMedia.image != null && !mMedia.image.equals("")) {
