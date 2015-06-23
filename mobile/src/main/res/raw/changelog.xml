@@ -21,6 +21,7 @@
     <changelogversion versionName="0.2.1">
         <changelogtext>Fixed problems with Chromecast</changelogtext>
         <changelogtext>Fixed problems with large TV shows</changelogtext>
+        <changelogtext>Improved speed limit selector</changelogtext>
         <changelogtext>Improved torrent loading</changelogtext>
         <changelogtext>Fixed charset recognition for some languages</changelogtext>
     </changelogversion>
