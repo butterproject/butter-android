@@ -54,20 +54,15 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
-        mTitle = getString(R.string.the_video);
+
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
+
+        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
 
         if(mStreamInfo == null) {
             finish();
             return;
-        }
-
-        if (mStreamInfo.isShow()) {
-            mTitle = mStreamInfo.getShow().title;
-        } else {
-            if (mStreamInfo.getMedia() != null && mStreamInfo.getMedia().title != null)
-                mTitle = mStreamInfo.getMedia().title;
         }
 
         String location = mStreamInfo.getVideoLocation();

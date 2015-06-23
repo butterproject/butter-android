@@ -214,21 +214,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             e.printStackTrace();
         }
 
-        String title = "";
-        String imageUrl = "";
-        Media media = info.getMedia();
-        if (media != null) {
-            if (info.isShow()) {
-                Show show = info.getShow();
-                title = show.title == null ? "" : show.title;
-                title += media.title == null ? "" : ": " + media.title;
-                imageUrl = show.image;
-            } else {
-                title = media.title == null ? "" : media.title;
-                imageUrl = media.image;
-            }
-        }
-        imageUrl = imageUrl == null ? "https://popcorntime.io/images/header-logo.png" : imageUrl;
+        String title = info.getTitle();
+        String imageUrl = info.getImageUrl() == null ? "https://popcorntime.io/images/header-logo.png" : info.getImageUrl();
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
         if (mCurrentDevice != null)

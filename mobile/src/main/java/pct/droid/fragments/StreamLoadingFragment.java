@@ -114,16 +114,13 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         StreamInfo info = mCallback.getStreamInformation();
           /* attempt to load background image */
         if (null != info) {
-            Media media = info.isShow() ? info.getShow() : info.getMedia();
-            if (media != null) {
-                String url = media.image;
-                if (PixelUtils.isTablet(getActivity())) {
-                    url = media.headerImage;
-                }
-
-                if (!TextUtils.isEmpty(url))
-                    Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+            String url = info.getImageUrl();
+            if (PixelUtils.isTablet(getActivity())) {
+                url = info.getHeaderImageUrl();
             }
+
+            if (!TextUtils.isEmpty(url))
+                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
         }
     }
 
