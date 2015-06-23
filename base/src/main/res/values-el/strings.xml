@@ -89,4 +89,5 @@
   <string name="pairing_tv">Σύζευξη με την τηλεόραση</string>
   <string name="confirm_tv">Παρακαλώ επιβεβαιώστε την σύνδεση με την τηλεόρασή σας</string>
   <string name="enter_pairing_code">Εισάγετε τον κωδικό σύζευξης στην τηλεόρασή σας</string>
+  <string name="open_with">Άνοιγμα με</string>
 </resources>

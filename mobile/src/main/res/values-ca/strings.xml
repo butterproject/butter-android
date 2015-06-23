@@ -27,6 +27,7 @@
   <string name="no_subs_available">No hi ha subtítols disponibles</string>
   <string name="subtitles">Subtítols</string>
   <string name="quality">Qualitat</string>
+  <string name="open_magnet">Obre magnet</string>
   <string name="trailer">Tràiler</string>
   <string name="season">Temporada</string>
   <string name="episode">Episodi</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Continuant</string>
   <string name="ended">Finalitzat</string>
   <string name="aired">Emesa: %s</string>
+  <string name="no_title_available">Sense nom</string>
+  <string name="no_synopsis_available">Cap sinopsi disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">S\'està esperant el torrent</string>
   <string name="starting_buffering">S\'està iniciant la precàrrega</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Encaix horitzontal</string>
   <string name="fit_vertical">Encaix vertical</string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Recarrega el vídeo</string>
   <string name="comm_error">Error de comunicacions</string>
   <string name="comm_message">S\'ha produït un error durant la localització del vídeo. Pot ser degut a errors de xarxa o als protocols de Youtube. Proveu-ho de nou més tard.</string>
   <string name="leave_videoplayer_title">N\'esteu segur?</string>
@@ -137,7 +141,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">L\'app VPN.ht no està instal·lada</string>
   <string name="vpn_info">Has de tenir instal·lada l\'app VPN.ht per fer servir l\'opció de VPN des de Popcorn Time. No t\'interessa? Llavors simplement amaga aquest botó.</string>
-  <string name="vpn_download">Descarrega l\'app.</string>
-  <string name="vpn_later">Torna més tard</string>
-  <string name="vpn_hide">Amaga el botó</string>
 </resources>

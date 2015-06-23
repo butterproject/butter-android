@@ -89,4 +89,5 @@
   <string name="pairing_tv">TV`ga ühendamine</string>
   <string name="confirm_tv">Palun kinnita ühendus oma TV ekraanil</string>
   <string name="enter_pairing_code">Sisesta Pairing Code oma telekasse</string>
+  <string name="open_with">Ava kasutades</string>
 </resources>

@@ -89,4 +89,5 @@
   <string name="pairing_tv">Jumelage à un téléviseur</string>
   <string name="confirm_tv">Confirmez la connexion au téléviseur</string>
   <string name="enter_pairing_code">Entrez le code de jumelage du téléviseur</string>
+  <string name="open_with">Ouvrir avec</string>
 </resources>

@@ -34,6 +34,7 @@
   <string name="continuing">En cours</string>
   <string name="ended">Terminé</string>
   <string name="aired">Diffusion : %s</string>
+  <string name="no_synopsis_available">Aucun synopsis disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">En attente du torrent</string>
   <string name="starting_buffering">Mise en mémoire tampon</string>
@@ -52,6 +53,7 @@
   <string name="fit_horizontal">Ajuster horizontalement</string>
   <string name="fit_vertical">Ajuster verticalement</string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Recharger la vidéo</string>
   <string name="comm_error">Erreur de communication</string>
   <string name="comm_message">Une erreur s\'est produite lors de la récupération de la vidéo. Ceci pourrait être du à un problème de réseau ou de protocoles Youtube. Veuillez réessayer ultérieurement.</string>
   <string name="leave_videoplayer_title">Confirmer ?</string>
@@ -135,7 +137,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">L\'application VPN.ht n\'est pas installée</string>
   <string name="vpn_info">Vous devez installer l\'application VPN.ht pour utiliser le VPN dans Popcorn Time. Pas intéressé ? Vous pouvez tout simplement cacher ce bouton.</string>
-  <string name="vpn_download">Télécharger l\'application</string>
-  <string name="vpn_later">Revenez plus tard</string>
-  <string name="vpn_hide">Cacher le bouton</string>
 </resources>

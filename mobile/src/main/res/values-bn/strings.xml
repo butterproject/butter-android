@@ -27,6 +27,7 @@
   <string name="no_subs_available">কোন সাবটাইটেল উপলব্ধ নেই</string>
   <string name="subtitles">সাবটাইটেল</string>
   <string name="quality">গুণমান</string>
+  <string name="open_magnet">চুম্বক খুলুন</string>
   <string name="trailer">ট্রেইলার</string>
   <string name="season">মৌসুম</string>
   <string name="episode">পর্ব</string>
@@ -34,6 +35,8 @@
   <string name="continuing">অব্যাহত</string>
   <string name="ended">সমাপ্ত হয়েছে</string>
   <string name="aired">প্রচারিত: %s</string>
+  <string name="no_title_available">নাম নেই</string>
+  <string name="no_synopsis_available">কোন সারসংক্ষেপ উপলব্ধ নেই</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">টরেন্টের জন্য অপেক্ষারত</string>
   <string name="starting_buffering">বাফারিং শুরু হচ্ছে</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">অনুভূমিক মাপসই</string>
   <string name="fit_vertical">উল্লম্ব মাপসই</string>
   <string name="original_size">আসল</string>
+  <string name="reload_video">ভিডিও পুনঃলোড করুন</string>
   <string name="comm_error">যোগাযোগ ত্রুটি</string>
   <string name="comm_message">ভিডিও পুনরুদ্ধার করার সময় একটি ত্রুটি ঘটেছে। এটি নেটওয়ার্ক বিষয় বা ইউটিউব প্রোটোকলের কারণে হতে পারে। দয়া করে পরে আবার চেষ্টা করুন।</string>
   <string name="leave_videoplayer_title">আপনি কি নিশ্চিত?</string>
@@ -137,7 +141,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht অ্যাপ ইনস্টল করা হয়নি</string>
   <string name="vpn_info">পপকর্ন টাইম থেকে VPN অপশনটি ব্যবহার করার জন্য আপনার VPN.ht অ্যাপ্লিকেশন ইনস্টল করা থাকতে হবে। আগ্রহী নন? তাহলে আপনি শুধু এই বোতামটি লুকিয়ে রাখতে পারেন।</string>
-  <string name="vpn_download">অ্যাপ ডাউনলোড করুন</string>
-  <string name="vpn_later">পরে ফিরে আসুন</string>
-  <string name="vpn_hide">বোতাম লুকান</string>
 </resources>
