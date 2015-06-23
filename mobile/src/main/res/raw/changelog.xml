@@ -18,6 +18,13 @@
 
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.2.1">
+        <changelogtext>Fixed problems with Chromecast</changelogtext>
+        <changelogtext>Fixed problems with large TV shows</changelogtext>
+        <changelogtext>Improved torrent loading</changelogtext>
+        <changelogtext>Fixed charset recognition for some languages</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.2.0">
         <changelogtext>[b]New![/b] Anime section</changelogtext>
         <changelogtext>[b]New![/b] Optimised Design</changelogtext>

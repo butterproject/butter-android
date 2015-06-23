@@ -89,4 +89,5 @@
   <string name="pairing_tv">Emparellant-se amb la TV.</string>
   <string name="confirm_tv">Confirma la connexió al teu televisor, si us plau</string>
   <string name="enter_pairing_code">Introdueix el Codi d\'Aparellament al televisor</string>
+  <string name="open_with">Obre amb</string>
 </resources>

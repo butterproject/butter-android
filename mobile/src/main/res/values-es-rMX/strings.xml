@@ -27,6 +27,7 @@
   <string name="no_subs_available">No hay subtítulos disponibles</string>
   <string name="subtitles">Subtítulos</string>
   <string name="quality">Calidad</string>
+  <string name="open_magnet">Abrir enlace</string>
   <string name="trailer">Trailer</string>
   <string name="season">Temporada</string>
   <string name="episode">Episodio</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Continúa</string>
   <string name="ended">Finalizada</string>
   <string name="aired">Emitido: %s</string>
+  <string name="no_title_available">Sin nombre</string>
+  <string name="no_synopsis_available">No hay sinopsis disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Esperando el archivo</string>
   <string name="starting_buffering">Iniciando almacenamiento</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Ajuste horizontal</string>
   <string name="fit_vertical">Ajuste vertical</string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Recargar video</string>
   <string name="comm_error">Error de comunicaciones</string>
   <string name="comm_message">Se produjo un error durante la recuperación del video. Esto podría deberse a problemas de red o de protocolos de YouTube. Por favor, inténtelo más tarde.</string>
   <string name="leave_videoplayer_title">¿Estás seguro?</string>
@@ -135,7 +139,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">La aplicación VPN.ht no está instalada</string>
   <string name="vpn_info">Requieres tener la aplicación VPN.ht instalada para utilizar la opción VPN desde Popcorn Time. Si no estás interesado puedes simplemente ocultar este botón.</string>
-  <string name="vpn_download">Descargar aplicación</string>
-  <string name="vpn_later">Regresar más tarde</string>
-  <string name="vpn_hide">Ocultar botón</string>
 </resources>

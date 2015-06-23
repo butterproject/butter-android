@@ -27,6 +27,7 @@
   <string name="no_subs_available">沒有可用的字幕</string>
   <string name="subtitles">字幕</string>
   <string name="quality">畫質</string>
+  <string name="open_magnet">開啟 Magnet</string>
   <string name="trailer">預告</string>
   <string name="season">季</string>
   <string name="episode">集</string>
@@ -34,6 +35,8 @@
   <string name="continuing">待續</string>
   <string name="ended">已完結</string>
   <string name="aired">播出於: %s</string>
+  <string name="no_title_available">無名稱</string>
+  <string name="no_synopsis_available">抱歉，暫無簡介。</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">正等待種子</string>
   <string name="starting_buffering">正在載入至緩衝</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">水平填滿</string>
   <string name="fit_vertical">垂直填滿</string>
   <string name="original_size">原始尺寸</string>
+  <string name="reload_video">重新載入影片</string>
   <string name="comm_error">通訊錯誤</string>
   <string name="comm_message">下載影片時發生錯誤，這可能是網路問題或 YouTube 通訊協定的問題，請稍後再試。</string>
   <string name="leave_videoplayer_title">您確定嗎?</string>
@@ -137,7 +141,6 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht 應用程式尚未安裝</string>
   <string name="vpn_info">您需要 VPN.ht 才能使用 Popcorn Time 内的VPN選項。用不到嗎？隱藏此按鈕就好。</string>
-  <string name="vpn_download">下載應用程式</string>
-  <string name="vpn_later">稍後再試</string>
-  <string name="vpn_hide">隱藏按鈕</string>
+  <string name="vpn_download">下載</string>
+  <string name="vpn_hide">隱藏</string>
 </resources>

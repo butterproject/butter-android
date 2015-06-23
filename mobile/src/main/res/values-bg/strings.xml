@@ -27,6 +27,7 @@
   <string name="no_subs_available">Няма налични субтитри</string>
   <string name="subtitles">Субтитри</string>
   <string name="quality">Качество</string>
+  <string name="open_magnet">Отвори магнит</string>
   <string name="trailer">Трейлър</string>
   <string name="season">Сезон</string>
   <string name="episode">Епизод</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Продължаващ</string>
   <string name="ended">Приключил</string>
   <string name="aired">Излъчено: %s</string>
+  <string name="no_title_available">Няма име</string>
+  <string name="no_synopsis_available">Няма налично резюме</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Изчакване за торент</string>
   <string name="starting_buffering">Начало на буферирането </string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Побери хоризонтално</string>
   <string name="fit_vertical">Побери вертикално</string>
   <string name="original_size">Оригинален</string>
+  <string name="reload_video">Презареди видео</string>
   <string name="comm_error">Проблем с комуникациите</string>
   <string name="comm_message">Стана грешка по време на изземането на видеото. Това може да е заради проблеми с връзката или YouTube протоколи. Моля опитайте пак по-късно.</string>
   <string name="leave_videoplayer_title">Сигурен ли сте?</string>
@@ -137,7 +141,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Приложението VPN.ht не е инсталирано</string>
   <string name="vpn_info">Трябва да имате инсталирано приложението VPN.ht , за да използвате VPN опцията чрез Popcorn Time. Не се интересувате? Тогава просто може да скриете този бутон. </string>
-  <string name="vpn_download">Изтегли приложение</string>
-  <string name="vpn_later">Върни се по-късно</string>
-  <string name="vpn_hide">Скрий бутон</string>
 </resources>

@@ -89,4 +89,5 @@
   <string name="pairing_tv">Parita TV</string>
   <string name="confirm_tv">Vahvista yhteys televisiostasi</string>
   <string name="enter_pairing_code">Syötä parituskoodi televisiossasi</string>
+  <string name="open_with">Avaa </string>
 </resources>

@@ -34,12 +34,15 @@
   <string name="continuing">Devam ediyor</string>
   <string name="ended">Tamamlandı</string>
   <string name="aired">Yayın Tarihi: %s</string>
+  <string name="no_title_available">Ad yok</string>
+  <string name="no_synopsis_available">Özet mevcut değil</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Torrent bekleniyor</string>
   <string name="starting_buffering">Önbelleğe alma başlatılıyor</string>
   <string name="streaming_started">Yayın başladı</string>
   <string name="waiting_for_subtitles">Altyazı bekleniyor</string>
   <string name="seeds">Göndericiler</string>
+  <string name="error_files">Hata: Dosyalar kaydedilemedi. Lütfen farklı bir alana kaydetmeyi deneyin.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Oynatılıyor</string>
   <string name="volume">Ses</string>
@@ -51,10 +54,13 @@
   <string name="fit_horizontal">Yatay sığdır</string>
   <string name="fit_vertical">Dikey sığdır</string>
   <string name="original_size">Orijinal </string>
+  <string name="reload_video">Videoyu tekrar yükle</string>
   <string name="comm_error">Bağlantı Hatası</string>
   <string name="comm_message">Videonun alınması sırasında bir hata meydana geldi. Bu bağlantı problemlerinde ya da Youtube protokollerinden kaynaklanıyor olabilir. Lütfen daha sonra tekrar deneyin.</string>
   <string name="leave_videoplayer_title">Emin misiniz?</string>
   <string name="leave_videoplayer_message">Video oynatıcıdan çıkmak istediğinize emin misiniz? %s yürütmesi duracak.</string>
+  <string name="encountered_error_title">Video hatasıyla karşılaşıldı</string>
+  <string name="encountered_error">Video oynatıcısı bir dizi hatayla karşılaştı. Video dosyası açılamadı ve/veya oynatılamadı. Format geçerli değil.</string>
   <!--TermsActivity strings-->
   <string name="accept">Kabul et</string>
   <string name="leave">Ayrıl</string>
@@ -100,6 +106,7 @@
   <string name="max_connections">En fazla bağlantı sayısı</string>
   <string name="dht_limit">DHT sınırı</string>
   <string name="unlimited">Sınırsız</string>
+  <string name="show_vpn">VPN seçeneğini menüde göster</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Sadece Wi-Fi</string>
   <string name="wifi_only_message">Sadece Wi-Fi üzerinden yayın yapabilirisiniz. Eğer telefon bağlantısı ile yayın yapmak istiyorsanız bu özelliği ayarlardan kapatabilirsiniz.</string>
@@ -108,7 +115,8 @@
   <string name="drawer_open">Açık navigasyon bölümü</string>
   <string name="drawer_close">Kapalı navigasyon bölümü</string>
   <string name="no_search_results">Arama sonucu bulunamadı</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time pek çok geliştiricinin ve tasarımcının bir araya gelerek torrent filmleri izlemeyi olabildiğince kolaylaştırmak için API\'ler oluşturmasıyla ortaya çıkmış bir üründür. Bu bir açık kaynak kodlu projedir. Biz dünyanın her yerinde bulunmaktayız. Biz filmleri seviyoruz. Ve çocuklar, biz patlamış mısırı seviyoruz.</string>
   <string name="website">Website</string>
   <string name="forum">Forum</string>
@@ -118,7 +126,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Android için Popcorn Time denediniz mi? Müthiş bir şey! https://popcorntime.io/</string>
+  <string name="share_message">Popcorn Time Android uygulamasını denediniz mi? Harika!</string>
   <string name="share_dialog_title">Paylaş</string>
   <!--Beam dialog-->
   <string name="connected_to">Bağlanıldı: </string>
@@ -126,4 +134,8 @@
   <string name="select_beaming">Işınlamak için bir cihaz seçin.</string>
   <string name="starting_beam">Video ışınlama başlıyor</string>
   <string name="beaming_failed">Video ışınlanan cihazda oynatılamadı. Tekrar denemek ister misiniz? Cihazınızın videoyu oynatabilmesi için uygulamanın daha fazla parça indirmesi gerekebilir.</string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht uygulaması yüklenmedi</string>
+  <string name="vpn_info">Popcorn Time üzerinden VPN seçeneğini kullanmak için VPN.ht uygulamasını yüklemeniz gerekmektedir. Bununla ilgilenmiyor musunuz? İlgilenmiyorsanız bu düğmeyi gizleyebilirsiniz.</string>
 </resources>

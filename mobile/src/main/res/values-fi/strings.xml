@@ -27,6 +27,7 @@
   <string name="no_subs_available">Tekstityksiä ei ole saatavilla</string>
   <string name="subtitles">Tekstitykset</string>
   <string name="quality">Laatu</string>
+  <string name="open_magnet">Avaa magneetti</string>
   <string name="trailer">Traileri</string>
   <string name="season">Tuotantokausi</string>
   <string name="episode">Jakso</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Jatketaan</string>
   <string name="ended">Loppunut</string>
   <string name="aired">Esitetty: %s</string>
+  <string name="no_title_available">Ei nimeä</string>
+  <string name="no_synopsis_available">Juonta ei ole saatavilla</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Odotetaan torrentia</string>
   <string name="starting_buffering">Aloitetaan puskurointi</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Venytä sivuttaissuunnassa</string>
   <string name="fit_vertical">Venytä pystysuunnassa</string>
   <string name="original_size">Alkuperäinen</string>
+  <string name="reload_video">Lataa video uudelleen</string>
   <string name="comm_error">Yhteysvirhe</string>
   <string name="comm_message">Videon noudossa tapahtui virhe. Tämä voi johtua verkko-ongelmista tai YouTuben protokollista. Yritä myöhemmin uudelleen.</string>
   <string name="leave_videoplayer_title">Oletko varma?</string>
@@ -135,7 +139,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht -ohjelmaa ei ole asennettu</string>
   <string name="vpn_info">VPN.ht -ohjelma tulee olla asennettuna, jotta voit käyttää VPN-vaihtoehtoa Popcorn Timessa. Eikö kiinnosta? Sitten voit vain piilottaa tämän näppäimen</string>
-  <string name="vpn_download">Lataa sovellus</string>
-  <string name="vpn_later">Tule takaisin myöhemmin</string>
-  <string name="vpn_hide">Piilota näppäin</string>
 </resources>
