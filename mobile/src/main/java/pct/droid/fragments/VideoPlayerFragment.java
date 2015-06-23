@@ -363,15 +363,15 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         int jump = (int) (Math.signum(gesturesize) * ((600000 * Math.pow((gesturesize / 8), 4)) + 3000));
 
         // Adjust the jump
-        if ((jump > 0) && ((getCurrentTime() + jump) > getDuration())) {
-            jump = (int) (getDuration() - getCurrentTime());
+        if ((jump > 0) && ((getCurrentTime() + jump) > mControlBar.getSecondaryProgress())) {
+            jump = (int) (mControlBar.getSecondaryProgress() - getCurrentTime());
         }
         if ((jump < 0) && ((getCurrentTime() + jump) < 0)) {
             jump = (int) -getCurrentTime();
         }
 
         long currentTime = getCurrentTime();
-        if (seek && getDuration() > 0) {
+        if (seek && mControlBar.getSecondaryProgress() > 0) {
             seek(jump);
         }
 
