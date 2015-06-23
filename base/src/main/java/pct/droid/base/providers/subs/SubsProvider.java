@@ -57,12 +57,12 @@ public abstract class SubsProvider extends BaseProvider {
 
     public abstract void getList(Movie movie, Callback callback);
 
-    public abstract void getList(Show media, Episode episode, Callback callback);
+    public abstract void getList(Episode episode, Callback callback);
 
     public interface Callback {
-        public void onSuccess(Map<String, String> items);
+        void onSuccess(Map<String, String> items);
 
-        public void onFailure(Exception e);
+        void onFailure(Exception e);
     }
 
     public static File getStorageLocation(Context context) {

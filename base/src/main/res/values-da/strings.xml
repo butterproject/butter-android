@@ -11,6 +11,10 @@
   <string name="overview_not_available">Beklager! Der er ingen oversigt.</string>
   <string name="episode">Episode</string>
   <string name="unknown_error">Noget gik galt</string>
+  <string name="torrent_failed">Hentning af torrent mislykkedes</string>
+  <string name="running">Køre i baggrund</string>
+  <string name="tap_to_close">Tryk for at lukke</string>
+  <string name="tap_to_resume">Tryk for at genoptage</string>
   <!--Genres-->
   <string name="genre_all">Alle</string>
   <string name="genre_action">Action</string>
@@ -85,4 +89,5 @@
   <string name="pairing_tv">Sammenkoble med TV</string>
   <string name="confirm_tv">Bekræft venligst forbindelsen til dit TV</string>
   <string name="enter_pairing_code">Indtast paringskode på TV\'et</string>
+  <string name="open_with">Åbn med</string>
 </resources>

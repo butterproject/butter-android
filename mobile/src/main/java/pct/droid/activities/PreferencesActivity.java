@@ -66,6 +66,7 @@ import pct.droid.base.utils.StorageUtils;
 import pct.droid.dialogfragments.ChangeLogDialogFragment;
 import pct.droid.dialogfragments.ColorPickerDialogFragment;
 import pct.droid.dialogfragments.NumberPickerDialogFragment;
+import pct.droid.dialogfragments.SeekBarDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.utils.ToolbarUtils;
 
@@ -403,14 +404,14 @@ public class PreferencesActivity extends PopcornBaseActivity
                     @Override
                     public void onClick(final PrefItem item) {
                         Bundle args = new Bundle();
-                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
-                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 102400);
-                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 0);
-                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+                        args.putString(SeekBarDialogFragment.TITLE, item.getTitle());
+                        args.putInt(SeekBarDialogFragment.MAX_VALUE, 2000);
+                        args.putInt(SeekBarDialogFragment.MIN_VALUE, 0);
+                        args.putInt(SeekBarDialogFragment.DEFAULT_VALUE, (int) item.getValue() / 1000);
 
-                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        SeekBarDialogFragment dialogFragment = new SeekBarDialogFragment();
                         dialogFragment.setArguments(args);
-                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                        dialogFragment.setOnResultListener(new SeekBarDialogFragment.ResultListener() {
                             @Override
                             public void onNewValue(int value) {
                                 item.saveValue(value);
@@ -426,7 +427,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                         if (limit == 0) {
                             return getString(R.string.unlimited);
                         } else {
-                            return limit + " bytes/sec";
+                            return (limit/1000) + " kB/s";
                         }
                     }
                 }));
@@ -435,14 +436,14 @@ public class PreferencesActivity extends PopcornBaseActivity
                     @Override
                     public void onClick(final PrefItem item) {
                         Bundle args = new Bundle();
-                        args.putString(NumberPickerDialogFragment.TITLE, item.getTitle());
-                        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 102400);
-                        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 0);
-                        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) item.getValue());
+                        args.putString(SeekBarDialogFragment.TITLE, item.getTitle());
+                        args.putInt(SeekBarDialogFragment.MAX_VALUE, 2000);
+                        args.putInt(SeekBarDialogFragment.MIN_VALUE, 0);
+                        args.putInt(SeekBarDialogFragment.DEFAULT_VALUE, (int) item.getValue() / 1000);
 
-                        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+                        SeekBarDialogFragment dialogFragment = new SeekBarDialogFragment();
                         dialogFragment.setArguments(args);
-                        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+                        dialogFragment.setOnResultListener(new SeekBarDialogFragment.ResultListener() {
                             @Override
                             public void onNewValue(int value) {
                                 item.saveValue(value);
@@ -458,7 +459,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                         if (limit == 0) {
                             return getString(R.string.unlimited);
                         } else {
-                            return limit + " bytes/sec";
+                            return (limit/1000) + " kB/s";
                         }
                     }
                 }));

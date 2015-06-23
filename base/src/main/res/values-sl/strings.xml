@@ -11,6 +11,10 @@
   <string name="overview_not_available">Žal! Večnamenski pogled ni na voljo.</string>
   <string name="episode">Epizoda</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
+  <string name="torrent_failed">Pridobivanje torenta Neuspešno</string>
+  <string name="running">Teče v ozadju</string>
+  <string name="tap_to_close">Dotaknite da zaprete</string>
+  <string name="tap_to_resume">Dotaknite za nadaljevanje</string>
   <!--Genres-->
   <string name="genre_all">Vse</string>
   <string name="genre_action">Akcijski</string>
@@ -85,4 +89,5 @@
   <string name="pairing_tv">\'\'Pairing\'\' s TV</string>
   <string name="confirm_tv">Prosimo potrdite povezavo na vašem TV</string>
   <string name="enter_pairing_code">Vnesite \'\'Pairing\'\' Kodo za TV</string>
+  <string name="open_with">Odpri z</string>
 </resources>

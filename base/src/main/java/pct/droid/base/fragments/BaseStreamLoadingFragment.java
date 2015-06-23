@@ -98,11 +98,17 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             @Override
             public void run() {
                 mStreamInfo = mCallback.getStreamInformation();
+                if (mStreamInfo == null) {
+                    getActivity().finish();
+                    return;
+                }
                 loadSubs();
             }
         });
 
-        if (!(getActivity() instanceof TorrentBaseActivity)) return;
+        if (!(getActivity() instanceof TorrentBaseActivity)) {
+            throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
+        }
     }
 
     @Override
@@ -327,7 +333,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     };
 
                     if (mStreamInfo.isShow()) {
-                        mSubsProvider.getList(mStreamInfo.getShow(), (Episode) data, subsCallback);
+                        mSubsProvider.getList((Episode) data, subsCallback);
                     } else {
                         mSubsProvider.getList((Movie) data, subsCallback);
                     }

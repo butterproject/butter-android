@@ -11,6 +11,10 @@
   <string name="overview_not_available">Lo sentimos, no hay información disponible. </string>
   <string name="episode">Episodio</string>
   <string name="unknown_error">Algo salió mal</string>
+  <string name="torrent_failed">Error al recuperar el archivo</string>
+  <string name="running">Ejecutando en segundo plano</string>
+  <string name="tap_to_close">Toca para cerrar</string>
+  <string name="tap_to_resume">Toca para reanudar</string>
   <!--Genres-->
   <string name="genre_all">Todo</string>
   <string name="genre_action">Acción</string>
@@ -85,4 +89,5 @@
   <string name="pairing_tv">Enlazar con la TV</string>
   <string name="confirm_tv">Por favor, confirma la conexión en la TV</string>
   <string name="enter_pairing_code">Ingresa el código de enlazamiento en la TV</string>
+  <string name="open_with">Abrir con..</string>
 </resources>

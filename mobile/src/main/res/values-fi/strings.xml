@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Tallenna</string>
+  <string name="cancel">Peruuta</string>
+  <string name="close">Sulje</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Käytössä</string>
+  <string name="disabled">Ei käytössä</string>
+  <string name="casting">Cast-lähetys</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Nimi, vuosi, näyttelijät</string>
+  <string name="title_shows">TV-ohjelmat</string>
+  <string name="title_movies">Elokuvat</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Lajit</string>
+  <string name="search">Haku</string>
+  <string name="searching">Haetaan...</string>
+  <string name="no_data_found">Tietoja ei löytynyt</string>
+  <string name="unknown_error">Jotain meni pieleen</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Lue lisää</string>
+  <string name="watch_trailer">Katso traileri</string>
+  <string name="disable_subs">Poista tekstitykset käytöstä</string>
+  <string name="no_subs">Tekstityksiä ei löytynyt</string>
+  <string name="no_subs_available">Tekstityksiä ei ole saatavilla</string>
+  <string name="subtitles">Tekstitykset</string>
+  <string name="quality">Laatu</string>
+  <string name="open_magnet">Avaa magneetti</string>
+  <string name="trailer">Traileri</string>
+  <string name="season">Tuotantokausi</string>
+  <string name="episode">Jakso</string>
+  <string name="specials">Erikois</string>
+  <string name="continuing">Jatketaan</string>
+  <string name="ended">Loppunut</string>
+  <string name="aired">Esitetty: %s</string>
+  <string name="no_title_available">Ei nimeä</string>
+  <string name="no_synopsis_available">Juonta ei ole saatavilla</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Odotetaan torrentia</string>
+  <string name="starting_buffering">Aloitetaan puskurointi</string>
+  <string name="streaming_started">Suoratoisto aloitettu</string>
+  <string name="waiting_for_subtitles">Odotetaan tekstityksiä</string>
+  <string name="seeds">jakajat</string>
+  <string name="error_files">Virhe: tiedostoja ei voitu kirjoittaa. Yritä toista tallennuspaikkaa.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Toistetaan</string>
+  <string name="volume">Äänenvoimakkuus</string>
+  <string name="brightness">Kirkkaus</string>
+  <string name="hardware_acceleration_error_title">Virhe HW-kiihdytyksessä</string>
+  <string name="hardware_acceleration_error_message">Laitteistokiihdytyksessä tapahtui virhe. Haluaisitko ottaa sen pois päältä ja yrittää uudelleen?</string>
+  <string name="best_fit">Sovita</string>
+  <string name="fill">Täytä</string>
+  <string name="fit_horizontal">Venytä sivuttaissuunnassa</string>
+  <string name="fit_vertical">Venytä pystysuunnassa</string>
+  <string name="original_size">Alkuperäinen</string>
+  <string name="reload_video">Lataa video uudelleen</string>
+  <string name="comm_error">Yhteysvirhe</string>
+  <string name="comm_message">Videon noudossa tapahtui virhe. Tämä voi johtua verkko-ongelmista tai YouTuben protokollista. Yritä myöhemmin uudelleen.</string>
+  <string name="leave_videoplayer_title">Oletko varma?</string>
+  <string name="leave_videoplayer_message">Haluatko varmasti poistua? %s lopettaa toistamisen.</string>
+  <string name="encountered_error_title">Video kohtasi virheen</string>
+  <string name="encountered_error">Videosoitin kohtasi vakavan virheen. Tätä videotiedostoa ei voitu avata/tai soittaa. Videoformaattia ei tunnistettu.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Hyväksy</string>
+  <string name="leave">Poistu</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Asetukset</string>
+  <string name="general">Yleinen</string>
+  <string name="default_view">Aloitusnäkymä</string>
+  <string name="default_player">Oletus videosoitin</string>
+  <string name="i18n_language">Ohjelman kieli</string>
+  <string name="restart_effect">Käynnistä ohjelma uudelleen, jotta muutokset astuvat voimaan.</string>
+  <string name="device_language">Laitteen kieli</string>
+  <string name="stream_over_wifi_only">Suoratoista vain Wi-Fi -yhteydellä</string>
+  <string name="internal_player">Sisäinen</string>
+  <string name="subtitle_color">Väri</string>
+  <string name="subtitle_size">Koko</string>
+  <string name="subtitle_stroke_color">Reunaviivan väri</string>
+  <string name="subtitle_stroke_width">Reunaviivan paksuus</string>
+  <string name="subtitle_language">Oletuskieli</string>
+  <string name="no_default_set">Ei oletuskieltä</string>
+  <string name="advanced">Lisäasetukset</string>
+  <string name="storage_location">Tallennuskohde</string>
+  <string name="storage_automatic">Automaattinen</string>
+  <string name="storage_choose">Valitse tallennuskohde</string>
+  <string name="not_writable">Kohteeseen ei pysty kirjoittamaan</string>
+  <string name="remove_cache">Tyhjennä väliaikaistiedostot sulkiessa</string>
+  <string name="hw_acceleration">Laitteistokiihdytys</string>
+  <string name="hw_automatic">Automaattinen</string>
+  <string name="hw_full">Täysi teho</string>
+  <string name="hw_decoding">Vain dekoodaus</string>
+  <string name="updates">Päivitykset</string>
+  <string name="auto_updates">Automaattiset päivitykset</string>
+  <string name="check_for_updates">Tarkista päivitykset</string>
+  <string name="last_check">Viimeisin tarkistus</string>
+  <string name="about">Tietoa</string>
+  <string name="version">Versio</string>
+  <string name="changelog">Muutosloki</string>
+  <string name="tap_to_open">Avaa painamalla</string>
+  <string name="report_a_bug">Ilmoita viasta</string>
+  <string name="open_source_licenses">Avoimen lähdekoodin lisenssi</string>
+  <string name="torrents">Torrentit</string>
+  <string name="download_speed">Latausraja</string>
+  <string name="upload_speed">Lähetysraja</string>
+  <string name="max_connections">Yhteysraja</string>
+  <string name="dht_limit">DHT-raja</string>
+  <string name="unlimited">Rajoittamaton</string>
+  <string name="show_vpn">Näytä VPN-vaihtoehto valikossa</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Pelkästään Wi-Fi</string>
+  <string name="wifi_only_message">Tällä hetkellä voit suoratoistaa vain Wi-Fi -yhteydellä. Voit sallia asetuksissa suoratoiston matkapuhelinverkossa.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Jaa</string>
+  <string name="drawer_open">Avaa navigointilaatikko</string>
+  <string name="drawer_close">Sulje navigointilaatikko</string>
+  <string name="no_search_results">Hakusi ei tuottanut yhtään osumaa</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time on monen kehittäjän ja suunnittelijan yhteistyön tulos. Tarkoitus on tehdä torrent-elokuvien katsomisesta mahdollisimman yksinkertaista! Olemme avoimeen lähdekoodiin perustuva projekti. Toimimme kaikkialla maailmassa. Rakastamme elokuviamme ja voi kuinka rakastammekaan popcornia.</string>
+  <string name="website">Internet-sivut</string>
+  <string name="forum">Foorumi</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blogi</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">Oletko vielä kokeillut Popcorn Timeä Androidilla? Se on mahtava!</string>
+  <string name="share_dialog_title">Jaa</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Yhdistetty</string>
+  <string name="disconnect">Katkaise yhteys</string>
+  <string name="select_beaming">Valitse beam-laite</string>
+  <string name="starting_beam">Alustetaan beamia...</string>
+  <string name="beaming_failed">Tätä videoa ei voida toistaa beam-laitteellasi. Haluaisitko yrittää uudelleen? Ohjelman saatta tarvita ladata lisää videon osia voidakseen toistaa sen.</string>
+  <string name="the_video">Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht -ohjelmaa ei ole asennettu</string>
+  <string name="vpn_info">VPN.ht -ohjelma tulee olla asennettuna, jotta voit käyttää VPN-vaihtoehtoa Popcorn Timessa. Eikö kiinnosta? Sitten voit vain piilottaa tämän näppäimen</string>
+</resources>

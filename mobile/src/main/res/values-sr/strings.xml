@@ -27,6 +27,7 @@
   <string name="no_subs_available">Титлови недоступни</string>
   <string name="subtitles">Титлови</string>
   <string name="quality">Квалитет</string>
+  <string name="open_magnet">Отвори магнет</string>
   <string name="trailer">Трејлер</string>
   <string name="season">Сезона</string>
   <string name="episode">Епизода</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Актуелно</string>
   <string name="ended">Завршено</string>
   <string name="aired">Емитовано: %s</string>
+  <string name="no_title_available">Нема наслова</string>
+  <string name="no_synopsis_available">Нема сажетка</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Чекање торента</string>
   <string name="starting_buffering">Почетак баферовања</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">по хоризонтали</string>
   <string name="fit_vertical">по вертикали</string>
   <string name="original_size">Оригинално</string>
+  <string name="reload_video">Поново учитај видео</string>
   <string name="comm_error">Грешка у комуникацији</string>
   <string name="comm_message">Дошло је до грешке током добављања видеа. Ово може бити због мрежних проблема или Јутјуб протокола. Покушајте поново касније.</string>
   <string name="leave_videoplayer_title">Да ли сте сигурни?</string>
@@ -113,7 +117,7 @@
   <string name="drawer_close">Затвори навигациону фиоку</string>
   <string name="no_search_results">Нема резултата претраге</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time је направљен тако што је група програмера и дизајнера саставила гомиле АПИ-ја како
 ⇥⇥би искуство гледања торент филмова учинила што једноставнијим.\n\nМи смо пројекат отвореног кода. Ми смо из целог света.
 		Ми волимо наше филмове. А, брате, волимо и кокице.</string>
@@ -137,7 +141,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht апликација није инсталирана</string>
   <string name="vpn_info">Морате инсталирати VPN.ht апликацију за коришћење ВПН опције унутар Popcorn Time. Нисте заинтересовани? Онда можете сакрити ово дугме.</string>
-  <string name="vpn_download">Преузми апликацију</string>
-  <string name="vpn_later">Врати се касније</string>
-  <string name="vpn_hide">Скриј дугме</string>
 </resources>
