@@ -89,4 +89,5 @@
   <string name="pairing_tv">Párosítás TV-vel</string>
   <string name="confirm_tv">Erősítse meg a kapcsolatot a TV-n</string>
   <string name="enter_pairing_code">Adja meg a párosítási kódot a TV-n</string>
+  <string name="open_with">Megnyitás ezzel</string>
 </resources>

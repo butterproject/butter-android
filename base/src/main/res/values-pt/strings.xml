@@ -89,4 +89,5 @@
   <string name="pairing_tv">A emparelhar com a TV</string>
   <string name="confirm_tv">Por favor, confirma a ligação na tua TV</string>
   <string name="enter_pairing_code">Introduz o código de emparelhamento da TV</string>
+  <string name="open_with">Abrir com</string>
 </resources>

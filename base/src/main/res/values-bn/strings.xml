@@ -89,4 +89,5 @@
   <string name="pairing_tv">টিভির সাথে পিয়ারিং</string>
   <string name="confirm_tv">দয়া করে আপনার টিভির সংযোগ নিশ্চিত করুন</string>
   <string name="enter_pairing_code">টিভিতে পিয়ারিং কোড লিখুন</string>
+  <string name="open_with">এটি দিয়ে খুলুন</string>
 </resources>

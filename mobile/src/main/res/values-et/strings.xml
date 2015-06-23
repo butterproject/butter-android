@@ -27,6 +27,7 @@
   <string name="no_subs_available">Subtiitrid ei ole saadaval</string>
   <string name="subtitles">Subtiitrid</string>
   <string name="quality">Kvaliteet</string>
+  <string name="open_magnet">Ava magnet</string>
   <string name="trailer">Treiler</string>
   <string name="season">Hooaeg</string>
   <string name="episode">Episood</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Jätkuv</string>
   <string name="ended">Lõppenud</string>
   <string name="aired">Eetris: %s</string>
+  <string name="no_title_available">Nimi puudub</string>
+  <string name="no_synopsis_available">Lühikirjeldus puudub</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Ootan torrentit</string>
   <string name="starting_buffering">Alustan laadimist</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Sobita horisontaalselt</string>
   <string name="fit_vertical">Sobita vertikaalselt</string>
   <string name="original_size">Originaal</string>
+  <string name="reload_video">Lae video uuesti</string>
   <string name="comm_error">Ühenduse viga</string>
   <string name="comm_message">Video esitamisel ilmnes viga. See võib olla seotud võrgu probleemidega või YouTube protokollidega. Palun proovige hiljem uuesti.</string>
   <string name="leave_videoplayer_title">Oled Sa kindel?</string>
@@ -135,7 +139,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht programm ei ole installeeritud</string>
   <string name="vpn_info">Selleks, et kasutada VPN`i Popcorn`i siseselt peab sul olema installeeritud VPN.ht progamm. Ei ole huvitatud? Sa võid selle nuppu ka lihtsalt ära peita.</string>
-  <string name="vpn_download">Lae alla</string>
-  <string name="vpn_later">Tule hiljem tagasi</string>
-  <string name="vpn_hide">Peida nupp</string>
 </resources>
