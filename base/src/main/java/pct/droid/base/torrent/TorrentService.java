@@ -34,6 +34,7 @@ import android.support.v4.app.NotificationCompat;
 import com.frostwire.jlibtorrent.DHT;
 import com.frostwire.jlibtorrent.Downloader;
 import com.frostwire.jlibtorrent.FileStorage;
+import com.frostwire.jlibtorrent.Priority;
 import com.frostwire.jlibtorrent.Session;
 import com.frostwire.jlibtorrent.SessionSettings;
 import com.frostwire.jlibtorrent.TorrentHandle;
@@ -332,8 +333,11 @@ public class TorrentService extends Service {
                 }
 
                 mCurrentTorrent = mTorrentSession.addTorrent(torrentFile, saveDirectory);
+                mCurrentTorrent.setAutoManaged(true);
+                mCurrentTorrent.setSequentialDownload(true);
                 mCurrentListener = new TorrentAlertAdapter(mCurrentTorrent);
                 mTorrentSession.addListener(mCurrentListener);
+                mCurrentTorrent.setPriority(7);
 
                 TorrentInfo torrentInfo = mCurrentTorrent.getTorrentInfo();
                 FileStorage fileStorage = torrentInfo.getFiles();
@@ -343,10 +347,13 @@ public class TorrentService extends Service {
                     long fileSize = fileStorage.getFileSize(i);
                     if (highestFileSize < fileSize) {
                         highestFileSize = fileSize;
+                        mCurrentTorrent.setFilePriority(selectedFile, Priority.IGNORE);
                         selectedFile = i;
+                        mCurrentTorrent.setFilePriority(i, Priority.SEVEN);
+                    } else {
+                        mCurrentTorrent.setFilePriority(i, Priority.IGNORE);
                     }
                 }
-
 
                 mCurrentVideoLocation = new File(saveDirectory, torrentInfo.getFileAt(selectedFile).getPath());
 
@@ -359,7 +366,6 @@ public class TorrentService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mCurrentTorrent.setSequentialDownload(true);
                         mCurrentTorrent.resume();
                         for (final Listener listener : mListener) {
                             ThreadUtils.runOnUiThread(new Runnable() {
