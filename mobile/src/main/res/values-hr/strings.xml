@@ -141,4 +141,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht aplikacija nije instalirana</string>
   <string name="vpn_info">Morate imati VPN.ht aplikaciju instaliranu kako bi mogli koristiti VPN mogućnost unutar Popcorn Timea. Niste zainteresirani? Tada možete jednostavno sakriti ovu tipku.</string>
+  <string name="vpn_download">Preuzmi</string>
+  <string name="vpn_later">Kasnije</string>
+  <string name="vpn_hide">Sakrij</string>
 </resources>

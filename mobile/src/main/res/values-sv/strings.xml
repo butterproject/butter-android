@@ -141,4 +141,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht appen inte installerad</string>
   <string name="vpn_info">Du måste ha VPN.ht appen installerat för att kunna använda VPN inifrån Popcorn Time. Inte intresserad? Då kan du bara dölja den här knappen.</string>
+  <string name="vpn_download">Ladda ner</string>
+  <string name="vpn_later">Senare </string>
+  <string name="vpn_hide">Göm</string>
 </resources>

@@ -27,6 +27,7 @@
   <string name="no_subs_available">Keine Untertitel verfügbar</string>
   <string name="subtitles">Untertitel</string>
   <string name="quality">Qualität</string>
+  <string name="open_magnet">Magnet öffnen</string>
   <string name="trailer">Filmvorschau</string>
   <string name="season">Staffel</string>
   <string name="episode">Folge</string>
@@ -136,4 +137,7 @@
   <string name="the_video">Das Video</string>
   <!--VPN dialog-->
   <string name="vpn_not_installed">App VPN.ht ist nicht installiert</string>
+  <string name="vpn_download">Herunterladen</string>
+  <string name="vpn_later">Später</string>
+  <string name="vpn_hide">Ausblenden</string>
 </resources>

@@ -142,5 +142,6 @@
   <string name="vpn_not_installed">VPN.ht 應用程式尚未安裝</string>
   <string name="vpn_info">您需要 VPN.ht 才能使用 Popcorn Time 内的VPN選項。用不到嗎？隱藏此按鈕就好。</string>
   <string name="vpn_download">下載</string>
+  <string name="vpn_later">稍後再試</string>
   <string name="vpn_hide">隱藏</string>
 </resources>

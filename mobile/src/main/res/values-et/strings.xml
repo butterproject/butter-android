@@ -139,4 +139,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht programm ei ole installeeritud</string>
   <string name="vpn_info">Selleks, et kasutada VPN`i Popcorn`i siseselt peab sul olema installeeritud VPN.ht progamm. Ei ole huvitatud? Sa võid selle nuppu ka lihtsalt ära peita.</string>
+  <string name="vpn_download">Lae alla</string>
+  <string name="vpn_later">Hiljem</string>
+  <string name="vpn_hide">Peida</string>
 </resources>

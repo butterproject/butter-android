@@ -140,4 +140,7 @@ Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműk�
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht app nincs telepítve</string>
   <string name="vpn_info">A VPN.ht app-nak telepítve kell lennie, hogy használhassa a VPN opciót a Popcorn Time-ból. Nem érdekli? Akkor eltüntetheti ezt a gombot.</string>
+  <string name="vpn_download">Letőltés</string>
+  <string name="vpn_later">Később</string>
+  <string name="vpn_hide">Elrejt</string>
 </resources>
