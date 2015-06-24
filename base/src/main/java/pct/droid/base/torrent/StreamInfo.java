@@ -71,7 +71,7 @@ public class StreamInfo implements Parcelable {
                 mTitle += media.title == null ? "" : ": " + media.title;
                 mImageUrl = show.image;
                 mHeaderImageUrl = show.headerImage;
-                mColor = media.color;
+                mColor = show.color;
             } else {
                 mTitle = media.title == null ? "" : media.title;
                 mImageUrl = media.image;
