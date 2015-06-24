@@ -139,4 +139,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">La aplicación VPN.ht no está instalada</string>
   <string name="vpn_info">Requieres tener la aplicación VPN.ht instalada para utilizar la opción VPN desde Popcorn Time. Si no estás interesado puedes simplemente ocultar este botón.</string>
+  <string name="vpn_download">Descargar</string>
+  <string name="vpn_later">Después</string>
+  <string name="vpn_hide">Ocultar</string>
 </resources>

@@ -27,6 +27,7 @@
   <string name="no_subs_available">لا تتوفر ترجمة</string>
   <string name="subtitles">الترجمة</string>
   <string name="quality">جودة العرض</string>
+  <string name="open_magnet">افتح الرابط</string>
   <string name="trailer">إعلان الفلم</string>
   <string name="season">الموسم</string>
   <string name="episode">الحلقة</string>
@@ -34,6 +35,8 @@
   <string name="continuing">العرض مستمر</string>
   <string name="ended">إنتهى</string>
   <string name="aired">تاريخ العرض: %s</string>
+  <string name="no_title_available">بدون إسم</string>
+  <string name="no_synopsis_available">الملخص غير متوفر</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">في انتظار التورنت</string>
   <string name="starting_buffering">بدأ التخزين المؤقت</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">أفقي</string>
   <string name="fit_vertical">عمودي</string>
   <string name="original_size">الأصلي</string>
+  <string name="reload_video">إعادة تحميل الفيديو</string>
   <string name="comm_error">خطأ في الإتصال</string>
   <string name="comm_message">حدث خطأ أثناء محاولة الحصول على الفيديو، من الممكن أن يحدث هذا بسبب مشكلة في الشبكة أو اليوتيوب . فضلاً أعد المحاولة في وقت لاحق.</string>
   <string name="leave_videoplayer_title">هل أنت متأكد ؟</string>
@@ -136,7 +140,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">تطبيق VPN.ht غير مثبت.</string>
   <string name="vpn_info">عليك أن تثبت تطبيق VPN.ht لتستخدم خيار الVPN  من داخل Popcorn Time. غير مهتم؟ اذاً يَمكنك اخفاء هذا الزر.</string>
-  <string name="vpn_download">تنزيل التطبيق</string>
-  <string name="vpn_later">عُد لاحقاً</string>
-  <string name="vpn_hide">إخفاء الزر</string>
+  <string name="vpn_download">تنزيل</string>
+  <string name="vpn_later">لاحقا</string>
+  <string name="vpn_hide">إخفاء</string>
 </resources>

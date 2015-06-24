@@ -123,4 +123,5 @@
   <string name="pairing_tv">Сопряжение с TV</string>
   <string name="confirm_tv">Пожалуйста, подтвердите соединение на TV</string>
   <string name="enter_pairing_code">Введите код подключения на TV</string>
+  <string name="open_with">Открыть с помощью</string>
 </resources>

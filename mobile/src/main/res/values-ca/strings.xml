@@ -141,4 +141,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">L\'app VPN.ht no està instal·lada</string>
   <string name="vpn_info">Has de tenir instal·lada l\'app VPN.ht per fer servir l\'opció de VPN des de Popcorn Time. No t\'interessa? Llavors simplement amaga aquest botó.</string>
+  <string name="vpn_download">Baixa</string>
+  <string name="vpn_later">Més tard</string>
+  <string name="vpn_hide">Amaga</string>
 </resources>

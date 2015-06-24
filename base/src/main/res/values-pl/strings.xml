@@ -89,4 +89,5 @@
   <string name="pairing_tv">Parowanie z telewizorem</string>
   <string name="confirm_tv">Proszę potwierdzić połączenie na swoim telewizorze</string>
   <string name="enter_pairing_code">Podaj kod parowania na telewizorze</string>
+  <string name="open_with">Otwórz z</string>
 </resources>
