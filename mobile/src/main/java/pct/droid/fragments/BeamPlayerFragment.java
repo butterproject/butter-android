@@ -54,7 +54,6 @@ import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.base.beaming.BeamManager;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
@@ -71,7 +70,6 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
 
     private StreamInfo mStreamInfo;
-    private Media mMedia;
     private BeamPlayerActivity mActivity;
     private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
@@ -176,8 +174,8 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, paletteColor));
         }
 
-        if (mMedia.image != null && !mMedia.image.equals("")) {
-            Picasso.with(mCoverImage.getContext()).load(mMedia.image)
+        if (mStreamInfo.getImageUrl() != null && !mStreamInfo.getImageUrl().equals("")) {
+            Picasso.with(mCoverImage.getContext()).load(mStreamInfo.getImageUrl())
                 .into(mCoverImage, new Callback() {
                     @Override
                     public void onSuccess() {
