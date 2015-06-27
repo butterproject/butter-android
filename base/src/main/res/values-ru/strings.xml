@@ -13,6 +13,9 @@
   <string name="episode">Эпизод</string>
   <string name="unknown_error">Что-то пошло не так</string>
   <string name="torrent_failed">Не удалось получить торрент</string>
+  <string name="running">Работает в фоновом режиме</string>
+  <string name="tap_to_close">Нажмите чтобы закрыть</string>
+  <string name="tap_to_resume">Нажмите чтобы возобновить </string>
   <!--Genres-->
   <string name="genre_all">Все</string>
   <string name="genre_action">Боевик</string>
@@ -120,4 +123,5 @@
   <string name="pairing_tv">Сопряжение с TV</string>
   <string name="confirm_tv">Пожалуйста, подтвердите соединение на TV</string>
   <string name="enter_pairing_code">Введите код подключения на TV</string>
+  <string name="open_with">Открыть с помощью</string>
 </resources>

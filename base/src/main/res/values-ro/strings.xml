@@ -11,6 +11,10 @@
   <string name="overview_not_available">Ne pare rău! Nu există prezentare generală disponibilă.</string>
   <string name="episode">Episod</string>
   <string name="unknown_error">Ceva nu a mers bine</string>
+  <string name="torrent_failed">Eroare la recuperarea torrentului</string>
+  <string name="running">Rulare în fundal</string>
+  <string name="tap_to_close">Apasă pentru a închide</string>
+  <string name="tap_to_resume">Apasă pentru a continua</string>
   <!--Genres-->
   <string name="genre_all">Toate</string>
   <string name="genre_action">Acțiune</string>
@@ -83,4 +87,6 @@
   <string name="a_to_z">A - Z</string>
   <!--BeamManager-->
   <string name="pairing_tv">Se asociează cu TV-ul.</string>
+  <string name="confirm_tv">Vă rugăm să confirmați conexiunea la televizor</string>
+  <string name="enter_pairing_code">Introduceti codul de împerechere la TV</string>
 </resources>

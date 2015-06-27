@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="update_available">Actualitzacions disponibles</string>
-  <string name="press_install">Premeu per instaŀlar</string>
+  <string name="press_install">Premeu per instal·lar</string>
   <string name="loading_data">S\'estan carregant les dades...</string>
   <string name="loading_details">S\'estan carregant els detalls...</string>
   <string name="loading_shows">S\'estan carregant les sèries...</string>
@@ -11,6 +11,10 @@
   <string name="overview_not_available">La vista prèvia no està disponible.</string>
   <string name="episode">Episodi</string>
   <string name="unknown_error">Alguna cosa ha fallat</string>
+  <string name="torrent_failed">No s\'ha pogut recuperar el torrent</string>
+  <string name="running">Executant-se en segon pla</string>
+  <string name="tap_to_close">Toca per tancar</string>
+  <string name="tap_to_resume">Prem per continuar</string>
   <!--Genres-->
   <string name="genre_all">Tots</string>
   <string name="genre_action">Acció</string>
@@ -85,4 +89,5 @@
   <string name="pairing_tv">Emparellant-se amb la TV.</string>
   <string name="confirm_tv">Confirma la connexió al teu televisor, si us plau</string>
   <string name="enter_pairing_code">Introdueix el Codi d\'Aparellament al televisor</string>
+  <string name="open_with">Obre amb</string>
 </resources>

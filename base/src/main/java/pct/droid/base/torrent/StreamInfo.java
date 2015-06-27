@@ -28,18 +28,24 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 
 public class StreamInfo implements Parcelable {
-    private Media mMedia;
+
     private String mSubtitleLanguage;
     private String mQuality;
     private String mTorrentUrl;
     private String mVideoLocation;
-    private Show mShow;
+    private String mTitle;
+    private String mImageUrl;
+    private String mHeaderImageUrl;
+    private Boolean mIsShow;
+    private Integer mColor = -1;
+    private Media mMedia;
 
     public StreamInfo(String torrentUrl) {
         this(null, null, torrentUrl, null, null);
@@ -54,24 +60,45 @@ public class StreamInfo implements Parcelable {
     }
 
     public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality, String videoLocation) {
-        mMedia = media;
-        mShow = show;
         mTorrentUrl = torrentUrl;
         mSubtitleLanguage = subtitleLanguage;
         mQuality = quality;
         mVideoLocation = videoLocation;
+
+        if (media != null) {
+            if (show != null) {
+                mTitle = show.title == null ? "" : show.title;
+                mTitle += media.title == null ? "" : ": " + media.title;
+                mImageUrl = show.image;
+                mHeaderImageUrl = show.headerImage;
+                mColor = show.color;
+            } else {
+                mTitle = media.title == null ? "" : media.title;
+                mImageUrl = media.image;
+                mHeaderImageUrl = media.headerImage;
+                mColor = media.color;
+            }
+
+            mIsShow = show != null;
+
+            mMedia = media;
+        }
     }
 
     public boolean isShow() {
-        return null != mShow;
+        return mIsShow;
     }
 
-    public Show getShow() {
-        return mShow;
+    public String getTitle() {
+        return mTitle;
     }
 
-    public Media getMedia() {
-        return mMedia;
+    public String getImageUrl() {
+        return mImageUrl;
+    }
+
+    public String getHeaderImageUrl() {
+        return mHeaderImageUrl;
     }
 
     public String getSubtitleLanguage() {
@@ -90,6 +117,14 @@ public class StreamInfo implements Parcelable {
         return mVideoLocation;
     }
 
+    public Integer getPaletteColor() {
+        return mColor;
+    }
+
+    public Media getMedia() {
+        return mMedia;
+    }
+
     public void setSubtitleLanguage(String subtitleLanguage) {
         mSubtitleLanguage = subtitleLanguage;
     }
@@ -105,21 +140,27 @@ public class StreamInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.mMedia, 0);
         dest.writeString(this.mSubtitleLanguage);
         dest.writeString(this.mQuality);
         dest.writeString(this.mTorrentUrl);
         dest.writeString(this.mVideoLocation);
-        dest.writeParcelable(this.mShow, 0);
+        dest.writeString(this.mImageUrl);
+        dest.writeString(this.mTitle);
+        dest.writeInt(this.mIsShow ? 1 : 0);
+        dest.writeInt(this.mColor);
+        dest.writeParcelable(this.mMedia, 0);
     }
 
     private StreamInfo(Parcel in) {
-        this.mMedia = in.readParcelable(Media.class.getClassLoader());
         this.mSubtitleLanguage = in.readString();
         this.mQuality = in.readString();
         this.mTorrentUrl = in.readString();
         this.mVideoLocation = in.readString();
-        this.mShow = in.readParcelable(Show.class.getClassLoader());
+        this.mImageUrl = in.readString();
+        this.mTitle = in.readString();
+        this.mIsShow = in.readInt() == 1;
+        this.mColor = in.readInt();
+        this.mMedia = in.readParcelable(Media.class.getClassLoader());
     }
 
     public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {

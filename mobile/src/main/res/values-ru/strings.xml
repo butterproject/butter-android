@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">Сохранить</string>
+  <string name="cancel">Отмена</string>
+  <string name="close">Закрыть</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Включено</string>
+  <string name="disabled">Выключено</string>
+  <string name="casting">Стриминг</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Название, год, актеры</string>
+  <string name="title_shows">Сериалы</string>
+  <string name="title_movies">Фильмы</string>
+  <string name="title_anime">Аниме</string>
+  <string name="genres">Жанры</string>
+  <string name="search">Поиск</string>
+  <string name="searching">Поиск...</string>
+  <string name="no_data_found">Данные не найдены</string>
+  <string name="unknown_error">Что-то пошло не так</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">мин</string>
+  <string name="read_more">Читать дальше</string>
+  <string name="watch_trailer">Смотреть трейлер</string>
+  <string name="disable_subs">Отключить субтитры</string>
+  <string name="no_subs">Без субтитров</string>
+  <string name="no_subs_available">Субтитры не найдены</string>
+  <string name="subtitles">Субтитры</string>
+  <string name="quality">Качество</string>
+  <string name="open_magnet">Открыть магнет-ссылку</string>
+  <string name="trailer">Трейлер</string>
+  <string name="season">Сезон</string>
+  <string name="episode">Эпизод</string>
+  <string name="specials">Дополнительные материалы</string>
+  <string name="continuing">Продолжается</string>
+  <string name="ended">Завершен</string>
+  <string name="aired">Вышли в эфир: %s</string>
+  <string name="no_title_available">Нет названия</string>
+  <string name="no_synopsis_available">Краткое содержание не найдено</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Ожидание торрента</string>
+  <string name="starting_buffering">Буферизация началась</string>
+  <string name="streaming_started">Потоковая передача началась</string>
+  <string name="waiting_for_subtitles">Ожидание субтитров</string>
+  <string name="seeds">сиды</string>
+  <string name="error_files">Ошибка: Запись файлов невозможна. Пожалуйста, попробуйте использовать другое место хранения.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Сейчас играет</string>
+  <string name="volume">Громкость</string>
+  <string name="brightness">Яркость</string>
+  <string name="hardware_acceleration_error_title">Ошибка HW ускорения</string>
+  <string name="hardware_acceleration_error_message">Произошла ошибка с аппаратным ускорением. Вы хотите отключить его и попробовать еще раз?</string>
+  <string name="best_fit">Оптимальная подгонка</string>
+  <string name="fill">Подгонка по размеру экрана</string>
+  <string name="fit_horizontal">Подогнать по горизонтали</string>
+  <string name="fit_vertical">Подогнать по вертикали</string>
+  <string name="original_size">Оригинальный</string>
+  <string name="reload_video">Перезагрузить видео</string>
+  <string name="comm_error">Ошибка соединения</string>
+  <string name="comm_message">Произошла ошибка во время поиска видео.
+Это может быть связано с проблемами сети или протоколов YouTube.
+Пожалуйста, повторите попытку позже.</string>
+  <string name="leave_videoplayer_title">Вы уверены?</string>
+  <string name="leave_videoplayer_message">Вы уверены, что хотите закрыть проигрыватель видео? %s перестанет играть.</string>
+  <string name="encountered_error_title">Обнаружена ошибка видео</string>
+  <string name="encountered_error">Проигрыватель видео обнаружил серьёзныую ошибку. Невозможно открыть и/или воспроизвести видеофайл. Формат не распознан.</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Принять</string>
+  <string name="leave">Отказаться</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Настройки</string>
+  <string name="general">Основные</string>
+  <string name="default_view">Стартовая страница</string>
+  <string name="default_player">Видео проигрыватель</string>
+  <string name="i18n_language">Язык приложения</string>
+  <string name="restart_effect">Перезапустите приложение для вступления изменений в силу</string>
+  <string name="device_language">Системный</string>
+  <string name="stream_over_wifi_only">Передача только по Wi-Fi</string>
+  <string name="internal_player">Встроенный</string>
+  <string name="subtitle_color">Цвет</string>
+  <string name="subtitle_size">Размер</string>
+  <string name="subtitle_stroke_color">Цвет обводки</string>
+  <string name="subtitle_stroke_width">Толщина обводки</string>
+  <string name="subtitle_language">Язык</string>
+  <string name="no_default_set">Системный</string>
+  <string name="advanced">Дополнительно</string>
+  <string name="storage_location">Расположение кэша</string>
+  <string name="storage_automatic">Автоматически</string>
+  <string name="storage_choose">Выбрать местоположение</string>
+  <string name="not_writable">Местоположение недоступно для записи</string>
+  <string name="remove_cache">Удалять кэш плеера после закрытия</string>
+  <string name="hw_acceleration">Аппаратное ускорение</string>
+  <string name="hw_automatic">Автоматически</string>
+  <string name="hw_full">Полное</string>
+  <string name="hw_decoding">Только декодирование</string>
+  <string name="updates">Обновления</string>
+  <string name="auto_updates">Автоматическое обновление</string>
+  <string name="check_for_updates">Проверить обновления</string>
+  <string name="last_check">Последняя проверка</string>
+  <string name="about">О приложении</string>
+  <string name="version">Версия</string>
+  <string name="changelog">Changelog</string>
+  <string name="tap_to_open">Нажмите для открытия</string>
+  <string name="report_a_bug">Сообщить об ошибке</string>
+  <string name="open_source_licenses">Open-source licenses</string>
+  <string name="torrents">Торренты</string>
+  <string name="download_speed">Максимальная скорость скачивания</string>
+  <string name="upload_speed">Максимальная скорость отдачи</string>
+  <string name="max_connections">Максимальное количество соединений</string>
+  <string name="dht_limit">Лимит DHT</string>
+  <string name="unlimited">Неограничено</string>
+  <string name="show_vpn">Показывать пункт VPN в меню</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Только по Wi-Fi</string>
+  <string name="wifi_only_message">Выбран режим потоковой передачи только по Wi-Fi. Можно отключить это в настройках, если вы хотите использовать мобильный интернет для просмотра.</string>
+  <!--NavigationDrawer-->
+  <string name="share">Поделиться</string>
+  <string name="drawer_open">Открыть выпадающее меню</string>
+  <string name="drawer_close">Закрыть выпадающее меню</string>
+  <string name="no_search_results">Результаты поиска не найдены</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time - результат работы разработчиков  и дизайнеров, сложивших многие API в одно целоe
+для удобного просмотра фильмов через торренты.\n\nЭто проект с открытым исходным кодом. Мылюбим смотреть фильмы. 
+А также любим похрустеть попкорном.</string>
+  <string name="website">Вебсайт</string>
+  <string name="forum">Форум</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Блог</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">Вы пользовались Popcorn Time на Android? Отличная вещь!</string>
+  <string name="share_dialog_title">Поделиться</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Соединён с</string>
+  <string name="disconnect">Разъединить</string>
+  <string name="select_beaming">Выберите устройство для трансляции</string>
+  <string name="starting_beam">Начинаем трансляцию видео...</string>
+  <string name="beaming_failed">Не удалось запустить трансляцию видео на ваше устройство. Хотите попробовать ещё раз? Возможно, приложение должно загрузить больше частей, прежде чем ваше устройство сможет воспроизвести видео.</string>
+  <string name="the_video">Видео</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">Приложение VPN.ht не установлено</string>
+  <string name="vpn_info">Чтобы использовать VPN непосредственно из Popcorn Time, вам нужно установить приложение VPN.ht. Не хотите этого делать? Тогда просто скройте эту кнопку.</string>
+  <string name="vpn_download">Скачивание</string>
+  <string name="vpn_later">Позже</string>
+  <string name="vpn_hide">Скрыть</string>
+</resources>

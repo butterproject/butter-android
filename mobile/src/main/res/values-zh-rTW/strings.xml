@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="save">儲存</string>
+  <string name="cancel">取消</string>
+  <string name="close">關閉</string>
+  <string name="ok">確定</string>
+  <string name="enabled">已啟用</string>
+  <string name="disabled">已停用</string>
+  <string name="casting">串流播放</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">標題、年份、演員</string>
+  <string name="title_shows">節目</string>
+  <string name="title_movies">電影</string>
+  <string name="title_anime">動畫</string>
+  <string name="genres">類型</string>
+  <string name="search">搜尋</string>
+  <string name="searching">搜尋中…</string>
+  <string name="no_data_found">找不到資料</string>
+  <string name="unknown_error">有些東西不對勁</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">分鐘</string>
+  <string name="read_more">閱讀更多</string>
+  <string name="watch_trailer">觀賞預告</string>
+  <string name="disable_subs">停用字幕</string>
+  <string name="no_subs">無字幕</string>
+  <string name="no_subs_available">沒有可用的字幕</string>
+  <string name="subtitles">字幕</string>
+  <string name="quality">畫質</string>
+  <string name="open_magnet">開啟 Magnet</string>
+  <string name="trailer">預告</string>
+  <string name="season">季</string>
+  <string name="episode">集</string>
+  <string name="specials">特輯</string>
+  <string name="continuing">待續</string>
+  <string name="ended">已完結</string>
+  <string name="aired">播出於: %s</string>
+  <string name="no_title_available">無名稱</string>
+  <string name="no_synopsis_available">抱歉，暫無簡介。</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">正等待種子</string>
+  <string name="starting_buffering">正在載入至緩衝</string>
+  <string name="streaming_started">已開始串流</string>
+  <string name="waiting_for_subtitles">正在等待字幕</string>
+  <string name="seeds">種子</string>
+  <string name="error_files">錯誤: 無法寫入文檔，請選擇其他存儲位置。</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">現正播放</string>
+  <string name="volume">音量</string>
+  <string name="brightness">亮度</string>
+  <string name="hardware_acceleration_error_title">硬體加速錯誤</string>
+  <string name="hardware_acceleration_error_message">硬體加速功能發生錯誤，您想要停用加速功能後再試一次嗎？</string>
+  <string name="best_fit">最佳比例</string>
+  <string name="fill">填滿</string>
+  <string name="fit_horizontal">水平填滿</string>
+  <string name="fit_vertical">垂直填滿</string>
+  <string name="original_size">原始尺寸</string>
+  <string name="reload_video">重新載入影片</string>
+  <string name="comm_error">通訊錯誤</string>
+  <string name="comm_message">下載影片時發生錯誤，這可能是網路問題或 YouTube 通訊協定的問題，請稍後再試。</string>
+  <string name="leave_videoplayer_title">您確定嗎?</string>
+  <string name="leave_videoplayer_message">您確定要離開影片播放器嗎？ %s 將會停止播放。</string>
+  <string name="encountered_error_title">影片播放錯誤</string>
+  <string name="encountered_error">影片播放出現嚴重錯誤。無法打開或播放此影片。未知的檔案格式。</string>
+  <!--TermsActivity strings-->
+  <string name="accept">接受</string>
+  <string name="leave">離開</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">偏好設定</string>
+  <string name="general">一般</string>
+  <string name="default_view">預設總覽</string>
+  <string name="default_player">預設視訊播放器</string>
+  <string name="i18n_language">應用程式語言</string>
+  <string name="restart_effect">重新啟動應用程式讓變更生效</string>
+  <string name="device_language">裝置語言</string>
+  <string name="stream_over_wifi_only">僅透過 Wi-Fi 串流</string>
+  <string name="internal_player">內建播放器</string>
+  <string name="subtitle_color">字體顏色</string>
+  <string name="subtitle_size">字體大小</string>
+  <string name="subtitle_stroke_color">外框色彩</string>
+  <string name="subtitle_stroke_width">外框寬度</string>
+  <string name="subtitle_language">預設語言</string>
+  <string name="no_default_set">無預設語言</string>
+  <string name="advanced">進階</string>
+  <string name="storage_location">儲存位置</string>
+  <string name="storage_automatic">自動</string>
+  <string name="storage_choose">選擇位置</string>
+  <string name="not_writable">該位置無法寫入</string>
+  <string name="remove_cache">在關閉播放器時移除快取</string>
+  <string name="hw_acceleration">硬體加速</string>
+  <string name="hw_automatic">自動</string>
+  <string name="hw_full">完整</string>
+  <string name="hw_decoding">僅解碼</string>
+  <string name="updates">更新</string>
+  <string name="auto_updates">自動更新</string>
+  <string name="check_for_updates">檢查更新</string>
+  <string name="last_check">上次檢查於</string>
+  <string name="about">關於</string>
+  <string name="version">版本</string>
+  <string name="changelog">更新日誌</string>
+  <string name="tap_to_open">點擊以開啟</string>
+  <string name="report_a_bug">回報 Bug</string>
+  <string name="open_source_licenses">開放原始碼授權</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">最高下載速度</string>
+  <string name="upload_speed">最高上傳速度</string>
+  <string name="max_connections">最大連線數</string>
+  <string name="dht_limit">DHT數量限制</string>
+  <string name="unlimited">無限制</string>
+  <string name="show_vpn">選單中顯示VPN選項</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">僅 Wi-Fi</string>
+  <string name="wifi_only_message">您可以僅透過 Wi-Fi 串流視訊，若您也想透過行動連線進行串流的話可在偏好設定中停用此設定。</string>
+  <!--NavigationDrawer-->
+  <string name="share">分享</string>
+  <string name="drawer_open">開啟導覽抽屜</string>
+  <string name="drawer_close">關閉導覽抽屜</string>
+  <string name="no_search_results">找不到搜尋結果</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time 是由許多開發人員和設計人員把一堆API放在一起來令
+看串流電影盡可能簡單。\n\n我們是一個開放源碼項目。我們從世界各地而來。我們
+愛我們的電影。而且，我們的確愛爆米花。</string>
+  <string name="website">網站</string>
+  <string name="forum">論壇</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">部落格</string>
+  <string name="twitter">Twitter</string>
+  <!--Share dialog-->
+  <string name="share_message">嘗試過 Android 版的 Popcorn Time 嗎？超讚！</string>
+  <string name="share_dialog_title">分享給</string>
+  <!--Beam dialog-->
+  <string name="connected_to">已連線至</string>
+  <string name="disconnect">中斷連線</string>
+  <string name="select_beaming">選擇串流播放設備</string>
+  <string name="starting_beam">初始化串流播放中...</string>
+  <string name="beaming_failed">該影片無法在您的裝置中播放，要重試嗎？您的裝置可能需要下載更多部分才能播放此影片。</string>
+  <string name="the_video">影片</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht 應用程式尚未安裝</string>
+  <string name="vpn_info">您需要 VPN.ht 才能使用 Popcorn Time 内的VPN選項。用不到嗎？隱藏此按鈕就好。</string>
+  <string name="vpn_download">下載</string>
+  <string name="vpn_later">稍後再試</string>
+  <string name="vpn_hide">隱藏</string>
+</resources>

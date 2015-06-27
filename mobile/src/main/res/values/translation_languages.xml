@@ -18,36 +18,42 @@
 
 <resources>
     <string-array name="translation_languages" translatable="false">
-        <item>en</item>
-        <item>el</item>
-        <item>fr</item>
-        <item>bg</item>
-        <item>pt-BR</item>
-        <item>hr</item>
-        <item>ca</item>
-        <item>de</item>
-        <item>it</item>
-        <item>iw</item>
-        <item>da</item>
         <item>ar</item>
-        <item>et</item>
-        <item>hu</item>
-        <item>es</item>
-        <item>he</item>
-        <item>nl</item>
-        <item>pt</item>
-        <item>zh-CN</item>
-        <item>sr</item>
-        <item>ko</item>
-        <item>sv</item>
-        <item>sk</item>
-        <item>lt</item>
-        <item>sl</item>
-        <item>ro</item>
+        <item>bg</item>
         <item>bn</item>
-        <item>pl</item>
-        <item>ru</item>
-        <item>id</item>
+        <item>ca</item>
+        <item>cs</item>
+        <item>da</item>
+        <item>de</item>
+        <item>el</item>
+        <item>es</item>
+        <item>es-MX</item>
+        <item>et</item>
+        <item>fa</item>
         <item>fi</item>
+        <item>fr</item>
+        <item>gl</item>
+        <item>he</item>
+        <item>hr</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>lt</item>
+        <item>mk</item>
+        <item>ms</item>
+        <item>nb</item>
+        <item>nl</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>pt-BR</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>sk</item>
+        <item>sl</item>
+        <item>sr</item>
+        <item>sv</item>
+        <item>tr</item>
+        <item>zh-CN</item>
+        <item>zh-TW</item>
     </string-array>
 </resources>

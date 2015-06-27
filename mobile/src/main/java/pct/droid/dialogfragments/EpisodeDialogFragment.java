@@ -274,7 +274,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         mSubtitles.setText(R.string.loading_subs);
         mSubtitles.setClickable(false);
         if (mSubsProvider != null) {
-            mSubsProvider.getList(mShow, mEpisode, new SubsProvider.Callback() {
+            mSubsProvider.getList(mEpisode, new SubsProvider.Callback() {
                 @Override
                 public void onSuccess(Map<String, String> subtitles) {
                     if (!mAttached) return;

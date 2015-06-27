@@ -11,7 +11,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.2'
+        classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.9'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
@@ -21,7 +21,7 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "22.1.1"
+    appCompatVersion = "22.2.0"
     buildToolsVersion = "22.0.1"
     crashlyticsVersion = "2.2.4"
     targetSdk = 22

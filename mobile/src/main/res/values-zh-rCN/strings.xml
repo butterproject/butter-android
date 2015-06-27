@@ -113,7 +113,7 @@
   <string name="drawer_close">关闭导航栏</string>
   <string name="no_search_results">未搜索到任何结果</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time 是众多开发者和设计师共同努力的成果，
 我们将大量API融汇在一起只为把种子观影体验变得简洁至极。
 我们的项目是开源的。我们来自世界不同的角落。

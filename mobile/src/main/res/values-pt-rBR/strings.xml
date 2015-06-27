@@ -27,6 +27,7 @@
   <string name="no_subs_available">Sem legendas disponíveis</string>
   <string name="subtitles">Legendas</string>
   <string name="quality">Qualidade</string>
+  <string name="open_magnet">Abrir link magnético</string>
   <string name="trailer">Trailer</string>
   <string name="season">Temporada</string>
   <string name="episode">Episódio</string>
@@ -34,12 +35,15 @@
   <string name="continuing">Em andamento</string>
   <string name="ended">Finalizada</string>
   <string name="aired">Exibido: %s</string>
+  <string name="no_title_available">Sem nome</string>
+  <string name="no_synopsis_available">Sinopse não disponível</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Esperando por torrent</string>
   <string name="starting_buffering">Iniciando armazenamento</string>
   <string name="streaming_started">Streaming iniciado</string>
   <string name="waiting_for_subtitles">Esperando por legendas</string>
   <string name="seeds">seeds</string>
+  <string name="error_files">Erro: Não foi possível gravar os arquivos. Por favor tente uma localização de armazenamento diferente.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Reproduzindo agora</string>
   <string name="volume">Volume</string>
@@ -51,10 +55,13 @@
   <string name="fit_horizontal">Ajustar horizontalmente</string>
   <string name="fit_vertical">Ajustar verticalmente</string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Recarregar vídeo</string>
   <string name="comm_error">Erro de comunicação</string>
   <string name="comm_message">Um erro ocorreu durante a obtenção do vídeo. Isso pode ser devido a um problema de rede ou de protocolos do YouTube. Por favor tente novamente mais tarde.</string>
   <string name="leave_videoplayer_title">Você tem certeza?</string>
   <string name="leave_videoplayer_message">Você tem certeza que quer saír do player de vídeo? %s irá parar de reproduzir.</string>
+  <string name="encountered_error_title">Erro de vídeo encontrado</string>
+  <string name="encountered_error">O reprodutor de vídeo encontrou um erro grave. O arquivo de vídeo não pode ser aberto e/ou reproduzido. O formato não foi reconhecido.</string>
   <!--TermsActivity strings-->
   <string name="accept">Aceitar</string>
   <string name="leave">Sair</string>
@@ -97,9 +104,10 @@
   <string name="torrents">Torrents</string>
   <string name="download_speed">Velocidade máxima de download</string>
   <string name="upload_speed">Velocidade mínima de download</string>
-  <string name="max_connections">Máximo de total de conexões</string>
+  <string name="max_connections">Máximo total de conexões</string>
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Ilimitado</string>
+  <string name="show_vpn">Exiba a opção VPN no menu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Você pode reproduzir videos apenas por Wi-Fi. Desabilite esta opção em Preferências para poder reproduzir vídeos utilizando redes móveis.</string>
@@ -108,7 +116,8 @@
   <string name="drawer_open">Abrir gaveta de navegação</string>
   <string name="drawer_close">Fechar gaveta de navegação</string>
   <string name="no_search_results">Nenhum resultado encontrado</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time é o resultado de vários desenvolvedores e designers colocando um monte de APIs juntas para fazer a
 		experiência de assistir filmes por torrent tão simples quanto possível.\n\nNós somos um projeto de código aberto. Nós somos de todo o mundo. Nós
 		amamos nossos filmes. E cara, nós realmente amamos pipoca.</string>
@@ -120,7 +129,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Você já experimentou o Popcorn Time para Android? É fantástico! https://popcorntime.io/</string>
+  <string name="share_message">Você já testou o Popcorn Time para Android? Ele é excelente!</string>
   <string name="share_dialog_title">Compartilhar com</string>
   <!--Beam dialog-->
   <string name="connected_to">Conectado em</string>
@@ -128,4 +137,8 @@
   <string name="select_beaming">Selecione o dispositivo para emitir</string>
   <string name="starting_beam">Inicializando emissão de vídeo</string>
   <string name="beaming_failed">O vídeo não pode tocar no seu dispositivo de emissão. Você quer tentar de novo? O aplicativo pode precisar de baixar mais partes antes de o seu dispositivo ser capaz de reproduzir o vídeo.</string>
+  <string name="the_video">O vídeo</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">Aplicativo VPN.ht não instalado</string>
+  <string name="vpn_info">Você precisa ter o aplicativo VPN.ht instalado para usar a opção VPN dentro do Popcorn Time. Não está interessado? Então você pode simplesmente esconder este botão.</string>
 </resources>

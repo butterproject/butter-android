@@ -11,6 +11,10 @@
   <string name="overview_not_available">O sentimos, pero a vista previa non está dispoñible.</string>
   <string name="episode">Capítulo</string>
   <string name="unknown_error">Algo foi mal</string>
+  <string name="torrent_failed">Non se puido recuperar o torrent</string>
+  <string name="running">Executándose de fondo</string>
+  <string name="tap_to_close">Preme para cerrar</string>
+  <string name="tap_to_resume">Toque para continuar</string>
   <!--Genres-->
   <string name="genre_all">Todo</string>
   <string name="genre_action">Acción</string>
@@ -85,4 +89,5 @@
   <string name="pairing_tv">Sincronizar coa TV</string>
   <string name="confirm_tv">Por favor confirma a conexión no teu TV</string>
   <string name="enter_pairing_code">Inserir o código de emparellado no TV</string>
+  <string name="open_with">Abrir con</string>
 </resources>
