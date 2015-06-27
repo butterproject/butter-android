@@ -195,4 +195,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="leave">Leave</string>
     <string name="show_vpn">Show VPN option in menu</string>
 
+    <string name="reload_video">Reload video</string>
+
 </resources>
