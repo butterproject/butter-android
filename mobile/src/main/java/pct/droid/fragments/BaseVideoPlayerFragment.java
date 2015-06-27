@@ -154,12 +154,16 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         mVideoSurfaceHolder = getVideoSurface().getHolder();
         String chroma = PrefUtils.get(getActivity(), Prefs.PIXEL_FORMAT, "");
-        if(chroma.equals("YV12")) {
-            mVideoSurfaceHolder.setFormat(ImageFormat.YV12);
-        } else if (chroma.equals("RV16")) {
-            mVideoSurfaceHolder.setFormat(PixelFormat.RGB_565);
-        } else {
-            mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
+        switch (chroma) {
+            case "YV12":
+                mVideoSurfaceHolder.setFormat(ImageFormat.YV12);
+                break;
+            case "RV16":
+                mVideoSurfaceHolder.setFormat(PixelFormat.RGB_565);
+                break;
+            default:
+                mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
+                break;
         }
         mVideoSurfaceHolder.addCallback(mSurfaceCallback);
 
