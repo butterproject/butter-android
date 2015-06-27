@@ -27,6 +27,7 @@
   <string name="no_subs_available">Inga undertexter tillgängliga</string>
   <string name="subtitles">Undertexter</string>
   <string name="quality">Kvalité </string>
+  <string name="open_magnet">Öppna magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Säsong</string>
   <string name="episode">Episode</string>
@@ -34,12 +35,15 @@
   <string name="continuing">Fortsätter</string>
   <string name="ended">Avslutad </string>
   <string name="aired">Sändes: %s</string>
+  <string name="no_title_available">Inget namn</string>
+  <string name="no_synopsis_available">Ingen sammanfattning tillgänglig</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Väntar på torrent</string>
   <string name="starting_buffering">Startar buffring</string>
   <string name="streaming_started">Streaming startade</string>
   <string name="waiting_for_subtitles">Väntar på undertexter</string>
   <string name="seeds">seeds</string>
+  <string name="error_files">Fel: Kunde inte skriva filer. Vänligen använd en annorlunda lagringsplats.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Nu spelas</string>
   <string name="volume">Volym</string>
@@ -51,10 +55,13 @@
   <string name="fit_horizontal">Passa horisontellt </string>
   <string name="fit_vertical">Passa vertikalt </string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Ladda om video</string>
   <string name="comm_error">Kommunikations fel</string>
   <string name="comm_message">Ett fel inträffade vid hämtning av videon. Detta kan bero på nätverksproblem eller YouTube-protokoll. Försök igen senare.</string>
   <string name="leave_videoplayer_title">Är du säker?</string>
   <string name="leave_videoplayer_message">Är du säker på att du vill lämna videospelaren? %s kommer att sluta spela.</string>
+  <string name="encountered_error_title">Videofel stött på</string>
+  <string name="encountered_error">Videospelaren stött på ett allvarligt fel. Videofilen kunde inte öppnas och/eller spelas. Formatet kunde inte identifieras.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accept</string>
   <string name="leave">Lämna</string>
@@ -100,6 +107,7 @@
   <string name="max_connections">Högsta totala anslutningar</string>
   <string name="dht_limit">DHT gräns</string>
   <string name="unlimited">Obegränsad</string>
+  <string name="show_vpn">Visa VPN-alternativ i menyn</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Endast Wi-Fi</string>
   <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>
@@ -108,7 +116,8 @@
   <string name="drawer_open">Öppna navigeringslåda</string>
   <string name="drawer_close">Stäng navigeringslåda</string>
   <string name="no_search_results">Inga sökresultat hittades</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time är resultatet av många utvecklare och designers som har slagit ihop ett gäng APIs tillsammans för att göra 
 ⇥⇥upplevelsen att titta torrent filmer så enkla som möjligt. \ n \ nVi är ett open source-projekt. Vi är från hela världen. Vi
 ⇥⇥älskar våra filmer. Oh boy, vad vi älskar popcorn.</string>
@@ -120,7 +129,7 @@
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Har du prövat Popcorn Time appen för Android? Den är grym! https://popcorntime.io/</string>
+  <string name="share_message">Har du provat Popcorn Time för Android? Den är häftigt!</string>
   <string name="share_dialog_title">Dela med</string>
   <!--Beam dialog-->
   <string name="connected_to">Ansluten till</string>
@@ -128,4 +137,11 @@
   <string name="select_beaming">Välj enhet för streaming</string>
   <string name="starting_beam">Initierar video streaming...</string>
   <string name="beaming_failed">Videon kunde inte spela på din streaming-enheten. Vill du försöka igen? Appen kan behöva ladda ner fler delar innan din enhet kan spela upp videon.</string>
+  <string name="the_video">Videon</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht appen inte installerad</string>
+  <string name="vpn_info">Du måste ha VPN.ht appen installerat för att kunna använda VPN inifrån Popcorn Time. Inte intresserad? Då kan du bara dölja den här knappen.</string>
+  <string name="vpn_download">Ladda ner</string>
+  <string name="vpn_later">Senare </string>
+  <string name="vpn_hide">Göm</string>
 </resources>

@@ -11,6 +11,10 @@
   <string name="overview_not_available">מצטערים! תצוגה מקדימה לא זמינה.</string>
   <string name="episode">פרק</string>
   <string name="unknown_error">משהו השתבש</string>
+  <string name="torrent_failed">נכשל בקבלת קובץ טורנט </string>
+  <string name="running">רץ ברקע</string>
+  <string name="tap_to_close">לחצו לסגירה</string>
+  <string name="tap_to_resume">לחצו להמשך</string>
   <!--Genres-->
   <string name="genre_all">הכל</string>
   <string name="genre_action">אקשן</string>
@@ -84,5 +88,5 @@
   <!--BeamManager-->
   <string name="pairing_tv">שיוך עם טלוויזיה</string>
   <string name="confirm_tv">אנא אשר את החיבור על הטלוויזיה שלך </string>
-  <string name="enter_pairing_code">הכנס קוד התאמה בטלוויזיה</string>
+  <string name="enter_pairing_code">הכנס קוד שיוך בטלוויזיה</string>
 </resources>

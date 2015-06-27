@@ -27,6 +27,7 @@
   <string name="no_subs_available">Nincs elérhető felirat</string>
   <string name="subtitles">Feliratok</string>
   <string name="quality">Minőség</string>
+  <string name="open_magnet">Magnet megnyitása</string>
   <string name="trailer">Előzetes</string>
   <string name="season">Évad</string>
   <string name="episode">Epizód</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Folytatódik</string>
   <string name="ended">Befejeződött</string>
   <string name="aired">Vetítve: %s</string>
+  <string name="no_title_available">Nincs név</string>
+  <string name="no_synopsis_available">Nincs elérhető szinopszis</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Várakozás torrentre</string>
   <string name="starting_buffering">Pufferelés kezdése</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Vízszintes illesztés</string>
   <string name="fit_vertical">Függőleges illesztés</string>
   <string name="original_size">Eredeti</string>
+  <string name="reload_video">Videó újratöltése</string>
   <string name="comm_error">Kommunikációs hiba</string>
   <string name="comm_message">Hiba történt a videó betöltése közben. Ezt okozhatják hálózati hibák vagy YouTube protokollok. Kérjük, próbálkozzon később.</string>
   <string name="leave_videoplayer_title">Biztos?</string>
@@ -113,7 +117,7 @@
   <string name="drawer_close">Navigációs fiók bezárása</string>
   <string name="no_search_results">Nem található keresési eredmény</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">A Popcorn Time! számtalan fejlesztő és dizájner munkájának eredménye, akik összeraktak pár API-t, hogy a torrentes filmnézés élményét a lehető legegyszerűbbé tegyék.\n\n
 Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműködőink. Szeretjük a filmeket, és legfőképp a popcornt.</string>
   <string name="website">Weboldal</string>
@@ -136,7 +140,7 @@ Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműk�
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht app nincs telepítve</string>
   <string name="vpn_info">A VPN.ht app-nak telepítve kell lennie, hogy használhassa a VPN opciót a Popcorn Time-ból. Nem érdekli? Akkor eltüntetheti ezt a gombot.</string>
-  <string name="vpn_download">App letöltése</string>
-  <string name="vpn_later">Jöjjön vissza később</string>
-  <string name="vpn_hide">Gomb elrejtése</string>
+  <string name="vpn_download">Letőltés</string>
+  <string name="vpn_later">Később</string>
+  <string name="vpn_hide">Elrejt</string>
 </resources>

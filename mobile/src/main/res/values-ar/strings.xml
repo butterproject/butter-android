@@ -27,6 +27,7 @@
   <string name="no_subs_available">لا تتوفر ترجمة</string>
   <string name="subtitles">الترجمة</string>
   <string name="quality">جودة العرض</string>
+  <string name="open_magnet">افتح الرابط</string>
   <string name="trailer">إعلان الفلم</string>
   <string name="season">الموسم</string>
   <string name="episode">الحلقة</string>
@@ -34,12 +35,15 @@
   <string name="continuing">العرض مستمر</string>
   <string name="ended">إنتهى</string>
   <string name="aired">تاريخ العرض: %s</string>
+  <string name="no_title_available">بدون إسم</string>
+  <string name="no_synopsis_available">الملخص غير متوفر</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">في انتظار التورنت</string>
   <string name="starting_buffering">بدأ التخزين المؤقت</string>
   <string name="streaming_started">بدأ العرض</string>
   <string name="waiting_for_subtitles">في إنتظار الترجمة</string>
   <string name="seeds">موزع</string>
+  <string name="error_files">خطأ في كتابة الملفات . فضلاً حاول تغيير مكان الحفظ من الاعدادات.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">يعرض الآن</string>
   <string name="volume">الصوت</string>
@@ -51,10 +55,13 @@
   <string name="fit_horizontal">أفقي</string>
   <string name="fit_vertical">عمودي</string>
   <string name="original_size">الأصلي</string>
+  <string name="reload_video">إعادة تحميل الفيديو</string>
   <string name="comm_error">خطأ في الإتصال</string>
   <string name="comm_message">حدث خطأ أثناء محاولة الحصول على الفيديو، من الممكن أن يحدث هذا بسبب مشكلة في الشبكة أو اليوتيوب . فضلاً أعد المحاولة في وقت لاحق.</string>
   <string name="leave_videoplayer_title">هل أنت متأكد ؟</string>
   <string name="leave_videoplayer_message">هل انت متاكد من انك تريد مغادرة مشغل الفيديو ؟ %s سيتوقف عن العرض.</string>
+  <string name="encountered_error_title">طرأ خطأ في الفيديو</string>
+  <string name="encountered_error">مشغل الفيديو واجه خطأ. ملف الفيديو لا يَمكن فتحه و/أو تشغيله. لم يتم التعرف على الصيغة.</string>
   <!--TermsActivity strings-->
   <string name="accept">قبول</string>
   <string name="leave">مغادرة</string>
@@ -100,6 +107,7 @@
   <string name="max_connections">عدد الإتصالات القصوى</string>
   <string name="dht_limit">DHT limit</string>
   <string name="unlimited">غير محدود</string>
+  <string name="show_vpn">إظهار خيار ال VPN في القائمة.</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">واي فاي فقط</string>
   <string name="wifi_only_message">يمكنك مشاهدة الفيديوهات عبر الواي فاي فقط. بإمكانك تعديل هذا الخيار في الإعدادات إذا كنت تريد المشاهدة عبر شبكة الهاتف المحمول.</string>
@@ -108,7 +116,8 @@
   <string name="drawer_open">إفتح شريط التنقل</string>
   <string name="drawer_close">أغلق شريط التنقل</string>
   <string name="no_search_results">لم يتم العثور على نتائج</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">بوب كورن تايم هو مشروع مفتوح المصدر لجعل مشاهدة أفلام التورنت سهلة بقدر ما يمكن .
 نحن مجموعة من المبرمجين والمصممين من جميع أنحاء العالم، نحب الأفلام ، وبالتأكيد نحب الفشار .</string>
   <string name="website">الموقع</string>
@@ -119,7 +128,7 @@
   <string name="blog">المدونة</string>
   <string name="twitter">تويتر</string>
   <!--Share dialog-->
-  <string name="share_text">هل جربت بوب كورن تايم للأندرويد؟ إنه رائع ! https://popcorntime.io/</string>
+  <string name="share_message">هل جربت Popcorn Time للأندرويد؟ إنه رائع!</string>
   <string name="share_dialog_title">شارك مع</string>
   <!--Beam dialog-->
   <string name="connected_to">متصل بـ</string>
@@ -127,4 +136,11 @@
   <string name="select_beaming">إختر جهازاً للمشاركة</string>
   <string name="starting_beam">التحضير لمشاركة الفيديو...</string>
   <string name="beaming_failed">لم نتمكن من عرض هذا الفيديو على جهازك المشترك ، هل تريد المحاولة مرة أخرى ؟ من الممكن ان التطبيق يحتاج لتنزيل المزيد من الأجزاء على جهازك ليتمكن من عرض الفيديو.</string>
+  <string name="the_video">الفيديو</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">تطبيق VPN.ht غير مثبت.</string>
+  <string name="vpn_info">عليك أن تثبت تطبيق VPN.ht لتستخدم خيار الVPN  من داخل Popcorn Time. غير مهتم؟ اذاً يَمكنك اخفاء هذا الزر.</string>
+  <string name="vpn_download">تنزيل</string>
+  <string name="vpn_later">لاحقا</string>
+  <string name="vpn_hide">إخفاء</string>
 </resources>

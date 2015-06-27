@@ -11,6 +11,10 @@
   <string name="overview_not_available">Συγνώμη! Δεν υπάρχει διαθέσιμη προεπισκόπηση.</string>
   <string name="episode">Επεισόδιο</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
+  <string name="torrent_failed">Αποτυχία ανάκτησης torrent</string>
+  <string name="running">Τρέχει στο παρασκήνιο</string>
+  <string name="tap_to_close">Πατήστε για κλείσιμο</string>
+  <string name="tap_to_resume">Πατήστε για συνέχιση</string>
   <!--Genres-->
   <string name="genre_all">Όλα</string>
   <string name="genre_action">Δράση</string>
@@ -85,4 +89,5 @@
   <string name="pairing_tv">Σύζευξη με την τηλεόραση</string>
   <string name="confirm_tv">Παρακαλώ επιβεβαιώστε την σύνδεση με την τηλεόρασή σας</string>
   <string name="enter_pairing_code">Εισάγετε τον κωδικό σύζευξης στην τηλεόρασή σας</string>
+  <string name="open_with">Άνοιγμα με</string>
 </resources>

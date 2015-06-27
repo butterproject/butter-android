@@ -27,19 +27,23 @@
   <string name="no_subs_available">No hi ha subtítols disponibles</string>
   <string name="subtitles">Subtítols</string>
   <string name="quality">Qualitat</string>
+  <string name="open_magnet">Obre magnet</string>
   <string name="trailer">Tràiler</string>
   <string name="season">Temporada</string>
   <string name="episode">Episodi</string>
   <string name="specials">Especials</string>
-  <string name="continuing">S\'està continuant</string>
+  <string name="continuing">Continuant</string>
   <string name="ended">Finalitzat</string>
   <string name="aired">Emesa: %s</string>
+  <string name="no_title_available">Sense nom</string>
+  <string name="no_synopsis_available">Cap sinopsi disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">S\'està esperant el torrent</string>
   <string name="starting_buffering">S\'està iniciant la precàrrega</string>
   <string name="streaming_started">S\'ha iniciat la transmissió</string>
   <string name="waiting_for_subtitles">S\'estan esperant els subtítols</string>
   <string name="seeds">llavors</string>
+  <string name="error_files">Error: No s\'ha pogut escriure. Prova una altra ubicació d\'emmagatzemament si us plau.</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">S\'està reproduint</string>
   <string name="volume">Volum</string>
@@ -51,10 +55,13 @@
   <string name="fit_horizontal">Encaix horitzontal</string>
   <string name="fit_vertical">Encaix vertical</string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Recarrega el vídeo</string>
   <string name="comm_error">Error de comunicacions</string>
   <string name="comm_message">S\'ha produït un error durant la localització del vídeo. Pot ser degut a errors de xarxa o als protocols de Youtube. Proveu-ho de nou més tard.</string>
   <string name="leave_videoplayer_title">N\'esteu segur?</string>
   <string name="leave_videoplayer_message">Segur que voleu abandonar el reproductor? %s deixarà de reproduir-se.</string>
+  <string name="encountered_error_title">S\'ha trobat un error de vídeo</string>
+  <string name="encountered_error">El reproductor de vídeo ha tingut un problema greu. No s\'ha pogut obrir i/o reproduir el fitxer de vídeo. No s\'ha reconegut el format.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accepta</string>
   <string name="leave">Eixir</string>
@@ -100,6 +107,7 @@
   <string name="max_connections">Connexions màximes totals</string>
   <string name="dht_limit">Límit DHT</string>
   <string name="unlimited">Sense límit</string>
+  <string name="show_vpn">Mostra l\'opció de VPN al menú</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Només Wi-Fi</string>
   <string name="wifi_only_message">Només es poden transmetre vídeos per Wi-Fi. Si voleu transmetre per una connexió mòbil podeu desactivar aquesta opció a la configuració.</string>
@@ -108,7 +116,8 @@
   <string name="drawer_open">Obre el navegador</string>
   <string name="drawer_close">Tanca el navegador</string>
   <string name="no_search_results">No s\'han trobat resultats</string>
-  <!--About fragment-->
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time és el resultat de molts desenvolupadors i dissenyadors ajuntant un grapat d\'APIs per tal de simplificar
 ⇥⇥tant com es pugui l\'experiència de veure pel·lícules torrent. Som un projecte de codi obert. Som d\'arreu del món. Ens encanten
 ⇥⇥les nostres pelis. I noi, ens encanten les crispetes.</string>
@@ -120,7 +129,7 @@
   <string name="blog">Bloc</string>
   <string name="twitter">Twitter</string>
   <!--Share dialog-->
-  <string name="share_text">Heu provat Popcorn Time per a Android? És fantàstic! https://popcorntime.io</string>
+  <string name="share_message">Has provat Popcorn Time per a Android? És collonut!</string>
   <string name="share_dialog_title">Compartiu amb </string>
   <!--Beam dialog-->
   <string name="connected_to">Connectat a</string>
@@ -129,4 +138,10 @@
   <string name="starting_beam">Iniciant el beaming de vídeo</string>
   <string name="beaming_failed">El vídeo no s\'ha pogut reproduir al teu dispositiu beaming. T\'agradaria intentar-ho de nou? L\'aplicació podria necessitar descarregar més parts abans que el teu dispositiu pugui reproduir el vídeo.</string>
   <string name="the_video">El vídeo</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">L\'app VPN.ht no està instal·lada</string>
+  <string name="vpn_info">Has de tenir instal·lada l\'app VPN.ht per fer servir l\'opció de VPN des de Popcorn Time. No t\'interessa? Llavors simplement amaga aquest botó.</string>
+  <string name="vpn_download">Baixa</string>
+  <string name="vpn_later">Més tard</string>
+  <string name="vpn_hide">Amaga</string>
 </resources>

@@ -29,6 +29,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -73,6 +76,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     public final static String RESUME_POSITION = "resume_position";
 
+    private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
     private String mLocation;
 
@@ -97,6 +101,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     private boolean mEnded = false;
     private boolean mSeeking = false;
     private boolean mReadyToPlay = false;
+    protected boolean mShowReload = false;
 
     private int mVideoHeight;
     private int mVideoWidth;
@@ -124,6 +129,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -225,6 +231,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
      */
     @SuppressWarnings({"unchecked"})
     public void loadMedia() {
+        setProgressVisible(true);
+
         if (mStreamInfo != null && null != mStreamInfo.getVideoLocation()) {
             mLocation = mStreamInfo.getVideoLocation();
         } else {
@@ -246,6 +254,16 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         mLibVLC.playMRL(mLocation);
         mEnded = false;
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(mLibVLC.getLength() == 0) {
+                    loadMedia();
+                    setProgressVisible(true);
+                }
+            }
+        }, 2000);
 
         long resumeTime = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
         if (resumeTime > 0) {
@@ -703,6 +721,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 case EventHandler.MediaPlayerPositionChanged:
                     fragment.onProgressChanged(fragment.getCurrentTime(), fragment.getDuration());
                     fragment.checkSubs();
+                    fragment.setProgressVisible(false);
                     break;
             }
             fragment.updatePlayPauseState();
@@ -758,10 +777,26 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
     };
 
-
     public interface Callback {
         StreamInfo getInfo();
         TorrentService getService();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.activity_player, menu);
+        menu.findItem(R.id.action_reload).setVisible(mShowReload);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_reload:
+                loadMedia();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

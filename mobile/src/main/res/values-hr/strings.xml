@@ -27,6 +27,7 @@
   <string name="no_subs_available">Nema dostupnih podnaslova</string>
   <string name="subtitles">Podnaslovi</string>
   <string name="quality">Kvaliteta</string>
+  <string name="open_magnet">Otvori magnet</string>
   <string name="trailer">Najava</string>
   <string name="season">Sezona</string>
   <string name="episode">Epizoda</string>
@@ -34,6 +35,8 @@
   <string name="continuing">Serija se još snima</string>
   <string name="ended">Snimanje završilo</string>
   <string name="aired">Datum emitiranja: %s</string>
+  <string name="no_title_available">Bez naziva</string>
+  <string name="no_synopsis_available">Nema dostupnog sadržaja</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Čekanje torrenta</string>
   <string name="starting_buffering">Pokretanje međuspremanja</string>
@@ -52,6 +55,7 @@
   <string name="fit_horizontal">Prilagodi vodoravno</string>
   <string name="fit_vertical">Prilagodi okomito</string>
   <string name="original_size">Izvorno</string>
+  <string name="reload_video">Ponovno učitaj video</string>
   <string name="comm_error">Greška komunikacije</string>
   <string name="comm_message">Dogodila se greška tijekom preuzimanja videa. To mogu uzrokovati mrežni problemi ili Youtube protokol. Pokušajte ponovno kasnije.</string>
   <string name="leave_videoplayer_title">Jeste li sigurni?</string>
@@ -113,7 +117,7 @@
   <string name="drawer_close">Zatvori navigacijsku površinu</string>
   <string name="no_search_results">Nema traženih rezultata</string>
   <string name="vpn">VPN</string>
-  <!--About fragment-->
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time je rezultat truda mnogo razvijatelja i dizajnera koji su spojili hrpu API-ija zajedno kako bi učinili
 		iskustvo gledanja filmova putem torrenta što jednostavnijim.\n\nOvo je projekt otvorenog kôda. Mi smo sa svih strana svijeta. Volimo
 		gledati filmove. A najviše od svega, volimo kokice.</string>
@@ -137,7 +141,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht aplikacija nije instalirana</string>
   <string name="vpn_info">Morate imati VPN.ht aplikaciju instaliranu kako bi mogli koristiti VPN mogućnost unutar Popcorn Timea. Niste zainteresirani? Tada možete jednostavno sakriti ovu tipku.</string>
-  <string name="vpn_download">Preuzmi aplikaciju</string>
-  <string name="vpn_later">Vrati se kanije</string>
-  <string name="vpn_hide">Sakrij tipku</string>
+  <string name="vpn_download">Preuzmi</string>
+  <string name="vpn_later">Kasnije</string>
+  <string name="vpn_hide">Sakrij</string>
 </resources>

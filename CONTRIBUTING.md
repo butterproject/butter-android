@@ -13,7 +13,7 @@ There are lots and lots of ways to get involved, this document covers:
 
 
 <a name="report-a-bug"></a>
-## Report a bug
+## General guidelines
 
 If you're about to raise an issue because think you've found a problem with Popcorn Time, or you'd like to make a request
 for a new feature in the codebase, or any other reason then please read this first.
