@@ -25,7 +25,7 @@ import android.view.MenuItem;
 
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.activities.TorrentBaseActivity;
+import pct.droid.activities.base.TorrentBaseActivity;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.LocaleUtils;

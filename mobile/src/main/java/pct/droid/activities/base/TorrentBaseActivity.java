@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.activities;
+package pct.droid.activities.base;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
@@ -28,6 +28,7 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
