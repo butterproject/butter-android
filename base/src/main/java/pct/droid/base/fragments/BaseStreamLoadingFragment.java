@@ -108,7 +108,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             }
         });
 
-        if (!(getActivity() instanceof TorrentBaseActivity)) {
+        if (!(getActivity() instanceof TorrentActivity)) {
             throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
         }
     }

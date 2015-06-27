@@ -43,23 +43,19 @@ import com.frostwire.jlibtorrent.Utils;
 import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
 import com.frostwire.jlibtorrent.alerts.TorrentFinishedAlert;
 import com.sjl.foreground.Foreground;
-import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
-import pct.droid.base.activities.TorrentBaseActivity;
+import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -145,7 +141,7 @@ public class TorrentService extends Service {
         return true;
     }
 
-    public void setCurrentActivity(TorrentBaseActivity activity) {
+    public void setCurrentActivity(TorrentActivity activity) {
         mCurrentActivityClass = activity.getClass();
     }
 
