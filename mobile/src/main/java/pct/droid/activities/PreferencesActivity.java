@@ -617,7 +617,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                     public void onClick(DialogInterface dialog, int position) {
                                         if(position == 2) {
                                             item.saveValue("YV12");
-                                        } else if (position == 1) {
+                                        } else if (position == 0) {
                                             item.saveValue("RV16");
                                         } else {
                                             item.saveValue("");
