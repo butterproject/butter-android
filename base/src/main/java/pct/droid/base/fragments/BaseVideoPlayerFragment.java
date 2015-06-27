@@ -791,10 +791,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_reload:
-                loadMedia();
-                return true;
+        int i = item.getItemId();
+        if (i == R.id.action_reload) {
+            loadMedia();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
