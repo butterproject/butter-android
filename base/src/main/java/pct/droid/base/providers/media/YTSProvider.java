@@ -145,7 +145,7 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(CURRENT_URL + "list_movies.json?" + query);
+        requestBuilder.url(CURRENT_URL + "list_movies_pct.json?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, filters, callback);
@@ -426,11 +426,8 @@ public class YTSProvider extends MediaProvider {
                     movie.year = Integer.toString(year.intValue());
                     movie.rating = item.get("rating").toString();
                     movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
-                    movie.image = (String) item.get("medium_cover_image");
-
-                    if (movie.image != null) {
-                        movie.image = movie.image.replace("medium-cover", "large-cover");
-                    }
+                    movie.image = (String) item.get("large_cover_image");
+                    movie.headerImage = (String) item.get("background_image_original");
 
                     ArrayList<LinkedTreeMap<String, Object>> torrents =
                             (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
