@@ -597,7 +597,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                         }
                     }
                 }));
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_hw_accel, R.string.pixel_format, Prefs.PIXEL_FORMAT, "",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_pixel_format, R.string.pixel_format, Prefs.PIXEL_FORMAT, "",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
