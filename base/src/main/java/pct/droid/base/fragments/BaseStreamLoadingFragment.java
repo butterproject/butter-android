@@ -33,7 +33,6 @@ import java.util.Map;
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
-import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
