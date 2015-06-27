@@ -144,6 +144,10 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="dht_limit">DHT limit</string>
     <string name="unlimited">Unlimited</string>
     <string name="show_vpn">Show VPN option in menu</string>
+	<string name="pixel_format">Force video chroma</string>
+	<string name="rgb32">RGB 32-bit: default chroma</string>
+	<string name="rgb16">RGB 16-bit: better performance, lower quality</string>
+	<string name="yuv">YUV: best performance but does not always work</string>
 
 	<!-- WifiOnlyDialogFragment -->
 	<string name="wifi_only">Wi-Fi only</string>
