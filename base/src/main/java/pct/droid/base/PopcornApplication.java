@@ -24,11 +24,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
-<<<<<<< HEAD
 import com.squareup.leakcanary.LeakCanary;
-=======
 import com.sjl.foreground.Foreground;
->>>>>>> development
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
