@@ -1,8 +1,5 @@
 package pct.droid.tv.activities.base;
 
-import android.support.v4.app.FragmentActivity;
-
-import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.tv.activities.PTVSearchActivity;
 
 public abstract class PTVBaseActivity extends PTVTorrentBaseActivity {
@@ -12,4 +9,5 @@ public abstract class PTVBaseActivity extends PTVTorrentBaseActivity {
 		PTVSearchActivity.startActivity(this);
 		return true;
 	}
+
 }
