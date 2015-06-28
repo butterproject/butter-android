@@ -117,6 +117,10 @@ public class YTSProvider extends MediaProvider {
             params.add(new NameValuePair("order_by", "desc"));
         }
 
+        if(filters.textLang != null) {
+            params.add(new NameValuePair("lang", filters.textLang));
+        }
+
         String sort;
         switch (filters.sort) {
             default:
@@ -145,7 +149,7 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(CURRENT_URL + "list_movies.json?" + query);
+        requestBuilder.url(CURRENT_URL + "list_movies_pct.json?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, filters, callback);
@@ -262,39 +266,8 @@ public class YTSProvider extends MediaProvider {
                             @Override
                             public void onResult(MetaProvider.MetaData metaData, Exception e) {
                                 if (e == null) {
-                                    if (metaData.images != null) {
-                                        if (metaData.images.poster != null) {
-                                            movie.image = metaData.images.poster.replace("/original/", "/medium/");
-                                            movie.fullImage = metaData.images.poster;
-                                        }
-
-                                        if (metaData.images != null && metaData.images.backdrop != null) {
-                                            movie.headerImage = metaData.images.backdrop.replace("/original/", "/medium/");
-                                        }
-                                    } else {
-                                        movie.fullImage = movie.image;
-                                        movie.headerImage = movie.image;
-                                    }
-
-
-                                    if (metaData.title != null) {
-                                        movie.title = metaData.title;
-                                    }
-
-                                    if (metaData.overview != null) {
-                                        movie.synopsis = metaData.overview;
-                                    }
-
-                                    if (metaData.tagline != null) {
-                                        movie.tagline = metaData.tagline;
-                                    }
-
                                     if (metaData.trailer != null) {
                                         movie.trailer = metaData.trailer;
-                                    }
-
-                                    if (metaData.runtime != null) {
-                                        movie.runtime = Integer.toString(metaData.runtime);
                                     }
 
                                     if (metaData.certification != null) {
@@ -359,21 +332,27 @@ public class YTSProvider extends MediaProvider {
          */
         public Movie formatDetailForPopcorn() {
             Movie movie = new Movie(sMediaProvider, sSubsProvider);
-            LinkedTreeMap<String, Object> movieObj = data;
-            if (movieObj == null) return movie;
+            LinkedTreeMap<String, Object> item = data;
+            if (item == null) return movie;
 
-            Double id = (Double) movieObj.get("id");
+            Double id = (Double) item.get("id");
             movie.videoId = Integer.toString(id.intValue());
-            movie.imdbId = (String) movieObj.get("imdb_code");
+            movie.imdbId = (String) item.get("imdb_code");
 
-            movie.title = (String) movieObj.get("title");
-            Double year = (Double) movieObj.get("year");
+            movie.title = (String) item.get("title");
+            Double year = (Double) item.get("year");
             movie.year = Integer.toString(year.intValue());
-            movie.rating = movieObj.get("rating").toString();
-            movie.genre = ((ArrayList<String>) movieObj.get("genres")).get(0);
+            movie.rating = item.get("rating").toString();
+            movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
+            movie.image = (String) item.get("large_cover_image");
+            movie.headerImage = (String) item.get("background_image_original");
+            movie.trailer = "https://youtube.com/?v=" + item.get("yt_trailer_code");
+            movie.runtime = Double.toString((Double) item.get("runtime"));
+            movie.synopsis = (String) item.get("description_full");
+            movie.fullImage = movie.image;
 
             ArrayList<LinkedTreeMap<String, Object>> torrents =
-                    (ArrayList<LinkedTreeMap<String, Object>>) movieObj.get("torrents");
+                    (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
             if (torrents != null) {
                 for (LinkedTreeMap<String, Object> torrentObj : torrents) {
                     String quality = (String) torrentObj.get("quality");
@@ -385,7 +364,7 @@ public class YTSProvider extends MediaProvider {
                     torrent.peers = ((Double) torrentObj.get("peers")).intValue();
                     torrent.hash = (String) torrentObj.get("hash");
                     try {
-                        String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(movieObj.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
+                        String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
                         torrent.url = magnet;
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
@@ -415,8 +394,7 @@ public class YTSProvider extends MediaProvider {
             for (LinkedTreeMap<String, Object> item : movies) {
                 Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
-                Double id = (Double) item.get("id");
-                movie.videoId = Integer.toString(id.intValue());
+                movie.videoId = Double.toString((Double) item.get("id"));
                 movie.imdbId = (String) item.get("imdb_code");
 
                 int existingItem = isInResults(existingList, movie.videoId);
@@ -426,11 +404,12 @@ public class YTSProvider extends MediaProvider {
                     movie.year = Integer.toString(year.intValue());
                     movie.rating = item.get("rating").toString();
                     movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
-                    movie.image = (String) item.get("medium_cover_image");
-
-                    if (movie.image != null) {
-                        movie.image = movie.image.replace("medium-cover", "large-cover");
-                    }
+                    movie.image = (String) item.get("large_cover_image");
+                    movie.headerImage = (String) item.get("background_image_original");
+                    movie.trailer = "https://youtube.com/?v=" + item.get("yt_trailer_code");
+                    movie.runtime = Double.toString((Double) item.get("runtime"));
+                    movie.synopsis = (String) item.get("description_full");
+                    movie.fullImage = movie.image;
 
                     ArrayList<LinkedTreeMap<String, Object>> torrents =
                             (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
@@ -445,7 +424,7 @@ public class YTSProvider extends MediaProvider {
                             torrent.peers = ((Double) torrentObj.get("peers")).intValue();
                             torrent.hash = (String) torrentObj.get("hash");
                             try {
-                                torrent.url = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
+                                torrent.url = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                                 torrent.url = (String) torrentObj.get("url");
