@@ -85,8 +85,6 @@
     <string name="encountered_error_title">Video error encountered</string>
     <string name="encountered_error">The video player encountered a serious error. The video file could not be opened and/or played. The format was not recognised.</string>
 
-
-
 	<!-- WifiOnlyDialogFragment -->
 	<string name="wifi_only">Wi-Fi only</string>
 	<string name="wifi_only_message">You can only stream videos over Wi-Fi. You can disable this in preferences if you want to stream over a cellular connection.</string>

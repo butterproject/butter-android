@@ -59,7 +59,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        sDefSystemLanguage = LocaleUtils.getCurrent();
+        sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
         LeakCanary.install(this);
         Foreground.init(this);
@@ -115,7 +115,7 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        sDefSystemLanguage = LocaleUtils.getCurrent();
+        sDefSystemLanguage = LocaleUtils.getCurrentAsString();
     }
 
     @Override
