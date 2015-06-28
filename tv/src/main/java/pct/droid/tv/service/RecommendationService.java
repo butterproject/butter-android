@@ -139,7 +139,7 @@ public class RecommendationService extends IntentService {
                         .setId(TOTAL_COUNT)
                         .setPriority(PRIORITY)
                         .setTitle(movie.title)
-                        .setDescription(movie.tagline)
+                        .setDescription(movie.synopsis)
                         .setImage(movie.image)
                         .setIntent(buildPendingIntent(movie))
                         .build();
