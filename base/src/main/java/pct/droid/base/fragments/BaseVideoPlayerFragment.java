@@ -153,15 +153,18 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
 
         mVideoSurfaceHolder = getVideoSurface().getHolder();
-        // Comment Chroma code out, experimental: will not work on all devices. To be added in settings later.
-        //String chroma = mSettings.getString("chroma_format", "");
-        //if(chroma.equals("YV12")) {
-        //    mSurfaceHolder.setFormat(ImageFormat.YV12);
-        //} else if (chroma.equals("RV16")) {
-        //    mSurfaceHolder.setFormat(PixelFormat.RGB_565);
-        //} else {
-        mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
-        //}
+        String chroma = PrefUtils.get(getActivity(), Prefs.PIXEL_FORMAT, "");
+        switch (chroma) {
+            case "YV12":
+                mVideoSurfaceHolder.setFormat(ImageFormat.YV12);
+                break;
+            case "RV16":
+                mVideoSurfaceHolder.setFormat(PixelFormat.RGB_565);
+                break;
+            default:
+                mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
+                break;
+        }
         mVideoSurfaceHolder.addCallback(mSurfaceCallback);
 
         EventHandler em = EventHandler.getInstance();
@@ -258,7 +261,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(mLibVLC.getLength() == 0) {
+                if (mLibVLC.getLength() == 0) {
                     loadMedia();
                     setProgressVisible(true);
                 }
