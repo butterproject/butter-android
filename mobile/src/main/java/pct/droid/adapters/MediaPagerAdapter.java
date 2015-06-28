@@ -59,10 +59,10 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (mHasGenreTabs > 0 && position == 0) {
-            return PopcornApplication.getAppContext().getString(R.string.genres).toUpperCase(LocaleUtils.getCurrentAsLocale());
+            return PopcornApplication.getAppContext().getString(R.string.genres).toUpperCase(LocaleUtils.getCurrent());
         }
         position -= mHasGenreTabs;
-        return mTabs.get(position).getLabel().toUpperCase(LocaleUtils.getCurrentAsLocale());
+        return mTabs.get(position).getLabel().toUpperCase(LocaleUtils.getCurrent());
     }
 
     @Override

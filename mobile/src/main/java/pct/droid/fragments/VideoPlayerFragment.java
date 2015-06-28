@@ -147,7 +147,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         });
         ButterKnife.inject(this, view);
 
-        if (LocaleUtils.isRTL(LocaleUtils.getCurrentAsLocale())) {
+        if (LocaleUtils.isRTL(LocaleUtils.getCurrent())) {
             Drawable forward = mForwardButton.getDrawable();
             Drawable rewind = mRewindButton.getDrawable();
             mRewindButton.setImageDrawable(forward);
