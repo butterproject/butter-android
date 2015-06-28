@@ -58,6 +58,7 @@ public class YTSProvider extends MediaProvider {
     public static String CURRENT_URL = API_URL;
 
     private static final SubsProvider sSubsProvider = new YSubsProvider();
+    private static Filters sFilters = new Filters();
 
     @Override
     protected OkHttpClient getClient() {
@@ -86,6 +87,8 @@ public class YTSProvider extends MediaProvider {
 
     @Override
     public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
+        sFilters = filters;
+
         final ArrayList<Media> currentList;
         if (existingList == null) {
             currentList = new ArrayList<>();
@@ -212,7 +215,7 @@ public class YTSProvider extends MediaProvider {
     @Override
     public Call getDetail(String videoId, Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + "movie_details.json?movie_id=" + videoId);
+        requestBuilder.url(API_URL + "list_movies_pct.json?query_term=" + videoId + "&limit=1&lang=" + sFilters.langCode);
         requestBuilder.addHeader("Host", "xor.image.yt");
         requestBuilder.tag(MEDIA_CALL);
 
@@ -329,12 +332,11 @@ public class YTSProvider extends MediaProvider {
          */
         public Movie formatDetailForPopcorn() {
             Movie movie = new Movie(sMediaProvider, sSubsProvider);
-            LinkedTreeMap<String, Object> item = data;
+            LinkedTreeMap<String, Object> item = ((ArrayList<LinkedTreeMap<String, Object>>) data.get("movies")).get(0);
             if (item == null) return movie;
 
-            Double id = (Double) item.get("id");
-            movie.videoId = Integer.toString(id.intValue());
-            movie.imdbId = (String) item.get("imdb_code");
+            movie.videoId = (String) item.get("imdb_code");
+            movie.imdbId = movie.videoId;
 
             movie.title = (String) item.get("title");
             Double year = (Double) item.get("year");
@@ -344,7 +346,8 @@ public class YTSProvider extends MediaProvider {
             movie.image = (String) item.get("large_cover_image");
             movie.headerImage = (String) item.get("background_image_original");
             movie.trailer = "https://youtube.com/?v=" + item.get("yt_trailer_code");
-            movie.runtime = Double.toString((Double) item.get("runtime"));
+            Double runtime = (Double) item.get("runtime");
+            movie.runtime = Integer.toString(runtime.intValue());
             movie.synopsis = (String) item.get("description_full");
             movie.fullImage = movie.image;
 
@@ -361,7 +364,7 @@ public class YTSProvider extends MediaProvider {
                     torrent.peers = ((Double) torrentObj.get("peers")).intValue();
                     torrent.hash = (String) torrentObj.get("hash");
                     try {
-                        String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title_long").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
+                        String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
                         torrent.url = magnet;
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
@@ -391,8 +394,8 @@ public class YTSProvider extends MediaProvider {
             for (LinkedTreeMap<String, Object> item : movies) {
                 Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
-                movie.videoId = Double.toString((Double) item.get("id"));
-                movie.imdbId = (String) item.get("imdb_code");
+                movie.videoId = (String) item.get("imdb_code");
+                movie.imdbId = movie.videoId;
 
                 int existingItem = isInResults(existingList, movie.videoId);
                 if (existingItem == -1) {
