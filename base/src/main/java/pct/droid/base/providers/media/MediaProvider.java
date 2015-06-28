@@ -86,7 +86,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
         public Order order = Order.DESC;
         public Sort sort = Sort.POPULARITY;
         public Integer page = null;
-        public String textLang = "en";
+        public String langCode = "en";
 
         public Filters() { }
 
