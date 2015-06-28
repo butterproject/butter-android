@@ -96,6 +96,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
             order = filters.order;
             sort = filters.sort;
             page = filters.page;
+            langCode = filters.langCode;
         }
     }
 

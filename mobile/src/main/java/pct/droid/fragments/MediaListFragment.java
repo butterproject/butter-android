@@ -45,9 +45,11 @@ import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.LocaleUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.LoadingDetailDialogFragment;
 import timber.log.Timber;
@@ -193,7 +195,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         // if not changed use default order
         mFilters.order = mDefOrder;
         mFilters.genre = getArguments().getString(EXTRA_GENRE);
-        mFilters.langCode = LocaleUtils.getCurrent().getLanguage();
+
+        String language = PrefUtils.get(getActivity(), Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        mFilters.langCode = LocaleUtils.toLocale(language).getLanguage();
 
         mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
         if (mMode == Mode.SEARCH) mEmptyView.setText(getString(R.string.no_search_results));
