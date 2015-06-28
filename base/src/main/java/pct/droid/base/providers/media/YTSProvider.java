@@ -26,7 +26,6 @@ import android.os.Build;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
@@ -39,8 +38,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import pct.droid.base.BuildConfig;
-import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Genre;
@@ -83,7 +80,7 @@ public class YTSProvider extends MediaProvider {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrent(), Build.MODEL, Build.DISPLAY, versionName)).build();
+        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrentAsString(), Build.MODEL, Build.DISPLAY, versionName)).build();
         return super.enqueue(request, requestCallback);
     }
 
@@ -117,8 +114,8 @@ public class YTSProvider extends MediaProvider {
             params.add(new NameValuePair("order_by", "desc"));
         }
 
-        if(filters.textLang != null) {
-            params.add(new NameValuePair("lang", filters.textLang));
+        if(filters.langCode != null) {
+            params.add(new NameValuePair("lang", filters.langCode));
         }
 
         String sort;

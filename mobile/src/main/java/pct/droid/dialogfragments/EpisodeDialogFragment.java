@@ -21,12 +21,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -36,20 +32,16 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -236,7 +228,7 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mAired.setVisibility(mEpisode.aired > 0 ? View.VISIBLE : View.GONE);
         Date airedDate = new Date((long) mEpisode.aired * 1000);
-        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrentAsLocale()).format(airedDate)));
+        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrent()).format(airedDate)));
 
         if (!TextUtils.isEmpty(mEpisode.overview))
             mSynopsis.setText(mEpisode.overview);
