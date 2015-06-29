@@ -61,7 +61,7 @@
 
         <pct.droid.widget.SquareImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignTop="@id/rating"
             android:layout_alignBottom="@id/rating"
             android:layout_toEndOf="@id/rating"
@@ -71,6 +71,7 @@
             android:maxWidth="20dp"
             android:id="@+id/health"
             android:src="@drawable/ic_health_unknown"
+            android:layout_centerVertical="true"
             android:visibility="gone"
             tools:visibility="visible"
             android:adjustViewBounds="true" />
