@@ -51,7 +51,6 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import timber.log.Timber;
@@ -326,7 +325,7 @@ public class TorrentService extends Service {
 
                 mCurrentTorrent.prepareTorrent();
 
-                Timber.d("Video location: %s", mCurrentVideoLocation);
+                Timber.d("Video location: %s", mCurrentTorrent.getVideoFile());
             }
         });
     }
