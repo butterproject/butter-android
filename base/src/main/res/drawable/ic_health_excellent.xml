@@ -18,4 +18,5 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
     <solid android:color="@color/excellent_health" />
+    <size android:height="14dp" android:width="14dp" />
 </shape>

@@ -213,13 +213,12 @@ public class Torrent extends TorrentAlertAdapter {
 
         mPieceIndices = indices;
 
-        int blockCount = 0;
+        double blockCount = 0;
         for(Integer index : indices) {
             blockCount += (int) Math.ceil(th.getTorrentInfo().getPieceSize(index) / th.getStatus().getBlockSize());
         }
 
-        double totalBlocks = (mPieceIndices.size() * blockCount);
-        mProgressStep = 100 / totalBlocks;
+        mProgressStep = 100 / blockCount;
 
         mTorrentHandle.resume();
 
