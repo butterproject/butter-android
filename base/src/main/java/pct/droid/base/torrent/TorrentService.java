@@ -70,7 +70,6 @@ public class TorrentService extends Service {
     private Torrent mCurrentTorrent;
 
     private String mCurrentTorrentUrl = "";
-    private File mCurrentVideoLocation;
     private boolean mIsStreaming = false, mIsCanceled = false, mReady = false, mInForeground = false, mIsBound = false;
 
     private boolean mInitialised = false;
@@ -321,11 +320,10 @@ public class TorrentService extends Service {
                     return;
                 }
 
-                mCurrentTorrent = new Torrent(mTorrentSession.addTorrent(torrentFile, saveDirectory));
+                mCurrentTorrent = new Torrent(mTorrentSession.addTorrent(torrentFile, saveDirectory), torrentFile);
                 mCurrentTorrent.setListener(new TorrentListener());
                 mTorrentSession.addListener(mCurrentTorrent);
 
-                mCurrentVideoLocation = new File(saveDirectory, mCurrentTorrent.getFilePath());
                 mCurrentTorrent.prepareTorrent();
 
                 Timber.d("Video location: %s", mCurrentVideoLocation);
@@ -345,21 +343,21 @@ public class TorrentService extends Service {
         mIsCanceled = true;
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
+            File currentTorrentFile = mCurrentTorrent.getTorrentFile();
+            File currentVideoFile = mCurrentTorrent.getVideoFile();
+
             mCurrentTorrent.pause();
             mTorrentSession.removeListener(mCurrentTorrent);
             mTorrentSession.removeTorrent(mCurrentTorrent.getTorrentHandle());
             mCurrentTorrent = null;
+
+            if (PrefUtils.get(TorrentService.this, Prefs.REMOVE_CACHE, true)) {
+                currentVideoFile.delete();
+            }
+            currentTorrentFile.delete();
         }
 
-        File saveDirectory = new File(PopcornApplication.getStreamDir());
-        File torrentPath = saveDirectory;
-        if (!PrefUtils.get(TorrentService.this, Prefs.REMOVE_CACHE, true)) {
-            torrentPath = new File(saveDirectory, "files");
-        }
-        FileUtils.recursiveDelete(torrentPath);
-        saveDirectory.mkdirs();
-
-        Timber.d("Stopped torrent and removed files");
+        Timber.d("Stopped torrent and removed files if possible");
     }
 
     public boolean isStreaming() {
@@ -371,7 +369,7 @@ public class TorrentService extends Service {
     }
 
     public File getCurrentVideoLocation() {
-        return mCurrentVideoLocation;
+        return mCurrentTorrent.getVideoFile();
     }
 
     public boolean isReady() {
@@ -472,12 +470,12 @@ public class TorrentService extends Service {
         }
 
         @Override
-        public void onStreamReady(String fileName) {
+        public void onStreamReady(final File file) {
             for (final Listener listener : mListener) {
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        listener.onStreamReady(mCurrentVideoLocation);
+                        listener.onStreamReady(file);
                     }
                 });
             }
