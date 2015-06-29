@@ -209,7 +209,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
 
             startVideo();
         } catch (Exception e) {
-            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             getActivity().finish();
         }
     }
