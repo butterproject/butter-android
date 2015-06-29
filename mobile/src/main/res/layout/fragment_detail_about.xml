@@ -50,7 +50,7 @@
         <RatingBar
             android:id="@+id/rating"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="16dp"
             android:layout_below="@id/title"
             android:layout_marginTop="@dimen/detail_rating_margin_top"
             android:clickable="false"
@@ -72,7 +72,8 @@
             android:id="@+id/health"
             android:src="@drawable/ic_health_unknown"
             android:visibility="gone"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            android:adjustViewBounds="true" />
 
         <ImageButton
             android:layout_width="15dp"
