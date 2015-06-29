@@ -76,8 +76,6 @@ public class Torrent extends TorrentAlertAdapter {
         mTorrentHandle = torrentHandle;
         mTorrentFile = torrentFile;
 
-        torrentHandle.pause();
-
         torrentHandle.setPriority(7);
 
         TorrentInfo torrentInfo = mTorrentHandle.getTorrentInfo();

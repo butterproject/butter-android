@@ -102,9 +102,7 @@ public class FileUtils {
         }
 
         File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
-        while(!file.renameTo(to)) {
-            Timber.d("Trying to delete file");
-        }
+        file.renameTo(to);
         to.delete();
     }
 
