@@ -29,9 +29,11 @@ import com.frostwire.jlibtorrent.alerts.PeerDisconnectedAlert;
 import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
 import com.frostwire.jlibtorrent.swig.int_vector;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import pct.droid.base.PopcornApplication;
 import timber.log.Timber;
 
 public class Torrent extends TorrentAlertAdapter {
@@ -48,6 +50,8 @@ public class Torrent extends TorrentAlertAdapter {
     private final int mLastPieceIndex;
     private final int mFirstPieceIndex;
     private final int mSelectedFile;
+
+    private File mTorrentFile;
 
     private Double mPrepareProgress = 0d;
     private Double mProgressStep = 0d;
@@ -67,9 +71,11 @@ public class Torrent extends TorrentAlertAdapter {
      *
      * @param torrentHandle {@link TorrentHandle}
      */
-    public Torrent(TorrentHandle torrentHandle) {
+    public Torrent(TorrentHandle torrentHandle, File torrentFile) {
         super(torrentHandle);
-        this.mTorrentHandle = torrentHandle;
+        mTorrentHandle = torrentHandle;
+        mTorrentFile = torrentFile;
+
         torrentHandle.pause();
 
         torrentHandle.setPriority(7);
@@ -174,8 +180,12 @@ public class Torrent extends TorrentAlertAdapter {
         return priorities;
     }
 
-    public String getFilePath() {
-        return mTorrentHandle.getTorrentInfo().getFileAt(mSelectedFile).getPath();
+    public File getVideoFile() {
+        return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFileAt(mSelectedFile).getPath());
+    }
+
+    public File getTorrentFile() {
+        return mTorrentFile;
     }
 
     public void resume() {
@@ -260,7 +270,7 @@ public class Torrent extends TorrentAlertAdapter {
             mState = State.STREAMING;
 
             if(mListener != null)
-                mListener.onStreamReady(getFilePath());
+                mListener.onStreamReady(getVideoFile());
         }
     }
 
@@ -310,7 +320,7 @@ public class Torrent extends TorrentAlertAdapter {
 
         void onStreamError(Exception e);
 
-        void onStreamReady(String fileName);
+        void onStreamReady(File videoFile);
 
         void onStreamProgress(DownloadStatus status);
     }
