@@ -41,6 +41,7 @@ import java.nio.charset.CharsetDecoder;
 import java.util.HashMap;
 
 import pct.droid.base.io.UnicodeBOMInputStream;
+import timber.log.Timber;
 
 public class FileUtils {
 
@@ -99,7 +100,12 @@ public class FileUtils {
                 recursiveDelete(new File(file, child));
             }
         }
-        file.delete();
+
+        File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
+        while(!file.renameTo(to)) {
+            Timber.d("Trying to delete file");
+        }
+        to.delete();
     }
 
     /**

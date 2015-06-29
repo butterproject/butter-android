@@ -24,6 +24,8 @@ import com.frostwire.jlibtorrent.TorrentHandle;
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.frostwire.jlibtorrent.TorrentStatus;
 import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
+import com.frostwire.jlibtorrent.alerts.PeerConnectAlert;
+import com.frostwire.jlibtorrent.alerts.PeerDisconnectedAlert;
 import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
 import com.frostwire.jlibtorrent.swig.int_vector;
 
@@ -274,9 +276,26 @@ public class Torrent extends TorrentAlertAdapter {
             }
         }
 
-        final float progress = status.getProgress() * 100;
-        final int seeds = status.getNumSeeds();
-        final int downloadSpeed = status.getDownloadPayloadRate();
+        sendStreamProgress();
+    }
+
+    @Override
+    public void peerConnect(PeerConnectAlert alert) {
+        super.peerConnect(alert);
+        sendStreamProgress();
+    }
+
+    @Override
+    public void peerDisconnected(PeerDisconnectedAlert alert) {
+        super.peerDisconnected(alert);
+        sendStreamProgress();
+    }
+
+    private void sendStreamProgress() {
+        TorrentStatus status = th.getStatus();
+        float progress = status.getProgress() * 100;
+        int seeds = status.getNumSeeds();
+        int downloadSpeed = status.getDownloadPayloadRate();
 
         if(mListener != null)
             mListener.onStreamProgress(new DownloadStatus(progress, mPrepareProgress.intValue(), seeds, downloadSpeed));
