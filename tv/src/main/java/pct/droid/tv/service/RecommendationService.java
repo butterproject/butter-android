@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.squareup.okhttp.Call;
 
+import junit.runner.Version;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +28,7 @@ import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.fragments.PTVMovieDetailsFragment;
@@ -52,6 +55,10 @@ public class RecommendationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        if(!VersionUtils.isAndroidTV()) {
+            return;
+        }
+
         MediaProvider.Filters movieFilter = new MediaProvider.Filters();
         movieFilter.order = MediaProvider.Filters.Order.DESC;
         movieFilter.sort = MediaProvider.Filters.Sort.POPULARITY;
