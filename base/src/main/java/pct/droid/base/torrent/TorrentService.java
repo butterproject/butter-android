@@ -33,9 +33,11 @@ import android.support.v4.app.NotificationCompat;
 
 import com.frostwire.jlibtorrent.DHT;
 import com.frostwire.jlibtorrent.Downloader;
+import com.frostwire.jlibtorrent.Priority;
 import com.frostwire.jlibtorrent.Session;
 import com.frostwire.jlibtorrent.SessionSettings;
-import com.frostwire.jlibtorrent.Utils;
+import com.frostwire.jlibtorrent.TorrentInfo;
+import com.frostwire.jlibtorrent.alerts.TorrentAddedAlert;
 import com.sjl.foreground.Foreground;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -45,7 +47,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
@@ -145,7 +146,7 @@ public class TorrentService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(pct.droid.base.R.drawable.ic_notif_logo)
+                .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle("Popcorn Time - " + getString(pct.droid.base.R.string.running))
                 .setContentText(getString(R.string.tap_to_resume))
                 .setOngoing(true)
@@ -214,6 +215,7 @@ public class TorrentService extends Service {
                     SessionSettings sessionSettings = mTorrentSession.getSettings();
                     sessionSettings.setAnonymousMode(true);
                     mTorrentSession.setSettings(sessionSettings);
+                    mTorrentSession.addListener(mAlertListener);
                     Timber.d("Init DHT");
                     mDHT = new DHT(mTorrentSession);
                     mDHT.start();
@@ -270,62 +272,17 @@ public class TorrentService extends Service {
                 File saveDirectory = new File(PopcornApplication.getStreamDir());
                 saveDirectory.mkdirs();
 
-                File torrentFileDir = new File(saveDirectory, "files");
-                torrentFileDir.mkdirs();
-
-                Random random = new Random();
-                long randomInt = System.currentTimeMillis() + random.nextInt();
-                File torrentFile = new File(torrentFileDir, randomInt + ".torrent");
-
-                if (!torrentFile.exists()) {
-                    int fileCreationTries = 0;
-                    while (fileCreationTries < 4) {
-                        try {
-                            fileCreationTries++;
-                            if (torrentFileDir.mkdirs() || torrentFileDir.isDirectory()) {
-                                Timber.d("Creating torrent file");
-                                if(torrentFile.createNewFile())
-                                    fileCreationTries = 4;
-                            }
-                        } catch (IOException e) {
-                            Timber.e(e, "Error on file create");
-                        }
-                    }
-
-                    if (!getTorrentFile(torrentUrl, torrentFile)) {
-                        for (final Listener listener : mListener) {
-                            ThreadUtils.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listener.onStreamError(new IOException("Write error"));
-                                }
-                            });
-                        }
-                        return;
-                    } else if (!torrentFile.exists()) {
-                        for (final Listener listener : mListener) {
-                            ThreadUtils.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listener.onStreamError(new IOException("Write error"));
-                                }
-                            });
-                        }
-                        return;
-                    }
+                TorrentInfo torrentInfo = getTorrentInfo(torrentUrl);
+                Priority[] priorities = new Priority[torrentInfo.getNumPieces()];
+                for(int i = 0; i < priorities.length; i++) {
+                    priorities[i] = Priority.NORMAL;
                 }
 
                 if (!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
                     return;
                 }
 
-                mCurrentTorrent = new Torrent(mTorrentSession.addTorrent(torrentFile, saveDirectory), torrentFile);
-                mCurrentTorrent.setListener(new TorrentListener());
-                mTorrentSession.addListener(mCurrentTorrent);
-
-                mCurrentTorrent.prepareTorrent();
-
-                Timber.d("Video location: %s", mCurrentTorrent.getVideoFile());
+                mTorrentSession.asyncAddTorrent(torrentInfo, saveDirectory, priorities, null);
             }
         });
     }
@@ -342,7 +299,6 @@ public class TorrentService extends Service {
         mIsCanceled = true;
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
-            File currentTorrentFile = mCurrentTorrent.getTorrentFile();
             File currentVideoFile = mCurrentTorrent.getVideoFile();
 
             mCurrentTorrent.pause();
@@ -353,7 +309,6 @@ public class TorrentService extends Service {
             if (PrefUtils.get(TorrentService.this, Prefs.REMOVE_CACHE, true)) {
                 currentVideoFile.delete();
             }
-            currentTorrentFile.delete();
         }
 
         Timber.d("Stopped torrent and removed files if possible");
@@ -383,43 +338,36 @@ public class TorrentService extends Service {
         mListener.remove(listener);
     }
 
-    private boolean getTorrentFile(String torrentUrl, File destination) {
+    private TorrentInfo getTorrentInfo(String torrentUrl) {
         if (torrentUrl.startsWith("magnet")) {
             Downloader d = new Downloader(mTorrentSession);
 
             Timber.d("Waiting for nodes in DHT");
-            if (mDHT.nodes() < 1) {
+            if(!mDHT.isRunning()) {
                 mDHT.start();
-                mDHT.waitNodes(1);
             }
+
+            if (mDHT.nodes() < 1) {
+                mDHT.waitNodes(30);
+            }
+
             Timber.d("Nodes in DHT: %s", mDHT.nodes());
 
             Timber.d("Fetching the magnet uri, please wait...");
             byte[] data = d.fetchMagnet(torrentUrl, 30000);
 
-            if (data != null) {
-                try {
-                    Utils.writeByteArrayToFile(destination, data);
-                    Timber.d("Torrent data saved to: %s,", destination);
-                    return true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            Timber.d("Failed to retrieve the magnet");
+            return TorrentInfo.bdecode(data);
         } else {
             OkHttpClient client = PopcornApplication.getHttpClient();
             Request request = new Request.Builder().url(torrentUrl).build();
             try {
                 Response response = client.newCall(request).execute();
-                Utils.writeByteArrayToFile(destination, response.body().bytes());
-                return true;
+                return TorrentInfo.bdecode(response.body().bytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return false;
+        return null;
     }
 
     public static void bindHere(Context context, ServiceConnection serviceConnection) {
@@ -510,6 +458,20 @@ public class TorrentService extends Service {
             } else {
                 startForeground();
             }
+        }
+    };
+
+    private TorrentAlertListener mAlertListener = new TorrentAlertListener() {
+        @Override
+        public void torrentAdded(TorrentAddedAlert alert) {
+            super.torrentAdded(alert);
+            mCurrentTorrent = new Torrent(alert.getHandle());
+            mCurrentTorrent.setListener(new TorrentListener());
+            mTorrentSession.addListener(mCurrentTorrent);
+
+            mCurrentTorrent.prepareTorrent();
+
+            Timber.d("Video location: %s", mCurrentTorrent.getVideoFile());
         }
     };
 
