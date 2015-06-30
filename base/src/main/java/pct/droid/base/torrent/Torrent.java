@@ -19,14 +19,15 @@ package pct.droid.base.torrent;
 
 import com.frostwire.jlibtorrent.FileStorage;
 import com.frostwire.jlibtorrent.Priority;
-import com.frostwire.jlibtorrent.TorrentAlertAdapter;
 import com.frostwire.jlibtorrent.TorrentHandle;
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.frostwire.jlibtorrent.TorrentStatus;
+import com.frostwire.jlibtorrent.alerts.Alert;
 import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
 import com.frostwire.jlibtorrent.alerts.PeerConnectAlert;
 import com.frostwire.jlibtorrent.alerts.PeerDisconnectedAlert;
 import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
+import com.frostwire.jlibtorrent.alerts.TorrentAlert;
 import com.frostwire.jlibtorrent.swig.int_vector;
 
 import java.io.File;
@@ -36,7 +37,7 @@ import java.util.List;
 import pct.droid.base.PopcornApplication;
 import timber.log.Timber;
 
-public class Torrent extends TorrentAlertAdapter {
+public class Torrent extends TorrentAlertListener {
 
     private final static Integer MAX_PREPARE_COUNT = 20;
     private final static Integer MIN_PREPARE_COUNT = 2;
@@ -50,8 +51,6 @@ public class Torrent extends TorrentAlertAdapter {
     private final int mLastPieceIndex;
     private final int mFirstPieceIndex;
     private final int mSelectedFile;
-
-    private File mTorrentFile;
 
     private Double mPrepareProgress = 0d;
     private Double mProgressStep = 0d;
@@ -71,10 +70,8 @@ public class Torrent extends TorrentAlertAdapter {
      *
      * @param torrentHandle {@link TorrentHandle}
      */
-    public Torrent(TorrentHandle torrentHandle, File torrentFile) {
-        super(torrentHandle);
+    public Torrent(TorrentHandle torrentHandle) {
         mTorrentHandle = torrentHandle;
-        mTorrentFile = torrentFile;
 
         torrentHandle.setPriority(7);
 
@@ -182,10 +179,6 @@ public class Torrent extends TorrentAlertAdapter {
         return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFileAt(mSelectedFile).getPath());
     }
 
-    public File getTorrentFile() {
-        return mTorrentFile;
-    }
-
     public void resume() {
         mTorrentHandle.resume();
     }
@@ -225,7 +218,7 @@ public class Torrent extends TorrentAlertAdapter {
 
         double blockCount = 0;
         for(Integer index : indices) {
-            blockCount += (int) Math.ceil(th.getTorrentInfo().getPieceSize(index) / th.getStatus().getBlockSize());
+            blockCount += (int) Math.ceil(mTorrentHandle.getTorrentInfo().getPieceSize(index) / mTorrentHandle.getStatus().getBlockSize());
         }
 
         mProgressStep = 100 / blockCount;
@@ -252,8 +245,6 @@ public class Torrent extends TorrentAlertAdapter {
     @Override
     public void pieceFinished(PieceFinishedAlert alert) {
         super.pieceFinished(alert);
-        TorrentHandle th = alert.getHandle();
-        if (!th.getInfoHash().equals(mTorrentHandle.getInfoHash())) return;
 
         for(Integer index : mPieceIndices) {
             if(mTorrentHandle.havePiece(index))
@@ -274,9 +265,6 @@ public class Torrent extends TorrentAlertAdapter {
 
     public void blockFinished(BlockFinishedAlert alert) {
         super.blockFinished(alert);
-        TorrentHandle th = alert.getHandle();
-        if (!th.getInfoHash().equals(mTorrentHandle.getInfoHash())) return;
-        TorrentStatus status = th.getStatus();
 
         for(Integer index : mPieceIndices) {
             if(index == alert.getPieceIndex()) {
@@ -300,12 +288,12 @@ public class Torrent extends TorrentAlertAdapter {
     }
 
     private void sendStreamProgress() {
-        TorrentStatus status = th.getStatus();
+        TorrentStatus status = mTorrentHandle.getStatus();
         float progress = status.getProgress() * 100;
         int seeds = status.getNumSeeds();
         int downloadSpeed = status.getDownloadPayloadRate();
 
-        if(mListener != null)
+        if(mListener != null && mPrepareProgress >= 1)
             mListener.onStreamProgress(new DownloadStatus(progress, mPrepareProgress.intValue(), seeds, downloadSpeed));
     }
 
@@ -321,6 +309,16 @@ public class Torrent extends TorrentAlertAdapter {
         void onStreamReady(File videoFile);
 
         void onStreamProgress(DownloadStatus status);
+    }
+
+    @Override
+    public void alert(Alert<?> alert) {
+        // block alerts not for this torrent
+        if ((alert instanceof TorrentAlert<?>) && !((TorrentAlert<?>) alert).getHandle().getSwig().op_eq(mTorrentHandle.getSwig())) {
+            return;
+        }
+
+        super.alert(alert);
     }
 
 }
