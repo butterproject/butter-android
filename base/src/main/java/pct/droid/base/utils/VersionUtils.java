@@ -17,7 +17,12 @@
 
 package pct.droid.base.utils;
 
+import android.app.UiModeManager;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
+
+import pct.droid.base.PopcornApplication;
 
 public class VersionUtils {
 
@@ -27,6 +32,11 @@ public class VersionUtils {
 
     public static boolean isJellyBean() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+    }
+
+    public static boolean isAndroidTV() {
+        UiModeManager uiModeManager = (UiModeManager) PopcornApplication.getAppContext().getSystemService(Context.UI_MODE_SERVICE);
+        return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
     }
 
 }
