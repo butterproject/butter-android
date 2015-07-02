@@ -58,6 +58,7 @@ import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.VersionUtils;
 
 public class PopcornUpdater extends Observable {
 
@@ -129,7 +130,7 @@ public class PopcornUpdater extends Observable {
                 }
             }
         } else {
-            sendNotification();
+            showMessage();
         }
 
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -269,7 +270,7 @@ public class PopcornUpdater extends Observable {
                             .putString(UPDATE_FILE, fileName)
                             .putLong(SHA1_TIME, System.currentTimeMillis())
                             .apply();
-                    sendNotification();
+                    showMessage();
 
                     setChanged();
                     notifyObservers(STATUS_HAVE_UPDATE);
@@ -300,29 +301,33 @@ public class PopcornUpdater extends Observable {
         }
     };
 
-    public void sendNotification() {
-        NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+    public void showMessage() {
+        if(!VersionUtils.isAndroidTV()) {
+            NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
-        if (updateFile.length() > 0) {
-            setChanged();
-            notifyObservers(STATUS_HAVE_UPDATE);
+            String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
+            if (updateFile.length() > 0) {
+                setChanged();
+                notifyObservers(STATUS_HAVE_UPDATE);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
-                    .setSmallIcon(R.drawable.ic_notif_logo)
-                    .setContentTitle(mContext.getString(R.string.update_available))
-                    .setContentText(mContext.getString(R.string.press_install))
-                    .setAutoCancel(true)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL);
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
+                        .setSmallIcon(R.drawable.ic_notif_logo)
+                        .setContentTitle(mContext.getString(R.string.update_available))
+                        .setContentText(mContext.getString(R.string.press_install))
+                        .setAutoCancel(true)
+                        .setDefaults(NotificationCompat.DEFAULT_ALL);
 
-            Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-            notificationIntent.setDataAndType(Uri.parse("file://" + mContext.getFilesDir().getAbsolutePath() + "/" + updateFile), ANDROID_PACKAGE);
+                Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+                notificationIntent.setDataAndType(Uri.parse("file://" + mContext.getFilesDir().getAbsolutePath() + "/" + updateFile), ANDROID_PACKAGE);
 
-            notificationBuilder.setContentIntent(PendingIntent.getActivity(mContext, 0, notificationIntent, 0));
+                notificationBuilder.setContentIntent(PendingIntent.getActivity(mContext, 0, notificationIntent, 0));
 
-            nm.notify(NOTIFICATION_ID, notificationBuilder.build());
+                nm.notify(NOTIFICATION_ID, notificationBuilder.build());
+            } else {
+                nm.cancel(NOTIFICATION_ID);
+            }
         } else {
-            nm.cancel(NOTIFICATION_ID);
+            // TODO: show dialog on Android TV
         }
     }
 
