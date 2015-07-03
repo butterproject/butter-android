@@ -76,7 +76,7 @@ public class PopcornUpdater {
     private final long WAKEUP_INTERVAL = 15 * MINUTES;
     private long UPDATE_INTERVAL = 3 * HOURS;
 
-    public final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
+    public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
     private final String DATA_URL = "http://ci.popcorntime.io/android";
 
     public static final String LAST_UPDATE_CHECK = "update_check";

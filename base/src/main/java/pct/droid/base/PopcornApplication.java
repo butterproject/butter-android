@@ -27,7 +27,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.multidex.MultiDex;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.sjl.foreground.Foreground;
