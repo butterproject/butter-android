@@ -17,12 +17,17 @@
 
 package pct.droid.base;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.NotificationCompat;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.sjl.foreground.Foreground;
@@ -33,6 +38,7 @@ import com.squareup.picasso.Picasso;
 import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
+import java.util.Observer;
 
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
@@ -43,9 +49,11 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 import com.squareup.leakcanary.RefWatcher;
+
+import pct.droid.base.utils.VersionUtils;
 import timber.log.Timber;
 
-public class PopcornApplication extends VLCApplication {
+public abstract class PopcornApplication extends VLCApplication implements PopcornUpdater.Listener {
 
     private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
@@ -107,7 +115,7 @@ public class PopcornApplication extends VLCApplication {
         builder.downloader(downloader);
         Picasso.setSingletonInstance(builder.build());
 
-        PopcornUpdater.getInstance(this).checkUpdates(false);
+        PopcornUpdater.getInstance(this, this).checkUpdates(false);
     }
 
     @Override
@@ -151,4 +159,25 @@ public class PopcornApplication extends VLCApplication {
         return directory.toString();
     }
 
+    @Override
+    public void updateAvailable() {
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String updateFile = PrefUtils.get(this, PopcornUpdater.UPDATE_FILE, "");
+        if (updateFile.length() > 0) {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_notif_logo)
+                    .setContentTitle(getString(R.string.update_available))
+                    .setContentText(getString(R.string.press_install))
+                    .setAutoCancel(true)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL);
+
+            Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+            notificationIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
+
+            notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0));
+
+            nm.notify(PopcornUpdater.NOTIFICATION_ID, notificationBuilder.build());
+        }
+    }
 }
