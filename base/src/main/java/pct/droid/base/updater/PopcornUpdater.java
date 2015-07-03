@@ -60,16 +60,15 @@ import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.VersionUtils;
 
-public class PopcornUpdater extends Observable {
+public class PopcornUpdater {
 
     private static PopcornUpdater sThis;
 
-    private static int NOTIFICATION_ID = 0xDEADBEEF;
-
-    public final String STATUS_CHECKING = "checking_updates";
-    public final String STATUS_NO_UPDATE = "no_updates";
-    public final String STATUS_GOT_UPDATE = "got_update";
-    public final String STATUS_HAVE_UPDATE = "have_update";
+    public static final String STATUS_CHECKING = "checking_updates";
+    public static final String STATUS_NO_UPDATE = "no_updates";
+    public static final String STATUS_GOT_UPDATE = "got_update";
+    public static final String STATUS_HAVE_UPDATE = "have_update";
+    public static int NOTIFICATION_ID = 0xAB343FE;
 
     private final long MINUTES = 60 * 1000;
     private final long HOURS = 60 * MINUTES;
@@ -77,12 +76,12 @@ public class PopcornUpdater extends Observable {
     private final long WAKEUP_INTERVAL = 15 * MINUTES;
     private long UPDATE_INTERVAL = 3 * HOURS;
 
-    private final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
+    public final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
     private final String DATA_URL = "http://ci.popcorntime.io/android";
 
     public static final String LAST_UPDATE_CHECK = "update_check";
     private static final String LAST_UPDATE_KEY = "last_update";
-    private static final String UPDATE_FILE = "update_file";
+    public static final String UPDATE_FILE = "update_file";
     private static final String SHA1_TIME = "sha1_update_time";
     private static final String SHA1_KEY = "sha1_update";
 
@@ -95,6 +94,8 @@ public class PopcornUpdater extends Observable {
     private String mPackageName;
     private String mVersionName;
     private Integer mVersionCode;
+
+    private Listener mListener;
 
     private PopcornUpdater(Context context) {
         if (Constants.DEBUG_ENABLED) {
@@ -129,8 +130,6 @@ public class PopcornUpdater extends Observable {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 }
             }
-        } else {
-            showMessage();
         }
 
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -142,6 +141,16 @@ public class PopcornUpdater extends Observable {
         }
         sThis.mContext = context;
         return sThis;
+    }
+
+    public static PopcornUpdater getInstance(Context context, Listener listener) {
+        PopcornUpdater instance = getInstance(context);
+        instance.setListener(listener);
+        return instance;
+    }
+
+    public void setListener(Listener  listener) {
+        mListener = listener;
     }
 
     private Runnable periodicUpdate = new Runnable() {
@@ -166,11 +175,8 @@ public class PopcornUpdater extends Observable {
         if (forced || (lastUpdate + UPDATE_INTERVAL) < now) {
             lastUpdate = System.currentTimeMillis();
             PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
-            setChanged();
 
             if (BuildConfig.GIT_BRANCH.contains("local")) return;
-
-            notifyObservers(STATUS_CHECKING);
 
             final String abi;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -200,8 +206,7 @@ public class PopcornUpdater extends Observable {
             mHttpClient.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    setChanged();
-                    notifyObservers(STATUS_NO_UPDATE);
+
                 }
 
                 @Override
@@ -222,17 +227,9 @@ public class PopcornUpdater extends Observable {
                                 channel = variant.get(channelStr).get(abi);
                             }
 
-                            if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
-                                setChanged();
-                                notifyObservers(STATUS_NO_UPDATE);
-                            } else {
+                            if (channel != null && !channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) && channel.versionCode > mVersionCode) {
                                 downloadFile(channel.updateUrl);
-                                setChanged();
-                                notifyObservers(STATUS_GOT_UPDATE);
                             }
-                        } else {
-                            setChanged();
-                            notifyObservers(STATUS_NO_UPDATE);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -250,8 +247,7 @@ public class PopcornUpdater extends Observable {
         mHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                setChanged();
-                notifyObservers(STATUS_NO_UPDATE);
+                // uhoh
             }
 
             @Override
@@ -270,13 +266,10 @@ public class PopcornUpdater extends Observable {
                             .putString(UPDATE_FILE, fileName)
                             .putLong(SHA1_TIME, System.currentTimeMillis())
                             .apply();
-                    showMessage();
 
-                    setChanged();
-                    notifyObservers(STATUS_HAVE_UPDATE);
-                } else {
-                    setChanged();
-                    notifyObservers(STATUS_NO_UPDATE);
+                    if(mListener != null) {
+                        mListener.updateAvailable();
+                    }
                 }
             }
         });
@@ -300,36 +293,6 @@ public class PopcornUpdater extends Observable {
             }
         }
     };
-
-    public void showMessage() {
-        if(!VersionUtils.isAndroidTV()) {
-            NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
-            if (updateFile.length() > 0) {
-                setChanged();
-                notifyObservers(STATUS_HAVE_UPDATE);
-
-                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.drawable.ic_notif_logo)
-                        .setContentTitle(mContext.getString(R.string.update_available))
-                        .setContentText(mContext.getString(R.string.press_install))
-                        .setAutoCancel(true)
-                        .setDefaults(NotificationCompat.DEFAULT_ALL);
-
-                Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-                notificationIntent.setDataAndType(Uri.parse("file://" + mContext.getFilesDir().getAbsolutePath() + "/" + updateFile), ANDROID_PACKAGE);
-
-                notificationBuilder.setContentIntent(PendingIntent.getActivity(mContext, 0, notificationIntent, 0));
-
-                nm.notify(NOTIFICATION_ID, notificationBuilder.build());
-            } else {
-                nm.cancel(NOTIFICATION_ID);
-            }
-        } else {
-            // TODO: show dialog on Android TV
-        }
-    }
 
     private String SHA1(String filename) {
         final int BUFFER_SIZE = 8192;
@@ -361,6 +324,10 @@ public class PopcornUpdater extends Observable {
         Checksum checksum = new CRC32();
         checksum.update(bytes, 0, bytes.length);
         return (int) checksum.getValue();
+    }
+
+    public interface Listener {
+        void updateAvailable();
     }
 
 }

@@ -26,7 +26,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="pct.droid.base.PopcornApplication"
+        android:name="pct.droid.tv.PTVPopcornApplication"
         android:allowBackup="false"
         android:banner="@drawable/banner"
         android:icon="@drawable/ic_launcher"
