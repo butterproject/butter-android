@@ -64,6 +64,7 @@
         <activity android:name=".activities.PTVSettingsActivity" />
         <activity android:name=".activities.PTVStreamLoadingActivity" />
         <activity android:name=".activities.PTVVideoPlayerActivity" />
+        <activity android:name=".activities.PTVUpdateActivity" />
 
         <service android:name="pct.droid.base.torrent.TorrentService" />
 

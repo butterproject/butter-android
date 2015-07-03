@@ -54,6 +54,11 @@
 	<string name="video_error_unknown_error">Failed to load video</string>
 	<string name="oops">Oops</string>
 
+	<!-- PTVUpdateFragment -->
+	<string name="now">Yes</string>
+	<string name="later">No, later</string>
+	<string name="new_update">A new version of Popcorn Time for Android TV is available. Do you want to update now?</string>
+
 	<!-- Categories -->
 
 	<!-- StreamLoadingActivity strings -->

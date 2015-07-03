@@ -64,10 +64,6 @@ public class PopcornUpdater {
 
     private static PopcornUpdater sThis;
 
-    public static final String STATUS_CHECKING = "checking_updates";
-    public static final String STATUS_NO_UPDATE = "no_updates";
-    public static final String STATUS_GOT_UPDATE = "got_update";
-    public static final String STATUS_HAVE_UPDATE = "have_update";
     public static int NOTIFICATION_ID = 0xAB343FE;
 
     private final long MINUTES = 60 * 1000;

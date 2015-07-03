@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
 
@@ -18,5 +19,12 @@ public class PTVMainActivity extends PTVBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_main);
+
+        PopcornUpdater.getInstance(this, new PopcornUpdater.Listener() {
+            @Override
+            public void updateAvailable() {
+                PTVUpdateActivity.startActivity(PTVMainActivity.this);
+            }
+        }).checkUpdates(false);
     }
 }

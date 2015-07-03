@@ -15,9 +15,9 @@ public class PTVWelcomeActivity extends PTVBaseActivity {
 		return intent;
 	}
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState,R.layout.activity_welcome);
 	}
+
 }
