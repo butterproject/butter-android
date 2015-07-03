@@ -16,5 +16,7 @@
     <item name="action_check_updates" type="id" />
     <item name="action_subtitle_color" type="id" />
     <item name="action_app_language" type="id" />
+    <item name="action_update_now" type="id" />
+    <item name="action_update_later" type="id" />
 
 </resources>

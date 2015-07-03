@@ -29,8 +29,8 @@ import android.net.Uri;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 
-import com.squareup.leakcanary.LeakCanary;
 import com.sjl.foreground.Foreground;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -38,7 +38,6 @@ import com.squareup.picasso.Picasso;
 import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
-import java.util.Observer;
 
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
@@ -48,9 +47,6 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
-import com.squareup.leakcanary.RefWatcher;
-
-import pct.droid.base.utils.VersionUtils;
 import timber.log.Timber;
 
 public abstract class PopcornApplication extends VLCApplication implements PopcornUpdater.Listener {
