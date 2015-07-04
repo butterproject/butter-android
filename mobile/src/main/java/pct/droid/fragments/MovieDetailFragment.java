@@ -242,7 +242,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
                     updateMagnet();
                 }
             });
-            String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "1080p");
+            String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "720p");
             int qualityIndex = Arrays.asList(qualities).contains(defaultQuality) ? Arrays.asList(qualities).indexOf(defaultQuality) : qualities.length - 1;
             mSelectedQuality = qualities[qualityIndex];
             mQuality.setText(mSelectedQuality);
