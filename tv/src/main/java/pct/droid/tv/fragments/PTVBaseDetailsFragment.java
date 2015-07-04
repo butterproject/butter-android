@@ -1,10 +1,12 @@
 package pct.droid.tv.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v17.leanback.app.DetailsFragment;
@@ -44,6 +46,7 @@ import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.ThreadUtils;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
@@ -144,9 +147,11 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 
 			}
 
+			@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 			@Override
 			public void onBitmapFailed(Drawable errorDrawable) {
-				getActivity().startPostponedEnterTransition();
+				if(VersionUtils.isLollipop())
+					getActivity().startPostponedEnterTransition();
 			}
 
 			@Override

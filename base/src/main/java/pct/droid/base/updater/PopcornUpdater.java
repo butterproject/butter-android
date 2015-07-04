@@ -88,7 +88,6 @@ public class PopcornUpdater {
     private Context mContext = null;
     private long lastUpdate = 0;
     private String mPackageName;
-    private String mVersionName;
     private Integer mVersionCode;
 
     private Listener mListener;
@@ -106,7 +105,6 @@ public class PopcornUpdater {
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(mPackageName, 0);
             mVersionCode = pInfo.versionCode;
-            mVersionName = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

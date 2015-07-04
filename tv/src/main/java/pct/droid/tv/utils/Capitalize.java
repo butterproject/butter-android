@@ -1,5 +1,7 @@
 package pct.droid.tv.utils;
 
+import pct.droid.base.utils.LocaleUtils;
+
 /*************************************************************************
  *  Compilation:  javac Capitalize.java
  *  Execution:    java Capitalize < input.txt
@@ -21,6 +23,6 @@ public class Capitalize {
 
     public static String capitalize(String s) {
         if (s.length() == 0) return s;
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
+        return s.substring(0, 1).toUpperCase(LocaleUtils.getCurrent()) + s.substring(1);
     }
 }

@@ -5,13 +5,13 @@
 
     <VideoView android:id="@+id/videoView" android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true" android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true" android:layout_centerInParent="true"
         android:layout_gravity="center" />
 
     <RelativeLayout android:id="@+id/controllers" android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_alignBottom="@+id/videoView"
-        android:layout_alignLeft="@+id/videoView" android:layout_alignRight="@+id/videoView"
+        android:layout_alignParentStart="@+id/videoView" android:layout_alignParentEnd="@+id/videoView"
         android:layout_alignTop="@+id/videoView" android:layout_centerInParent="true"
         android:background="@drawable/player_bg_gradient_dark">
 
@@ -29,22 +29,22 @@
                 android:src="@drawable/ic_play_playcontrol_normal" />
 
             <TextView android:id="@+id/startText" android:layout_width="wrap_content"
-                android:layout_height="fill_parent" android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/playpause" android:gravity="center_vertical"
+                android:layout_height="fill_parent" android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/playpause" android:gravity="center_vertical"
                 android:maxLines="1" android:text="@+id/init_text"
                 android:textColor="@color/white" />
 
             <TextView android:id="@+id/endText" android:layout_width="wrap_content"
-                android:layout_height="fill_parent" android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp" android:gravity="center_vertical"
+                android:layout_height="fill_parent" android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp" android:gravity="center_vertical"
                 android:maxLines="1" android:text="@+id/init_text"
                 android:textColor="@color/white" />
 
             <SeekBar android:id="@+id/seekBar" android:layout_width="fill_parent"
                 android:layout_height="wrap_content" android:layout_centerVertical="true"
                 android:layout_gravity="center" android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" android:layout_toLeftOf="@+id/endText"
-                android:layout_toRightOf="@+id/startText" />
+                android:layout_marginRight="5dp" android:layout_toStartOf="@+id/endText"
+                android:layout_toEndOf="@+id/startText" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
