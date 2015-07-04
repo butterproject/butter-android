@@ -185,7 +185,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                     }
                 }));
 
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_action_quality, R.string.quality, Prefs.QUALITY_DEFAULT, "1080p",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_action_quality, R.string.quality, Prefs.QUALITY_DEFAULT, "720p",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
