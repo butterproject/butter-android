@@ -301,8 +301,10 @@ public class TorrentService extends Service {
         stopForeground();
 
         //remove all callbacks from handler
-        mLibTorrentHandler.removeCallbacksAndMessages(null);
-        mStreamingHandler.removeCallbacksAndMessages(null);
+        if(mLibTorrentHandler != null)
+            mLibTorrentHandler.removeCallbacksAndMessages(null);
+        if(mStreamingHandler != null)
+            mStreamingHandler.removeCallbacksAndMessages(null);
 
         mIsCanceled = true;
         mIsStreaming = false;
@@ -319,7 +321,8 @@ public class TorrentService extends Service {
             }
         }
 
-        mStreamingThread.interrupt();
+        if(mStreamingThread != null)
+            mStreamingThread.interrupt();
 
         Timber.d("Stopped torrent and removed files if possible");
     }
