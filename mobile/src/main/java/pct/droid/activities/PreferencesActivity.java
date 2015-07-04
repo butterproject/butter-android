@@ -120,6 +120,7 @@ public class PreferencesActivity extends PopcornBaseActivity
         mPrefItems.add(getResources().getString(R.string.general));
 
         final String[] items = {getString(R.string.title_movies), getString(R.string.title_shows), getString(R.string.title_anime)};
+        final String[] qualities = getResources().getStringArray(R.array.video_qualities);
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.default_view, Prefs.DEFAULT_VIEW, 0,
                 new PrefItem.OnClickListener() {
                     @Override
@@ -183,6 +184,28 @@ public class PreferencesActivity extends PopcornBaseActivity
                         return PrefUtils.get(PreferencesActivity.this, Prefs.DEFAULT_PLAYER_NAME, getString(R.string.internal_player));
                     }
                 }));
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_action_quality, R.string.quality, Prefs.QUALITY_DEFAULT, "1080p",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        openListSelectionDialog(item.getTitle(), qualities, StringArraySelectorDialogFragment.SINGLE_CHOICE,
+                                Arrays.asList(qualities).indexOf(item.getValue()), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int position) {
+                                        item.saveValue(qualities[position]);
+                                        dialog.dismiss();
+                                    }
+                                });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return (String) item.getValue();
+                    }
+                }));
+
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_app_language, R.string.i18n_language, Prefs.LOCALE, "",
                 new PrefItem.OnClickListener() {
                     @Override
