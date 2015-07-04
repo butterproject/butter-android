@@ -43,7 +43,7 @@ public class BeamServer {
             AVI = new FileType("avi", "video/x-msvideo", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
             MKV = new FileType("mkv", "video/x-matroska", "DLNA.ORG_PN=AVC_MKV_MP_HD_AC3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
             SRT = new FileType("srt", "application/x-subrip", "*", "");
-    private static FileType[] FILE_TYPES = {MP4, AVI, MKV, SRT};
+    private static FileType[] FILE_TYPES = {MP4, AVI, MKV};
     private static HashMap<String, FileType> EXTENSIONS, CONTENT_TYPES;
     private static String sHost;
     private static Integer sPort;
@@ -78,31 +78,23 @@ public class BeamServer {
         StringBuilder extBuilder = new StringBuilder();
         extBuilder.append("(");
         for (FileType localFileType : FILE_TYPES) {
-            FileReponse localFileReponse = new FileReponse(localFileType);
-            mHttpServer.get("/video." + localFileType.extension, localFileReponse);
-            mHttpServer.addAction("HEAD", "/video." + localFileType.extension, localFileReponse);
+            VideoFileReponse localVideoFileReponse = new VideoFileReponse(localFileType);
+            mHttpServer.get("/video." + localFileType.extension, localVideoFileReponse);
+            mHttpServer.addAction("HEAD", "/video." + localFileType.extension, localVideoFileReponse);
             extBuilder.append(localFileType.extension);
             extBuilder.append("|");
         }
         extBuilder.deleteCharAt(extBuilder.length() - 1);
         extBuilder.append(")");
 
-        mHttpServer.get("/video.srt", new HttpServerRequestCallback() {
-            @Override
-            public void onRequest(AsyncHttpServerRequest httpServerRequest, AsyncHttpServerResponse httpServerResponse) {
-                if (sCurrentSubs != null && sCurrentSubs.exists()) {
-                    SRT.setHeaders(httpServerResponse);
-                    httpServerResponse.sendFile(sCurrentSubs);
-                } else {
-                    httpServerResponse.code(404);
-                }
-            }
-        });
+        SubtitleFileResponse localSubsFileReponse = new SubtitleFileResponse(SRT);
+        mHttpServer.get("/video.srt", localSubsFileReponse);
 
         mHttpServer.get("/(.*?)", new HttpServerRequestCallback() {
             @Override
             public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-                response.send("Empty");
+                response.send("No content");
+                response.code(404);
             }
         });
     }
@@ -190,10 +182,10 @@ public class BeamServer {
         }
     }
 
-    class FileReponse implements HttpServerRequestCallback {
+    class VideoFileReponse implements HttpServerRequestCallback {
         FileType mFileType;
 
-        public FileReponse(FileType fileType) {
+        public VideoFileReponse(FileType fileType) {
             mFileType = fileType;
         }
 
@@ -202,6 +194,26 @@ public class BeamServer {
                 mFileType.setHeaders(httpServerResponse);
                 if (!asyncHttpServerRequest.getMethod().equals("HEAD"))
                     httpServerResponse.sendFile(sCurrentVideo);
+            } else {
+                httpServerResponse.code(404);
+            }
+
+            Timber.i(httpServerResponse.toString());
+        }
+    }
+
+    class SubtitleFileResponse implements HttpServerRequestCallback {
+        FileType mFileType;
+
+        public SubtitleFileResponse(FileType fileType) {
+            mFileType = fileType;
+        }
+
+        public void onRequest(AsyncHttpServerRequest asyncHttpServerRequest, AsyncHttpServerResponse httpServerResponse) {
+            if (sCurrentSubs != null && sCurrentSubs.exists()) {
+                mFileType.setHeaders(httpServerResponse);
+                if (!asyncHttpServerRequest.getMethod().equals("HEAD"))
+                    httpServerResponse.sendFile(sCurrentSubs);
             } else {
                 httpServerResponse.code(404);
             }
