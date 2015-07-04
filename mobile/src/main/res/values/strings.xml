@@ -20,7 +20,6 @@
 
     <!-- General strings -->
     <string name="app_name" translatable="false">Popcorn Time</string>
-    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
@@ -42,11 +41,9 @@
 	<string name="minutes">min</string>
     <string name="read_more">Read more</string>
 	<string name="watch_trailer">Watch trailer</string>
-	<string name="disable_subs">Disable subtitles</string>
 	<string name="no_subs">No subtitles</string>
     <string name="no_subs_available">No subtitles available</string>
 	<string name="quality">Quality</string>
-	<string name="open_magnet">Open magnet</string>
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
@@ -138,7 +135,6 @@
 	<string name="yuv">YUV: best performance but does not always work</string>
 
 	<!-- NavigationDrawer -->
-	<string name="share">Share</string>
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
 	<string name="no_search_results">No search results found</string>
@@ -155,10 +151,6 @@
 	<string name="git">Git</string>
 	<string name="blog">Blog</string>
 	<string name="twitter">Twitter</string>
-
-	<!-- Share dialog -->
-	<string name="share_message">Have you tried Popcorn Time for Android? It\'s awesome!</string>
-	<string name="share_dialog_title">Share with</string>
 
     <!-- Beam dialog -->
     <string name="connected_to">Connected to</string>

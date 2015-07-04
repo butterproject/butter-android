@@ -250,9 +250,12 @@ public class EpisodeDialogFragment extends DialogFragment {
         final String[] qualities = mEpisode.torrents.keySet().toArray(new String[mEpisode.torrents.size()]);
         SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
-        mSelectedQuality = qualities[qualities.length - 1];
+        String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "1080p");
+        int qualityIndex = Arrays.asList(qualities).contains(defaultQuality) ? Arrays.asList(qualities).indexOf(defaultQuality) : qualities.length - 1;
+        mSelectedQuality = qualities[qualityIndex];
         mQuality.setText(mSelectedQuality);
-        mQuality.setDefault(qualities.length - 1);
+        mQuality.setDefault(qualityIndex);
+
         updateMagnet();
 
         mQuality.setListener(new OptionSelector.SelectorListener() {

@@ -65,7 +65,6 @@
 		android:layout_marginBottom="16dp"
 		android:layout_marginRight="16dp"
 		tools:visibility="visible"
-		android:text="524 hours watched"
 		android:singleLine="true"
 		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 		android:layout_alignParentBottom="true"
