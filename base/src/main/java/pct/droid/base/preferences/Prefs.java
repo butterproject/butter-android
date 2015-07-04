@@ -39,4 +39,6 @@ public class Prefs {
     public static final String LIBTORRENT_DOWNLOAD_LIMIT = "libtorrent_downloadlimit";
     public static final String LIBTORRENT_UPLOAD_LIMIT = "libtorrent_uploadlimit";
     public static final String SHOW_VPN = "show_vpn";
+    public static final String PIXEL_FORMAT = "pixel_format";
+    public static final String QUALITY_DEFAULT = "quality_default";
 }

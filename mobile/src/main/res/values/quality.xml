@@ -16,8 +16,9 @@
   ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<translate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/decelerate_interpolator"
-    android:fromYDelta="50%p"
-    android:toYDelta="0"
-    android:duration="@android:integer/config_shortAnimTime" />
+<resources>
+    <string-array name="video_qualities" translatable="false">
+        <item>1080p</item>
+        <item>720p</item>
+    </string-array>
+</resources>

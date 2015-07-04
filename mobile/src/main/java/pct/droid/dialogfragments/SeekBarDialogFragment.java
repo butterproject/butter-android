@@ -1,24 +1,20 @@
 package pct.droid.dialogfragments;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import pct.droid.R;
 
-/**
- * Created by Seïfane on 6/21/2015.
- */
 public class SeekBarDialogFragment extends DialogFragment {
 
     public static final String TITLE = "title";
@@ -33,6 +29,7 @@ public class SeekBarDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -47,7 +44,7 @@ public class SeekBarDialogFragment extends DialogFragment {
         LinearLayout layout = new LinearLayout(getActivity());
         layout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setLayoutParams(params);
 
         final SeekBar seekbar = new SeekBar(getActivity());
         seekbar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -57,7 +54,7 @@ public class SeekBarDialogFragment extends DialogFragment {
         final TextView textSpeed = new TextView(getActivity());
         textSpeed.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         textSpeed.setGravity(Gravity.CENTER);
-        textSpeed.setTextAppearance(getActivity(), android.R.style.TextAppearance_Material_Medium);
+        textSpeed.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Medium);
         textSpeed.setText(defaultValue + " Kb/s");
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -108,7 +105,7 @@ public class SeekBarDialogFragment extends DialogFragment {
     }
 
     public interface ResultListener {
-        public void onNewValue(int value);
+        void onNewValue(int value);
     }
 
 }

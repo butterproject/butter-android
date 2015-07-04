@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +50,7 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.vpn.VPNHTChecker;
 import pct.droid.base.vpn.VPNManager;
 import pct.droid.dialogfragments.VPNInfoDialogFragment;
+import timber.log.Timber;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback {
 
@@ -266,12 +266,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-				/* do nothing */
-            }
-
-            @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if (!isAdded()) return;
@@ -282,6 +276,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
                     mUserLearnedDrawer = true;
                     PrefUtils.save(getActivity(), Prefs.DRAWER_LEARNED, true);
                 }
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, 0);
             }
         };
 
