@@ -55,7 +55,7 @@ public class MediaContainerFragment extends Fragment {
 
         MediaProvider provider = getArguments().getParcelable(EXTRA_PROVIDER);
 
-        mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), provider.getNavigation(), mViewPager);
+        mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), provider.getNavigation());
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(provider.getDefaultNavigationIndex());
         mTabs.setViewPager(mViewPager);
