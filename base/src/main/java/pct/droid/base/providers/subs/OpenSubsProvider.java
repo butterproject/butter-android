@@ -25,6 +25,7 @@ import org.xmlrpc.android.XMLRPCException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import pct.droid.base.providers.media.models.Episode;
@@ -153,8 +154,8 @@ public class OpenSubsProvider extends SubsProvider {
             XMLRPCClient client = new XMLRPCClient(new URI(mApiUrl), "", "", mUserAgent);
             Map<String, String> option = new HashMap<>();
             option.put("imdbid", episode.imdbId.replace("tt", ""));
-            option.put("season", String.format("%d", episode.season));
-            option.put("episode", String.format("%d", episode.episode));
+            option.put("season", String.format(Locale.US, "%d", episode.season));
+            option.put("episode", String.format(Locale.US, "%d", episode.episode));
             option.put("sublanguageid", "all");
             client.callAsync(callback, "SearchSubtitles", new Object[]{token, new Object[]{option}});
         } catch (URISyntaxException e) {
