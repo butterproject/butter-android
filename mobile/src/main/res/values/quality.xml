@@ -17,7 +17,7 @@
   -->
 
 <resources>
-    <string-array name="video_qualities">
+    <string-array name="video_qualities" translatable="false">
         <item>1080p</item>
         <item>720p</item>
     </string-array>
