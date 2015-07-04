@@ -89,7 +89,6 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
 
         mNavigationDrawerFragment.initialise(mNavigationDrawerContainer, drawerLayout);
 
-
 		/* view a magnet link directly */
         String action = getIntent().getAction();
         Uri data = getIntent().getData();
