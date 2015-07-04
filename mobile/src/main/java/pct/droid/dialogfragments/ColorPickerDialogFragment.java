@@ -50,7 +50,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_colorpicker, null, false);
+        View view = View.inflate(getActivity(), R.layout.fragment_dialog_colorpicker, null);
         ButterKnife.inject(this, view);
 
         colorPicker.addSVBar(svBar);
