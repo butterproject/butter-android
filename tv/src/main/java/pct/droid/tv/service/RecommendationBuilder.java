@@ -14,11 +14,13 @@
 
 package pct.droid.tv.service;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -28,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import pct.droid.base.utils.PixelUtils;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 
 /*
@@ -100,43 +103,48 @@ public class RecommendationBuilder {
         return this;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public Notification build() throws IOException {
+        if(VersionUtils.isLollipop()) {
 
-        Log.d(TAG, "Building notification - " + this.toString());
+            Log.d(TAG, "Building notification - " + this.toString());
 
-        if (mNotificationManager == null) {
-            mNotificationManager = (NotificationManager) mContext
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            if (mNotificationManager == null) {
+                mNotificationManager = (NotificationManager) mContext
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+
+            Bundle extras = new Bundle();
+            if (mBackgroundUri != null) {
+                extras.putString(EXTRA_BACKGROUND_IMAGE_URL, mBackgroundUri);
+            }
+
+            Bitmap image = Picasso.with(mContext)
+                    .load(mImageUri)
+                    .resize((int) mContext.getResources().getDimension(R.dimen.card_width), (int) mContext.getResources().getDimension(R.dimen.card_height))
+                    .get();
+
+            Notification notification = new NotificationCompat.BigPictureStyle(
+                    new NotificationCompat.Builder(mContext)
+                            .setContentTitle(mTitle)
+                            .setContentText(mDescription)
+                            .setPriority(mPriority)
+                            .setLocalOnly(true)
+                            .setOngoing(true)
+                            .setColor(mContext.getResources().getColor(R.color.primary))
+                            .setCategory(Notification.CATEGORY_RECOMMENDATION)
+                            .setLargeIcon(image)
+                            .setSmallIcon(mSmallIcon)
+                            .setContentIntent(mIntent)
+                            .setExtras(extras))
+                    .build();
+
+            mNotificationManager.notify(mId, notification);
+            mNotificationManager = null;
+            return notification;
         }
 
-        Bundle extras = new Bundle();
-        if (mBackgroundUri != null) {
-            extras.putString(EXTRA_BACKGROUND_IMAGE_URL, mBackgroundUri);
-        }
-
-        Bitmap image = Picasso.with(mContext)
-                .load(mImageUri)
-                .resize((int)mContext.getResources().getDimension(R.dimen.card_width), (int)mContext.getResources().getDimension(R.dimen.card_height))
-                .get();
-
-        Notification notification = new NotificationCompat.BigPictureStyle(
-                new NotificationCompat.Builder(mContext)
-                        .setContentTitle(mTitle)
-                        .setContentText(mDescription)
-                        .setPriority(mPriority)
-                        .setLocalOnly(true)
-                        .setOngoing(true)
-                        .setColor(mContext.getResources().getColor(R.color.primary))
-                        .setCategory(Notification.CATEGORY_RECOMMENDATION)
-                        .setLargeIcon(image)
-                        .setSmallIcon(mSmallIcon)
-                        .setContentIntent(mIntent)
-                        .setExtras(extras))
-                .build();
-
-        mNotificationManager.notify(mId, notification);
-        mNotificationManager = null;
-        return notification;
+        return null;
     }
 
     @Override
