@@ -20,6 +20,7 @@ package pct.droid.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import pct.droid.fragments.MediaListFragment;
 
 public class MediaPagerAdapter extends FragmentPagerAdapter {
 
+    private ViewPager mViewPager;
     private FragmentManager mFragmentManager;
     private Map<Integer, String> mFragTags = new HashMap<>();
     private final List<MediaProvider.NavInfo> mTabs;
@@ -43,12 +45,13 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     private int mHasGenreTabs = 0;
     private Fragment mGenreFragment;
 
-    public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<MediaProvider.NavInfo> tabs) {
+    public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<MediaProvider.NavInfo> tabs, ViewPager viewPager) {
         super(fm);
         mFragmentManager = fm;
         mTabs = tabs;
         mProvider = provider;
         mHasGenreTabs = (mProvider.getGenres() != null && mProvider.getGenres().size() > 0 ? 1 : 0);
+        mViewPager = viewPager;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         if (mHasGenreTabs > 0 && position == 0) {
             if (mGenreFragment != null)
                 return mGenreFragment;
-            mGenreFragment = MediaGenreSelectionFragment.newInstance(mProvider, mMediaGenreSelectionFragment);
+            mGenreFragment = MediaGenreSelectionFragment.newInstance(mProvider, mMediaGenreSelectionFragmentListener);
             return mGenreFragment;
         }
 
@@ -106,7 +109,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    private MediaGenreSelectionFragment.Listener mMediaGenreSelectionFragment = new MediaGenreSelectionFragment.Listener() {
+    private MediaGenreSelectionFragment.Listener mMediaGenreSelectionFragmentListener = new MediaGenreSelectionFragment.Listener() {
         @Override
         public void onGenreSelected(String genre) {
             mGenre = genre;
@@ -115,6 +118,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
                 MediaListFragment mediaListFragment = getMediaListFragment(i);
                 if (mediaListFragment != null)
                     mediaListFragment.changeGenre(genre);
+                mViewPager.setCurrentItem(mHasGenreTabs);
             }
         }
     };
