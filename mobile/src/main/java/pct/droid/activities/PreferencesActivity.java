@@ -120,6 +120,7 @@ public class PreferencesActivity extends PopcornBaseActivity
         mPrefItems.add(getResources().getString(R.string.general));
 
         final String[] items = {getString(R.string.title_movies), getString(R.string.title_shows), getString(R.string.title_anime)};
+        final String[] qualities = getResources().getStringArray(R.array.video_qualities);
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_default_view, R.string.default_view, Prefs.DEFAULT_VIEW, 0,
                 new PrefItem.OnClickListener() {
                     @Override
@@ -183,6 +184,28 @@ public class PreferencesActivity extends PopcornBaseActivity
                         return PrefUtils.get(PreferencesActivity.this, Prefs.DEFAULT_PLAYER_NAME, getString(R.string.internal_player));
                     }
                 }));
+
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_action_quality, R.string.quality, Prefs.QUALITY_DEFAULT, "720p",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        openListSelectionDialog(item.getTitle(), qualities, StringArraySelectorDialogFragment.SINGLE_CHOICE,
+                                Arrays.asList(qualities).indexOf(item.getValue()), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int position) {
+                                        item.saveValue(qualities[position]);
+                                        dialog.dismiss();
+                                    }
+                                });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        return (String) item.getValue();
+                    }
+                }));
+
         mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_app_language, R.string.i18n_language, Prefs.LOCALE, "",
                 new PrefItem.OnClickListener() {
                     @Override
@@ -595,6 +618,47 @@ public class PreferencesActivity extends PopcornBaseActivity
                             case LibVLC.HW_ACCELERATION_AUTOMATIC:
                                 return getString(R.string.hw_automatic);
                         }
+                    }
+                }));
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_prefs_pixel_format, R.string.pixel_format, Prefs.PIXEL_FORMAT, "",
+                new PrefItem.OnClickListener() {
+                    @Override
+                    public void onClick(final PrefItem item) {
+                        String[] items = {getString(R.string.rgb16), getString(R.string.rgb32), getString(R.string.yuv)};
+
+                        String currentValue = (String) item.getValue();
+                        int current = 1;
+                        if (currentValue.equals("YV12")) {
+                            current = 2;
+                        } else if (currentValue.equals("RV16")) {
+                            current = 0;
+                        }
+
+                        openListSelectionDialog(item.getTitle(), items, StringArraySelectorDialogFragment.SINGLE_CHOICE,
+                                current, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int position) {
+                                        if(position == 2) {
+                                            item.saveValue("YV12");
+                                        } else if (position == 0) {
+                                            item.saveValue("RV16");
+                                        } else {
+                                            item.saveValue("");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                    }
+                },
+                new PrefItem.SubTitleGenerator() {
+                    @Override
+                    public String get(PrefItem item) {
+                        if (item.getValue().equals("YV12")) {
+                            return getString(R.string.yuv);
+                        } else if (item.getValue().equals("RV16")) {
+                            return getString(R.string.rgb16);
+                        }
+                        return getString(R.string.rgb32);
                     }
                 }));
         mPrefItems.add(new PrefItem(this, R.drawable.ic_nav_vpn, R.string.show_vpn, Prefs.SHOW_VPN, true,

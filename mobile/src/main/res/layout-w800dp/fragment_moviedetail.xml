@@ -52,31 +52,33 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/detail_rating_margin_top">
+                    android:layout_marginTop="@dimen/detail_rating_margin_top"
+                    android:gravity="center_vertical">
                     <RatingBar
                         android:id="@+id/rating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="80dp"
+                        android:layout_height="16dp"
                         android:clickable="false"
                         android:focusable="false"
                         android:isIndicator="true"
+                        style="@style/RatingBar.PopcornTime"
                         android:max="10"
                         android:progress="5"/>
                     <pct.droid.widget.SquareImageView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        android:maxWidth="20dp"
                         android:id="@+id/health"
                         android:src="@drawable/ic_health_unknown"
+                        android:scaleType="centerInside"
+                        android:visibility="gone"
                         tools:visibility="visible" />
                     <ImageButton
                         android:layout_width="15dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:id="@+id/magnet"
                         android:src="@drawable/ic_action_magnet"
                         android:background="@drawable/selectable_background"

@@ -30,7 +30,6 @@ public class Movie extends Media implements Parcelable {
     public String type = "movie";
     public String trailer = "";
     public String runtime = "";
-    public String tagline = "";
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
     public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
@@ -44,7 +43,6 @@ public class Movie extends Media implements Parcelable {
         super(in);
         trailer = in.readString();
         runtime = in.readString();
-        tagline = in.readString();
         synopsis = in.readString();
         certification = in.readString();
         int size = in.readInt();
@@ -65,7 +63,6 @@ public class Movie extends Media implements Parcelable {
         super.writeToParcel(dest, flags);
         dest.writeString(trailer);
         dest.writeString(runtime);
-        dest.writeString(tagline);
         dest.writeString(synopsis);
         dest.writeString(certification);
         if (torrents != null) {

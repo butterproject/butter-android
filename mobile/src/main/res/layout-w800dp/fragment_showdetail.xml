@@ -50,12 +50,12 @@
                     />
                 <RatingBar
                     android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/detail_rating_margin_top"
+                    android:layout_width="80dp"
+                    android:layout_height="16dp"
                     android:clickable="false"
                     android:focusable="false"
                     android:isIndicator="true"
+                    style="@style/RatingBar.PopcornTime"
                     android:max="10"
                     android:progress="5"/>
                 <com.devspark.robototextview.widget.RobotoTextView
