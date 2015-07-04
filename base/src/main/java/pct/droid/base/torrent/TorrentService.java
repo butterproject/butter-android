@@ -60,11 +60,10 @@ public class TorrentService extends Service {
 
     private static TorrentService sThis;
 
-    private static final String THREAD_NAME = "TORRENT_SERVICE_THREAD";
-    private HandlerThread mThread;
-    private Handler mHandler;
+    private static final String LIBTORRENT_THREAD_NAME = "TORRENT_SERVICE_THREAD", STREAMING_THREAD_NAME = "TORRENT_STREAMING_THREAD";
+    private HandlerThread mLibTorrentThread, mStreamingThread;
+    private Handler mLibTorrentHandler, mStreamingHandler;
 
-    private final Integer mId = 3423423;
     private Session mTorrentSession;
     private DHT mDHT;
     private Torrent mCurrentTorrent;
@@ -99,7 +98,7 @@ public class TorrentService extends Service {
         Timber.d("onDestroy");
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
-        mThread.interrupt();
+        mLibTorrentThread.interrupt();
     }
 
     @Override
@@ -156,7 +155,7 @@ public class TorrentService extends Service {
         Notification notification = builder.build();
         notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
-        startForeground(mId, notification);
+        startForeground(3423423, notification);
         mInForeground = true;
     }
 
@@ -176,12 +175,12 @@ public class TorrentService extends Service {
         }
 
         Timber.d("initialize");
-        if (mThread != null) {
-            mHandler.removeCallbacksAndMessages(null);
+        if (mLibTorrentThread != null) {
+            mLibTorrentHandler.removeCallbacksAndMessages(null);
 
             //resume torrent session if needed
             if (mTorrentSession != null && mTorrentSession.isPaused()) {
-                mHandler.post(new Runnable() {
+                mLibTorrentHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         Timber.d("Resuming libtorrent session");
@@ -191,7 +190,7 @@ public class TorrentService extends Service {
             }
             //start DHT if needed
             if (mDHT != null && !mDHT.isRunning()) {
-                mHandler.post(new Runnable() {
+                mLibTorrentHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         mDHT.start();
@@ -203,10 +202,10 @@ public class TorrentService extends Service {
         } else {
             if (mInitialised) return;
 
-            mThread = new HandlerThread(THREAD_NAME);
-            mThread.start();
-            mHandler = new Handler(mThread.getLooper());
-            mHandler.post(new Runnable() {
+            mLibTorrentThread = new HandlerThread(LIBTORRENT_THREAD_NAME);
+            mLibTorrentThread.start();
+            mLibTorrentHandler = new Handler(mLibTorrentThread.getLooper());
+            mLibTorrentHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     // Start libtorrent session and init DHT
@@ -228,7 +227,7 @@ public class TorrentService extends Service {
     }
 
     private void pause() {
-        mHandler.post(new Runnable() {
+        mLibTorrentHandler.post(new Runnable() {
             @Override
             public void run() {
                 mTorrentSession.pause();
@@ -244,7 +243,7 @@ public class TorrentService extends Service {
         //attempt to initialize service
         initialize();
 
-        if (mHandler == null || mIsStreaming) return;
+        if (mLibTorrentHandler == null || mIsStreaming) return;
 
         mIsCanceled = false;
         mReady = false;
@@ -252,7 +251,11 @@ public class TorrentService extends Service {
         Timber.d("Starting streaming");
 
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, THREAD_NAME);
+        if(mWakeLock != null && mWakeLock.isHeld()) {
+            mWakeLock.release();
+            mWakeLock = null;
+        }
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LIBTORRENT_THREAD_NAME);
         mWakeLock.acquire();
 
         SessionSettings sessionSettings = mTorrentSession.getSettings();
@@ -262,7 +265,11 @@ public class TorrentService extends Service {
         sessionSettings.setUploadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
         mTorrentSession.setSettings(sessionSettings);
 
-        mHandler.post(new Runnable() {
+        mStreamingThread = new HandlerThread(STREAMING_THREAD_NAME);
+        mStreamingThread.start();
+        mStreamingHandler = new Handler(mStreamingThread.getLooper());
+
+        mStreamingHandler.post(new Runnable() {
             @Override
             public void run() {
                 Timber.d("streaming runnable");
@@ -274,7 +281,7 @@ public class TorrentService extends Service {
 
                 TorrentInfo torrentInfo = getTorrentInfo(torrentUrl);
                 Priority[] priorities = new Priority[torrentInfo.getNumPieces()];
-                for(int i = 0; i < priorities.length; i++) {
+                for (int i = 0; i < priorities.length; i++) {
                     priorities[i] = Priority.NORMAL;
                 }
 
@@ -294,7 +301,8 @@ public class TorrentService extends Service {
         stopForeground();
 
         //remove all callbacks from handler
-        mHandler.removeCallbacksAndMessages(null);
+        mLibTorrentHandler.removeCallbacksAndMessages(null);
+        mStreamingHandler.removeCallbacksAndMessages(null);
 
         mIsCanceled = true;
         mIsStreaming = false;
@@ -310,6 +318,8 @@ public class TorrentService extends Service {
                 currentVideoFile.delete();
             }
         }
+
+        mStreamingThread.interrupt();
 
         Timber.d("Stopped torrent and removed files if possible");
     }

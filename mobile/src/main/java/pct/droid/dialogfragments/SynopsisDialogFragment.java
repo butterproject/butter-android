@@ -36,7 +36,7 @@ public class SynopsisDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_synopsis, null, false);
+        View view = View.inflate(getActivity(), R.layout.fragment_synopsis, null);
         ButterKnife.inject(this, view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())

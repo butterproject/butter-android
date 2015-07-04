@@ -63,6 +63,8 @@ public class OptionSelector extends LinearLayout {
         mIcon.setImageResource(res);
 
         setOnClickListener(mOnClickListener);
+
+        a.recycle();
     }
 
     public void setText(String str) {

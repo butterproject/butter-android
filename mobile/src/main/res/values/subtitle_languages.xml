@@ -17,7 +17,7 @@
   -->
 
 <resources>
-    <string-array name="subtitle_languages">
+    <string-array name="subtitle_languages" translatable="false">
         <item>ar</item>
         <item>bg</item>
         <item>bs</item>
