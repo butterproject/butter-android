@@ -73,6 +73,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     private EditText mInput;
     private AlertDialog mPairingAlertDialog;
     private AlertDialog mPairingCodeDialog;
+    private StreamInfo mStreamInfo;
 
     private BeamManager(Context context) {
         mContext = context;
@@ -188,6 +189,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mLaunchSession.close(null);
         mLaunchSession = null;
 
+        mStreamInfo = null;
+
         return true;
     }
 
@@ -201,6 +204,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     public void playVideo(StreamInfo info, Boolean subs, final MediaPlayer.LaunchListener listener) {
         if (!mConnected) listener.onError(ServiceCommandError.getError(503));
+
+        mStreamInfo = info;
 
         String location = info.getVideoLocation();
         if(!location.startsWith("http")) {
@@ -295,6 +300,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     public void removeDeviceListener(ConnectableDeviceListener listener) {
         mDeviceListeners.remove(listener);
+    }
+
+    public StreamInfo getStreamInfo() {
+        return mStreamInfo;
     }
 
     @Override
