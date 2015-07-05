@@ -84,6 +84,11 @@ public class TrailerPlayerActivity extends PopcornBaseActivity implements VideoP
     }
 
     @Override
+    public Long getResumePosition() {
+        return 0l;
+    }
+
+    @Override
     public StreamInfo getInfo() {
         return mStreamInfo;
     }
