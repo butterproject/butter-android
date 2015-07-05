@@ -30,7 +30,6 @@ android {
         versionCode buildNumber
         versionName "0.2.2"
         multiDexEnabled true
-        ext.enableCrashlytics = true
     }
 
     signingConfigs {
