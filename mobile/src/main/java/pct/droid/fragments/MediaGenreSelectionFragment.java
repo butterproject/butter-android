@@ -92,10 +92,12 @@ public class MediaGenreSelectionFragment extends Fragment {
 
         List<Genre> genreList = mProvider.getGenres();
 
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST, R.drawable.list_divider_nospacing));
         mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST, R.drawable.list_divider_nospacing));
+
         //adapter should only ever be created once on fragment initialise.
         mAdapter = new GenreAdapter(mContext, genreList, mSelectedPos);
         mAdapter.setOnItemSelectionListener(mOnItemSelectionListener);

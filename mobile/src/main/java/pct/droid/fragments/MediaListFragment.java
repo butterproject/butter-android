@@ -167,10 +167,12 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         mColumns = getResources().getInteger(R.integer.overview_cols);
         mLoadingTreshold = mColumns * 3;
-        mRecyclerView.setHasFixedSize(true);
+
         mLayoutManager = new GridLayoutManager(mContext, mColumns);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setOnScrollListener(mScrollListener);
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addOnScrollListener(mScrollListener);
         //adapter should only ever be created once on fragment initialise.
         mAdapter = new MediaGridAdapter(mContext, mItems, mColumns);
         mAdapter.setOnItemClickListener(mOnItemClickListener);
