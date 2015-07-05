@@ -31,7 +31,17 @@ import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.discovery.CapabilityFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
+import com.connectsdk.discovery.provider.CastDiscoveryProvider;
+import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
+import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
+import com.connectsdk.service.AirPlayService;
+import com.connectsdk.service.CastService;
+import com.connectsdk.service.DIALService;
+import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
+import com.connectsdk.service.NetcastTVService;
+import com.connectsdk.service.RokuService;
+import com.connectsdk.service.WebOSTVService;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
@@ -121,6 +131,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         // CastService.setApplicationID(Constants.CAST_ID); Do not use since suspended by Google
         DiscoveryManager.init(PopcornApplication.getAppContext());
         mDiscoveryManager = DiscoveryManager.getInstance();
+
+        mDiscoveryManager.registerDeviceService(CastService.class, CastDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(RokuService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(DLNAService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(NetcastTVService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
+
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
         mDiscoveryManager.setCapabilityFilters(new CapabilityFilter(
                 MediaPlayer.Play_Video,
