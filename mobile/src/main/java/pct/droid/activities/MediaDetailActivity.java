@@ -99,6 +99,11 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
         // mParallaxLayout doesn't exist? Then this is a tablet or big screen device
         mIsTablet = mParallaxLayout == null;
 
+        if(sMedia == null) {
+            finish();
+            return;
+        }
+
         getSupportActionBar().setTitle(sMedia.title);
 
         mScrollView.setListener(mOnScrollListener);

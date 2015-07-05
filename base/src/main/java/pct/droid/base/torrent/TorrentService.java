@@ -280,16 +280,18 @@ public class TorrentService extends Service {
                 saveDirectory.mkdirs();
 
                 TorrentInfo torrentInfo = getTorrentInfo(torrentUrl);
-                Priority[] priorities = new Priority[torrentInfo.getNumPieces()];
-                for (int i = 0; i < priorities.length; i++) {
-                    priorities[i] = Priority.NORMAL;
-                }
+                if(torrentInfo != null) {
+                    Priority[] priorities = new Priority[torrentInfo.getNumPieces()];
+                    for (int i = 0; i < priorities.length; i++) {
+                        priorities[i] = Priority.NORMAL;
+                    }
 
-                if (!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
-                    return;
-                }
+                    if (!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
+                        return;
+                    }
 
-                mTorrentSession.asyncAddTorrent(torrentInfo, saveDirectory, priorities, null);
+                    mTorrentSession.asyncAddTorrent(torrentInfo, saveDirectory, priorities, null);
+                }
             }
         });
     }

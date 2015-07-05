@@ -43,7 +43,7 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
-        BeamManager.getInstance(this).setListener(this);
+        BeamManager.getInstance(this).addListener(this);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     @Override
     protected void onPause() {
         super.onPause();
-        BeamManager.getInstance(this).setListener(null);
+        BeamManager.getInstance(this).removeListener(this);
     }
 
     @Override

@@ -22,6 +22,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.connectsdk.device.ConnectableDevice;
+import com.connectsdk.device.ConnectableDeviceListener;
+import com.connectsdk.service.DeviceService;
+import com.connectsdk.service.command.ServiceCommandError;
+
+import java.util.List;
+
 import pct.droid.R;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
@@ -35,6 +42,7 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     private VideoPlayerFragment mFragment;
     private StreamInfo mStreamInfo;
     private String mTitle = "";
+    private Long mResumePosition;
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -43,7 +51,7 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
         Intent i = new Intent(context, VideoPlayerActivity.class);
         i.putExtra(INFO, info);
-        //todo: resume position
+        i.putExtra(RESUME_POSITION, resumePosition);
         context.startActivity(i);
         return i;
     }
@@ -54,8 +62,9 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
+        setShowCasting(true);
 
-
+        mResumePosition = getIntent().getLongExtra(RESUME_POSITION, 0);
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
         mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
@@ -64,12 +73,6 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
             finish();
             return;
         }
-
-        String location = mStreamInfo.getVideoLocation();
-        if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
-            location = "file://" + location;
-        }
-        mStreamInfo.setVideoLocation(location);
 
         mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
         mFragment.loadMedia();
@@ -113,6 +116,11 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     @Override
+    public Long getResumePosition() {
+        return mResumePosition;
+    }
+
+    @Override
     public StreamInfo getInfo() {
         return mStreamInfo;
     }
@@ -127,5 +135,6 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
         super.onTorrentServiceConnected();
         mService.addListener(mFragment);
     }
+
 }
 

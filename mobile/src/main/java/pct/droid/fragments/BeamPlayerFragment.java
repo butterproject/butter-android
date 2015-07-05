@@ -34,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
@@ -53,6 +54,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
+import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
@@ -70,6 +73,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
 
     private StreamInfo mStreamInfo;
+    private Long mResumePosition;
     private BeamPlayerActivity mActivity;
     private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
@@ -126,6 +130,8 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
             }
         });
         mLoadingDialog.show(getChildFragmentManager(), "overlay_fragment");
+
+        mResumePosition = mActivity.getResumePosition();
 
         mStreamInfo = mActivity.getInfo();
         int paletteColor = mStreamInfo.getPaletteColor();
@@ -214,6 +220,20 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
+    }
+
     private void startVideo() {
         mBeamManager.playVideo(mStreamInfo, false, new MediaPlayer.LaunchListener() {
             @Override
@@ -233,12 +253,16 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
                     startUpdating();
                     mMediaControl.getDuration(mDurationListener);
                 }
+
+                if(mResumePosition > 0) {
+                    mMediaControl.seek(mResumePosition, null);
+                }
             }
 
             @Override
             public void onError(ServiceCommandError error) {
                 Timber.e(error.getCause(), error.getMessage());
-                if (mRetries > 2) {
+                if (mRetries > 2 && !isDetached()) {
                     if (mLoadingDialog.isVisible() && !getActivity().isFinishing()) {
                         mLoadingDialog.dismiss();
                     }
@@ -473,4 +497,16 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
     }
+
+    BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
+
+        @Override
+        public void onDeviceDisconnected(ConnectableDevice device) {
+            super.onDeviceDisconnected(device);
+            VideoPlayerActivity.startActivity(getActivity(), mStreamInfo, mSeekBar.getProgress());
+            getActivity().finish();
+        }
+
+    };
+
 }
