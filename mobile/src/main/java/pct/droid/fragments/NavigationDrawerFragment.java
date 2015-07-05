@@ -138,9 +138,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         mAdapter = new NavigationAdapter(getActivity(), this, initItems());
         mAdapter.setOnItemClickListener(mOnItemClickListener);
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 3));
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.requestFocus();
     }
