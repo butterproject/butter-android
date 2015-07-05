@@ -19,6 +19,7 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -57,6 +58,7 @@ import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
+import pct.droid.base.beaming.BeamPlayerNotificationService;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
@@ -218,6 +220,10 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
             Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             getActivity().finish();
         }
+
+        Intent intent = new Intent( getActivity(), BeamPlayerNotificationService.class );
+        intent.setAction(mIsPlaying ? BeamPlayerNotificationService.ACTION_PLAY : BeamPlayerNotificationService.ACTION_PAUSE);
+        getActivity().startService(intent);
     }
 
     @Override
@@ -231,7 +237,17 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     public void onPause() {
         super.onPause();
 
-        BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
+        BeamManager manager = BeamManager.getInstance(getActivity());
+
+        manager.removeDeviceListener(mDeviceListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Intent intent = new Intent( getActivity(), BeamPlayerNotificationService.class );
+        getActivity().stopService(intent);
     }
 
     private void startVideo() {
@@ -292,14 +308,27 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     public void playPauseClick(View v) {
         if(mMediaControl == null) return;
 
+        ResponseListener<Object> responseListener = new ResponseListener<Object>() {
+            @Override
+            public void onSuccess(Object object) {
+                mMediaControl.getPlayState(mPlayStateListener);
+            }
+
+            @Override
+            public void onError(ServiceCommandError error) {
+                mMediaControl.getPlayState(mPlayStateListener);
+            }
+        };
+
         if (mIsPlaying) {
             mIsPlaying = false;
-            mMediaControl.pause(null);
+            mMediaControl.pause(responseListener);
         } else {
             mIsPlaying = true;
-            mMediaControl.play(null);
+            mMediaControl.play(responseListener);
         }
-        mMediaControl.getPlayState(mPlayStateListener);
+
+        mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
     }
 
     @OnClick(R.id.forward_button)
