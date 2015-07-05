@@ -40,6 +40,7 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     private BeamPlayerFragment mFragment;
     private BeamManager mBeamManager = BeamManager.getInstance(this);
     private StreamInfo mStreamInfo;
+    private Long mResumePosition;
     private String mTitle;
 
     public static Intent startActivity(Context context, StreamInfo info) {
@@ -49,7 +50,7 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
         Intent i = new Intent(context, BeamPlayerActivity.class);
         i.putExtra(INFO, info);
-        //todo: resume position
+        i.putExtra(RESUME_POSITION, resumePosition);
         context.startActivity(i);
         return i;
     }
@@ -63,18 +64,15 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
 
+        setShowCasting(true);
+
         BeamServerService.getServer().start();
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
+        mResumePosition = getIntent().getLongExtra(RESUME_POSITION, 0);
 
-        String location = mStreamInfo.getVideoLocation();
-        if (!location.startsWith("http://") && !location.startsWith("https://")) {
-            BeamServer.setCurrentVideo(location);
-            location = BeamServer.getVideoURL();
-        }
-        mStreamInfo.setVideoLocation(location);
+        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
 
         /*
         File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
@@ -131,6 +129,10 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     @Override
     public TorrentService getService() {
         return mService;
+    }
+
+    public Long getResumePosition() {
+        return mResumePosition;
     }
 
     @Override

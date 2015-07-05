@@ -38,6 +38,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.connectsdk.device.ConnectableDevice;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -56,7 +57,10 @@ import java.util.Collection;
 import java.util.Locale;
 
 import pct.droid.R;
+import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.beaming.BeamDeviceListener;
+import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
@@ -79,6 +83,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
     private String mLocation;
+    private Long mResumePosition;
 
     private static final int SURFACE_BEST_FIT = 0;
     private static final int SURFACE_FIT_HORIZONTAL = 1;
@@ -136,6 +141,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mResumePosition = mCallback.getResumePosition();
         mStreamInfo = mCallback.getInfo();
         mMedia = mStreamInfo.getMedia();
 
@@ -172,7 +178,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         Timber.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
 
-        PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        PrefUtils.save(getActivity(), VideoPlayerActivity.RESUME_POSITION, mResumePosition);
 
         if (mCallback.getService() != null)
             mCallback.getService().addListener(BaseVideoPlayerFragment.this);
@@ -206,6 +212,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
 
         getVideoSurface().setKeepScreenOn(false);
+
+        BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
     }
 
     @Override
@@ -213,6 +221,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         super.onResume();
 
         resumeVideo();
+
+        BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
     }
 
     @Override
@@ -238,6 +248,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         if (mStreamInfo != null && null != mStreamInfo.getVideoLocation()) {
             mLocation = mStreamInfo.getVideoLocation();
+            if (!mLocation.startsWith("file://") && !mLocation.startsWith("http://") && !mLocation.startsWith("https://")) {
+                mLocation = "file://" + mLocation;
+            }
         } else {
             mReadyToPlay = true;
             return;
@@ -268,9 +281,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             }
         }, 2000);
 
-        long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, 0);
+        long resumeTime = PrefUtils.get(getActivity(), VideoPlayerActivity.RESUME_POSITION, mResumePosition);
         if (resumeTime > 0) {
-            setCurrentTime(resumeTime);
+            mLibVLC.setTime(resumeTime);
         }
     }
 
@@ -781,6 +794,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     };
 
     public interface Callback {
+        Long getResumePosition();
         StreamInfo getInfo();
         TorrentService getService();
     }
@@ -801,5 +815,16 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
         return super.onOptionsItemSelected(item);
     }
+
+    BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
+
+        @Override
+        public void onDeviceReady(ConnectableDevice device) {
+            super.onDeviceReady(device);
+            BeamPlayerActivity.startActivity(getActivity(), mStreamInfo, getCurrentTime());
+            getActivity().finish();
+        }
+
+    };
 
 }
