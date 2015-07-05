@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Αποθήκευση</string>
   <string name="cancel">Ακύρωση</string>
   <string name="close">Κλείσιμο</string>
   <string name="ok">Εντάξει</string>
@@ -22,12 +21,10 @@
   <string name="minutes">λεπτά</string>
   <string name="read_more">Διαβάστε περισσότερα</string>
   <string name="watch_trailer">Προβολή τρέιλερ</string>
-  <string name="disable_subs">Απενεργοποίηση υποτίτλων</string>
   <string name="no_subs">Χωρίς υπότιτλους</string>
   <string name="no_subs_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
   <string name="subtitles">Υπότιτλοι</string>
   <string name="quality">Ποιότητα</string>
-  <string name="open_magnet">Άνοιγμα magnet</string>
   <string name="trailer">Τρέιλερ</string>
   <string name="season">Κύκλος</string>
   <string name="episode">Επεισόδιο</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Μόνο Wi-Fi</string>
   <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>
   <!--NavigationDrawer-->
-  <string name="share">Μοιραστείτε το</string>
   <string name="drawer_open">Άνοιγμα συρταριού πλοήγησης</string>
   <string name="drawer_close">Κλείσιμο συρταριού πλοήγησης</string>
   <string name="no_search_results">Δεν βρέθηκαν αποτελέσματα αναζήτησης</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">Ιστολόγιο</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Έχετε δοκιμάσει το Popcorn Time για το Android; Είναι καταπληκτικό!</string>
-  <string name="share_dialog_title">Μοιραστείτε το με</string>
   <!--Beam dialog-->
   <string name="connected_to">Συνδεδεμένο με</string>
   <string name="disconnect">Αποσύνδεση</string>
