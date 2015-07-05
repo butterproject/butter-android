@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Сохранить</string>
   <string name="cancel">Отмена</string>
   <string name="close">Закрыть</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">мин</string>
   <string name="read_more">Читать дальше</string>
   <string name="watch_trailer">Смотреть трейлер</string>
-  <string name="disable_subs">Отключить субтитры</string>
   <string name="no_subs">Без субтитров</string>
   <string name="no_subs_available">Субтитры не найдены</string>
   <string name="subtitles">Субтитры</string>
   <string name="quality">Качество</string>
-  <string name="open_magnet">Открыть магнет-ссылку</string>
   <string name="trailer">Трейлер</string>
   <string name="season">Сезон</string>
   <string name="episode">Эпизод</string>
@@ -114,7 +111,6 @@
   <string name="wifi_only">Только по Wi-Fi</string>
   <string name="wifi_only_message">Выбран режим потоковой передачи только по Wi-Fi. Можно отключить это в настройках, если вы хотите использовать мобильный интернет для просмотра.</string>
   <!--NavigationDrawer-->
-  <string name="share">Поделиться</string>
   <string name="drawer_open">Открыть выпадающее меню</string>
   <string name="drawer_close">Закрыть выпадающее меню</string>
   <string name="no_search_results">Результаты поиска не найдены</string>
@@ -130,9 +126,6 @@
   <string name="git">Git</string>
   <string name="blog">Блог</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Вы пользовались Popcorn Time на Android? Отличная вещь!</string>
-  <string name="share_dialog_title">Поделиться</string>
   <!--Beam dialog-->
   <string name="connected_to">Соединён с</string>
   <string name="disconnect">Разъединить</string>

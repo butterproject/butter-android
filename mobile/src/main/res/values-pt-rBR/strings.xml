@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Salvar</string>
   <string name="cancel">Cancelar</string>
   <string name="close">Fechar</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Leia mais</string>
   <string name="watch_trailer">Assistir trailer</string>
-  <string name="disable_subs">Desabilitar legendas</string>
   <string name="no_subs">Sem legendas</string>
   <string name="no_subs_available">Sem legendas disponíveis</string>
   <string name="subtitles">Legendas</string>
   <string name="quality">Qualidade</string>
-  <string name="open_magnet">Abrir link magnético</string>
   <string name="trailer">Trailer</string>
   <string name="season">Temporada</string>
   <string name="episode">Episódio</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Você pode reproduzir videos apenas por Wi-Fi. Desabilite esta opção em Preferências para poder reproduzir vídeos utilizando redes móveis.</string>
   <!--NavigationDrawer-->
-  <string name="share">Compartilhar</string>
   <string name="drawer_open">Abrir gaveta de navegação</string>
   <string name="drawer_close">Fechar gaveta de navegação</string>
   <string name="no_search_results">Nenhum resultado encontrado</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Você já testou o Popcorn Time para Android? Ele é excelente!</string>
-  <string name="share_dialog_title">Compartilhar com</string>
   <!--Beam dialog-->
   <string name="connected_to">Conectado em</string>
   <string name="disconnect">Desconectar</string>
@@ -141,4 +134,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Aplicativo VPN.ht não instalado</string>
   <string name="vpn_info">Você precisa ter o aplicativo VPN.ht instalado para usar a opção VPN dentro do Popcorn Time. Não está interessado? Então você pode simplesmente esconder este botão.</string>
+  <string name="vpn_download">Download</string>
+  <string name="vpn_later">Depois</string>
+  <string name="vpn_hide">Ocultar</string>
 </resources>
