@@ -156,8 +156,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_media, container, false);
         mContext = getActivity();
+
+        View v = inflater.inflate(R.layout.fragment_media, container, false);
         ButterKnife.inject(this, v);
 
         mColumns = getResources().getInteger(R.integer.overview_cols);
