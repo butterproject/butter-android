@@ -100,7 +100,7 @@
     <string name="genre_vampire">Vampire</string>
 
     <!-- Possible tabs -->
-    <string name="popular_now">POPULAR NOW</string>
+    <string name="popular_now">POPULAR</string>
     <string name="top_rated">TOP RATED</string>
     <string name="release_date">RELEASE DATE</string>
     <string name="last_updated">LAST UPDATED</string>
