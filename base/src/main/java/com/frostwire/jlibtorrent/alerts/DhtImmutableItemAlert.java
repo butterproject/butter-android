@@ -1,7 +1,6 @@
 package com.frostwire.jlibtorrent.alerts;
 
 import com.frostwire.jlibtorrent.Entry;
-import com.frostwire.jlibtorrent.Session;
 import com.frostwire.jlibtorrent.Sha1Hash;
 import com.frostwire.jlibtorrent.swig.dht_immutable_item_alert;
 

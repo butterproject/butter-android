@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Salva</string>
   <string name="cancel">Annulla</string>
   <string name="close">Chiudi</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Leggi di più</string>
   <string name="watch_trailer">Guarda il Trailer</string>
-  <string name="disable_subs">Disattiva sottotitoli</string>
   <string name="no_subs">Nessun sottotitolo</string>
   <string name="no_subs_available">Nessun sottotitolo disponibile</string>
   <string name="subtitles">Sottotitoli</string>
   <string name="quality">Qualità</string>
-  <string name="open_magnet">Apri link magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Stagione</string>
   <string name="episode">Episodio</string>
@@ -36,6 +33,7 @@
   <string name="ended">Finito</string>
   <string name="aired">Trasmesso il: %s</string>
   <string name="no_title_available">Nessun nome</string>
+  <string name="no_synopsis_available">Nessuna trama disponibile</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Aspettando il torrent</string>
   <string name="starting_buffering">Inizio buffering</string>
@@ -107,11 +105,11 @@
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Illimitato</string>
   <string name="show_vpn">Mostra l\'opzione VPN nel menu</string>
+  <string name="rgb16">RGB 16-bit: migliori prestazioni, qualità inferiore</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Solo wifi</string>
   <string name="wifi_only_message">Puoi visualizzare i video solo con una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>
   <!--NavigationDrawer-->
-  <string name="share">Condividi</string>
   <string name="drawer_open">Apri cartella di navigazione</string>
   <string name="drawer_close">Chiudi cartella di navigazione</string>
   <string name="no_search_results">Nessun risultato trovato</string>
@@ -127,9 +125,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Hai provato Popcorn TIme per Android? E\' fantastico|</string>
-  <string name="share_dialog_title">Condividi con:</string>
   <!--Beam dialog-->
   <string name="connected_to">Connesso a</string>
   <string name="disconnect">Disconnetti</string>
@@ -140,4 +135,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">App VPN.ht non installata</string>
   <string name="vpn_info">Devi avere l\'app VPN.ht per poter utilizzare l\'opzione VPN da Popcorn Time. Non ti interessa? Allora puoi semplicemente nascondere questo pulsante.</string>
+  <string name="vpn_download">Scarica</string>
+  <string name="vpn_later">Più tardi</string>
+  <string name="vpn_hide">Nascondi</string>
 </resources>
