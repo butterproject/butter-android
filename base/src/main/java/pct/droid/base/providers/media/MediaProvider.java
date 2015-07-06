@@ -79,7 +79,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
 
     public static class Filters {
         public enum Order {ASC, DESC};
-        public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET}
+        public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET, TRENDING}
 
         public String keywords = null;
         public String genre = null;

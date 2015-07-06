@@ -22,13 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.connectsdk.device.ConnectableDevice;
-import com.connectsdk.device.ConnectableDeviceListener;
-import com.connectsdk.service.DeviceService;
-import com.connectsdk.service.command.ServiceCommandError;
-
-import java.util.List;
-
 import pct.droid.R;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;

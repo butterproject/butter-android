@@ -36,7 +36,6 @@ import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
 import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
 import com.connectsdk.service.AirPlayService;
 import com.connectsdk.service.CastService;
-import com.connectsdk.service.DIALService;
 import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
 import com.connectsdk.service.NetcastTVService;

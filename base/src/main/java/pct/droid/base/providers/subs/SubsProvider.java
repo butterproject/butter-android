@@ -41,7 +41,6 @@ import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
-import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.subs.FatalParsingException;
 import pct.droid.base.subs.FormatASS;
 import pct.droid.base.subs.FormatSRT;
