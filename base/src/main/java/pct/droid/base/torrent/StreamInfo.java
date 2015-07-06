@@ -17,20 +17,9 @@
 
 package pct.droid.base.torrent;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 
@@ -43,7 +32,7 @@ public class StreamInfo implements Parcelable {
     private String mTitle;
     private String mImageUrl;
     private String mHeaderImageUrl;
-    private Boolean mIsShow;
+    private Boolean mIsShow = false;
     private Integer mColor = -1;
     private Media mMedia;
 
