@@ -105,6 +105,10 @@
   <string name="dht_limit">Όριο DHT</string>
   <string name="unlimited">Απεριόριστο</string>
   <string name="show_vpn">Εμφάνιση επιλογής VPN στο μενού</string>
+  <string name="pixel_format">Εξαναγκασμός χρωματισμού βίντεο</string>
+  <string name="rgb32">RGB 32-bit: Προεπιλεγμένος χρωματισμός</string>
+  <string name="rgb16">RGB 16-bit: Καλύτερη επίδοση, χαμηλότερη ποιότητα</string>
+  <string name="yuv">YUV: Καλύτερη επίδοση αλλά δεν λειτουργεί πάντα</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Μόνο Wi-Fi</string>
   <string name="wifi_only_message">Μπορείτε να βλέπετε βίντεο μόνο μέσω Wi-Fi. Μπορείτε να απενεργοποιήσετε την επιλογή αυτή εάν θέλετε να γίνεται αναπαραγωγή μέσω του δικτύου κινητής τηλεφωνίας.</string>

@@ -1,25 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="update_available">Nueva actualización disponible</string>
-  <string name="press_install">Presiona para instalar</string>
+  <string name="press_install">Presioná para instalar</string>
   <string name="loading_data">Cargando datos...</string>
-  <string name="loading_details">Cargando ficha...</string>
-  <string name="loading_shows">Cargando series...</string>
+  <string name="loading_details">Cargando detalles...</string>
+  <string name="loading_shows">Cargando shows...</string>
   <string name="loading_movies">Cargando películas...</string>
   <string name="loading_subs">Cargando subtítulos...</string>
-  <string name="error_files">Error: No se pudo escribir archivos</string>
-  <string name="overview_not_available">¡Lo siento! No hay información disponible.</string>
+  <string name="error_files">Error: No se pudieron escribir los archivos</string>
   <string name="episode">Episodio</string>
-  <string name="unknown_error">Algo ha salido mal</string>
-  <string name="torrent_failed">No se pudo recuperar el torrent</string>
-  <string name="running">Ejecutándose en segundo plano</string>
-  <string name="tap_to_close">Toque para cerrar</string>
-  <string name="tap_to_resume">Toque para reanudar</string>
   <!--Genres-->
-  <string name="genre_all">Todos</string>
+  <string name="genre_all">Todo</string>
   <string name="genre_action">Acción</string>
   <string name="genre_adventure">Aventura</string>
-  <string name="genre_animation">Animación</string>
+  <string name="genre_animation">Animació</string>
   <string name="genre_biography">Biografía</string>
   <string name="genre_comedy">Comedia</string>
   <string name="genre_crime">Crimen</string>
@@ -28,30 +22,29 @@
   <string name="genre_drama">Drama</string>
   <string name="genre_family">Familiar</string>
   <string name="genre_fantasy">Fantasía</string>
-  <string name="genre_film_noir">Cine Negro</string>
+  <string name="genre_film_noir">Film Noir</string>
   <string name="genre_game_show">Concursos</string>
-  <string name="genre_history">Historia</string>
-  <string name="genre_home_garden">Hogar y Jardín</string>
+  <string name="genre_history">Histórico</string>
   <string name="genre_horror">Terror</string>
-  <string name="genre_mini_series">Mini series</string>
+  <string name="genre_mini_series">Mini Series</string>
   <string name="genre_music">Música</string>
   <string name="genre_musical">Musical</string>
   <string name="genre_mystery">Misterio</string>
   <string name="genre_news">Noticias</string>
   <string name="genre_reality">Reality</string>
-  <string name="genre_romance">Romance</string>
-  <string name="genre_sci_fi">Ciencia Ficción</string>
+  <string name="genre_romance">Romántico</string>
+  <string name="genre_sci_fi">Ciencia Ficció</string>
   <string name="genre_short">Corto</string>
   <string name="genre_special_interest">Interés especial</string>
-  <string name="genre_soap">Novela</string>
+  <string name="genre_soap">Telenovela</string>
   <string name="genre_sport">Deporte</string>
-  <string name="genre_suspense">Suspense</string>
+  <string name="genre_suspense">Suspenso</string>
   <string name="genre_talk_show">Entrevistas</string>
-  <string name="genre_thriller">Suspense</string>
-  <string name="genre_war">Bélico</string>
+  <string name="genre_thriller">Suspenso</string>
+  <string name="genre_war">Bélica</string>
   <string name="genre_western">Western</string>
   <!--Anime:-->
-  <string name="genre_cars">Coches</string>
+  <string name="genre_cars">Autos</string>
   <string name="genre_dementia">Demencia</string>
   <string name="genre_demons">Demonios</string>
   <string name="genre_ecchi">Ecchi</string>
@@ -63,9 +56,9 @@
   <string name="genre_martial_arts">Artes marciales</string>
   <string name="genre_mecha">Mecha</string>
   <string name="genre_military">Militar</string>
-  <string name="genre_police">Policiaca</string>
+  <string name="genre_police">Policia</string>
   <string name="genre_parody">Parodia</string>
-  <string name="genre_psychological">Psicológica</string>
+  <string name="genre_psychological">Psicológico</string>
   <string name="genre_samurai">Samurai</string>
   <string name="genre_school">Escuela</string>
   <string name="genre_seinen">Seinen</string>
@@ -73,22 +66,13 @@
   <string name="genre_shoujo_ai">Shoujo Ai</string>
   <string name="genre_shounen">Shounen</string>
   <string name="genre_shounen_ai">Shounen Ai</string>
-  <string name="genre_slice_of_life">Recuentos de la vida</string>
-  <string name="genre_space">Espacio</string>
-  <string name="genre_super_power">Superpoderes</string>
+  <string name="genre_slice_of_life">Slice of Life</string>
+  <string name="genre_space">Espacial</string>
+  <string name="genre_super_power">Súper poder</string>
   <string name="genre_supernatural">Sobrenatural</string>
-  <string name="genre_vampire">Vampiros</string>
+  <string name="genre_vampire">Vampiro</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULAR AHORA</string>
-  <string name="top_rated">MÁS VALORADOS</string>
-  <string name="release_date">FECHA DE ESTRENO</string>
-  <string name="last_updated">ÚLTIMA ACTUALIZACIÓN</string>
   <string name="year">AÑO</string>
   <string name="a_to_z">A - Z</string>
-  <string name="trending">TENDENCIAS</string>
   <!--BeamManager-->
-  <string name="pairing_tv">Emparejando con la TV</string>
-  <string name="confirm_tv">Por favor, confirma la conexión en tu TV</string>
-  <string name="enter_pairing_code">Introduce el código de emparejamiento en la TV</string>
-  <string name="open_with">Abrir con</string>
 </resources>

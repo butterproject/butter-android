@@ -105,6 +105,10 @@
   <string name="dht_limit">Límit DHT</string>
   <string name="unlimited">Sense límit</string>
   <string name="show_vpn">Mostra l\'opció de VPN al menú</string>
+  <string name="pixel_format">Forçant els colors del vídeo</string>
+  <string name="rgb32">RGB 32-bit: colors per defecte</string>
+  <string name="rgb16">RGB 16-bit: reproducció més fluida, menys qualitat</string>
+  <string name="yuv">YUV: la reproducció més fluida, però no sempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Només Wi-Fi</string>
   <string name="wifi_only_message">Només es poden transmetre vídeos per Wi-Fi. Si voleu transmetre per una connexió mòbil podeu desactivar aquesta opció a la configuració.</string>
