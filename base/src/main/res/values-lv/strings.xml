@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="update_available">Jauna versija pieejama</string>
+  <string name="update_available">Pieejama jauna versija</string>
   <string name="press_install">Spied lai instalētu</string>
   <string name="loading_data">Ielādējam datus...</string>
   <string name="loading_details">Ielādējam detaļas</string>
@@ -85,6 +85,7 @@
   <string name="last_updated">ATJAUNOTĀKIE</string>
   <string name="year">GAGS</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">POPULĀRI</string>
   <!--BeamManager-->
   <string name="pairing_tv">Savienojos ar TV</string>
   <string name="confirm_tv">Lūdzu apstiprinu savienojumu savā TV</string>

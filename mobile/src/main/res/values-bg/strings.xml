@@ -105,6 +105,10 @@
   <string name="dht_limit">DHT ограничение</string>
   <string name="unlimited">Неограничени</string>
   <string name="show_vpn">Показвай VPN опция в менюто</string>
+  <string name="pixel_format">Принудителни видео цветове</string>
+  <string name="rgb32">RGB 32-бита: стандартни цветове</string>
+  <string name="rgb16">RGB 16-бита: по-добро изпълнение, по-ниско качество</string>
+  <string name="yuv">YUV: най-добро изпълнение, но не винаги работи</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Само чрез Wi-Fi</string>
   <string name="wifi_only_message">Може да стриймвате видеа само чрез Wi-Fi.Може да изключите това в \"предпочитания\" в случай,че искате да стриймвате чрез клетъчна връзка.</string>
