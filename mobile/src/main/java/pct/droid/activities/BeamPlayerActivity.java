@@ -27,7 +27,6 @@ import android.view.View;
 
 import pct.droid.R;
 import pct.droid.base.beaming.BeamManager;
-import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;

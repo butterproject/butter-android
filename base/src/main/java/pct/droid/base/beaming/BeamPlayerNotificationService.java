@@ -15,12 +15,10 @@ import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import pct.droid.base.R;
-import timber.log.Timber;
 
 public class BeamPlayerNotificationService extends Service {
 

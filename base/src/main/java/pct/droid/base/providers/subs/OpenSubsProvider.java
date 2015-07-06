@@ -30,7 +30,6 @@ import java.util.Map;
 
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Movie;
-import pct.droid.base.providers.media.models.Show;
 
 public class OpenSubsProvider extends SubsProvider {
 

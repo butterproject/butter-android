@@ -41,7 +41,6 @@ import java.nio.charset.CharsetDecoder;
 import java.util.HashMap;
 
 import pct.droid.base.io.UnicodeBOMInputStream;
-import timber.log.Timber;
 
 public class FileUtils {
 

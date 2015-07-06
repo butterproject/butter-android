@@ -1,6 +1,13 @@
 package com.frostwire.jlibtorrent;
 
-import com.frostwire.jlibtorrent.swig.*;
+import com.frostwire.jlibtorrent.swig.announce_entry_vector;
+import com.frostwire.jlibtorrent.swig.create_torrent;
+import com.frostwire.jlibtorrent.swig.error_code;
+import com.frostwire.jlibtorrent.swig.lazy_entry;
+import com.frostwire.jlibtorrent.swig.libtorrent;
+import com.frostwire.jlibtorrent.swig.string_string_pair_vector;
+import com.frostwire.jlibtorrent.swig.torrent_info;
+import com.frostwire.jlibtorrent.swig.web_seed_entry_vector;
 
 import java.io.File;
 import java.util.ArrayList;
