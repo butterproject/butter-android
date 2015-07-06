@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Guardar</string>
   <string name="cancel">Cancelar</string>
   <string name="close">Cerrar</string>
   <string name="ok">Ok</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Leer más</string>
   <string name="watch_trailer">Ver trailer</string>
-  <string name="disable_subs">Desactivar subtítulos</string>
   <string name="no_subs">Sin subtítulos</string>
   <string name="no_subs_available">No hay subtítulos disponibles</string>
   <string name="subtitles">Subtítulos</string>
   <string name="quality">Calidad</string>
-  <string name="open_magnet">Abrir enlace magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Temporada</string>
   <string name="episode">Episodio</string>
@@ -108,12 +105,15 @@
   <string name="dht_limit">Límite DHT</string>
   <string name="unlimited">Ilimitada</string>
   <string name="show_vpn">Mostrar opción VPN en el menú</string>
+  <string name="pixel_format">Forzar croma de vídeo</string>
+  <string name="rgb32">RGB 32-bit: croma por defecto</string>
+  <string name="rgb16">RGB 16-bit: mejor rendimiento, menor calidad</string>
+  <string name="yuv">YUV: el mejor rendimiento pero no siempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Sólo Wi-Fi</string>
   <string name="wifi_only_message">La reproducción de vídeos sólo es posible a través de Wi-Fi. Puedes desactivar ésto en la página de Configuración si deseas utilizar tu red de datos móviles.
 </string>
   <!--NavigationDrawer-->
-  <string name="share">Compartir</string>
   <string name="drawer_open">Abrir el panel lateral</string>
   <string name="drawer_close">Cerrar el panel lateral</string>
   <string name="no_search_results">No se encontraron resultados de búsqueda</string>
@@ -127,9 +127,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">¿Has probado Popcorn Time para Android? ¡Es impresionante!</string>
-  <string name="share_dialog_title">Compartir con</string>
   <!--Beam dialog-->
   <string name="connected_to">Conectado a</string>
   <string name="disconnect">Desconectar</string>

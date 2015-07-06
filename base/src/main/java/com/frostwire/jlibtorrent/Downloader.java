@@ -4,7 +4,12 @@ import com.frostwire.jlibtorrent.alerts.Alert;
 import com.frostwire.jlibtorrent.alerts.AlertType;
 import com.frostwire.jlibtorrent.alerts.MetadataReceivedAlert;
 import com.frostwire.jlibtorrent.alerts.TorrentPrioritizeAlert;
-import com.frostwire.jlibtorrent.swig.*;
+import com.frostwire.jlibtorrent.swig.add_torrent_params;
+import com.frostwire.jlibtorrent.swig.error_code;
+import com.frostwire.jlibtorrent.swig.libtorrent;
+import com.frostwire.jlibtorrent.swig.sha1_hash;
+import com.frostwire.jlibtorrent.swig.torrent_handle;
+import com.frostwire.jlibtorrent.swig.torrent_info;
 
 import java.io.File;
 import java.util.concurrent.CountDownLatch;

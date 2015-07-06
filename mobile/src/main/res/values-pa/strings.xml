@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="cancel">ਰੱਦ ਕਰੋ</string>
+  <string name="close">ਬੰਦ ਕਰੋ</string>
+  <string name="ok">ਠੀਕ ਹੈ</string>
+  <string name="enabled">ਯੋਗ</string>
+  <string name="disabled">ਆਯੋਗ</string>
+  <string name="casting">ਕਾਸਟਿੰਗ</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">ਸ਼ੀਰਸ਼ਕ, ਸਾਲ, ਕਲਾਕਾਰ</string>
+  <string name="title_shows">ਸ਼ੋ</string>
+  <string name="title_movies">ਫਿਲਮਾਂ</string>
+  <string name="title_anime">ਐਨੀਮੇ</string>
+  <string name="genres">ਕਿਸਮਾਂ</string>
+  <string name="search">ਲਭੋ</string>
+  <string name="searching">ਲਭ ਰਹੇ ਹਾਂ...</string>
+  <string name="no_data_found">ਕੋਈ ਵੀ ਡਾਟਾ ਨਹੀਂ ਲਭਾ</string>
+  <string name="unknown_error">ਕੁਝ ਗਲਤ ਵਾਪਰ ਗਿਆ ਹੈ</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">ਮਿੰਟ</string>
+  <string name="read_more">ਵਧੇਰੇ ਪੜੋ</string>
+  <string name="watch_trailer">ਟਰੇਲਰ ਵੇਖੋ</string>
+  <string name="no_subs">ਕੋਈ ਸਬ-ਟਾਈਟਲ ਨਹੀਂ</string>
+  <string name="no_subs_available">ਕੋਈ ਵੀ ਸਬ-ਟਾਈਟਲ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
+  <string name="subtitles">ਸਬ-ਟਾਈਟਲ</string>
+  <string name="quality">ਕੁਆਲਟੀ</string>
+  <string name="trailer">ਟਰੇਲਰ</string>
+  <string name="season">ਸੀਜ਼ਨ</string>
+  <string name="episode">ਕੜੀ</string>
+  <string name="specials">ਖ਼ਾਸ ਕੜੀਆਂ</string>
+  <string name="no_title_available">ਕੋਈ ਨਾਮ ਨਹੀਂ</string>
+  <string name="no_synopsis_available">ਕੋਈ ਵੀ ਸਾਰ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">ਟੋਰੰਟ ਦੀ ਉਡੀਕ ਕਰ ਰਹੇ ਹਾਂ</string>
+  <string name="starting_buffering">ਬਫਰਿੰਗ ਚਾਲੂ ਕਰ ਰਹੇ ਹਾਂ</string>
+  <string name="streaming_started">ਸਟਰੀਮਿੰਗ ਚਾਲੂ ਹੋ ਗਈ ਹੈ</string>
+  <string name="waiting_for_subtitles">ਸਬ-ਟਾਈਟਲ ਦੀ ਉਡੀਕ ਕਰ ਰਹੇ ਹਾਂ</string>
+  <string name="seeds">ਸੀਡ</string>
+  <string name="error_files">ਗਲਤੀ: ਫਾਇਲਾਂ ਬਣਾਉਣ ਵਿੱਚ ਅਸਮਰਥ. ਕਿਰਪਾ ਕਿਸੇ ਵੱਖਰੇ ਸਟੋਰੇਜ ਟਿਕਾਣੇ ਨਾਲ ਕੋਸ਼ਿਸ਼ ਕਰੋ.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">ਵਿਖਾਇਆ ਜਾ ਰਿਹਾ</string>
+  <string name="volume">ਵਾਲੀਅਮ</string>
+  <string name="brightness">ਬ੍ਰਾਈਟਨੈਸ</string>
+  <string name="hardware_acceleration_error_title">ਗਲਤੀ: ਹਾਰਡਵੇਅਰ ਡੀਕੋਡਿੰਗ ਅਸਫਲ ਰਹੀ</string>
+  <string name="hardware_acceleration_error_message">ਹਾਰਡਵੇਅਰ ਐਕਸੇਲਰੇਸ਼ਨ ਵਿੱਚ ਗਲਤੀ ਆ ਗਈ ਹੈ. ਕੀ ਤੁਸੀਂ ਇਸਨੂੰ ਆਯੋਗ ਕਰਕੇ ਮੁੜ-ਕੋਸ਼ਿਸ਼ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</string>
+  <string name="best_fit">ਬਿਹਤਰੀਨ ਫਿੱਟ</string>
+  <string name="fill">ਭਰਵੀਂ ਫਿੱਟ</string>
+  <string name="fit_horizontal">ਲੇਟਵੀਂ ਫਿੱਟ</string>
+  <string name="fit_vertical">ਖੜਵੀਂ ਫਿੱਟ</string>
+  <string name="original_size">ਅਸਲੀ ਫਿੱਟ</string>
+  <string name="reload_video">ਵੀਡੀਓ ਮੁੜ ਲੋਡ ਕਰੋ</string>
+  <string name="comm_error">ਸੰਚਾਰਕ ਗਲਤੀ</string>
+  <string name="comm_message">ਵੀਡੀਓ ਲੈਣ ਦੌਰਾਨ ਇੱਕ ਸਮੱਸਿਆ ਆ ਗਈ ਹੈ. ਇਹ ਨੈਟਵਰਕ ਦਾ ਜਾਂ YouTube ਪਰੋਟੋਕੋਲ ਦਾ ਮਸਲਾ ਹੋ ਸੱਕਦਾ ਹੈ. ਕਿਰਪਾ ਕੁਝ ਚਿਰ ਮਗਰੋਂ ਮੁੜ-ਕੋਸ਼ਿਸ਼ ਕਰੋ.</string>
+  <string name="leave_videoplayer_title">ਕੀ ਤੁਸੀਂ ਨਿਸ਼ਚਿਤ ਹੋ?</string>
+  <string name="leave_videoplayer_message">ਕੀ ਤੁਸੀਂ ਨਿਸ਼ਚਿਤ ਵੀਡੀਓ ਪਲੇਅਰ ਨੂੰ ਛੱਡ ਕੇ ਜਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? %s will stop playing.</string>
+  <string name="encountered_error_title">ਵੀਡੀਓ ਗਲਤੀ</string>
+  <string name="encountered_error">ਵੀਡੀਓ ਪਲੇਅਰ ਵਿੱਚ ਇੱਕ ਗੰਭੀਰ ਸਮੱਸਿਆ ਆ ਗਈ ਹੈ. ਵੀਡੀਓ ਫਾਇਲ ਨੂੰ ਖੋਲਿਆ ਅਤੇ/ਜਾਂ ਚਲਾਇਆ ਨਹੀਂ ਜਾ ਸੱਕਿਆ. ਫਾਰਮੈਟ ਦੀ ਪਛਾਨ ਅਸਫਲ ਰਹੀ.</string>
+  <!--TermsActivity strings-->
+  <!--SettingsActivity strings-->
+  <string name="preferences">ਸੈਟਿੰਗ</string>
+  <string name="general">ਸਧਾਰਨ</string>
+  <string name="default_view">ਡੀਫਾਲਟ ਸੰਖੇਪ</string>
+  <string name="default_player">ਡੀਫਾਲਟ ਵੀਡੀਓ ਪਲੇਅਰ</string>
+  <string name="i18n_language">ਐਪਲੀਕੇਸ਼ਨ ਭਾਸ਼ਾ</string>
+  <string name="restart_effect">ਬਦਲਾਵ ਲਾਗੂ ਕਰਨ ਲਈ ਐਪਲੀਕੇਸ਼ਨ ਮੁੜ-ਚਾਲੂ ਕਰੋ</string>
+  <string name="device_language">ਡਿਵਾਈਸ ਭਾਸ਼ਾ</string>
+  <string name="stream_over_wifi_only">ਸਿਰਫ Wi-Fi ਉੱਤੇ ਸਟਰੀਮ ਕਰੋ</string>
+  <string name="internal_player">ਅੰਦਰੂਨੀ</string>
+  <string name="subtitle_color">ਰੰਗ</string>
+  <string name="subtitle_size">saaiz</string>
+  <string name="subtitle_stroke_color">ਆਉਟਲਾਈਨ ਰੰਗ</string>
+  <string name="subtitle_stroke_width">ਆਉਟਲਾਈਨ ਚੌੜਾਈ</string>
+  <string name="subtitle_language">ਡੀਫਾਲਟ ਭਾਸ਼ਾ</string>
+  <string name="no_default_set">ਕੋਈ ਡੀਫਾਲਟ ਭਾਸ਼ਾ ਸੈੱਟ ਨਹੀਂ</string>
+  <string name="advanced">ਅਡਵਾਂਸਡ</string>
+  <string name="storage_location">ਸਟੋਰੇਜ ਟਿਕਾਣਾ</string>
+  <string name="storage_automatic">ਆਟੋਮੈਟਿਕ</string>
+  <string name="storage_choose">ਟਿਕਾਣਾ ਚੁਣੋ</string>
+  <string name="not_writable">ਟਿਕਾਣਾ ਲਿਖਣਯੋਗ ਨਹੀਂ ਹੈ</string>
+  <string name="remove_cache">ਪਲੇਅਰ ਬੰਦ ਹੋਣ ਸਾਰ ਕੈਸ਼ ਮੈਮਰੀ ਸਾਫ਼ ਕਰ ਦਿਓ</string>
+  <string name="hw_acceleration">ਹਾਰਡਵੇਅਰ ਐਕਸੇਲਰੇਸ਼ਨ</string>
+  <string name="hw_automatic">ਆਟੋਮੈਟਿਕ</string>
+  <string name="hw_full">ਪੂਰੀ ਵਰਤੋਂ</string>
+  <string name="hw_decoding">ਸਿਰਫ ਡੀਕੋਡਿੰਗ ਲਈ</string>
+  <string name="updates">ਅੱਪਡੇਟ</string>
+  <string name="auto_updates">ਆਟੋਮੈਟਿਕ ਅੱਪਡੇਟ</string>
+  <string name="check_for_updates">ਅੱਪਡੇਟ ਲਈ ਚੈੱਕ ਕਰੋ</string>
+  <string name="last_check">ਅਖੀਰਲਾ ਚੈੱਕ</string>
+  <string name="about">ਐਪਲੀਕੇਸ਼ਨ ਬਾਰੇ</string>
+  <string name="version">ਵਰਯਨ</string>
+  <string name="changelog">ਬਦਲਾਵ ਲਾਗ</string>
+  <string name="tap_to_open">ਖੋਲਣ ਲਈ ਟੈਪ ਕਰੋ</string>
+  <string name="report_a_bug">ਖਰਾਬੀ ਰੀਪੋਰਟ ਕਰੋ</string>
+  <string name="open_source_licenses">ਓਪਨ-ਸਰੋਤ ਲਾਇਸੰਸ</string>
+  <string name="torrents">ਟੋਰੰਟ</string>
+  <string name="download_speed">ਵੱਧੋ-ਵੱਧ ਡਾਉਨਲੋਡ ਸਪੀਡ</string>
+  <string name="upload_speed">ਵੱਧੋ-ਵੱਧ ਅੱਪਲੋਡ ਸਪੀਡ</string>
+  <string name="max_connections">ਵੱਧੋ-ਵੱਧ ਕੁੱਲ ਕਨੈਕਸ਼ਨ</string>
+  <string name="dht_limit">DHT ਦੀ ਸੀਮਾ</string>
+  <string name="unlimited">ਬੇਅੰਤ</string>
+  <string name="show_vpn">ਮੀਨੂੰ ਵਿੱਚ VPN ਵਿਕਲਪ ਵਿਖਾਓ</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">ਸਿਰਫ Wi-Fi</string>
+  <string name="wifi_only_message">ਤੁਸੀਂ ਸਿਰਫ Wi-Fi ਦੇ ਉੱਤੇ ਹੀ ਵੀਡੀਓ ਸਟਰੀਮ ਕਰ ਸੱਕਦੇ ਹੋ. ਜੇਕਰ ਤੁਸੀਂ ਮੋਬਾਈਲ ਕਨੈਕਸ਼ਨ ਉੱਤੇ ਸਟਰੀਮ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ ਤਾਂ ਸੈਟਿੰਗ ਵਿੱਚੋਂ ਇਸਨੂੰ ਆਯੋਗ ਕਰ ਸੱਕਦੇ ਹੋ.</string>
+  <!--NavigationDrawer-->
+  <string name="drawer_open">ਨੈਵੀਗੇਸ਼ਨ ਡਰਾਵਰ ਖੋਲੋ</string>
+  <string name="drawer_close">ਨੈਵੀਗੇਸ਼ਨ ਡਰਾਵਰ ਬੰਦ ਕਰੋ</string>
+  <string name="no_search_results">ਕੋਈ ਵੀ ਖੋਜ ਨਤੀਜੇ ਨਹੀਂ ਲਭੇ</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="website">ਵੈਬਸਾਇਟ</string>
+  <string name="forum">ਜਨਸਭਾ</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Beam dialog-->
+  <string name="the_video">ਵੀਡੀਓ</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht ਐਪਲੀਕੇਸ਼ਨ ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ</string>
+  <string name="vpn_info">Popcorn Time ਦੇ ਵਿੱਚੋਂ VPN ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ ਇਹ ਜਰੂਰੀ ਹੈ ਕਿ ਤੁਸੀਂ VPN.ht ਐਪਲੀਕੇਸ਼ਨ ਇੰਸਟਾਲ ਕੀਤੀ ਹੋਵੇ. ਦਿਲਚਸਪੀ ਨਹੀਂ ਹੈ? ਤਾਂ ਤੁਸੀਂ ਇਸ ਬਟਨ ਨੂੰ ਛੁਪਾ ਸੱਕਦੇ ਹੋ.</string>
+  <string name="vpn_download">ਡਾਉਨਲੋਡ</string>
+  <string name="vpn_later">ਫੇਰ ਕਦੀਂ</string>
+  <string name="vpn_hide">ਛੁਪਾਓ</string>
+</resources>

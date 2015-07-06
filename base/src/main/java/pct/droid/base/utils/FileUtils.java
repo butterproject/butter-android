@@ -99,7 +99,10 @@ public class FileUtils {
                 recursiveDelete(new File(file, child));
             }
         }
-        file.delete();
+
+        File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
+        file.renameTo(to);
+        to.delete();
     }
 
     /**

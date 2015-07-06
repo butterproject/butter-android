@@ -31,8 +31,16 @@ import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.discovery.CapabilityFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
+import com.connectsdk.discovery.provider.CastDiscoveryProvider;
+import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
+import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
+import com.connectsdk.service.AirPlayService;
 import com.connectsdk.service.CastService;
+import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
+import com.connectsdk.service.NetcastTVService;
+import com.connectsdk.service.RokuService;
+import com.connectsdk.service.WebOSTVService;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
@@ -43,15 +51,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
+import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
-import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;
 import timber.log.Timber;
 
@@ -69,11 +76,13 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     private ConnectableDevice mCurrentDevice;
     private LaunchSession mLaunchSession;
     private Boolean mConnected = false;
-    private BeamListener mListener = null;
+    private List<BeamListener> mListeners = new ArrayList<>();
+    private List<ConnectableDeviceListener> mDeviceListeners = new ArrayList<>();
     private InputMethodManager mInputManager;
     private EditText mInput;
     private AlertDialog mPairingAlertDialog;
     private AlertDialog mPairingCodeDialog;
+    private StreamInfo mStreamInfo;
 
     private BeamManager(Context context) {
         mContext = context;
@@ -121,6 +130,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         // CastService.setApplicationID(Constants.CAST_ID); Do not use since suspended by Google
         DiscoveryManager.init(PopcornApplication.getAppContext());
         mDiscoveryManager = DiscoveryManager.getInstance();
+
+        mDiscoveryManager.registerDeviceService(CastService.class, CastDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(RokuService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(DLNAService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(NetcastTVService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
+
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
         mDiscoveryManager.setCapabilityFilters(new CapabilityFilter(
                 MediaPlayer.Play_Video,
@@ -189,6 +206,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mLaunchSession.close(null);
         mLaunchSession = null;
 
+        mStreamInfo = null;
+
         return true;
     }
 
@@ -203,7 +222,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     public void playVideo(StreamInfo info, Boolean subs, final MediaPlayer.LaunchListener listener) {
         if (!mConnected) listener.onError(ServiceCommandError.getError(503));
 
+        mStreamInfo = info;
+
         String location = info.getVideoLocation();
+        if(!location.startsWith("http")) {
+            BeamServer.setCurrentVideo(location);
+            location = BeamServer.getVideoURL();
+        }
+
         try {
             URL url = new URL(location);
             URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
@@ -261,11 +287,12 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             mCurrentDevice.removeListener(this);
         }
 
-        mCurrentDevice = null;
+        for (BeamListener listener : mListeners)
+            listener.updateBeamIcon();
 
-        if (mListener != null) {
-            mListener.updateBeamIcon();
-        }
+        onDeviceDisconnected(mCurrentDevice);
+
+        mCurrentDevice = null;
     }
 
     public void addDiscoveryListener(DiscoveryManagerListener listener) {
@@ -276,8 +303,24 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.removeListener(listener);
     }
 
-    public void setListener(BeamListener listener) {
-        mListener = listener;
+    public void addListener(BeamListener listener) {
+        mListeners.add(listener);
+    }
+
+    public void removeListener(BeamListener listener) {
+        mListeners.remove(listener);
+    }
+
+    public void addDeviceListener(ConnectableDeviceListener listener) {
+        mDeviceListeners.add(listener);
+    }
+
+    public void removeDeviceListener(ConnectableDeviceListener listener) {
+        mDeviceListeners.remove(listener);
+    }
+
+    public StreamInfo getStreamInfo() {
+        return mStreamInfo;
     }
 
     @Override
@@ -287,15 +330,21 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         }
 
         mConnected = true;
-        if (mListener != null)
-            mListener.updateBeamIcon();
+        for (BeamListener listener : mListeners)
+            listener.updateBeamIcon();
+
+        for(ConnectableDeviceListener listener : mDeviceListeners)
+            listener.onDeviceReady(device);
     }
 
     @Override
     public void onDeviceDisconnected(ConnectableDevice device) {
         mConnected = false;
-        if (mListener != null)
-            mListener.updateBeamIcon();
+        for (BeamListener listener : mListeners)
+            listener.updateBeamIcon();
+
+        for(ConnectableDeviceListener listener : mDeviceListeners)
+            listener.onDeviceDisconnected(device);
     }
 
     @Override
@@ -311,21 +360,28 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             default:
                 break;
         }
+
+        for(ConnectableDeviceListener listener : mDeviceListeners)
+            listener.onPairingRequired(device, service, pairingType);
     }
 
     @Override
     public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {
+        for(ConnectableDeviceListener listener : mDeviceListeners)
+            listener.onCapabilityUpdated(device, added, removed);
     }
 
     @Override
     public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) {
         Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+        for(ConnectableDeviceListener listener : mDeviceListeners)
+            listener.onConnectionFailed(device, error);
     }
 
     @Override
     public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
-        if (mListener != null)
-            mListener.updateBeamIcon();
+        for (BeamListener listener : mListeners)
+            listener.updateBeamIcon();
     }
 
     @Override
@@ -340,8 +396,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             mCurrentDevice = null;
         }
 
-        if (mListener != null)
-            mListener.updateBeamIcon();
+        for (BeamListener listener : mListeners)
+            listener.updateBeamIcon();
     }
 
     @Override
@@ -350,7 +406,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public interface BeamListener {
-        public void updateBeamIcon();
+        void updateBeamIcon();
     }
 
 }

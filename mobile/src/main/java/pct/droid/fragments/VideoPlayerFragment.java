@@ -147,7 +147,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         });
         ButterKnife.inject(this, view);
 
-        if (LocaleUtils.isRTL(LocaleUtils.getCurrentAsLocale())) {
+        if (LocaleUtils.isRTL(LocaleUtils.getCurrent())) {
             Drawable forward = mForwardButton.getDrawable();
             Drawable rewind = mRewindButton.getDrawable();
             mRewindButton.setImageDrawable(forward);
@@ -174,6 +174,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         mControlBar.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -212,21 +213,23 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                     mToolbar.getPaddingBottom());
         }
 
-        if (null != mStreamInfo) {
-            if (mMedia != null && mMedia.title != null) {
-                if (null != mStreamInfo.getQuality()) {
-                    getAppCompatActivity().getSupportActionBar().setTitle(
-                            getString(R.string.now_playing) + ": " + mMedia.title + " (" + mStreamInfo.getQuality() + ")");
+        if(getAppCompatActivity().getSupportActionBar() != null) {
+            if (null != mStreamInfo) {
+                if (mMedia != null && mMedia.title != null) {
+                    if (null != mStreamInfo.getQuality()) {
+                        getAppCompatActivity().getSupportActionBar().setTitle(
+                                getString(R.string.now_playing) + ": " + mMedia.title + " (" + mStreamInfo.getQuality() + ")");
+                    } else {
+                        getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
+                    }
                 } else {
-                    getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
+                    getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
                 }
             } else {
                 getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
             }
-        } else {
-            getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing));
+            getAppCompatActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        getAppCompatActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
@@ -528,9 +531,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
     public void updatePlayPauseState() {
         if (isPlaying()) {
-            mPlayButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
+            mPlayButton.setImageResource(R.drawable.ic_av_pause);
         } else {
-            mPlayButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
+            mPlayButton.setImageResource(R.drawable.ic_av_play);
         }
     }
 
@@ -632,8 +635,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     /**
      * Updates the overlay when the media playback progress has changed
      *
-     * @param currentTime
-     * @param duration
+     * @param currentTime Current progress time
+     * @param duration Duration of full medias
      */
     @Override
     protected void onProgressChanged(long currentTime, long duration) {

@@ -72,6 +72,7 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
         context.startActivity(intent);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -81,8 +82,10 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
 
         // Set transparent toolbar
         // Hacky empty string to make sure title textview is added to the toolbar
-        getSupportActionBar().setTitle("   ");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("   ");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         ActionBarBackground.fadeOut(this);
 
         // Get Title TextView from the Toolbar
@@ -95,6 +98,11 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
 
         // mParallaxLayout doesn't exist? Then this is a tablet or big screen device
         mIsTablet = mParallaxLayout == null;
+
+        if(sMedia == null) {
+            finish();
+            return;
+        }
 
         getSupportActionBar().setTitle(sMedia.title);
 

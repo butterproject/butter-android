@@ -89,4 +89,5 @@
   <string name="pairing_tv">匹配电视</string>
   <string name="confirm_tv">请在您的电视中确认连接</string>
   <string name="enter_pairing_code">输入配对码匹配电视</string>
+  <string name="open_with">打开方式</string>
 </resources>

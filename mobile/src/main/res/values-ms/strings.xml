@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Simpan</string>
   <string name="cancel">Batal</string>
   <string name="close">Tutup</string>
   <string name="ok">OK</string>
@@ -22,7 +21,6 @@
   <string name="minutes">min</string>
   <string name="read_more">Baca lagi</string>
   <string name="watch_trailer">Tonton treler</string>
-  <string name="disable_subs">Lumpuh sarikata</string>
   <string name="no_subs">Tiada sarikata</string>
   <string name="no_subs_available">Tiada sarikata tersedia</string>
   <string name="subtitles">Sarikata</string>
@@ -108,7 +106,6 @@
   <string name="wifi_only">Wi-Fi sahaja</string>
   <string name="wifi_only_message">Anda hanya boleh strimkan video melalui Wi-Fi. Anda boleh lumpuhkannya dalam keutamaan jika anda mahu strimkan menerusi sambungan selular.</string>
   <!--NavigationDrawer-->
-  <string name="share">Kongsi</string>
   <string name="drawer_open">Buka bekas navigasi</string>
   <string name="drawer_close">Tutup bekas navigasi</string>
   <string name="no_search_results">Tiada keputusan gelintar ditemui</string>
@@ -124,9 +121,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Pernahkan anda mencuba Popcorn Time di Android? Ia sangat mengujakan!</string>
-  <string name="share_dialog_title">Kongsi dengan</string>
   <!--Beam dialog-->
   <string name="connected_to">Bersambung dengan</string>
   <string name="disconnect">Terputus</string>
@@ -137,7 +131,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Apl VPN.ht tidak dipasang</string>
   <string name="vpn_info">Anda perlukan apl VPN.ht dipasang untuk guna pilihan VPN dalam Popcorn Time. Jika tidak berminat? Anda boleh sembunyikan butang ini.</string>
-  <string name="vpn_download">Muat turun apl</string>
-  <string name="vpn_later">Jumpa lagi</string>
-  <string name="vpn_hide">Sembunyi butang</string>
 </resources>

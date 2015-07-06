@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Запази</string>
   <string name="cancel">Отмени</string>
   <string name="close">Затвори</string>
   <string name="ok">ОК</string>
@@ -22,12 +21,10 @@
   <string name="minutes">мин</string>
   <string name="read_more">Прочети повече</string>
   <string name="watch_trailer">Изгледай трейлър</string>
-  <string name="disable_subs">Изключи субтитри</string>
   <string name="no_subs">Няма субтитри</string>
   <string name="no_subs_available">Няма налични субтитри</string>
   <string name="subtitles">Субтитри</string>
   <string name="quality">Качество</string>
-  <string name="open_magnet">Отвори магнит</string>
   <string name="trailer">Трейлър</string>
   <string name="season">Сезон</string>
   <string name="episode">Епизод</string>
@@ -108,11 +105,14 @@
   <string name="dht_limit">DHT ограничение</string>
   <string name="unlimited">Неограничени</string>
   <string name="show_vpn">Показвай VPN опция в менюто</string>
+  <string name="pixel_format">Принудителни видео цветове</string>
+  <string name="rgb32">RGB 32-бита: стандартни цветове</string>
+  <string name="rgb16">RGB 16-бита: по-добро изпълнение, по-ниско качество</string>
+  <string name="yuv">YUV: най-добро изпълнение, но не винаги работи</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Само чрез Wi-Fi</string>
   <string name="wifi_only_message">Може да стриймвате видеа само чрез Wi-Fi.Може да изключите това в \"предпочитания\" в случай,че искате да стриймвате чрез клетъчна връзка.</string>
   <!--NavigationDrawer-->
-  <string name="share">Сподели</string>
   <string name="drawer_open">Отвори навигационно чекмедже</string>
   <string name="drawer_close">Затвори навигационно чекмедже</string>
   <string name="no_search_results">Няма открити резултати</string>
@@ -128,9 +128,6 @@
   <string name="git">Git</string>
   <string name="blog">Блог</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Опитвали ли сте Popcorn Time за Android? Страхотно е!</string>
-  <string name="share_dialog_title">Сподели с</string>
   <!--Beam dialog-->
   <string name="connected_to">Свързан към</string>
   <string name="disconnect">Изключи</string>
@@ -141,4 +138,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Приложението VPN.ht не е инсталирано</string>
   <string name="vpn_info">Трябва да имате инсталирано приложението VPN.ht , за да използвате VPN опцията чрез Popcorn Time. Не се интересувате? Тогава просто може да скриете този бутон. </string>
+  <string name="vpn_download">Изтегли</string>
+  <string name="vpn_later">По-късно</string>
+  <string name="vpn_hide">Скрий</string>
 </resources>

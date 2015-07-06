@@ -20,7 +20,6 @@
 
     <!-- General strings -->
     <string name="app_name" translatable="false">Popcorn Time</string>
-    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
@@ -43,12 +42,10 @@
 	<string name="minutes">min</string>
     <string name="read_more">Read more</string>
 	<string name="watch_trailer">Watch trailer</string>
-	<string name="disable_subs">Disable subtitles</string>
 	<string name="no_subs">No subtitles</string>
     <string name="no_subs_available">No subtitles available</string>
 	<string name="subtitles">Subtitles</string>
 	<string name="quality">Quality</string>
-	<string name="open_magnet">Open magnet</string>
 	<string name="trailer">Trailer</string>
 	<string name="season">Season</string>
 	<string name="episode">Episode</string>
@@ -144,13 +141,16 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="dht_limit">DHT limit</string>
     <string name="unlimited">Unlimited</string>
     <string name="show_vpn">Show VPN option in menu</string>
+	<string name="pixel_format">Force video chroma</string>
+	<string name="rgb32">RGB 32-bit: default chroma</string>
+	<string name="rgb16">RGB 16-bit: better performance, lower quality</string>
+	<string name="yuv">YUV: best performance but does not always work</string>
 
 	<!-- WifiOnlyDialogFragment -->
 	<string name="wifi_only">Wi-Fi only</string>
 	<string name="wifi_only_message">You can only stream videos over Wi-Fi. You can disable this in preferences if you want to stream over a cellular connection.</string>
 
 	<!-- NavigationDrawer -->
-	<string name="share">Share</string>
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
 	<string name="no_search_results">No search results found</string>
@@ -167,10 +167,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 	<string name="git">Git</string>
 	<string name="blog">Blog</string>
 	<string name="twitter">Twitter</string>
-
-	<!-- Share dialog -->
-	<string name="share_message">Have you tried Popcorn Time for Android? It\'s awesome!</string>
-	<string name="share_dialog_title">Share with</string>
 
     <!-- Beam dialog -->
     <string name="connected_to">Connected to</string>

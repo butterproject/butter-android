@@ -2,11 +2,11 @@
 <resources>
   <string name="update_available">新的更新可用</string>
   <string name="press_install">按下以安裝</string>
-  <string name="loading_data">資料載入中。。。</string>
-  <string name="loading_details">詳細資料載入中。。。</string>
-  <string name="loading_shows">節目載入中。。。</string>
-  <string name="loading_movies">電影載入中。。。</string>
-  <string name="loading_subs">字幕載入中。。。</string>
+  <string name="loading_data">資料載入中...</string>
+  <string name="loading_details">詳細資料載入中...</string>
+  <string name="loading_shows">節目載入中...</string>
+  <string name="loading_movies">電影載入中...</string>
+  <string name="loading_subs">字幕載入中...</string>
   <string name="error_files">錯誤：無法寫入文件</string>
   <string name="overview_not_available">抱歉，無預覽可用。</string>
   <string name="episode">集</string>
@@ -89,4 +89,5 @@
   <string name="pairing_tv">與電視配對</string>
   <string name="confirm_tv">請確保電視的連線正常</string>
   <string name="enter_pairing_code">輸入電視上的配對碼</string>
+  <string name="open_with">選擇開啟工具</string>
 </resources>

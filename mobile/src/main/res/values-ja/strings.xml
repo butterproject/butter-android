@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">保存</string>
   <string name="cancel">キャンセル</string>
   <string name="close">閉じる</string>
   <string name="ok">OK</string>
@@ -22,7 +21,6 @@
   <string name="minutes">分</string>
   <string name="read_more">もっと読む</string>
   <string name="watch_trailer">トレーラーを見る</string>
-  <string name="disable_subs">字幕の無効化</string>
   <string name="no_subs">何の字幕もありません</string>
   <string name="no_subs_available">利用可能な字幕はありません</string>
   <string name="subtitles">字幕</string>
@@ -34,6 +32,8 @@
   <string name="continuing">連続</string>
   <string name="ended">終了</string>
   <string name="aired">放映: %s</string>
+  <string name="no_title_available">名前なし</string>
+  <string name="no_synopsis_available">概要はありません</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">トレントの待機中です</string>
   <string name="starting_buffering">バッファリングを開始</string>
@@ -52,6 +52,7 @@
   <string name="fit_horizontal">幅を合わせる</string>
   <string name="fit_vertical">高さを合わせる</string>
   <string name="original_size">オリジナル</string>
+  <string name="reload_video">ビデオの再読み込み</string>
   <string name="comm_error">通信エラー</string>
   <string name="comm_message">エラーは、ビデオの検索中に発生しました。これは、ネットワークの問題やYouTubeのプロトコルが原因である可能性があります。後でもう一度試して下さい。</string>
   <string name="leave_videoplayer_title">本当に？</string>
@@ -108,7 +109,6 @@
   <string name="wifi_only">Wi-Fiのみ</string>
   <string name="wifi_only_message">Wi-Fi経由でのみビデオをストリーミングすることができます。モバイルネットワーク経由でストリーミングする場合は、環境設定でこれを無効にすることができます。</string>
   <!--NavigationDrawer-->
-  <string name="share">共有</string>
   <string name="drawer_open">ナビゲーションドロワーを開く</string>
   <string name="drawer_close">ナビゲーションドロワーを閉じる</string>
   <string name="no_search_results">検索結果が見つかりませんでした</string>
@@ -122,9 +122,6 @@
   <string name="git">Git</string>
   <string name="blog">ブログ</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Android用のPopcorn Timeを試しましたか？素晴らしいですよ！</string>
-  <string name="share_dialog_title">共有の選択</string>
   <!--Beam dialog-->
   <string name="connected_to">接続の選択</string>
   <string name="disconnect">Disconnect</string>
@@ -135,7 +132,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.htアプリがインストールされていません</string>
   <string name="vpn_info">Popcorn Timeの中でVPNオプションを使用するにはVPN.htアプリをインストールする必要があります。興味がありませんか？このボタンを非表示にできます。</string>
-  <string name="vpn_download">ダウンロードアプリ</string>
-  <string name="vpn_later">後でもう一度表示</string>
-  <string name="vpn_hide">ボタンを隠す</string>
+  <string name="vpn_download">ダウンロード</string>
+  <string name="vpn_later">あとで</string>
+  <string name="vpn_hide">隠す</string>
 </resources>

@@ -85,6 +85,7 @@
   <string name="last_updated">DARRERA ACTUALITZACIÓ</string>
   <string name="year">ANY</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDÈNCIA</string>
   <!--BeamManager-->
   <string name="pairing_tv">Emparellant-se amb la TV.</string>
   <string name="confirm_tv">Confirma la connexió al teu televisor, si us plau</string>

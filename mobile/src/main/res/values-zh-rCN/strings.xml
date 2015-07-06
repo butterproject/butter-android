@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">保存</string>
   <string name="cancel">取消</string>
   <string name="close">关闭</string>
   <string name="ok">确定</string>
@@ -22,7 +21,6 @@
   <string name="minutes">分钟</string>
   <string name="read_more">阅读更多</string>
   <string name="watch_trailer">观看预告片</string>
-  <string name="disable_subs">禁用字幕</string>
   <string name="no_subs">无字幕</string>
   <string name="no_subs_available">无字幕可用</string>
   <string name="subtitles">字幕</string>
@@ -34,6 +32,8 @@
   <string name="continuing">连载中</string>
   <string name="ended">已完结</string>
   <string name="aired">已上映：%s</string>
+  <string name="no_title_available">无名称</string>
+  <string name="no_synopsis_available">暂无简介</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">正在等待种子文件</string>
   <string name="starting_buffering">开始缓冲</string>
@@ -52,6 +52,7 @@
   <string name="fit_horizontal">适应宽度</string>
   <string name="fit_vertical">适应高度</string>
   <string name="original_size">原始大小</string>
+  <string name="reload_video">重新载入视频</string>
   <string name="comm_error">通信错误</string>
   <string name="comm_message">获取视频出错。可能是网络问题或 YouTube 协议问题。请稍后重试。</string>
   <string name="leave_videoplayer_title">您确定吗？</string>
@@ -108,7 +109,6 @@
   <string name="wifi_only">仅使用Wi-Fi</string>
   <string name="wifi_only_message">只在Wi-Fi环境下传输流媒体视频，如果您想要使用移动数据，请在设置中禁用此选项。</string>
   <!--NavigationDrawer-->
-  <string name="share">分享</string>
   <string name="drawer_open">打开导航栏</string>
   <string name="drawer_close">关闭导航栏</string>
   <string name="no_search_results">未搜索到任何结果</string>
@@ -125,9 +125,6 @@
   <string name="git">Git</string>
   <string name="blog">博客</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">尝试过 Android 版的 Popcorn Time 吗？超赞！</string>
-  <string name="share_dialog_title">分享至</string>
   <!--Beam dialog-->
   <string name="connected_to">连接到</string>
   <string name="disconnect">断开连接</string>
@@ -138,7 +135,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht 应用尚未安装</string>
   <string name="vpn_info">您需要需要 VPN.ht 应用才能使用 Popcorn Time 内的VPN选项。用不到吗？隐藏此按钮就好。</string>
-  <string name="vpn_download">下载应用</string>
+  <string name="vpn_download">下载</string>
   <string name="vpn_later">以后再说</string>
-  <string name="vpn_hide">隐藏按钮</string>
+  <string name="vpn_hide">隐藏</string>
 </resources>
