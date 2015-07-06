@@ -106,6 +106,7 @@
     <string name="last_updated">LAST UPDATED</string>
     <string name="year">YEAR</string>
     <string name="a_to_z">A - Z</string>
+    <string name="trending">TRENDING</string>
 
     <!-- BeamManager -->
     <string name="pairing_tv">Pairing with TV</string>
