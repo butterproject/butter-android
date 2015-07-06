@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">שמור</string>
   <string name="cancel">בטל</string>
   <string name="close">סגור</string>
   <string name="ok">אישור</string>
@@ -22,7 +21,6 @@
   <string name="minutes">דקות</string>
   <string name="read_more">קראו עוד</string>
   <string name="watch_trailer">צפייה בטריילר </string>
-  <string name="disable_subs">ביטול כתוביות</string>
   <string name="no_subs">ללא כתוביות</string>
   <string name="no_subs_available">אין כתוביות זמינות</string>
   <string name="subtitles">כתוביות</string>
@@ -34,6 +32,8 @@
   <string name="continuing">בפגרה</string>
   <string name="ended">הסתיים</string>
   <string name="aired">עלה לשידור: %s</string>
+  <string name="no_title_available">אין שם</string>
+  <string name="no_synopsis_available">אין תיאור</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">ממתין לטורנט</string>
   <string name="starting_buffering">מתחיל טעינה</string>
@@ -52,6 +52,7 @@
   <string name="fit_horizontal">אופקי מלא</string>
   <string name="fit_vertical">התאם אנכי</string>
   <string name="original_size">מקורי</string>
+  <string name="reload_video">טען מחדש וידאו</string>
   <string name="comm_error">שגיאת תקשורת</string>
   <string name="comm_message">שגיאה התרחשה. זה יכולה להיות בעיה ברשת או בעיה ב YouTube. בבקשה נסו מאוחר יותר.</string>
   <string name="leave_videoplayer_title">האם אתם בטוחים?</string>
@@ -108,7 +109,6 @@
   <string name="wifi_only">Wi-Fi בלבד</string>
   <string name="wifi_only_message">הצפייה מתאפשרת דרך Wi-Fi בלבד כברירת מחדל. באפשרותך לשנות הגדרה זאת ולאפשר צפייה גם דרך האינטרנט של הרשת הסלולרית.</string>
   <!--NavigationDrawer-->
-  <string name="share">שיתוף</string>
   <string name="drawer_open">פתח שורת חיפוש</string>
   <string name="drawer_close">סגור שורת חיפוש</string>
   <string name="no_search_results">לא נמצאו תוצאות חיפוש</string>
@@ -125,9 +125,6 @@
   <string name="git">Git</string>
   <string name="blog">בלוג</string>
   <string name="twitter">טוויטר</string>
-  <!--Share dialog-->
-  <string name="share_message">האם ניסיתם את פופקורן טיים לאנדרואיד? זה מדהים!</string>
-  <string name="share_dialog_title">שתף עם</string>
   <!--Beam dialog-->
   <string name="connected_to">מחובר אל</string>
   <string name="disconnect">ניתוק</string>
@@ -138,7 +135,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">האפליקציה של VPN.ht אינה מותקנת</string>
   <string name="vpn_info">בכדי להשתמש ב VPN אתם צריכים את האפליקציה של VPN.ht. לא מעוניינים? באפשרותכם להסתיר אופציה זאת בהגדרות.</string>
-  <string name="vpn_download">הורדת אפליקציה</string>
-  <string name="vpn_later">נסו מאוחר יותר</string>
-  <string name="vpn_hide">הסתר לחצן</string>
+  <string name="vpn_download">הורד</string>
+  <string name="vpn_later">מאוחר יותר</string>
+  <string name="vpn_hide">הסתר</string>
 </resources>

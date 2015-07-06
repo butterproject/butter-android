@@ -93,7 +93,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:gravity="right|end"
+                    android:gravity="end"
                     tools:text="0:00" />
 
                 <com.devspark.robototextview.widget.RobotoTextView
@@ -104,7 +104,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:gravity="left|start"
+                    android:gravity="start"
                     tools:text="0:00" />
 
                 <pct.droid.widget.SeekBar

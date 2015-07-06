@@ -45,7 +45,6 @@ import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PixelUtils;

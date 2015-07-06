@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Speichern</string>
   <string name="cancel">Abbrechen</string>
   <string name="close">Schließen</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Weiterlesen</string>
   <string name="watch_trailer">Filmvorschau ansehen</string>
-  <string name="disable_subs">Untertitel deaktivieren</string>
   <string name="no_subs">Keine Untertitel</string>
   <string name="no_subs_available">Keine Untertitel verfügbar</string>
   <string name="subtitles">Untertitel</string>
   <string name="quality">Qualität</string>
-  <string name="open_magnet">Magnet öffnen</string>
   <string name="trailer">Filmvorschau</string>
   <string name="season">Staffel</string>
   <string name="episode">Folge</string>
@@ -111,7 +108,6 @@
   <string name="wifi_only">Nur Wi-Fi</string>
   <string name="wifi_only_message">Sie können nur Videos über Wi-Fi streamen. Dies können Sie in den Einstellungen deaktivieren, wenn über eine Mobilfunkverbindung gestreamt werden soll.</string>
   <!--NavigationDrawer-->
-  <string name="share">Teilen</string>
   <string name="drawer_open">Navigation Schublade öffnen</string>
   <string name="drawer_close">Navigation Schublade schließen</string>
   <string name="no_search_results">Keine Suchergebnisse gefunden</string>
@@ -125,9 +121,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Haben Sie Popcorn Time für Android ausprobiert? Es ist großartig!</string>
-  <string name="share_dialog_title">Teilen mit</string>
   <!--Beam dialog-->
   <string name="connected_to">Verbunden mit</string>
   <string name="disconnect">Trennen</string>

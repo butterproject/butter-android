@@ -45,8 +45,11 @@ import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.utils.LocaleUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.LoadingDetailDialogFragment;
 import timber.log.Timber;
@@ -154,20 +157,25 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getActivity();
-        return inflater.inflate(R.layout.fragment_media, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_media, container, false);
+        ButterKnife.inject(this, v);
+
+        mColumns = getResources().getInteger(R.integer.overview_cols);
+        mLoadingTreshold = mColumns * 3;
+
+        mLayoutManager = new GridLayoutManager(mContext, mColumns);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
 
-        mColumns = getResources().getInteger(R.integer.overview_cols);
-        mLoadingTreshold = mColumns * 3;
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(mContext, mColumns);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setOnScrollListener(mScrollListener);
+        mRecyclerView.addOnScrollListener(mScrollListener);
         //adapter should only ever be created once on fragment initialise.
         mAdapter = new MediaGridAdapter(mContext, mItems, mColumns);
         mAdapter.setOnItemClickListener(mOnItemClickListener);
@@ -192,6 +200,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         // if not changed use default order
         mFilters.order = mDefOrder;
         mFilters.genre = getArguments().getString(EXTRA_GENRE);
+
+        String language = PrefUtils.get(getActivity(), Prefs.LOCALE, PopcornApplication.getSystemLanguage());
+        mFilters.langCode = LocaleUtils.toLocale(language).getLanguage();
 
         mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
         if (mMode == Mode.SEARCH) mEmptyView.setText(getString(R.string.no_search_results));

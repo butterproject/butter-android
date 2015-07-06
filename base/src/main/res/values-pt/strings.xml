@@ -85,9 +85,10 @@
   <string name="last_updated">ÚLTIMA ATUALIZAÇÃO</string>
   <string name="year">ANO</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDÊNCIAS</string>
   <!--BeamManager-->
   <string name="pairing_tv">A emparelhar com a TV</string>
   <string name="confirm_tv">Por favor, confirma a ligação na tua TV</string>
-  <string name="enter_pairing_code">Introduz o código de emparelhamento da TV</string>
+  <string name="enter_pairing_code">Digita o código de emparelhamento da TV</string>
   <string name="open_with">Abrir com</string>
 </resources>

@@ -89,4 +89,5 @@
   <string name="pairing_tv">שיוך עם טלוויזיה</string>
   <string name="confirm_tv">אנא אשר את החיבור על הטלוויזיה שלך </string>
   <string name="enter_pairing_code">הכנס קוד שיוך בטלוויזיה</string>
+  <string name="open_with">פתח עם</string>
 </resources>

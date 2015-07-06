@@ -72,20 +72,21 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public interface Callback {
-        public void onSuccess(Filters filters, ArrayList<Media> items, boolean changed);
+        void onSuccess(Filters filters, ArrayList<Media> items, boolean changed);
 
-        public void onFailure(Exception e);
+        void onFailure(Exception e);
     }
 
     public static class Filters {
         public enum Order {ASC, DESC};
-        public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET}
+        public enum Sort {POPULARITY, YEAR, DATE, RATING, ALPHABET, TRENDING}
 
         public String keywords = null;
         public String genre = null;
         public Order order = Order.DESC;
         public Sort sort = Sort.POPULARITY;
         public Integer page = null;
+        public String langCode = "en";
 
         public Filters() { }
 
@@ -95,6 +96,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
             order = filters.order;
             sort = filters.sort;
             page = filters.page;
+            langCode = filters.langCode;
         }
     }
 

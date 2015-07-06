@@ -85,6 +85,7 @@
   <string name="last_updated">ΤΕΛΕΥΤΑΙΑ ΕΝΗΜΕΡΩΣΗ</string>
   <string name="year">ΕΤΟΣ</string>
   <string name="a_to_z">Α - Ω</string>
+  <string name="trending">ΤΑΣΕΙΣ</string>
   <!--BeamManager-->
   <string name="pairing_tv">Σύζευξη με την τηλεόραση</string>
   <string name="confirm_tv">Παρακαλώ επιβεβαιώστε την σύνδεση με την τηλεόρασή σας</string>

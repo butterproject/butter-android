@@ -18,7 +18,7 @@
 
 <resources>
 
-    <string-array name="file_types">
+    <string-array name="file_types" translatable="false">
         <item>BBB, MP4 1080p h264 High 4.1 3 Mbps 30 FPS AAC 356 Kbps</item>
         <item>BBB, MP4 1080p h264 High 4.1 3 Mbps 30 FPS MP3 160 Kbps</item>
         <item>BBB, MP4 1080p h264 High 4.1 3 Mbps 30 FPS AC3 (5.1) 320 Kbps</item>
@@ -46,7 +46,7 @@
         <item>Open dialog</item>
     </string-array>
 
-    <string-array name="files">
+    <string-array name="files" translatable="false">
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
         <item>http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
