@@ -127,18 +127,17 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return mRecyclerView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
 
         mAdapter = new NavigationAdapter(getActivity(), this, initItems());
         mAdapter.setOnItemClickListener(mOnItemClickListener);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 3));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);

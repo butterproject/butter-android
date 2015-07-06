@@ -156,20 +156,22 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_media, container, false);
         mContext = getActivity();
-        return inflater.inflate(R.layout.fragment_media, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.inject(this, v);
 
         mColumns = getResources().getInteger(R.integer.overview_cols);
         mLoadingTreshold = mColumns * 3;
 
         mLayoutManager = new GridLayoutManager(mContext, mColumns);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addOnScrollListener(mScrollListener);
