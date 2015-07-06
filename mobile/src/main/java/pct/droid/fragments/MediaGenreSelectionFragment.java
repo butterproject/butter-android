@@ -80,9 +80,12 @@ public class MediaGenreSelectionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContext = getActivity();
         View v = inflater.inflate(R.layout.fragment_media, container, false);
         ButterKnife.inject(this, v);
+        
+        mLayoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
         return v;
     }
 
@@ -91,9 +94,6 @@ public class MediaGenreSelectionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         List<Genre> genreList = mProvider.getGenres();
-
-        mLayoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST, R.drawable.list_divider_nospacing));
