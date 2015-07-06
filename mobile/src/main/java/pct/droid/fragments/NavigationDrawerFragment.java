@@ -50,7 +50,6 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.vpn.VPNHTChecker;
 import pct.droid.base.vpn.VPNManager;
 import pct.droid.dialogfragments.VPNInfoDialogFragment;
-import timber.log.Timber;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback {
 

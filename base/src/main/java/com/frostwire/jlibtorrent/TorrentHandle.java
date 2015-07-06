@@ -1,7 +1,14 @@
 package com.frostwire.jlibtorrent;
 
-import com.frostwire.jlibtorrent.swig.*;
+import com.frostwire.jlibtorrent.swig.announce_entry_vector;
+import com.frostwire.jlibtorrent.swig.int64_vector;
+import com.frostwire.jlibtorrent.swig.int_vector;
+import com.frostwire.jlibtorrent.swig.libtorrent;
+import com.frostwire.jlibtorrent.swig.peer_info_vector;
+import com.frostwire.jlibtorrent.swig.torrent_handle;
 import com.frostwire.jlibtorrent.swig.torrent_handle.status_flags_t;
+import com.frostwire.jlibtorrent.swig.torrent_info;
+import com.frostwire.jlibtorrent.swig.torrent_status;
 
 import java.util.ArrayList;
 import java.util.Collections;

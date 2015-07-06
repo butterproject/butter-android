@@ -1,6 +1,10 @@
 package com.frostwire.jlibtorrent;
 
-import com.frostwire.jlibtorrent.swig.*;
+import com.frostwire.jlibtorrent.swig.entry;
+import com.frostwire.jlibtorrent.swig.entry_list;
+import com.frostwire.jlibtorrent.swig.entry_vector;
+import com.frostwire.jlibtorrent.swig.string_entry_map;
+import com.frostwire.jlibtorrent.swig.string_vector;
 
 import java.io.File;
 import java.io.IOException;
