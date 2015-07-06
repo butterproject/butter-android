@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="cancel">Utzi</string>
+  <string name="close">Itxi</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Gaituta</string>
+  <string name="disabled">Desgaituta</string>
+  <string name="casting">Streaming-a</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Izenburua, urtea, aktoreak</string>
+  <string name="title_shows">Ikuskizunak</string>
+  <string name="title_movies">Filmak</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Generoak</string>
+  <string name="search">Bilatu</string>
+  <string name="searching">Bilatzen...</string>
+  <string name="no_data_found">Ez da daturik aurkitu</string>
+  <string name="unknown_error">Zerbait gaizki joan da</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Irakurri gehiago</string>
+  <string name="watch_trailer">Ikusi trailerra</string>
+  <string name="no_subs">Azpititulurik gabe</string>
+  <string name="no_subs_available">Ez dago azpititulurik eskuragarri</string>
+  <string name="subtitles">Azpitituluak</string>
+  <string name="quality">Kalitatea</string>
+  <string name="trailer">Trailerra</string>
+  <string name="season">Denboraldia</string>
+  <string name="episode">Atala</string>
+  <string name="specials">Bereziak</string>
+  <string name="continuing">Jarraitzen</string>
+  <string name="ended">Bukatua</string>
+  <string name="aired">Transmisioa: %s</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Torrentari itxaroten</string>
+  <string name="starting_buffering">Buferrean sartzen hasten</string>
+  <string name="streaming_started">Emisioa hasita</string>
+  <string name="waiting_for_subtitles">Azpitituluak kargatzen</string>
+  <string name="seeds">aleak</string>
+  <string name="error_files">Akatsa: Ezin izan da fitxategietan idatzi. Mesedez probatu gordetze kokapen desberdin bat.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Orain erreproduzitzen</string>
+  <string name="volume">Bolumena</string>
+  <string name="brightness">Distira</string>
+  <string name="hardware_acceleration_error_title">HW azelerazio errorea</string>
+  <string name="hardware_acceleration_error_message">Errorea izan da hardware azelerazioan. Nahi al duzu ezgaitu eta berriz saiatzea?</string>
+  <string name="best_fit">Egokitze onena</string>
+  <string name="fill">Asetasuna</string>
+  <string name="fit_horizontal">Egokitu horizontalki</string>
+  <string name="fit_vertical">Egokitu bertikalki</string>
+  <string name="original_size">Originala</string>
+  <string name="comm_error">Komunikazio Errorea</string>
+  <string name="comm_message">Errorea gertatu da bideoa berreskuratzen. Beharbada sare edo Youtuberen protokoloen erruz. Saiatu beranduago mesedez.</string>
+  <string name="leave_videoplayer_title">Are you sure?</string>
+  <string name="leave_videoplayer_message">Ziur zaude bideo erreproduktore hau utzi nahi duzula? %s-k erreproduzitzeari utziko dio.</string>
+  <string name="encountered_error_title">Bideo errorea aurkitu da</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Onartu</string>
+  <string name="leave">Utzi</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Hobespenak</string>
+  <string name="general">Orokorra</string>
+  <string name="default_view">Ikuspegi lehenetsia</string>
+  <string name="default_player">Lehenetsitako erreproduzitzailea</string>
+  <string name="i18n_language">Aplikazioaren hizkuntza</string>
+  <string name="restart_effect">Aplikazioa berrabiarazten aldaketak gauzatzeko</string>
+  <string name="device_language">Gailuaren hizkuntza</string>
+  <string name="stream_over_wifi_only">Wi-Firekin bakarrik emititu</string>
+  <string name="internal_player">barneko</string>
+  <string name="subtitle_color">Kolorea</string>
+  <string name="subtitle_size">Tamaina</string>
+  <string name="subtitle_stroke_color">Inguruneko kolorea</string>
+  <string name="subtitle_stroke_width">Inguruneko lodiera</string>
+  <string name="subtitle_language">Hizkuntza lehenetsia</string>
+  <string name="no_default_set">Hizkuntza lehenetsirik ez</string>
+  <string name="advanced">Aurreratua</string>
+  <string name="storage_location">Biltegiratze kokapena</string>
+  <string name="storage_automatic">Automatikoa</string>
+  <string name="storage_choose">Aukeratu kokapena</string>
+  <string name="not_writable">Kokapenean ezin da idatzi</string>
+  <string name="remove_cache">Ezabatu cachea erreproduzitzailea ixtean</string>
+  <string name="hw_acceleration">Hardware azelerazioa</string>
+  <string name="hw_automatic">Automatikoa</string>
+  <string name="hw_full">Osoa</string>
+  <string name="hw_decoding">Dekodetzean bakarrik</string>
+  <string name="updates">Eguneraketa</string>
+  <string name="auto_updates">Eguneraketa automatikoak</string>
+  <string name="check_for_updates">Bilatu eguneraketak</string>
+  <string name="last_check">Azken bilaketa</string>
+  <string name="about">Honi buruz</string>
+  <string name="version">Bertsioa</string>
+  <string name="changelog">Aldaketak</string>
+  <string name="tap_to_open">Zapaldu irekitzeko</string>
+  <string name="report_a_bug">Akatsa jakinarazi</string>
+  <string name="open_source_licenses">Kode irekiko lizentziak</string>
+  <string name="torrents">Torrentak</string>
+  <string name="download_speed">Deskarga abiadura maximoa</string>
+  <string name="upload_speed">Igoera abiadura maximoa</string>
+  <string name="max_connections">Konexio total maximoa</string>
+  <string name="dht_limit">DHT muga</string>
+  <string name="unlimited">Mugarik gabe</string>
+  <string name="show_vpn">Erakutsi VPN aukera menuan</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi bidez bakarrik</string>
+  <string name="wifi_only_message">Bideoak Wi-Fi erabiliz bakarrik ikus ditzakezu. Hobespen hau ezgaitu dezakezu mugikor konexioaren bidez ikusi nahi baduzu. </string>
+  <!--NavigationDrawer-->
+  <string name="drawer_open">Ireki nabigazio tiradera</string>
+  <string name="drawer_close">Itxi nabigazio tiradera</string>
+  <string name="no_search_results">Ez da bilaketa emaitzarik aurkitu</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time API mordo bat batera jarri dituzten garatzaile eta diseinatzaile baten emaitza da
+⇥⇥torrent filmak ikusteko esperientzia ahalik eta sinpleena izateko.\n\nKode irekiko proiektua gara. Mundu osokoak gara.
+⇥⇥Maite ditugu gure filmak. Eta aizu, krispetak ere maite ditugu.</string>
+  <string name="website">Webgunea</string>
+  <string name="forum">Foroa</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Bloga</string>
+  <string name="twitter">Twitter</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Konektatu hona:</string>
+  <string name="disconnect">Deskonektatu</string>
+  <string name="the_video">Bideoa</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht aplia instalatu gabe dago</string>
+</resources>

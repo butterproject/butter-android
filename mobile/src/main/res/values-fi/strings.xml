@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
-  <string name="save">Tallenna</string>
   <string name="cancel">Peruuta</string>
   <string name="close">Sulje</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Lue lisää</string>
   <string name="watch_trailer">Katso traileri</string>
-  <string name="disable_subs">Poista tekstitykset käytöstä</string>
   <string name="no_subs">Tekstityksiä ei löytynyt</string>
   <string name="no_subs_available">Tekstityksiä ei ole saatavilla</string>
   <string name="subtitles">Tekstitykset</string>
   <string name="quality">Laatu</string>
-  <string name="open_magnet">Avaa magneetti</string>
   <string name="trailer">Traileri</string>
   <string name="season">Tuotantokausi</string>
   <string name="episode">Jakso</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Pelkästään Wi-Fi</string>
   <string name="wifi_only_message">Tällä hetkellä voit suoratoistaa vain Wi-Fi -yhteydellä. Voit sallia asetuksissa suoratoiston matkapuhelinverkossa.</string>
   <!--NavigationDrawer-->
-  <string name="share">Jaa</string>
   <string name="drawer_open">Avaa navigointilaatikko</string>
   <string name="drawer_close">Sulje navigointilaatikko</string>
   <string name="no_search_results">Hakusi ei tuottanut yhtään osumaa</string>
@@ -126,9 +122,6 @@
   <string name="git">Git</string>
   <string name="blog">Blogi</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Oletko vielä kokeillut Popcorn Timeä Androidilla? Se on mahtava!</string>
-  <string name="share_dialog_title">Jaa</string>
   <!--Beam dialog-->
   <string name="connected_to">Yhdistetty</string>
   <string name="disconnect">Katkaise yhteys</string>

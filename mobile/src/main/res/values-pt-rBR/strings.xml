@@ -105,6 +105,10 @@
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Ilimitado</string>
   <string name="show_vpn">Exiba a opção VPN no menu</string>
+  <string name="pixel_format">Forçar chroma do vídeo</string>
+  <string name="rgb32">RGB 32-bit: chroma padrão</string>
+  <string name="rgb16">RGB 16-bit: performance aprimorada, qualidade reduzida</string>
+  <string name="yuv">YUV: melhor performance, mas nem sempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Você pode reproduzir videos apenas por Wi-Fi. Desabilite esta opção em Preferências para poder reproduzir vídeos utilizando redes móveis.</string>

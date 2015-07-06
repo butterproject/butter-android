@@ -85,6 +85,7 @@
   <string name="last_updated">ÚLTIMO ATUALIZADO</string>
   <string name="year">ANO</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDÊNCIA</string>
   <!--BeamManager-->
   <string name="pairing_tv">Pareado com TV</string>
   <string name="confirm_tv">Por favor, confirme a conexão na sua TV</string>
