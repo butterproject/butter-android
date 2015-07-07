@@ -680,6 +680,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         showTimedCaptionText(null);
 
         mCurrentSubsLang = language;
+        mStreamInfo.setSubtitleLanguage(language);
 
         if (language.equals("no-subs")) {
             mSubs = null;
