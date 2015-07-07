@@ -451,7 +451,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         displayImage(mediaUrl, mimeType, title, desc, iconSrc, listener);
     }
 
-    public void playVideo(final String url, String mimeType, String title,
+    public void playVideo(final String url, String subsUrl, String mimeType, String title,
             String description, String iconSrc, boolean shouldLoop,
             final LaunchListener listener) {
 
@@ -487,21 +487,30 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     }
 
     @Override
-    public void playMedia(String url, String mimeType, String title,
-            String description, String iconSrc, boolean shouldLoop,
-            LaunchListener listener) {
+    public void playMedia(String url, String subsUrl, String mimeType, String title,
+                          String description, String iconSrc, boolean shouldLoop,
+                          LaunchListener listener) {
 
         if (mimeType.contains("image")) {
             displayImage(url, mimeType, title, description, iconSrc, listener);
         }
         else {
-            playVideo(url, mimeType, title, description, iconSrc, shouldLoop, listener);
+            playVideo(url, subsUrl, mimeType, title, description, iconSrc, shouldLoop, listener);
         }
+    }
+
+    @Override
+    public void playMedia(String url, String mimeType, String title,
+            String description, String iconSrc, boolean shouldLoop,
+            LaunchListener listener) {
+
+        playMedia(url, null, mimeType, title, description, iconSrc, shouldLoop, listener);
     }
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, LaunchListener listener) {
         String mediaUrl = null;
+        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -509,6 +518,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
+            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -519,12 +529,12 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
             }
         }
 
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
     public void closeMedia(LaunchSession launchSession,
-            ResponseListener<Object> listener) {
+                           ResponseListener<Object> listener) {
         stop(listener);
     }
 

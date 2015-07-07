@@ -36,6 +36,7 @@ public interface MediaPlayer extends CapabilityMethods {
     public final static String Display_Image = "MediaPlayer.Display.Image";
     public final static String Play_Video = "MediaPlayer.Play.Video";
     public final static String Play_Audio = "MediaPlayer.Play.Audio";
+    public final static String Display_Subtitles = "MediaPlayer.Display.Subtitles";
     public final static String Play_Playlist = "MediaPlayer.Play.Playlist";
     public final static String Close = "MediaPlayer.Close";
 
@@ -51,6 +52,7 @@ public interface MediaPlayer extends CapabilityMethods {
         Display_Image,
         Play_Video,
         Play_Audio,
+        Display_Subtitles,
         Close,
         MetaData_Title,
         MetaData_Description,
@@ -69,6 +71,7 @@ public interface MediaPlayer extends CapabilityMethods {
 
     public void displayImage(String url, String mimeType, String title, String description, String iconSrc, LaunchListener listener);
     public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener);
+    public void playMedia(String url, String subsUrl, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener);
 
     public void closeMedia(LaunchSession launchSession, ResponseListener<Object> listener);
 

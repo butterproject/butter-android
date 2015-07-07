@@ -256,7 +256,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
     }
 
-    public void displayMedia(String url, String mimeType, String title, String description, String iconSrc, final LaunchListener listener) {
+    public void displayMedia(String url, String subsUrl, String mimeType, String title, String description, String iconSrc, final LaunchListener listener) {
         final String instanceId = "0";
         String[] mediaElements = mimeType.split("/");
         String mediaType = mediaElements[0];
@@ -329,6 +329,10 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
         request.send();
     }
 
+    public void displayMedia(String url, String mimeType, String title, String description, String iconSrc, LaunchListener listener) {
+        displayMedia(url, null, mimeType, title, description, iconSrc, listener);
+    }
+
     @Override
     public void displayImage(String url, String mimeType, String title, String description, String iconSrc, LaunchListener listener) {
         displayMedia(url, mimeType, title, description, iconSrc, listener);
@@ -358,14 +362,20 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
     }
 
     @Override
+    public void playMedia(String url, String subsUrl, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener) {
+        displayMedia(url, subsUrl, mimeType, title, description, iconSrc, listener);
+    }
+
+    @Override
     public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener) {
-        displayMedia(url, mimeType, title, description, iconSrc, listener);
+        playMedia(url, null, mimeType, title, description, iconSrc, shouldLoop, listener);
     }
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop,
             LaunchListener listener) {
         String mediaUrl = null;
+        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -373,6 +383,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
+            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -383,7 +394,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
             }
         }
 
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override

@@ -412,15 +412,19 @@ public class WebAppSession implements MediaControl, MediaPlayer {
     }
 
     @Override
-    public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
+    public void playMedia(String url, String subsUrl, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
         Util.postError(listener, ServiceCommandError.notSupported());
+    }
+
+    @Override
+    public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
+        playMedia(url, mimeType, title, description, iconSrc, shouldLoop, listener);
     }
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop,
             MediaPlayer.LaunchListener listener) {
         Util.postError(listener, ServiceCommandError.notSupported());
-
     }
 
     @Override
