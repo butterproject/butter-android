@@ -45,6 +45,15 @@ public class Time {
             cs = Integer.parseInt(value.substring(8, 10));
 
             mseconds = cs * 10 + s * 1000 + m * 60000 + h * 3600000;
+        } else if (format.equalsIgnoreCase("hh:mm:ss.ms")) {
+            // this type of format:  01:02:22.501 (used in .VTT)
+            int h, m, s, cs;
+            h = Integer.parseInt(value.substring(0, 1));
+            m = Integer.parseInt(value.substring(2, 4));
+            s = Integer.parseInt(value.substring(5, 7));
+            cs = Integer.parseInt(value.substring(8, 10));
+
+            mseconds = cs * 10 + s * 1000 + m * 60000 + h * 3600000;
         } else if (format.equalsIgnoreCase("h:m:s:f/fps")) {
             int h, m, s, f;
             float fps;
@@ -94,6 +103,30 @@ public class Time {
             if (aux.length() == 1) time.append('0');
             time.append(aux);
             time.append(',');
+            ms = mseconds % 1000;
+            aux = String.valueOf(ms);
+            if (aux.length() == 1) time.append("00");
+            else if (aux.length() == 2) time.append('0');
+            time.append(aux);
+
+        } else if (format.equalsIgnoreCase("hh:mm:ss.ms")) {
+            // this type of format:  01:02:22.501 (used in .SRT)
+            int h, m, s, ms;
+            h = mseconds / 3600000;
+            aux = String.valueOf(h);
+            if (aux.length() == 1) time.append('0');
+            time.append(aux);
+            time.append(':');
+            m = (mseconds / 60000) % 60;
+            aux = String.valueOf(m);
+            if (aux.length() == 1) time.append('0');
+            time.append(aux);
+            time.append(':');
+            s = (mseconds / 1000) % 60;
+            aux = String.valueOf(s);
+            if (aux.length() == 1) time.append('0');
+            time.append(aux);
+            time.append('.');
             ms = mseconds % 1000;
             aux = String.valueOf(ms);
             if (aux.length() == 1) time.append("00");
