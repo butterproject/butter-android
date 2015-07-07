@@ -1546,7 +1546,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     }
 
     @Override
-    public void playMedia(final String url, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
+    public void playMedia(final String url, final String subsUrl, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
         if (getDLNAService() != null) {
             final MediaPlayer.LaunchListener launchListener = new LaunchListener() {
 
@@ -1568,7 +1568,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
                 }
             }; 
 
-            getDLNAService().playMedia(url, mimeType, title, description, iconSrc, shouldLoop, launchListener);
+            getDLNAService().playMedia(url, subsUrl, mimeType, title, description, iconSrc, shouldLoop, launchListener);
         }
         else {
             System.err.println("DLNA Service is not ready yet");
@@ -1576,8 +1576,14 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     }
 
     @Override
+    public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
+        playMedia(url, mimeType, title, description, iconSrc, shouldLoop, listener);
+    }
+
+    @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
         String mediaUrl = null;
+        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -1585,6 +1591,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
+            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -1595,7 +1602,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
             }
         }
 
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override

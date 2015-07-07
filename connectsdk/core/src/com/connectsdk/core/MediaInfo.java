@@ -58,8 +58,21 @@ public class MediaInfo {
         this.allImages = allImages;
     }
 
+    /**
+     * Default constructor method.
+     *
+     * @param allImages list of imageInfo objects where [0] is icon, [1] is poster
+     */
+
+    public MediaInfo(String url, String mimeType, String title,
+                     String description, List<ImageInfo> allImages, String subsUrl) {
+        this(url, mimeType, title, description);
+        this.allImages = allImages;
+        this.subsUrl = subsUrl;
+    }
+
     // @cond INTERNAL
-    private String url, mimeType, description, title;
+    private String url, mimeType, description, title, subsUrl;
 
     private List<ImageInfo> allImages;
 
@@ -176,6 +189,24 @@ public class MediaInfo {
      */
 
     public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * Gets URL address of a subtitle file.
+     *
+     */
+
+    public String getSubsUrl() {
+        return url;
+    }
+
+    /**
+     * Sets URL address of a subtitle file.
+     *
+     */
+
+    public void setSubsUrl(String url) {
         this.url = url;
     }
 
