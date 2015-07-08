@@ -212,14 +212,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public void playVideo(StreamInfo info) {
-        playVideo(info, false, null);
+        playVideo(info, null);
     }
 
-    public void playVideo(StreamInfo info, Boolean subs) {
-        playVideo(info, subs, null);
-    }
-
-    public void playVideo(StreamInfo info, Boolean subs, final MediaPlayer.LaunchListener listener) {
+    public void playVideo(StreamInfo info, final MediaPlayer.LaunchListener listener) {
         if (!mConnected) listener.onError(ServiceCommandError.getError(503));
 
         mStreamInfo = info;
