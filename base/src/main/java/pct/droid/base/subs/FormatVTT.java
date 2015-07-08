@@ -133,6 +133,9 @@ public class FormatVTT extends TimedTextFileFormat {
         Iterator<Caption> itr = c.iterator();
         int captionNumber = 1;
 
+        file.add("WEBVTT");
+        index += 2;
+
         while (itr.hasNext()) {
             //new caption
             Caption current = itr.next();
