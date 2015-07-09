@@ -24,8 +24,6 @@ import java.util.Iterator;
 
 /**
  * This class represents the .VTT subtitle format
- *
- * NOTE: Should work, maybe not. Not tested. Will be used in the future for Chromecast subtitles
  */
 public class FormatVTT extends TimedTextFileFormat {
 
@@ -134,6 +132,7 @@ public class FormatVTT extends TimedTextFileFormat {
         int captionNumber = 1;
 
         file.add("WEBVTT");
+        file.add("");
         index += 2;
 
         while (itr.hasNext()) {

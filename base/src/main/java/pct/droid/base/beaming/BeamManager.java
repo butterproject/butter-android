@@ -47,6 +47,8 @@ import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -59,7 +61,12 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.subs.FatalParsingException;
+import pct.droid.base.subs.FormatSRT;
+import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.FileUtils;
 import timber.log.Timber;
 
 /**
@@ -226,10 +233,25 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             location = BeamServer.getVideoURL();
         }
 
+        String subsLocation = null;
+        if(!info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
+            File srtFile = new File(SubsProvider.getStorageLocation(mContext), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
+            BeamServer.setCurrentSubs(srtFile);
+            subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
+        } else {
+            BeamServer.setCurrentSubs("no-subs");
+        }
+
         try {
             URL url = new URL(location);
             URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
             location = uri.toString();
+
+            if(subsLocation != null) {
+                URL subsUrl = new URL(subsLocation);
+                URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(), subsUrl.getPort(), subsUrl.getPath(), subsUrl.getQuery(), subsUrl.getRef());
+                subsLocation = subsUri.toString();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
@@ -241,7 +263,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
         if (mCurrentDevice != null)
-            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
+            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, subsLocation, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
                 @Override
                 public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                     mLaunchSession = object.launchSession;
