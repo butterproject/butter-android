@@ -170,6 +170,12 @@ public class BeamPlayerNotificationService extends Service {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     mImage = bitmap;
+
+                    if(!mIsPlaying) {
+                        buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );
+                    } else {
+                        buildNotification( generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE ) );
+                    }
                 }
 
                 @Override

@@ -672,7 +672,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
         return null;
     }
 
-    private void displayMedia(String url, String mimeType, String title,
+    private void displayMedia(String url, String subsUrl, String mimeType, String title,
             String description, String iconSrc,
             final MediaPlayer.LaunchListener listener) {
         ResponseListener<Object> responseListener = new ResponseListener<Object>() {
@@ -731,7 +731,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
     public void displayImage(String url, String mimeType, String title,
             String description, String iconSrc,
             MediaPlayer.LaunchListener listener) {
-        displayMedia(url, mimeType, title, description, iconSrc, listener);
+        displayMedia(url, null, mimeType, title, description, iconSrc, listener);
     }
 
     @Override
@@ -759,10 +759,17 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
     }
 
     @Override
+    public void playMedia(String url, String subsUrl, String mimeType, String title,
+                          String description, String iconSrc, boolean shouldLoop,
+                          MediaPlayer.LaunchListener listener) {
+        displayMedia(url, subsUrl, mimeType, title, description, iconSrc, listener);
+    }
+
+    @Override
     public void playMedia(String url, String mimeType, String title,
             String description, String iconSrc, boolean shouldLoop,
             MediaPlayer.LaunchListener listener) {
-        displayMedia(url, mimeType, title, description, iconSrc, listener);
+        playMedia(url, mimeType, title, description, iconSrc, shouldLoop, listener);
     }
 
     @Override
