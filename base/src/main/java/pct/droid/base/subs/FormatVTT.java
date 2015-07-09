@@ -22,36 +22,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-
 /**
- * This class represents the .SRT subtitle format
- * <br><br>
- * Copyright (c) 2012 J. David Requejo <br>
- * j[dot]david[dot]requejo[at] Gmail
- * <br><br>
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
- * is furnished to do so, subject to the following conditions:
- * <br><br>
- * The above copyright notice and this permission notice shall be included in all copies
- * or substantial portions of the Software.
- * <br><br>
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- * @author J. David Requejo
+ * This class represents the .VTT subtitle format
  */
-public class FormatSRT extends TimedTextFileFormat {
+public class FormatVTT extends TimedTextFileFormat {
 
-
-    public TimedTextObject parseFile(String fileName, String[] inputString) throws IOException {
-
+    @Override
+    public TimedTextObject parseFile(String fileName, String[] inputString) throws IOException, FatalParsingException {
         TimedTextObject tto = new TimedTextObject();
         Caption caption = new Caption();
         int captionNumber = 1;
@@ -91,9 +68,9 @@ public class FormatSRT extends TimedTextFileFormat {
                             line = getLine(inputString, stringIndex++).trim();
                             String start = line.substring(0, 12);
                             String end = line.substring(line.length() - 12, line.length());
-                            Time time = new Time("hh:mm:ss,ms", start);
+                            Time time = new Time("hh:mm:ss.ms", start);
                             caption.start = time;
-                            time = new Time("hh:mm:ss,ms", end);
+                            time = new Time("hh:mm:ss.ms", end);
                             caption.end = time;
                         } catch (Exception e) {
                             tto.warnings += "incorrect time format at line " + lineCounter;
@@ -139,7 +116,6 @@ public class FormatSRT extends TimedTextFileFormat {
         return tto;
     }
 
-
     public String[] toFile(TimedTextObject tto) {
 
         //first we check if the TimedTextObject had been built, otherwise...
@@ -155,6 +131,10 @@ public class FormatSRT extends TimedTextFileFormat {
         Iterator<Caption> itr = c.iterator();
         int captionNumber = 1;
 
+        file.add("WEBVTT");
+        file.add("");
+        index += 2;
+
         while (itr.hasNext()) {
             //new caption
             Caption current = itr.next();
@@ -166,14 +146,14 @@ public class FormatSRT extends TimedTextFileFormat {
                 current.end.mseconds += tto.offset;
             }
             //time is written
-            file.add(index++, current.start.getTime("hh:mm:ss,ms") + " --> " + current.end.getTime("hh:mm:ss,ms"));
+            file.add(index++, current.start.getTime("hh:mm:ss.ms") + " --> " + current.end.getTime("hh:mm:ss.ms"));
             //offset is undone
             if (tto.offset != 0) {
                 current.start.mseconds -= tto.offset;
                 current.end.mseconds -= tto.offset;
             }
             //text is added
-            String[] lines = cleanTextForSRT(current);
+            String[] lines = cleanTextForVTT(current);
             int i = 0;
             while (i < lines.length)
                 file.add(index++, "" + lines[i++]);
@@ -184,13 +164,12 @@ public class FormatSRT extends TimedTextFileFormat {
         return file.toArray(new String[file.size()]);
     }
 
-
-	/* PRIVATE METHODS */
+    /* PRIVATE METHODS */
 
     /**
      * This method cleans caption.content of XML and parses line breaks.
      */
-    private String[] cleanTextForSRT(Caption current) {
+    private String[] cleanTextForVTT(Caption current) {
         String[] lines;
         String text = current.content;
         //add line breaks

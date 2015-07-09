@@ -251,7 +251,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     }
 
     private void startVideo() {
-        mBeamManager.playVideo(mStreamInfo, false, new MediaPlayer.LaunchListener() {
+        mBeamManager.playVideo(mStreamInfo, new MediaPlayer.LaunchListener() {
             @Override
             public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                 mMediaControl = object.mediaControl;

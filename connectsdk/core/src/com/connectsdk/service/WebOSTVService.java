@@ -1278,7 +1278,7 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
     }
 
     @Override
-    public void playMedia(final String url, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
+    public void playMedia(final String url, final String subsUrl, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
         if ("4.0.0".equalsIgnoreCase(this.serviceDescription.getVersion())) {
             DeviceService dlnaService = this.getDLNAService();
 
@@ -1286,7 +1286,7 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
                 MediaPlayer mediaPlayer = dlnaService.getAPI(MediaPlayer.class);
 
                 if (mediaPlayer != null) {
-                    mediaPlayer.playMedia(url, mimeType, title, description, iconSrc, shouldLoop, listener);
+                    mediaPlayer.playMedia(url, subsUrl, mimeType, title, description, iconSrc, shouldLoop, listener);
                     return;
                 }
             }
@@ -1321,7 +1321,7 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
                 @Override
                 public void onSuccess(WebAppSession webAppSession) {
-                    webAppSession.playMedia(url, mimeType, title, description, iconSrc, shouldLoop, listener);
+                    webAppSession.playMedia(url, subsUrl, mimeType, title, description, iconSrc, shouldLoop, listener);
                 }
             };
 
@@ -1334,15 +1334,21 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
                 @Override
                 public void onSuccess(WebAppSession webAppSession) {
-                    webAppSession.playMedia(url, mimeType, title, description, iconSrc, shouldLoop, listener);
+                    webAppSession.playMedia(url, subsUrl, mimeType, title, description, iconSrc, shouldLoop, listener);
                 }
             });
         }
     }
 
     @Override
+    public void playMedia(final String url, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
+
+    }
+
+    @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
         String mediaUrl = null;
+        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -1350,6 +1356,7 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
+            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -1360,7 +1367,7 @@ public class WebOSTVService extends DeviceService implements Launcher, MediaCont
             }
         }
 
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
