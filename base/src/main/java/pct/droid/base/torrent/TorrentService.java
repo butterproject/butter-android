@@ -177,11 +177,11 @@ public class TorrentService extends Service {
         }
 
         Timber.d("initialize");
-        if (mLibTorrentThread != null) {
+        if (mLibTorrentThread != null && mTorrentSession != null) {
             mLibTorrentHandler.removeCallbacksAndMessages(null);
 
             //resume torrent session if needed
-            if (mTorrentSession != null && mTorrentSession.isPaused()) {
+            if (mTorrentSession.isPaused()) {
                 mLibTorrentHandler.post(new Runnable() {
                     @Override
                     public void run() {
