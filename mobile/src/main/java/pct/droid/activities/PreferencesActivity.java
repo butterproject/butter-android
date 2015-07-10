@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.adapters.PreferencesListAdapter;
@@ -78,11 +78,11 @@ public class PreferencesActivity extends PopcornBaseActivity
     private LinearLayoutManager mLayoutManager;
     private DirectoryChooserFragment mDirectoryChooserFragment;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.recyclerView)
+    @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-    @InjectView(R.id.rootLayout)
+    @Bind(R.id.rootLayout)
     ViewGroup rootLayout;
 
     public static Intent startActivity(Activity activity) {

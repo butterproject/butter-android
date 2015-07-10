@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.base.R;
 import pct.droid.base.utils.ThreadUtils;
 
@@ -54,15 +54,15 @@ public class BeamDeviceAdapter extends BaseAdapter {
     private ArrayList<String> mKeys = new ArrayList<>();
 
     class ViewHolder {
-        @InjectView(android.R.id.icon)
+        @Bind(android.R.id.icon)
         ImageView icon;
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text1;
-        @InjectView(android.R.id.text2)
+        @Bind(android.R.id.text2)
         TextView text2;
 
         public ViewHolder(View v) {
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
         }
     }
 

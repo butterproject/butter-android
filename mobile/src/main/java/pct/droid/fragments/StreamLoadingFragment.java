@@ -37,7 +37,7 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
@@ -57,22 +57,22 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     private Context mContext;
 
     View mRoot;
-    @InjectView(R.id.progress_indicator)
+    @Bind(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
-    @InjectView(R.id.primary_textview)
+    @Bind(R.id.primary_textview)
     TextView mPrimaryTextView;
-    @InjectView(R.id.secondary_textview)
+    @Bind(R.id.secondary_textview)
     TextView mSecondaryTextView;
-    @InjectView(R.id.tertiary_textview)
+    @Bind(R.id.tertiary_textview)
     TextView mTertiaryTextView;
-    @InjectView(R.id.background_imageview)
+    @Bind(R.id.background_imageview)
     ImageView mBackgroundImageView;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_streamloading, container, false);
-        ButterKnife.inject(this, mRoot);
+        ButterKnife.bind(this, mRoot);
 
         if (VersionUtils.isLollipop()) {
             //postpone the transitions until after the view is layed out.

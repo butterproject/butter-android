@@ -55,7 +55,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.base.preferences.Prefs;
@@ -71,31 +71,31 @@ import pct.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @InjectView(R.id.progress_indicator)
+    @Bind(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
-    @InjectView(R.id.video_surface)
+    @Bind(R.id.video_surface)
     SurfaceView videoSurface;
-    @InjectView(R.id.subtitle_text)
+    @Bind(R.id.subtitle_text)
     StrokedRobotoTextView mSubtitleText;
-    @InjectView(R.id.control_layout)
+    @Bind(R.id.control_layout)
     RelativeLayout mControlLayout;
-    @InjectView(R.id.player_info)
+    @Bind(R.id.player_info)
     TextView mPlayerInfo;
-    @InjectView(R.id.control_bar)
+    @Bind(R.id.control_bar)
     pct.droid.widget.SeekBar mControlBar;
-    @InjectView(R.id.play_button)
+    @Bind(R.id.play_button)
     ImageButton mPlayButton;
-    @InjectView(R.id.forward_button)
+    @Bind(R.id.forward_button)
     ImageButton mForwardButton;
-    @InjectView(R.id.rewind_button)
+    @Bind(R.id.rewind_button)
     ImageButton mRewindButton;
-    @InjectView(R.id.subs_button)
+    @Bind(R.id.subs_button)
     ImageButton mSubsButton;
-    @InjectView(R.id.current_time)
+    @Bind(R.id.current_time)
     TextView mCurrentTimeTextView;
-    @InjectView(R.id.length_time)
+    @Bind(R.id.length_time)
     TextView lengthTime;
     View mDecorView;
 
@@ -146,7 +146,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                 return onTouchEvent(event);
             }
         });
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         if (LocaleUtils.isRTL(LocaleUtils.getCurrent())) {
             Drawable forward = mForwardButton.getDrawable();

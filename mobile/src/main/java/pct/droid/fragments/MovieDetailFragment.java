@@ -24,9 +24,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
-import butterknife.Optional;
+import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.TrailerPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
@@ -55,30 +55,30 @@ public class MovieDetailFragment extends BaseDetailFragment {
     private Boolean mAttached = false;
     private Magnet mMagnet;
 
-    @InjectView(R.id.play_button)
+    @Bind(R.id.play_button)
     ImageButton mPlayButton;
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     TextView mTitle;
-    @InjectView(R.id.health)
+    @Bind(R.id.health)
     ImageView mHealth;
-    @InjectView(R.id.meta)
+    @Bind(R.id.meta)
     TextView mMeta;
-    @InjectView(R.id.synopsis)
+    @Bind(R.id.synopsis)
     TextView mSynopsis;
-    @InjectView(R.id.read_more)
+    @Bind(R.id.read_more)
     Button mReadMore;
-    @InjectView(R.id.watch_trailer)
+    @Bind(R.id.watch_trailer)
     Button mWatchTrailer;
-    @InjectView(R.id.magnet)
+    @Bind(R.id.magnet)
     ImageButton mOpenMagnet;
-    @InjectView(R.id.rating)
+    @Bind(R.id.rating)
     RatingBar mRating;
-    @InjectView(R.id.subtitles)
+    @Bind(R.id.subtitles)
     OptionSelector mSubtitles;
-    @InjectView(R.id.quality)
+    @Bind(R.id.quality)
     OptionSelector mQuality;
-    @Optional
-    @InjectView(R.id.cover_image)
+    @Nullable
+    @Bind(R.id.cover_image)
     ImageView mCoverImage;
 
     public static MovieDetailFragment newInstance(Movie movie) {
@@ -98,7 +98,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
         if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
-        ButterKnife.inject(this, mRoot);
+        ButterKnife.bind(this, mRoot);
 
         if(sMovie != null) {
 

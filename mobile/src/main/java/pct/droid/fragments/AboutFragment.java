@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.base.Constants;
@@ -36,19 +36,19 @@ import pct.droid.base.utils.IntentUtils;
 
 public class AboutFragment extends Fragment {
 
-    @InjectView(R.id.logo_imageview)
+    @Bind(R.id.logo_imageview)
     ImageView mLogoImageView;
-    @InjectView(R.id.facebook_button)
+    @Bind(R.id.facebook_button)
     TextView mFacebookButton;
-    @InjectView(R.id.git_button)
+    @Bind(R.id.git_button)
     TextView mGitButton;
-    @InjectView(R.id.blog_button)
+    @Bind(R.id.blog_button)
     TextView mBlogButton;
-    @InjectView(R.id.popcorn_button)
+    @Bind(R.id.popcorn_button)
     TextView mPopcornButton;
-    @InjectView(R.id.discuss_button)
+    @Bind(R.id.discuss_button)
     TextView mDiscussButton;
-    @InjectView(R.id.twitter_button)
+    @Bind(R.id.twitter_button)
     TextView mTwitterButton;
 
     private OnFragmentInteractionListener mListener;
@@ -72,7 +72,7 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
     }
 
     @Override

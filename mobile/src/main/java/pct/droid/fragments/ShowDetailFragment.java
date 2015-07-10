@@ -23,9 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
-import butterknife.Optional;
+import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.adapters.ShowDetailPagerAdapter;
 import pct.droid.base.providers.media.models.Episode;
@@ -43,33 +43,33 @@ public class ShowDetailFragment extends BaseDetailFragment {
     private static Show sShow;
     private Boolean mIsTablet = false;
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     WrappingViewPager mViewPager;
-    @InjectView(R.id.tabs)
+    @Bind(R.id.tabs)
     PagerSlidingTabStrip mTabs;
-    @Optional
-    @InjectView(R.id.background)
+    @Nullable
+    @Bind(R.id.background)
     View mBackground;
-    @Optional
-    @InjectView(R.id.top)
+    @Nullable
+    @Bind(R.id.top)
     View mShadow;
-    @Optional
-    @InjectView(R.id.title)
+    @Nullable
+    @Bind(R.id.title)
     TextView mTitle;
-    @Optional
-    @InjectView(R.id.aired)
+    @Nullable
+    @Bind(R.id.aired)
     TextView mMeta;
-    @Optional
-    @InjectView(R.id.synopsis)
+    @Nullable
+    @Bind(R.id.synopsis)
     TextView mSynopsis;
-    @Optional
-    @InjectView(R.id.read_more)
+    @Nullable
+    @Bind(R.id.read_more)
     TextView mReadMore;
-    @Optional
-    @InjectView(R.id.rating)
+    @Nullable
+    @Bind(R.id.rating)
     RatingBar mRating;
-    @Optional
-    @InjectView(R.id.cover_image)
+    @Nullable
+    @Bind(R.id.cover_image)
     ImageView mCoverImage;
 
     public static ShowDetailFragment newInstance(Show show) {
@@ -86,7 +86,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
-        ButterKnife.inject(this, mRoot);
+        ButterKnife.bind(this, mRoot);
         if (VersionUtils.isJellyBean() && container != null) {
             int minHeight = container.getMinimumHeight() + PixelUtils.getPixelsFromDp(mActivity, 48);
             mRoot.setMinimumHeight(minHeight);
@@ -188,7 +188,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
         mActivity.setSubScrollListener(null);
     }
 
-    @Optional
+    @Nullable
     @OnClick(R.id.read_more)
     public void openReadMore(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)

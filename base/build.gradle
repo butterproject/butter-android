@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'hugo'
+apply plugin: 'hugo'//for method logging (only in debug builds)
+apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -49,8 +50,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.uwetrottmann:trakt-java:4.3.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.uwetrottmann:trakt-java:4.3.1'
 
     compile 'com.koushikdutta.async:androidasync:2.1.6'
 

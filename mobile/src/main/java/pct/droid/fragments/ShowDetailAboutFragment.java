@@ -16,7 +16,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Show;
@@ -28,19 +28,19 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
 
     private static Show sShow;
 
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     TextView mTitle;
-    @InjectView(R.id.meta)
+    @Bind(R.id.meta)
     TextView mMeta;
-    @InjectView(R.id.synopsis)
+    @Bind(R.id.synopsis)
     TextView mSynopsis;
-    @InjectView(R.id.rating)
+    @Bind(R.id.rating)
     RatingBar mRating;
-    @InjectView(R.id.read_more)
+    @Bind(R.id.read_more)
     Button mReadMore;
-    @InjectView(R.id.info_buttons)
+    @Bind(R.id.info_buttons)
     LinearLayout mInfoButtons;
-    @InjectView(R.id.magnet)
+    @Bind(R.id.magnet)
     ImageButton mOpenMagnet;
 
     public static ShowDetailAboutFragment newInstance(Show show) {
@@ -60,7 +60,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_detail_about, container, false);
-        ButterKnife.inject(this, mRoot);
+        ButterKnife.bind(this, mRoot);
         if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
