@@ -449,6 +449,7 @@ public class YTSProvider extends MediaProvider {
     @Override
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
+        tabs.add(new NavInfo(Filters.Sort.TRENDING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.trending)));
         tabs.add(new NavInfo(Filters.Sort.POPULARITY, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.popular)));
         tabs.add(new NavInfo(Filters.Sort.RATING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.top_rated)));
         tabs.add(new NavInfo(Filters.Sort.DATE, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.release_date)));
