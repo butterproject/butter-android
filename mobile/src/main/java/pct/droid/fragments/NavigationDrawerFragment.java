@@ -36,7 +36,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import pct.droid.R;
 import pct.droid.activities.PreferencesActivity;
 import pct.droid.adapters.NavigationAdapter;
