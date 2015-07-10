@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.design.widget.TabLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
