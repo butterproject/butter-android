@@ -53,9 +53,6 @@ import com.connectsdk.service.config.WebOSTVServiceConfig;
 
 @SuppressLint("DefaultLocale")
 public class WebOSTVServiceSocketClient extends WebSocketClient implements ServiceCommandProcessor {
-
-    private static final String TAG = "Connect SDK";
-
     public enum State {
         NONE,
         INITIAL,
@@ -122,7 +119,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
     public void connect() {
         synchronized (this) {
             if (state != State.INITIAL) {
-                Log.w(TAG, "already connecting; not trying to connect again: " + state);
+                Log.w(Util.T, "already connecting; not trying to connect again: " + state);
                 return; // don't try to connect again while connected
             }
 
@@ -181,7 +178,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
 
     @Override
     public void onMessage(String data) {
-        Log.d(TAG, "webOS Socket [IN] : " + data);
+        Log.d(Util.T, "webOS Socket [IN] : " + data);
 
         this.handleMessage(data);
     }
@@ -258,7 +255,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
 
         if ("response".equals(type)) {
             if (request != null) {
-//                Log.d("Connect SDK", "Found requests need to handle response");
+//                Log.d(Util.T, "Found requests need to handle response");
                 if (payload != null) {
                     Util.postSuccess(request.getResponseListener(), payload);
                 } 
@@ -308,11 +305,11 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
             }
 
             if (payload != null) {
-                Log.d("Connect SDK", "Error Payload: " + payload.toString());
+                Log.d(Util.T, "Error Payload: " + payload.toString());
             }
 
             if (message.has("id")) {
-                Log.d("Connect SDK", "Error Desc: " + errorDesc);
+                Log.d(Util.T, "Error Desc: " + errorDesc);
 
                 if (request != null) {
                     Util.postError(request.getResponseListener(), new ServiceCommandError(errorCode, errorDesc, payload));
@@ -320,10 +317,6 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
                     if (!(request instanceof URLServiceSubscription)) 
                         requests.remove(id);
 
-                    if (errorCode == 403) { // 403 User Denied Access 
-                        disconnect();
-                        return;
-                    }
                 }
             }
         } else if ("hello".equals(type)) {
@@ -534,7 +527,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
         if (!commandQueue.isEmpty()) {
             LinkedHashSet<ServiceCommand<ResponseListener<Object>>> tempHashSet = new LinkedHashSet<ServiceCommand<ResponseListener<Object>>>(commandQueue);
             for (ServiceCommand<ResponseListener<Object>> command : tempHashSet) {
-                Log.d("Connect SDK", "executing queued command for " + command.getTarget());
+                Log.d(Util.T, "executing queued command for " + command.getTarget());
 
                 sendCommandImmediately(command);
                 commandQueue.remove(command);
@@ -572,10 +565,10 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
         if (state == State.REGISTERED) {
             this.sendCommandImmediately(command);
         } else if (state == State.CONNECTING || state == State.DISCONNECTING){
-            Log.d("Connect SDK", "queuing command for " + command.getTarget());
+            Log.d(Util.T, "queuing command for " + command.getTarget());
             commandQueue.add((ServiceCommand<ResponseListener<Object>>) command);
         } else {
-            Log.d("Connect SDK", "queuing command and restarting socket for " + command.getTarget());
+            Log.d(Util.T, "queuing command and restarting socket for " + command.getTarget());
             commandQueue.add((ServiceCommand<ResponseListener<Object>>) command);
             connect();
         }
@@ -696,7 +689,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
         if (isConnected()) {
             String message = packet.toString();
 
-            Log.d(TAG, "webOS Socket [OUT] : " + message);
+            Log.d(Util.T, "webOS Socket [OUT] : " + message);
 
             this.send(message);
         }
@@ -812,7 +805,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
 
         @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            Log.d("Connect SDK", "Expecting device cert " + (expectedCert != null ? expectedCert.getSubjectDN() : "(any)"));
+            Log.d(Util.T, "Expecting device cert " + (expectedCert != null ? expectedCert.getSubjectDN() : "(any)"));
 
             if (chain != null && chain.length > 0) {
                 X509Certificate cert = chain[0];
@@ -823,7 +816,7 @@ public class WebOSTVServiceSocketClient extends WebSocketClient implements Servi
                     byte [] certBytes = cert.getEncoded();
                     byte [] expectedCertBytes = expectedCert.getEncoded();
 
-                    Log.d("Connect SDK", "Device presented cert " + cert.getSubjectDN());
+                    Log.d(Util.T, "Device presented cert " + cert.getSubjectDN());
 
                     if (!Arrays.equals(certBytes, expectedCertBytes)) {
                         throw new CertificateException("certificate does not match");

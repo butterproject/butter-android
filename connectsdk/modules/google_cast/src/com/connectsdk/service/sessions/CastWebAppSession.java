@@ -84,7 +84,7 @@ public class CastWebAppSession extends WebAppSession {
             Cast.CastApi.removeMessageReceivedCallbacks(service.getApiClient(), castServiceChannel.getNamespace());
             castServiceChannel = null;
         } catch (IOException e) {
-            Log.e("Connect SDK", "Exception while removing application", e);
+            Log.e(Util.T, "Exception while removing application", e);
         }
 
         Cast.CastApi.leaveApplication(service.getApiClient());
