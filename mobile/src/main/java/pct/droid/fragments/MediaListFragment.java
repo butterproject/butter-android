@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
@@ -112,6 +113,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private MediaProvider.Filters mFilters = new MediaProvider.Filters();
     private String mGenre;
 
+    View mRootView;
     @InjectView(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
     @InjectView(R.id.recyclerView)
@@ -158,8 +160,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getActivity();
 
-        View v = inflater.inflate(R.layout.fragment_media, container, false);
-        ButterKnife.inject(this, v);
+        mRootView = inflater.inflate(R.layout.fragment_media, container, false);
+        ButterKnife.inject(this, mRootView);
 
         mColumns = getResources().getInteger(R.integer.overview_cols);
         mLoadingTreshold = mColumns * 3;
@@ -167,7 +169,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mLayoutManager = new GridLayoutManager(mContext, mColumns);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        return v;
+        return mRootView;
     }
 
     @Override
@@ -377,7 +379,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                     ThreadUtils.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                            Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
                             setState(State.LOADED);
                         }
                     });
@@ -467,7 +469,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
      */
     @Override
     public void onDetailLoadFailure() {
-        Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
     }
 
     /**
