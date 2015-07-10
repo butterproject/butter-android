@@ -1,21 +1,4 @@
 /*
- * This file is part of Popcorn Time.
- *
- * Popcorn Time is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Popcorn Time is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
  * DLNAService
  * Connect SDK
  *
@@ -140,15 +123,15 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
     }
 
     public DLNAService(ServiceDescription serviceDescription, ServiceConfig serviceConfig) {
-        this(serviceDescription, serviceConfig, DiscoveryManager.getInstance().getContext());
+        this(serviceDescription, serviceConfig, DiscoveryManager.getInstance().getContext(), new DLNAHttpServer());
     }
 
-    public DLNAService(ServiceDescription serviceDescription, ServiceConfig serviceConfig, Context context) {
+    public DLNAService(ServiceDescription serviceDescription, ServiceConfig serviceConfig, Context context, DLNAHttpServer dlnaServer) {
         super(serviceDescription, serviceConfig);
         this.context = context;
         SIDList = new HashMap<String, String>();
         updateControlURL();
-        httpServer = new DLNAHttpServer();
+        httpServer = dlnaServer;
     }
 
     public static DiscoveryFilter discoveryFilter() {
@@ -198,11 +181,15 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 else if ((serviceList.get(i).serviceType.contains(CONNECTION_MANAGER)) ) {
                     connectionControlURL = makeControlURL(serviceList.get(i).baseURL, serviceList.get(i).controlURL);
                 }
+
             }
         }
     }
 
     String makeControlURL(String base, String path) {
+        if (base == null || path == null) {
+            return null;
+        }
         if (path.startsWith("/")) {
             return base + path.substring(1);
         }
@@ -256,7 +243,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
     }
 
-    public void displayMedia(String url, String subsUrl, String mimeType, String title, String description, String iconSrc, final LaunchListener listener) {
+    public void displayMedia(String url, String mimeType, String title, String description, String iconSrc, final LaunchListener listener) {
         final String instanceId = "0";
         String[] mediaElements = mimeType.split("/");
         String mediaType = mediaElements[0];
@@ -329,10 +316,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
         request.send();
     }
 
-    public void displayMedia(String url, String mimeType, String title, String description, String iconSrc, LaunchListener listener) {
-        displayMedia(url, null, mimeType, title, description, iconSrc, listener);
-    }
-
     @Override
     public void displayImage(String url, String mimeType, String title, String description, String iconSrc, LaunchListener listener) {
         displayMedia(url, mimeType, title, description, iconSrc, listener);
@@ -362,20 +345,14 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
     }
 
     @Override
-    public void playMedia(String url, String subsUrl, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener) {
-        displayMedia(url, subsUrl, mimeType, title, description, iconSrc, listener);
-    }
-
-    @Override
     public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener) {
-        playMedia(url, null, mimeType, title, description, iconSrc, shouldLoop, listener);
+        displayMedia(url, mimeType, title, description, iconSrc, listener);
     }
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop,
             LaunchListener listener) {
         String mediaUrl = null;
-        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -383,7 +360,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
-            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -394,7 +370,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
             }
         }
 
-        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
@@ -583,8 +559,8 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 if ((!strDuration.equals("0:00:00")) || (info.getMimeType().contains("image"))) {
                     long milliTimes = convertStrTimeFormatToLong(strDuration);
 
-                    Util.postSuccess(listener, milliTimes);}
-                else new Timer().schedule(new TimerTask() {
+                    Util.postSuccess(listener, milliTimes);
+                } else new Timer().schedule(new TimerTask() {
 
                     @Override
                     public void run() {
@@ -765,7 +741,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 ServiceCommand<ResponseListener<Object>> command = (ServiceCommand<ResponseListener<Object>>) mCommand;
 
                 String method = command.getTarget();
-                String payload = (String)command.getPayload();
+                String payload = (String) command.getPayload();
 
                 String targetURL = null;
                 String serviceURN = null;
@@ -778,12 +754,10 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 if (payload.contains(AV_TRANSPORT_URN)) {
                     targetURL = avTransportURL;
                     serviceURN = AV_TRANSPORT_URN;
-                }
-                else if (payload.contains(RENDERING_CONTROL_URN)) {
+                } else if (payload.contains(RENDERING_CONTROL_URN)) {
                     targetURL = renderingControlURL;
                     serviceURN = RENDERING_CONTROL_URN;
-                }
-                else if (payload.contains(CONNECTION_MANAGER_URN)) {
+                } else if (payload.contains(CONNECTION_MANAGER_URN)) {
                     targetURL = connectionControlURL;
                     serviceURN = CONNECTION_MANAGER_URN;
                 }
@@ -799,7 +773,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 }
 
                 try {
-                    HttpConnection connection = HttpConnection.newInstance(URI.create(targetURL));
+                    HttpConnection connection = createHttpConnection(targetURL);
                     connection.setHeader("Content-Type", "text/xml; charset=utf-8");
                     connection.setHeader("SOAPAction", String.format("\"%s#%s\"", serviceURN, method));
                     connection.setMethod(HttpConnection.Method.POST);
@@ -816,6 +790,10 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 }
             }
         });
+    }
+
+    HttpConnection createHttpConnection(String targetURL) throws IOException {
+        return HttpConnection.newInstance(URI.create(targetURL));
     }
 
     @Override
@@ -915,9 +893,9 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
             Date d2 = df.parse("00:00:00");
             time = d.getTime() - d2.getTime();
         } catch (ParseException e) {
-            Log.w("Connect SDK", "Invalid Time Format: " + strTime);
+            Log.w(Util.T, "Invalid Time Format: " + strTime);
         } catch (NullPointerException e) {
-            Log.w("Connect SDK", "Null time argument");
+            Log.w(Util.T, "Null time argument");
         }
 
         return time;
@@ -952,7 +930,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
     @Override
     public ServiceSubscription<PlayStateListener> subscribePlayState(PlayStateListener listener) {
-        URLServiceSubscription<PlayStateListener> request = new URLServiceSubscription<PlayStateListener>(this, PLAY_STATE, null, null);
+        URLServiceSubscription<PlayStateListener> request = new URLServiceSubscription<MediaControl.PlayStateListener>(this, PLAY_STATE, null, null);
         request.addListener(listener);
         addSubscription(request);
         return request;
@@ -979,7 +957,6 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
         if (httpServer.getSubscriptions().isEmpty()) {
             unsubscribeServices();
-            httpServer.stop();
         }
     }
 
@@ -1072,6 +1049,14 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 }
             }
         });
+
+        Util.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                httpServer.stop();
+            }
+        });
+
     }
 
     @Override
@@ -1099,7 +1084,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
                 if (serviceList != null) {
                     for (int i = 0; i < serviceList.size(); i++) {
-                        String eventSubURL = serviceList.get(i).eventSubURL;
+                        String eventSubURL = makeControlURL("/", serviceList.get(i).eventSubURL);
                         if (eventSubURL == null) {
                             continue;
                         }
@@ -1121,6 +1106,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                     }
                 }
             }
@@ -1143,7 +1129,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
                         if (serviceList != null) {
                             for (int i = 0; i < serviceList.size(); i++) {
-                                String eventSubURL = serviceList.get(i).eventSubURL;
+                                String eventSubURL = makeControlURL("/", serviceList.get(i).eventSubURL);
                                 if (eventSubURL == null) {
                                     continue;
                                 }
@@ -1168,8 +1154,9 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
     }
 
     public void unsubscribeServices() {
-        if (resubscriptionTimer != null)
+        if (resubscriptionTimer != null) {
             resubscriptionTimer.cancel();
+        }
 
         Util.runInBackground(new Runnable() {
 
@@ -1179,7 +1166,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
 
                 if (serviceList != null) {
                     for (int i = 0; i < serviceList.size(); i++) {
-                        String eventSubURL = serviceList.get(i).eventSubURL;
+                        String eventSubURL = makeControlURL("/", serviceList.get(i).eventSubURL);
                         if (eventSubURL == null) {
                             continue;
                         }
@@ -1305,6 +1292,7 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 String currentVolume = parseData((String) response, "CurrentVolume");
                 int iVolume = 0;
                 try {
+                    //noinspection ResultOfMethodCallIgnored
                     Integer.parseInt(currentVolume);
                 } catch (RuntimeException ex) {
                     ex.printStackTrace();
