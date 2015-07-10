@@ -28,13 +28,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -126,7 +129,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
      */
     private final Handler mVlcEventHandler = new VideoPlayerEventHandler(this);
 
-
+    private View mRootView;
     private SurfaceHolder mVideoSurfaceHolder;
 
 
@@ -135,6 +138,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return mRootView = super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -464,7 +473,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                                     @Override
                                     public void onFileSelected(File f) {
                                         if (!f.getPath().endsWith(".srt")) {
-                                            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
                                             return;
                                         }
                                         FileSelectorDialogFragment.hide();
@@ -694,7 +703,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 mCurrentSubsLang = "no-subs";
 
                 try {
-                    Toast.makeText(getActivity(), "Subtitle download failed", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(mRootView, "Subtitle download failed", Snackbar.LENGTH_SHORT).show();
                 } catch (RuntimeException runtimeException) {
                     runtimeException.printStackTrace();
                 }
