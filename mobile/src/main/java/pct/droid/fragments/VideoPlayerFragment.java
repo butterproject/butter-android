@@ -66,6 +66,7 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.VersionUtils;
+import pct.droid.fragments.base.BaseVideoPlayerFragment;
 import pct.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
@@ -560,7 +561,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     };
 
     @Override
-    void onHardwareAccelerationError() {
+    protected void onHardwareAccelerationError() {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override

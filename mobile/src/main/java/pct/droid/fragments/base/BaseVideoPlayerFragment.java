@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.fragments;
+package pct.droid.fragments.base;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -303,7 +303,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     protected abstract void onErrorEncountered();
 
-    abstract void onHardwareAccelerationError();
+    protected abstract void onHardwareAccelerationError();
 
     protected abstract void showTimedCaptionText(Caption text);
 
@@ -610,7 +610,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
 
-    void seek(int delta) {
+    protected void seek(int delta) {
         if (mLibVLC.getLength() <= 0 && !mSeeking) return;
 
         long position = mLibVLC.getTime() + delta;

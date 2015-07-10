@@ -50,12 +50,11 @@
         android:alpha="0.08"
         />
 
-    <com.astuetz.PagerSlidingTabStrip
+    <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="48sp"
         android:layout_alignTop="@id/top"
-        android:background="@android:color/transparent"
-        app:pstsDividerColor="@android:color/white" />
+        android:background="@android:color/transparent" />
 
 </RelativeLayout>

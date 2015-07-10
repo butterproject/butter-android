@@ -1,4 +1,4 @@
-package pct.droid.fragments;
+package pct.droid.fragments.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
