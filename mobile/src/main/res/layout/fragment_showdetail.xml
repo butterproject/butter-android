@@ -51,6 +51,7 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
+        style="@style/Theme.PopcornTime.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="48sp"
         android:layout_alignTop="@id/top"
