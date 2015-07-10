@@ -39,7 +39,7 @@ import com.squareup.okhttp.Call;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
@@ -113,13 +113,13 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private String mGenre;
 
     View mRootView;
-    @InjectView(R.id.progressOverlay)
+    @Bind(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
-    @InjectView(R.id.recyclerView)
+    @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    @InjectView(R.id.emptyView)
+    @Bind(R.id.emptyView)
     TextView mEmptyView;
-    @InjectView(R.id.progress_textview)
+    @Bind(R.id.progress_textview)
     TextView mProgressTextView;
 
     public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
@@ -160,7 +160,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mContext = getActivity();
 
         mRootView = inflater.inflate(R.layout.fragment_media, container, false);
-        ButterKnife.inject(this, mRootView);
+        ButterKnife.bind(this, mRootView);
 
         mColumns = getResources().getInteger(R.integer.overview_cols);
         mLoadingTreshold = mColumns * 3;

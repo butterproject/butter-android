@@ -13,16 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 public class OptionSelector extends LinearLayout {
 
     View mView;
-    @InjectView(android.R.id.text1)
+    @Bind(android.R.id.text1)
     TextView mText;
-    @InjectView(android.R.id.icon)
+    @Bind(android.R.id.icon)
     ImageView mIcon;
 
     private FragmentManager mFragmentManager;
@@ -50,7 +50,7 @@ public class OptionSelector extends LinearLayout {
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = layoutInflater.inflate(R.layout.optionselector, this);
-        ButterKnife.inject(this, mView);
+        ButterKnife.bind(this, mView);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OptionSelector, defStyle, 0);
 

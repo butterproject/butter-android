@@ -51,7 +51,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
@@ -89,17 +89,17 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     private ScheduledFuture mTask;
 
     View mRootView;
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @InjectView(R.id.sliding_layout)
+    @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout mPanel;
-    @InjectView(R.id.play_button)
+    @Bind(R.id.play_button)
     ImageButton mPlayButton;
-    @InjectView(R.id.cover_image)
+    @Bind(R.id.cover_image)
     ImageView mCoverImage;
-    @InjectView(R.id.seekbar)
+    @Bind(R.id.seekbar)
     SeekBar mSeekBar;
-    @InjectView(R.id.volumebar)
+    @Bind(R.id.volumebar)
     SeekBar mVolumeBar;
 
     @Override
@@ -110,7 +110,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mToolbar.getBackground().setAlpha(0);
         mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_mtrl_alpha);

@@ -27,7 +27,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.adapters.models.Option;
 
 public class FileArrayAdapter extends ArrayAdapter<Option> {
@@ -68,13 +68,13 @@ public class FileArrayAdapter extends ArrayAdapter<Option> {
     }
 
     class ViewHolder {
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text1;
-        @InjectView(android.R.id.text2)
+        @Bind(android.R.id.text2)
         TextView text2;
 
         public ViewHolder(View v) {
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
         }
     }
 

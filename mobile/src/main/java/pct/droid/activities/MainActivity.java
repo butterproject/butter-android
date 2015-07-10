@@ -42,8 +42,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import butterknife.InjectView;
-import butterknife.Optional;
+import butterknife.Bind;
+import android.support.annotation.Nullable;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
@@ -70,12 +70,12 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
 
     private Fragment mCurrentFragment;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @InjectView(R.id.navigation_drawer_container)
+    @Bind(R.id.navigation_drawer_container)
     ScrimInsetsFrameLayout mNavigationDrawerContainer;
-    @Optional
-    @InjectView(R.id.tabs)
+    @Nullable
+    @Bind(R.id.tabs)
     TabLayout mTabs;
     NavigationDrawerFragment mNavigationDrawerFragment;
 

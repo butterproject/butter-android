@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import butterknife.InjectView;
-import butterknife.Optional;
+import butterknife.Bind;
+import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
@@ -47,22 +47,22 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
     TextView mToolbarTitle;
-    @InjectView(R.id.scrollview)
+    @Bind(R.id.scrollview)
     ObservableParallaxScrollView mScrollView;
-    @Optional
-    @InjectView(R.id.parallax)
+    @Nullable
+    @Bind(R.id.parallax)
     RelativeLayout mParallaxLayout;
-    @Optional
-    @InjectView(R.id.parallax_color)
+    @Nullable
+    @Bind(R.id.parallax_color)
     View mParallaxColor;
-    @InjectView(R.id.content)
+    @Bind(R.id.content)
     FrameLayout mContent;
-    @InjectView(R.id.logo)
+    @Bind(R.id.logo)
     ImageView mLogo;
-    @InjectView(R.id.bg_image)
+    @Bind(R.id.bg_image)
     ImageView mBgImage;
 
     public static void startActivity(Context context, Media media) {
