@@ -22,12 +22,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.squareup.okhttp.Callback;
@@ -40,6 +43,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 
 import butterknife.InjectView;
+import butterknife.Optional;
 import pct.droid.BuildConfig;
 import pct.droid.R;
 import pct.droid.base.Constants;
@@ -64,10 +68,15 @@ import timber.log.Timber;
  */
 public class MainActivity extends PopcornBaseActivity implements NavigationDrawerFragment.Callbacks {
 
+    private Fragment mCurrentFragment;
+
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.navigation_drawer_container)
     ScrimInsetsFrameLayout mNavigationDrawerContainer;
+    @Optional
+    @InjectView(R.id.tabs)
+    TabLayout mTabs;
     NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
@@ -106,6 +115,11 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         if (null != savedInstanceState) return;
         int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
         mNavigationDrawerFragment.selectItem(providerId);
+
+        if(mTabs != null) {
+            mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
+            mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        }
     }
 
     @Override
@@ -182,11 +196,44 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
 
         String tag = title + "_tag";
         // Fragment fragment = mFragmentCache.get(position);
-        Fragment fragment = fragmentManager.findFragmentByTag(tag);
-        if (null == fragment && item.hasProvider()) {
-            fragment = MediaContainerFragment.newInstance(item.getMediaProvider());
+        mCurrentFragment = fragmentManager.findFragmentByTag(tag);
+        if (null == mCurrentFragment && item.hasProvider()) {
+            mCurrentFragment = MediaContainerFragment.newInstance(item.getMediaProvider());
         }
-        fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
+
+        if(mTabs.getTabCount() > 0)
+            mTabs.getTabAt(0).select();
+        mTabs.removeAllTabs();
+
+        fragmentManager.beginTransaction().replace(R.id.container, mCurrentFragment, tag).commit();
+    }
+
+    public void updateTabs(final int position) {
+        if(mTabs == null)
+            return;
+
+        mTabs.removeAllTabs();
+
+        if(mCurrentFragment instanceof MediaContainerFragment) {
+            MediaContainerFragment containerFragment = (MediaContainerFragment) mCurrentFragment;
+            ViewPager viewPager = containerFragment.getViewPager();
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
+            mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+            mTabs.setupWithViewPager(viewPager);
+            mTabs.setVisibility(View.VISIBLE);
+
+            mTabs.getTabAt(0).select();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mTabs.getTabAt(position).select();
+                }
+            }, 10);
+
+        } else {
+            mTabs.setVisibility(View.GONE);
+        }
     }
 
     private void openPlayerTestDialog() {

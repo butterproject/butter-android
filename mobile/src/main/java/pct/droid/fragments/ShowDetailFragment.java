@@ -34,6 +34,7 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.fragments.base.BaseDetailFragment;
 import pct.droid.widget.ObservableParallaxScrollView;
 import pct.droid.widget.WrappingViewPager;
 
