@@ -1547,7 +1547,12 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     }
 
     @Override
-    public void playMedia(final String url, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
+    public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
+        playMedia(new MediaInfo(url, mimeType, title, description, iconSrc), shouldLoop, listener);
+    }
+
+    @Override
+    public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
         if (getDLNAService() != null) {
             final MediaPlayer.LaunchListener launchListener = new LaunchListener() {
 
@@ -1567,36 +1572,13 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
                     if (listener != null)
                         Util.postSuccess(listener, object);
                 }
-            }; 
+            };
 
-            getDLNAService().playMedia(url, mimeType, title, description, iconSrc, shouldLoop, launchListener);
+            getDLNAService().playMedia(mediaInfo, shouldLoop, launchListener);
         }
         else {
             System.err.println("DLNA Service is not ready yet");
         }
-    }
-
-    @Override
-    public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
-        String mediaUrl = null;
-        String mimeType = null;
-        String title = null;
-        String desc = null;
-        String iconSrc = null;
-
-        if (mediaInfo != null) {
-            mediaUrl = mediaInfo.getUrl();
-            mimeType = mediaInfo.getMimeType();
-            title = mediaInfo.getTitle();
-            desc = mediaInfo.getDescription();
-
-            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
-                ImageInfo imageInfo = mediaInfo.getImages().get(0);
-                iconSrc = imageInfo.getUrl();
-            }
-        }
-
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
