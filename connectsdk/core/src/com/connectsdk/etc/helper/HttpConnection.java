@@ -30,10 +30,12 @@ import java.net.ProtocolException;
 import java.net.Socket;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * HTTP connection implementation based on this article http://android-developers.blogspot.com/2011/09/androids-http-clients.html
+ * HTTP connection implementation based on this article
+ * http://android-developers.blogspot.com/2011/09/androids-http-clients.html
  * Also DefaultHttpClient has been deprecated since Android 5.1
  */
 public abstract class HttpConnection {
@@ -101,13 +103,15 @@ public abstract class HttpConnection {
         public void execute() throws IOException {
             try {
                 if (payload != null) {
-                    BufferedOutputStream writer = new BufferedOutputStream(connection.getOutputStream());
+                    BufferedOutputStream writer =
+                            new BufferedOutputStream(connection.getOutputStream());
                     writer.write(payload);
                     writer.flush();
                     writer.close();
                 }
                 try {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    BufferedReader reader =
+                            new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     String line;
                     StringBuilder sb = new StringBuilder();
                     while (null != (line = reader.readLine())) {
@@ -153,7 +157,7 @@ public abstract class HttpConnection {
         private final URI uri;
         private Method method;
         private String payload;
-        private Map<String, String> headers = new HashMap<String, String>();
+        private Map<String, String> headers = new LinkedHashMap<String, String>();
         private int code;
         private String response;
         private Map<String, String> responseHeaders = new HashMap<String, String>();
@@ -179,17 +183,34 @@ public abstract class HttpConnection {
 
         @Override
         public void execute() throws IOException {
-            Socket socket = new Socket(uri.getHost(), uri.getPort() > 0 ? uri.getPort() : 80);
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            int port = uri.getPort() > 0 ? uri.getPort() : 80;
+            Socket socket = new Socket(uri.getHost(), port);
+            PrintWriter writer =
+                    new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             // send request
-            writer.println(method.name() + " " + uri.getPath() + (uri.getQuery() != null ? "?" + uri.getQuery() : "") + " HTTP/1.1");
-            writer.println("Host:" + uri.getHost());
+            writer.print(method.name());
+            writer.print(" ");
+            writer.print(uri.getPath());
+            writer.print(uri.getQuery().isEmpty() ? "" : "?" + uri.getQuery());
+            writer.print(" HTTP/1.1\r\n");
+
+            writer.print("Host:");
+            writer.print(uri.getHost());
+            writer.print(":");
+            writer.print(port);
+            writer.print("\r\n");
+
             for (Map.Entry<String, String> pair : headers.entrySet()) {
-                writer.println(pair.getKey() + ":" + pair.getValue());
+                writer.print(pair.getKey());
+                writer.print(":");
+                writer.print(pair.getValue());
+                writer.print("\r\n");
             }
-            writer.println("");
+            writer.print("\r\n");
+
             if (payload != null) {
                 writer.print(payload);
             }
@@ -210,7 +231,7 @@ public abstract class HttpConnection {
                 if (line.isEmpty()) {
                     break;
                 }
-                String[] pair = line.split(":");
+                String[] pair = line.split(":", 2);
                 if (pair != null && pair.length == 2) {
                     responseHeaders.put(pair[0].trim(), pair[1].trim());
                 }
@@ -236,7 +257,9 @@ public abstract class HttpConnection {
 
         @Override
         public void setHeader(String name, String value) {
-            this.headers.put(name, value);
+            if (name != null && value != null) {
+                this.headers.put(name.trim(), value.trim());
+            }
         }
 
         @Override
@@ -244,4 +267,5 @@ public abstract class HttpConnection {
             return responseHeaders.get(name);
         }
     }
+
 }

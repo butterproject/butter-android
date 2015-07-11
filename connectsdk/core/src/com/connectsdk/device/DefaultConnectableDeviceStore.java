@@ -42,6 +42,10 @@ import com.connectsdk.service.DeviceService;
 import com.connectsdk.service.config.ServiceConfig;
 import com.connectsdk.service.config.ServiceDescription;
 
+/**
+ * Default implementation of ConnectableDeviceStore. It stores data in a file in application
+ * data directory.
+ */
 public class DefaultConnectableDeviceStore implements ConnectableDeviceStore {
     // @cond INTERNAL
 
