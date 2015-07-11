@@ -26,18 +26,23 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.connectsdk.core.ImageInfo;
+import com.connectsdk.core.MediaInfo;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.discovery.CapabilityFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
 import com.connectsdk.discovery.provider.CastDiscoveryProvider;
+import com.connectsdk.discovery.provider.FireTVDiscoveryProvider;
 import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
 import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
 import com.connectsdk.service.AirPlayService;
 import com.connectsdk.service.CastService;
+import com.connectsdk.service.DIALService;
 import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
+import com.connectsdk.service.FireTVService;
 import com.connectsdk.service.NetcastTVService;
 import com.connectsdk.service.RokuService;
 import com.connectsdk.service.WebOSTVService;
@@ -144,6 +149,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.registerDeviceService(NetcastTVService.class, SSDPDiscoveryProvider.class);
         mDiscoveryManager.registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
         mDiscoveryManager.registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(FireTVService.class, FireTVDiscoveryProvider.class);
+        mDiscoveryManager.unregisterDeviceService(DIALService.class, SSDPDiscoveryProvider.class);
 
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
         mDiscoveryManager.setCapabilityFilters(new CapabilityFilter(
@@ -237,7 +244,11 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         if(!info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
             File srtFile = new File(SubsProvider.getStorageLocation(mContext), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
             BeamServer.setCurrentSubs(srtFile);
-            subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
+            if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
+                subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
+            } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Srt)) {
+                subsLocation = BeamServer.getSubsURL(BeamServer.SRT);
+            }
         } else {
             BeamServer.setCurrentSubs("no-subs");
         }
@@ -262,8 +273,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         String imageUrl = info.getImageUrl() == null ? "https://popcorntime.io/images/header-logo.png" : info.getImageUrl();
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
-        if (mCurrentDevice != null)
-            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, subsLocation, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
+        if (mCurrentDevice != null) {
+            MediaInfo mediaInfo = new MediaInfo(location, subsLocation, "video/mp4", title, "");
+            mediaInfo.addImages(new ImageInfo(imageUrl));
+            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(mediaInfo, false, new MediaPlayer.LaunchListener() {
                 @Override
                 public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                     mLaunchSession = object.launchSession;
@@ -278,6 +291,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                         listener.onError(error);
                 }
             });
+        }
     }
 
     public void connect(ConnectableDevice castingDevice) {

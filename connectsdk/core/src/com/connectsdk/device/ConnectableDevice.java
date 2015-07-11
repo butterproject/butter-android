@@ -291,10 +291,12 @@ public class ConnectableDevice implements DeviceServiceListener {
     /**
      * Clears the array of listeners and adds the provided `listener` to the array. If `listener` is null, the array will be empty.
      * 
-     * @deprecated Since version 1.2.1, use addListener instead
+     * This method is deprecated. Since version 1.2.1, use
+     * `ConnectableDevice#addListener(ConnectableDeviceListener listener)` instead
      * 
      * @param listener ConnectableDeviceListener to listen to device events (connect, disconnect, ready, etc)
      */
+    @Deprecated
     public void setListener(ConnectableDeviceListener listener) {
         listeners = new CopyOnWriteArrayList<ConnectableDeviceListener>();
 
@@ -485,7 +487,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority Launcher object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public Launcher getLauncher() {
@@ -494,7 +497,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority MediaPlayer object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public MediaPlayer getMediaPlayer() {
@@ -503,7 +507,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority MediaControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public MediaControl getMediaControl() {
@@ -512,7 +517,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority PlaylistControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public PlaylistControl getPlaylistControl() {
@@ -521,7 +527,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority VolumeControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public VolumeControl getVolumeControl() {
@@ -530,7 +537,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority WebAppLauncher object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public WebAppLauncher getWebAppLauncher() {
@@ -539,7 +547,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority TVControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public TVControl getTVControl() {
@@ -548,7 +557,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority ToastControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public ToastControl getToastControl() {
@@ -557,7 +567,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority TextInputControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public TextInputControl getTextInputControl() {
@@ -566,7 +577,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority MouseControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public MouseControl getMouseControl() {
@@ -575,7 +587,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority ExternalInputControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public ExternalInputControl getExternalInputControl() {
@@ -584,7 +597,8 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority PowerLauncher object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public PowerControl getPowerControl() {
@@ -593,13 +607,20 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     /**
      * Accessor for highest priority KeyControl object
-     * @deprecated Use getCapability method instead
+     * This method is deprecated. Use
+     * `ConnectableDevice#getCapability(Class<T> controllerClass)` method instead
      */
     @Deprecated
     public KeyControl getKeyControl() {
         return getCapability(KeyControl.class);
     }
 
+    /**
+     * Get a capability with the highest priority from a device. If device doesn't have such
+     * capability then returns null.
+     * @param controllerClass type of capability
+     * @return capability implementation
+     */
     public <T extends CapabilityMethods> T getCapability(Class<T> controllerClass) {
         T foundController = null;
         CapabilityPriorityLevel foundControllerPriority = CapabilityPriorityLevel.NOT_SUPPORTED;
@@ -614,11 +635,11 @@ public class ConnectableDevice implements DeviceServiceListener {
                 foundController = controller;
  
                 if (controllerPriority == null || controllerPriority == CapabilityPriorityLevel.NOT_SUPPORTED) {
-                    Log.w("Connect SDK", "We found a mathcing capability class, but no priority level for the class. Please check \"getPriorityLevel()\" in your class");
+                    Log.w(Util.T, "We found a mathcing capability class, but no priority level for the class. Please check \"getPriorityLevel()\" in your class");
                 }
                 foundControllerPriority = controllerPriority;
             }
-            else {
+            else if (controllerPriority != null && foundControllerPriority != null) {
                 if (controllerPriority.getValue() > foundControllerPriority.getValue()) {
                     foundController = controller;
                     foundControllerPriority = controllerPriority;

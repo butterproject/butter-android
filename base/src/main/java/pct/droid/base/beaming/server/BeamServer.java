@@ -204,6 +204,7 @@ public class BeamServer {
             paramHeaders.set("Date", HttpDate.format(new Date()));
             paramHeaders.set("Last-Modified", "2015-01-01T10:00:00Z");
             paramHeaders.set("Content-Type", this.mimeType);
+            paramHeaders.set("CaptionInfo.sec", getSubsURL(SRT));
         }
 
         public void setHeaders(AsyncHttpServerResponse httpServerResponse) {
