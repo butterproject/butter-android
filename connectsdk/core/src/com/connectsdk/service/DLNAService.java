@@ -706,12 +706,12 @@ public class DLNAService extends DeviceService implements PlaylistControl, Media
                 resElement.setAttribute("pv:subtitleFileType", "srt");
 
                 Element smiResElement = doc.createElement("res");
-                smiResElement.setAttribute("protocolInfo", "http-get:*:smi/caption");
+                smiResElement.setAttribute("protocolInfo", "http-get::smi/caption:");
                 smiResElement.setTextContent(subsUrl);
                 itemElement.appendChild(smiResElement);
 
                 Element srtResElement = doc.createElement("res");
-                srtResElement.setAttribute("protocolInfo", "http-get:*:text/srt:");
+                srtResElement.setAttribute("protocolInfo", "http-get::text/srt:");
                 srtResElement.setTextContent(subsUrl);
                 itemElement.appendChild(srtResElement);
 
