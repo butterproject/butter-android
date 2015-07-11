@@ -115,11 +115,6 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         if (null != savedInstanceState) return;
         int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
         mNavigationDrawerFragment.selectItem(providerId);
-
-        if(mTabs != null) {
-            mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
-            mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-        }
     }
 
     @Override
@@ -213,6 +208,8 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
             return;
 
         mTabs.removeAllTabs();
+        mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
+        mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         if(mCurrentFragment instanceof MediaContainerFragment) {
             MediaContainerFragment containerFragment = (MediaContainerFragment) mCurrentFragment;

@@ -373,6 +373,9 @@ public class TorrentService extends Service {
             Timber.d("Fetching the magnet uri, please wait...");
             byte[] data = d.fetchMagnet(torrentUrl, 30000);
 
+            if(data == null)
+                return null;
+
             return TorrentInfo.bdecode(data);
         } else {
             OkHttpClient client = PopcornApplication.getHttpClient();
