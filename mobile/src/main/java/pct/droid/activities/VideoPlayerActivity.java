@@ -61,12 +61,12 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
         mResumePosition = getIntent().getLongExtra(RESUME_POSITION, 0);
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
-
         if(mStreamInfo == null) {
             finish();
             return;
         }
+
+        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
 
         mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
         mFragment.loadMedia();
