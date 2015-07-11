@@ -23,8 +23,13 @@ import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
+import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
+import pct.droid.base.BuildConfig;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SignUtils;
+import pct.droid.dialogfragments.MessageDialogFragment;
 
 public class LaunchActivity extends PopcornBaseActivity {
 
@@ -33,6 +38,12 @@ public class LaunchActivity extends PopcornBaseActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         TorrentService.start(this);
+
+        if(SignUtils.checkAppSignature(this) != SignUtils.VALID && !BuildConfig.GIT_BRANCH.equals("local")) {
+            MessageDialogFragment.show(getFragmentManager(), R.string.signature_invalid, R.string.possibly_dangerous, false);
+            return;
+        }
+
         if (PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
             startActivity(new Intent(this, MainActivity.class));
         } else {

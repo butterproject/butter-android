@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.activities;
+package pct.droid.activities.base;
 
 import android.content.Intent;
 import android.support.v4.app.NavUtils;

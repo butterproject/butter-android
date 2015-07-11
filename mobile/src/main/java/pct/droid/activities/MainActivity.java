@@ -46,6 +46,7 @@ import butterknife.Bind;
 import android.support.annotation.Nullable;
 import pct.droid.BuildConfig;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.Constants;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
@@ -128,6 +129,8 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         }
 
         mNavigationDrawerFragment.initItems();
+
+        mTabs.setVisibility((mCurrentFragment instanceof MediaContainerFragment) ? View.VISIBLE : View.GONE);
     }
 
     @Override

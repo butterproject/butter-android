@@ -33,6 +33,8 @@
     <string name="running">Running in background</string>
     <string name="tap_to_close">Tap to close</string>
     <string name="tap_to_resume">Tap to resume</string>
+    <string name="signature_invalid">App signature invalid</string>
+    <string name="possibly_dangerous">Popcorn Time has been tampered with. Please download a new install file from https://popcorntime.io/</string>
 
     <!-- Genres -->
     <string name="genre_all">All</string>

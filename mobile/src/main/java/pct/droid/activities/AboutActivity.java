@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.fragments.AboutFragment;
 import pct.droid.utils.ToolbarUtils;
 

@@ -24,6 +24,7 @@ import android.view.View;
 
 import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.utils.ToolbarUtils;
 
