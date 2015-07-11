@@ -73,6 +73,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
     private TorrentService mService;
+    private TorrentBaseActivity mActivity;
 
     protected StreamInfo mStreamInfo;
 
@@ -94,20 +95,21 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mActivity = getActivity();
 
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mStreamInfo = mCallback.getStreamInformation();
                 if (mStreamInfo == null) {
-                    getActivity().finish();
+                    mActivity.finish();
                     return;
                 }
                 loadSubs();
             }
         });
 
-        if (!(getActivity() instanceof TorrentBaseActivity)) {
+        if (!(mActivity instanceof TorrentBaseActivity)) {
             throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
         }
     }
@@ -119,7 +121,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     public void onTorrentServiceConnected() {
-        mService = ((TorrentBaseActivity) getActivity()).getTorrentService();
+        if(mActivity == null)
+            return;
+
+        mService = mActivity.getTorrentService();
         mService.addListener(this);
         startStream();
     }

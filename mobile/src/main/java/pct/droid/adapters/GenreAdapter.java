@@ -72,9 +72,11 @@ public class GenreAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
             if (mItemSelectionListener != null) {
                 mSelectedPos = getPosition();
-                mSelectedItem.setBackgroundColor(mNormalColor);
-                mSelectedItem = itemView;
-                mSelectedItem.setBackgroundColor(mSelectedColor);
+                if(mSelectedItem != null) {
+                    mSelectedItem.setBackgroundColor(mNormalColor);
+                    mSelectedItem = itemView;
+                    mSelectedItem.setBackgroundColor(mSelectedColor);
+                }
 
                 mItemSelectionListener.onItemSelect(view, getItem(mSelectedPos), mSelectedPos);
             }
