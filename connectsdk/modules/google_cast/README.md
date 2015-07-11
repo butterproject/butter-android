@@ -6,17 +6,44 @@ For more information about Connect SDK, visit the [main repository](https://gith
 
 ##Setup
 ###Connect SDK Integration
-1. Go to the [Google Cast Developer site](https://developers.google.com/cast/docs/downloads) and download the Android Sender API
-2. Set it up following the instructions 
+It's already integrated in Connect-SDK-Android. Set it up following the instructions for Connect-SDK-Android.
 
 ###Connect SDK Lite Integration
-1. Clone this repository into a subfolder of the Connect SDK Lite project
-2. Import the source files into the Connect SDK Lite Eclipse project
-3. Follow the steps above for Connect SDK integration
-4. In Connect SDK Lite's `DefaultPlatforms.java` file add line `devicesList.put("com.connectsdk.androidgooglecast.CastService", "com.connectsdk.androidgooglecast.CastDiscoveryProvider");` inside `getDeviceServiceMap()` method
+1. Setup [Connect-SDK-Android-Lite](https://github.com/ConnectSDK/Connect-SDK-Android-Lite)
+2. Clone this repository into a subfolder of the Connect SDK Lite project (e.g. `modules/google_cast`)
+3. Add sources files for Google Cast module in your `build.gradle`, it should looks similar to this (here we have Google Cast module in `modules/google_cast` folder):
+    ```groovy
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = [
+                        'src',
+                        'core/src',
+                        'modules/google_cast/src',
+                ]
+                resources.srcDirs = ['src']
+                aidl.srcDirs = ['src']
+                renderscript.srcDirs = ['src']
+                res.srcDirs = ['res']
+                assets.srcDirs = ['assets']
+            }
+            test {
+                java.srcDirs = [
+                        'core/test/src',
+                        'modules/google_cast/test/src',
+                ]
+            }
+        }
+    ```
+
+4. In Connect SDK Lite's `DefaultPlatforms.java` file add this line
+    ```groovy
+    devicesList.put("com.connectsdk.service.CastService", "com.connectsdk.discovery.provider.CastDiscoveryProvider");
+    ```
+    inside `getDeviceServiceMap()` method.
 
 ##License
-Copyright (c) 2013-2014 LG Electronics.
+Copyright (c) 2013-2015 LG Electronics.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

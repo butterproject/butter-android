@@ -68,10 +68,10 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 public class AirPlayService extends DeviceService implements MediaPlayer, MediaControl {
-    public static final String PLAY_STATE = "PlayState";
-    public static final String INFO = "Info";
     public static final String X_APPLE_SESSION_ID = "X-Apple-Session-ID";
     public static final String ID = "AirPlay";
+    public static final String PLAY_STATE = "PlayState";
+
     private static final long KEEP_ALIVE_PERIOD = 15000;
     private static final long UPDATE_PERIOD = 500;
 
@@ -79,7 +79,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
     private String mSessionId;
 
-    private Timer keepAliveTimer, updateTimer;
+    private Timer timer, updateTimer;
 
     private List<URLServiceSubscription<?>> mSubscriptions = new ArrayList<>();
 
@@ -352,11 +352,8 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     @Override
     public ServiceSubscription<MediaInfoListener> subscribeMediaInfo(
             MediaInfoListener listener) {
-        URLServiceSubscription<MediaInfoListener> request = new URLServiceSubscription<>(this, INFO, null, null);
-        request.addListener(listener);
-        addSubscription(request);
-
-        return request;
+        listener.onError(ServiceCommandError.notSupported());
+        return null;
     }
 
     @Override
@@ -398,7 +395,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                             || responseCode == HttpURLConnection.HTTP_MOVED_PERM
                             || responseCode == HttpURLConnection.HTTP_SEE_OTHER);
 
-                    if (redirect) {
+                    if(redirect) {
                         String newPath = connection.getHeaderField("Location");
                         URL newImagePath = new URL(newPath);
                         connection = (HttpURLConnection) newImagePath.openConnection();
@@ -451,7 +448,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         displayImage(mediaUrl, mimeType, title, desc, iconSrc, listener);
     }
 
-    public void playVideo(final String url, String subsUrl, String mimeType, String title,
+    public void playVideo(final String url, String mimeType, String title,
             String description, String iconSrc, boolean shouldLoop,
             final LaunchListener listener) {
 
@@ -487,30 +484,21 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     }
 
     @Override
-    public void playMedia(String url, String subsUrl, String mimeType, String title,
-                          String description, String iconSrc, boolean shouldLoop,
-                          LaunchListener listener) {
+    public void playMedia(String url, String mimeType, String title,
+            String description, String iconSrc, boolean shouldLoop,
+            LaunchListener listener) {
 
         if (mimeType.contains("image")) {
             displayImage(url, mimeType, title, description, iconSrc, listener);
         }
         else {
-            playVideo(url, subsUrl, mimeType, title, description, iconSrc, shouldLoop, listener);
+            playVideo(url, mimeType, title, description, iconSrc, shouldLoop, listener);
         }
-    }
-
-    @Override
-    public void playMedia(String url, String mimeType, String title,
-            String description, String iconSrc, boolean shouldLoop,
-            LaunchListener listener) {
-
-        playMedia(url, null, mimeType, title, description, iconSrc, shouldLoop, listener);
     }
 
     @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, LaunchListener listener) {
         String mediaUrl = null;
-        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -518,7 +506,6 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
-            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -529,12 +516,12 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
             }
         }
 
-        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
     public void closeMedia(LaunchSession launchSession,
-                           ResponseListener<Object> listener) {
+            ResponseListener<Object> listener) {
         stop(listener);
     }
 
@@ -770,13 +757,14 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
      */
     private void startTimer() {
         stopTimer();
-        keepAliveTimer = new Timer();
-        keepAliveTimer.scheduleAtFixedRate(new TimerTask() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
             public void run() {
                 Log.d("Timer", "Timer");
                 getPlaybackPosition(new PlaybackPositionListener() {
+
                     @Override
                     public void onGetPlaybackPositionSuccess(long duration, long position) {
                         if (position >= duration) {
@@ -847,14 +835,14 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     }
 
     private void stopTimer() {
-        if (keepAliveTimer != null) {
-            keepAliveTimer.cancel();
+        if (timer != null) {
+            timer.cancel();
         }
         if(updateTimer != null) {
             updateTimer.cancel();
         }
-        keepAliveTimer = null;
         updateTimer = null;
+        timer = null;
     }
 
     private void addSubscription(URLServiceSubscription<?> subscription) {
@@ -873,6 +861,5 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     public void setSubscriptions(List<URLServiceSubscription<?>> subscriptions) {
         this.mSubscriptions = subscriptions;
     }
-
 
 }

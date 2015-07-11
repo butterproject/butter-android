@@ -42,17 +42,27 @@ import com.connectsdk.service.command.ServiceCommandError;
 
 public final class Util {
     static public String T = "Connect SDK";
+
     static private Handler handler;
+
     static private final int NUM_OF_THREADS = 20;
 
-    static private Executor executor = Executors.newFixedThreadPool(NUM_OF_THREADS, new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread th = new Thread(r);
-            th.setName("2nd Screen BG");
-            return th;
-        }
-    });
+    static private Executor executor;
+
+    static {
+        createExecutor();
+    }
+
+    static void createExecutor() {
+        Util.executor = Executors.newFixedThreadPool(NUM_OF_THREADS, new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread th = new Thread(r);
+                th.setName("2nd Screen BG");
+                return th;
+            }
+        });
+    }
 
     public static void runOnUI(Runnable runnable) {
         if (handler == null) {

@@ -22,6 +22,10 @@ package com.connectsdk.service.capability;
 
 import com.connectsdk.service.capability.listeners.ResponseListener;
 
+/**
+ * The PlaylistControl capability interface serves to define the methods required for normalizing
+ * the control of playlist (next, previous, jumpToTrack, etc)
+ */
 public interface PlaylistControl extends CapabilityMethods {
     public final static String Any = "PlaylistControl.Any";
     public final static String JumpToTrack = "PlaylistControl.JumpToTrack";
@@ -38,10 +42,28 @@ public interface PlaylistControl extends CapabilityMethods {
         JumpToTrack,
     };
 
+    /**
+     * Enumerates available playlist mode
+     */
     public static enum PlayMode {
+        /**
+         * Default mode, play tracks in sequence and stop at the end.
+         */
         Normal,
+
+        /**
+         * Shuffle the playlist and play in sequeance.
+         */
         Shuffle,
+
+        /**
+         * Repeat current track
+         */
         RepeatOne,
+
+        /**
+         * Repeat entire playlist
+         */
         RepeatAll,
     }
 
@@ -50,22 +72,22 @@ public interface PlaylistControl extends CapabilityMethods {
     public CapabilityPriorityLevel getPlaylistControlCapabilityLevel();
 
     /**
-     * Jump to previous track in the playlist
-     * @param listener
+     * Play previous track in the playlist
+     * @param listener optional response listener
      */
     public void previous(ResponseListener<Object> listener);
 
     /**
-     * Jump to next track in the playlist
-     * @param listener
+     * Play next track in the playlist
+     * @param listener optional response listener
      */
     public void next(ResponseListener<Object> listener);
 
     /**
-     * This method is used for playlist only and it allows to switch to another track by it's position
+     * Play a track specified by index in the playlist
      *
      * @param index index in the playlist, it starts from zero like index of array
-     * @param listener
+     * @param listener optional response listener
      */
     public void jumpToTrack(long index, ResponseListener<Object> listener);
 
@@ -73,6 +95,7 @@ public interface PlaylistControl extends CapabilityMethods {
      * Set order of playing tracks
      *
      * @param playMode
+     * @param listener optional response listener
      */
     public void setPlayMode(PlayMode playMode, ResponseListener<Object> listener);
 
