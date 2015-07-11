@@ -204,6 +204,10 @@ public class ShowDetailFragment extends BaseDetailFragment {
         mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
 
+        if(fragmentPagerAdapter.getCount() == 1) {
+            mTabs.setTabMode(TabLayout.MODE_FIXED);
+        }
+
         mActivity.setSubScrollListener(mOnScrollListener);
 
         return mRoot;
