@@ -20,6 +20,7 @@ package pct.droid.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.frostwire.jlibtorrent.FileStorage;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -47,14 +49,18 @@ import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import timber.log.Timber;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     private boolean mAttached = false;
     private Context mContext;
+    private Torrent mCurrentTorrent;
 
     View mRoot;
     @Bind(R.id.progress_indicator)
@@ -109,17 +115,40 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         loadBackgroundImage();
     }
 
+    @Override
+    public void onStreamMetaData(Torrent torrent) {
+        mCurrentTorrent = torrent;
+
+        if(TextUtils.isEmpty(mStreamInfo.getTitle())) {
+            FileStorage fileStorage = mCurrentTorrent.getTorrentHandle().getTorrentInfo().getFiles();
+            String[] fileNames = new String[fileStorage.getNumFiles()];
+            for(int i = 0; i < fileStorage.getNumFiles(); i++) {
+                fileNames[i] = fileStorage.getFileName(i);
+            }
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, fileNames, -1, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int position) {
+                    mCurrentTorrent.setSelectedFile(position);
+                    StreamLoadingFragment.super.onStreamMetaData(mCurrentTorrent);
+                }
+            });
+            return;
+        }
+
+        super.onStreamMetaData(mCurrentTorrent);
+    }
+
     private void loadBackgroundImage() {
         StreamInfo info = mCallback.getStreamInformation();
           /* attempt to load background image */
         if (null != info) {
             String url = info.getImageUrl();
-            if (PixelUtils.isTablet(getActivity())) {
+            if (PixelUtils.isTablet(mContext)) {
                 url = info.getHeaderImageUrl();
             }
 
             if (!TextUtils.isEmpty(url))
-                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+                Picasso.with(mContext).load(url).error(R.color.bg).into(mBackgroundImageView);
         }
     }
 
