@@ -2,7 +2,6 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Field;
@@ -27,10 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.adapters.ShowDetailPagerAdapter;
 import pct.droid.base.providers.media.models.Episode;
