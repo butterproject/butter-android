@@ -58,6 +58,15 @@ public class DefaultPlayer {
             returnMap.put(resolveInfo.activityInfo.name + DELIMITER + resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString());
         }
 
+        playerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("/path/video.mp4"));
+        playerIntent.setDataAndType(Uri.parse("/path/video.mp4"), "video/mp4");
+
+        resolveInfoList = packageManager.queryIntentActivities(playerIntent, 0);
+
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            returnMap.put(resolveInfo.activityInfo.name + DELIMITER + resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString());
+        }
+
         return returnMap;
     }
 
