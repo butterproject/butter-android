@@ -130,7 +130,7 @@ public class NetcastHttpServer {
 
             String body = sb.toString();
 
-            Log.d("Connect SDK", "got message body: " + body);
+            Log.d(Util.T, "got message body: " + body);
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
@@ -190,7 +190,7 @@ public class NetcastHttpServer {
             if (body.contains("ChannelChanged")) {
                 ChannelInfo channel = NetcastChannelParser.parseRawChannelData(handler.getJSONObject());
 
-                Log.d("Connect SDK", "Channel Changed: " + channel.getNumber());
+                Log.d(Util.T, "Channel Changed: " + channel.getNumber());
 
                 for (URLServiceSubscription<?> sub: subscriptions) {
                     if (sub.getTarget().equalsIgnoreCase("ChannelChanged")) {
@@ -216,7 +216,7 @@ public class NetcastHttpServer {
                     e.printStackTrace();
                 }
 
-                Log.d("Connect SDK", "KeyboardFocused?: " + focused);
+                Log.d(Util.T, "KeyboardFocused?: " + focused);
 
                 for (URLServiceSubscription<?> sub: subscriptions) {
                     if (sub.getTarget().equalsIgnoreCase("KeyboardVisible")) {

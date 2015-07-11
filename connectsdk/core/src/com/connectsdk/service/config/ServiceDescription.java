@@ -53,12 +53,10 @@ public class ServiceDescription implements Cloneable {
     String version;
     List<Service> serviceList; 
     String locationXML;
-
     String serviceURI;
-
     Map<String, List<String>> responseHeaders;
-
     String serviceID;
+    Object device;
 
     long lastDetection = Long.MAX_VALUE;
 
@@ -222,6 +220,14 @@ public class ServiceDescription implements Cloneable {
         this.serviceURI = serviceURI;
     }
 
+    public Object getDevice() {
+        return device;
+    }
+
+    public void setDevice(Object device) {
+        this.device = device;
+    }
+
     public JSONObject toJSONObject() {
         JSONObject jsonObj = new JSONObject();
 
@@ -235,17 +241,6 @@ public class ServiceDescription implements Cloneable {
             jsonObj.putOpt(KEY_PORT, port);
             jsonObj.putOpt(KEY_VERSION, version);
             jsonObj.putOpt(KEY_SERVICE_ID, serviceID);
-//            if (responseHeaders != null) {
-//                jsonObj.putOpt("responseHeaders", new JSONObject() {{
-//                    for (final String key : responseHeaders.keySet()) {
-//                        putOpt(key, new JSONArray(){{
-//                            List<String> items = responseHeaders.get(key);
-//                            for (String item : items)
-//                                put(item);
-//                        }});
-//                    }
-//                }});
-//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -258,20 +253,20 @@ public class ServiceDescription implements Cloneable {
         service.setPort(this.port);
 
         // we can ignore all these NullPointerExceptions, it's OK if those properties don't have values
-        try { service.setServiceID(new String(this.serviceID)); } catch (NullPointerException ex) { }
-        try { service.setIpAddress(new String(this.ipAddress)); } catch (NullPointerException ex) { }
-        try { service.setUUID(new String(this.UUID)); } catch (NullPointerException ex) { }
-        try { service.setVersion(new String(this.version)); } catch (NullPointerException ex) { }
-        try { service.setFriendlyName(new String(this.friendlyName)); } catch (NullPointerException ex) { }
-        try { service.setManufacturer(new String(this.manufacturer)); } catch (NullPointerException ex) { }
-        try { service.setModelName(new String(this.modelName)); } catch (NullPointerException ex) { }
-        try { service.setModelNumber(new String(this.modelNumber)); } catch (NullPointerException ex) { }
-        try { service.setModelDescription(new String(this.modelDescription)); } catch (NullPointerException ex) { }
-        try { service.setApplicationURL(new String(this.applicationURL)); } catch (NullPointerException ex) { }
-        try { service.setLocationXML(new String(this.locationXML)); } catch (NullPointerException ex) { }
+        try { service.setServiceID(this.serviceID); } catch (NullPointerException ex) { }
+        try { service.setIpAddress(this.ipAddress); } catch (NullPointerException ex) { }
+        try { service.setUUID(this.UUID); } catch (NullPointerException ex) { }
+        try { service.setVersion(this.version); } catch (NullPointerException ex) { }
+        try { service.setFriendlyName(this.friendlyName); } catch (NullPointerException ex) { }
+        try { service.setManufacturer(this.manufacturer); } catch (NullPointerException ex) { }
+        try { service.setModelName(this.modelName); } catch (NullPointerException ex) { }
+        try { service.setModelNumber(this.modelNumber); } catch (NullPointerException ex) { }
+        try { service.setModelDescription(this.modelDescription); } catch (NullPointerException ex) { }
+        try { service.setApplicationURL(this.applicationURL); } catch (NullPointerException ex) { }
+        try { service.setLocationXML(this.locationXML); } catch (NullPointerException ex) { }
         try { service.setResponseHeaders(this.responseHeaders); } catch (NullPointerException ex) { }
         try { service.setServiceList(this.serviceList); } catch (NullPointerException ex) { }
-        try { service.setServiceFilter(new String(this.serviceFilter)); } catch (NullPointerException ex) { }
+        try { service.setServiceFilter(this.serviceFilter); } catch (NullPointerException ex) { }
 
         return service;
     }
