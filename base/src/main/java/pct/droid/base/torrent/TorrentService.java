@@ -408,11 +408,12 @@ public class TorrentService extends Service {
         void onStreamReady(File videoLocation);
 
         void onStreamProgress(DownloadStatus status);
+
+        void onStreamMetaData(Torrent torrent);
     }
 
     protected class TorrentListener implements Torrent.Listener {
 
-        @Override
         public void onStreamStarted() {
             for (final Listener listener : mListener) {
                 ThreadUtils.runOnUiThread(new Runnable() {
@@ -424,7 +425,6 @@ public class TorrentService extends Service {
             }
         }
 
-        @Override
         public void onStreamError(final Exception e) {
             for (final Listener listener : mListener) {
                 ThreadUtils.runOnUiThread(new Runnable() {
@@ -436,7 +436,6 @@ public class TorrentService extends Service {
             }
         }
 
-        @Override
         public void onStreamReady(final File file) {
             for (final Listener listener : mListener) {
                 ThreadUtils.runOnUiThread(new Runnable() {
@@ -448,7 +447,6 @@ public class TorrentService extends Service {
             }
         }
 
-        @Override
         public void onStreamProgress(final DownloadStatus status) {
             for (final Listener listener : mListener) {
                 ThreadUtils.runOnUiThread(new Runnable() {
@@ -459,6 +457,18 @@ public class TorrentService extends Service {
                 });
             }
         }
+
+        public void onStreamMetaData(final Torrent torrent) {
+            for (final Listener listener : mListener) {
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onStreamMetaData(torrent);
+                    }
+                });
+            }
+        }
+
     }
 
     protected static void stop() {
@@ -485,13 +495,12 @@ public class TorrentService extends Service {
         @Override
         public void torrentAdded(TorrentAddedAlert alert) {
             super.torrentAdded(alert);
+            TorrentListener listener = new TorrentListener();
             mCurrentTorrent = new Torrent(alert.getHandle());
-            mCurrentTorrent.setListener(new TorrentListener());
+            mCurrentTorrent.setListener(listener);
             mTorrentSession.addListener(mCurrentTorrent);
 
-            mCurrentTorrent.prepareTorrent();
-
-            Timber.d("Video location: %s", mCurrentTorrent.getVideoFile());
+            listener.onStreamMetaData(mCurrentTorrent);
         }
     };
 
