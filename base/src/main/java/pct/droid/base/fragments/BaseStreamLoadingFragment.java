@@ -95,7 +95,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity = getActivity();
+        mActivity = (TorrentBaseActivity) getActivity();
 
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
