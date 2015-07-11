@@ -71,6 +71,7 @@ import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
@@ -771,6 +772,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (mStreamerProgress < newProgress) {
             mStreamerProgress = newProgress;
         }
+    }
+
+    @Override
+    public void onStreamMetaData(Torrent torrent) {
+
     }
 
     /**
