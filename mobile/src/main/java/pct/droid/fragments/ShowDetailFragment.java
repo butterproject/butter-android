@@ -2,9 +2,11 @@ package pct.droid.fragments;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -18,6 +20,9 @@ import android.widget.TextView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +51,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Bind(R.id.pager)
     WrappingViewPager mViewPager;
     @Bind(R.id.tabs)
-    PagerSlidingTabStrip mTabs;
+    TabLayout mTabs;
     @Nullable
     @Bind(R.id.background)
     View mBackground;
@@ -92,6 +97,9 @@ public class ShowDetailFragment extends BaseDetailFragment {
             mRoot.setMinimumHeight(minHeight);
             mViewPager.setMinimumHeight(minHeight);
         }
+
+        mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
 
         mIsTablet = mCoverImage != null;
 
@@ -143,7 +151,27 @@ public class ShowDetailFragment extends BaseDetailFragment {
             }
 
             Picasso.with(mCoverImage.getContext()).load(sShow.image).into(mCoverImage);
-            mTabs.setIndicatorColor(sShow.color);
+
+            // Use reflection to set indicator color
+            try {
+                Field field = TabLayout.class.getDeclaredField("mTabStrip");
+                field.setAccessible(true);
+                Object ob = field.get(mTabs);
+                Class<?> c = Class.forName("android.support.design.widget.TabLayout$SlidingTabStrip");
+                Method method = c.getDeclaredMethod("setSelectedIndicatorColor", int.class);
+                method.setAccessible(true);
+                method.invoke(ob, sShow.color);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         } else {
             mBackground.post(new Runnable() {
                 @Override
@@ -175,7 +203,9 @@ public class ShowDetailFragment extends BaseDetailFragment {
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
 
         mViewPager.setAdapter(fragmentPagerAdapter);
-        mTabs.setViewPager(mViewPager);
+        mTabs.setupWithViewPager(mViewPager);
+        mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
 
         mActivity.setSubScrollListener(mOnScrollListener);
 
