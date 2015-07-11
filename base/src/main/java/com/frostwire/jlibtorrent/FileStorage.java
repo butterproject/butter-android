@@ -41,7 +41,7 @@ public final class FileStorage {
      *
      * @return
      */
-    public int geNumFiles() {
+    public int getNumFiles() {
         return fs.num_files();
     }
 

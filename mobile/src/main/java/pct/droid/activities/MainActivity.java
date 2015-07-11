@@ -99,20 +99,6 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
 
         mNavigationDrawerFragment.initialise(mNavigationDrawerContainer, drawerLayout);
 
-		/* view a magnet link directly */
-        String action = getIntent().getAction();
-        Uri data = getIntent().getData();
-        if (action != null && action.equals(Intent.ACTION_VIEW) && data != null) {
-            String streamUrl = data.toString();
-            try {
-                streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-                StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl));
-                finish();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-
         if (null != savedInstanceState) return;
         int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
         mNavigationDrawerFragment.selectItem(providerId);
