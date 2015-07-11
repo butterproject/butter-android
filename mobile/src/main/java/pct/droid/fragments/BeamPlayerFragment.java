@@ -61,6 +61,7 @@ import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.beaming.BeamPlayerNotificationService;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -527,6 +528,9 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
     }
+
+    @Override
+    public void onStreamMetaData(Torrent torrent) { }
 
     BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
 

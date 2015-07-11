@@ -41,6 +41,7 @@ import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
@@ -279,6 +280,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         }
     }
 
+    @Override
+    public void onStreamMetaData(Torrent torrent) {
+        torrent.prepareTorrent();
+    }
 
     /**
      * Downloads the subs file
