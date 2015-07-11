@@ -13,6 +13,7 @@ import timber.log.Timber;
 public class SignUtils {
 
     private static final String SIGNATURE = "00phZ568ikxfwglO+VVC1qLQCq3DjA7/K970qP00i0Q=";
+    private static final String SIGNATURE_DEV = "RjdMyRUrPzkCPaFHCZ9c4Ip40JHCkw3LpMG3p97+zcA=";
 
     public static final int VALID = 0;
 
@@ -33,7 +34,7 @@ public class SignUtils {
                 Timber.d("Detected signature: %s", currentSignature);
 
                 //compare signatures
-                if (SIGNATURE.equals(currentSignature)){
+                if (SIGNATURE.equals(currentSignature) || SIGNATURE_DEV.equals(currentSignature)){
                     return VALID;
                 }
             }
