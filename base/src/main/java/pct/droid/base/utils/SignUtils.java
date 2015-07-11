@@ -29,7 +29,7 @@ public class SignUtils {
 
                 MessageDigest md = MessageDigest.getInstance("SHA-256");
                 md.update(signatureBytes);
-                String currentSignature = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                String currentSignature = Base64.encodeToString(md.digest(), Base64.NO_WRAP);
 
                 Timber.d("Detected signature: %s", currentSignature);
 
