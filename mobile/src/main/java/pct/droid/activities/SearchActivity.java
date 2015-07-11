@@ -26,6 +26,7 @@ import android.view.MenuItem;
 
 import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.fragments.MediaListFragment;
 import pct.droid.utils.ToolbarUtils;

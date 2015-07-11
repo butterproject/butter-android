@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 import android.support.annotation.Nullable;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;

@@ -54,6 +54,7 @@ import java.util.Map;
 import butterknife.Bind;
 import pct.droid.BuildConfig;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.adapters.PreferencesListAdapter;
 import pct.droid.base.Constants;
 import pct.droid.base.preferences.DefaultPlayer;
