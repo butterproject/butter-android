@@ -120,7 +120,6 @@ public class DefaultPlayer {
                     intent.putExtra("title", String.format("%s S%dE%d - %s", episode.showName, episode.season, episode.episode, episode.title));
                 }
             }
-            intent.putExtra("position", 0);
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
