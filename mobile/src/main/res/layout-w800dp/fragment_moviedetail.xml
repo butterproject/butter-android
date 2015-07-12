@@ -84,7 +84,8 @@
                         android:background="@drawable/selectable_background"
                         android:visibility="visible"
                         tools:visibility="visible"
-                        android:scaleType="fitCenter" />
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/magnet" />
                 </LinearLayout>
 
                 <com.devspark.robototextview.widget.RobotoTextView
@@ -110,6 +111,7 @@
                 android:layout_below="@id/title_header"
                 android:src="@drawable/ic_av_play_button"
                 android:background="@drawable/play_button_circle"
+                android:contentDescription="@string/play"
                 android:transitionName="fab"
                 android:elevation="5dp" />
 

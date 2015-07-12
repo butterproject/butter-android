@@ -57,6 +57,7 @@ public class OptionSelector extends LinearLayout {
         String str = a.getString(R.styleable.OptionSelector_optionText);
         if (!TextUtils.isEmpty(str)) {
             mText.setText(str);
+            setContentDescription(str);
         }
 
         int res = a.getResourceId(R.styleable.OptionSelector_optionIcon, R.drawable.ic_launcher);

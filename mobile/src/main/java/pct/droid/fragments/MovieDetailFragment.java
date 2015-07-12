@@ -112,6 +112,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             if (!sMovie.rating.equals("-1")) {
                 Double rating = Double.parseDouble(sMovie.rating);
                 mRating.setProgress(rating.intValue());
+                mRating.setContentDescription("Rating: " + rating.intValue() + " out of 10");
                 mRating.setVisibility(View.VISIBLE);
             } else {
                 mRating.setVisibility(View.GONE);

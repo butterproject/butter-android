@@ -88,7 +88,8 @@
                 android:background="@drawable/selectable_background"
                 android:visibility="visible"
                 tools:visibility="visible"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/magnet" />
 
         </LinearLayout>
 
