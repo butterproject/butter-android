@@ -56,7 +56,6 @@
 	<string name="no_title_available">No name</string>
 	<string name="no_synopsis_available">No synopsis available</string>
 
-
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
     <string name="starting_buffering">Starting buffering</string>
@@ -113,6 +112,8 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="subtitle_stroke_color">Outline color</string>
     <string name="subtitle_stroke_width">Outline width</string>
 	<string name="subtitle_language">Default language</string>
+	<string name="subtitle_timing">Subtitle timing</string>
+	<string name="subtitle_settings">Subtitle settings</string>
 	<string name="no_default_set">No default language</string>
 	<string name="advanced">Advanced</string>
 	<string name="storage_location">Storage location</string>

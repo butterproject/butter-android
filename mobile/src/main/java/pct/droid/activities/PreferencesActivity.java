@@ -317,7 +317,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -369,7 +369,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -506,7 +506,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -534,7 +534,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {

@@ -17,13 +17,16 @@
 
 package pct.droid.dialogfragments;
 
+import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pct.droid.R;
 
@@ -33,6 +36,7 @@ public class NumberPickerDialogFragment extends DialogFragment {
     public static final String MAX_VALUE = "max_val";
     public static final String MIN_VALUE = "min_val";
     public static final String DEFAULT_VALUE = "default_val";
+    public static final String FOCUSABLE = "focusable";
 
     private ResultListener mOnResultListener;
 
@@ -51,11 +55,24 @@ public class NumberPickerDialogFragment extends DialogFragment {
 
         final NumberPicker numberPicker = new NumberPicker(getActivity());
         numberPicker.setLayoutParams(new NumberPicker.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        numberPicker.setMaxValue(getArguments().getInt(MAX_VALUE));
-        numberPicker.setMinValue(getArguments().getInt(MIN_VALUE));
-        numberPicker.setValue(getArguments().getInt(DEFAULT_VALUE, (int) Math.floor((numberPicker.getMaxValue() - numberPicker.getMinValue()) / 2)));
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        final int minValue = getArguments().getInt(MIN_VALUE);
+        final int maxValue = getArguments().getInt(MAX_VALUE);
+        final int currentValue = getArguments().getInt(DEFAULT_VALUE, (int) Math.floor((numberPicker.getMaxValue() - numberPicker.getMinValue()) / 2));
+
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(maxValue - minValue);
+        numberPicker.setValue(currentValue - minValue);
+
+        List<String> displayValues = new ArrayList<>();
+        for(int i = minValue; i < maxValue + 1; i++) {
+            displayValues.add(Integer.toString(i));
+        }
+        numberPicker.setDisplayedValues(displayValues.toArray(new String[displayValues.size()]));
+
+        if(getArguments().containsKey(FOCUSABLE) && !getArguments().getBoolean(FOCUSABLE))
+            numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         builder
                 .setView(numberPicker)
@@ -64,7 +81,7 @@ public class NumberPickerDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mOnResultListener.onNewValue(numberPicker.getValue());
+                                mOnResultListener.onNewValue(numberPicker.getValue() + minValue);
                                 dialog.dismiss();
                             }
                         })
