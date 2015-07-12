@@ -95,6 +95,9 @@ public class ShowDetailFragment extends BaseDetailFragment {
             mViewPager.setMinimumHeight(minHeight);
         }
 
+        if(sShow == null)
+            return mRoot;
+
         mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
 

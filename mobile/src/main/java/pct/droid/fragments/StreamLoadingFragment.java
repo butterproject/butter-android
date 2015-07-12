@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
@@ -58,7 +60,7 @@ import timber.log.Timber;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
-    private boolean mAttached = false;
+    private boolean mAttached = false, mPlayingExternal = false;
     private Context mContext;
     private Torrent mCurrentTorrent;
 
@@ -73,6 +75,8 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     TextView mTertiaryTextView;
     @Bind(R.id.background_imageview)
     ImageView mBackgroundImageView;
+    @Bind(R.id.startexternal_button)
+    Button mStartExternalButton;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -106,6 +110,18 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     public void onDetach() {
         super.onDetach();
         mAttached = false;
+    }
+
+    @Override
+    public void onResume() {
+        if(mPlayingExternal) {
+            mPlayerStarted = false;
+            super.onResume();
+            mPlayerStarted = true;
+            setState(State.STREAMING);
+        } else {
+            super.onResume();
+        }
     }
 
     @Override
@@ -160,8 +176,14 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             @Override
             public void run() {
                 mProgressIndicator.setIndeterminate(false);
-                mProgressIndicator.setProgress(status.bufferProgress);
-                mPrimaryTextView.setText(status.bufferProgress + "%");
+                if(!mPlayingExternal) {
+                    mProgressIndicator.setProgress(status.bufferProgress);
+                    mPrimaryTextView.setText(status.bufferProgress + "%");
+                } else {
+                    int progress = ((Float) status.progress).intValue();
+                    mProgressIndicator.setProgress(progress);
+                    mPrimaryTextView.setText(progress + "%");
+                }
 
                 if (status.downloadSpeed / 1024 < 1000) {
                     mSecondaryTextView.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
@@ -200,7 +222,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mProgressIndicator.setProgress(0);
                 break;
             case STREAMING:
-                mPrimaryTextView.setText(R.string.streaming_started);
                 if (null != extra && extra instanceof DownloadStatus)
                     updateStatus((DownloadStatus) extra);
                 break;
@@ -227,17 +248,25 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     protected void startPlayerActivity(String location, int resumePosition) {
         if (getActivity() != null && !mPlayerStarted) {
             mStreamInfo.setVideoLocation(location);
-            boolean playingExternal = false;
             if (BeamManager.getInstance(mContext).isConnected()) {
                 BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
             } else {
-                playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
-                if (!playingExternal) {
+                mPlayingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+                if (!mPlayingExternal) {
                     VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
                 }
             }
 
-            getActivity().finish();
+            if (!mPlayingExternal) {
+                getActivity().finish();
+            } else {
+                mStartExternalButton.setVisibility(View.VISIBLE);
+            }
         }
+    }
+
+    @OnClick(R.id.startexternal_button)
+    public void externalClick(View v) {
+        DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), mStreamInfo.getVideoLocation());
     }
 }

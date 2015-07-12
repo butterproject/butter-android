@@ -160,12 +160,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     protected abstract void startPlayerActivity(String location, int resumePosition);
 
     @DebugLog
-    private void setState(final State state) {
+    protected void setState(final State state) {
         setState(state, null);
     }
 
     @DebugLog
-    private void setState(final State state, final Object extra) {
+    protected void setState(final State state, final Object extra) {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -278,11 +278,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     @DebugLog
     public void onStreamProgress(DownloadStatus status) {
-        if (mVideoLocation.isEmpty()) {
-            setState(State.STREAMING, status);
-        } else {
+        if (!mVideoLocation.isEmpty()) {
             startPlayer(mVideoLocation);
         }
+        setState(State.STREAMING, status);
     }
 
     @Override
