@@ -78,8 +78,6 @@ public class Torrent extends TorrentAlertListener {
         if(mSelectedFile == -1)
             setSelectedFile(mSelectedFile);
 
-        mTorrentHandle.resume();
-
         if(mListener != null)
             mListener.onStreamStarted();
     }
