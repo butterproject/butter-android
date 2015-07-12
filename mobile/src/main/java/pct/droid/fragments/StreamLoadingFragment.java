@@ -47,6 +47,8 @@ import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.beaming.BeamManager;
+import pct.droid.base.beaming.server.BeamServer;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.torrent.DownloadStatus;
@@ -115,6 +117,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     public void onResume() {
         if(mPlayingExternal) {
+            BeamServerService.getServer().stop();
             mPlayerStarted = false;
             super.onResume();
             mPlayerStarted = true;
