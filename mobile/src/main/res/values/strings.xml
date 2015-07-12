@@ -55,6 +55,8 @@
     <string name="aired">Aired: %s</string>
 	<string name="no_title_available">No name</string>
 	<string name="no_synopsis_available">No synopsis available</string>
+    <string name="magnet">Magnet</string>
+    <string name="scale">Scale</string>
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
@@ -68,6 +70,10 @@
 	<!-- VideoPlayerActivity strings -->
 	<string name="now_playing">Now playing</string>
 	<string name="volume">Volume</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="fastforward">Fast forward</string>
+    <string name="rewind">Rewind</string>
 	<string name="brightness">Brightness</string>
 	<string name="hardware_acceleration_error_title">HW acceleration error</string>
 	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>

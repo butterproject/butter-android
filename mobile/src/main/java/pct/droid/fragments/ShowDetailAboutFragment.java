@@ -69,6 +69,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
         if (!sShow.rating.equals("-1")) {
             Double rating = Double.parseDouble(sShow.rating);
             mRating.setProgress(rating.intValue());
+            mRating.setContentDescription("Rating: " + rating.intValue() + " out of 10");
             mRating.setVisibility(View.VISIBLE);
         } else {
             mRating.setVisibility(View.GONE);
