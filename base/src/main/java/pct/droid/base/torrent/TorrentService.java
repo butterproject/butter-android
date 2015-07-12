@@ -52,6 +52,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.preferences.Prefs;
+import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import timber.log.Timber;
@@ -313,7 +314,7 @@ public class TorrentService extends Service {
         mIsCanceled = true;
         mIsStreaming = false;
         if (mCurrentTorrent != null) {
-            File currentVideoFile = mCurrentTorrent.getVideoFile();
+            File saveLocation = mCurrentTorrent.getSaveLocation();
 
             mCurrentTorrent.pause();
             mTorrentSession.removeListener(mCurrentTorrent);
@@ -321,7 +322,15 @@ public class TorrentService extends Service {
             mCurrentTorrent = null;
 
             if (PrefUtils.get(TorrentService.this, Prefs.REMOVE_CACHE, true)) {
-                currentVideoFile.delete();
+                int tries = 0;
+                while(!FileUtils.recursiveDelete(saveLocation) && tries < 5) {
+                    tries++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 

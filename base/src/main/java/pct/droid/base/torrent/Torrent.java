@@ -122,6 +122,10 @@ public class Torrent extends TorrentAlertListener {
         return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFileAt(mSelectedFile).getPath());
     }
 
+    public File getSaveLocation() {
+        return new File(mTorrentHandle.getSavePath() + "/" + mTorrentHandle.getName());
+    }
+
     public void resume() {
         mTorrentHandle.resume();
     }
@@ -133,6 +137,8 @@ public class Torrent extends TorrentAlertListener {
     public void setSelectedFile(int selectedFileIndex) {
         TorrentInfo torrentInfo = mTorrentHandle.getTorrentInfo();
         FileStorage fileStorage = torrentInfo.getFiles();
+        Timber.d(mTorrentHandle.getSavePath());
+        Timber.d(mTorrentHandle.getName());
 
         if(selectedFileIndex == -1) {
             long highestFileSize = 0;
