@@ -221,10 +221,13 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (!TextUtils.isEmpty(mEpisode.title))
+        if (!TextUtils.isEmpty(mEpisode.title)) {
             mTitle.setText(mEpisode.title);
-        else
+            mHeaderImage.setContentDescription(mEpisode.title);
+        } else {
             mTitle.setText(R.string.no_title_available);
+            mHeaderImage.setContentDescription(getString(R.string.no_title_available));
+        }
 
         mAired.setVisibility(mEpisode.aired > 0 ? View.VISIBLE : View.GONE);
         Date airedDate = new Date((long) mEpisode.aired * 1000);

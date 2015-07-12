@@ -533,8 +533,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     public void updatePlayPauseState() {
         if (isPlaying()) {
             mPlayButton.setImageResource(R.drawable.ic_av_pause);
+            mPlayButton.setContentDescription(getString(R.string.pause));
         } else {
             mPlayButton.setImageResource(R.drawable.ic_av_play);
+            mPlayButton.setContentDescription(getString(R.string.play));
         }
     }
 

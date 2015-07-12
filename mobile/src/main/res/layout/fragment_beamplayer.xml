@@ -99,6 +99,7 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_av_rewind"
                         android:background="@drawable/selectable_background_circle"
+                        android:contentDescription="@string/rewind"
                         />
                     <ImageButton
                         android:id="@+id/play_button"
@@ -107,7 +108,9 @@
                         android:layout_marginLeft="@dimen/beamplayer_controls_margin"
                         android:layout_marginRight="@dimen/beamplayer_controls_margin"
                         android:src="@drawable/ic_av_play"
-                        android:background="@drawable/play_button_circle" />
+                        android:background="@drawable/play_button_circle"
+                        android:contentDescription="@string/play"
+                        />
                     <ImageButton
                         android:id="@+id/forward_button"
                         android:layout_width="40dp"
@@ -116,6 +119,7 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_av_forward"
                         android:background="@drawable/selectable_background_circle"
+                        android:contentDescription="@string/fastforward"
                         />
                 </LinearLayout>
 
@@ -148,7 +152,8 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:contentDescription="@string/volume">
 
                     <pct.droid.widget.SeekBar
                         android:id="@+id/volumebar"

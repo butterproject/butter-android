@@ -331,6 +331,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         }
 
         mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
+        mPlayButton.setContentDescription(mIsPlaying ? getString(R.string.pause) : getString(R.string.play));
     }
 
     @OnClick(R.id.forward_button)
@@ -375,6 +376,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         public void onSuccess(MediaControl.PlayStateStatus state) {
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
             mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
+            mPlayButton.setContentDescription(mIsPlaying ? getString(R.string.pause) : getString(R.string.play));
 
             if (mLoadingDialog.isVisible() && mIsPlaying && !getActivity().isFinishing()) {
                 mLoadingDialog.dismiss();
