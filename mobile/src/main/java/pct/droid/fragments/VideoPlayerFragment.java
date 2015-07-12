@@ -657,6 +657,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         mSubsButton.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
     }
 
+    protected void updateSubtitleSize(int size) {
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+    }
+
     @OnClick(R.id.play_button)
     void onPlayPauseClick() {
         togglePlayPause();

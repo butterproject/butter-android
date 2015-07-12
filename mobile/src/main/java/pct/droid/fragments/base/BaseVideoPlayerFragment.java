@@ -78,6 +78,7 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.dialogfragments.FileSelectorDialogFragment;
+import pct.droid.dialogfragments.NumberPickerDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import timber.log.Timber;
 
@@ -117,6 +118,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     private int mVideoVisibleWidth;
     private int mSarNum;
     private int mSarDen;
+    private int mSubtitleOffset = 0;
 
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
@@ -440,57 +442,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     public abstract void onPlaybackEndReached();
 
-    public void subsClick() {
-        if (mMedia != null && mMedia.subtitles != null) {
-            if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
-            String[] subtitles = mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]);
-            Arrays.sort(subtitles);
-            final String[] adapterSubtitles = new String[subtitles.length + 2];
-            System.arraycopy(subtitles, 0, adapterSubtitles, 1, subtitles.length);
-
-            adapterSubtitles[0] = "no-subs";
-            adapterSubtitles[adapterSubtitles.length - 1] = "custom";
-            String[] readableNames = new String[adapterSubtitles.length];
-
-            for (int i = 0; i < readableNames.length - 1; i++) {
-                String language = adapterSubtitles[i];
-                if (language.equals("no-subs")) {
-                    readableNames[i] = getString(R.string.no_subs);
-                } else {
-                    Locale locale = LocaleUtils.toLocale(language);
-                    readableNames[i] = locale.getDisplayName(locale);
-                }
-            }
-
-            readableNames[readableNames.length - 1] = "Custom..";
-
-            StringArraySelectorDialogFragment.showSingleChoice(getFragmentManager(), R.string.subtitles, readableNames,
-                    Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, int position) {
-                            if (position == adapterSubtitles.length - 1) {
-                                FileSelectorDialogFragment.show(getChildFragmentManager(), new FileSelectorDialogFragment.Listener() {
-                                    @Override
-                                    public void onFileSelected(File f) {
-                                        if (!f.getPath().endsWith(".srt")) {
-                                            Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
-                                            return;
-                                        }
-                                        FileSelectorDialogFragment.hide();
-                                        mSubsFile = f;
-                                        startSubtitles();
-                                        dialog.dismiss();
-                                    }
-                                });
-                                return;
-                            }
-                            onSubtitleLanguageSelected(adapterSubtitles[position]);
-                            dialog.dismiss();
-                        }
-                    });
-        }
-    }
-
     private void handleHardwareAccelerationError() {
         mLibVLC.stop();
         onHardwareAccelerationError();
@@ -662,14 +613,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     protected void checkSubs() {
         if (mLibVLC != null && mLibVLC.isPlaying() && mSubs != null) {
             Collection<Caption> subtitles = mSubs.captions.values();
-            double currentTime = getCurrentTime();
+            double currentTime = getCurrentTime() - mSubtitleOffset;
             if (mLastSub != null && currentTime >= mLastSub.start.getMilliseconds() && currentTime <= mLastSub.end.getMilliseconds()) {
                 showTimedCaptionText(mLastSub);
             } else {
                 for (Caption caption : subtitles) {
                     if (currentTime >= caption.start.getMilliseconds() && currentTime <= caption.end.getMilliseconds()) {
                         mLastSub = caption;
-
                         showTimedCaptionText(caption);
                         break;
                     } else if (currentTime > caption.end.getMilliseconds()) {
@@ -830,6 +780,124 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void subsClick() {
+        if (mMedia != null && mMedia.subtitles != null) {
+            if (getChildFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+
+            String[] subsOptions = {
+                    getString(R.string.subtitle_language),
+                    getString(R.string.subtitle_size),
+                    getString(R.string.subtitle_timing)
+            };
+
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.subtitle_settings, subsOptions, -1,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position) {
+                            switch (position) {
+                                case 0:
+                                    subsLanguageSettings();
+                                    break;
+                                case 1:
+                                    subsSizeSettings();
+                                    break;
+                                case 2:
+                                    subsTimingSettings();
+                                    break;
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void subsLanguageSettings() {
+        String[] subtitles = mMedia.subtitles.keySet().toArray(new String[mMedia.subtitles.size()]);
+        Arrays.sort(subtitles);
+        final String[] adapterSubtitles = new String[subtitles.length + 2];
+        System.arraycopy(subtitles, 0, adapterSubtitles, 1, subtitles.length);
+
+        adapterSubtitles[0] = "no-subs";
+        adapterSubtitles[adapterSubtitles.length - 1] = "custom";
+        String[] readableNames = new String[adapterSubtitles.length];
+
+        for (int i = 0; i < readableNames.length - 1; i++) {
+            String language = adapterSubtitles[i];
+            if (language.equals("no-subs")) {
+                readableNames[i] = getString(R.string.no_subs);
+            } else {
+                Locale locale = LocaleUtils.toLocale(language);
+                readableNames[i] = locale.getDisplayName(locale);
+            }
+        }
+
+        readableNames[readableNames.length - 1] = "Custom..";
+
+        StringArraySelectorDialogFragment.showSingleChoice(getChildFragmentManager(), R.string.subtitles, readableNames,
+                Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int position) {
+                        if (position == adapterSubtitles.length - 1) {
+                            FileSelectorDialogFragment.show(getChildFragmentManager(), new FileSelectorDialogFragment.Listener() {
+                                @Override
+                                public void onFileSelected(File f) {
+                                    if (!f.getPath().endsWith(".srt")) {
+                                        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    FileSelectorDialogFragment.hide();
+                                    mSubsFile = f;
+                                    startSubtitles();
+                                    dialog.dismiss();
+                                }
+                            });
+                            return;
+                        }
+                        onSubtitleLanguageSelected(adapterSubtitles[position]);
+                        dialog.dismiss();
+                    }
+                });
+    }
+
+    private void subsSizeSettings() {
+        Bundle args = new Bundle();
+        args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_size));
+        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
+        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 10);
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
+
+        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+        dialogFragment.setArguments(args);
+        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+            @Override
+            public void onNewValue(int value) {
+                updateSubtitleSize(value);
+            }
+        });
+        dialogFragment.show(getChildFragmentManager(), "overlay_fragment");
+    }
+
+    private void subsTimingSettings() {
+        Bundle args = new Bundle();
+        args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_timing));
+        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 3600);
+        args.putInt(NumberPickerDialogFragment.MIN_VALUE, -3600);
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, mSubtitleOffset / 60);
+        args.putBoolean(NumberPickerDialogFragment.FOCUSABLE, true);
+
+        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+        dialogFragment.setArguments(args);
+        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+            @Override
+            public void onNewValue(int value) {
+                mSubtitleOffset = value * 60;
+                showTimedCaptionText(null);
+            }
+        });
+        dialogFragment.show(getChildFragmentManager(), "overlay_fragment");
+    }
+
+    protected abstract void updateSubtitleSize(int size);
 
     BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
 
