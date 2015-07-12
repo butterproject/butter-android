@@ -75,22 +75,6 @@ public class Torrent extends TorrentAlertListener {
 
         torrentHandle.setPriority(7);
 
-        TorrentInfo torrentInfo = mTorrentHandle.getTorrentInfo();
-        FileStorage fileStorage = torrentInfo.getFiles();
-        long highestFileSize = 0;
-        int selectedFile = -1;
-        for (int i = 0; i < fileStorage.getNumFiles(); i++) {
-            long fileSize = fileStorage.getFileSize(i);
-            if (highestFileSize < fileSize) {
-                highestFileSize = fileSize;
-                mTorrentHandle.setFilePriority(selectedFile, Priority.IGNORE);
-                selectedFile = i;
-                mTorrentHandle.setFilePriority(i, Priority.SEVEN);
-            } else {
-                mTorrentHandle.setFilePriority(i, Priority.IGNORE);
-            }
-        }
-
         if(mSelectedFile == -1)
             setSelectedFile(mSelectedFile);
 
