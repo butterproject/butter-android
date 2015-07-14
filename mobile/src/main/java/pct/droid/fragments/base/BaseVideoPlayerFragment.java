@@ -152,6 +152,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (getActivity() instanceof Callback && mCallback == null) mCallback = (Callback) getActivity();
+
         mResumePosition = mCallback.getResumePosition();
         mStreamInfo = mCallback.getInfo();
         mMedia = mStreamInfo.getMedia();

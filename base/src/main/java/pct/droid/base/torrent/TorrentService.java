@@ -203,7 +203,11 @@ public class TorrentService extends Service {
 
             }
         } else {
-            if (mInitialised) return;
+            if(mInitialised) {
+                if (mLibTorrentThread != null) {
+                    mLibTorrentThread.interrupt();
+                }
+            }
 
             mLibTorrentThread = new HandlerThread(LIBTORRENT_THREAD_NAME);
             mLibTorrentThread.start();
