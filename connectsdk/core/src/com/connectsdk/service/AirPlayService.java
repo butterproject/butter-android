@@ -68,10 +68,10 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 public class AirPlayService extends DeviceService implements MediaPlayer, MediaControl {
-    public static final String PLAY_STATE = "PlayState";
-    public static final String INFO = "Info";
     public static final String X_APPLE_SESSION_ID = "X-Apple-Session-ID";
     public static final String ID = "AirPlay";
+    public static final String PLAY_STATE = "PlayState";
+
     private static final long KEEP_ALIVE_PERIOD = 15000;
     private static final long UPDATE_PERIOD = 500;
 
@@ -79,7 +79,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
     private String mSessionId;
 
-    private Timer keepAliveTimer, updateTimer;
+    private Timer timer, updateTimer;
 
     private List<URLServiceSubscription<?>> mSubscriptions = new ArrayList<>();
 
@@ -352,11 +352,8 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     @Override
     public ServiceSubscription<MediaInfoListener> subscribeMediaInfo(
             MediaInfoListener listener) {
-        URLServiceSubscription<MediaInfoListener> request = new URLServiceSubscription<>(this, INFO, null, null);
-        request.addListener(listener);
-        addSubscription(request);
-
-        return request;
+        listener.onError(ServiceCommandError.notSupported());
+        return null;
     }
 
     @Override
@@ -398,7 +395,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                             || responseCode == HttpURLConnection.HTTP_MOVED_PERM
                             || responseCode == HttpURLConnection.HTTP_SEE_OTHER);
 
-                    if (redirect) {
+                    if(redirect) {
                         String newPath = connection.getHeaderField("Location");
                         URL newImagePath = new URL(newPath);
                         connection = (HttpURLConnection) newImagePath.openConnection();
@@ -760,13 +757,14 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
      */
     private void startTimer() {
         stopTimer();
-        keepAliveTimer = new Timer();
-        keepAliveTimer.scheduleAtFixedRate(new TimerTask() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
             public void run() {
                 Log.d("Timer", "Timer");
                 getPlaybackPosition(new PlaybackPositionListener() {
+
                     @Override
                     public void onGetPlaybackPositionSuccess(long duration, long position) {
                         if (position >= duration) {
@@ -837,14 +835,14 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     }
 
     private void stopTimer() {
-        if (keepAliveTimer != null) {
-            keepAliveTimer.cancel();
+        if (timer != null) {
+            timer.cancel();
         }
         if(updateTimer != null) {
             updateTimer.cancel();
         }
-        keepAliveTimer = null;
         updateTimer = null;
+        timer = null;
     }
 
     private void addSubscription(URLServiceSubscription<?> subscription) {
@@ -863,6 +861,5 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     public void setSubscriptions(List<URLServiceSubscription<?>> subscriptions) {
         this.mSubscriptions = subscriptions;
     }
-
 
 }

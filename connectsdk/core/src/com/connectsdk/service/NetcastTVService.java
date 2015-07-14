@@ -109,6 +109,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     public final static String TARGET_APPNUM_GET = "appnum_get";
     public final static String TARGET_3D_MODE = "3DMode";
     public final static String TARGET_IS_3D = "is_3D";
+    public static final String SMART_SHARE = "SmartShare™";
 
     enum State {
         NONE,
@@ -203,7 +204,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     @Override
     public void connect() {
         if (state != State.INITIAL) {
-            Log.w("Connect SDK", "already connecting; not trying to connect again: " + state);
+            Log.w(Util.T, "already connecting; not trying to connect again: " + state);
             return; // don't try to connect again while connected
         }
 
@@ -598,7 +599,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     @Override
     public void launchBrowser(String url, final Launcher.AppLaunchListener listener) {
         if (!(url == null || url.length() == 0)) 
-            Log.w("Connect SDK", "Netcast TV does not support deeplink for Browser");
+            Log.w(Util.T, "Netcast TV does not support deeplink for Browser");
 
         final String appName = "Internet";
 
@@ -1056,7 +1057,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
             public void onSuccess(List<ChannelInfo> channelList) {
                 String requestURL = getUDAPRequestURL(UDAP_PATH_COMMAND);
 
-                Map <String,String> params = new HashMap<String,String>();
+                Map<String, String> params = new HashMap<String, String>();
 
                 for (int i = 0; i < channelList.size(); i++) {
                     ChannelInfo ch = channelList.get(i);
@@ -1072,7 +1073,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
                         String sourceIndex = (String) rawData.get("sourceIndex");
                         int physicalNum = (Integer) rawData.get("physicalNumber");
 
-                        if (Integer.valueOf(major) == majorNumber 
+                        if (Integer.valueOf(major) == majorNumber
                                 && Integer.valueOf(minor) == minorNumber) {
                             params.put("name", "HandleChannelChange");
                             params.put("major", major);
@@ -1505,8 +1506,8 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
                 @Override
                 public void onSuccess(MediaLaunchObject object) {
-                    object.launchSession.setAppId("SmartShareª");
-                    object.launchSession.setAppName("SmartShareª");
+                    object.launchSession.setAppId(SMART_SHARE);
+                    object.launchSession.setAppName(SMART_SHARE);
 
                     object.mediaControl = NetcastTVService.this.getMediaControl();
 
@@ -1546,7 +1547,12 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     }
 
     @Override
-    public void playMedia(final String url, final String mimeType, final String title, final String description, final String iconSrc, final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
+    public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
+        playMedia(new MediaInfo(url, mimeType, title, description, iconSrc), shouldLoop, listener);
+    }
+
+    @Override
+    public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
         if (getDLNAService() != null) {
             final MediaPlayer.LaunchListener launchListener = new LaunchListener() {
 
@@ -1558,44 +1564,21 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
                 @Override
                 public void onSuccess(MediaLaunchObject object) {
-                    object.launchSession.setAppId("SmartShareª");
-                    object.launchSession.setAppName("SmartShareª");
+                    object.launchSession.setAppId(SMART_SHARE);
+                    object.launchSession.setAppName(SMART_SHARE);
 
                     object.mediaControl = NetcastTVService.this.getMediaControl();
 
                     if (listener != null)
                         Util.postSuccess(listener, object);
                 }
-            }; 
+            };
 
-            getDLNAService().playMedia(url, mimeType, title, description, iconSrc, shouldLoop, launchListener);
+            getDLNAService().playMedia(mediaInfo, shouldLoop, launchListener);
         }
         else {
             System.err.println("DLNA Service is not ready yet");
         }
-    }
-
-    @Override
-    public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
-        String mediaUrl = null;
-        String mimeType = null;
-        String title = null;
-        String desc = null;
-        String iconSrc = null;
-
-        if (mediaInfo != null) {
-            mediaUrl = mediaInfo.getUrl();
-            mimeType = mediaInfo.getMimeType();
-            title = mediaInfo.getTitle();
-            desc = mediaInfo.getDescription();
-
-            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
-                ImageInfo imageInfo = mediaInfo.getImages().get(0);
-                iconSrc = imageInfo.getUrl();
-            }
-        }
-
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     @Override
@@ -1744,7 +1727,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onSuccess(Object response) {
-                Log.d("Connect SDK", "Netcast TV's mouse has been connected");
+                Log.d(Util.T, "Netcast TV's mouse has been connected");
 
                 mMouseDistance = new PointF(0, 0);
                 mMouseIsMoving = false;
@@ -1752,7 +1735,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's mouse connection has been failed");
+                Log.w(Util.T, "Netcast TV's mouse connection has been failed");
             }
         };
 
@@ -1774,7 +1757,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's mouse click has been failed");
+                Log.w(Util.T, "Netcast TV's mouse click has been failed");
             }
         };
 
@@ -1828,7 +1811,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's mouse move has failed");
+                Log.w(Util.T, "Netcast TV's mouse move has failed");
 
                 mMouseIsMoving = false;
             }
@@ -1856,7 +1839,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's mouse scroll has been failed");
+                Log.w(Util.T, "Netcast TV's mouse scroll has been failed");
             }
         };
 
@@ -1908,7 +1891,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
     @Override
     public void sendText(final String input) {
-        Log.d("Connect SDK", "Add to Queue: " + input);
+        Log.d(Util.T, "Add to Queue: " + input);
         keyboardString.append(input);
         handleKeyboardInput("Editing", keyboardString.toString());
     }
@@ -1925,7 +1908,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's enter key has been failed");
+                Log.w(Util.T, "Netcast TV's enter key has been failed");
             }
         };
         handleKeyboardInput("EditEnd", keyboardString.toString());
@@ -1965,7 +1948,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's keyboard input has been failed");
+                Log.w(Util.T, "Netcast TV's keyboard input has been failed");
             }
         };
 
@@ -2056,7 +2039,7 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
             @Override
             public void onError(ServiceCommandError error) {
-                Log.w("Connect SDK", "Netcast TV's power off has been failed");
+                Log.w(Util.T, "Netcast TV's power off has been failed");
             }
         };
 
@@ -2282,8 +2265,13 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
     }
 
     public String decToHex(String dec) {
-        if (dec != null && dec.length() > 0) 
-            return decToHex(Long.parseLong(dec));
+        if (dec != null && dec.length() > 0) {
+            try {
+                return decToHex(Long.parseLong(dec.trim()));
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 

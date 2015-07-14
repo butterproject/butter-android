@@ -1,1 +1,1 @@
-include ':mobile', ':vlc', ':base', ':xmlrpc', ':connectsdk'
+include ':mobile', ':vlc', ':base', ':xmlrpc', ':connectsdk', ':vlc-aar', ':connectsdk-aar', ':xmlrpc-aar'

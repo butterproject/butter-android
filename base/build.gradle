@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'hugo'
+apply plugin: 'hugo'//for method logging (only in debug builds)
+apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -42,19 +43,23 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:multidex:1.0.1'
 
-    compile 'com.jakewharton.timber:timber:3.1.0'
+    compile "com.android.support:support-v4:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:appcompat-v7:${rootProject.ext.appCompatVersion}"
+
+    compile 'com.google.android.gms:play-services-cast:6.5.+'
+
+    compile 'com.jakewharton.timber:timber:3.1.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.uwetrottmann:trakt-java:4.3.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.uwetrottmann:trakt-java:4.3.1'
 
     compile 'com.koushikdutta.async:androidasync:2.1.6'
 
-    compile project(':vlc')
-    compile project(':xmlrpc')
-    compile project(':connectsdk')
+    compile project(':vlc-aar')
+    compile project(':xmlrpc-aar')
+    compile project(':connectsdk-aar')
 }

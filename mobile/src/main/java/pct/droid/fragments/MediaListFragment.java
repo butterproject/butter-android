@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,14 +33,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
@@ -112,13 +112,14 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private MediaProvider.Filters mFilters = new MediaProvider.Filters();
     private String mGenre;
 
-    @InjectView(R.id.progressOverlay)
+    View mRootView;
+    @Bind(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
-    @InjectView(R.id.recyclerView)
+    @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    @InjectView(R.id.emptyView)
+    @Bind(R.id.emptyView)
     TextView mEmptyView;
-    @InjectView(R.id.progress_textview)
+    @Bind(R.id.progress_textview)
     TextView mProgressTextView;
 
     public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
@@ -158,8 +159,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getActivity();
 
-        View v = inflater.inflate(R.layout.fragment_media, container, false);
-        ButterKnife.inject(this, v);
+        mRootView = inflater.inflate(R.layout.fragment_media, container, false);
+        ButterKnife.bind(this, mRootView);
 
         mColumns = getResources().getInteger(R.integer.overview_cols);
         mLoadingTreshold = mColumns * 3;
@@ -167,7 +168,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mLayoutManager = new GridLayoutManager(mContext, mColumns);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        return v;
+        return mRootView;
     }
 
     @Override
@@ -377,7 +378,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                     ThreadUtils.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                            Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
                             setState(State.LOADED);
                         }
                     });
@@ -467,7 +468,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
      */
     @Override
     public void onDetailLoadFailure() {
-        Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
     }
 
     /**

@@ -845,7 +845,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
 
         String uri = requestURL(action, param);
 
-        Log.d("Connect SDK", "RokuService::send() | uri = " + uri);
+        Log.d(Util.T, "RokuService::send() | uri = " + uri);
 
         ServiceCommand<ResponseListener<Object>> request = new ServiceCommand<ResponseListener<Object>>(
                 this, uri, null, listener);

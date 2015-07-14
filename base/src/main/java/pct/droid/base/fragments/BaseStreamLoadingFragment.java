@@ -41,6 +41,7 @@ import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
@@ -72,6 +73,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
     private TorrentService mService;
+    private TorrentBaseActivity mActivity;
 
     protected StreamInfo mStreamInfo;
 
@@ -93,20 +95,21 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mActivity = (TorrentBaseActivity) getActivity();
 
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mStreamInfo = mCallback.getStreamInformation();
                 if (mStreamInfo == null) {
-                    getActivity().finish();
+                    mActivity.finish();
                     return;
                 }
                 loadSubs();
             }
         });
 
-        if (!(getActivity() instanceof TorrentBaseActivity)) {
+        if (!(mActivity instanceof TorrentBaseActivity)) {
             throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
         }
     }
@@ -118,7 +121,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     public void onTorrentServiceConnected() {
-        mService = ((TorrentBaseActivity) getActivity()).getTorrentService();
+        if(mActivity == null)
+            return;
+
+        mService = mActivity.getTorrentService();
         mService.addListener(this);
         startStream();
     }
@@ -154,12 +160,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     protected abstract void startPlayerActivity(String location, int resumePosition);
 
     @DebugLog
-    private void setState(final State state) {
+    protected void setState(final State state) {
         setState(state, null);
     }
 
     @DebugLog
-    private void setState(final State state, final Object extra) {
+    protected void setState(final State state, final Object extra) {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -272,13 +278,16 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     @DebugLog
     public void onStreamProgress(DownloadStatus status) {
-        if (mVideoLocation.isEmpty()) {
-            setState(State.STREAMING, status);
-        } else {
+        if (!mVideoLocation.isEmpty()) {
             startPlayer(mVideoLocation);
         }
+        setState(State.STREAMING, status);
     }
 
+    @Override
+    public void onStreamMetaData(Torrent torrent) {
+        torrent.prepareTorrent();
+    }
 
     /**
      * Downloads the subs file

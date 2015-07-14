@@ -44,14 +44,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
 
 public class LoadingBeamingDialogFragment extends DialogFragment {
 
     private DialogInterface.OnCancelListener mOnCancelListener;
 
-    @InjectView(R.id.progress_textview)
+    @Bind(R.id.progress_textview)
     TextView mTextView;
 
     public static LoadingBeamingDialogFragment newInstance() {
@@ -65,7 +65,7 @@ public class LoadingBeamingDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout
                 .fragment_loading_detail, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         mTextView.setText(R.string.starting_beam);
         return v;
     }

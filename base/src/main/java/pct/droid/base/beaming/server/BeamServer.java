@@ -30,32 +30,35 @@ import com.koushikdutta.async.http.server.AsyncHttpServerResponse;
 import com.koushikdutta.async.http.server.HttpServerRequestCallback;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
 import pct.droid.base.PopcornApplication;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.subs.FatalParsingException;
+import pct.droid.base.subs.FormatSRT;
+import pct.droid.base.subs.FormatVTT;
+import pct.droid.base.subs.TimedTextObject;
+import pct.droid.base.utils.FileUtils;
 import timber.log.Timber;
 
 public class BeamServer {
 
-    private static FileType
+    public static final FileType
             MP4 = new FileType("mp4", "video/mp4", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
             AVI = new FileType("avi", "video/x-msvideo", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
             MKV = new FileType("mkv", "video/x-matroska", "DLNA.ORG_PN=AVC_MKV_MP_HD_AC3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            SRT = new FileType("srt", "application/x-subrip", "*", "");
+            SRT = new FileType("srt", "application/x-subrip", "*", ""),
+            VTT = new FileType("vtt", "text/vtt", "*", "");
     private static FileType[] FILE_TYPES = {MP4, AVI, MKV};
+    private static FileType[] SUB_TYPES = {SRT, VTT};
     private static HashMap<String, FileType> EXTENSIONS, CONTENT_TYPES;
     private static String sHost;
     private static Integer sPort;
     private static File sCurrentVideo = null, sCurrentSubs = null;
     private AsyncServer mAsyncServer = new AsyncServer();
-    private AsyncHttpServer mHttpServer = new AsyncHttpServer() {
-        protected boolean onRequest(final AsyncHttpServerRequest httpServerRequest, final AsyncHttpServerResponse httpServerResponse) {
-            Timber.d(httpServerRequest.toString());
-            httpServerResponse.getHeaders().set("Access-Control-Allow-Origin", "*");
-            return super.onRequest(httpServerRequest, httpServerResponse);
-        }
-    };
+    private AsyncHttpServer mHttpServer;
     private PowerManager.WakeLock mWakeLock;
     private WifiManager.WifiLock mWifiLock;
 
@@ -72,28 +75,32 @@ public class BeamServer {
     }
 
     public BeamServer(String host, int port) {
+        mHttpServer = new AsyncHttpServer() {
+            protected boolean onRequest(AsyncHttpServerRequest httpServerRequest, AsyncHttpServerResponse httpServerResponse) {
+                Timber.d(httpServerRequest.toString());
+                httpServerResponse.getHeaders().set("Access-Control-Allow-Origin", "*");
+                return super.onRequest(httpServerRequest, httpServerResponse);
+            }
+        };
+
         sHost = host;
         sPort = port;
 
-        StringBuilder extBuilder = new StringBuilder();
-        extBuilder.append("(");
         for (FileType localFileType : FILE_TYPES) {
             VideoFileReponse localVideoFileReponse = new VideoFileReponse(localFileType);
             mHttpServer.get("/video." + localFileType.extension, localVideoFileReponse);
             mHttpServer.addAction("HEAD", "/video." + localFileType.extension, localVideoFileReponse);
-            extBuilder.append(localFileType.extension);
-            extBuilder.append("|");
         }
-        extBuilder.deleteCharAt(extBuilder.length() - 1);
-        extBuilder.append(")");
 
-        SubtitleFileResponse localSubsFileReponse = new SubtitleFileResponse(SRT);
-        mHttpServer.get("/video.srt", localSubsFileReponse);
+        for(FileType localSubsFileType : SUB_TYPES) {
+            SubtitleFileResponse localSubsFileReponse = new SubtitleFileResponse(localSubsFileType);
+            mHttpServer.get("/video." + localSubsFileType.extension, localSubsFileReponse);
+        }
 
         mHttpServer.get("/(.*?)", new HttpServerRequestCallback() {
             @Override
             public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-                response.send("No content");
+                response.send("Not found");
                 response.code(404);
             }
         });
@@ -104,7 +111,25 @@ public class BeamServer {
     }
 
     public static void setCurrentSubs(File file) {
-        sCurrentSubs = file;
+        sCurrentSubs = new File(file.getAbsolutePath().replace(".srt", "").replace(".vtt", ""));
+        File vttFile = new File(sCurrentSubs.getAbsolutePath() + ".vtt");
+        File srtFile = new File(sCurrentSubs.getAbsolutePath() + ".srt");
+
+        try {
+            if (FileUtils.getFileExtension(file.getName()).equals("srt") && !vttFile.exists() && srtFile.exists()) {
+                FormatSRT srt = new FormatSRT();
+                TimedTextObject timedTextObject = srt.parseFile(file.getName(), FileUtils.getContentsAsString(file.getAbsolutePath()));
+                String[] vttStr = timedTextObject.toVTT();
+                FileUtils.saveStringFile(vttStr, vttFile);
+            } else if (FileUtils.getFileExtension(file.getName()).equals("vtt") && !srtFile.exists() && vttFile.exists()) {
+                FormatVTT vtt = new FormatVTT();
+                TimedTextObject timedTextObject = vtt.parseFile(file.getName(), FileUtils.getContentsAsString(file.getAbsolutePath()));
+                String[] srtStr = timedTextObject.toSRT();
+                FileUtils.saveStringFile(srtStr, srtFile);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void setCurrentVideo(String file) {
@@ -124,7 +149,11 @@ public class BeamServer {
     }
 
     public static String getSubsURL() {
-        return "http://" + sHost + ":" + sPort + "/video.srt";
+        return "http://" + sHost + ":" + sPort + "/video." + SRT.extension;
+    }
+
+    public static String getSubsURL(FileType fileType) {
+        return "http://" + sHost + ":" + sPort + "/video." + fileType.extension;
     }
 
     public void start() {
@@ -175,6 +204,7 @@ public class BeamServer {
             paramHeaders.set("Date", HttpDate.format(new Date()));
             paramHeaders.set("Last-Modified", "2015-01-01T10:00:00Z");
             paramHeaders.set("Content-Type", this.mimeType);
+            paramHeaders.set("CaptionInfo.sec", getSubsURL(SRT));
         }
 
         public void setHeaders(AsyncHttpServerResponse httpServerResponse) {
@@ -195,6 +225,7 @@ public class BeamServer {
                 if (!asyncHttpServerRequest.getMethod().equals("HEAD"))
                     httpServerResponse.sendFile(sCurrentVideo);
             } else {
+                httpServerResponse.send("Not found");
                 httpServerResponse.code(404);
             }
 
@@ -210,11 +241,14 @@ public class BeamServer {
         }
 
         public void onRequest(AsyncHttpServerRequest asyncHttpServerRequest, AsyncHttpServerResponse httpServerResponse) {
-            if (sCurrentSubs != null && sCurrentSubs.exists()) {
+            File file = new File(sCurrentSubs.getAbsolutePath() + "." + mFileType.extension);
+            if (sCurrentSubs != null && file.exists()) {
                 mFileType.setHeaders(httpServerResponse);
-                if (!asyncHttpServerRequest.getMethod().equals("HEAD"))
-                    httpServerResponse.sendFile(sCurrentSubs);
+                if (!asyncHttpServerRequest.getMethod().equals("HEAD")) {
+                    httpServerResponse.sendFile(file);
+                }
             } else {
+                httpServerResponse.send("Not found");
                 httpServerResponse.code(404);
             }
 

@@ -62,6 +62,14 @@
             android:id="@+id/tertiary_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <com.devspark.robototextview.widget.RobotoButton
+            android:id="@+id/startexternal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/start_external"
+            android:visibility="gone" />
     </LinearLayout>
 
 </FrameLayout>

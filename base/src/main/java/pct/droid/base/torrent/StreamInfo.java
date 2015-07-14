@@ -134,6 +134,7 @@ public class StreamInfo implements Parcelable {
         dest.writeString(this.mTorrentUrl);
         dest.writeString(this.mVideoLocation);
         dest.writeString(this.mImageUrl);
+        dest.writeString(this.mHeaderImageUrl);
         dest.writeString(this.mTitle);
         dest.writeInt(this.mIsShow ? 1 : 0);
         dest.writeInt(this.mColor);
@@ -146,6 +147,7 @@ public class StreamInfo implements Parcelable {
         this.mTorrentUrl = in.readString();
         this.mVideoLocation = in.readString();
         this.mImageUrl = in.readString();
+        this.mHeaderImageUrl = in.readString();
         this.mTitle = in.readString();
         this.mIsShow = in.readInt() == 1;
         this.mColor = in.readInt();

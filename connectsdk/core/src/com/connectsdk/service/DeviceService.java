@@ -69,9 +69,26 @@ import com.connectsdk.service.sessions.LaunchSession;
  * All DeviceService objects have a group of capabilities. These capabilities can be implemented by any object, and that object will be returned when you call the DeviceService's capability methods (launcher, mediaPlayer, volumeControl, etc).
  */
 public class DeviceService implements DeviceServiceReachabilityListener, ServiceCommandProcessor {
+
+    /**
+     * Enumerates available pairing types. It is used by a DeviceService for implementing pairing
+     * strategy.
+     */
     public enum PairingType {
+        /**
+         * DeviceService doesn't require pairing
+         */
         NONE,
+
+        /**
+         * In this mode user must confirm pairing on the first screen device (e.g. an alert on a TV)
+         */
         FIRST_SCREEN,
+
+        /**
+         * In this mode user must enter a pin code from a mobile device and send it to the first
+         * screen device
+         */
         PIN_CODE
     }
 

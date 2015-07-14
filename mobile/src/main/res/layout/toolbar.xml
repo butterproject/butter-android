@@ -27,4 +27,5 @@ the same attributes -->
 	android:layout_width="match_parent"
 	android:fitsSystemWindows="true"
 	android:clipToPadding="false"
-	android:background="?attr/colorPrimary" />
+	android:background="?attr/colorPrimary"
+	app:layout_scrollFlags="scroll|enterAlways" />
