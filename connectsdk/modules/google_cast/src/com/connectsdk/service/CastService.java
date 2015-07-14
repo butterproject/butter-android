@@ -20,6 +20,7 @@
 
 package com.connectsdk.service;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,8 +53,10 @@ import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.cast.MediaTrack;
 import com.google.android.gms.cast.RemoteMediaPlayer;
 import com.google.android.gms.cast.RemoteMediaPlayer.MediaChannelResult;
+import com.google.android.gms.cast.TextTrackStyle;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -528,8 +531,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
         displayImage(mediaUrl, mimeType, title, desc, iconSrc, listener);
     }
 
-    @Override
-    public void playMedia(String url, String mimeType, String title,
+    public void playMedia(String url, String subsUrl, String mimeType, String title,
                           String description, String iconSrc, boolean shouldLoop,
                           LaunchListener listener) {
         MediaMetadata mMediaMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
@@ -542,20 +544,42 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
             mMediaMetadata.addImage(image);
         }
 
+        List<MediaTrack> mediaTracks = new ArrayList<>();
+        if(subsUrl != null) {
+            MediaTrack subtitle = new MediaTrack.Builder(1, MediaTrack.TYPE_TEXT)
+                    .setName("Subtitle")
+                    .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                    .setContentId(subsUrl)
+                    .setContentType("text/vtt")
+                    .setLanguage("en")
+                    .build();
+
+            mediaTracks.add(subtitle);
+        }
+
         com.google.android.gms.cast.MediaInfo mediaInformation = new com.google.android.gms.cast.MediaInfo.Builder(url)
                 .setContentType(mimeType)
                 .setStreamType(com.google.android.gms.cast.MediaInfo.STREAM_TYPE_BUFFERED)
                 .setMetadata(mMediaMetadata)
                 .setStreamDuration(1000)
                 .setCustomData(null)
+                .setMediaTracks(mediaTracks)
                 .build();
 
         playMedia(mediaInformation, applicationID, listener);
     }
 
     @Override
+    public void playMedia(String url, String mimeType, String title,
+                          String description, String iconSrc, boolean shouldLoop,
+                          LaunchListener listener) {
+        playMedia(url, null, mimeType, title, description, iconSrc, shouldLoop, listener);
+    }
+
+    @Override
     public void playMedia(MediaInfo mediaInfo, boolean shouldLoop, LaunchListener listener) {
         String mediaUrl = null;
+        String subsUrl = null;
         String mimeType = null;
         String title = null;
         String desc = null;
@@ -563,6 +587,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
 
         if (mediaInfo != null) {
             mediaUrl = mediaInfo.getUrl();
+            subsUrl = mediaInfo.getSubsUrl();
             mimeType = mediaInfo.getMimeType();
             title = mediaInfo.getTitle();
             desc = mediaInfo.getDescription();
@@ -573,7 +598,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
             }
         }
 
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+        playMedia(mediaUrl, subsUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
     }
 
     private void playMedia(final com.google.android.gms.cast.MediaInfo mediaInformation, final String mediaAppId, final LaunchListener listener) {
@@ -594,6 +619,18 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
 
                                     if (status.isSuccess()) {
                                         webAppSession.launchSession.setSessionType(LaunchSessionType.Media);
+
+                                        // White text, black outline, no background
+                                        TextTrackStyle textTrackStyle = new TextTrackStyle();
+                                        textTrackStyle.setForegroundColor(Color.parseColor("#FFFFFFFF"));
+                                        textTrackStyle.setBackgroundColor(Color.parseColor("#01000000"));
+                                        textTrackStyle.setWindowType(TextTrackStyle.WINDOW_TYPE_NONE);
+                                        textTrackStyle.setEdgeType(TextTrackStyle.EDGE_TYPE_OUTLINE);
+                                        textTrackStyle.setEdgeColor(Color.BLACK);
+                                        textTrackStyle.setFontGenericFamily(TextTrackStyle.FONT_FAMILY_SANS_SERIF);
+
+                                        mMediaPlayer.setTextTrackStyle(mApiClient, textTrackStyle);
+                                        mMediaPlayer.setActiveMediaTracks(mApiClient, new long[]{1});
 
                                         Util.postSuccess(listener, new MediaLaunchObject(webAppSession.launchSession, CastService.this));
                                     }
@@ -730,8 +767,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
                                     sessions.put(applicationMetadata.getApplicationId(), webAppSession);
 
                                     Util.postSuccess(listener, webAppSession);
-                                }
-                                else {
+                                } else {
                                     LaunchOptions options = new LaunchOptions();
                                     options.setRelaunchIfRunning(true);
 
@@ -1095,8 +1131,8 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
         capabilities.add(Seek);
         capabilities.add(Position);
         capabilities.add(PlayState);
-        capabilities.add(PlayState_Subscribe);
         capabilities.add(Subtitles_Vtt);
+        capabilities.add(PlayState_Subscribe);
 
         capabilities.add(WebAppLauncher.Launch);
         capabilities.add(Message_Send);

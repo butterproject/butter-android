@@ -61,5 +61,5 @@ dependencies {
 
     compile project(':vlc-aar')
     compile project(':xmlrpc-aar')
-    compile project(':connectsdk-aar')
+    compile project(':connectsdk')
 }
