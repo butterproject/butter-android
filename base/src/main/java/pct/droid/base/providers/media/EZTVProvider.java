@@ -41,8 +41,15 @@ import pct.droid.base.providers.subs.SubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
-    private static final String API_URL = "http://eztvapi.re/";
-    private static final String MIRROR_URL = "http://api.popcorntime.io/";
+    private static Integer CURRENT_API = 0;
+    private static final String[] API_URLS = {
+            "https://eztvapi.re/",
+            "https://api.popcorntime.io/",
+            "https://api.popcorntime.cc/",
+            "https://api.popcorntime.re/",
+            "https://api.get-popcorn.com/",
+            "http://tv.ytspt.re/",
+    };
     private static final SubsProvider sSubsProvider = new OpenSubsProvider();
     private static final MetaProvider sMetaProvider = new TraktProvider();
     private static final MediaProvider sMediaProvider = new EZTVProvider();
@@ -102,7 +109,7 @@ public class EZTVProvider extends MediaProvider {
 
         params.add(new NameValuePair("sort", sort));
 
-        String url = API_URL + "shows/";
+        String url = API_URLS[CURRENT_API] + "shows/";
         if (filters.page != null) {
             url += filters.page;
         } else {
@@ -130,10 +137,10 @@ public class EZTVProvider extends MediaProvider {
             @Override
             public void onFailure(Request request, IOException e) {
                 String url = requestBuilder.build().urlString();
-                if (url.equals(MIRROR_URL)) {
+                if (CURRENT_API >= API_URLS.length) {
                     callback.onFailure(e);
                 } else {
-                    url = url.replace(API_URL, MIRROR_URL);
+                    url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);
                     requestBuilder.url(url);
                     fetchList(currentList, requestBuilder, filters, callback);
                 }
@@ -172,7 +179,7 @@ public class EZTVProvider extends MediaProvider {
     @Override
     public Call getDetail(String videoId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + "show/" + videoId);
+        requestBuilder.url(API_URLS[CURRENT_API] + "show/" + videoId);
         requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
