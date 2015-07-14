@@ -24,7 +24,7 @@ import pct.droid.widget.LinearList;
 
 public class ShowDetailSeasonFragment extends BaseDetailFragment {
 
-    protected static final String SEASON = "season";
+    protected static final String SEASON = "season", COLOR = "color";
 
     private static Show sShow;
     private List<Episode> mEpisodes = new ArrayList<>();
@@ -33,6 +33,7 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
         sShow = show;
         Bundle b = new Bundle();
         b.putInt(SEASON, season);
+        b.putInt(COLOR, show.color);
         ShowDetailSeasonFragment showDetailFragment = new ShowDetailSeasonFragment();
         showDetailFragment.setArguments(b);
         return showDetailFragment;
@@ -76,7 +77,11 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
-        EpisodeListAdapter adapter = new EpisodeListAdapter(inflater, mEpisodes, sShow.color);
+        int color = getResources().getColor(R.color.primary);
+        if(getArguments().containsKey(COLOR)) {
+            color = getArguments().getInt(COLOR, color);
+        }
+        EpisodeListAdapter adapter = new EpisodeListAdapter(inflater, mEpisodes, color);
 
         LinearList linearList = (LinearList) mRoot;
         linearList.setOnItemClickListener(mOnClickListener);
