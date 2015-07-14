@@ -79,7 +79,6 @@
   <string name="genre_supernatural">על טבעי</string>
   <string name="genre_vampire">ערפד</string>
   <!--Possible tabs-->
-  <string name="popular_now">פופולארי כעת</string>
   <string name="top_rated">הכי מדורגים</string>
   <string name="release_date">תאריך יציאה</string>
   <string name="last_updated">עודכן לאחרונה</string>

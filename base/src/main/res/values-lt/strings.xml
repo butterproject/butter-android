@@ -15,6 +15,8 @@
   <string name="running">Veikia fone</string>
   <string name="tap_to_close">Palieskite, norėdami uždarykite</string>
   <string name="tap_to_resume">Spustelėkite, norėdami pratęsti</string>
+  <string name="signature_invalid">Programos parašas klaidingas</string>
+  <string name="possibly_dangerous">Popcorn Time buvo sugadintas. Atsisiųskite naują įdiegimo failą iš https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Visi</string>
   <string name="genre_action">Veiksmo</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Antgamtiškas</string>
   <string name="genre_vampire">Vampyrai</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULIARU DABAR</string>
+  <string name="popular">POPULIARU</string>
   <string name="top_rated">GERIAUSIAI ĮVERTINTI</string>
   <string name="release_date">IŠLEIDIMO DATA</string>
   <string name="last_updated">PASKUTINIS ATNAUJINIMAS</string>
   <string name="year">METAI</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">POPULIARU</string>
   <!--BeamManager-->
   <string name="pairing_tv">Poruojama su TV</string>
   <string name="confirm_tv">Patvirtinkite prisijungimą televizoriuje</string>
   <string name="enter_pairing_code">Įveskite poravimo kodą televizoriuje</string>
   <string name="open_with">Atverti su</string>
+  <string name="select_file">Pasirinkti failą</string>
 </resources>

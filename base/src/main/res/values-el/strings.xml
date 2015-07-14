@@ -79,7 +79,6 @@
   <string name="genre_supernatural">Υπερφυσικά</string>
   <string name="genre_vampire">Βρυκόλακες</string>
   <!--Possible tabs-->
-  <string name="popular_now">ΔΗΜΟΦΙΛΗ ΤΩΡΑ</string>
   <string name="top_rated">ΚΟΡΥΦΑΙΑ ΒΑΘΜΟΛΟΓΙΑ</string>
   <string name="release_date">ΗΜΕΡΟΜΗΝΙΑ ΚΥΚΛΟΦΟΡΙΑΣ</string>
   <string name="last_updated">ΤΕΛΕΥΤΑΙΑ ΕΝΗΜΕΡΩΣΗ</string>

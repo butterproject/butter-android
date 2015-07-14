@@ -79,7 +79,6 @@
   <string name="genre_supernatural">Sovrannaturale</string>
   <string name="genre_vampire">Vampiri</string>
   <!--Possible tabs-->
-  <string name="popular_now">Popolari</string>
   <string name="top_rated">Più votati</string>
   <string name="release_date">Data di uscita</string>
   <string name="last_updated">Ultimo Aggiornamento</string>

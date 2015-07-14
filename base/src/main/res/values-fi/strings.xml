@@ -15,6 +15,8 @@
   <string name="running">Pyörii taustalla</string>
   <string name="tap_to_close">Sulje painamalla</string>
   <string name="tap_to_resume">Palaa painamalla</string>
+  <string name="signature_invalid">Sovelluksen allekirjoitus on väärä</string>
+  <string name="possibly_dangerous">Popcorn Timea on peukaloitu. Lataa uusi asennustiedosto osoitteesta https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Kaikki</string>
   <string name="genre_action">Toiminta</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Yliluonnollinen</string>
   <string name="genre_vampire">Vampyyri</string>
   <!--Possible tabs-->
-  <string name="popular_now">SUOSITTU NYT</string>
+  <string name="popular">SUOSITTU</string>
   <string name="top_rated">HUIPPUARVOSTELTU</string>
   <string name="release_date">JULKAISUPÄIVÄ</string>
   <string name="last_updated">VIIMEKSI PÄIVITETTY</string>
   <string name="year">VUOSI</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">Trendit</string>
   <!--BeamManager-->
   <string name="pairing_tv">Parita TV</string>
   <string name="confirm_tv">Vahvista yhteys televisiostasi</string>
   <string name="enter_pairing_code">Syötä parituskoodi televisiossasi</string>
   <string name="open_with">Avaa </string>
+  <string name="select_file">Valitse tiedosto</string>
 </resources>

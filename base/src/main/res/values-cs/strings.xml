@@ -79,7 +79,6 @@
   <string name="genre_supernatural">Supernatural</string>
   <string name="genre_vampire">Upírské</string>
   <!--Possible tabs-->
-  <string name="popular_now">NYNÍ POPULÁRNÍ</string>
   <string name="top_rated">NEJLÉPE HODNOCENÉ</string>
   <string name="release_date">DATUM VYDÁNÍ</string>
   <string name="last_updated">NAPOSLEDY AKTUALIZOVÁNO</string>

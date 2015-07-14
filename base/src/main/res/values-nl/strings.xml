@@ -15,6 +15,8 @@
   <string name="running">Draait in de achtergrond</string>
   <string name="tap_to_close">Tik om te sluiten</string>
   <string name="tap_to_resume">Tik om door te gaan</string>
+  <string name="signature_invalid">Digitale ondertekening ongeldig</string>
+  <string name="possibly_dangerous">Er is geknoeid met deze Popcorn Time applicatie. Download een nieuwe versie van https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Alle</string>
   <string name="genre_action">Actie</string>
@@ -79,7 +81,7 @@
   <string name="genre_supernatural">Bovennatuurlijk</string>
   <string name="genre_vampire">Vampier</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULAIR</string>
+  <string name="popular">POPULAIR</string>
   <string name="top_rated">BEST GEWAARDEERD</string>
   <string name="release_date">RELEASE DATUM</string>
   <string name="last_updated">LAATST GEÜPDATET</string>
@@ -91,4 +93,5 @@
   <string name="confirm_tv">Bevestig de verbinding op je TV</string>
   <string name="enter_pairing_code">Voer de koppelingscode van de TV in.</string>
   <string name="open_with">Open met</string>
+  <string name="select_file">Bestand selecteren</string>
 </resources>

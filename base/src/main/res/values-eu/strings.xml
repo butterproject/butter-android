@@ -79,7 +79,6 @@
   <string name="genre_supernatural">Naturaz gaindikoa</string>
   <string name="genre_vampire">Banpiroa</string>
   <!--Possible tabs-->
-  <string name="popular_now">ARRAKASTATSUENA ORAIN</string>
   <string name="top_rated">BOZKATUENA</string>
   <string name="release_date">ARGITARATZE DATA</string>
   <string name="last_updated">AZKEN EGUNERAKETA</string>

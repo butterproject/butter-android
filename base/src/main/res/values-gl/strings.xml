@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="update_available">Hai dispoñible unha nova actualización</string>
+  <string name="update_available">Haiche unha nova actualización dispoñible</string>
   <string name="press_install">Preme para instalar</string>
   <string name="loading_data">Cargando datos...</string>
   <string name="loading_details">Cargando detalles</string>
@@ -15,6 +15,8 @@
   <string name="running">Executándose de fondo</string>
   <string name="tap_to_close">Preme para cerrar</string>
   <string name="tap_to_resume">Toque para continuar</string>
+  <string name="signature_invalid">A sinatura da app é inválida</string>
+  <string name="possibly_dangerous">O Popcorn Time foi manipulado. Por favor, baixate un novo arquivo de instalación dende https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Todo</string>
   <string name="genre_action">Acción</string>
@@ -79,7 +81,7 @@
   <string name="genre_supernatural">Sobrenatural</string>
   <string name="genre_vampire">Vampiro</string>
   <!--Possible tabs-->
-  <string name="popular_now">DE MODA</string>
+  <string name="popular">POPULAR</string>
   <string name="top_rated">MELLOR PUNTUACIÓN</string>
   <string name="release_date">ANO DE LANZAMENTO</string>
   <string name="last_updated">ÚLTIMO EN ACTUALIZAR</string>
@@ -91,4 +93,5 @@
   <string name="confirm_tv">Por favor confirma a conexión no teu TV</string>
   <string name="enter_pairing_code">Inserir o código de emparellado no TV</string>
   <string name="open_with">Abrir con</string>
+  <string name="select_file">Seleccionar arquivo</string>
 </resources>
