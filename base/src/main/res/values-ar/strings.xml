@@ -15,6 +15,8 @@
   <string name="running">التشغيل في الخلفية</string>
   <string name="tap_to_close">انقر للإغلاق</string>
   <string name="tap_to_resume">انقر للمتابعة</string>
+  <string name="signature_invalid">توقيع التطبيق غير صالح</string>
+  <string name="possibly_dangerous">تم العبث بهذه النسخة من بوب كورن تايم . رجاءًا قم بتحميل التطبيق من https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">الكل</string>
   <string name="genre_action">أكشن</string>
@@ -79,12 +81,12 @@
   <string name="genre_supernatural">خارق للعادة</string>
   <string name="genre_vampire">مصاص الدماء</string>
   <!--Possible tabs-->
-  <string name="popular_now">الأكثر شهرة</string>
   <string name="top_rated">الأعلى تقييم</string>
   <string name="release_date">تاريخ الإضافة</string>
   <string name="last_updated">آخر تحديث</string>
   <string name="year">السنة</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">الأكثر رواج</string>
   <!--BeamManager-->
   <string name="pairing_tv">اقتران مع التلفزيون</string>
   <string name="confirm_tv">فضلا قم بتأكيد الإتصال في التلفزيون</string>

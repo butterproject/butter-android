@@ -79,7 +79,6 @@
   <string name="genre_supernatural">Übernatürlich</string>
   <string name="genre_vampire">Vampir</string>
   <!--Possible tabs-->
-  <string name="popular_now">GERADE ANGESAGT</string>
   <string name="top_rated">BESTBEWERTET</string>
   <string name="release_date">VERÖFFENTLICHUNGSDATUM</string>
   <string name="last_updated">ZULETZT AKTUALISIERT</string>

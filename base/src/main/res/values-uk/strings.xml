@@ -74,7 +74,6 @@
   <string name="genre_supernatural">Надприродні</string>
   <string name="genre_vampire">Vampire</string>
   <!--Possible tabs-->
-  <string name="popular_now">ПОПУЛЯРНО ЗАРАЗ</string>
   <string name="release_date">ДАТА ВИХОДУ</string>
   <string name="year">РІК</string>
   <!--BeamManager-->

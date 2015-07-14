@@ -15,6 +15,8 @@
   <string name="running">পটভূমিতে চলমান</string>
   <string name="tap_to_close">বন্ধ করতে টোকা দিন</string>
   <string name="tap_to_resume">পুনঃসূচনা করতে টোকা দিন</string>
+  <string name="signature_invalid">অ্যাপ স্বাক্ষর অবৈধ</string>
+  <string name="possibly_dangerous">পপকর্ন টাইম ক্ষতিগ্রস্ত হয়েছে। দয়া করে https://popcorntime.io/ থেকে একটি নতুন ফাইল ইনস্টল করুন</string>
   <!--Genres-->
   <string name="genre_all">সব</string>
   <string name="genre_action">অ্যাকশন</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">অতিপ্রাকৃত</string>
   <string name="genre_vampire">ভ্যাম্পায়ার</string>
   <!--Possible tabs-->
-  <string name="popular_now">এখনকার জনপ্রিয়</string>
+  <string name="popular">জনপ্রিয়</string>
   <string name="top_rated">শীর্ষ রেটকৃত</string>
   <string name="release_date">মুক্তির তারিখ</string>
   <string name="last_updated">সর্বশেষ হালনাগাদ হয়েছে</string>
   <string name="year">বছর</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">প্রবণতা</string>
   <!--BeamManager-->
   <string name="pairing_tv">টিভির সাথে পিয়ারিং</string>
   <string name="confirm_tv">দয়া করে আপনার টিভির সংযোগ নিশ্চিত করুন</string>
   <string name="enter_pairing_code">টিভিতে পিয়ারিং কোড লিখুন</string>
   <string name="open_with">এটি দিয়ে খুলুন</string>
+  <string name="select_file">ফাইল নির্বাচন করুন</string>
 </resources>

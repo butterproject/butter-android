@@ -76,7 +76,6 @@
   <string name="genre_supernatural">Supernatural</string>
   <string name="genre_vampire">Vampire</string>
   <!--Possible tabs-->
-  <string name="popular_now">นิยมในขณะนี้</string>
   <string name="top_rated">นิยมสูงสุด</string>
   <string name="release_date">วันที่วางจำหน่าย</string>
   <string name="last_updated">อัพเดทล่าสุด</string>

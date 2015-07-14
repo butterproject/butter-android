@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Cancelar</string>
   <string name="close">Fechar</string>
@@ -15,7 +15,7 @@
   <string name="genres">Gêneros</string>
   <string name="search">Procurar</string>
   <string name="searching">Buscando...</string>
-  <string name="no_data_found">Os dados não foram encontrados</string>
+  <string name="no_data_found">Nenhum resultado encontrado</string>
   <string name="unknown_error">Algo deu errado</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
@@ -34,6 +34,8 @@
   <string name="aired">Exibido: %s</string>
   <string name="no_title_available">Sem nome</string>
   <string name="no_synopsis_available">Sinopse não disponível</string>
+  <string name="magnet">Magnético</string>
+  <string name="scale">Escala</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Esperando por torrent</string>
   <string name="starting_buffering">Iniciando armazenamento</string>
@@ -41,9 +43,14 @@
   <string name="waiting_for_subtitles">Esperando por legendas</string>
   <string name="seeds">seeds</string>
   <string name="error_files">Erro: Não foi possível gravar os arquivos. Por favor tente uma localização de armazenamento diferente.</string>
+  <string name="start_external">Iniciar o reprodutor externo</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Reproduzindo agora</string>
   <string name="volume">Volume</string>
+  <string name="play">Reproduzir</string>
+  <string name="pause">Pausar</string>
+  <string name="fastforward">Avançar</string>
+  <string name="rewind">Rebobinar</string>
   <string name="brightness">Brilho</string>
   <string name="hardware_acceleration_error_title">Erro de aceleração de Hardware</string>
   <string name="hardware_acceleration_error_message">Ocorreu um erro com a aceleração de hardware. Gostaria de desabilitá-la e tentar novamente?</string>
@@ -77,6 +84,8 @@
   <string name="subtitle_stroke_color">Cor do contorno</string>
   <string name="subtitle_stroke_width">Espessura do contorno</string>
   <string name="subtitle_language">Língua padrão</string>
+  <string name="subtitle_timing">Tempo da legenda</string>
+  <string name="subtitle_settings">Configurações da legenda</string>
   <string name="no_default_set">Sem língua padrão</string>
   <string name="advanced">Avançado</string>
   <string name="storage_location">Localização do armazenamento</string>

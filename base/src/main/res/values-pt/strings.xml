@@ -15,6 +15,8 @@
   <string name="running">A trabalhar em segundo plano</string>
   <string name="tap_to_close">Toca para fechar</string>
   <string name="tap_to_resume">Toca para continuar</string>
+  <string name="signature_invalid">Assinatura da app inválida</string>
+  <string name="possibly_dangerous">O Popcorn Time foi adulterado. Por favor descarrega novamente o ficheiro em https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Todos</string>
   <string name="genre_action">Ação</string>
@@ -79,7 +81,7 @@
   <string name="genre_supernatural">Sobrenatural</string>
   <string name="genre_vampire">Vampiro</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULARES AGORA</string>
+  <string name="popular">POPULAR</string>
   <string name="top_rated">MAIS VOTADOS</string>
   <string name="release_date">DATA DE SAÍDA</string>
   <string name="last_updated">ÚLTIMA ATUALIZAÇÃO</string>
@@ -91,4 +93,5 @@
   <string name="confirm_tv">Por favor, confirma a ligação na tua TV</string>
   <string name="enter_pairing_code">Digita o código de emparelhamento da TV</string>
   <string name="open_with">Abrir com</string>
+  <string name="select_file">Escolhe o ficheiro</string>
 </resources>

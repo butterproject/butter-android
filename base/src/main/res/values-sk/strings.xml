@@ -79,14 +79,15 @@
   <string name="genre_supernatural">Nadprirodzené</string>
   <string name="genre_vampire">Upíri</string>
   <!--Possible tabs-->
-  <string name="popular_now">TERAZ POPULÁRNE</string>
   <string name="top_rated">NAJVIAC HODNOTENÉ</string>
   <string name="release_date">DÁTUM UVEDENIA</string>
   <string name="last_updated">POSLEDNÁ AKTUALIZÁCIA</string>
   <string name="year">ROK</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TRENDY</string>
   <!--BeamManager-->
   <string name="pairing_tv">Spárovať s TV</string>
   <string name="confirm_tv">Prosím potvrdte spojenie na vašej TV</string>
   <string name="enter_pairing_code">Vložte párovací kód na TV</string>
+  <string name="open_with">Otvoriť s</string>
 </resources>
