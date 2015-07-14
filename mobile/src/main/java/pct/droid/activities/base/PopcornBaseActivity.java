@@ -61,7 +61,8 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     @Override
     protected void onStop() {
         super.onStop();
-        mVPNManager.stop();
+        if(mVPNManager != null)
+            mVPNManager.stop();
     }
 
     protected void onHomePressed() {

@@ -209,13 +209,15 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
             mTabs.setupWithViewPager(viewPager);
             mTabs.setVisibility(View.VISIBLE);
 
-            mTabs.getTabAt(0).select();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mTabs.getTabAt(position).select();
-                }
-            }, 10);
+            if(mTabs.getTabCount() > 0) {
+                mTabs.getTabAt(0).select();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTabs.getTabAt(position).select();
+                    }
+                }, 10);
+            }
 
         } else {
             mTabs.setVisibility(View.GONE);

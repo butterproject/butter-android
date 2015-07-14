@@ -137,7 +137,7 @@ public class EZTVProvider extends MediaProvider {
             @Override
             public void onFailure(Request request, IOException e) {
                 String url = requestBuilder.build().urlString();
-                if (CURRENT_API >= API_URLS.length) {
+                if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
                 } else {
                     url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);

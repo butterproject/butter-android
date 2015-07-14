@@ -374,6 +374,9 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     private MediaControl.PlayStateListener mPlayStateListener = new MediaControl.PlayStateListener() {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
+            if(isDetached())
+                return;
+
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
             mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
             mPlayButton.setContentDescription(mIsPlaying ? getString(R.string.pause) : getString(R.string.play));
