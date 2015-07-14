@@ -25,7 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class DialogStringArrayAdapter extends BaseAdapter {
 
@@ -34,10 +34,10 @@ public class DialogStringArrayAdapter extends BaseAdapter {
 
     class ViewHolder {
         public ViewHolder(View v) {
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
         }
 
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text1;
     }
 

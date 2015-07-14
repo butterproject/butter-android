@@ -22,14 +22,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.fragments.AboutFragment;
 import pct.droid.utils.ToolbarUtils;
 
 public class AboutActivity extends PopcornBaseActivity implements AboutFragment.OnFragmentInteractionListener {
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     public static Intent startActivity(Activity activity) {

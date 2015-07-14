@@ -20,6 +20,7 @@ package pct.droid.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,51 +29,62 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.frostwire.jlibtorrent.FileStorage;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
+import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.beaming.BeamManager;
+import pct.droid.base.beaming.server.BeamServer;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
+import timber.log.Timber;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
-    private boolean mAttached = false;
+    private boolean mAttached = false, mPlayingExternal = false;
     private Context mContext;
+    private Torrent mCurrentTorrent;
 
     View mRoot;
-    @InjectView(R.id.progress_indicator)
+    @Bind(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
-    @InjectView(R.id.primary_textview)
+    @Bind(R.id.primary_textview)
     TextView mPrimaryTextView;
-    @InjectView(R.id.secondary_textview)
+    @Bind(R.id.secondary_textview)
     TextView mSecondaryTextView;
-    @InjectView(R.id.tertiary_textview)
+    @Bind(R.id.tertiary_textview)
     TextView mTertiaryTextView;
-    @InjectView(R.id.background_imageview)
+    @Bind(R.id.background_imageview)
     ImageView mBackgroundImageView;
+    @Bind(R.id.startexternal_button)
+    Button mStartExternalButton;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_streamloading, container, false);
-        ButterKnife.inject(this, mRoot);
+        ButterKnife.bind(this, mRoot);
 
         if (VersionUtils.isLollipop()) {
             //postpone the transitions until after the view is layed out.
@@ -103,10 +115,46 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
+    public void onResume() {
+        if(mPlayingExternal) {
+            BeamServerService.getServer().stop();
+            mPlayerStarted = false;
+            super.onResume();
+            mPlayerStarted = true;
+            setState(State.STREAMING);
+        } else {
+            super.onResume();
+        }
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
         loadBackgroundImage();
+    }
+
+    @Override
+    public void onStreamMetaData(Torrent torrent) {
+        mCurrentTorrent = torrent;
+
+        if(TextUtils.isEmpty(mStreamInfo.getTitle())) {
+            FileStorage fileStorage = mCurrentTorrent.getTorrentHandle().getTorrentInfo().getFiles();
+            String[] fileNames = new String[fileStorage.getNumFiles()];
+            for(int i = 0; i < fileStorage.getNumFiles(); i++) {
+                fileNames[i] = fileStorage.getFileName(i);
+            }
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, fileNames, -1, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int position) {
+                    mCurrentTorrent.setSelectedFile(position);
+                    StreamLoadingFragment.super.onStreamMetaData(mCurrentTorrent);
+                }
+            });
+            return;
+        }
+
+        super.onStreamMetaData(mCurrentTorrent);
     }
 
     private void loadBackgroundImage() {
@@ -114,12 +162,12 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
           /* attempt to load background image */
         if (null != info) {
             String url = info.getImageUrl();
-            if (PixelUtils.isTablet(getActivity())) {
+            if (PixelUtils.isTablet(mContext)) {
                 url = info.getHeaderImageUrl();
             }
 
             if (!TextUtils.isEmpty(url))
-                Picasso.with(getActivity()).load(url).error(R.color.bg).into(mBackgroundImageView);
+                Picasso.with(mContext).load(url).error(R.color.bg).into(mBackgroundImageView);
         }
     }
 
@@ -131,8 +179,14 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             @Override
             public void run() {
                 mProgressIndicator.setIndeterminate(false);
-                mProgressIndicator.setProgress(status.bufferProgress);
-                mPrimaryTextView.setText(status.bufferProgress + "%");
+                if(!mPlayingExternal) {
+                    mProgressIndicator.setProgress(status.bufferProgress);
+                    mPrimaryTextView.setText(status.bufferProgress + "%");
+                } else {
+                    int progress = ((Float) status.progress).intValue();
+                    mProgressIndicator.setProgress(progress);
+                    mPrimaryTextView.setText(progress + "%");
+                }
 
                 if (status.downloadSpeed / 1024 < 1000) {
                     mSecondaryTextView.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
@@ -171,7 +225,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mProgressIndicator.setProgress(0);
                 break;
             case STREAMING:
-                mPrimaryTextView.setText(R.string.streaming_started);
                 if (null != extra && extra instanceof DownloadStatus)
                     updateStatus((DownloadStatus) extra);
                 break;
@@ -198,17 +251,25 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     protected void startPlayerActivity(String location, int resumePosition) {
         if (getActivity() != null && !mPlayerStarted) {
             mStreamInfo.setVideoLocation(location);
-            boolean playingExternal = false;
             if (BeamManager.getInstance(mContext).isConnected()) {
                 BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
             } else {
-                playingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
-                if (!playingExternal) {
+                mPlayingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+                if (!mPlayingExternal) {
                     VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
                 }
             }
 
-            getActivity().finish();
+            if (!mPlayingExternal) {
+                getActivity().finish();
+            } else {
+                mStartExternalButton.setVisibility(View.VISIBLE);
+            }
         }
+    }
+
+    @OnClick(R.id.startexternal_button)
+    public void externalClick(View v) {
+        DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), mStreamInfo.getVideoLocation());
     }
 }

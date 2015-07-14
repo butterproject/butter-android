@@ -29,7 +29,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.preferences.PrefItem;
@@ -96,18 +96,18 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View itemView;
-        @InjectView(android.R.id.icon)
+        @Bind(android.R.id.icon)
         ImageView icon;
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text1;
-        @InjectView(android.R.id.text2)
+        @Bind(android.R.id.text2)
         TextView text2;
-        @InjectView(android.R.id.checkbox)
+        @Bind(android.R.id.checkbox)
         CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             this.itemView = itemView;
             itemView.setOnClickListener(this);
         }

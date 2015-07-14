@@ -24,8 +24,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.fragments.MediaListFragment;
 import pct.droid.utils.ToolbarUtils;
@@ -40,10 +41,10 @@ public class SearchActivity extends PopcornBaseActivity {
 
     public static final String EXTRA_PROVIDER = "extra_provider";
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    @InjectView(R.id.searchview)
+    @Bind(R.id.searchview)
     SearchView mSearchview;
 
     private MediaListFragment mFragment;

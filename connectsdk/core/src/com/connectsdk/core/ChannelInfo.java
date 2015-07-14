@@ -29,8 +29,6 @@ import android.util.Log;
  * Normalized reference object for information about a TVs channels. This object is required to set the channel on a TV.
  */
 public class ChannelInfo implements JSONSerializable {
-    private static final String TAG = "Connect SDK";
-
     // @cond INTERNAL
     String channelName;
     String channelId;
@@ -129,9 +127,9 @@ public class ChannelInfo implements JSONSerializable {
                         && this.minorNumber == other.minorNumber;
             }
 
-            Log.d(TAG, "Could not compare channel values, no data to compare against");
-            Log.d(TAG, "This channel info: \n" + this.rawData.toString());
-            Log.d(TAG, "Other channel info: \n" + other.rawData.toString());
+            Log.d(Util.T, "Could not compare channel values, no data to compare against");
+            Log.d(Util.T, "This channel info: \n" + this.rawData.toString());
+            Log.d(Util.T, "Other channel info: \n" + other.rawData.toString());
 
             return false;
         }

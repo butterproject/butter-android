@@ -32,7 +32,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
 import pct.droid.adapters.GenreAdapter;
 import pct.droid.adapters.decorators.DividerItemDecoration;
@@ -50,13 +50,13 @@ public class MediaGenreSelectionFragment extends Fragment {
     private Listener mListener;
     private int mSelectedPos = 0;
 
-    @InjectView(R.id.progressOverlay)
+    @Bind(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
-    @InjectView(R.id.recyclerView)
+    @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    @InjectView(R.id.emptyView)
+    @Bind(R.id.emptyView)
     TextView mEmptyView;
-    @InjectView(R.id.progress_textview)
+    @Bind(R.id.progress_textview)
     TextView mProgressTextView;
 
     public static MediaGenreSelectionFragment newInstance(MediaProvider provider, Listener listener) {
@@ -83,7 +83,7 @@ public class MediaGenreSelectionFragment extends Fragment {
         mContext = getActivity();
 
         View v = inflater.inflate(R.layout.fragment_media, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);

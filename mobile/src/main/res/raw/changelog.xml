@@ -18,6 +18,19 @@
 
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.2.4">
+        <changelogtext>[b]New![/b] Chromecast subtitle support</changelogtext>
+        <changelogtext>[b]New![/b] Partial DLNA subtitle support</changelogtext>
+        <changelogtext>[b]New![/b] Select file from external torrent to play</changelogtext>
+        <changelogtext>Added option to relaunch external player</changelogtext>
+        <changelogtext>Added advanced subtitle settings inside video player</changelogtext>
+        <changelogtext>Added design pattern that hides toolbar on scroll</changelogtext>
+        <changelogtext>Updated ConnectSDK to 1.5.0 (added FireTV support)</changelogtext>
+        <changelogtext>Fixed background on tablet buffering screen</changelogtext>
+        <changelogtext>Fixed general problems</changelogtext>
+        <changelogtext>Improved accessibility</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.2.3">
         <changelogtext>Improved torrent loading</changelogtext>
         <changelogtext>Fixed localisation bugs</changelogtext>

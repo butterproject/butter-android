@@ -266,7 +266,7 @@ public class ZeroconfDiscoveryProvider implements DiscoveryProvider {
     @Override
     public void addDeviceFilter(DiscoveryFilter filter) {
         if (filter.getServiceFilter() == null) {
-            Log.e("Connect SDK", "This device filter does not have zeroconf filter info");
+            Log.e(Util.T, "This device filter does not have zeroconf filter info");
         } else {
             serviceFilters.add(filter);
         }

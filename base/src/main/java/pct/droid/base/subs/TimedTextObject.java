@@ -114,6 +114,15 @@ public class TimedTextObject {
         return new FormatASS().toFile(this);
     }
 
+    /**
+     * Method to generate the .VTT file
+     *
+     * @return an array of strings where each String represents a line
+     */
+    public String[] toVTT() {
+        return new FormatVTT().toFile(this);
+    }
+
 	/* 
      * PROTECTED METHODS
 	 * 

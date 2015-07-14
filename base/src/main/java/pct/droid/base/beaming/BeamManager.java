@@ -26,18 +26,23 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.connectsdk.core.ImageInfo;
+import com.connectsdk.core.MediaInfo;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.discovery.CapabilityFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
 import com.connectsdk.discovery.provider.CastDiscoveryProvider;
+import com.connectsdk.discovery.provider.FireTVDiscoveryProvider;
 import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
 import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
 import com.connectsdk.service.AirPlayService;
 import com.connectsdk.service.CastService;
+import com.connectsdk.service.DIALService;
 import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
+import com.connectsdk.service.FireTVService;
 import com.connectsdk.service.NetcastTVService;
 import com.connectsdk.service.RokuService;
 import com.connectsdk.service.WebOSTVService;
@@ -47,6 +52,8 @@ import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -59,7 +66,12 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
+import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.subs.FatalParsingException;
+import pct.droid.base.subs.FormatSRT;
+import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.FileUtils;
 import timber.log.Timber;
 
 /**
@@ -137,6 +149,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.registerDeviceService(NetcastTVService.class, SSDPDiscoveryProvider.class);
         mDiscoveryManager.registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
         mDiscoveryManager.registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
+        mDiscoveryManager.registerDeviceService(FireTVService.class, FireTVDiscoveryProvider.class);
+        mDiscoveryManager.unregisterDeviceService(DIALService.class, SSDPDiscoveryProvider.class);
 
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
         mDiscoveryManager.setCapabilityFilters(new CapabilityFilter(
@@ -212,14 +226,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public void playVideo(StreamInfo info) {
-        playVideo(info, false, null);
+        playVideo(info, null);
     }
 
-    public void playVideo(StreamInfo info, Boolean subs) {
-        playVideo(info, subs, null);
-    }
-
-    public void playVideo(StreamInfo info, Boolean subs, final MediaPlayer.LaunchListener listener) {
+    public void playVideo(StreamInfo info, final MediaPlayer.LaunchListener listener) {
         if (!mConnected) listener.onError(ServiceCommandError.getError(503));
 
         mStreamInfo = info;
@@ -230,10 +240,29 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             location = BeamServer.getVideoURL();
         }
 
+        String subsLocation = null;
+        if(!info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
+            File srtFile = new File(SubsProvider.getStorageLocation(mContext), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
+            BeamServer.setCurrentSubs(srtFile);
+            if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
+                subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
+            } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Srt)) {
+                subsLocation = BeamServer.getSubsURL(BeamServer.SRT);
+            }
+        } else {
+            BeamServer.setCurrentSubs("no-subs");
+        }
+
         try {
             URL url = new URL(location);
             URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
             location = uri.toString();
+
+            if(subsLocation != null) {
+                URL subsUrl = new URL(subsLocation);
+                URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(), subsUrl.getPort(), subsUrl.getPath(), subsUrl.getQuery(), subsUrl.getRef());
+                subsLocation = subsUri.toString();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
@@ -244,8 +273,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         String imageUrl = info.getImageUrl() == null ? "https://popcorntime.io/images/header-logo.png" : info.getImageUrl();
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
-        if (mCurrentDevice != null)
-            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(location, "video/mp4", title, "", imageUrl, false, new MediaPlayer.LaunchListener() {
+        if (mCurrentDevice != null) {
+            MediaInfo mediaInfo = new MediaInfo(location, subsLocation, "video/mp4", title, "");
+            mediaInfo.addImages(new ImageInfo(imageUrl));
+            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(mediaInfo, false, new MediaPlayer.LaunchListener() {
                 @Override
                 public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                     mLaunchSession = object.launchSession;
@@ -260,6 +291,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                         listener.onError(error);
                 }
             });
+        }
     }
 
     public void connect(ConnectableDevice castingDevice) {

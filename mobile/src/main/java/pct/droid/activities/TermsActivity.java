@@ -22,8 +22,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.utils.ToolbarUtils;
 
@@ -31,7 +32,7 @@ public class TermsActivity extends PopcornBaseActivity {
 
     public static String TERMS_ACCEPTED = "terms_accepted";
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     @Override

@@ -149,7 +149,7 @@ public class FormatSRT extends TimedTextFileFormat {
         //we will write the lines in an ArrayList,
         int index = 0;
         //the minimum size of the file is 4*number of captions, so we'll take some extra space.
-        ArrayList<String> file = new ArrayList<String>(5 * tto.captions.size());
+        ArrayList<String> file = new ArrayList<>(5 * tto.captions.size());
         //we iterate over our captions collection, they are ordered since they come from a TreeMap
         Collection<Caption> c = tto.captions.values();
         Iterator<Caption> itr = c.iterator();
@@ -181,8 +181,7 @@ public class FormatSRT extends TimedTextFileFormat {
             file.add(index++, "");
         }
 
-        String[] toReturn = file.toArray(new String[file.size()]);
-        return toReturn;
+        return file.toArray(new String[file.size()]);
     }
 
 

@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import java.net.URLDecoder;
 
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;

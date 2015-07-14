@@ -26,6 +26,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -33,7 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
@@ -51,7 +51,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
@@ -61,6 +61,7 @@ import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.beaming.BeamPlayerNotificationService;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PixelUtils;
@@ -88,28 +89,29 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     private ScheduledThreadPoolExecutor mExecutor = new ScheduledThreadPoolExecutor(2);
     private ScheduledFuture mTask;
 
-    @InjectView(R.id.toolbar)
+    View mRootView;
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @InjectView(R.id.sliding_layout)
+    @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout mPanel;
-    @InjectView(R.id.play_button)
+    @Bind(R.id.play_button)
     ImageButton mPlayButton;
-    @InjectView(R.id.cover_image)
+    @Bind(R.id.cover_image)
     ImageView mCoverImage;
-    @InjectView(R.id.seekbar)
+    @Bind(R.id.seekbar)
     SeekBar mSeekBar;
-    @InjectView(R.id.volumebar)
+    @Bind(R.id.volumebar)
     SeekBar mVolumeBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_beamplayer, container, false);
+        return mRootView = inflater.inflate(R.layout.fragment_beamplayer, container, false);
     }
 
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mToolbar.getBackground().setAlpha(0);
         mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_mtrl_alpha);
@@ -217,7 +219,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
 
             startVideo();
         } catch (Exception e) {
-            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+            Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
             getActivity().finish();
         }
 
@@ -251,7 +253,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     }
 
     private void startVideo() {
-        mBeamManager.playVideo(mStreamInfo, false, new MediaPlayer.LaunchListener() {
+        mBeamManager.playVideo(mStreamInfo, new MediaPlayer.LaunchListener() {
             @Override
             public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                 mMediaControl = object.mediaControl;
@@ -329,6 +331,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         }
 
         mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
+        mPlayButton.setContentDescription(mIsPlaying ? getString(R.string.pause) : getString(R.string.play));
     }
 
     @OnClick(R.id.forward_button)
@@ -373,6 +376,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         public void onSuccess(MediaControl.PlayStateStatus state) {
             mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
             mPlayButton.setImageResource(mIsPlaying ? R.drawable.ic_av_pause : R.drawable.ic_av_play);
+            mPlayButton.setContentDescription(mIsPlaying ? getString(R.string.pause) : getString(R.string.play));
 
             if (mLoadingDialog.isVisible() && mIsPlaying && !getActivity().isFinishing()) {
                 mLoadingDialog.dismiss();
@@ -526,6 +530,9 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
         mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
     }
+
+    @Override
+    public void onStreamMetaData(Torrent torrent) { }
 
     BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
 

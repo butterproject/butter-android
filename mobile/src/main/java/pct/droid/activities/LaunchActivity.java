@@ -18,13 +18,23 @@
 package pct.droid.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import io.fabric.sdk.android.Fabric;
+import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
+import pct.droid.base.BuildConfig;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SignUtils;
+import pct.droid.dialogfragments.MessageDialogFragment;
 
 public class LaunchActivity extends PopcornBaseActivity {
 
@@ -33,7 +43,27 @@ public class LaunchActivity extends PopcornBaseActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         TorrentService.start(this);
+
+        if(SignUtils.checkAppSignature(this) != SignUtils.VALID && !BuildConfig.GIT_BRANCH.equals("local")) {
+            MessageDialogFragment.show(getFragmentManager(), R.string.signature_invalid, R.string.possibly_dangerous, false);
+            return;
+        }
+
         if (PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
+		    /* view a magnet link directly */
+            String action = getIntent().getAction();
+            Uri data = getIntent().getData();
+            if (action != null && action.equals(Intent.ACTION_VIEW) && data != null) {
+                String streamUrl = data.toString();
+                try {
+                    streamUrl = URLDecoder.decode(streamUrl, "utf-8");
+                    StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl));
+                    finish();
+                    return;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             startActivity(new Intent(this, MainActivity.class));
         } else {
             startActivity(new Intent(this, TermsActivity.class));
