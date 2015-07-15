@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Shrani</string>
   <string name="cancel">Prekliči</string>
   <string name="close">Zapri</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Več o tem</string>
   <string name="watch_trailer">Napovednik</string>
-  <string name="disable_subs">Onemogoči podnapise</string>
   <string name="no_subs">Ni podnapisov</string>
   <string name="no_subs_available">Podnapisi niso na voljo</string>
   <string name="subtitles">Podnapisi</string>
   <string name="quality">Kvaliteta</string>
-  <string name="open_magnet">Odpri magnet</string>
   <string name="trailer">Napovednik</string>
   <string name="season">Sezona</string>
   <string name="episode">Epizoda</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Samo Wi-Fi</string>
   <string name="wifi_only_message">Video vsebine lahko prenašaš samo preko Wi-Fi. Lahko pa to tudi onemogočiš v nastavitvah, če želiš prenašat preko mobilne povezave.</string>
   <!--NavigationDrawer-->
-  <string name="share">Deli</string>
   <string name="drawer_open">Odpri navigacijski predal</string>
   <string name="drawer_close">Zapri navigacijski predal</string>
   <string name="no_search_results">Ni našlo iskanih rezultatov</string>
@@ -127,9 +123,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Ali ste poskusili Popcorn Time za Android? To je super!</string>
-  <string name="share_dialog_title">Deli z</string>
   <!--Beam dialog-->
   <string name="connected_to">Povezan z</string>
   <string name="disconnect">Izključeno</string>

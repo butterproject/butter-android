@@ -26,18 +26,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
 
 public class SynopsisDialogFragment extends DialogFragment {
 
-    @InjectView(R.id.synopsis)
+    @Bind(R.id.synopsis)
     TextView synopsisText;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_synopsis, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)

@@ -15,6 +15,8 @@
   <string name="running">Futás a háttérben</string>
   <string name="tap_to_close">Érintse meg a bezáráshoz</string>
   <string name="tap_to_resume">Érintse meg a folytatáshoz</string>
+  <string name="signature_invalid">App aláírás érvénytelen</string>
+  <string name="possibly_dangerous">A Popcorn Time módosítva lett. Töltsön le egy új telepítőfájlt: https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Minden</string>
   <string name="genre_action">Akció</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Természetfölötti</string>
   <string name="genre_vampire">Vámpír</string>
   <!--Possible tabs-->
-  <string name="popular_now">MOST NÉPSZERŰ</string>
+  <string name="popular">NÉPSZERŰ</string>
   <string name="top_rated">LEGJOBBRA ÉRTÉKELT</string>
   <string name="release_date">KIADÁS DÁTUMA</string>
   <string name="last_updated">Utoljára frissítve</string>
   <string name="year">ÉV</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">FELKAPOTT</string>
   <!--BeamManager-->
   <string name="pairing_tv">Párosítás TV-vel</string>
   <string name="confirm_tv">Erősítse meg a kapcsolatot a TV-n</string>
   <string name="enter_pairing_code">Adja meg a párosítási kódot a TV-n</string>
   <string name="open_with">Megnyitás ezzel</string>
+  <string name="select_file">Fájl kiválasztása</string>
 </resources>

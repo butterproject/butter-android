@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Desa</string>
   <string name="cancel">Cancel·la</string>
   <string name="close">Tanca</string>
   <string name="ok">D\'acord</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Més informació</string>
   <string name="watch_trailer">Reprodueix el tràiler</string>
-  <string name="disable_subs">Desactiva els subtítols</string>
   <string name="no_subs">Sense subtítols</string>
   <string name="no_subs_available">No hi ha subtítols disponibles</string>
   <string name="subtitles">Subtítols</string>
   <string name="quality">Qualitat</string>
-  <string name="open_magnet">Obre magnet</string>
   <string name="trailer">Tràiler</string>
   <string name="season">Temporada</string>
   <string name="episode">Episodi</string>
@@ -108,11 +105,14 @@
   <string name="dht_limit">Límit DHT</string>
   <string name="unlimited">Sense límit</string>
   <string name="show_vpn">Mostra l\'opció de VPN al menú</string>
+  <string name="pixel_format">Forçant els colors del vídeo</string>
+  <string name="rgb32">RGB 32-bit: colors per defecte</string>
+  <string name="rgb16">RGB 16-bit: reproducció més fluida, menys qualitat</string>
+  <string name="yuv">YUV: la reproducció més fluida, però no sempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Només Wi-Fi</string>
   <string name="wifi_only_message">Només es poden transmetre vídeos per Wi-Fi. Si voleu transmetre per una connexió mòbil podeu desactivar aquesta opció a la configuració.</string>
   <!--NavigationDrawer-->
-  <string name="share">Comparteix</string>
   <string name="drawer_open">Obre el navegador</string>
   <string name="drawer_close">Tanca el navegador</string>
   <string name="no_search_results">No s\'han trobat resultats</string>
@@ -128,9 +128,6 @@
   <string name="git">Git</string>
   <string name="blog">Bloc</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Has provat Popcorn Time per a Android? És collonut!</string>
-  <string name="share_dialog_title">Compartiu amb </string>
   <!--Beam dialog-->
   <string name="connected_to">Connectat a</string>
   <string name="disconnect">Desconnecta</string>

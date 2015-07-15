@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Сачувај</string>
   <string name="cancel">Откажи</string>
   <string name="close">Затвори</string>
   <string name="ok">У реду</string>
@@ -22,12 +21,10 @@
   <string name="minutes">мин</string>
   <string name="read_more">Прочитај више</string>
   <string name="watch_trailer">Погледај трејлер</string>
-  <string name="disable_subs">Искључи титлове</string>
   <string name="no_subs">Нема титлова</string>
   <string name="no_subs_available">Титлови недоступни</string>
   <string name="subtitles">Титлови</string>
   <string name="quality">Квалитет</string>
-  <string name="open_magnet">Отвори магнет</string>
   <string name="trailer">Трејлер</string>
   <string name="season">Сезона</string>
   <string name="episode">Епизода</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Само бежично</string>
   <string name="wifi_only_message">Снимке можете преносити само преко бежичне везе. Ово можете искључити у подешавањима ако желите да преносите преко мобилног интернета.</string>
   <!--NavigationDrawer-->
-  <string name="share">Подели</string>
   <string name="drawer_open">Отвори навигациону фиоку </string>
   <string name="drawer_close">Затвори навигациону фиоку</string>
   <string name="no_search_results">Нема резултата претраге</string>
@@ -128,9 +124,6 @@
   <string name="git">Гит</string>
   <string name="blog">Блог</string>
   <string name="twitter">Твитер</string>
-  <!--Share dialog-->
-  <string name="share_message">Јеси ли пробао Popcorn Time за Андроид? Одличан је!</string>
-  <string name="share_dialog_title">Подели са</string>
   <!--Beam dialog-->
   <string name="connected_to">Повезано на</string>
   <string name="disconnect">Искључи се</string>
@@ -141,4 +134,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht апликација није инсталирана</string>
   <string name="vpn_info">Морате инсталирати VPN.ht апликацију за коришћење ВПН опције унутар Popcorn Time. Нисте заинтересовани? Онда можете сакрити ово дугме.</string>
+  <string name="vpn_download">Преузми</string>
+  <string name="vpn_later">Касније</string>
+  <string name="vpn_hide">Сакриј</string>
 </resources>

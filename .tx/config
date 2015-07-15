@@ -6,30 +6,33 @@ file_filter = base/src/main/res/values-<lang>/strings.xml
 source_lang = en
 source_file = base/src/main/res/values/strings.xml
 type = ANDROID
-minimum_perc = 95
+minimum_perc = 75
 trans.zh_CN = base/src/main/res/values-zh-rCN/strings.xml
 trans.pt_BR = base/src/main/res/values-pt-rBR/strings.xml
 trans.es_MX = base/src/main/res/values-es-rMX/strings.xml
 trans.zh_TW = base/src/main/res/values-zh-rTW/strings.xml
+trans.es_AR = base/src/main/res/values-es-rAR/strings.xml
 
 [popcorn-time-app.android-mobile-strings]
 file_filter = mobile/src/main/res/values-<lang>/strings.xml
 source_lang = en
 source_file = mobile/src/main/res/values/strings.xml
 type = ANDROID
-minimum_perc = 95
+minimum_perc = 75
 trans.zh_CN = mobile/src/main/res/values-zh-rCN/strings.xml
 trans.pt_BR = mobile/src/main/res/values-pt-rBR/strings.xml
 trans.es_MX = mobile/src/main/res/values-es-rMX/strings.xml
 trans.zh_TW = mobile/src/main/res/values-zh-rTW/strings.xml
+trans.es_AR = mobile/src/main/res/values-es-rAR/strings.xml
 
 [popcorn-time-app.android-tv-strings]
 file_filter = tv/src/main/res/values-<lang>/strings.xml
 source_lang = en
 source_file = tv/src/main/res/values/strings.xml
 type = ANDROID
-minimum_perc = 95
+minimum_perc = 75
 trans.zh_CN = tv/src/main/res/values-zh-rCN/strings.xml
 trans.pt_BR = tv/src/main/res/values-pt-rBR/strings.xml
 trans.es_MX = tv/src/main/res/values-es-rMX/strings.xml
 trans.zh_TW = tv/src/main/res/values-zh-rTW/strings.xml
+trans.es_AR = tv/src/main/res/values-es-rAR/strings.xml

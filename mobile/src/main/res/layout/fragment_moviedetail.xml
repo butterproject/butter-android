@@ -86,5 +86,6 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/play_button_circle"
         android:elevation="5dp"
-        android:src="@drawable/ic_av_play_button" />
+        android:src="@drawable/ic_av_play_button"
+        android:contentDescription="@string/play" />
 </RelativeLayout>

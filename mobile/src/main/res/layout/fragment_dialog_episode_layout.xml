@@ -82,12 +82,14 @@
                             android:layout_alignParentBottom="true"
                             android:layout_marginLeft="@dimen/detail_horizontal_offset"
                             android:layout_marginStart="@dimen/detail_horizontal_offset"
+                            android:layout_marginEnd="75dp"
+                            android:layout_marginRight="75dp"
                             android:orientation="vertical"
                             android:paddingBottom="@dimen/detail_vertical_offset">
 
                             <com.devspark.robototextview.widget.RobotoTextView
                                 android:id="@+id/info"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAllCaps="true"
                                 android:textColor="@color/text_color"
@@ -99,8 +101,6 @@
                                 android:id="@+id/title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="75dp"
-                                android:layout_marginRight="75dp"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/detail_title_text_size"
                                 app:typeface="roboto_medium"
@@ -123,8 +123,8 @@
                             android:layout_marginBottom="12dp"
                             android:layout_marginTop="@dimen/detail_meta_margin_top"
                             android:gravity="center_vertical"
-                            android:paddingStart="@dimen/detail_horizontal_offset"
                             android:paddingLeft="@dimen/detail_horizontal_offset"
+                            android:paddingStart="@dimen/detail_horizontal_offset"
                             android:textColor="@color/secondary_text_color"
                             android:textSize="@dimen/detail_meta_text_size"
                             tools:text="Aired: 12 dec 2014" />
@@ -143,7 +143,8 @@
                             android:background="@drawable/selectable_background"
                             android:visibility="visible"
                             tools:visibility="visible"
-                            android:scaleType="fitCenter" />
+                            android:scaleType="fitCenter"
+                            android:contentDescription="@string/magnet" />
 
                         <com.devspark.robototextview.widget.RobotoTextView
                             android:id="@+id/synopsis"

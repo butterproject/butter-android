@@ -15,8 +15,10 @@
   <string name="running">Pokrenuto u pozadini</string>
   <string name="tap_to_close">Dodirni za otvaranje</string>
   <string name="tap_to_resume">Dodirni za nastavak</string>
+  <string name="signature_invalid">Neispravan potpis aplikacije</string>
+  <string name="possibly_dangerous">Popcorn Time je neovlašteno promijenjen. Preuzmite novu instalacijsku datoteku s https://popcorntime.io/</string>
   <!--Genres-->
-  <string name="genre_all">Sve</string>
+  <string name="genre_all">Svi</string>
   <string name="genre_action">Akcijski</string>
   <string name="genre_adventure">Pustolovni</string>
   <string name="genre_animation">Animirani</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Nadnaravno</string>
   <string name="genre_vampire">Vampirski</string>
   <!--Possible tabs-->
-  <string name="popular_now">NAJGLEDANIJE</string>
+  <string name="popular">POPULARNO</string>
   <string name="top_rated">NAJPOPULARNIJE</string>
   <string name="release_date">DATUM IZDANJA</string>
   <string name="last_updated">NAJNOVIJE</string>
   <string name="year">GODINA</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TRENDOVSKI</string>
   <!--BeamManager-->
   <string name="pairing_tv">Uparivanje s TV-om</string>
   <string name="confirm_tv">Potvrdite povezivanje na vašem TV-u</string>
   <string name="enter_pairing_code">Upišite kôd uparivanja na vašem TV-u</string>
   <string name="open_with">Otvori s</string>
+  <string name="select_file">Odaberi datoteku</string>
 </resources>

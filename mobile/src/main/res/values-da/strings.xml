@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Gem</string>
   <string name="cancel">Annullér</string>
   <string name="close">Luk</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min.</string>
   <string name="read_more">Læs mere</string>
   <string name="watch_trailer">Se trailer</string>
-  <string name="disable_subs">Deaktivér undertekster</string>
   <string name="no_subs">Ingen undertekster</string>
   <string name="no_subs_available">Ingen tilgængelige undertekster</string>
   <string name="subtitles">Undertekster</string>
   <string name="quality">Kvalitet</string>
-  <string name="open_magnet">Åbn magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Sæson</string>
   <string name="episode">Episode</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan kun streame videoer via Wi-Fi. Du kan deaktivere dette i indstillinger, hvis du vil streame via mobilnetværk</string>
   <!--NavigationDrawer-->
-  <string name="share">Del</string>
   <string name="drawer_open">Åbn navigationsskuffe</string>
   <string name="drawer_close">Luk navigationsskuffe</string>
   <string name="no_search_results">Ingen søgeresultater fundet</string>
@@ -126,9 +122,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Har du prøvet Popcorn Time til Android? Den er fantastisk!</string>
-  <string name="share_dialog_title">Del med</string>
   <!--Beam dialog-->
   <string name="connected_to">Forbundet til</string>
   <string name="disconnect">Afbryd</string>
@@ -139,4 +132,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht-app er ikke installeret</string>
   <string name="vpn_info">VPN.ht-app skal være installeret før du kan bruge VPN-valg i Popcorn Time. Er du ikke interesseret? Så kan du skjule denne knap.</string>
+  <string name="vpn_download">Download</string>
+  <string name="vpn_later">Senere</string>
+  <string name="vpn_hide">Skjul</string>
 </resources>

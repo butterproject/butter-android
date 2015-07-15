@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -15,17 +16,18 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.Optional;
 import pct.droid.R;
 import pct.droid.adapters.ShowDetailPagerAdapter;
 import pct.droid.base.fragments.StringArraySelectorDialogFragment;
@@ -34,6 +36,7 @@ import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.fragments.base.BaseDetailFragment;
 import pct.droid.widget.ObservableParallaxScrollView;
 import pct.droid.widget.WrappingViewPager;
 
@@ -42,33 +45,33 @@ public class ShowDetailFragment extends BaseDetailFragment {
     private static Show sShow;
     private Boolean mIsTablet = false;
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     WrappingViewPager mViewPager;
-    @InjectView(R.id.tabs)
-    PagerSlidingTabStrip mTabs;
-    @Optional
-    @InjectView(R.id.background)
+    @Bind(R.id.tabs)
+    TabLayout mTabs;
+    @Nullable
+    @Bind(R.id.background)
     View mBackground;
-    @Optional
-    @InjectView(R.id.top)
+    @Nullable
+    @Bind(R.id.top)
     View mShadow;
-    @Optional
-    @InjectView(R.id.title)
+    @Nullable
+    @Bind(R.id.title)
     TextView mTitle;
-    @Optional
-    @InjectView(R.id.aired)
+    @Nullable
+    @Bind(R.id.aired)
     TextView mMeta;
-    @Optional
-    @InjectView(R.id.synopsis)
+    @Nullable
+    @Bind(R.id.synopsis)
     TextView mSynopsis;
-    @Optional
-    @InjectView(R.id.read_more)
+    @Nullable
+    @Bind(R.id.read_more)
     TextView mReadMore;
-    @Optional
-    @InjectView(R.id.rating)
+    @Nullable
+    @Bind(R.id.rating)
     RatingBar mRating;
-    @Optional
-    @InjectView(R.id.cover_image)
+    @Nullable
+    @Bind(R.id.cover_image)
     ImageView mCoverImage;
 
     public static ShowDetailFragment newInstance(Show show) {
@@ -85,12 +88,18 @@ public class ShowDetailFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
-        ButterKnife.inject(this, mRoot);
+        ButterKnife.bind(this, mRoot);
         if (VersionUtils.isJellyBean() && container != null) {
             int minHeight = container.getMinimumHeight() + PixelUtils.getPixelsFromDp(mActivity, 48);
             mRoot.setMinimumHeight(minHeight);
             mViewPager.setMinimumHeight(minHeight);
         }
+
+        if(sShow == null)
+            return mRoot;
+
+        mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
 
         mIsTablet = mCoverImage != null;
 
@@ -142,7 +151,27 @@ public class ShowDetailFragment extends BaseDetailFragment {
             }
 
             Picasso.with(mCoverImage.getContext()).load(sShow.image).into(mCoverImage);
-            mTabs.setIndicatorColor(sShow.color);
+
+            // Use reflection to set indicator color
+            try {
+                Field field = TabLayout.class.getDeclaredField("mTabStrip");
+                field.setAccessible(true);
+                Object ob = field.get(mTabs);
+                Class<?> c = Class.forName("android.support.design.widget.TabLayout$SlidingTabStrip");
+                Method method = c.getDeclaredMethod("setSelectedIndicatorColor", int.class);
+                method.setAccessible(true);
+                method.invoke(ob, sShow.color);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         } else {
             mBackground.post(new Runnable() {
                 @Override
@@ -174,7 +203,13 @@ public class ShowDetailFragment extends BaseDetailFragment {
         ShowDetailPagerAdapter fragmentPagerAdapter = new ShowDetailPagerAdapter(mActivity, getChildFragmentManager(), fragments);
 
         mViewPager.setAdapter(fragmentPagerAdapter);
-        mTabs.setViewPager(mViewPager);
+        mTabs.setupWithViewPager(mViewPager);
+        mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
+
+        if(fragmentPagerAdapter.getCount() == 1) {
+            mTabs.setTabMode(TabLayout.MODE_FIXED);
+        }
 
         mActivity.setSubScrollListener(mOnScrollListener);
 
@@ -187,7 +222,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
         mActivity.setSubScrollListener(null);
     }
 
-    @Optional
+    @Nullable
     @OnClick(R.id.read_more)
     public void openReadMore(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)

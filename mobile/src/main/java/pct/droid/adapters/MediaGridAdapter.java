@@ -40,7 +40,7 @@ import com.squareup.picasso.Transformation;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Media;
@@ -213,13 +213,13 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View itemView;
-        @InjectView(R.id.focus_overlay)
+        @Bind(R.id.focus_overlay)
         View focusOverlay;
-        @InjectView(R.id.cover_image)
+        @Bind(R.id.cover_image)
         ImageView coverImage;
-        @InjectView(R.id.title)
+        @Bind(R.id.title)
         TextView title;
-        @InjectView(R.id.year)
+        @Bind(R.id.year)
         TextView year;
 
         private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
@@ -231,7 +231,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             this.itemView = itemView;
             itemView.setOnClickListener(this);
             coverImage.setMinimumHeight(mItemHeight);

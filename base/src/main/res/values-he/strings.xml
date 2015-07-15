@@ -79,7 +79,6 @@
   <string name="genre_supernatural">על טבעי</string>
   <string name="genre_vampire">ערפד</string>
   <!--Possible tabs-->
-  <string name="popular_now">פופולארי כעת</string>
   <string name="top_rated">הכי מדורגים</string>
   <string name="release_date">תאריך יציאה</string>
   <string name="last_updated">עודכן לאחרונה</string>
@@ -89,4 +88,5 @@
   <string name="pairing_tv">שיוך עם טלוויזיה</string>
   <string name="confirm_tv">אנא אשר את החיבור על הטלוויזיה שלך </string>
   <string name="enter_pairing_code">הכנס קוד שיוך בטלוויזיה</string>
+  <string name="open_with">פתח עם</string>
 </resources>

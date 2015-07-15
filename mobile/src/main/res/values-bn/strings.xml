@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">সংরক্ষণ</string>
   <string name="cancel">বাতিল</string>
   <string name="close">বন্ধ</string>
   <string name="ok">ঠিক আছে</string>
@@ -22,12 +21,10 @@
   <string name="minutes">মিনিট</string>
   <string name="read_more">আরও পড়ুন</string>
   <string name="watch_trailer">ট্রেইলার দেখুন</string>
-  <string name="disable_subs">সাবটাইটেল নিষ্ক্রিয়</string>
   <string name="no_subs">কোন সাবটাইটেল নেই</string>
   <string name="no_subs_available">কোন সাবটাইটেল উপলব্ধ নেই</string>
   <string name="subtitles">সাবটাইটেল</string>
   <string name="quality">গুণমান</string>
-  <string name="open_magnet">চুম্বক খুলুন</string>
   <string name="trailer">ট্রেইলার</string>
   <string name="season">মৌসুম</string>
   <string name="episode">পর্ব</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">ওয়াই-ফাই শুধুমাত্র</string>
   <string name="wifi_only_message">আপনি শুধুমাত্র ওয়াই-ফাইয়ের মাধ্যমে ভিডিও স্ট্রিম করতে পারবেন। আপনি যদি মোবাইল থেকে স্ট্রিম করতে চান, তাহলে আপনি পছন্দসমূহ থেকে নিষ্ক্রিয় করতে পারবেন।</string>
   <!--NavigationDrawer-->
-  <string name="share">ভাগ করুন</string>
   <string name="drawer_open">পরিভ্রমণ ড্রয়ার খুলুন</string>
   <string name="drawer_close">পরিভ্রমণ ড্রয়ার বন্ধ করুন</string>
   <string name="no_search_results">অনুসন্ধানের কোন ফলাফল পাওয়া যায়নি</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">ব্লগ</string>
   <string name="twitter">টুইটার</string>
-  <!--Share dialog-->
-  <string name="share_message">আপনি কি অ্যান্ড্রয়েড জন্য পপকর্ন ব্যবহার করছেন? এটা অসাধারণ!</string>
-  <string name="share_dialog_title">এতে ভাগ করুন</string>
   <!--Beam dialog-->
   <string name="connected_to">এতে সংযুক্ত</string>
   <string name="disconnect">বিচ্ছিন্ন করুন</string>

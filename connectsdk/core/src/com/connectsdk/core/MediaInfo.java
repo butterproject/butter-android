@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  * Normalized reference object for information about a media to display. This object can be used to pass as a parameter to displayImage or playMedia.
- * 
+ *
  */
 
 import java.util.Collections;
@@ -34,10 +34,13 @@ public class MediaInfo {
 
     /**
      * Default constructor method.
+     *
+     * @param url media file
+     * @param mimeType media mime type
+     * @param title optional metadata
+     * @param description optional metadata
      */
-
-    public MediaInfo(String url, String mimeType, String title,
-            String description) {
+    public MediaInfo(String url, String mimeType, String title, String description) {
         super();
         this.url = url;
         this.mimeType = mimeType;
@@ -46,20 +49,35 @@ public class MediaInfo {
     }
 
     /**
-     * Default constructor method.
-     * 
-     * @param allImages
-     *            list of imageInfo objects where [0] is icon, [1] is poster
+     * MediaInfo constructor with subtitles url
+     *
+     * @param url media file
+     * @param mimeType media mime type
+     * @param title optional metadata
+     * @param description optional metadata
      */
+    public MediaInfo(String url, String subsUrl, String mimeType, String title, String description) {
+        this(url, mimeType, title, description);
+        this.subsUrl = subsUrl;
+    }
 
-    public MediaInfo(String url, String mimeType, String title,
-            String description, List<ImageInfo> allImages) {
+    /**
+     * MediaInfo constructor with a list of icons URLs.
+     *
+     * @param url media file
+     * @param mimeType media mime type
+     * @param title optional metadata
+     * @param description optional metadata
+     * @param allImages list of imageInfo objects where [0] is icon, [1] is poster
+     */
+    public MediaInfo(String url, String mimeType, String title, String description,
+                     List<ImageInfo> allImages) {
         this(url, mimeType, title, description);
         this.allImages = allImages;
     }
 
     // @cond INTERNAL
-    private String url, mimeType, description, title;
+    private String url, subsUrl, mimeType, description, title;
 
     private List<ImageInfo> allImages;
 
@@ -69,8 +87,8 @@ public class MediaInfo {
 
     /**
      * Gets type of a media file.
-     * 
-     * 
+     *
+     *
      */
 
     public String getMimeType() {
@@ -79,8 +97,8 @@ public class MediaInfo {
 
     /**
      * Sets type of a media file.
-     * 
-     * 
+     *
+     *
      */
 
     public void setMimeType(String mimeType) {
@@ -89,8 +107,8 @@ public class MediaInfo {
 
     /**
      * Gets title for a media file.
-     * 
-     * 
+     *
+     *
      */
 
     public String getTitle() {
@@ -99,8 +117,8 @@ public class MediaInfo {
 
     /**
      * Sets title of a media file.
-     * 
-     * 
+     *
+     *
      */
 
     public void setTitle(String title) {
@@ -109,7 +127,7 @@ public class MediaInfo {
 
     /**
      * Gets description for a media.
-     * 
+     *
      */
 
     public String getDescription() {
@@ -118,7 +136,7 @@ public class MediaInfo {
 
     /**
      * Sets description for a media.
-     * 
+     *
      */
 
     public void setDescription(String description) {
@@ -135,8 +153,7 @@ public class MediaInfo {
 
     /**
      * Sets list of ImageInfo objects for images representing a media (ex. icon, poster). Where first ([0]) is icon image, and second ([1]) is poster image. 
-
-     * 
+     *
      */
 
     public void setImages(List<ImageInfo> images) {
@@ -145,7 +162,7 @@ public class MediaInfo {
 
     /**
      * Gets duration of a media file.
-     * 
+     *
      */
 
     public long getDuration() {
@@ -154,7 +171,7 @@ public class MediaInfo {
 
     /**
      * Sets duration of a media file.
-     * 
+     *
      */
 
     public void setDuration(long duration) {
@@ -163,7 +180,7 @@ public class MediaInfo {
 
     /**
      * Gets URL address of a media file.
-     * 
+     *
      */
 
     public String getUrl() {
@@ -172,7 +189,7 @@ public class MediaInfo {
 
     /**
      * Sets URL address of a media file.
-     * 
+     *
      */
 
     public void setUrl(String url) {
@@ -180,17 +197,35 @@ public class MediaInfo {
     }
 
     /**
+     * Gets URL address of a subtitle file.
+     *
+     */
+
+    public String getSubsUrl() {
+        return subsUrl;
+    }
+
+    /**
+     * Sets URL address of a subtitle file.
+     *
+     */
+
+    public void setSubsUrl(String subsUrl) {
+        this.subsUrl = subsUrl;
+    }
+
+    /**
      * Stores ImageInfo objects.
-     * 
+     *
      */
 
     public void addImages(ImageInfo... images) {
-
+        if (images == null) {
+            return;
+        }
         List<ImageInfo> list = new ArrayList<ImageInfo>();
         Collections.addAll(list, images);
-
         this.setImages(list);
-
     }
 
 }

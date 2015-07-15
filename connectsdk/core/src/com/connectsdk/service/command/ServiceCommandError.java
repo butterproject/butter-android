@@ -20,7 +20,9 @@
 
 package com.connectsdk.service.command;
 
-
+/**
+ * This class implements base service error which is based on HTTP response codes
+ */
 public class ServiceCommandError extends Error {
 
     private static final long serialVersionUID = 4232138682873631468L;
@@ -47,10 +49,19 @@ public class ServiceCommandError extends Error {
         this.payload = payload;
     }
 
+    /**
+     * Create an error which indicates that feature is not supported by a service
+     * @return NotSupportedServiceCommandError
+     */
     public static ServiceCommandError notSupported() {
         return new NotSupportedServiceCommandError();
     }
 
+    /**
+     * Create an error from HTTP response code
+     * @param code HTTP response code
+     * @return ServiceCommandError
+     */
     public static ServiceCommandError getError(int code) {
         String desc = null;
         if (code == 400) {

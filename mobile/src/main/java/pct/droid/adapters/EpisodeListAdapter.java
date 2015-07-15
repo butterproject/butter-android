@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Episode;
 
@@ -22,12 +22,12 @@ public class EpisodeListAdapter extends BaseAdapter {
 
     class ViewHolder {
         public ViewHolder(View v) {
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
         }
 
-        @InjectView(R.id.info)
+        @Bind(R.id.info)
         TextView number;
-        @InjectView(R.id.title)
+        @Bind(R.id.title)
         TextView title;
     }
 

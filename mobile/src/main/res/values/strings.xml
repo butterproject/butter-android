@@ -53,7 +53,8 @@
     <string name="aired">Aired: %s</string>
 	<string name="no_title_available">No name</string>
 	<string name="no_synopsis_available">No synopsis available</string>
-
+    <string name="magnet">Magnet</string>
+    <string name="scale">Scale</string>
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
@@ -62,10 +63,15 @@
 	<string name="waiting_for_subtitles">Waiting for subtitles</string>
 	<string name="seeds">seeds</string>
     <string name="error_files">Error: Couldn\'t write files. Please try a different storage location.</string>
+    <string name="start_external">Start external player</string>
 
 	<!-- VideoPlayerActivity strings -->
 	<string name="now_playing">Now playing</string>
 	<string name="volume">Volume</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="fastforward">Fast forward</string>
+    <string name="rewind">Rewind</string>
 	<string name="brightness">Brightness</string>
 	<string name="hardware_acceleration_error_title">HW acceleration error</string>
 	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
@@ -101,6 +107,8 @@
 	<string name="subtitle_stroke_color">Outline color</string>
 	<string name="subtitle_stroke_width">Outline width</string>
 	<string name="subtitle_language">Default language</string>
+	<string name="subtitle_timing">Subtitle timing</string>
+	<string name="subtitle_settings">Subtitle settings</string>
 	<string name="no_default_set">No default language</string>
 	<string name="advanced">Advanced</string>
 	<string name="storage_location">Storage location</string>

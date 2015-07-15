@@ -41,7 +41,6 @@ import java.nio.charset.CharsetDecoder;
 import java.util.HashMap;
 
 import pct.droid.base.io.UnicodeBOMInputStream;
-import timber.log.Timber;
 
 public class FileUtils {
 
@@ -92,18 +91,16 @@ public class FileUtils {
      *
      * @param file Location
      */
-    public static void recursiveDelete(File file) {
+    public static boolean recursiveDelete(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
-            if (children == null) return;
+            if (children == null) return false;
             for (String child : children) {
                 recursiveDelete(new File(file, child));
             }
         }
 
-        File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
-        file.renameTo(to);
-        to.delete();
+        return file.delete();
     }
 
     /**

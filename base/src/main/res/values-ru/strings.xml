@@ -16,6 +16,8 @@
   <string name="running">Работает в фоновом режиме</string>
   <string name="tap_to_close">Нажмите чтобы закрыть</string>
   <string name="tap_to_resume">Нажмите чтобы возобновить </string>
+  <string name="signature_invalid">Подпись приложения недействительна</string>
+  <string name="possibly_dangerous">Popcorn Time был подделан. Вы можете скачать новый установочный файл на https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Все</string>
   <string name="genre_action">Боевик</string>
@@ -113,15 +115,17 @@
         Вампир
         </string>
   <!--Possible tabs-->
-  <string name="popular_now">Популярно сейчас</string>
+  <string name="popular">ПОПУЛЯРНОЕ</string>
   <string name="top_rated">Топовые в рейтинге</string>
   <string name="release_date">Дата релиза</string>
   <string name="last_updated">ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ</string>
   <string name="year">Год</string>
   <string name="a_to_z">А - Я</string>
+  <string name="trending">ТРЕНДОВЫЕ</string>
   <!--BeamManager-->
   <string name="pairing_tv">Сопряжение с TV</string>
   <string name="confirm_tv">Пожалуйста, подтвердите соединение на TV</string>
   <string name="enter_pairing_code">Введите код подключения на TV</string>
   <string name="open_with">Открыть с помощью</string>
+  <string name="select_file">Выберите файл</string>
 </resources>

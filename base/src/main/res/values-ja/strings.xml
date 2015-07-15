@@ -79,14 +79,15 @@
   <string name="genre_supernatural">超自然の</string>
   <string name="genre_vampire">吸血鬼</string>
   <!--Possible tabs-->
-  <string name="popular_now">人気のあるもの</string>
   <string name="top_rated">高評価</string>
   <string name="release_date">発売日</string>
   <string name="last_updated">最終更新</string>
   <string name="year">年</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">トレンド</string>
   <!--BeamManager-->
   <string name="pairing_tv">テレビとのペアリング</string>
   <string name="confirm_tv">テレビとの接続をご確認ください</string>
   <string name="enter_pairing_code">テレビでペアリングコードを入力してください</string>
+  <string name="open_with">開く...</string>
 </resources>

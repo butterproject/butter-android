@@ -29,7 +29,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class PlayerAdapter extends BaseAdapter {
 
@@ -38,10 +38,10 @@ public class PlayerAdapter extends BaseAdapter {
 
     class ViewHolder {
         public ViewHolder(View v) {
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
         }
 
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text1;
     }
 

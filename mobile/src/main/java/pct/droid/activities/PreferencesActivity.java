@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -50,9 +51,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.BuildConfig;
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.adapters.PreferencesListAdapter;
 import pct.droid.base.Constants;
 import pct.droid.base.preferences.DefaultPlayer;
@@ -77,11 +79,11 @@ public class PreferencesActivity extends PopcornBaseActivity
     private LinearLayoutManager mLayoutManager;
     private DirectoryChooserFragment mDirectoryChooserFragment;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.recyclerView)
+    @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-    @InjectView(R.id.rootLayout)
+    @Bind(R.id.rootLayout)
     ViewGroup rootLayout;
 
     public static Intent startActivity(Activity activity) {
@@ -185,7 +187,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                     }
                 }));
 
-        mPrefItems.add(new PrefItem(this, R.drawable.ic_action_quality, R.string.quality, Prefs.QUALITY_DEFAULT, "1080p",
+        mPrefItems.add(new PrefItem(this, R.drawable.ic_action_quality, R.string.quality, Prefs.QUALITY_DEFAULT, "720p",
                 new PrefItem.OnClickListener() {
                     @Override
                     public void onClick(final PrefItem item) {
@@ -238,7 +240,7 @@ public class PreferencesActivity extends PopcornBaseActivity
 
                                         dialog.dismiss();
 
-                                        Toast.makeText(PreferencesActivity.this, R.string.restart_effect, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(rootLayout, R.string.restart_effect, Snackbar.LENGTH_LONG).show();
                                     }
                                 });
                     }
@@ -315,7 +317,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -367,7 +369,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -504,7 +506,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {
@@ -532,7 +534,7 @@ public class PreferencesActivity extends PopcornBaseActivity
                                 item.saveValue(value);
                             }
                         });
-                        dialogFragment.show(getFragmentManager(), "pref_fragment");
+                        dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
                     }
                 },
                 new PrefItem.SubTitleGenerator() {

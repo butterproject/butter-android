@@ -46,9 +46,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
-import butterknife.Optional;
+import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.base.preferences.Prefs;
@@ -86,28 +86,28 @@ public class EpisodeDialogFragment extends DialogFragment {
     private Show mShow;
     private Magnet mMagnet;
 
-    @InjectView(R.id.scrollview)
+    @Bind(R.id.scrollview)
     BottomSheetScrollView mScrollView;
-    @InjectView(R.id.placeholder)
+    @Bind(R.id.placeholder)
     View mPlaceholder;
-    @InjectView(R.id.play_button)
+    @Bind(R.id.play_button)
     ImageButton mPlayButton;
-    @InjectView(R.id.header_image)
+    @Bind(R.id.header_image)
     ImageView mHeaderImage;
-    @InjectView(R.id.info)
+    @Bind(R.id.info)
     TextView mInfo;
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     TextView mTitle;
-    @InjectView(R.id.aired)
+    @Bind(R.id.aired)
     TextView mAired;
-    @InjectView(R.id.synopsis)
+    @Bind(R.id.synopsis)
     TextView mSynopsis;
-    @InjectView(R.id.subtitles)
+    @Bind(R.id.subtitles)
     OptionSelector mSubtitles;
-    @InjectView(R.id.quality)
+    @Bind(R.id.quality)
     OptionSelector mQuality;
-    @InjectView(R.id.magnet)
-    @Optional
+    @Bind(R.id.magnet)
+    @Nullable
     ImageButton mOpenMagnet;
 
     public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
@@ -123,7 +123,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_PopcornTime)).inflate(R.layout.fragment_dialog_episode, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         if (!VersionUtils.isJellyBean()) {
             mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
@@ -221,10 +221,13 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (!TextUtils.isEmpty(mEpisode.title))
+        if (!TextUtils.isEmpty(mEpisode.title)) {
             mTitle.setText(mEpisode.title);
-        else
+            mHeaderImage.setContentDescription(mEpisode.title);
+        } else {
             mTitle.setText(R.string.no_title_available);
+            mHeaderImage.setContentDescription(getString(R.string.no_title_available));
+        }
 
         mAired.setVisibility(mEpisode.aired > 0 ? View.VISIBLE : View.GONE);
         Date airedDate = new Date((long) mEpisode.aired * 1000);
@@ -250,7 +253,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         final String[] qualities = mEpisode.torrents.keySet().toArray(new String[mEpisode.torrents.size()]);
         SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
-        String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "1080p");
+        String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "720p");
         int qualityIndex = Arrays.asList(qualities).contains(defaultQuality) ? Arrays.asList(qualities).indexOf(defaultQuality) : qualities.length - 1;
         mSelectedQuality = qualities[qualityIndex];
         mQuality.setText(mSelectedQuality);
@@ -409,7 +412,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 
-    @Optional
+    @Nullable
     @OnClick(R.id.magnet)
     public void openMagnet() {
         mMagnet.open(mActivity);

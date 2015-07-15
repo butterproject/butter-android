@@ -2,11 +2,11 @@
 <resources>
   <string name="update_available">新的更新可用</string>
   <string name="press_install">按下以安裝</string>
-  <string name="loading_data">資料載入中。。。</string>
-  <string name="loading_details">詳細資料載入中。。。</string>
-  <string name="loading_shows">節目載入中。。。</string>
-  <string name="loading_movies">電影載入中。。。</string>
-  <string name="loading_subs">字幕載入中。。。</string>
+  <string name="loading_data">資料載入中...</string>
+  <string name="loading_details">詳細資料載入中...</string>
+  <string name="loading_shows">節目載入中...</string>
+  <string name="loading_movies">電影載入中...</string>
+  <string name="loading_subs">字幕載入中...</string>
   <string name="error_files">錯誤：無法寫入文件</string>
   <string name="overview_not_available">抱歉，無預覽可用。</string>
   <string name="episode">集</string>
@@ -15,6 +15,8 @@
   <string name="running">背景執行</string>
   <string name="tap_to_close">點擊以關閉</string>
   <string name="tap_to_resume">點擊以繼續</string>
+  <string name="signature_invalid">無效的應用程式簽章</string>
+  <string name="possibly_dangerous">Popcorn Time 應用程式已遇竄改。請於 https://popcorntime.io/ 重新下載安裝檔。</string>
   <!--Genres-->
   <string name="genre_all">所有</string>
   <string name="genre_action">動作片</string>
@@ -79,14 +81,17 @@
   <string name="genre_supernatural">超自然</string>
   <string name="genre_vampire">吸血鬼</string>
   <!--Possible tabs-->
-  <string name="popular_now">現時流行</string>
+  <string name="popular">熱門流行</string>
   <string name="top_rated">最高評價</string>
   <string name="release_date">發行日期</string>
   <string name="last_updated">上次更新</string>
   <string name="year">年份</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">熱門趨勢</string>
   <!--BeamManager-->
   <string name="pairing_tv">與電視配對</string>
   <string name="confirm_tv">請確保電視的連線正常</string>
   <string name="enter_pairing_code">輸入電視上的配對碼</string>
+  <string name="open_with">選擇開啟工具</string>
+  <string name="select_file">選取檔案</string>
 </resources>

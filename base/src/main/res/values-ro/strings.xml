@@ -15,6 +15,8 @@
   <string name="running">Rulare în fundal</string>
   <string name="tap_to_close">Apasă pentru a închide</string>
   <string name="tap_to_resume">Apasă pentru a continua</string>
+  <string name="signature_invalid">Semnătură aplicație nevalidă</string>
+  <string name="possibly_dangerous">Popcon Time a fost modificat. Vă rugăm să descărcați un fișier nou de instalare de la https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Toate</string>
   <string name="genre_action">Acțiune</string>
@@ -79,14 +81,17 @@
   <string name="genre_supernatural">Supranatural</string>
   <string name="genre_vampire">Vampir</string>
   <!--Possible tabs-->
-  <string name="popular_now">FILME POPULARE</string>
+  <string name="popular">POPULAR</string>
   <string name="top_rated">CELE MAI APRECIATE</string>
-  <string name="release_date">DATĂ LANSARE</string>
+  <string name="release_date">DATA LANSĂRII</string>
   <string name="last_updated">ULTIMA ACTUALIZATĂ</string>
   <string name="year">AN</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">ÎN TREND</string>
   <!--BeamManager-->
-  <string name="pairing_tv">Se asociează cu TV-ul.</string>
+  <string name="pairing_tv">Se asociază cu televizorul.</string>
   <string name="confirm_tv">Vă rugăm să confirmați conexiunea la televizor</string>
   <string name="enter_pairing_code">Introduceti codul de împerechere la TV</string>
+  <string name="open_with">Deschis cu</string>
+  <string name="select_file">Selectează fișier</string>
 </resources>

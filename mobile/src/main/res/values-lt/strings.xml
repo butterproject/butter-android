@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Išsaugoti</string>
   <string name="cancel">Nutraukti</string>
   <string name="close">Uždaryti</string>
   <string name="ok">Gerai</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Skaityti daugiau</string>
   <string name="watch_trailer">Žiūrėti anonsą</string>
-  <string name="disable_subs">Išjungti subtitrus</string>
   <string name="no_subs">Subtitrų nėra</string>
   <string name="no_subs_available">Nėra prieinamų subtitrų</string>
   <string name="subtitles">Subtitrai</string>
   <string name="quality">Kokybė</string>
-  <string name="open_magnet">Atidaryti magnetinę nuorodą</string>
   <string name="trailer">Anonsas</string>
   <string name="season">Sezonas</string>
   <string name="episode">Epizodas</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Tik Wi-Fi</string>
   <string name="wifi_only_message">Vaizdo įrašų galite perdauoti tik per Wi-Fi. Tai galite išjungti nustatymuose, jei norite perduoti srautą naudodami mobiliuosius duomenis.</string>
   <!--NavigationDrawer-->
-  <string name="share">Dalintis</string>
   <string name="drawer_open">Atidaryti navigacijos stalčių</string>
   <string name="drawer_close">Uždaryti navigacijos stalčių</string>
   <string name="no_search_results">Nerasta paieškos rezultatų</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">Tinklaraštis</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Ar išmėginote Popcorn Time, skirtą Android? Ji nuostabi!</string>
-  <string name="share_dialog_title">Dalintis su</string>
   <!--Beam dialog-->
   <string name="connected_to">Prisijungta prie</string>
   <string name="disconnect">Atsijungti</string>
@@ -141,4 +134,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht programa neįdiegta</string>
   <string name="vpn_info">Jums reikia įdiegti VPN.ht programą, jei norite naudoti VPN parinktį Popcorn Time programoje. Neįdomu? Tada tiesiog galite paslėpti šį mygtuką.</string>
+  <string name="vpn_download">Atsisiųsti</string>
+  <string name="vpn_later">Vėliau</string>
+  <string name="vpn_hide">Slėpti</string>
 </resources>

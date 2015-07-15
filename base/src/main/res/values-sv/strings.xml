@@ -79,12 +79,12 @@
   <string name="genre_supernatural">Övernaturlig</string>
   <string name="genre_vampire">Vampyr</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULÄRT NU</string>
   <string name="top_rated">TOPPBETYG</string>
   <string name="release_date">RELEASE DATUM</string>
   <string name="last_updated">SENAST UPPDATERAD</string>
   <string name="year">ÅR</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TRENDING</string>
   <!--BeamManager-->
   <string name="pairing_tv">Ihopkoppling med TV</string>
   <string name="confirm_tv">Var god bekräfta anslutningen på din TV</string>

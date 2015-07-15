@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Lagre</string>
   <string name="cancel">Avbryt</string>
   <string name="close">Lukk</string>
   <string name="ok">Ok</string>
@@ -22,7 +21,6 @@
   <string name="minutes">min</string>
   <string name="read_more">Les mer</string>
   <string name="watch_trailer">Se trailer</string>
-  <string name="disable_subs">Fjern undertekst</string>
   <string name="no_subs">Ingen undertekster tilgjengelig</string>
   <string name="no_subs_available">Ingen undertekster tilgjengelig</string>
   <string name="subtitles">Undertekster</string>
@@ -108,7 +106,6 @@
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan bare strømme video over Wi-Fi. Dette kan du endre i preferansene dine om du nå vil strømme over mobilt nettverk.</string>
   <!--NavigationDrawer-->
-  <string name="share">Del</string>
   <string name="drawer_open">Åpne navigasjonsskuff</string>
   <string name="drawer_close">Lukk navigasjonsskuff</string>
   <string name="no_search_results">Ingen søkeresultater funnet</string>
@@ -124,9 +121,6 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <string name="git">Git</string>
   <string name="blog">Blogg</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Har du prøvd Popcorn Time for Android? Det fungerer kjempebra!</string>
-  <string name="share_dialog_title">Del med</string>
   <!--Beam dialog-->
   <string name="connected_to">Koblet til</string>
   <string name="disconnect">Koble fra</string>
@@ -137,7 +131,4 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht app er ikke installert</string>
   <string name="vpn_info">Du må ha VPN.ht appen installert for å bruke VPN alternativet inne i Popcorn Time. Ikke interessert? Da kan du bare skjule denne knappen.</string>
-  <string name="vpn_download">Last ned app</string>
-  <string name="vpn_later">Kom tilbake senere</string>
-  <string name="vpn_hide">Skjul knapp</string>
 </resources>

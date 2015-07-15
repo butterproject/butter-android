@@ -46,6 +46,7 @@ import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SignUtils;
 import pct.droid.base.utils.StorageUtils;
 import timber.log.Timber;
 

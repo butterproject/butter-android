@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.fragments.StreamLoadingFragment;
 

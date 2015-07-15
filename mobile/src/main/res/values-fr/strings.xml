@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Enregistrer</string>
   <string name="cancel">Annuler</string>
   <string name="close">Fermer</string>
   <string name="ok">OK</string>
@@ -22,7 +21,6 @@
   <string name="minutes">min</string>
   <string name="read_more">Plus...</string>
   <string name="watch_trailer">Visionner la bande-annonce</string>
-  <string name="disable_subs">Désactiver les sous-titres</string>
   <string name="no_subs">Aucuns sous-titres</string>
   <string name="no_subs_available">Aucun sous-titre disponible</string>
   <string name="subtitles">Sous-titres</string>
@@ -106,11 +104,14 @@
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Illimité</string>
   <string name="show_vpn">Montrer l\'option VPN dans le menu</string>
+  <string name="pixel_format">Forcer une chromatique vidéo</string>
+  <string name="rgb32">RGB 32-bit : par défaut</string>
+  <string name="rgb16">RGB 16-bit : meilleures performances, plus faible qualité</string>
+  <string name="yuv">YUV : les meilleures performances, mais ne fonctionne pas à tous les coups</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi uniquement </string>
   <string name="wifi_only_message">Vous ne pouvez lire de vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences si vous souhaitez utiliser une connexion de données mobiles.</string>
   <!--NavigationDrawer-->
-  <string name="share">Partager</string>
   <string name="drawer_open">Ouvrir la barre de navigation</string>
   <string name="drawer_close">Fermer la barre de navigation</string>
   <string name="no_search_results">Aucun résultat trouvé pour la recherche</string>
@@ -124,9 +125,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Vous avez déjà essayé Popcorn Time pour Android ? C\'est renversant !</string>
-  <string name="share_dialog_title">Partager avec</string>
   <!--Beam dialog-->
   <string name="connected_to">Connecté à</string>
   <string name="disconnect">Déconnexion</string>
@@ -137,4 +135,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">L\'application VPN.ht n\'est pas installée</string>
   <string name="vpn_info">Vous devez installer l\'application VPN.ht pour utiliser le VPN dans Popcorn Time. Pas intéressé ? Vous pouvez tout simplement cacher ce bouton.</string>
+  <string name="vpn_download">Télécharger</string>
+  <string name="vpn_later">Plus tard</string>
+  <string name="vpn_hide">Cacher</string>
 </resources>

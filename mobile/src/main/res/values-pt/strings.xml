@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Guardar</string>
   <string name="cancel">Cancelar</string>
   <string name="close">Fechar</string>
   <string name="ok">OK</string>
@@ -12,7 +11,7 @@
   <string name="search_hint">Título, ano, atores</string>
   <string name="title_shows">Séries</string>
   <string name="title_movies">Filmes</string>
-  <string name="title_anime">Anime</string>
+  <string name="title_anime">Animes</string>
   <string name="genres">Categorias</string>
   <string name="search">Pesquisar</string>
   <string name="searching">A pesquisar...</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min.</string>
   <string name="read_more">Ler mais</string>
   <string name="watch_trailer">Ver trailer</string>
-  <string name="disable_subs">Desativar legendas</string>
   <string name="no_subs">Sem legendas</string>
   <string name="no_subs_available">Sem legendas disponíveis</string>
   <string name="subtitles">Legendas</string>
   <string name="quality">Qualidade</string>
-  <string name="open_magnet">Abrir magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Temporada</string>
   <string name="episode">Episódio</string>
@@ -39,7 +36,7 @@
   <string name="no_synopsis_available">Sinopse indisponível</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">A aguardar pelo torrent</string>
-  <string name="starting_buffering">A iniciar transferência</string>
+  <string name="starting_buffering">A iniciar descarga…</string>
   <string name="streaming_started">Reprodução iniciada</string>
   <string name="waiting_for_subtitles">A aguardar pelas legendas</string>
   <string name="seeds">sementes</string>
@@ -49,7 +46,7 @@
   <string name="volume">Volume</string>
   <string name="brightness">Brilho</string>
   <string name="hardware_acceleration_error_title">Erro na aceleração por HW</string>
-  <string name="hardware_acceleration_error_message">Ocorreu um erro com a aceleração por hardware. Queres desativá-la e voltar a tentar?</string>
+  <string name="hardware_acceleration_error_message">Ocorreu um erro com a aceleração por hardware. Pretendes desativá-la e voltar a tentar?</string>
   <string name="best_fit">Melhor enquadramento</string>
   <string name="fill">Preencher</string>
   <string name="fit_horizontal">Ajustar horizontalmente</string>
@@ -57,7 +54,7 @@
   <string name="original_size">Original</string>
   <string name="reload_video">Recarregar vídeo</string>
   <string name="comm_error">Erro de comunicação</string>
-  <string name="comm_message">Ocorreu um erro durante a transferência do vídeo. Poderá dever-se a problemas de rede ou de protocolos do Youtube. Por favor, tenta mais tarde.</string>
+  <string name="comm_message">Ocorreu um erro ao descarregar o vídeo. Poderão ter ocorrido problemas de rede ou de protocolos do YouTube. Por favor, volta a tentar mais tarde.</string>
   <string name="leave_videoplayer_title">Tens a certeza?</string>
   <string name="leave_videoplayer_message">Tens a certeza que queres sair do leitor de vídeo? A reprodução de %s será terminada.</string>
   <string name="encountered_error_title">Encontrado erro no vídeo</string>
@@ -108,11 +105,14 @@
   <string name="dht_limit">Limite DHT</string>
   <string name="unlimited">Ilimitado</string>
   <string name="show_vpn">Mostrar opção de VPN no menu</string>
+  <string name="pixel_format">Forçar sistema de cores</string>
+  <string name="rgb32">RGB 32-bit: sistema de cores predefinido</string>
+  <string name="rgb16">RGB 16-bit: melhor desempenho, menor qualidade</string>
+  <string name="yuv">YUV: melhor desempenho, mas nem sempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Apenas Wi-Fi</string>
   <string name="wifi_only_message">Apenas podes reproduzir vídeo através de Wi-Fi. Desativa esta opção nas Definições se quiseres reproduzir através de uma rede móvel.</string>
   <!--NavigationDrawer-->
-  <string name="share">Partilhar</string>
   <string name="drawer_open">Abrir gaveta de navegação</string>
   <string name="drawer_close">Fechar gaveta de navegação</string>
   <string name="no_search_results">Nenhum resultado encontrado</string>
@@ -128,9 +128,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Já experimentaste o Popcorn Time para Android? É espetacular!</string>
-  <string name="share_dialog_title">Partilha com</string>
   <!--Beam dialog-->
   <string name="connected_to">Ligado a</string>
   <string name="disconnect">Desligar</string>
@@ -141,4 +138,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Aplicação VPN.ht não está instalada</string>
   <string name="vpn_info">Precisas ter a aplicação VPN.ht instalada para usar a opção interna de VPN no Popcorn Time. Se não tiveres interesse, podes esconder este botão.</string>
+  <string name="vpn_download">Descarregar</string>
+  <string name="vpn_later">Mais tarde</string>
+  <string name="vpn_hide">Esconder</string>
 </resources>

@@ -79,12 +79,12 @@
   <string name="genre_supernatural">Sobrenatural</string>
   <string name="genre_vampire">Vampiros</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULAR AHORA</string>
   <string name="top_rated">MÁS VALORADOS</string>
   <string name="release_date">FECHA DE ESTRENO</string>
   <string name="last_updated">ÚLTIMA ACTUALIZACIÓN</string>
   <string name="year">AÑO</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDENCIAS</string>
   <!--BeamManager-->
   <string name="pairing_tv">Emparejando con la TV</string>
   <string name="confirm_tv">Por favor, confirma la conexión en tu TV</string>

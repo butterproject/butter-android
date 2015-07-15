@@ -47,10 +47,10 @@ public class Torrent extends TorrentAlertListener {
     public enum State { UNKNOWN, RETRIEVING_META, PREPARING, STREAMING }
 
     private final TorrentHandle mTorrentHandle;
-    private final int mPiecesToPrepare;
-    private final int mLastPieceIndex;
-    private final int mFirstPieceIndex;
-    private final int mSelectedFile;
+    private int mPiecesToPrepare;
+    private int mLastPieceIndex;
+    private int mFirstPieceIndex;
+    private int mSelectedFile = -1;
 
     private Double mPrepareProgress = 0d;
     private Double mProgressStep = 0d;
@@ -75,65 +75,8 @@ public class Torrent extends TorrentAlertListener {
 
         torrentHandle.setPriority(7);
 
-        TorrentInfo torrentInfo = mTorrentHandle.getTorrentInfo();
-        FileStorage fileStorage = torrentInfo.getFiles();
-        long highestFileSize = 0;
-        int selectedFile = -1;
-        for (int i = 0; i < fileStorage.geNumFiles(); i++) {
-            long fileSize = fileStorage.getFileSize(i);
-            if (highestFileSize < fileSize) {
-                highestFileSize = fileSize;
-                mTorrentHandle.setFilePriority(selectedFile, Priority.IGNORE);
-                selectedFile = i;
-                mTorrentHandle.setFilePriority(i, Priority.SEVEN);
-            } else {
-                mTorrentHandle.setFilePriority(i, Priority.IGNORE);
-            }
-        }
-        mSelectedFile = selectedFile;
-
-        int[] piecePriorities = getPiecePriorities();
-        int firstPieceIndex = -1;
-        int lastPieceIndex = -1;
-        for (int i = 0; i < piecePriorities.length; i++) {
-            if (piecePriorities[i] != Priority.IGNORE.getSwig()) {
-                if (firstPieceIndex == -1) {
-                    firstPieceIndex = i;
-                }
-                piecePriorities[i] = Priority.IGNORE.getSwig();
-            } else {
-                if (firstPieceIndex != -1 && lastPieceIndex == -1) {
-                    lastPieceIndex = i - 1;
-                }
-            }
-        }
-
-        if (lastPieceIndex == -1) {
-            lastPieceIndex = piecePriorities.length - 1;
-        }
-        int pieceCount = lastPieceIndex - firstPieceIndex + 1;
-        int pieceLength = torrentHandle.getTorrentInfo().getPieceLength();
-        int activePieceCount;
-        if (pieceLength > 0) {
-            activePieceCount = (int) (PREPARE_SIZE / pieceLength);
-            if (activePieceCount < MIN_PREPARE_COUNT) {
-                activePieceCount = MIN_PREPARE_COUNT;
-            } else if (activePieceCount > MAX_PREPARE_COUNT) {
-                activePieceCount = MAX_PREPARE_COUNT;
-            }
-        } else {
-            activePieceCount = DEFAULT_PREPARE_COUNT;
-        }
-
-        if (pieceCount < activePieceCount) {
-            activePieceCount = pieceCount / 2;
-        }
-
-        mFirstPieceIndex = firstPieceIndex;
-        mLastPieceIndex = lastPieceIndex;
-        mPiecesToPrepare = activePieceCount;
-
-        mTorrentHandle.resume();
+        if(mSelectedFile == -1)
+            setSelectedFile(mSelectedFile);
 
         if(mListener != null)
             mListener.onStreamStarted();
@@ -179,12 +122,90 @@ public class Torrent extends TorrentAlertListener {
         return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFileAt(mSelectedFile).getPath());
     }
 
+    public File getSaveLocation() {
+        return new File(mTorrentHandle.getSavePath() + "/" + mTorrentHandle.getName());
+    }
+
     public void resume() {
         mTorrentHandle.resume();
     }
 
     public void pause() {
         mTorrentHandle.pause();
+    }
+
+    public void setSelectedFile(int selectedFileIndex) {
+        TorrentInfo torrentInfo = mTorrentHandle.getTorrentInfo();
+        FileStorage fileStorage = torrentInfo.getFiles();
+        Timber.d(mTorrentHandle.getSavePath());
+        Timber.d(mTorrentHandle.getName());
+
+        if(selectedFileIndex == -1) {
+            long highestFileSize = 0;
+            int selectedFile = -1;
+            for (int i = 0; i < fileStorage.getNumFiles(); i++) {
+                long fileSize = fileStorage.getFileSize(i);
+                if (highestFileSize < fileSize) {
+                    highestFileSize = fileSize;
+                    mTorrentHandle.setFilePriority(selectedFile, Priority.IGNORE);
+                    selectedFile = i;
+                    mTorrentHandle.setFilePriority(i, Priority.SEVEN);
+                } else {
+                    mTorrentHandle.setFilePriority(i, Priority.IGNORE);
+                }
+            }
+            selectedFileIndex = selectedFile;
+        } else {
+            for (int i = 0; i < fileStorage.getNumFiles(); i++) {
+                if(i == selectedFileIndex) {
+                    mTorrentHandle.setFilePriority(i, Priority.SEVEN);
+                } else {
+                    mTorrentHandle.setFilePriority(i, Priority.IGNORE);
+                }
+            }
+        }
+        mSelectedFile = selectedFileIndex;
+
+        int[] piecePriorities = getPiecePriorities();
+        int firstPieceIndex = -1;
+        int lastPieceIndex = -1;
+        for (int i = 0; i < piecePriorities.length; i++) {
+            if (piecePriorities[i] != Priority.IGNORE.getSwig()) {
+                if (firstPieceIndex == -1) {
+                    firstPieceIndex = i;
+                }
+                piecePriorities[i] = Priority.IGNORE.getSwig();
+            } else {
+                if (firstPieceIndex != -1 && lastPieceIndex == -1) {
+                    lastPieceIndex = i - 1;
+                }
+            }
+        }
+
+        if (lastPieceIndex == -1) {
+            lastPieceIndex = piecePriorities.length - 1;
+        }
+        int pieceCount = lastPieceIndex - firstPieceIndex + 1;
+        int pieceLength = mTorrentHandle.getTorrentInfo().getPieceLength();
+        int activePieceCount;
+        if (pieceLength > 0) {
+            activePieceCount = (int) (PREPARE_SIZE / pieceLength);
+            if (activePieceCount < MIN_PREPARE_COUNT) {
+                activePieceCount = MIN_PREPARE_COUNT;
+            } else if (activePieceCount > MAX_PREPARE_COUNT) {
+                activePieceCount = MAX_PREPARE_COUNT;
+            }
+        } else {
+            activePieceCount = DEFAULT_PREPARE_COUNT;
+        }
+
+        if (pieceCount < activePieceCount) {
+            activePieceCount = pieceCount / 2;
+        }
+
+        mFirstPieceIndex = firstPieceIndex;
+        mLastPieceIndex = lastPieceIndex;
+        mPiecesToPrepare = activePieceCount;
     }
 
     /**
