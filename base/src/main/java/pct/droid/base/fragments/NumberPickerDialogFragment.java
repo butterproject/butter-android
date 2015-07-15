@@ -15,20 +15,21 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.dialogfragments;
+package pct.droid.base.fragments;
 
-import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pct.droid.R;
+import pct.droid.base.R;
+
 
 public class NumberPickerDialogFragment extends DialogFragment {
 

@@ -21,7 +21,6 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +29,8 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
@@ -43,13 +42,13 @@ import pct.droid.tv.utils.BackgroundUpdater;
 public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 
 	View mRoot;
-	@InjectView(R.id.progressIndicator)
+	@Bind(R.id.progressIndicator)
 	ProgressBar progressIndicator;
-	@InjectView(R.id.primary_textview)
+	@Bind(R.id.primary_textview)
 	TextView mPrimaryTextView;
-	@InjectView(R.id.secondary_textview)
+	@Bind(R.id.secondary_textview)
 	TextView mSecondaryTextView;
-	@InjectView(R.id.tertiary_textview)
+	@Bind(R.id.tertiary_textview)
 	TextView mTertiaryTextView;
 
 	BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
@@ -58,7 +57,7 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mRoot = inflater.inflate(R.layout.fragment_streamloading, container, false);
-		ButterKnife.inject(this, mRoot);
+		ButterKnife.bind(this, mRoot);
 
 		return mRoot;
 	}

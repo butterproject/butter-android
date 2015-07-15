@@ -1,14 +1,13 @@
 package pct.droid.tv.presenters.showdetail;
 
-import android.support.v17.leanback.widget.RowHeaderPresenter;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import pct.droid.tv.R;
 
 public class SeasonHeaderRowPresenter extends RowPresenter {
@@ -25,12 +24,12 @@ public class SeasonHeaderRowPresenter extends RowPresenter {
     public static class SeasonHeaderRowViewHolder extends ViewHolder {
 
         public
-        @InjectView(R.id.title_textview)
+        @Bind(R.id.title_textview)
         TextView titleTextView;
 
         public SeasonHeaderRowViewHolder(View view) {
             super(view);
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

@@ -34,14 +34,12 @@
 
 package pct.droid.tv.activities.base;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 
 import java.io.File;
 
@@ -64,7 +62,7 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mHandler = new Handler(getMainLooper());
     }
 

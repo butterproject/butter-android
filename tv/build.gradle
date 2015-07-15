@@ -33,7 +33,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdk
         versionCode buildNumber
         versionName "0.1.2"
-//        multiDexEnabled true
+        multiDexEnabled true
     }
 
     signingConfigs {

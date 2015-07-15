@@ -1,17 +1,11 @@
 package pct.droid.tv.activities;
 
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.tv.R;
@@ -102,6 +96,12 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         if(mService != null)
             mService.removeListener(mFragment);
         super.onPause();
+    }
+
+    @Override
+    public Long getResumePosition() {
+        //todo:
+        return null;
     }
 }
 

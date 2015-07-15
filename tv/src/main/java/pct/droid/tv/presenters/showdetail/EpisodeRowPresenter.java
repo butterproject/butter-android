@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import pct.droid.tv.R;
 
 public class EpisodeRowPresenter extends RowPresenter {
@@ -27,21 +27,21 @@ public class EpisodeRowPresenter extends RowPresenter {
     public static class EpisodeRowViewHolder extends RowPresenter.ViewHolder {
 
 
-        @InjectView(R.id.title_textview)
+        @Bind(R.id.title_textview)
         public TextView titleTextView;
-        @InjectView(R.id.background_view)
+        @Bind(R.id.background_view)
         public View backgroundView;
-        @InjectView(R.id.number_textview)
+        @Bind(R.id.number_textview)
         public TextView numberTextView;
-        @InjectView(R.id.duration_textview)
+        @Bind(R.id.duration_textview)
         public TextView durationTextView;
 
-        @InjectView(R.id.synopsis_textview)
+        @Bind(R.id.synopsis_textview)
         public TextView synopsisTextView;
 
         public EpisodeRowViewHolder(View view) {
             super(view);
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

@@ -54,10 +54,11 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pct.droid.R;
+import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.subs.Caption;
@@ -67,7 +68,6 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.fragments.base.BaseVideoPlayerFragment;
 import pct.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
@@ -689,5 +689,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         subsClick();
     }
 
+
+    public void startBeamPlayerActivity(){
+        BeamPlayerActivity.startActivity(getActivity(), mStreamInfo, getCurrentTime());
+    }
 
 }
