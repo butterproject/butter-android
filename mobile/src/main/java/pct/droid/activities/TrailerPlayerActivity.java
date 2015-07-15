@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import java.net.URLDecoder;
 
 import pct.droid.R;
+import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
@@ -81,6 +82,11 @@ public class TrailerPlayerActivity extends PopcornBaseActivity implements VideoP
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Long getResumePosition() {
+        return 0l;
     }
 
     @Override

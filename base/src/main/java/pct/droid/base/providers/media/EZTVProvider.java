@@ -41,8 +41,15 @@ import pct.droid.base.providers.subs.SubsProvider;
 
 public class EZTVProvider extends MediaProvider {
 
-    private static final String API_URL = "http://eztvapi.re/";
-    private static final String MIRROR_URL = "http://api.popcorntime.io/";
+    private static Integer CURRENT_API = 0;
+    private static final String[] API_URLS = {
+            "https://eztvapi.re/",
+            "https://api.popcorntime.io/",
+            "https://api.popcorntime.cc/",
+            "https://api.popcorntime.re/",
+            "https://api.get-popcorn.com/",
+            "http://tv.ytspt.re/",
+    };
     private static final SubsProvider sSubsProvider = new OpenSubsProvider();
     private static final MetaProvider sMetaProvider = new TraktProvider();
     private static final MediaProvider sMediaProvider = new EZTVProvider();
@@ -83,6 +90,9 @@ public class EZTVProvider extends MediaProvider {
             case POPULARITY:
                 sort = "popularity";
                 break;
+            case TRENDING:
+                sort = "trending";
+                break;
             case YEAR:
                 sort = "year";
                 break;
@@ -99,7 +109,7 @@ public class EZTVProvider extends MediaProvider {
 
         params.add(new NameValuePair("sort", sort));
 
-        String url = API_URL + "shows/";
+        String url = API_URLS[CURRENT_API] + "shows/";
         if (filters.page != null) {
             url += filters.page;
         } else {
@@ -127,10 +137,10 @@ public class EZTVProvider extends MediaProvider {
             @Override
             public void onFailure(Request request, IOException e) {
                 String url = requestBuilder.build().urlString();
-                if (url.equals(MIRROR_URL)) {
+                if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
                 } else {
-                    url = url.replace(API_URL, MIRROR_URL);
+                    url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);
                     requestBuilder.url(url);
                     fetchList(currentList, requestBuilder, filters, callback);
                 }
@@ -169,7 +179,7 @@ public class EZTVProvider extends MediaProvider {
     @Override
     public Call getDetail(String videoId, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + "show/" + videoId);
+        requestBuilder.url(API_URLS[CURRENT_API] + "show/" + videoId);
         requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
@@ -321,7 +331,9 @@ public class EZTVProvider extends MediaProvider {
     @Override
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
-        tabs.add(new NavInfo(R.id.eztv_filter_popular_now,Filters.Sort.POPULARITY, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.popular_now)));
+
+        tabs.add(new NavInfo(R.id.eztv_filter_trending,Filters.Sort.TRENDING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.trending)));
+        tabs.add(new NavInfo(R.id.eztv_filter_popular_now,Filters.Sort.POPULARITY, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.popular)));
         tabs.add(new NavInfo(R.id.eztv_filter_top_rated,Filters.Sort.RATING, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.top_rated)));
         tabs.add(new NavInfo(R.id.eztv_filter_last_updated,Filters.Sort.DATE, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.last_updated)));
         tabs.add(new NavInfo(R.id.eztv_filter_year,Filters.Sort.YEAR, Filters.Order.DESC, PopcornApplication.getAppContext().getString(R.string.year)));

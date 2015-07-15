@@ -31,6 +31,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.DownloadStatus;
+import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -45,7 +46,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mHandler = new Handler(getMainLooper());
     }
 
@@ -120,6 +121,11 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
 
     @Override
     public void onStreamProgress(DownloadStatus status) {
+
+    }
+
+    @Override
+    public void onStreamMetaData(Torrent torrent) {
 
     }
 }

@@ -15,6 +15,8 @@
   <string name="running">Върви на фон</string>
   <string name="tap_to_close">Цъкни да затвориш</string>
   <string name="tap_to_resume">Цъкни да продължиш</string>
+  <string name="signature_invalid">Подписа на приложението е невалиден</string>
+  <string name="possibly_dangerous">Popcorn Time е бил подправен. Моля изтеглете нов инсталационен файл от https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Всички</string>
   <string name="genre_action">Екшън</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Супер естествено</string>
   <string name="genre_vampire">Вампири</string>
   <!--Possible tabs-->
-  <string name="popular_now">ПОПУЛЯРНИ</string>
+  <string name="popular">ПОПУЛЯРНИ</string>
   <string name="top_rated">НАЙ-ХАРЕСВАНИ</string>
   <string name="release_date">ДАТА НА ИЗЛИЗАНЕ</string>
   <string name="last_updated">ПОСЛЕДНО ОБНОВЕНО</string>
   <string name="year">ГОДИНА</string>
   <string name="a_to_z">А - Я</string>
+  <string name="trending">ТЕНДЕНЦИИ</string>
   <!--BeamManager-->
   <string name="pairing_tv">Сдвояване с ТВ</string>
   <string name="confirm_tv">Моля потвърдете връзката на вашият ТВ</string>
   <string name="enter_pairing_code">Въведете сдвояващ код на ТВ</string>
   <string name="open_with">Отвори с/със</string>
+  <string name="select_file">Избери файл</string>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Zapisz</string>
   <string name="cancel">Anuluj</string>
   <string name="close">Zamknij</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Czytaj więcej</string>
   <string name="watch_trailer">Zobacz zwiastun</string>
-  <string name="disable_subs">Wyłącz napisy</string>
   <string name="no_subs">Brak napisów</string>
   <string name="no_subs_available">Napisy niedostępne</string>
   <string name="subtitles">Napisy</string>
   <string name="quality">Jakość</string>
-  <string name="open_magnet">Otwórz magnet</string>
   <string name="trailer">Zwiastun</string>
   <string name="season">Sezon</string>
   <string name="episode">Odcinek</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Tylko Wi-Fi</string>
   <string name="wifi_only_message">Możesz streamować filmy tylko przez Wi-Fi. Możesz to wyłączyć w ustawieniach jeśli chcesz korzystać z łącza mobilnego.</string>
   <!--NavigationDrawer-->
-  <string name="share">Udostępnij</string>
   <string name="drawer_open">Otwórz szufladę nawigacyjną</string>
   <string name="drawer_close">Zamknij szufladę nawigacyjną</string>
   <string name="no_search_results">Nic nie znaleziono</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Miałeś do czynienia z Popcorn Time dla Android\'a? Polecam!</string>
-  <string name="share_dialog_title">Udostępnij</string>
   <!--Beam dialog-->
   <string name="connected_to">Podłączony do</string>
   <string name="disconnect">Rozłącz</string>

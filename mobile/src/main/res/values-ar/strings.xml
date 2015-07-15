@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">حفظ</string>
   <string name="cancel">إلغاء</string>
   <string name="close">إغلاق</string>
   <string name="ok">موافق</string>
@@ -22,12 +21,10 @@
   <string name="minutes">دقيقة</string>
   <string name="read_more">إقرأ المزيد</string>
   <string name="watch_trailer">شاهد الإعلان</string>
-  <string name="disable_subs">إلغاء الترجمة</string>
   <string name="no_subs">بدون ترجمة</string>
   <string name="no_subs_available">لا تتوفر ترجمة</string>
   <string name="subtitles">الترجمة</string>
   <string name="quality">جودة العرض</string>
-  <string name="open_magnet">افتح الرابط</string>
   <string name="trailer">إعلان الفلم</string>
   <string name="season">الموسم</string>
   <string name="episode">الحلقة</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">واي فاي فقط</string>
   <string name="wifi_only_message">يمكنك مشاهدة الفيديوهات عبر الواي فاي فقط. بإمكانك تعديل هذا الخيار في الإعدادات إذا كنت تريد المشاهدة عبر شبكة الهاتف المحمول.</string>
   <!--NavigationDrawer-->
-  <string name="share">شارك</string>
   <string name="drawer_open">إفتح شريط التنقل</string>
   <string name="drawer_close">أغلق شريط التنقل</string>
   <string name="no_search_results">لم يتم العثور على نتائج</string>
@@ -127,9 +123,6 @@
   <string name="git">Git</string>
   <string name="blog">المدونة</string>
   <string name="twitter">تويتر</string>
-  <!--Share dialog-->
-  <string name="share_message">هل جربت Popcorn Time للأندرويد؟ إنه رائع!</string>
-  <string name="share_dialog_title">شارك مع</string>
   <!--Beam dialog-->
   <string name="connected_to">متصل بـ</string>
   <string name="disconnect">قطع الاتصال</string>

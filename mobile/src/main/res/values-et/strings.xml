@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Salvesta</string>
   <string name="cancel">Tühista</string>
   <string name="close">Sulge</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Loe veel</string>
   <string name="watch_trailer">Vaata treilerit</string>
-  <string name="disable_subs">Subtiitrid välja</string>
   <string name="no_subs">Subtiitrid puuduvad</string>
   <string name="no_subs_available">Subtiitrid ei ole saadaval</string>
   <string name="subtitles">Subtiitrid</string>
   <string name="quality">Kvaliteet</string>
-  <string name="open_magnet">Ava magnet</string>
   <string name="trailer">Treiler</string>
   <string name="season">Hooaeg</string>
   <string name="episode">Episood</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">ainult Wi-Fi</string>
   <string name="wifi_only_message">Videosi saab voogedastada ainult üle Wi-Fi võrgu. Sa võid selle seadetest välja lülitada kui soovid voogedastust kasutada üle telefoni võrgu.</string>
   <!--NavigationDrawer-->
-  <string name="share">Jaga</string>
   <string name="drawer_open">Ava navigeerimissahtel</string>
   <string name="drawer_close">Sulge navigeerimissahtel</string>
   <string name="no_search_results">Osingutulemusi ei leitud.</string>
@@ -126,9 +122,6 @@
   <string name="git">Git</string>
   <string name="blog">Blogi</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Oled sa proovinud Popcorn Time`i Androidi jaoks? See on mõnus!</string>
-  <string name="share_dialog_title">Jaga</string>
   <!--Beam dialog-->
   <string name="connected_to">Ühendatud</string>
   <string name="disconnect">Ühenda lahti</string>

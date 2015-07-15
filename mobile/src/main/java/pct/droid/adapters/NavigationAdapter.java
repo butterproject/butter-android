@@ -32,7 +32,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pct.droid.R;
 import pct.droid.fragments.NavigationDrawerFragment;
@@ -167,18 +167,18 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public class ItemRowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @InjectView(android.R.id.icon)
+        @Bind(android.R.id.icon)
         ImageView icon;
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView title;
-        @InjectView(android.R.id.checkbox)
+        @Bind(android.R.id.checkbox)
         Switch checkbox;
-        @InjectView(android.R.id.progress)
+        @Bind(android.R.id.progress)
         ProgressBar progressBar;
 
         public ItemRowHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -201,18 +201,18 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static class HeaderHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.bg_imageview)
+        @Bind(R.id.bg_imageview)
         ImageView mBackgroundImageView;
-        @InjectView(R.id.profile_imageview)
+        @Bind(R.id.profile_imageview)
         CircleImageView mProfileImageView;
-        @InjectView(R.id.title_textview)
+        @Bind(R.id.title_textview)
         TextView mTitleTextView;
-        @InjectView(R.id.subtitle_textview)
+        @Bind(R.id.subtitle_textview)
         TextView mSubtitleTextView;
 
         public HeaderHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

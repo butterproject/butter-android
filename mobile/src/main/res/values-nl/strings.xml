@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Opslaan</string>
   <string name="cancel">Annuleren</string>
   <string name="close">Sluiten</string>
   <string name="ok">Oké</string>
@@ -22,7 +21,6 @@
   <string name="minutes">min</string>
   <string name="read_more">Meer lezen</string>
   <string name="watch_trailer">Trailer bekijken</string>
-  <string name="disable_subs">Ondertiteling uitschakelen</string>
   <string name="no_subs">Geen ondertiteling</string>
   <string name="no_subs_available">Geen ondertiteling beschikbaar</string>
   <string name="subtitles">Ondertiteling</string>
@@ -34,6 +32,8 @@
   <string name="continuing">Lopend</string>
   <string name="ended">Geëindigd</string>
   <string name="aired">Uitgezonden: %s</string>
+  <string name="no_title_available">Geen naam</string>
+  <string name="no_synopsis_available">Geen beschrijving beschikbaar</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Wachten op torrent</string>
   <string name="starting_buffering">Bufferen starten...</string>
@@ -52,12 +52,13 @@
   <string name="fit_horizontal">Horizontaal passend</string>
   <string name="fit_vertical">Verticaal passend</string>
   <string name="original_size">Centreren</string>
+  <string name="reload_video">Herlaadt video</string>
   <string name="comm_error">Communicatiefout</string>
-  <string name="comm_message">Er is een fout opgetreden bij het ophalen van de video. Dit kan komen door netwerkproblemen of YouTube-protocollen. Probeer het later opnieuw.</string>
+  <string name="comm_message">Er is een fout opgetreden bij het ophalen van de video. Dit kan komen door problemen met het netwerk of met YouTube. Probeer het later opnieuw.</string>
   <string name="leave_videoplayer_title">Weet je het zeker?</string>
   <string name="leave_videoplayer_message">Weet je zeker dat je wil afsluiten? %s stopt dan met afspelen.</string>
-  <string name="encountered_error_title">Video fout opgetreden</string>
-  <string name="encountered_error">De video speler heeft een serieuze fout ontdekt. De video bestand kon niet geopend en/of afgespeeld worden. Het bestand werd niet herkend.</string>
+  <string name="encountered_error_title">Er is een fout opgetreden bij het afspelen van de video.</string>
+  <string name="encountered_error">Er is een fout opgetreden in de videospeler. De video bestand kon niet geopend en/of afgespeeld worden. Het bestandsformaat kon niet worden herkend.</string>
   <!--TermsActivity strings-->
   <string name="accept">Accepteren</string>
   <string name="leave">Sluiten</string>
@@ -104,11 +105,14 @@
   <string name="dht_limit">DHT-limiet</string>
   <string name="unlimited">Ongelimiteerd</string>
   <string name="show_vpn">VPN-optie tonen in menu</string>
+  <string name="pixel_format">Forceer video chroma</string>
+  <string name="rgb32">RGB 32-bit: standaard chroma</string>
+  <string name="rgb16">RGB 16-bit: hogere performance, lagere kwaliteit</string>
+  <string name="yuv">YUV: beste performance maar werkt niet altijd</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Alleen wifi</string>
   <string name="wifi_only_message">Je kunt alleen streamen over een Wi-Fi-verbinding. Als je wilt streamen over een mobiele verbinding kun je deze instelling veranderen in de instellingen.</string>
   <!--NavigationDrawer-->
-  <string name="share">Delen</string>
   <string name="drawer_open">Navigatielade openen</string>
   <string name="drawer_close">Navigatielade sluiten</string>
   <string name="no_search_results">Er zijn geen zoekresultaten gevonden</string>
@@ -122,20 +126,17 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Heb je Popcorn Time voor Android geprobeerd? Het is geweldig!</string>
-  <string name="share_dialog_title">Delen via</string>
   <!--Beam dialog-->
   <string name="connected_to">Verbonden met</string>
   <string name="disconnect">Verbinding verbreken</string>
   <string name="select_beaming">Selecteer apparaat voor beaming</string>
-  <string name="starting_beam">Voorbereiden van het video beamen</string>
-  <string name="beaming_failed">De video kan niet afgespeeld worden op het apparaat. Opnieuw proberen? De app moet mischien meer delen van de video downloaden voordat deze kan worden afgespeeld.</string>
+  <string name="starting_beam">Beamen voorbereiden...</string>
+  <string name="beaming_failed">De video kan niet gestart worden op het externe apparaat. Het is mogelijk dat er meer delen van de video gedownload moeten worden voordat deze kan worden afgespeeld. Wil je het opnieuw proberen?</string>
   <string name="the_video">De video</string>
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht app niet geïnstalleerd</string>
-  <string name="vpn_info">VPN.ht app moet geïnstalleerd zijn om gebruik te maken van de VPN optie voor in Popcorn Time. geen interesse? Dan kan je deze knop verbergen. </string>
-  <string name="vpn_download">App downloaden</string>
-  <string name="vpn_later">Kom later terug</string>
-  <string name="vpn_hide">Verbergknop</string>
+  <string name="vpn_info">De VPN.ht app moet geïnstalleerd zijn om gebruik te maken van de VPN optie binnen Popcorn Time. Heb je geen interesse? Dan kan je deze knop verbergen.</string>
+  <string name="vpn_download">Download</string>
+  <string name="vpn_later">Later</string>
+  <string name="vpn_hide">Verberg</string>
 </resources>

@@ -8,11 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.astuetz.PagerSlidingTabStrip;
-
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import pct.droid.R;
+import pct.droid.activities.MainActivity;
 import pct.droid.adapters.MediaPagerAdapter;
 import pct.droid.base.providers.media.MediaProvider;
 
@@ -25,9 +24,7 @@ public class MediaContainerFragment extends Fragment {
 
     private MediaPagerAdapter mAdapter;
 
-    @InjectView(R.id.tabs)
-    PagerSlidingTabStrip mTabs;
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mViewPager;
 
     public static MediaContainerFragment newInstance(MediaProvider provider) {
@@ -46,7 +43,7 @@ public class MediaContainerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
     }
 
     @Override
@@ -56,9 +53,14 @@ public class MediaContainerFragment extends Fragment {
         MediaProvider provider = getArguments().getParcelable(EXTRA_PROVIDER);
 
         mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), provider.getNavigation());
+
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(provider.getDefaultNavigationIndex());
-        mTabs.setViewPager(mViewPager);
+
+        ((MainActivity) getActivity()).updateTabs(provider.getDefaultNavigationIndex());
+    }
+
+    public ViewPager getViewPager() {
+        return mViewPager;
     }
 
 }

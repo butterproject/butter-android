@@ -38,9 +38,12 @@
     <string name="running">Running in background</string>
     <string name="tap_to_close">Tap to close</string>
     <string name="tap_to_resume">Tap to resume</string>
+
+    <string name="signature_invalid">App signature invalid</string>
+    <string name="possibly_dangerous">Popcorn Time has been tampered with. Please download a new install file from https://popcorntime.io/</string>
+
 	<string name="subtitles">Subtitles</string>
 	<string name="now_playing">Now playing</string>
-
 
     <!-- SettingsActivity strings -->
     <string name="preferences">Preferences</string>
@@ -164,13 +167,14 @@
     <string name="genre_vampire">Vampire</string>
 
     <!-- Possible tabs -->
-    <string name="popular_now">POPULAR NOW</string>
+    <string name="popular">POPULAR</string>
     <string name="top_rated">TOP RATED</string>
     <string name="release_date">RELEASE DATE</string>
     <string name="last_updated">LAST UPDATED</string>
     <string name="year">YEAR</string>
     <string name="a_to_z">A - Z</string>
 
+    <string name="trending">TRENDING</string>
     <string name="encountered_error_title">Video error encountered</string>
     <string name="encountered_error">The video player encountered a serious error. The video file could not be opened and/or played. The format was not recognised.</string>
 
@@ -181,6 +185,7 @@
 
     <!-- TermsActivity strings -->
     <string name="open_with">Open with</string>
+<string name="select_file">Select file</string>
     <string name="terms" translatable="false">Your Acceptance\n\n
 By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
 Privacy Policy\n\n

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Spara</string>
   <string name="cancel">Avbryt</string>
   <string name="close">Stäng</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Läs mer</string>
   <string name="watch_trailer">Se trailer</string>
-  <string name="disable_subs">Inaktivera undertexter</string>
   <string name="no_subs">Inga undertexter</string>
   <string name="no_subs_available">Inga undertexter tillgängliga</string>
   <string name="subtitles">Undertexter</string>
   <string name="quality">Kvalité </string>
-  <string name="open_magnet">Öppna magnet</string>
   <string name="trailer">Trailer</string>
   <string name="season">Säsong</string>
   <string name="episode">Episode</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Endast Wi-Fi</string>
   <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>
   <!--NavigationDrawer-->
-  <string name="share">Dela</string>
   <string name="drawer_open">Öppna navigeringslåda</string>
   <string name="drawer_close">Stäng navigeringslåda</string>
   <string name="no_search_results">Inga sökresultat hittades</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Har du provat Popcorn Time för Android? Den är häftigt!</string>
-  <string name="share_dialog_title">Dela med</string>
   <!--Beam dialog-->
   <string name="connected_to">Ansluten till</string>
   <string name="disconnect">Koppla från</string>

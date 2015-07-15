@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">ذخیره</string>
   <string name="cancel">انصراف</string>
   <string name="close">ببند</string>
   <string name="ok">تائید</string>
@@ -22,7 +21,6 @@
   <string name="minutes">دقیقه</string>
   <string name="read_more">بیشتر بخوانید</string>
   <string name="watch_trailer">تماشای پیش‌پرده</string>
-  <string name="disable_subs">زیرنویس را غیرفعال کن</string>
   <string name="no_subs">زیرنویس پیدا نشد</string>
   <string name="no_subs_available">هیچ زیرنویسی یافت نشد</string>
   <string name="subtitles">زیرنویس‌ها</string>
@@ -104,11 +102,11 @@
   <string name="wifi_only">فقط Wi-Fi</string>
   <string name="wifi_only_message">فقط از طریق Wi-Fi میتوانید ویدئوها را استریم کنید. در قسمت تنظیمات می‌توانید این محدودیت را غیرفعال کنید.</string>
   <!--NavigationDrawer-->
-  <string name="share">اشتراک</string>
   <string name="drawer_open">منوی جابجایی را باز کن</string>
   <string name="drawer_close">منوی جابجایی را ببند</string>
   <string name="no_search_results">هیچ نتیجه‌ای پیدا نشد</string>
-  <!--About fragment-->
+  <string name="vpn">وی‌پی‌ان</string>
+  <!--AboutFragment-->
   <string name="about_message">Popcorn Time نتیجه‌ی زحمات توسعه‌دهندگان و طراحان بسیاری‌ست که تعدادی API را با هم ترکیب کرده تا لذت تماشای فیلم‌های تورنت را تا جای ممکن ساده کنند.
 ما یک پروژه‌ی متن‌باز هستیم. ما از همه جای دنیا می‌آییم. فیلم‌هامون رو دوست داریم. و پسر، نمیدونی چقدر عاشق پاپکورن‌یم!</string>
   <string name="website">وب‌سایت</string>
@@ -118,13 +116,11 @@
   <string name="git">گیت</string>
   <string name="blog">وب‌لاگ</string>
   <string name="twitter">توییتر</string>
-  <!--Share dialog-->
-  <string name="share_text">پاپکورن تایم برای اندروید رو تا حالا امتحان کردی؟ عالیه! https://popcorntime.io/</string>
-  <string name="share_dialog_title">به اشتراک گزاری با</string>
   <!--Beam dialog-->
   <string name="connected_to">اتصال به </string>
   <string name="disconnect">قطع ارتباط</string>
   <string name="select_beaming">دستگاهی را برای استریم کردن انتخاب کنید</string>
   <string name="starting_beam">آماده سازی برای استریم ویديو...</string>
   <string name="beaming_failed">ویديو امکان پخش در دستگاه مورد نظر را ندارد. آیا می‌خواهید دوباره امتحان کنید؟ برنامه ممکن است احتیاج به دانلود مقدار بیشتری از ویديو را داشته باشد تا دستگاه شما بتواند آن را پخش کند.</string>
+  <!--VPN dialog-->
 </resources>

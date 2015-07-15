@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Spremi</string>
   <string name="cancel">Odustani</string>
   <string name="close">Zatvori</string>
   <string name="ok">U redu</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Pročitajte više</string>
   <string name="watch_trailer">Pogledajte najavu</string>
-  <string name="disable_subs">Onemogući podnaslove</string>
   <string name="no_subs">Nema podnaslova</string>
   <string name="no_subs_available">Nema dostupnih podnaslova</string>
   <string name="subtitles">Podnaslovi</string>
   <string name="quality">Kvaliteta</string>
-  <string name="open_magnet">Otvori magnet</string>
   <string name="trailer">Najava</string>
   <string name="season">Sezona</string>
   <string name="episode">Epizoda</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Samo Wi-Fi</string>
   <string name="wifi_only_message">Možete samo streamati video snimke putem Wi-Fi. Ovo možete onemogućiti u postavkama ako želite streamati putem mobilne mreže.</string>
   <!--NavigationDrawer-->
-  <string name="share">Podijeli</string>
   <string name="drawer_open">Otvori navigacijsku površinu</string>
   <string name="drawer_close">Zatvori navigacijsku površinu</string>
   <string name="no_search_results">Nema traženih rezultata</string>
@@ -128,9 +124,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Jeste li isprobali Popcorn Time za Android? Fenomenalan je!</string>
-  <string name="share_dialog_title">Podijelite s</string>
   <!--Beam dialog-->
   <string name="connected_to">Povezano s</string>
   <string name="disconnect">Odspoji</string>

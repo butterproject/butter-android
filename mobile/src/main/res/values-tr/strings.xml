@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Kaydet</string>
   <string name="cancel">İptal</string>
   <string name="close">Kapat</string>
   <string name="ok">Tamam</string>
@@ -22,7 +21,6 @@
   <string name="minutes">min</string>
   <string name="read_more">Daha fazla oku</string>
   <string name="watch_trailer">Fragman izle</string>
-  <string name="disable_subs">Altyazıyı kapat</string>
   <string name="no_subs">Altyazı mevcut değil</string>
   <string name="no_subs_available">Altyazı mevcut değil</string>
   <string name="subtitles">Altyazılar</string>
@@ -111,7 +109,6 @@
   <string name="wifi_only">Sadece Wi-Fi</string>
   <string name="wifi_only_message">Sadece Wi-Fi üzerinden yayın yapabilirisiniz. Eğer telefon bağlantısı ile yayın yapmak istiyorsanız bu özelliği ayarlardan kapatabilirsiniz.</string>
   <!--NavigationDrawer-->
-  <string name="share">Paylaş</string>
   <string name="drawer_open">Açık navigasyon bölümü</string>
   <string name="drawer_close">Kapalı navigasyon bölümü</string>
   <string name="no_search_results">Arama sonucu bulunamadı</string>
@@ -125,9 +122,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Popcorn Time Android uygulamasını denediniz mi? Harika!</string>
-  <string name="share_dialog_title">Paylaş</string>
   <!--Beam dialog-->
   <string name="connected_to">Bağlanıldı: </string>
   <string name="disconnect">Bağlantıyı Kes</string>
@@ -138,4 +132,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht uygulaması yüklenmedi</string>
   <string name="vpn_info">Popcorn Time üzerinden VPN seçeneğini kullanmak için VPN.ht uygulamasını yüklemeniz gerekmektedir. Bununla ilgilenmiyor musunuz? İlgilenmiyorsanız bu düğmeyi gizleyebilirsiniz.</string>
+  <string name="vpn_download">İndir</string>
+  <string name="vpn_later">Sonra</string>
+  <string name="vpn_hide">Gizle</string>
 </resources>

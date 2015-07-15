@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Uložit</string>
   <string name="cancel">Zrušit</string>
   <string name="close">Zavřít</string>
   <string name="ok">OK</string>
@@ -22,7 +21,6 @@
   <string name="minutes">min.</string>
   <string name="read_more">Číst dále</string>
   <string name="watch_trailer">Přehrát trailer</string>
-  <string name="disable_subs">Titulky vypnuty</string>
   <string name="no_subs">Bez titulků</string>
   <string name="no_subs_available">K dispozici nejsou žádné titulky</string>
   <string name="subtitles">Titulky</string>
@@ -108,7 +106,6 @@
   <string name="wifi_only">Pouze Wi-Fi</string>
   <string name="wifi_only_message">Streamovat videa je povoleno pouze přes Wi-Fi. Tuto možnost lze zakázat v nastavení, pokud chcete streamovat přes mobilní připojení.</string>
   <!--NavigationDrawer-->
-  <string name="share">Sdílet</string>
   <string name="drawer_open">Otevřít navigační okno</string>
   <string name="drawer_close">Zavřít navigační okno</string>
   <string name="no_search_results">Nenalezeny žádné výsledky hledání</string>
@@ -124,9 +121,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Už si zkusil Popcorn Time pro Android? Je to úžasné! </string>
-  <string name="share_dialog_title">Sdílet s</string>
   <!--Beam dialog-->
   <string name="connected_to">Připojeno k</string>
   <string name="disconnect">Odpojit</string>
@@ -137,7 +131,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht aplikace není nainstalována </string>
   <string name="vpn_info">Musíte mít nainstalovanou aplikaci VPN.ht aby jste mohli použít VPN v aplikaci Popcorn Time. Nechcete používat VPN? Můžete jednoduše schovat tlačítko. </string>
-  <string name="vpn_download">Stáhnout aplikaci </string>
-  <string name="vpn_later">Vraťte se zpátky později </string>
-  <string name="vpn_hide">Schovat tlačítko </string>
 </resources>

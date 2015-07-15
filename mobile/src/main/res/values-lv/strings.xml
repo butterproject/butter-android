@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--General strings-->
+  <string name="cancel">Atcelt</string>
+  <string name="close">Close</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Ieslēgts</string>
+  <string name="disabled">Atslēgti</string>
+  <string name="casting">video \"casting\"</string>
+  <!--OverviewActivity strings-->
+  <string name="search_hint">Virsraksts, gads, aktieri</string>
+  <string name="title_shows">Seriāli</string>
+  <string name="title_movies">Filmas</string>
+  <string name="title_anime">Anime</string>
+  <string name="genres">Žanri</string>
+  <string name="search">Meklēt</string>
+  <string name="searching">Meklē...</string>
+  <string name="no_data_found">Dati nav atrasti</string>
+  <string name="unknown_error">Kaut kas nogāja greizi</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Lasī vairāk</string>
+  <string name="watch_trailer">Skaties treileri</string>
+  <string name="no_subs">Nav subtitri</string>
+  <string name="no_subs_available">Subtitri nav pieejami</string>
+  <string name="subtitles">Subtitri</string>
+  <string name="quality">Kvalitāte</string>
+  <string name="trailer">Treileris</string>
+  <string name="season">Sezona</string>
+  <string name="episode">Epizode</string>
+  <string name="specials">Ipašie</string>
+  <string name="continuing">Turpinās</string>
+  <string name="ended">Beidzies</string>
+  <string name="aired">Rādīts: %s</string>
+  <string name="no_title_available">Nav nosaukuma</string>
+  <string name="no_synopsis_available">Kopsavilkums nav pieejams</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Gaidam torrentu</string>
+  <string name="starting_buffering">Sākakam buferot</string>
+  <string name="streaming_started">Straumēšana sākās</string>
+  <string name="waiting_for_subtitles">Gaidam subtitrus</string>
+  <string name="seeds">sīīdi</string>
+  <string name="error_files">Kļūda: Nesanāk ierakstīt failus, pamēģini ciru datu glabātSanas vietu.</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">Tagad atskaņo</string>
+  <string name="volume">Skaļums</string>
+  <string name="brightness">Gaišums</string>
+  <string name="hardware_acceleration_error_title">HW paātrinātāja kļūda</string>
+  <string name="hardware_acceleration_error_message">HW paātrinātājas kļūdās, vai gribi atslēgt  HW paātrinātāju?</string>
+  <string name="best_fit">Labākais izmērs</string>
+  <string name="fill">Piepildīt</string>
+  <string name="fit_horizontal">Pilns Horizontāli</string>
+  <string name="fit_vertical">Pilns Vertikāli</string>
+  <string name="original_size">Oriģināls</string>
+  <string name="reload_video">pārstartēt video</string>
+  <string name="comm_error">Kļūda komunicējot</string>
+  <string name="comm_message">Kaut kāda kļūda grābjot video. Varētu būt tīkla vaina vai YouTube protoklos. Lūdzu mēģini vēlreiz.</string>
+  <string name="leave_videoplayer_title">Vai esat pārliecināts?</string>
+  <string name="leave_videoplayer_message">Tiešām gribi iziet no atskaņotāja? %s pārtrauks atskaņošanu.</string>
+  <string name="encountered_error_title">kaut kāda video kļūdu </string>
+  <string name="encountered_error">Nopietna video atskaņotāja kļūda. Video failsu neizdevās plalaist. Svešs formāts</string>
+  <!--TermsActivity strings-->
+  <string name="accept">Piekrīti</string>
+  <string name="leave">Iziet</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Iestatījumi</string>
+  <string name="general">Vispārēji</string>
+  <string name="default_view">noklusētais pārskats</string>
+  <string name="default_player">noklusētais atskaņotājs</string>
+  <string name="i18n_language">App Valoda</string>
+  <string name="restart_effect">Restartē programu lai iedarbināti izmaiņas</string>
+  <string name="device_language">Verķa valoda</string>
+  <string name="stream_over_wifi_only">Tikai Wi-Fi straumēšana</string>
+  <string name="internal_player">Iekšējais</string>
+  <string name="subtitle_color">Color</string>
+  <string name="subtitle_size">Izmērs</string>
+  <string name="subtitle_stroke_color">titru apvilktā krāsa</string>
+  <string name="subtitle_stroke_width">līnijas platums</string>
+  <string name="subtitle_language">noklusētā valoda</string>
+  <string name="no_default_set">Nav noklusētā valoda</string>
+  <string name="advanced">Papildus Iestatījumi</string>
+  <string name="storage_location">Datu glabāšana</string>
+  <string name="storage_automatic">Automātiski</string>
+  <string name="storage_choose">Izvēlies Lokāciju</string>
+  <string name="not_writable">Lokācija nav ierakstāma</string>
+  <string name="remove_cache">Iztīri kašu aiverot atskaņotāju</string>
+  <string name="hw_acceleration">kompjūteratūras paātrinājums</string>
+  <string name="hw_automatic">Automātiski</string>
+  <string name="hw_full">Pilns</string>
+  <string name="hw_decoding">TIkai Atkodēju</string>
+  <string name="updates">Atjauninājumi</string>
+  <string name="auto_updates">Automātiskās atjaunināšanas</string>
+  <string name="check_for_updates">Pārbaudi atjauninājumu</string>
+  <string name="last_check">Pēdējais atjauninājuma mēģinājums</string>
+  <string name="about">Par</string>
+  <string name="version">Versija</string>
+  <string name="changelog">Izmaiņas</string>
+  <string name="tap_to_open">Piebaksti lai atvērtu</string>
+  <string name="report_a_bug">Pavēsti kļūdu</string>
+  <string name="open_source_licenses">Open-source licenze</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Maksimālais lejuplaādes ātrums</string>
+  <string name="upload_speed">Maksimālais augšuplādes ātrums</string>
+  <string name="max_connections">Maksimālais savienojumu skaits</string>
+  <string name="dht_limit">DHT limits</string>
+  <string name="unlimited">Neierobežoti</string>
+  <string name="show_vpn">Rāri VPN iespēju izvēlnē</string>
+  <string name="pixel_format">Forsēt viodeo krāsas</string>
+  <string name="rgb32">RGB 32-bit: noklusētais krāsu profils</string>
+  <string name="rgb16">RGB 16-bit: Efektīvāka darbība, ber zemāka kvalitāte</string>
+  <string name="yuv">YUV: vislietderīgāk darbojās ,bet nevienmēr strādā</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Tikai Wi-Fi</string>
+  <string name="wifi_only_message">Tu vari tikai straumēt video caur Wi-Fi. Vari arī atslēgt ierobežojumu iestatījumos, ja gribi izmantot telefona tīklu.</string>
+  <!--NavigationDrawer-->
+  <string name="drawer_open">Atvēr navigātora šūplādi</string>
+  <string name="drawer_close">Aizver navigātora šūplādi</string>
+  <string name="no_search_results">Neko nevarēju atrast</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">\"Popcorn Time\" ir radies Daudzu Izstrādātāju un dizaineru sadarbībā liekot kopā vairakus API, lai radītu ļoti
+⇥⇥baudāmu torrent filmu skatīšanos cik vienkāri vien iespējams.\n\nWe are an open source project. We are from all over the world.  And boy, do we love popcorn.Mēs esam Atvērtā koda projekts. Mēs esam no vias pasaules. Mēs
+⇥⇥mīlam mūsu filmas. Un vecīt mēs mīlam popkornu.</string>
+  <string name="website">Websaits</string>
+  <string name="forum">Forums</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blogs</string>
+  <string name="twitter">Twitter</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Savienots ar</string>
+  <string name="disconnect">Disconnect</string>
+  <string name="select_beaming">Izvēlies ierīci video bīmēšanai</string>
+  <string name="starting_beam">iedarbinam video bīmēšanau...</string>
+  <string name="beaming_failed">Video neatskaņojās un neaizbīmējās. Mēģināsi vēlreiz? Programai varbūt vajad lejuplādēt vairāk gabalus lai atskaņotu video.</string>
+  <string name="the_video">Pats Video</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht app nav instalēta</string>
+  <string name="vpn_info">Ja gribi izmantot VPN.ht no iekš Popcorn Tme, tev ir jāinstalē VPN.ht app. Negribi? Tu vari noslēpt šo pogu.</string>
+  <string name="vpn_download">Lejuplādēt</string>
+  <string name="vpn_later">Vēlāk</string>
+  <string name="vpn_hide">Slēpt</string>
+</resources>

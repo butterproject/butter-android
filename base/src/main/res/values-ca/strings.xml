@@ -15,6 +15,8 @@
   <string name="running">Executant-se en segon pla</string>
   <string name="tap_to_close">Toca per tancar</string>
   <string name="tap_to_resume">Prem per continuar</string>
+  <string name="signature_invalid">Signatura de l\'aplicació no vàlida</string>
+  <string name="possibly_dangerous">Popcorn Time ha estat compromesa. Baixeu un nou fitxer d\'instal·lació de https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Tots</string>
   <string name="genre_action">Acció</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Sobrenatural</string>
   <string name="genre_vampire">Vampirs</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULAR ARA</string>
+  <string name="popular">POPULAR</string>
   <string name="top_rated">MILLOR VALORADES</string>
   <string name="release_date">DATA D\'EMISSIÓ</string>
   <string name="last_updated">DARRERA ACTUALITZACIÓ</string>
   <string name="year">ANY</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDÈNCIA</string>
   <!--BeamManager-->
   <string name="pairing_tv">Emparellant-se amb la TV.</string>
   <string name="confirm_tv">Confirma la connexió al teu televisor, si us plau</string>
   <string name="enter_pairing_code">Introdueix el Codi d\'Aparellament al televisor</string>
   <string name="open_with">Obre amb</string>
+  <string name="select_file">Seleccioneu un fitxer</string>
 </resources>

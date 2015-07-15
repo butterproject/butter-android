@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Зачувај</string>
   <string name="cancel">Откажи</string>
   <string name="close">Затвори</string>
   <string name="ok">Во ред</string>
@@ -22,7 +21,6 @@
   <string name="minutes">минута</string>
   <string name="read_more">Прочитај повеќе</string>
   <string name="watch_trailer">Гледај траилер</string>
-  <string name="disable_subs">Оневозможи преводи</string>
   <string name="no_subs">Нема преводи</string>
   <string name="no_subs_available">Не се достапни преводи</string>
   <string name="subtitles">Преводи</string>
@@ -108,7 +106,6 @@
   <string name="wifi_only">Само преку Wi-Fi</string>
   <string name="wifi_only_message">Можете да симнувате видеа само преку Wi-Fi. Можете да ја исклучите таа опција ако сакате да симнувате и преку мобилна мрежа.</string>
   <!--NavigationDrawer-->
-  <string name="share">Делење</string>
   <string name="drawer_open">Отвори ги командите за навигација</string>
   <string name="drawer_close">Затвори ги командите за навигација</string>
   <string name="no_search_results">Нема резултати од барањето</string>
@@ -124,9 +121,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Дали сте го пробале Popcorn Time за Android? Одличен е!</string>
-  <string name="share_dialog_title">Сподели со</string>
   <!--Beam dialog-->
   <string name="connected_to">Поврзано со</string>
   <string name="disconnect">Прекинато поврзување</string>
@@ -137,7 +131,4 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">Не е инсталирана апликацијата VPN.ht</string>
   <string name="vpn_info">Потребно е да ја инсталирате апликацијата VPN.ht app за да ја користите VPN опцијата во Popcorn Time. Не ви е потребно? тогаш сокријте го ова копче.</string>
-  <string name="vpn_download">Симни ја апликацијата</string>
-  <string name="vpn_later">Вратете се подоцна</string>
-  <string name="vpn_hide">Сокриј го копчето</string>
 </resources>

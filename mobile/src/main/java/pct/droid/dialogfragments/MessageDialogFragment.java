@@ -31,7 +31,8 @@ import pct.droid.base.PopcornApplication;
 public class MessageDialogFragment extends DialogFragment {
 
     public static final String TITLE = "title";
-    public static final String MESSAGE = "title";
+    public static final String MESSAGE = "message";
+    public static final String CANCELABLE = "cancelable";
 
     @NonNull
     @Override
@@ -40,28 +41,44 @@ public class MessageDialogFragment extends DialogFragment {
             return super.onCreateDialog(savedInstanceState);
         }
 
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(getArguments().getString(TITLE))
-                .setMessage(getArguments().getString(MESSAGE))
-                .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create();
+                .setMessage(getArguments().getString(MESSAGE));
+
+        if(getArguments().getBoolean(CANCELABLE, true)) {
+            builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            setCancelable(true);
+        } else {
+            setCancelable(false);
+        }
+
+        return builder.create();
     }
 
     public static void show(FragmentManager fm, String title, String message) {
+        show(fm, title, message, true);
+    }
+
+    public static void show(FragmentManager fm, String title, String message, Boolean cancelable) {
         MessageDialogFragment dialogFragment = new MessageDialogFragment();
         Bundle args = new Bundle();
         args.putString(TITLE, title);
         args.putString(MESSAGE, message);
+        args.putBoolean(CANCELABLE, cancelable);
         dialogFragment.setArguments(args);
         dialogFragment.show(fm, "overlay_fragment");
     }
 
     public static void show(FragmentManager fm, int titleRes, int messageRes) {
         show(fm, PopcornApplication.getAppContext().getString(titleRes), PopcornApplication.getAppContext().getString(messageRes));
+    }
+
+    public static void show(FragmentManager fm, int titleRes, int messageRes, Boolean cancelable) {
+        show(fm, PopcornApplication.getAppContext().getString(titleRes), PopcornApplication.getAppContext().getString(messageRes), cancelable);
     }
 }

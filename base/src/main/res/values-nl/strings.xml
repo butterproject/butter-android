@@ -2,19 +2,21 @@
 <resources>
   <string name="update_available">Er is een nieuwe update beschikbaar</string>
   <string name="press_install">Klik om te installeren</string>
-  <string name="loading_data">Gegevens aan het laden...</string>
-  <string name="loading_details">Details aan het laden...</string>
-  <string name="loading_shows">Series aan het laden laden...</string>
-  <string name="loading_movies">Films aan het laden...</string>
-  <string name="loading_subs">Ondertiteling aan het laden laden...</string>
+  <string name="loading_data">Gegevens laden...</string>
+  <string name="loading_details">Details laden...</string>
+  <string name="loading_shows">Series laden...</string>
+  <string name="loading_movies">Films laden...</string>
+  <string name="loading_subs">Ondertiteling laden...</string>
   <string name="error_files">Fout: Er konden geen bestanden worden aangemaakt</string>
   <string name="overview_not_available">Helaas! Er is geen overzicht beschikbaar.</string>
   <string name="episode">Aflevering</string>
   <string name="unknown_error">Er is een fout opgetreden</string>
-  <string name="torrent_failed">Niet gelukt om de torrent te ontvangen</string>
-  <string name="running">Wordt in de achtergrond uitgevoerd</string>
+  <string name="torrent_failed">De torrent kon niet worden opgehaald</string>
+  <string name="running">Draait in de achtergrond</string>
   <string name="tap_to_close">Tik om te sluiten</string>
   <string name="tap_to_resume">Tik om door te gaan</string>
+  <string name="signature_invalid">Digitale ondertekening ongeldig</string>
+  <string name="possibly_dangerous">Er is geknoeid met deze Popcorn Time applicatie. Download een nieuwe versie van https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Alle</string>
   <string name="genre_action">Actie</string>
@@ -40,7 +42,7 @@
   <string name="genre_news">Nieuws</string>
   <string name="genre_reality">Reality</string>
   <string name="genre_romance">Romantiek</string>
-  <string name="genre_sci_fi">Sciencefiction</string>
+  <string name="genre_sci_fi">Sci-Fi</string>
   <string name="genre_short">Kort</string>
   <string name="genre_special_interest">Speciale interesse</string>
   <string name="genre_soap">Soap</string>
@@ -73,20 +75,23 @@
   <string name="genre_shoujo_ai">Shoujo Ai</string>
   <string name="genre_shounen">Shounen</string>
   <string name="genre_shounen_ai">Shounen Ai</string>
-  <string name="genre_slice_of_life">Stukje leven</string>
+  <string name="genre_slice_of_life">Slice of Life</string>
   <string name="genre_space">Ruimte</string>
   <string name="genre_super_power">Superkracht</string>
   <string name="genre_supernatural">Bovennatuurlijk</string>
   <string name="genre_vampire">Vampier</string>
   <!--Possible tabs-->
-  <string name="popular_now">NU POPULAIR</string>
+  <string name="popular">POPULAIR</string>
   <string name="top_rated">BEST GEWAARDEERD</string>
   <string name="release_date">RELEASE DATUM</string>
-  <string name="last_updated">voor het laatst geupdate</string>
+  <string name="last_updated">LAATST GEÜPDATET</string>
   <string name="year">JAAR</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TRENDING</string>
   <!--BeamManager-->
-  <string name="pairing_tv">koppelen met TV</string>
-  <string name="confirm_tv">bevestig de verbinding op je TV</string>
-  <string name="enter_pairing_code">voer de koppelings code in op de TV</string>
+  <string name="pairing_tv">Koppelen met TV</string>
+  <string name="confirm_tv">Bevestig de verbinding op je TV</string>
+  <string name="enter_pairing_code">Voer de koppelingscode van de TV in.</string>
+  <string name="open_with">Open met</string>
+  <string name="select_file">Bestand selecteren</string>
 </resources>

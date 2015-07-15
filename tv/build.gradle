@@ -6,7 +6,7 @@ buildscript {
 
     dependencies {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.9'
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.19.2'
     }
 }
 
@@ -90,6 +90,4 @@ dependencies {
     }
 
     compile project(':base')
-    compile project(':vlc')
-    compile project(':xmlrpc')
 }

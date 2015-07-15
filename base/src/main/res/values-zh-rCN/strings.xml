@@ -15,6 +15,8 @@
   <string name="running">后台运行</string>
   <string name="tap_to_close">点击关闭</string>
   <string name="tap_to_resume">点击继续</string>
+  <string name="signature_invalid">应用程序签名无效</string>
+  <string name="possibly_dangerous">Popcorn Time 已被篡改。请从官方网站 https://popcorntime.io/ 下载新的安装文件。</string>
   <!--Genres-->
   <string name="genre_all">所有</string>
   <string name="genre_action">动作</string>
@@ -79,14 +81,17 @@
   <string name="genre_supernatural">超自然</string>
   <string name="genre_vampire">吸血鬼</string>
   <!--Possible tabs-->
-  <string name="popular_now">即时热门</string>
+  <string name="popular">热门</string>
   <string name="top_rated">最高评分</string>
   <string name="release_date">上映日期</string>
   <string name="last_updated">最近更新</string>
   <string name="year">年份</string>
   <string name="a_to_z">字母</string>
+  <string name="trending">流行</string>
   <!--BeamManager-->
   <string name="pairing_tv">匹配电视</string>
   <string name="confirm_tv">请在您的电视中确认连接</string>
   <string name="enter_pairing_code">输入配对码匹配电视</string>
+  <string name="open_with">打开方式</string>
+  <string name="select_file">选择文件</string>
 </resources>

@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +36,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import pct.droid.R;
 import pct.droid.activities.PreferencesActivity;
 import pct.droid.adapters.NavigationAdapter;
@@ -127,20 +125,19 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return mRecyclerView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
 
         mAdapter = new NavigationAdapter(getActivity(), this, initItems());
         mAdapter.setOnItemClickListener(mOnItemClickListener);
 
         mRecyclerView.addItemDecoration(new OneShotDividerDecorator(getActivity(), 3));
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.requestFocus();
     }
@@ -266,12 +263,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-				/* do nothing */
-            }
-
-            @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if (!isAdded()) return;
@@ -282,6 +273,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
                     mUserLearnedDrawer = true;
                     PrefUtils.save(getActivity(), Prefs.DRAWER_LEARNED, true);
                 }
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, 0);
             }
         };
 

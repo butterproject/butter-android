@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Salvează</string>
   <string name="cancel">Anulează</string>
   <string name="close">Închide</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">min</string>
   <string name="read_more">Mai citește</string>
   <string name="watch_trailer">Urmărește prezentarea</string>
-  <string name="disable_subs">Dezactivează subtitrările</string>
   <string name="no_subs">Fără subtitrări</string>
   <string name="no_subs_available">Nu sunt subtitrari disponibile</string>
   <string name="subtitles">Subtitrări</string>
   <string name="quality">Calitate</string>
-  <string name="open_magnet">Deschide magnet</string>
   <string name="trailer">Prezentare</string>
   <string name="season">Sezon</string>
   <string name="episode">Episod</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">Doar Wi-Fi</string>
   <string name="wifi_only_message">Puteți emite filme doar prin Wi-Fi. Puteți dezactiva această setare în preferințe daca doriți să puteți emite printr-o conexiune celulară.</string>
   <!--NavigationDrawer-->
-  <string name="share">Partajează</string>
   <string name="drawer_open">Deschide sertarul de navigare</string>
   <string name="drawer_close">Închide sertarul de navigare</string>
   <string name="no_search_results">Nici un rezultat de căutare găsit</string>
@@ -126,9 +122,6 @@
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Ai încercat Popcorn Time pentru Android? E super tare!</string>
-  <string name="share_dialog_title">Partajează cu</string>
   <!--Beam dialog-->
   <string name="connected_to">Conectat la</string>
   <string name="disconnect">Deconectează</string>

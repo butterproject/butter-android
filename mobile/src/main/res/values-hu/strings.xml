@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--General strings-->
-  <string name="save">Mentés</string>
   <string name="cancel">Mégse</string>
   <string name="close">Bezárás</string>
   <string name="ok">OK</string>
@@ -22,12 +21,10 @@
   <string name="minutes">perc</string>
   <string name="read_more">Bővebben</string>
   <string name="watch_trailer">Előzetes megnézése</string>
-  <string name="disable_subs">Feliratok kikapcsolása</string>
   <string name="no_subs">Nincs felirat</string>
   <string name="no_subs_available">Nincs elérhető felirat</string>
   <string name="subtitles">Feliratok</string>
   <string name="quality">Minőség</string>
-  <string name="open_magnet">Magnet megnyitása</string>
   <string name="trailer">Előzetes</string>
   <string name="season">Évad</string>
   <string name="episode">Epizód</string>
@@ -112,7 +109,6 @@
   <string name="wifi_only">csak Wi-Fi</string>
   <string name="wifi_only_message">Csak Wi-Fi-n tud videót streamelni. Kikapcsolhatja a beállításoknál ha mobil hálózaton keresztűl akar streamelni.</string>
   <!--NavigationDrawer-->
-  <string name="share">Megosztás</string>
   <string name="drawer_open">Navigációs fiók kinyitása</string>
   <string name="drawer_close">Navigációs fiók bezárása</string>
   <string name="no_search_results">Nem található keresési eredmény</string>
@@ -127,9 +123,6 @@ Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműk�
   <string name="git">Git</string>
   <string name="blog">Blog</string>
   <string name="twitter">Twitter</string>
-  <!--Share dialog-->
-  <string name="share_message">Kipróbálta a Popcorn Time-ot Android-on? Fantasztikus!</string>
-  <string name="share_dialog_title">Megosztás ezzel</string>
   <!--Beam dialog-->
   <string name="connected_to">Csatlakozva</string>
   <string name="disconnect">Kapcsolat bontása</string>

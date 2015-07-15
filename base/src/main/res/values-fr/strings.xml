@@ -15,6 +15,8 @@
   <string name="running">Exécution en arrière-plan</string>
   <string name="tap_to_close">Appuyez pour fermer</string>
   <string name="tap_to_resume">Appuyez pour continuer</string>
+  <string name="signature_invalid">Signature de l\'application non-valide</string>
+  <string name="possibly_dangerous">Popcorn Time a été altéré par un tiers. Téléchargez un autre installeur sur https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Tous</string>
   <string name="genre_action">Action</string>
@@ -79,15 +81,17 @@
   <string name="genre_supernatural">Surnaturel</string>
   <string name="genre_vampire">Vampire</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULAIRES</string>
+  <string name="popular">POPULAIRES</string>
   <string name="top_rated">MEILLEURS NOTES</string>
   <string name="release_date">DATE DE SORTIE</string>
   <string name="last_updated">MIS À JOUR</string>
   <string name="year">ANNÉE</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDANCE</string>
   <!--BeamManager-->
   <string name="pairing_tv">Jumelage à un téléviseur</string>
   <string name="confirm_tv">Confirmez la connexion au téléviseur</string>
   <string name="enter_pairing_code">Entrez le code de jumelage du téléviseur</string>
   <string name="open_with">Ouvrir avec</string>
+  <string name="select_file">Sélectionnez un fichier</string>
 </resources>

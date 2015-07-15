@@ -75,7 +75,6 @@
   <string name="genre_supernatural">مافوق طبیعی</string>
   <string name="genre_vampire">خون‌آشام</string>
   <!--Possible tabs-->
-  <string name="popular_now">پر طرفدار</string>
   <string name="top_rated">پرامتیازترین</string>
   <string name="release_date">تاریخ پخش</string>
   <string name="last_updated">آخرین به‌ روز رسانی</string>

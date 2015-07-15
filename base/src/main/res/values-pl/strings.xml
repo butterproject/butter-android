@@ -79,7 +79,6 @@
   <string name="genre_supernatural">Supernatural</string>
   <string name="genre_vampire">Wampir</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULARNE</string>
   <string name="top_rated">NAJLEPIEJ OCENIANE</string>
   <string name="release_date">DATA WYDANIA</string>
   <string name="last_updated">OSTATNIO AKTUALIZOWANE</string>

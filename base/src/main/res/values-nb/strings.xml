@@ -15,6 +15,8 @@
   <string name="running">Kjører i bakgrunnen</string>
   <string name="tap_to_close">Trykk for å lukke</string>
   <string name="tap_to_resume">Trykk for å fortsette</string>
+  <string name="signature_invalid">App signatur ugyldig</string>
+  <string name="possibly_dangerous">Popcorn Time har blitt tuklet med, Venligst last ned en ny verson fra https://popcorntime.io/</string>
   <!--Genres-->
   <string name="genre_all">Alle</string>
   <string name="genre_action">Action</string>
@@ -79,14 +81,17 @@
   <string name="genre_supernatural">Overnaturlig </string>
   <string name="genre_vampire">Vampyr</string>
   <!--Possible tabs-->
-  <string name="popular_now">POPULÆRT NÅ</string>
+  <string name="popular">POPULÆRT</string>
   <string name="top_rated">HØYT VURDERT</string>
   <string name="release_date">UTGIVELSESDATO</string>
   <string name="last_updated">SIST OPPDATERT</string>
   <string name="year">ÅR</string>
   <string name="a_to_z">A - Å</string>
+  <string name="trending">TRENDING</string>
   <!--BeamManager-->
   <string name="pairing_tv">Sammenkobling med TV</string>
   <string name="confirm_tv">Vennligst bekreft tilkoblingen på TVen</string>
   <string name="enter_pairing_code">Skriv inn koden for sammenkobling på TVen</string>
+  <string name="open_with">Åpne med</string>
+  <string name="select_file">Velg fil</string>
 </resources>

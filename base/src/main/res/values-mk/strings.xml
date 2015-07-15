@@ -78,7 +78,6 @@
   <string name="genre_supernatural">Натприродно</string>
   <string name="genre_vampire">Вампирски</string>
   <!--Possible tabs-->
-  <string name="popular_now">ПОПУЛАРНИ</string>
   <string name="top_rated">НАЈДОБРО ОЦЕНЕТИ</string>
   <string name="release_date">ДАТУМ НА ПРЕТСТАВУВАЊЕ</string>
   <string name="last_updated">ПОСЛЕДНО ОСВЕЖЕНИ</string>
