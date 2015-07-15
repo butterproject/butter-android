@@ -175,7 +175,7 @@
                         android:layout_marginLeft="@dimen/optionselector_icon_margin_start"
                         android:layout_marginStart="@dimen/optionselector_icon_margin_start"
                         android:layout_gravity="center_vertical|start"
-                        tools:src="@drawable/ic_launcher"
+                        tools:src="@mipmap/ic_launcher"
                         android:src="@drawable/ic_av_volume"
                         android:duplicateParentState="true" />
 

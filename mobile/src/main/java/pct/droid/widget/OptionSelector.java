@@ -60,7 +60,7 @@ public class OptionSelector extends LinearLayout {
             setContentDescription(str);
         }
 
-        int res = a.getResourceId(R.styleable.OptionSelector_optionIcon, R.drawable.ic_launcher);
+        int res = a.getResourceId(R.styleable.OptionSelector_optionIcon, R.mipmap.ic_launcher);
         mIcon.setImageResource(res);
 
         setOnClickListener(mOnClickListener);
