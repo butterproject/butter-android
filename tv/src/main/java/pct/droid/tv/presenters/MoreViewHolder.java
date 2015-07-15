@@ -5,18 +5,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import pct.droid.tv.R;
-
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import pct.droid.tv.R;
 
 public class MoreViewHolder extends Presenter.ViewHolder {
 
-	@InjectView(R.id.text) TextView textview;
-	@InjectView(R.id.icon) ImageView imageview;
+	@Bind(R.id.text) TextView textview;
+	@Bind(R.id.icon) ImageView imageview;
 
 	public MoreViewHolder(View view) {
 		super(view);
-		ButterKnife.inject(this, view);
+		ButterKnife.bind(this, view);
 	}
 }

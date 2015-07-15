@@ -1,9 +1,7 @@
 package pct.droid.tv.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -11,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -22,16 +19,14 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.preferences.Prefs;
@@ -43,23 +38,23 @@ import pct.droid.tv.R;
 
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
-    @InjectView(R.id.progress_indicator)
+    @Bind(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
-    @InjectView(R.id.video_surface)
+    @Bind(R.id.video_surface)
     SurfaceView videoSurface;
-    @InjectView(R.id.subtitle_text)
+    @Bind(R.id.subtitle_text)
     TextView mSubtitleText;
-    @InjectView(R.id.control_layout)
+    @Bind(R.id.control_layout)
     ViewGroup mControlLayout;
-    @InjectView(R.id.player_info)
+    @Bind(R.id.player_info)
     TextView mPlayerInfo;
-    @InjectView(R.id.control_bar)
+    @Bind(R.id.control_bar)
     ProgressBar mControlBar;
-    @InjectView(R.id.play_button)
+    @Bind(R.id.play_button)
     ImageButton playButton;
-    @InjectView(R.id.currentTime)
+    @Bind(R.id.currentTime)
     TextView mCurrentTimeTextView;
-    @InjectView(R.id.length_time)
+    @Bind(R.id.length_time)
     TextView lengthTime;
 
 
@@ -79,7 +74,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
     }
 
     @Override
@@ -369,5 +364,13 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         subsClick();
     }
 
+    @Override
+    protected void updateSubtitleSize(int size) {
 
+    }
+
+    @Override
+    public void startBeamPlayerActivity() {
+
+    }
 }

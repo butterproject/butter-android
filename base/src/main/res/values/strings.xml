@@ -17,10 +17,12 @@
   -->
 
 <resources>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
 
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
-    <string name="cancel">Cancel</string>
     <string name="update_available">New update available</string>
     <string name="press_install">Press to install</string>
 	<string name="movies_error" translatable="false">No movies found</string>
@@ -57,9 +59,11 @@
     <string name="internal_player">Internal</string>
     <string name="subtitle_color">Color</string>
     <string name="subtitle_size">Size</string>
+    <string name="subtitle_timing">Subtitle timing</string>
     <string name="subtitle_stroke_color">Outline color</string>
     <string name="subtitle_stroke_width">Outline width</string>
     <string name="subtitle_language">Default language</string>
+    <string name="subtitle_settings">Subtitle settings</string>
     <string name="no_default_set">No default language</string>
     <string name="advanced">Advanced</string>
     <string name="storage_location">Storage location</string>
