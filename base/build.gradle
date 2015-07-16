@@ -1,6 +1,21 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.19.2'
+    }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -42,6 +57,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:multidex:1.0.1'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.4.0@aar') {
+        transitive = true;
+    }
 
     compile "com.android.support:support-v4:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"

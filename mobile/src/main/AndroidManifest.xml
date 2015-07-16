@@ -24,12 +24,11 @@
         android:name=".base.PopcornApplication"
         android:supportsRtl="true">
 
-        <activity
-            android:name=".activities.LaunchActivity"
-            android:label="@string/app_name"
-            android:noHistory="true"
-            android:theme="@style/Theme.HiddenActivity"
-            android:windowSoftInputMode="adjustPan">
+		<activity
+			android:name=".activities.MainActivity"
+            android:label="@null"
+			android:theme="@style/Theme.PopcornTime.NavigationDrawer"
+			android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -120,12 +119,6 @@
                 <data android:scheme="magnet" />
             </intent-filter>
         </activity>
-
-		<activity
-			android:name=".activities.MainActivity"
-            android:label="@null"
-			android:theme="@style/Theme.PopcornTime.NavigationDrawer"
-			android:windowSoftInputMode="adjustPan" />
 
 		<activity
 			android:name=".activities.MediaDetailActivity"

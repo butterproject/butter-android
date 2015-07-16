@@ -56,8 +56,10 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.SignUtils;
 import pct.droid.base.vpn.VPNManager;
 import pct.droid.base.youtube.YouTubeData;
+import pct.droid.dialogfragments.MessageDialogFragment;
 import pct.droid.fragments.MediaContainerFragment;
 import pct.droid.fragments.NavigationDrawerFragment;
 import pct.droid.utils.ToolbarUtils;
@@ -83,7 +85,32 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_main);
+
+        if(SignUtils.checkAppSignature(this) != SignUtils.VALID && !pct.droid.base.BuildConfig.GIT_BRANCH.equals("local")) {
+            MessageDialogFragment.show(getFragmentManager(), R.string.signature_invalid, R.string.possibly_dangerous, false);
+            return;
+        }
+
+        if (!PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
+            startActivity(new Intent(this, TermsActivity.class));
+        }
+
+        String action = getIntent().getAction();
+        Uri data = getIntent().getData();
+        if (action != null && action.equals(Intent.ACTION_VIEW) && data != null) {
+            String streamUrl = data.toString();
+            try {
+                streamUrl = URLDecoder.decode(streamUrl, "utf-8");
+                StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl));
+                finish();
+                return;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
         FragmentManager.enableDebugLogging(BuildConfig.DEBUG);
+
 
         setSupportActionBar(mToolbar);
         setShowCasting(true);

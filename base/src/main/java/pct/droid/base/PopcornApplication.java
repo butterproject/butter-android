@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
+import com.crashlytics.android.Crashlytics;
 import com.sjl.foreground.Foreground;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
@@ -33,6 +34,7 @@ import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
 
+import io.fabric.sdk.android.Fabric;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
@@ -58,6 +60,8 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
+
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
         Foreground.init(this);
@@ -106,8 +110,6 @@ public class PopcornApplication extends VLCApplication {
         Picasso.setSingletonInstance(builder.build());
 
         PopcornUpdater.getInstance(this).checkUpdates(false);
-
-
     }
 
     @Override
