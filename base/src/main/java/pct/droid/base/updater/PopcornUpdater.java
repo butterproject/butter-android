@@ -204,7 +204,7 @@ public class PopcornUpdater extends Observable {
     Callback mCallback = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
-            if(request.httpUrl().toString().contains(DATA_URLS[mCurrentUrl]) && mCurrentUrl < DATA_URLS.length - 1) {
+            if(mCurrentUrl < DATA_URLS.length - 1) {
                 mCurrentUrl++;
                 Request newRequest = new Request.Builder()
                         .url(DATA_URLS[mCurrentUrl] + "/" + mVariantStr)
