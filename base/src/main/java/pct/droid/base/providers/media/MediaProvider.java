@@ -19,6 +19,8 @@ package pct.droid.base.providers.media;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.Nullable;
 
 import com.squareup.okhttp.Call;
 
@@ -101,16 +103,18 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
     }
 
     public static class NavInfo {
+        private final Integer mIconId;
         private int mId;
         private Filters.Sort mSort;
         private Filters.Order mDefOrder;
         private String mLabel;
 
-        public NavInfo(int id,Filters.Sort sort, Filters.Order defOrder, String label) {
+        public NavInfo(int id,Filters.Sort sort, Filters.Order defOrder, String label,@Nullable @DrawableRes Integer icon) {
             mId = id;
             mSort = sort;
             mDefOrder = defOrder;
             mLabel = label;
+            mIconId = icon;
         }
 
         public Filters.Sort getFilter() {
@@ -119,6 +123,11 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
 
         public int getId() {
             return mId;
+        }
+
+        @DrawableRes
+        public int getIcon() {
+            return mIconId;
         }
 
         public Filters.Order getOrder() {

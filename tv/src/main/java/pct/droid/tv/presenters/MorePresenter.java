@@ -3,14 +3,11 @@ package pct.droid.tv.presenters;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.Presenter;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import pct.droid.base.providers.media.MediaProvider;
-import pct.droid.tv.R;
+import pct.droid.base.utils.StringUtils;
 
 public class MorePresenter extends Presenter {
 
@@ -22,16 +19,17 @@ public class MorePresenter extends Presenter {
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent) {
-		View view = LayoutInflater.from(mContext).inflate(R.layout.more_row, parent, false);
-		return new MoreViewHolder(view);
+		final MoreCardView cardView = new MoreCardView(mContext);
+		return new ViewHolder(cardView);
 	}
 
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, Object item) {
 		MoreItem moreItem = (MoreItem) item;
-		MoreViewHolder vh = (MoreViewHolder) viewHolder;
-		vh.textview.setText(moreItem.mTitle);
-		vh.imageview.setImageResource(moreItem.mIcon);
+		MoreCardView cardView = (MoreCardView) viewHolder.view;
+
+		cardView.setTitleText(StringUtils.capWords(moreItem.mTitle.toLowerCase()));
+		cardView.setImageResource(moreItem.mIcon);
 	}
 
 	@Override

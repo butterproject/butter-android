@@ -219,7 +219,7 @@ public class PTVOverviewFragment extends BrowseFragment {
         //add items
         List<MediaProvider.NavInfo> navigation = mMoviesProvider.getNavigation();
         for (MediaProvider.NavInfo info : navigation) {
-            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), 0, info));
+            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), info.getIcon(), info));
         }
 
         mRowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
@@ -233,7 +233,7 @@ public class PTVOverviewFragment extends BrowseFragment {
         //add items
         List<MediaProvider.NavInfo> navigation = mShowsProvider.getNavigation();
         for (MediaProvider.NavInfo info : navigation) {
-            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), 0, info));
+            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), info.getIcon(), info));
         }
 
         mRowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
@@ -301,6 +301,7 @@ public class PTVOverviewFragment extends BrowseFragment {
                 PTVSettingsActivity.startActivity(getActivity());
                 break;
             case R.id.yts_filter_a_to_z:
+            case R.id.yts_filter_trending:
             case R.id.yts_filter_release_date:
             case R.id.yts_filter_popular_now:
             case R.id.yts_filter_year:
@@ -308,6 +309,7 @@ public class PTVOverviewFragment extends BrowseFragment {
                 PTVMediaGridActivity.startActivity(getActivity(),moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.MOVIE, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
                 break;
             case R.id.eztv_filter_a_to_z:
+            case R.id.eztv_filter_trending:
             case R.id.eztv_filter_last_updated:
             case R.id.eztv_filter_popular_now:
             case R.id.eztv_filter_year:

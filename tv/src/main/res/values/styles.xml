@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="@style/Theme.Leanback"></style>
+
+
+    <style name="Widget.Leanback.MoreCardViewStyle" parent="Widget.Leanback.BaseCardViewStyle">
+        <item name="cardType">infoUnder</item>
+        <item name="infoVisibility">always</item>
+        <item name="android:background">@color/primary</item>
+        <!--<item name="android:background">@color/lb_basic_card_bg_color</item>-->
+        <!--<item name="infoAreaBackground">@color/lb_basic_card_info_bg_color</item>-->
+    </style>
 </resources>
