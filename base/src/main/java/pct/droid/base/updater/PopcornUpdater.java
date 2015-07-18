@@ -60,11 +60,15 @@ import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.VersionUtils;
 
-public class PopcornUpdater {
+public class PopcornUpdater extends Observable {
 
     private static PopcornUpdater sThis;
 
-    public static int NOTIFICATION_ID = 0xAB343FE;
+    public static int NOTIFICATION_ID = 0xDEADBEEF;    
+public final String STATUS_CHECKING = "checking_updates";
+public final String STATUS_NO_UPDATE = "no_updates";
+    public final String STATUS_GOT_UPDATE = "got_update";
+    public final String STATUS_HAVE_UPDATE = "have_update";
 
     private final long MINUTES = 60 * 1000;
     private final long HOURS = 60 * MINUTES;
@@ -72,8 +76,9 @@ public class PopcornUpdater {
     private final long WAKEUP_INTERVAL = 15 * MINUTES;
     private long UPDATE_INTERVAL = 3 * HOURS;
 
-    public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
-    private final String DATA_URL = "http://ci.popcorntime.io/android";
+    private final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
+    private final String DATA_URLS[] = {"https://ci.popcontime.io/android", "https://ci.popcorntime.cc/android", "https://ci.popcorntime.re/android",  "https://ci.get-popcorn.com/android"};
+    private Integer mCurrentUrl = 0;
 
     public static final String LAST_UPDATE_CHECK = "update_check";
     private static final String LAST_UPDATE_KEY = "last_update";
@@ -89,6 +94,9 @@ public class PopcornUpdater {
     private long lastUpdate = 0;
     private String mPackageName;
     private Integer mVersionCode;
+    private String mVariantStr;
+    private String mChannelStr;
+    private String mAbi;
 
     private Listener mListener;
 
@@ -172,66 +180,82 @@ public class PopcornUpdater {
 
             if (BuildConfig.GIT_BRANCH.contains("local")) return;
 
-            final String abi;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                abi = Build.CPU_ABI.toLowerCase(Locale.US);
+                mAbi = Build.CPU_ABI.toLowerCase(Locale.US);
             } else {
-                abi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
+                mAbi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
             }
 
-            final String variantStr;
             if (mPackageName.contains("tv")) {
-                variantStr = "tv";
+                mVariantStr = "tv";
             } else {
-                variantStr = "mobile";
+                mVariantStr = "mobile";
             }
 
-            final String channelStr;
             if (BuildConfig.BUILD_TYPE.equals("release")) {
-                channelStr = "release";
+                mChannelStr = "release";
             } else {
-                channelStr = BuildConfig.GIT_BRANCH;
+                mChannelStr = BuildConfig.GIT_BRANCH;
             }
 
             Request request = new Request.Builder()
-                    .url(DATA_URL + "/" + variantStr)
+                    .url(DATA_URLS[mCurrentUrl] + "/" + mVariantStr)
                     .build();
 
-            mHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Response response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
-                            Map<String, Map<String, UpdaterData.Arch>> variant;
-
-                            if (variantStr.equals("tv")) {
-                                variant = data.tv;
-                            } else {
-                                variant = data.mobile;
-                            }
-
-                            UpdaterData.Arch channel = null;
-                            if (variant.containsKey(channelStr) && variant.get(channelStr).containsKey(abi)) {
-                                channel = variant.get(channelStr).get(abi);
-                            }
-
-                            if (channel != null && !channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) && channel.versionCode > mVersionCode) {
-                                downloadFile(channel.updateUrl);
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            mHttpClient.newCall(request).enqueue(mCallback);
         }
     }
+
+    Callback mCallback = new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+            if(mCurrentUrl < DATA_URLS.length - 1) {
+                mCurrentUrl++;
+                Request newRequest = new Request.Builder()
+                        .url(DATA_URLS[mCurrentUrl] + "/" + mVariantStr)
+                        .build();
+
+                mHttpClient.newCall(newRequest).enqueue(mCallback);
+            } else {
+                setChanged();
+                notifyObservers(STATUS_NO_UPDATE);
+            }
+        }
+
+        @Override
+        public void onResponse(Response response) {
+            try {
+                if (response.isSuccessful()) {
+                    UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
+                    Map<String, Map<String, UpdaterData.Arch>> variant;
+                    if (mVariantStr.equals("tv")) {
+                        variant = data.tv;
+                    } else {
+                        variant = data.mobile;
+                    }
+
+                    UpdaterData.Arch channel = null;
+                    if (variant.containsKey(mChannelStr) && variant.get(mChannelStr).containsKey(mAbi)) {
+                        channel = variant.get(mChannelStr).get(mAbi);
+                    }
+
+                    if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                        setChanged();
+                        notifyObservers(STATUS_NO_UPDATE);
+                    } else {
+                        downloadFile(channel.updateUrl);
+                        setChanged();
+                        notifyObservers(STATUS_GOT_UPDATE);
+                    }
+                } else {
+                    setChanged();
+                    notifyObservers(STATUS_NO_UPDATE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     private void downloadFile(final String location) {
         Request request = new Request.Builder()

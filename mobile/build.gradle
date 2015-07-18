@@ -13,10 +13,6 @@ apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
 apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 android {
     compileSdkVersion rootProject.ext.compileSdk
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -28,7 +24,7 @@ android {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         versionCode buildNumber
-        versionName "0.2.4"
+        versionName "0.2.4.1"
         multiDexEnabled true
     }
 
