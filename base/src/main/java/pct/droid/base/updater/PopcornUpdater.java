@@ -18,8 +18,6 @@
 package pct.droid.base.updater;
 
 import android.annotation.TargetApi;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,10 +26,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
@@ -54,11 +50,9 @@ import java.util.zip.Checksum;
 import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.R;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.VersionUtils;
 
 public class PopcornUpdater extends Observable {
 
@@ -76,7 +70,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
     private final long WAKEUP_INTERVAL = 15 * MINUTES;
     private long UPDATE_INTERVAL = 3 * HOURS;
 
-    private final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
+    public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
     private final String DATA_URLS[] = {"https://ci.popcontime.io/android", "https://ci.popcorntime.cc/android", "https://ci.popcorntime.re/android",  "https://ci.get-popcorn.com/android"};
     private Integer mCurrentUrl = 0;
 

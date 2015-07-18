@@ -121,6 +121,8 @@ public class BackgroundUpdater {
         if (null != mBackgroundTimer) {
             mBackgroundTimer.cancel();
         }
+
+        Picasso.with(mContext).cancelRequest(mBackgroundImageTarget);
         mBackgroundManager.release();
     }
 }
