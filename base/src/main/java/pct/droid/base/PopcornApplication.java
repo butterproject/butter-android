@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 
+import com.crashlytics.android.Crashlytics;
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
@@ -39,6 +40,7 @@ import org.videolan.vlc.VLCApplication;
 
 import java.io.File;
 
+import io.fabric.sdk.android.Fabric;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
@@ -64,6 +66,8 @@ public abstract class PopcornApplication extends VLCApplication implements Popco
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
+
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
         LeakCanary.install(this);

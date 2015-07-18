@@ -373,7 +373,7 @@ public class TorrentService extends Service {
             Downloader d = new Downloader(mTorrentSession);
 
             Timber.d("Waiting for nodes in DHT");
-            if(!mDHT.isRunning()) {
+            if (!mDHT.isRunning()) {
                 mDHT.start();
             }
 
