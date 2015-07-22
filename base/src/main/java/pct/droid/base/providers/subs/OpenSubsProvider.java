@@ -94,12 +94,9 @@ public class OpenSubsProvider extends SubsProvider {
                                     if (!episodeMap.containsKey(lang)) {
                                         episodeMap.put(lang, url);
                                         scoreMap.put(lang, new Integer[]{score, downloads});
-                                    } else {
-                                        // If score is 0 or equal, sort by downloads
-                                        if (score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
-                                            episodeMap.put(lang, url);
-                                            scoreMap.put(lang, new Integer[]{score, downloads});
-                                        }
+                                    } else if (score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
+                                        episodeMap.put(lang, url);
+                                        scoreMap.put(lang, new Integer[]{score, downloads});
                                     }
                                 }
                                 returnMap.put(episode.videoId, episodeMap);
