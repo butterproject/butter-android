@@ -177,9 +177,9 @@ public class EZTVProvider extends MediaProvider {
     }
 
     @Override
-    public Call getDetail(String videoId, final Callback callback) {
+    public Call getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URLS[CURRENT_API] + "show/" + videoId);
+        requestBuilder.url(API_URLS[CURRENT_API] + "show/" + currentList.get(index).videoId);
         requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
