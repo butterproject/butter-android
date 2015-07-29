@@ -98,7 +98,7 @@ dependencies {
     compile 'net.rdrei.android.dirchooser:library:2.1@aar'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.4.0'
-    compile 'com.sothree.slidinguppanel:library:3.0.0'
+    compile 'com.sothree.slidinguppanel:library:3.1.1'
 
     compile project(':base')
 }
