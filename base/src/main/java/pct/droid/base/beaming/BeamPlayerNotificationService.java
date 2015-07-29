@@ -47,6 +47,7 @@ public class BeamPlayerNotificationService extends Service {
         if(mMediaControl == null) {
             Intent stopIntent = new Intent( getApplicationContext(), BeamPlayerNotificationService.class );
             stopService(stopIntent);
+            return;
         }
 
         if( action.equalsIgnoreCase( ACTION_PLAY ) || action.equalsIgnoreCase( ACTION_PAUSE ) ) {
