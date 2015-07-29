@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
+import pct.droid.tv.fragments.PTVPlaybackOverlayFragment;
 import pct.droid.tv.fragments.PTVVideoPlayerFragment;
 
-public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback {
+public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback,
+        PTVVideoPlayerFragment.PlayerControlListener, PTVPlaybackOverlayFragment.FragmentListener {
 
-    private PTVVideoPlayerFragment mFragment;
+    private PTVVideoPlayerFragment mPlayerFragment;
+    private PTVPlaybackOverlayFragment mPlaybackOverlayFragment;
 
     public final static String INFO = "stream_info";
 
@@ -34,7 +38,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState,R.layout.activity_videoplayer);
+        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
@@ -45,8 +49,9 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         }
         mStreamInfo.setVideoLocation(location);
 
-        mFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-        mFragment.loadMedia();
+        mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
+        mPlayerFragment.loadMedia();
     }
 
     @Override
@@ -68,8 +73,8 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (null != mFragment) {
-            if (!mFragment.onKeyDown(keyCode, event)) {
+        if (null != mPlayerFragment) {
+            if (!mPlayerFragment.onKeyDown(keyCode, event)) {
                 return false;
             }
         }
@@ -88,20 +93,45 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public void onTorrentServiceConnected() {
-        mService.addListener(mFragment);
+        mService.addListener(mPlayerFragment);
     }
 
     @Override
     protected void onPause() {
-        if(mService != null)
-            mService.removeListener(mFragment);
+        if (mService != null)
+            mService.removeListener(mPlayerFragment);
         super.onPause();
     }
 
     @Override
     public Long getResumePosition() {
         //todo: Implement ResumePosition on Android TV
-        return 0L;
+    }
+
+    @Override
+    public void updatePlayPauseState(boolean playing) {
+//        mPlaybackOverlayFragment.
+    }
+
+    @Override
+    public void onProgressChanged(long currentTime, long duration) {
+
+    }
+
+    @Override
+    public Media getMedia() {
+        return null == mStreamInfo ? null : mStreamInfo.getMedia();
+    }
+
+    @Override
+    public void fastForward() {
+        mPlayerFragment.fastForward();
+
+    }
+
+    @Override
+    public void rewind() {
+        mPlayerFragment.rewind();
     }
 }
 

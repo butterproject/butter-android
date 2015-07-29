@@ -1,6 +1,7 @@
 package pct.droid.tv.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -21,41 +22,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.subs.Caption;
-import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.StringUtils;
 import pct.droid.tv.R;
 
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Bind(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
+
     @Bind(R.id.video_surface)
     SurfaceView videoSurface;
+
     @Bind(R.id.subtitle_text)
     TextView mSubtitleText;
-    @Bind(R.id.control_layout)
-    ViewGroup mControlLayout;
+
     @Bind(R.id.player_info)
     TextView mPlayerInfo;
-    @Bind(R.id.control_bar)
-    ProgressBar mControlBar;
-    @Bind(R.id.play_button)
-    ImageButton playButton;
-    @Bind(R.id.currentTime)
-    TextView mCurrentTimeTextView;
-    @Bind(R.id.length_time)
-    TextView lengthTime;
 
 
     private static final int FADE_OUT_OVERLAY = 5000;
@@ -64,6 +54,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     private boolean mOverlayVisible = true;
 
     private Handler mDisplayHandler;
+    private PlayerControlListener playerControlListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,6 +81,14 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
 
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof PlayerControlListener)
+            this.playerControlListener = (PlayerControlListener) activity;
     }
 
     @Override
@@ -213,7 +212,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         if (!mOverlayVisible) {
             updatePlayPauseState();
 
-            AnimUtils.fadeIn(mControlLayout);
+//            AnimUtils.fadeIn(mControlLayout);
         }
 
         mOverlayVisible = true;
@@ -223,7 +222,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void hideOverlay() {
-        AnimUtils.fadeOut(mControlLayout);
+//        AnimUtils.fadeOut(mControlLayout);
 
         mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
         mOverlayVisible = false;
@@ -232,6 +231,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     protected void showPlayerInfo(String text) {
         mPlayerInfo.setVisibility(View.VISIBLE);
         mPlayerInfo.setText(text);
+
         mDisplayHandler.removeCallbacks(mInfoHideRunnable);
         mDisplayHandler.postDelayed(mInfoHideRunnable, FADE_OUT_INFO);
     }
@@ -245,11 +245,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     public void updatePlayPauseState() {
-        if (isPlaying()) {
-            playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause));
-        } else {
-            playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play));
-        }
+        this.playerControlListener.updatePlayPauseState(isPlaying());
     }
 
     @Override
@@ -327,39 +323,41 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
      */
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
-        mControlBar.setMax((int) duration);
-        mControlBar.setProgress((int) currentTime);
-        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-        mControlBar.setSecondaryProgress(getStreamerProgress());
-        if (getCurrentTime() >= 0)
-            mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
-        if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
+        this.playerControlListener.onProgressChanged(currentTime, duration);
 
-        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-        mControlBar.setSecondaryProgress(getStreamerProgress());
+//        mControlBar.setMax((int) duration);
+//        mControlBar.setProgress((int) currentTime);
+//        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+//        mControlBar.setSecondaryProgress(getStreamerProgress());
+//        if (getCurrentTime() >= 0)
+//            mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
+//        if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
+//
+//        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+//        mControlBar.setSecondaryProgress(getStreamerProgress());
     }
 
-    @OnClick(R.id.play_button)
-    void onPlayPauseClick() {
+//    @OnClick(R.id.play_button)
+    public void togglePlayPause() {
         togglePlayPause();
     }
 
-    @OnClick(R.id.rewindButton)
-    void onRewindClick() {
+//    @OnClick(R.id.rewindButton)
+    public void rewind() {
         seekBackwardClick();
     }
 
-    @OnClick(R.id.forwardButton)
-    void onForwardClick() {
+//    @OnClick(R.id.forwardButton)
+    public void fastForward() {
         seekForwardClick();
     }
 
-    @OnClick(R.id.scaleButton)
+//    @OnClick(R.id.scaleButton)
     void onScaleClick() {
         scaleClick();
     }
 
-    @OnClick(R.id.subsButton)
+//    @OnClick(R.id.subsButton)
     void onSubsClick() {
         subsClick();
     }
@@ -372,5 +370,12 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void startBeamPlayerActivity() {
 
+    }
+
+    public interface PlayerControlListener {
+
+        void updatePlayPauseState(boolean playing);
+
+        void onProgressChanged(long currentTime, long duration);
     }
 }

@@ -45,17 +45,6 @@
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true" />
 
-	<include
-		layout="@layout/control_layout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/player_controls_margin"
-		android:layout_marginRight="@dimen/player_controls_margin"
-		android:layout_marginTop="@dimen/player_controls_margin"
-		android:layout_marginBottom="@dimen/player_controls_bottom_margin"
-		android:layout_centerHorizontal="true"
-		android:layout_alignParentBottom="true" />
-
 	<TextView
 		android:id="@+id/player_info"
 		android:layout_width="wrap_content"
