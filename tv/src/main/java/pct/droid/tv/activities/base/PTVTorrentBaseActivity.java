@@ -51,6 +51,7 @@ import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
+import timber.log.Timber;
 
 public abstract class PTVTorrentBaseActivity extends FragmentActivity implements TorrentService.Listener, TorrentActivity {
 
