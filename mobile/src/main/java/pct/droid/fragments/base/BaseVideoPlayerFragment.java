@@ -74,6 +74,7 @@ import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
@@ -156,6 +157,15 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         mResumePosition = mCallback.getResumePosition();
         mStreamInfo = mCallback.getInfo();
+
+        if (mStreamInfo==null){
+            //why is this null?
+            //https://fabric.io/popcorn-time/android/apps/pct.droid/issues/55a801cd2f038749478f93c7
+            //have added logging to activity lifecycle methods to further track down this issue
+            getActivity().finish();
+            return;
+        }
+
         mMedia = mStreamInfo.getMedia();
 
         //start subtitles
@@ -166,7 +176,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 startSubtitles();
             }
         }
-
 
         mLibVLC = VLCInstance.get();
         mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
@@ -906,10 +915,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         @Override
         public void onDeviceReady(ConnectableDevice device) {
             super.onDeviceReady(device);
+
+            if (!FragmentUtil.isAdded(BaseVideoPlayerFragment.this)){
+                return;
+            }
             BeamPlayerActivity.startActivity(getActivity(), mStreamInfo, getCurrentTime());
             getActivity().finish();
         }
-
     };
 
 }
