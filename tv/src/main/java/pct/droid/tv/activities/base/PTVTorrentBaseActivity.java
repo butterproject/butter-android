@@ -77,11 +77,7 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
     protected void onStop() {
         super.onStop();
         if (null != mService)
-            try {
-                unbindService(mServiceConnection);
-            }catch (Exception e){
-                Timber.e(e, "Service not registered");
-            }
+            unbindService(mServiceConnection);
     }
 
     @Override
