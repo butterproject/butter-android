@@ -100,8 +100,8 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public Long getResumePosition() {
-        //todo:
-        return null;
+        //todo: Implement ResumePosition on Android TV
+        return 0L;
     }
 }
 
