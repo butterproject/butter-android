@@ -22,7 +22,7 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "22.2.0"
+    appCompatVersion = "22.2.1"
     buildToolsVersion = "22.0.1"
     targetSdk = 22
     compileSdk = 22
