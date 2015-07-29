@@ -43,7 +43,10 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 	}
 
 	@Override void loadDetails() {
-		mMovieProvider.getDetail(getMovieItem().videoId, this);
+		ArrayList<Media> mediaList = new ArrayList<>();
+		mediaList.add(getMovieItem());
+
+		mMovieProvider.getDetail(mediaList, 0, this);
 	}
 
 	@Override AbstractDetailsDescriptionPresenter getDetailPresenter() {

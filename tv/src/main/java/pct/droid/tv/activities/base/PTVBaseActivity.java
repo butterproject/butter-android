@@ -1,6 +1,7 @@
 package pct.droid.tv.activities.base;
 
-import pct.droid.base.torrent.Torrent;
+import com.github.sv244.torrentstream.Torrent;
+
 import pct.droid.tv.activities.PTVSearchActivity;
 
 public abstract class PTVBaseActivity extends PTVTorrentBaseActivity {
@@ -12,7 +13,10 @@ public abstract class PTVBaseActivity extends PTVTorrentBaseActivity {
 	}
 
 	@Override
-	public void onStreamMetaData(Torrent torrent) {
-		//todo:
+	public void onStreamPrepared(Torrent torrent) {
+		super.onStreamPrepared(torrent);
+
+		// todo?
 	}
+
 }

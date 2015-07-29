@@ -159,9 +159,9 @@ public class HaruProvider extends MediaProvider {
     }
 
     @Override
-    public Call getDetail(String videoId, final Callback callback) {
+    public Call getDetail(ArrayList<Media> currentList, Integer position, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + "anime.php?id=" + videoId);
+        requestBuilder.url(API_URL + "anime.php?id=" + currentList.get(position).videoId);
         requestBuilder.tag(MEDIA_CALL);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {

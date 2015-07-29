@@ -20,6 +20,7 @@ package pct.droid.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
 import pct.droid.R;
@@ -37,12 +38,17 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     private String mTitle = "";
     private Long mResumePosition;
 
-    public static Intent startActivity(Context context, StreamInfo info) {
+    public static Intent startActivity(Context context, @NonNull StreamInfo info) {
         return startActivity(context, info, 0);
     }
 
-    public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
+    public static Intent startActivity(Context context, @NonNull StreamInfo info, long resumePosition) {
         Intent i = new Intent(context, VideoPlayerActivity.class);
+
+        if (info == null){
+            throw new IllegalArgumentException("StreamInfo must not be null");
+        }
+
         i.putExtra(INFO, info);
         i.putExtra(BaseVideoPlayerFragment.RESUME_POSITION, resumePosition);
         context.startActivity(i);

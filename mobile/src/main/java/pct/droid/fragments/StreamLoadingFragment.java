@@ -42,6 +42,8 @@ import java.text.DecimalFormat;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
@@ -51,12 +53,13 @@ import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
 import pct.droid.base.fragments.StringArraySelectorDialogFragment;
 import pct.droid.base.preferences.DefaultPlayer;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.Torrent;
+import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
+
+import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
@@ -133,26 +136,21 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
-    public void onStreamMetaData(Torrent torrent) {
+    public void onStreamPrepared(Torrent torrent) {
         mCurrentTorrent = torrent;
 
         if(TextUtils.isEmpty(mStreamInfo.getTitle())) {
-            FileStorage fileStorage = mCurrentTorrent.getTorrentHandle().getTorrentInfo().getFiles();
-            String[] fileNames = new String[fileStorage.getNumFiles()];
-            for(int i = 0; i < fileStorage.getNumFiles(); i++) {
-                fileNames[i] = fileStorage.getFileName(i);
-            }
-            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, fileNames, -1, new DialogInterface.OnClickListener() {
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, mCurrentTorrent.getFileNames(), -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int position) {
                     mCurrentTorrent.setSelectedFile(position);
-                    StreamLoadingFragment.super.onStreamMetaData(mCurrentTorrent);
+                    StreamLoadingFragment.super.onStreamPrepared(mCurrentTorrent);
                 }
             });
             return;
         }
 
-        super.onStreamMetaData(mCurrentTorrent);
+        super.onStreamPrepared(mCurrentTorrent);
     }
 
     private void loadBackgroundImage() {
@@ -169,7 +167,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         }
     }
 
-    private void updateStatus(final DownloadStatus status) {
+    private void updateStatus(final StreamStatus status) {
         if (!mAttached) return;
 
         final DecimalFormat df = new DecimalFormat("#############0.00");
@@ -223,8 +221,8 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mProgressIndicator.setProgress(0);
                 break;
             case STREAMING:
-                if (null != extra && extra instanceof DownloadStatus)
-                    updateStatus((DownloadStatus) extra);
+                if (null != extra && extra instanceof StreamStatus)
+                    updateStatus((StreamStatus) extra);
                 break;
             case WAITING_SUBTITLES:
                 mPrimaryTextView.setText(R.string.waiting_for_subtitles);
@@ -247,7 +245,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @Override
     @DebugLog
     protected void startPlayerActivity(String location, int resumePosition) {
-        if (getActivity() != null && !mPlayerStarted) {
+        if (FragmentUtil.isAdded(this) && !mPlayerStarted) {
             mStreamInfo.setVideoLocation(location);
             if (BeamManager.getInstance(mContext).isConnected()) {
                 BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);

@@ -59,7 +59,7 @@ public abstract class MediaProvider extends BaseProvider implements Parcelable {
      */
     public abstract Call getList(ArrayList<Media> currentList, Filters filters, Callback callback);
 
-    public abstract Call getDetail(String videoId, Callback callback);
+    public abstract Call getDetail(ArrayList<Media> currentList, Integer index, Callback callback);
 
     public abstract int getLoadingMessage();
 

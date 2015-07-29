@@ -402,7 +402,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 
                 if (coverImage.getDrawable() == null) {
-                    showLoadingDialog(item);
+                    showLoadingDialog(position);
                     return;
                 }
 
@@ -418,18 +418,18 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                             paletteColor = vibrantColor;
                         }
                         item.color = paletteColor;
-                        showLoadingDialog(item);
+                        showLoadingDialog(position);
                     }
                 });
             } else {
-                showLoadingDialog(item);
+                showLoadingDialog(position);
             }
 
         }
     };
 
-    private void showLoadingDialog(Media item) {
-        LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(item);
+    private void showLoadingDialog(Integer position) {
+        LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(position);
         loadingFragment.setTargetFragment(MediaListFragment.this, LOADING_DIALOG_FRAGMENT);
         loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
     }
@@ -472,12 +472,21 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     }
 
     /**
-     * Called when media details have been loaded This should be called on a background thread
+     * Called when media details have been loaded. This should be called on a background thread.
      *
      * @param item
      */
     @Override
     public void onDetailLoadSuccess(final Media item) {
         MediaDetailActivity.startActivity(mContext, item);
+    }
+
+    /**
+     * Called when loading media details
+     * @return mItems
+     */
+    @Override
+    public ArrayList<Media> getCurrentList() {
+        return mItems;
     }
 }

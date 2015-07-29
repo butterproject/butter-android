@@ -52,10 +52,16 @@ import pct.droid.base.utils.LocaleUtils;
 public class YTSProvider extends MediaProvider {
 
     private static final YTSProvider sMediaProvider = new YTSProvider();
-    private static final String API_URL = "http://cloudflare.com/api/v2/";
-    private static final String MIRROR_URL = "http://reddit.com/api/v2/";
-    private static final String MIRROR_URL2 = "http://xor.image.yt/api/v2/";
-    public static String CURRENT_URL = API_URL;
+    private static Integer CURRENT_API = 0;
+    private static final String[] API_URLS = {
+            "https://yts.to/api/v2/",
+            "https://yts.io/api/v2/",
+            "https://yts.sh/api/v2/",
+            "https://xor.image.yt/api/v2/",
+            "http://cloudflare.com/api/v2/",
+            "http://reddit.com/api/v2/",
+    };
+    public static String CURRENT_URL = API_URLS[CURRENT_API];
 
     private static final SubsProvider sSubsProvider = new YSubsProvider();
     private static Filters sFilters = new Filters();
@@ -168,10 +174,13 @@ public class YTSProvider extends MediaProvider {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                if (generateFallback(requestBuilder)) {
-                    fetchList(currentList, requestBuilder, filters, callback);
-                } else {
+                String url = requestBuilder.build().urlString();
+                if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
+                } else {
+                    url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);
+                    requestBuilder.url(url);
+                    fetchList(currentList, requestBuilder, filters, callback);
                 }
             }
 
@@ -213,95 +222,11 @@ public class YTSProvider extends MediaProvider {
     }
 
     @Override
-    public Call getDetail(String videoId, Callback callback) {
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + "list_movies_pct.json?query_term=" + videoId + "&limit=1&lang=" + sFilters.langCode);
-        requestBuilder.addHeader("Host", "xor.image.yt");
-        requestBuilder.tag(MEDIA_CALL);
-
-        return fetchDetail(requestBuilder, callback);
-    }
-
-    private Call fetchDetail(final Request.Builder requestBuilder, final Callback callback) {
-        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                if (generateFallback(requestBuilder)) {
-                    fetchDetail(requestBuilder, callback);
-                } else {
-                    callback.onFailure(e);
-                }
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseStr;
-                    try {
-                        responseStr = response.body().string();
-                    } catch (SocketException e) {
-                        onFailure(response.request(), new IOException("Socket failed"));
-                        return;
-                    }
-
-                    YTSReponse result;
-                    try {
-                        result = mGson.fromJson(responseStr, YTSReponse.class);
-                    } catch (IllegalStateException e) {
-                        onFailure(response.request(), new IOException("JSON Failed"));
-                        return;
-                    } catch (JsonSyntaxException e) {
-                        onFailure(response.request(), new IOException("JSON Failed"));
-                        return;
-                    }
-
-                    if (result.status != null && result.status.equals("error")) {
-                        callback.onFailure(new NetworkErrorException(result.status_message));
-                    } else {
-                        final Movie movie = result.formatDetailForPopcorn();
-
-                        TraktProvider traktProvider = new TraktProvider();
-
-                        traktProvider.getMovieMeta(movie.imdbId, new MetaProvider.Callback() {
-                            @Override
-                            public void onResult(MetaProvider.MetaData metaData, Exception e) {
-                                if (e == null) {
-                                    if (metaData.trailer != null) {
-                                        movie.trailer = metaData.trailer;
-                                    }
-
-                                    if (metaData.certification != null) {
-                                        movie.certification = metaData.certification;
-                                    }
-                                }
-
-                                final ArrayList<Media> returnData = new ArrayList<>();
-                                returnData.add(movie);
-                                callback.onSuccess(null, returnData, true);
-                            }
-                        });
-
-                        return;
-                    }
-                }
-                onFailure(response.request(), new IOException("Couldn't connect to YTS"));
-            }
-        });
-    }
-
-    private boolean generateFallback(Request.Builder requestBuilder) {
-        String url = requestBuilder.build().urlString();
-        if (url.contains(MIRROR_URL2)) {
-            return false;
-        } else if (url.contains(MIRROR_URL)) {
-            url = url.replace(MIRROR_URL, MIRROR_URL2);
-            CURRENT_URL = MIRROR_URL2;
-        } else {
-            url = url.replace(API_URL, MIRROR_URL);
-            CURRENT_URL = MIRROR_URL;
-        }
-        requestBuilder.url(url);
-        return true;
+    public Call getDetail(ArrayList<Media> currentList, Integer index, Callback callback) {
+        ArrayList<Media> returnList = new ArrayList<>();
+        returnList.add(currentList.get(index));
+        callback.onSuccess(null, returnList, true);
+        return null;
     }
 
     private class YTSReponse {
@@ -323,60 +248,6 @@ public class YTSProvider extends MediaProvider {
                 i++;
             }
             return -1;
-        }
-
-        /**
-         * Format data for the application
-         *
-         * @return List with items
-         */
-        public Movie formatDetailForPopcorn() {
-            Movie movie = new Movie(sMediaProvider, sSubsProvider);
-            LinkedTreeMap<String, Object> item = ((ArrayList<LinkedTreeMap<String, Object>>) data.get("movies")).get(0);
-            if (item == null) return movie;
-
-            movie.videoId = (String) item.get("imdb_code");
-            movie.imdbId = movie.videoId;
-
-            movie.title = (String) item.get("title");
-            Double year = (Double) item.get("year");
-            movie.year = Integer.toString(year.intValue());
-            movie.rating = item.get("rating").toString();
-            movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
-            movie.image = (String) item.get("large_cover_image");
-            movie.headerImage = (String) item.get("background_image_original");
-            movie.trailer = "https://youtube.com/?v=" + item.get("yt_trailer_code");
-            Double runtime = (Double) item.get("runtime");
-            movie.runtime = Integer.toString(runtime.intValue());
-            movie.synopsis = (String) item.get("description_full");
-            movie.fullImage = movie.image;
-
-            ArrayList<LinkedTreeMap<String, Object>> torrents =
-                    (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
-            if (torrents != null) {
-                for (LinkedTreeMap<String, Object> torrentObj : torrents) {
-                    String quality = (String) torrentObj.get("quality");
-                    if (quality == null) continue;
-
-                    Media.Torrent torrent = new Media.Torrent();
-
-                    torrent.seeds = ((Double) torrentObj.get("seeds")).intValue();
-                    torrent.peers = ((Double) torrentObj.get("peers")).intValue();
-                    torrent.hash = (String) torrentObj.get("hash");
-                    try {
-                        String magnet = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
-                        torrent.url = magnet;
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        torrent.url = (String) torrentObj.get("url");
-                    }
-
-                    movie.torrents.put(quality, torrent);
-                }
-            }
-
-
-            return movie;
         }
 
         /**
@@ -406,9 +277,11 @@ public class YTSProvider extends MediaProvider {
                     movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
                     movie.image = (String) item.get("large_cover_image");
                     movie.headerImage = (String) item.get("background_image_original");
-                    movie.trailer = "https://youtube.com/?v=" + item.get("yt_trailer_code");
-                    movie.runtime = Double.toString((Double) item.get("runtime"));
+                    movie.trailer = "https://youtube.com/watch?v=" + item.get("yt_trailer_code");
+                    Double runtime = (Double) item.get("runtime");
+                    movie.runtime = Integer.toString(runtime.intValue());
                     movie.synopsis = (String) item.get("description_full");
+                    movie.certification = (String) item.get("mpa_rating");
                     movie.fullImage = movie.image;
 
                     ArrayList<LinkedTreeMap<String, Object>> torrents =

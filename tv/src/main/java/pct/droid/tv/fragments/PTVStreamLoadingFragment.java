@@ -27,12 +27,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.sv244.torrentstream.StreamStatus;
+
 import java.text.DecimalFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
@@ -69,7 +70,7 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 		updateBackground();
 	}
 
-	private void updateStatus(final DownloadStatus status) {
+	private void updateStatus(final StreamStatus status) {
 		final DecimalFormat df = new DecimalFormat("#############0.00");
 		ThreadUtils.runOnUiThread(new Runnable() {
 			@Override
@@ -117,8 +118,8 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 				break;
 			case STREAMING:
 				mPrimaryTextView.setText(R.string.streaming_started);
-				if (null != extra && extra instanceof DownloadStatus)
-					updateStatus((DownloadStatus) extra);
+				if (null != extra && extra instanceof StreamStatus)
+					updateStatus((StreamStatus) extra);
 				break;
 			case WAITING_SUBTITLES:
 				mPrimaryTextView.setText(R.string.waiting_for_subtitles);
