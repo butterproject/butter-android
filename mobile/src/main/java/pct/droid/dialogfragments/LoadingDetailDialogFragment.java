@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.MediaProvider;
@@ -41,10 +42,10 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     private MediaProvider mProvider;
     private Boolean mSavedInstanceState = false;
 
-    public static LoadingDetailDialogFragment newInstance(Media item) {
+    public static LoadingDetailDialogFragment newInstance(Integer position) {
         LoadingDetailDialogFragment frag = new LoadingDetailDialogFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_MEDIA, item);
+        args.putInt(EXTRA_MEDIA, position);
         frag.setArguments(args);
         return frag;
     }
@@ -84,10 +85,11 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final Media media = getArguments().getParcelable(EXTRA_MEDIA);
-
+        ArrayList<Media> currentList = mCallback.getCurrentList();
+        int position = getArguments().getInt(EXTRA_MEDIA);
+        final Media media = currentList.get(position);
         mProvider = media.getMediaProvider();
-        mProvider.getDetail(media.videoId, new MediaProvider.Callback() {
+        mProvider.getDetail(currentList, position, new MediaProvider.Callback() {
                     @Override
                     public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
                         if (!isAdded()) return;
@@ -133,6 +135,8 @@ public class LoadingDetailDialogFragment extends DialogFragment {
         void onDetailLoadFailure();
 
         void onDetailLoadSuccess(Media item);
+
+        ArrayList<Media> getCurrentList();
     }
 
 

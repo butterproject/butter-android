@@ -58,7 +58,10 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
     }
 
     public void loadDetails() {
-        mTvProvider.getDetail(getShowItem().videoId, this);
+        ArrayList<Media> mediaList = new ArrayList<>();
+        mediaList.add(getShowItem());
+
+        mTvProvider.getDetail(mediaList, 0, this);
     }
 
     private Show getShowItem() {

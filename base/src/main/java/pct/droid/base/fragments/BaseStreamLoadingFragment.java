@@ -30,6 +30,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
@@ -40,9 +43,7 @@ import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
@@ -67,7 +68,7 @@ import pct.droid.base.utils.ThreadUtils;
  * <p/>
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
-public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentService.Listener {
+public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentListener {
 
     protected FragmentListener mCallback;
     private SubsProvider mSubsProvider;
@@ -209,8 +210,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             getActivity().onBackPressed();
         }
 
-        if(mService != null && mService.isReady()) {
-            onStreamReady(mService.getCurrentVideoLocation());
+        if(mService != null && mService.isStreaming() && mService.isReady()) {
+            onStreamReady(mService.getCurrentTorrent());
         }
 
         setState(State.WAITING_TORRENT);
@@ -226,7 +227,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         //if the torrent service is currently streaming another file, stop it.
         if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
             mService.stopStreaming();
+        } else if(mService.isReady()) {
+            onStreamReady(mService.getCurrentTorrent());
         }
+
         //start streaming the new file
         mService.streamTorrent(torrentUrl);
     }
@@ -243,13 +247,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     @Override
     @DebugLog
-    public void onStreamStarted() {
+    public void onStreamStarted(Torrent torrent) {
         setState(State.BUFFERING);
     }
 
     @Override
     @DebugLog
-    public void onStreamError(final Exception e) {
+    public void onStreamError(Torrent torrent, final Exception e) {
         if (e.getMessage().equals("Write error")) {
             setState(State.ERROR, getString(R.string.error_files));
         } else if (e.getMessage().equals("Torrent error")) {
@@ -262,12 +266,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     /**
      * Called when torrent buffering has reached 100%
      *
-     * @param videoLocation
+     * @param torrent
      */
     @Override
     @DebugLog
-    public void onStreamReady(File videoLocation) {
-        mVideoLocation = videoLocation.toString();
+    public void onStreamReady(Torrent torrent) {
+        mVideoLocation = torrent.getVideoFile().toString();
         startPlayer(mVideoLocation);
     }
 
@@ -279,7 +283,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     @Override
     @DebugLog
-    public void onStreamProgress(DownloadStatus status) {
+    public void onStreamProgress(Torrent torrent, StreamStatus status) {
         if (!mVideoLocation.isEmpty()) {
             startPlayer(mVideoLocation);
         }
@@ -287,8 +291,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     @Override
-    public void onStreamMetaData(Torrent torrent) {
-        torrent.prepareTorrent();
+    public void onStreamPrepared(Torrent torrent) {
+        torrent.startDownload();
+    }
+
+    @Override
+    public void onStreamStopped() {
+
     }
 
     /**

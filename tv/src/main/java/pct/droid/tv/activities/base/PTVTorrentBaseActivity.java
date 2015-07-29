@@ -41,19 +41,22 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
+
 import java.io.File;
 
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import timber.log.Timber;
 
-public abstract class PTVTorrentBaseActivity extends FragmentActivity implements TorrentService.Listener, TorrentActivity {
+public abstract class PTVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity {
 
     protected Handler mHandler;
     protected TorrentService mService;
@@ -120,22 +123,32 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onStreamStarted() {
+    public void onStreamPrepared(Torrent torrent) {
 
     }
 
     @Override
-    public void onStreamError(Exception e) {
+    public void onStreamStarted(Torrent torrent) {
 
     }
 
     @Override
-    public void onStreamReady(File videoLocation) {
+    public void onStreamError(Torrent torrent, Exception e) {
 
     }
 
     @Override
-    public void onStreamProgress(DownloadStatus status) {
+    public void onStreamReady(Torrent torrent) {
+
+    }
+
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+
+    }
+
+    @Override
+    public void onStreamStopped() {
 
     }
 }

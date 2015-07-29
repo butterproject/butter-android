@@ -58,6 +58,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
+
 import pct.droid.base.R;
 import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
@@ -68,17 +72,16 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.FileUtils;
+import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
 import timber.log.Timber;
 
-public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
+public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentListener {
 
     public static final String RESUME_POSITION = "resume_position";
 
@@ -154,6 +157,15 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         mResumePosition = mCallback.getResumePosition();
         mStreamInfo = mCallback.getInfo();
+
+        if (mStreamInfo==null){
+            //why is this null?
+            //https://fabric.io/popcorn-time/android/apps/pct.droid/issues/55a801cd2f038749478f93c7
+            //have added logging to activity lifecycle methods to further track down this issue
+            getActivity().finish();
+            return;
+        }
+
         mMedia = mStreamInfo.getMedia();
 
         //start subtitles
@@ -164,7 +176,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 startSubtitles();
             }
         }
-
 
         mLibVLC = VLCInstance.get();
         mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
@@ -705,28 +716,36 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
     @Override
-    public void onStreamStarted() {
+    public void onStreamPrepared(Torrent torrent) {
+
     }
 
     @Override
-    public void onStreamError(Exception e) {
+    public void onStreamStarted(Torrent torrent) {
+
     }
 
     @Override
-    public void onStreamReady(File videoLocation) {
+    public void onStreamStopped() {
+
     }
 
     @Override
-    public void onStreamProgress(DownloadStatus status) {
-        int newProgress = (int) ((getDuration() / 100) * status.progress);
+    public void onStreamError(Torrent torrent, Exception e) {
+
+    }
+
+    @Override
+    public void onStreamReady(Torrent torrent) {
+
+    }
+
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+        int newProgress = (int) ((getDuration() / 100) * streamStatus.progress);
         if (mStreamerProgress < newProgress) {
             mStreamerProgress = newProgress;
         }
-    }
-
-    @Override
-    public void onStreamMetaData(Torrent torrent) {
-
     }
 
     /**
@@ -904,9 +923,15 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         @Override
         public void onDeviceReady(ConnectableDevice device) {
             super.onDeviceReady(device);
+
+            if (!FragmentUtil.isAdded(BaseVideoPlayerFragment.this)){
+                return;
+            }
+
+            startBeamPlayerActivity();
+            
             getActivity().finish();
         }
-
     };
 
     public abstract void startBeamPlayerActivity();

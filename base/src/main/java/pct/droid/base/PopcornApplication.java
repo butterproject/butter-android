@@ -65,7 +65,8 @@ public abstract class PopcornApplication extends VLCApplication implements Popco
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        if(!BuildConfig.GIT_BRANCH.equals("local"))
+            Fabric.with(this, new Crashlytics());
 
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 

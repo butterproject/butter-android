@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -43,12 +44,17 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     private Long mResumePosition;
     private String mTitle;
 
-    public static Intent startActivity(Context context, StreamInfo info) {
+    public static Intent startActivity(Context context, @NonNull StreamInfo info) {
         return startActivity(context, info, 0);
     }
 
-    public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
+    public static Intent startActivity(Context context, @NonNull StreamInfo info, long resumePosition) {
         Intent i = new Intent(context, BeamPlayerActivity.class);
+
+        if (info == null){
+            throw new IllegalArgumentException("StreamInfo must not be null");
+        }
+
         i.putExtra(INFO, info);
         i.putExtra(RESUME_POSITION, resumePosition);
         context.startActivity(i);
