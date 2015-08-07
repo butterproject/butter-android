@@ -52,10 +52,16 @@ import pct.droid.base.utils.LocaleUtils;
 public class YTSProvider extends MediaProvider {
 
     private static final YTSProvider sMediaProvider = new YTSProvider();
-    private static final String API_URL = "http://cloudflare.com/api/v2/";
-    private static final String MIRROR_URL = "http://reddit.com/api/v2/";
-    private static final String MIRROR_URL2 = "http://xor.image.yt/api/v2/";
-    public static String CURRENT_URL = API_URL;
+    private static Integer CURRENT_API = 0;
+    private static final String[] API_URLS = {
+            "https://yts.to/api/v2/",
+            "https://yts.io/api/v2/",
+            "https://yts.sh/api/v2/",
+            "https://xor.image.yt/api/v2/",
+            "http://cloudflare.com/api/v2/",
+            "http://reddit.com/api/v2/",
+    };
+    public static String CURRENT_URL = API_URLS[CURRENT_API];
 
     private static final SubsProvider sSubsProvider = new YSubsProvider();
     private static Filters sFilters = new Filters();
@@ -168,10 +174,13 @@ public class YTSProvider extends MediaProvider {
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                if (generateFallback(requestBuilder)) {
-                    fetchList(currentList, requestBuilder, filters, callback);
-                } else {
+                String url = requestBuilder.build().urlString();
+                if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
+                } else {
+                    url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);
+                    requestBuilder.url(url);
+                    fetchList(currentList, requestBuilder, filters, callback);
                 }
             }
 
@@ -218,21 +227,6 @@ public class YTSProvider extends MediaProvider {
         returnList.add(currentList.get(index));
         callback.onSuccess(null, returnList, true);
         return null;
-    }
-
-    private boolean generateFallback(Request.Builder requestBuilder) {
-        String url = requestBuilder.build().urlString();
-        if (url.contains(MIRROR_URL2)) {
-            return false;
-        } else if (url.contains(MIRROR_URL)) {
-            url = url.replace(MIRROR_URL, MIRROR_URL2);
-            CURRENT_URL = MIRROR_URL2;
-        } else {
-            url = url.replace(API_URL, MIRROR_URL);
-            CURRENT_URL = MIRROR_URL;
-        }
-        requestBuilder.url(url);
-        return true;
     }
 
     private class YTSReponse {
