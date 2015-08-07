@@ -31,12 +31,20 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
+import com.frostwire.jlibtorrent.AlertListener;
 import com.frostwire.jlibtorrent.DHT;
 import com.frostwire.jlibtorrent.Downloader;
 import com.frostwire.jlibtorrent.Priority;
 import com.frostwire.jlibtorrent.Session;
 import com.frostwire.jlibtorrent.SessionSettings;
+import com.frostwire.jlibtorrent.SettingsPack;
 import com.frostwire.jlibtorrent.TorrentInfo;
+import com.frostwire.jlibtorrent.alerts.Alert;
+import com.frostwire.jlibtorrent.alerts.AlertType;
+import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
+import com.frostwire.jlibtorrent.alerts.PeerConnectAlert;
+import com.frostwire.jlibtorrent.alerts.PeerDisconnectedAlert;
+import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
 import com.frostwire.jlibtorrent.alerts.TorrentAddedAlert;
 import com.sjl.foreground.Foreground;
 import com.squareup.okhttp.OkHttpClient;
@@ -218,10 +226,7 @@ public class TorrentService extends Service {
                     // Start libtorrent session and init DHT
                     Timber.d("Starting libtorrent session");
                     mTorrentSession = new Session();
-                    SessionSettings sessionSettings = mTorrentSession.getSettings();
-                    sessionSettings.setAnonymousMode(true);
-                    mTorrentSession.setSettings(sessionSettings);
-                    mTorrentSession.addListener(mAlertListener);
+                    //mTorrentSession.addListener(mAlertListener);
                     Timber.d("Init DHT");
                     mDHT = new DHT(mTorrentSession);
                     mDHT.start();
@@ -265,12 +270,13 @@ public class TorrentService extends Service {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LIBTORRENT_THREAD_NAME);
         mWakeLock.acquire();
 
-        SessionSettings sessionSettings = mTorrentSession.getSettings();
-        sessionSettings.setActiveDHTLimit(PrefUtils.get(this, Prefs.LIBTORRENT_DHT_LIMIT, 200));
-        sessionSettings.setConnectionsLimit(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
-        sessionSettings.setDownloadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
-        sessionSettings.setUploadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
-        mTorrentSession.setSettings(sessionSettings);
+        SettingsPack settingsPack = new SettingsPack();
+        settingsPack.setAnonymousMode(true);
+        //mDHT.(PrefUtils.get(this, Prefs.LIBTORRENT_DHT_LIMIT, 200));
+        settingsPack.setConnectionsLimit(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
+        settingsPack.setDownloadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
+        settingsPack.setUploadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
+        mTorrentSession.applySettings(settingsPack);
 
         mStreamingThread = new HandlerThread(STREAMING_THREAD_NAME);
         mStreamingThread.start();
@@ -511,7 +517,7 @@ public class TorrentService extends Service {
             TorrentListener listener = new TorrentListener();
             mCurrentTorrent = new Torrent(alert.getHandle());
             mCurrentTorrent.setListener(listener);
-            mTorrentSession.addListener(mCurrentTorrent);
+            //mTorrentSession.addListener(mCurrentTorrent);
 
             listener.onStreamMetaData(mCurrentTorrent);
         }

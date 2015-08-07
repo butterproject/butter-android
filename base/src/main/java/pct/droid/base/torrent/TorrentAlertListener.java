@@ -1,81 +1,8 @@
-/*
- * This file is part of Popcorn Time.
- *
- * Popcorn Time is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Popcorn Time is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package pct.droid.base.torrent;
 
 import com.frostwire.jlibtorrent.AlertListener;
 import com.frostwire.jlibtorrent.Logger;
-import com.frostwire.jlibtorrent.alerts.AddTorrentAlert;
-import com.frostwire.jlibtorrent.alerts.Alert;
-import com.frostwire.jlibtorrent.alerts.AnonymousModeAlert;
-import com.frostwire.jlibtorrent.alerts.BlockDownloadingAlert;
-import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
-import com.frostwire.jlibtorrent.alerts.BlockTimeoutAlert;
-import com.frostwire.jlibtorrent.alerts.CacheFlushedAlert;
-import com.frostwire.jlibtorrent.alerts.DhtReplyAlert;
-import com.frostwire.jlibtorrent.alerts.FastresumeRejectedAlert;
-import com.frostwire.jlibtorrent.alerts.FileCompletedAlert;
-import com.frostwire.jlibtorrent.alerts.FileErrorAlert;
-import com.frostwire.jlibtorrent.alerts.FileRenameFailedAlert;
-import com.frostwire.jlibtorrent.alerts.FileRenamedAlert;
-import com.frostwire.jlibtorrent.alerts.HashFailedAlert;
-import com.frostwire.jlibtorrent.alerts.InvalidRequestAlert;
-import com.frostwire.jlibtorrent.alerts.LsdPeerAlert;
-import com.frostwire.jlibtorrent.alerts.MetadataFailedAlert;
-import com.frostwire.jlibtorrent.alerts.MetadataReceivedAlert;
-import com.frostwire.jlibtorrent.alerts.PeerBanAlert;
-import com.frostwire.jlibtorrent.alerts.PeerBlockedAlert;
-import com.frostwire.jlibtorrent.alerts.PeerConnectAlert;
-import com.frostwire.jlibtorrent.alerts.PeerDisconnectedAlert;
-import com.frostwire.jlibtorrent.alerts.PeerErrorAlert;
-import com.frostwire.jlibtorrent.alerts.PeerSnubbedAlert;
-import com.frostwire.jlibtorrent.alerts.PeerUnsnubbedAlert;
-import com.frostwire.jlibtorrent.alerts.PerformanceAlert;
-import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
-import com.frostwire.jlibtorrent.alerts.ReadPieceAlert;
-import com.frostwire.jlibtorrent.alerts.RequestDroppedAlert;
-import com.frostwire.jlibtorrent.alerts.SaveResumeDataAlert;
-import com.frostwire.jlibtorrent.alerts.SaveResumeDataFailedAlert;
-import com.frostwire.jlibtorrent.alerts.ScrapeFailedAlert;
-import com.frostwire.jlibtorrent.alerts.ScrapeReplyAlert;
-import com.frostwire.jlibtorrent.alerts.StateChangedAlert;
-import com.frostwire.jlibtorrent.alerts.StatsAlert;
-import com.frostwire.jlibtorrent.alerts.StorageMovedAlert;
-import com.frostwire.jlibtorrent.alerts.StorageMovedFailedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentAddedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentCheckedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentDeleteFailedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentDeletedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentErrorAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentFinishedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentNeedCertAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentPausedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentPrioritizeAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentRemovedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentResumedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentUpdateAlert;
-import com.frostwire.jlibtorrent.alerts.TrackerAnnounceAlert;
-import com.frostwire.jlibtorrent.alerts.TrackerErrorAlert;
-import com.frostwire.jlibtorrent.alerts.TrackerReplyAlert;
-import com.frostwire.jlibtorrent.alerts.TrackerWarningAlert;
-import com.frostwire.jlibtorrent.alerts.TrackeridAlert;
-import com.frostwire.jlibtorrent.alerts.UnwantedBlockAlert;
-import com.frostwire.jlibtorrent.alerts.UrlSeedAlert;
+import com.frostwire.jlibtorrent.alerts.*;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -92,6 +19,9 @@ public abstract class TorrentAlertListener implements AlertListener {
     private static final Logger LOG = Logger.getLogger(TorrentAlertListener.class);
 
     private static final Map<String, CallAlertFunction> CALL_TABLE = buildCallAlertTable();
+
+    public TorrentAlertListener() {
+    }
 
     @Override
     public int[] types() {
@@ -191,6 +121,9 @@ public abstract class TorrentAlertListener implements AlertListener {
     public void stateChanged(StateChangedAlert alert) {
     }
 
+    public void sessionStats(SessionStatsAlert alert) {
+    }
+
     public void dhtReply(DhtReplyAlert alert) {
     }
 
@@ -270,6 +203,15 @@ public abstract class TorrentAlertListener implements AlertListener {
     }
 
     public void unwantedBlock(UnwantedBlockAlert alert) {
+    }
+
+    public void torrentLog(TorrentLogAlert alert) {
+    }
+
+    public void peerLog(PeerLogAlert alert) {
+    }
+
+    public void incomingRequest(IncomingRequestAlert alert) {
     }
 
     public void torrentPrioritize(TorrentPrioritizeAlert alert) {
