@@ -19,6 +19,7 @@ package pct.droid.base.torrent;
 
 import com.frostwire.jlibtorrent.FileStorage;
 import com.frostwire.jlibtorrent.Priority;
+import com.frostwire.jlibtorrent.TorrentAlertAdapter;
 import com.frostwire.jlibtorrent.TorrentHandle;
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.frostwire.jlibtorrent.TorrentStatus;
@@ -73,7 +74,7 @@ public class Torrent extends TorrentAlertListener {
     public Torrent(TorrentHandle torrentHandle) {
         mTorrentHandle = torrentHandle;
 
-        torrentHandle.setPriority(7);
+        torrentHandle.setPriority(Priority.SEVEN.getSwig());
 
         if(mSelectedFile == -1)
             setSelectedFile(mSelectedFile);
@@ -87,9 +88,9 @@ public class Torrent extends TorrentAlertListener {
      * First set all piece priorities to {@link Priority}.NORMAL and then set the file priority to the file selected for playback.
      */
     private void resetPriorities() {
-        int[] priorities = getPiecePriorities();
+        Priority[] priorities = getPiecePriorities();
         for (int i = 0; i < priorities.length; i++) {
-            mTorrentHandle.getSwig().piece_priority(i, Priority.NORMAL.getSwig());
+            mTorrentHandle.setPiecePriority(i, Priority.IGNORE);
         }
 
         for (int i = 0; i < mTorrentHandle.getTorrentInfo().getNumFiles(); i++) {
@@ -109,17 +110,17 @@ public class Torrent extends TorrentAlertListener {
      * Get torrent piece priorities
      * @return Piece priorities
      */
-    public int[] getPiecePriorities() {
-        int_vector piece_priorities = mTorrentHandle.getSwig().piece_priorities();
-        int[] priorities = new int[(int) piece_priorities.size()];
+    public Priority[] getPiecePriorities() {
+        Priority[] piece_priorities = mTorrentHandle.getPiecePriorities();
+        Priority[] priorities = new Priority[piece_priorities.length];
         for (int i = 0; i < priorities.length; i++) {
-            priorities[i] = piece_priorities.get(i);
+            priorities[i] = piece_priorities[i];
         }
         return priorities;
     }
 
     public File getVideoFile() {
-        return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFileAt(mSelectedFile).getPath());
+        return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFiles().getFilePath(mSelectedFile));
     }
 
     public File getSaveLocation() {
@@ -166,15 +167,15 @@ public class Torrent extends TorrentAlertListener {
         }
         mSelectedFile = selectedFileIndex;
 
-        int[] piecePriorities = getPiecePriorities();
+        Priority[] piecePriorities = getPiecePriorities();
         int firstPieceIndex = -1;
         int lastPieceIndex = -1;
         for (int i = 0; i < piecePriorities.length; i++) {
-            if (piecePriorities[i] != Priority.IGNORE.getSwig()) {
+            if (piecePriorities[i] != Priority.IGNORE) {
                 if (firstPieceIndex == -1) {
                     firstPieceIndex = i;
                 }
-                piecePriorities[i] = Priority.IGNORE.getSwig();
+                piecePriorities[i] = Priority.IGNORE;
             } else {
                 if (firstPieceIndex != -1 && lastPieceIndex == -1) {
                     lastPieceIndex = i - 1;
@@ -218,21 +219,21 @@ public class Torrent extends TorrentAlertListener {
 
         List<Integer> indices = new ArrayList<>();
 
-        int[] priorities = getPiecePriorities();
+        Priority[] priorities = getPiecePriorities();
         for (int i = 0; i < priorities.length; i++) {
-            if(priorities[i] != Priority.IGNORE.getSwig()) {
-                mTorrentHandle.getSwig().piece_priority(i, Priority.IGNORE.getSwig());
+            if(priorities[i] != Priority.IGNORE) {
+                mTorrentHandle.setPiecePriority(i, Priority.IGNORE);
             }
         }
 
         for (int i = 0; i < mPiecesToPrepare; i++) {
             indices.add(mLastPieceIndex - i);
-            mTorrentHandle.getSwig().piece_priority(mLastPieceIndex - i, Priority.SEVEN.getSwig());
+            mTorrentHandle.setPiecePriority(mLastPieceIndex - i, Priority.SEVEN);
         }
 
         for (int i = 0; i < mPiecesToPrepare; i++) {
             indices.add(mFirstPieceIndex + i);
-            mTorrentHandle.getSwig().piece_priority(mFirstPieceIndex + i, Priority.SEVEN.getSwig());
+            mTorrentHandle.setPiecePriority(mFirstPieceIndex + i, Priority.SEVEN);
         }
 
         mPieceIndices = indices;
