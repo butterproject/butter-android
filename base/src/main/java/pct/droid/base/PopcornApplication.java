@@ -60,7 +60,8 @@ public class PopcornApplication extends VLCApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        if(!BuildConfig.GIT_BRANCH.equals("local"))
+            Fabric.with(this, new Crashlytics());
 
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
