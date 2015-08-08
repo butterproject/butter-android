@@ -226,7 +226,7 @@ public class TorrentService extends Service {
                     // Start libtorrent session and init DHT
                     Timber.d("Starting libtorrent session");
                     mTorrentSession = new Session();
-                    //mTorrentSession.addListener(mAlertListener);
+                    mTorrentSession.addListener(mAlertListener);
                     Timber.d("Init DHT");
                     mDHT = new DHT(mTorrentSession);
                     mDHT.start();
@@ -383,11 +383,11 @@ public class TorrentService extends Service {
                 mDHT.start();
             }
 
-            if (mDHT.nodes() < 1) {
+            if (mDHT.totalNodes() < 1) {
                 mDHT.waitNodes(30);
             }
 
-            Timber.d("Nodes in DHT: %s", mDHT.nodes());
+            Timber.d("Nodes in DHT: %s", mDHT.totalNodes());
 
             Timber.d("Fetching the magnet uri, please wait...");
             byte[] data = d.fetchMagnet(torrentUrl, 30000);
@@ -510,14 +510,18 @@ public class TorrentService extends Service {
         }
     };
 
-    private TorrentAlertListener mAlertListener = new TorrentAlertListener() {
+    private AlertListener mAlertListener = new AlertListener() {
         @Override
-        public void torrentAdded(TorrentAddedAlert alert) {
-            super.torrentAdded(alert);
+        public int[] types() {
+            return new int[] { AlertType.TORRENT_ADDED.getSwig() };
+        }
+
+        @Override
+        public void alert(Alert<?> alert) {
             TorrentListener listener = new TorrentListener();
-            mCurrentTorrent = new Torrent(alert.getHandle());
+            mCurrentTorrent = new Torrent(mTorrentSession.findTorrent(((TorrentAddedAlert) alert).getHandle().getInfoHash()));
             mCurrentTorrent.setListener(listener);
-            //mTorrentSession.addListener(mCurrentTorrent);
+            mTorrentSession.addListener(mCurrentTorrent);
 
             listener.onStreamMetaData(mCurrentTorrent);
         }
