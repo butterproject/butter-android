@@ -38,7 +38,7 @@ import java.util.List;
 import pct.droid.base.PopcornApplication;
 import timber.log.Timber;
 
-public class Torrent extends TorrentAlertListener {
+public class Torrent extends TorrentAlertAdapter {
 
     private final static Integer MAX_PREPARE_COUNT = 20;
     private final static Integer MIN_PREPARE_COUNT = 2;
@@ -47,7 +47,6 @@ public class Torrent extends TorrentAlertListener {
 
     public enum State { UNKNOWN, RETRIEVING_META, PREPARING, STREAMING }
 
-    private final TorrentHandle mTorrentHandle;
     private int mPiecesToPrepare;
     private int mLastPieceIndex;
     private int mFirstPieceIndex;
@@ -72,7 +71,7 @@ public class Torrent extends TorrentAlertListener {
      * @param torrentHandle {@link TorrentHandle}
      */
     public Torrent(TorrentHandle torrentHandle) {
-        mTorrentHandle = torrentHandle;
+        super(torrentHandle);
 
         torrentHandle.setPriority(Priority.SEVEN.getSwig());
 
@@ -90,20 +89,20 @@ public class Torrent extends TorrentAlertListener {
     private void resetPriorities() {
         Priority[] priorities = getPiecePriorities();
         for (int i = 0; i < priorities.length; i++) {
-            mTorrentHandle.setPiecePriority(i, Priority.IGNORE);
+            th.setPiecePriority(i, Priority.IGNORE);
         }
 
-        for (int i = 0; i < mTorrentHandle.getTorrentInfo().getNumFiles(); i++) {
+        for (int i = 0; i < th.getTorrentInfo().getNumFiles(); i++) {
             if(i == mSelectedFile) {
-                mTorrentHandle.setFilePriority(i, Priority.SEVEN);
+                th.setFilePriority(i, Priority.SEVEN);
             } else {
-                mTorrentHandle.setFilePriority(i, Priority.IGNORE);
+                th.setFilePriority(i, Priority.IGNORE);
             }
         }
     }
 
     public TorrentHandle getTorrentHandle() {
-        return mTorrentHandle;
+        return th;
     }
 
     /**
@@ -111,7 +110,7 @@ public class Torrent extends TorrentAlertListener {
      * @return Piece priorities
      */
     public Priority[] getPiecePriorities() {
-        Priority[] piece_priorities = mTorrentHandle.getPiecePriorities();
+        Priority[] piece_priorities = th.getPiecePriorities();
         Priority[] priorities = new Priority[piece_priorities.length];
         for (int i = 0; i < priorities.length; i++) {
             priorities[i] = piece_priorities[i];
@@ -120,26 +119,26 @@ public class Torrent extends TorrentAlertListener {
     }
 
     public File getVideoFile() {
-        return new File(PopcornApplication.getStreamDir(), mTorrentHandle.getTorrentInfo().getFiles().getFilePath(mSelectedFile));
+        return new File(PopcornApplication.getStreamDir(), th.getTorrentInfo().getFiles().getFilePath(mSelectedFile));
     }
 
     public File getSaveLocation() {
-        return new File(mTorrentHandle.getSavePath() + "/" + mTorrentHandle.getName());
+        return new File(th.getSavePath() + "/" + th.getName());
     }
 
     public void resume() {
-        mTorrentHandle.resume();
+        th.resume();
     }
 
     public void pause() {
-        mTorrentHandle.pause();
+        th.pause();
     }
 
     public void setSelectedFile(int selectedFileIndex) {
-        TorrentInfo torrentInfo = mTorrentHandle.getTorrentInfo();
+        TorrentInfo torrentInfo = th.getTorrentInfo();
         FileStorage fileStorage = torrentInfo.getFiles();
-        Timber.d(mTorrentHandle.getSavePath());
-        Timber.d(mTorrentHandle.getName());
+        Timber.d(th.getSavePath());
+        Timber.d(th.getName());
 
         if(selectedFileIndex == -1) {
             long highestFileSize = 0;
@@ -148,20 +147,20 @@ public class Torrent extends TorrentAlertListener {
                 long fileSize = fileStorage.getFileSize(i);
                 if (highestFileSize < fileSize) {
                     highestFileSize = fileSize;
-                    mTorrentHandle.setFilePriority(selectedFile, Priority.IGNORE);
+                    th.setFilePriority(selectedFile, Priority.IGNORE);
                     selectedFile = i;
-                    mTorrentHandle.setFilePriority(i, Priority.SEVEN);
+                    th.setFilePriority(i, Priority.SEVEN);
                 } else {
-                    mTorrentHandle.setFilePriority(i, Priority.IGNORE);
+                    th.setFilePriority(i, Priority.IGNORE);
                 }
             }
             selectedFileIndex = selectedFile;
         } else {
             for (int i = 0; i < fileStorage.getNumFiles(); i++) {
                 if(i == selectedFileIndex) {
-                    mTorrentHandle.setFilePriority(i, Priority.SEVEN);
+                    th.setFilePriority(i, Priority.SEVEN);
                 } else {
-                    mTorrentHandle.setFilePriority(i, Priority.IGNORE);
+                    th.setFilePriority(i, Priority.IGNORE);
                 }
             }
         }
@@ -187,7 +186,7 @@ public class Torrent extends TorrentAlertListener {
             lastPieceIndex = piecePriorities.length - 1;
         }
         int pieceCount = lastPieceIndex - firstPieceIndex + 1;
-        int pieceLength = mTorrentHandle.getTorrentInfo().getPieceLength();
+        int pieceLength = th.getTorrentInfo().getPieceLength();
         int activePieceCount;
         if (pieceLength > 0) {
             activePieceCount = (int) (PREPARE_SIZE / pieceLength);
@@ -222,30 +221,30 @@ public class Torrent extends TorrentAlertListener {
         Priority[] priorities = getPiecePriorities();
         for (int i = 0; i < priorities.length; i++) {
             if(priorities[i] != Priority.IGNORE) {
-                mTorrentHandle.setPiecePriority(i, Priority.IGNORE);
+                th.setPiecePriority(i, Priority.IGNORE);
             }
         }
 
         for (int i = 0; i < mPiecesToPrepare; i++) {
             indices.add(mLastPieceIndex - i);
-            mTorrentHandle.setPiecePriority(mLastPieceIndex - i, Priority.SEVEN);
+            th.setPiecePriority(mLastPieceIndex - i, Priority.SEVEN);
         }
 
         for (int i = 0; i < mPiecesToPrepare; i++) {
             indices.add(mFirstPieceIndex + i);
-            mTorrentHandle.setPiecePriority(mFirstPieceIndex + i, Priority.SEVEN);
+            th.setPiecePriority(mFirstPieceIndex + i, Priority.SEVEN);
         }
 
         mPieceIndices = indices;
 
         double blockCount = 0;
         for(Integer index : indices) {
-            blockCount += (int) Math.ceil(mTorrentHandle.getTorrentInfo().getPieceSize(index) / mTorrentHandle.getStatus().getBlockSize());
+            blockCount += (int) Math.ceil(th.getTorrentInfo().getPieceSize(index) / th.getStatus().getBlockSize());
         }
 
         mProgressStep = 100 / blockCount;
 
-        mTorrentHandle.resume();
+        th.resume();
 
         mListener.onStreamStarted();
     }
@@ -256,8 +255,8 @@ public class Torrent extends TorrentAlertListener {
     public void startSequentialMode() {
         resetPriorities();
 
-        mTorrentHandle.setAutoManaged(true);
-        mTorrentHandle.setSequentialDownload(true);
+        th.setAutoManaged(true);
+        th.setSequentialDownload(true);
     }
 
     public State getState() {
@@ -267,9 +266,10 @@ public class Torrent extends TorrentAlertListener {
     @Override
     public void pieceFinished(PieceFinishedAlert alert) {
         super.pieceFinished(alert);
+        Timber.d(alert.getMessage());
 
         for(Integer index : mPieceIndices) {
-            if(mTorrentHandle.havePiece(index))
+            if(index == alert.getPieceIndex())
                 mPieceIndices.remove(index);
         }
 
@@ -310,7 +310,7 @@ public class Torrent extends TorrentAlertListener {
     }
 
     private void sendStreamProgress() {
-        TorrentStatus status = mTorrentHandle.getStatus();
+        TorrentStatus status = th.getStatus();
         float progress = status.getProgress() * 100;
         int seeds = status.getNumSeeds();
         int downloadSpeed = status.getDownloadPayloadRate();
@@ -331,16 +331,6 @@ public class Torrent extends TorrentAlertListener {
         void onStreamReady(File videoFile);
 
         void onStreamProgress(DownloadStatus status);
-    }
-
-    @Override
-    public void alert(Alert<?> alert) {
-        // block alerts not for this torrent
-        if ((alert instanceof TorrentAlert<?>) && !((TorrentAlert<?>) alert).getHandle().getSwig().op_eq(mTorrentHandle.getSwig())) {
-            return;
-        }
-
-        super.alert(alert);
     }
 
 }
