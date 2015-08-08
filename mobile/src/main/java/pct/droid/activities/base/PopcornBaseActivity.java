@@ -26,6 +26,7 @@ import android.view.MenuItem;
 
 import com.crashlytics.android.core.CrashlyticsCore;
 
+import io.fabric.sdk.android.Fabric;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.activities.TorrentBaseActivity;
@@ -45,12 +46,14 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     @Override
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState, layoutId);
-        CrashlyticsCore.getInstance().log(getClass().getName() + " onCreate");
+        if(Fabric.isInitialized())
+            CrashlyticsCore.getInstance().log(getClass().getName() + " onCreate");
     }
 
     @Override
     protected void onResume() {
-        CrashlyticsCore.getInstance().log(getClass().getName() + " onResume");
+        if(Fabric.isInitialized())
+            CrashlyticsCore.getInstance().log(getClass().getName() + " onResume");
         String language = PrefUtils.get(this, Prefs.LOCALE, PopcornApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
@@ -66,14 +69,16 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
     @Override
     protected void onPause() {
         super.onPause();
-        CrashlyticsCore.getInstance().log(getClass().getName() + " onPause");
+        if(Fabric.isInitialized())
+            CrashlyticsCore.getInstance().log(getClass().getName() + " onPause");
         BeamManager.getInstance(this).removeListener(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        CrashlyticsCore.getInstance().log(getClass().getName() + " onStop");
+        if(Fabric.isInitialized())
+            CrashlyticsCore.getInstance().log(getClass().getName() + " onStop");
         if(mVPNManager != null)
             mVPNManager.stop();
     }
