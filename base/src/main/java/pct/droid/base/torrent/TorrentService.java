@@ -17,6 +17,7 @@
 
 package pct.droid.base.torrent;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -58,7 +59,7 @@ public class TorrentService extends Service implements TorrentListener {
     private TorrentStream mTorrentStream;
     private Torrent mCurrentTorrent;
 
-    private boolean mInForeground = false;
+    private boolean mInForeground = false, mIsReady = false;
 
     private IBinder mBinder = new ServiceBinder();
     private List<TorrentListener> mListener = new ArrayList<>();
@@ -104,6 +105,11 @@ public class TorrentService extends Service implements TorrentListener {
     @Override
     public IBinder onBind(Intent intent) {
         Timber.d("onBind");
+
+        if(mInForeground) {
+            stopForeground();
+        }
+
         return mBinder;
     }
 
@@ -119,11 +125,16 @@ public class TorrentService extends Service implements TorrentListener {
 
     public void setCurrentActivity(TorrentBaseActivity activity) {
         mCurrentActivityClass = activity.getClass();
+
+        if(mInForeground) {
+            stopForeground();
+            startForeground();
+        }
     }
 
     public void startForeground() {
         Timber.d("startForeground");
-        if (mInForeground) return;
+        if (Foreground.get().isForeground() || mInForeground) return;
 
         Intent notificationIntent = new Intent(this, mCurrentActivityClass);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -175,6 +186,7 @@ public class TorrentService extends Service implements TorrentListener {
         options.setSaveLocation(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()));
         mTorrentStream.setOptions(options);
 
+        mIsReady = false;
         mTorrentStream.addListener(this);
         mTorrentStream.startStream(torrentUrl);
     }
@@ -190,12 +202,17 @@ public class TorrentService extends Service implements TorrentListener {
 
         mTorrentStream.stopStream();
         mTorrentStream.removeListener(this);
+        mIsReady = false;
 
         Timber.d("Stopped torrent and removed files if possible");
     }
 
     public boolean isStreaming() {
         return mTorrentStream.isStreaming();
+    }
+
+    public boolean isReady() {
+        return mIsReady;
     }
 
     public void addListener(@NonNull TorrentListener listener) {
@@ -205,6 +222,7 @@ public class TorrentService extends Service implements TorrentListener {
     public void removeListener(@NonNull TorrentListener listener) {
         mListener.remove(listener);
     }
+
     public static void bindHere(Context context, ServiceConnection serviceConnection) {
         Intent torrentServiceIntent = new Intent(context, TorrentService.class);
         context.bindService(torrentServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -222,7 +240,11 @@ public class TorrentService extends Service implements TorrentListener {
     private Foreground.Listener mForegroundListener = new Foreground.Listener() {
         @Override
         public void onBecameForeground() {
-            mTorrentStream.resumeSession();
+            if (!mTorrentStream.isStreaming()) {
+                mTorrentStream.resumeSession();
+            } else {
+                stopForeground();
+            }
         }
 
         @Override
@@ -237,6 +259,10 @@ public class TorrentService extends Service implements TorrentListener {
 
     public Torrent getCurrentTorrent() {
         return mCurrentTorrent;
+    }
+
+    public String getCurrentTorrentUrl() {
+        return mTorrentStream.getCurrentTorrentUrl();
     }
 
     @Override
@@ -265,6 +291,7 @@ public class TorrentService extends Service implements TorrentListener {
     @Override
     public void onStreamReady(Torrent torrent) {
         mCurrentTorrent = torrent;
+        mIsReady = true;
 
         for(TorrentListener listener : mListener) {
             listener.onStreamReady(torrent);

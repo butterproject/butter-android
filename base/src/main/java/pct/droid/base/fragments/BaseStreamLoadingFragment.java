@@ -208,7 +208,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             getActivity().onBackPressed();
         }
 
-        if(mService != null && mService.isStreaming()) {
+        if(mService != null && mService.isStreaming() && mService.isReady()) {
             onStreamReady(mService.getCurrentTorrent());
         }
 
@@ -223,8 +223,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         String torrentUrl = mStreamInfo.getTorrentUrl();
 
         //if the torrent service is currently streaming another file, stop it.
-        if (mService.isStreaming()) {
+        if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
             mService.stopStreaming();
+        } else if(mService.isReady()) {
+            onStreamReady(mService.getCurrentTorrent());
         }
 
         //start streaming the new file
