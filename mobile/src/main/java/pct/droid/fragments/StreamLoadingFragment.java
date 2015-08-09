@@ -138,12 +138,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
         mCurrentTorrent = torrent;
 
         if(TextUtils.isEmpty(mStreamInfo.getTitle())) {
-            FileStorage fileStorage = mCurrentTorrent.getTorrentHandle().getTorrentInfo().getFiles();
-            String[] fileNames = new String[fileStorage.getNumFiles()];
-            for(int i = 0; i < fileStorage.getNumFiles(); i++) {
-                fileNames[i] = fileStorage.getFileName(i);
-            }
-            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, fileNames, -1, new DialogInterface.OnClickListener() {
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, mCurrentTorrent.getFileNames(), -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int position) {
                     mCurrentTorrent.setSelectedFile(position);
