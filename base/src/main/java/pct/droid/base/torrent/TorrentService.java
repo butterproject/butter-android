@@ -31,59 +31,37 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
-import com.frostwire.jlibtorrent.AlertListener;
-import com.frostwire.jlibtorrent.DHT;
-import com.frostwire.jlibtorrent.Downloader;
-import com.frostwire.jlibtorrent.Priority;
-import com.frostwire.jlibtorrent.Session;
-import com.frostwire.jlibtorrent.SessionSettings;
-import com.frostwire.jlibtorrent.SettingsPack;
-import com.frostwire.jlibtorrent.TorrentInfo;
-import com.frostwire.jlibtorrent.alerts.Alert;
-import com.frostwire.jlibtorrent.alerts.AlertType;
-import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
-import com.frostwire.jlibtorrent.alerts.PeerConnectAlert;
-import com.frostwire.jlibtorrent.alerts.PeerDisconnectedAlert;
-import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
-import com.frostwire.jlibtorrent.alerts.TorrentAddedAlert;
 import com.sjl.foreground.Foreground;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.sv244.torrentstream.StreamStatus;
+import eu.sv244.torrentstream.Torrent;
+import eu.sv244.torrentstream.TorrentOptions;
+import eu.sv244.torrentstream.TorrentStream;
+import eu.sv244.torrentstream.exceptions.NotInitializedException;
+import eu.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentBaseActivity;
 import pct.droid.base.preferences.Prefs;
-import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.ThreadUtils;
 import timber.log.Timber;
 
-public class TorrentService extends Service {
+public class TorrentService extends Service implements TorrentListener {
+
+    private static String WAKE_LOCK = "TorrentService_WakeLock";
 
     private static TorrentService sThis;
 
-    private static final String LIBTORRENT_THREAD_NAME = "TORRENT_SERVICE_THREAD", STREAMING_THREAD_NAME = "TORRENT_STREAMING_THREAD";
-    private HandlerThread mLibTorrentThread, mStreamingThread;
-    private Handler mLibTorrentHandler, mStreamingHandler;
-
-    private Session mTorrentSession;
-    private DHT mDHT;
+    private TorrentStream mTorrentStream;
     private Torrent mCurrentTorrent;
 
-    private String mCurrentTorrentUrl = "";
-    private boolean mIsStreaming = false, mIsCanceled = false, mReady = false, mInForeground = false, mIsBound = false;
-
-    private boolean mInitialised = false;
+    private boolean mInForeground = false;
 
     private IBinder mBinder = new ServiceBinder();
-    private List<Listener> mListener = new ArrayList<>();
+    private List<TorrentListener> mListener = new ArrayList<>();
 
     private PowerManager.WakeLock mWakeLock;
     private Class mCurrentActivityClass;
@@ -99,6 +77,14 @@ public class TorrentService extends Service {
         super.onCreate();
         sThis = this;
         Foreground.get().addListener(mForegroundListener);
+
+        TorrentOptions options = new TorrentOptions();
+        options.setRemoveFilesAfterStop(true);
+        options.setMaxConnections(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
+        options.setMaxDownloadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
+        options.setMaxUploadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
+        options.setSaveLocation(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()));
+        mTorrentStream = TorrentStream.init(options);
     }
 
     @Override
@@ -107,7 +93,6 @@ public class TorrentService extends Service {
         Timber.d("onDestroy");
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
-        mLibTorrentThread.interrupt();
     }
 
     @Override
@@ -119,26 +104,17 @@ public class TorrentService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Timber.d("onBind");
-        mIsBound = true;
-        initialize();
         return mBinder;
     }
 
     @Override
     public void onRebind(Intent intent) {
-        mIsBound = true;
         super.onRebind(intent);
         Timber.d("onRebind");
-        initialize();
-    }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        super.onUnbind(intent);
-        Timber.d("onUnbind");
-        mIsBound = false;
-
-        return true;
+        if(mInForeground) {
+            stopForeground();
+        }
     }
 
     public void setCurrentActivity(TorrentBaseActivity activity) {
@@ -176,89 +152,10 @@ public class TorrentService extends Service {
         stopForeground(true);
     }
 
-    /**
-     * Initialize will setup the thread and handler,
-     * and start/resume the torrent session
-     */
-    private void initialize() {
-        if(mInForeground) {
-            stopForeground();
-        }
-
-        Timber.d("initialize");
-        if (mLibTorrentThread != null && mTorrentSession != null) {
-            mLibTorrentHandler.removeCallbacksAndMessages(null);
-
-            //resume torrent session if needed
-            if (mTorrentSession.isPaused()) {
-                mLibTorrentHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Timber.d("Resuming libtorrent session");
-                        mTorrentSession.resume();
-                    }
-                });
-            }
-            //start DHT if needed
-            if (mDHT != null && !mDHT.isRunning()) {
-                mLibTorrentHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDHT.start();
-                        Timber.d("Nodes in DHT: %s", mDHT.nodes());
-                    }
-                });
-
-            }
-        } else {
-            if(mInitialised) {
-                if (mLibTorrentThread != null) {
-                    mLibTorrentThread.interrupt();
-                }
-            }
-
-            mLibTorrentThread = new HandlerThread(LIBTORRENT_THREAD_NAME);
-            mLibTorrentThread.start();
-            mLibTorrentHandler = new Handler(mLibTorrentThread.getLooper());
-            mLibTorrentHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    // Start libtorrent session and init DHT
-                    Timber.d("Starting libtorrent session");
-                    mTorrentSession = new Session();
-                    mTorrentSession.addListener(mAlertListener);
-                    Timber.d("Init DHT");
-                    mDHT = new DHT(mTorrentSession);
-                    mDHT.start();
-                    Timber.d("Nodes in DHT: %s", mDHT.nodes());
-
-                    mInitialised = true;
-                }
-            });
-        }
-    }
-
-    private void pause() {
-        mLibTorrentHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mTorrentSession.pause();
-                mDHT.stop();
-                Timber.d("Pausing libtorrent session");
-            }
-        });
-    }
-
     public void streamTorrent(@NonNull final String torrentUrl) {
         Timber.d("streamTorrent");
 
-        //attempt to initialize service
-        initialize();
-
-        if (mLibTorrentHandler == null || mIsStreaming) return;
-
-        mIsCanceled = false;
-        mReady = false;
+        if (mTorrentStream.isStreaming()) return;
 
         Timber.d("Starting streaming");
 
@@ -267,148 +164,47 @@ public class TorrentService extends Service {
             mWakeLock.release();
             mWakeLock = null;
         }
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LIBTORRENT_THREAD_NAME);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK);
         mWakeLock.acquire();
 
-        SettingsPack settingsPack = new SettingsPack();
-        settingsPack.setAnonymousMode(true);
-        //mDHT.(PrefUtils.get(this, Prefs.LIBTORRENT_DHT_LIMIT, 200));
-        settingsPack.setConnectionsLimit(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
-        settingsPack.setDownloadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
-        settingsPack.setUploadRateLimit(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
-        mTorrentSession.applySettings(settingsPack);
+        TorrentOptions options = mTorrentStream.getOptions();
+        options.setRemoveFilesAfterStop(true);
+        options.setMaxConnections(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
+        options.setMaxDownloadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
+        options.setMaxUploadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
+        options.setSaveLocation(PrefUtils.get(this, Prefs.STORAGE_LOCATION, PopcornApplication.getStreamDir()));
+        mTorrentStream.setOptions(options);
 
-        mStreamingThread = new HandlerThread(STREAMING_THREAD_NAME);
-        mStreamingThread.start();
-        mStreamingHandler = new Handler(mStreamingThread.getLooper());
-
-        mStreamingHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Timber.d("streaming runnable");
-                mIsStreaming = true;
-                mCurrentTorrentUrl = torrentUrl;
-
-                File saveDirectory = new File(PopcornApplication.getStreamDir());
-                saveDirectory.mkdirs();
-
-                TorrentInfo torrentInfo = getTorrentInfo(torrentUrl);
-                if(torrentInfo != null) {
-                    Priority[] priorities = new Priority[torrentInfo.getNumPieces()];
-                    for (int i = 0; i < priorities.length; i++) {
-                        priorities[i] = Priority.NORMAL;
-                    }
-
-                    if (!mCurrentTorrentUrl.equals(torrentUrl) || mIsCanceled) {
-                        return;
-                    }
-
-                    mTorrentSession.asyncAddTorrent(torrentInfo, saveDirectory, priorities, null);
-                }
-            }
-        });
+        mTorrentStream.addListener(this);
+        mTorrentStream.startStream(torrentUrl);
     }
 
     public void stopStreaming() {
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
+        if(!mTorrentStream.isStreaming())
+            return;
+
         stopForeground();
 
-        //remove all callbacks from handler
-        if(mLibTorrentHandler != null)
-            mLibTorrentHandler.removeCallbacksAndMessages(null);
-        if(mStreamingHandler != null)
-            mStreamingHandler.removeCallbacksAndMessages(null);
-
-        mIsCanceled = true;
-        mIsStreaming = false;
-        if (mCurrentTorrent != null) {
-            File saveLocation = mCurrentTorrent.getSaveLocation();
-
-            mCurrentTorrent.pause();
-            mTorrentSession.removeListener(mCurrentTorrent);
-            mTorrentSession.removeTorrent(mCurrentTorrent.getTorrentHandle());
-            mCurrentTorrent = null;
-
-            if (PrefUtils.get(TorrentService.this, Prefs.REMOVE_CACHE, true)) {
-                int tries = 0;
-                while(!FileUtils.recursiveDelete(saveLocation) && tries < 5) {
-                    tries++;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-        if(mStreamingThread != null)
-            mStreamingThread.interrupt();
+        mTorrentStream.stopStream();
+        mTorrentStream.removeListener(this);
 
         Timber.d("Stopped torrent and removed files if possible");
     }
 
     public boolean isStreaming() {
-        return mIsStreaming;
+        return mTorrentStream.isStreaming();
     }
 
-    public String getCurrentTorrentUrl() {
-        return mCurrentTorrentUrl;
-    }
-
-    public File getCurrentVideoLocation() {
-        return mCurrentTorrent.getVideoFile();
-    }
-
-    public boolean isReady() {
-        return mReady;
-    }
-
-    public void addListener(@NonNull Listener listener) {
+    public void addListener(@NonNull TorrentListener listener) {
         mListener.add(listener);
     }
 
-    public void removeListener(@NonNull Listener listener) {
+    public void removeListener(@NonNull TorrentListener listener) {
         mListener.remove(listener);
     }
-
-    private TorrentInfo getTorrentInfo(String torrentUrl) {
-        if (torrentUrl.startsWith("magnet")) {
-            Downloader d = new Downloader(mTorrentSession);
-
-            Timber.d("Waiting for nodes in DHT");
-            if (!mDHT.isRunning()) {
-                mDHT.start();
-            }
-
-            if (mDHT.totalNodes() < 1) {
-                mDHT.waitNodes(30);
-            }
-
-            Timber.d("Nodes in DHT: %s", mDHT.totalNodes());
-
-            Timber.d("Fetching the magnet uri, please wait...");
-            byte[] data = d.fetchMagnet(torrentUrl, 30000);
-
-            if(data == null)
-                return null;
-
-            return TorrentInfo.bdecode(data);
-        } else {
-            OkHttpClient client = PopcornApplication.getHttpClient();
-            Request request = new Request.Builder().url(torrentUrl).build();
-            try {
-                Response response = client.newCall(request).execute();
-                return TorrentInfo.bdecode(response.body().bytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
     public static void bindHere(Context context, ServiceConnection serviceConnection) {
         Intent torrentServiceIntent = new Intent(context, TorrentService.class);
         context.bindService(torrentServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -419,77 +215,6 @@ public class TorrentService extends Service {
         context.startService(torrentServiceIntent);
     }
 
-    public interface Listener {
-        void onStreamStarted();
-
-        void onStreamError(Exception e);
-
-        void onStreamReady(File videoLocation);
-
-        void onStreamProgress(DownloadStatus status);
-
-        void onStreamMetaData(Torrent torrent);
-    }
-
-    protected class TorrentListener implements Torrent.Listener {
-
-        public void onStreamStarted() {
-            for (final Listener listener : mListener) {
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onStreamStarted();
-                    }
-                });
-            }
-        }
-
-        public void onStreamError(final Exception e) {
-            for (final Listener listener : mListener) {
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onStreamError(e);
-                    }
-                });
-            }
-        }
-
-        public void onStreamReady(final File file) {
-            for (final Listener listener : mListener) {
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onStreamReady(file);
-                    }
-                });
-            }
-        }
-
-        public void onStreamProgress(final DownloadStatus status) {
-            for (final Listener listener : mListener) {
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onStreamProgress(status);
-                    }
-                });
-            }
-        }
-
-        public void onStreamMetaData(final Torrent torrent) {
-            for (final Listener listener : mListener) {
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onStreamMetaData(torrent);
-                    }
-                });
-            }
-        }
-
-    }
-
     protected static void stop() {
         sThis.stopStreaming();
     }
@@ -497,34 +222,67 @@ public class TorrentService extends Service {
     private Foreground.Listener mForegroundListener = new Foreground.Listener() {
         @Override
         public void onBecameForeground() {
-
+            mTorrentStream.resumeSession();
         }
 
         @Override
         public void onBecameBackground() {
-            if (!mIsStreaming) {
-                pause();
+            if (!mTorrentStream.isStreaming()) {
+                mTorrentStream.pauseSession();
             } else {
                 startForeground();
             }
         }
     };
 
-    private AlertListener mAlertListener = new AlertListener() {
-        @Override
-        public int[] types() {
-            return new int[] { AlertType.TORRENT_ADDED.getSwig() };
-        }
+    public Torrent getCurrentTorrent() {
+        return mCurrentTorrent;
+    }
 
-        @Override
-        public void alert(Alert<?> alert) {
-            TorrentListener listener = new TorrentListener();
-            mCurrentTorrent = new Torrent(mTorrentSession.findTorrent(((TorrentAddedAlert) alert).getHandle().getInfoHash()));
-            mCurrentTorrent.setListener(listener);
-            mTorrentSession.addListener(mCurrentTorrent);
+    @Override
+    public void onStreamPrepared(Torrent torrent) {
+        mCurrentTorrent = torrent;
 
-            listener.onStreamMetaData(mCurrentTorrent);
+        for(TorrentListener listener : mListener) {
+            listener.onStreamPrepared(torrent);
         }
-    };
+    }
+
+    @Override
+    public void onStreamStarted(Torrent torrent) {
+        for(TorrentListener listener : mListener) {
+            listener.onStreamStarted(torrent);
+        }
+    }
+
+    @Override
+    public void onStreamError(Torrent torrent, Exception e) {
+        for(TorrentListener listener : mListener) {
+            listener.onStreamError(torrent, e);
+        }
+    }
+
+    @Override
+    public void onStreamReady(Torrent torrent) {
+        mCurrentTorrent = torrent;
+
+        for(TorrentListener listener : mListener) {
+            listener.onStreamReady(torrent);
+        }
+    }
+
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+        for(TorrentListener listener : mListener) {
+            listener.onStreamProgress(torrent, streamStatus);
+        }
+    }
+
+    @Override
+    public void onStreamStopped() {
+        for(TorrentListener listener : mListener) {
+            listener.onStreamStopped();
+        }
+    }
 
 }
