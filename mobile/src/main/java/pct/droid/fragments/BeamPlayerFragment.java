@@ -53,15 +53,16 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import butterknife.OnClick;
+import eu.sv244.torrentstream.StreamStatus;
+import eu.sv244.torrentstream.Torrent;
+import eu.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.beaming.BeamPlayerNotificationService;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FragmentUtil;
@@ -72,7 +73,7 @@ import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.widget.SeekBar;
 import timber.log.Timber;
 
-public class BeamPlayerFragment extends Fragment implements TorrentService.Listener {
+public class BeamPlayerFragment extends Fragment implements TorrentListener {
 
     public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
 
@@ -527,21 +528,23 @@ public class BeamPlayerFragment extends Fragment implements TorrentService.Liste
     };
 
     @Override
-    public void onStreamStarted() { }
+    public void onStreamStarted(Torrent torrent) { }
     @Override
-    public void onStreamError(Exception e) { }
+    public void onStreamPrepared(Torrent torrent) { }
     @Override
-    public void onStreamReady(File videoLocation) { }
+    public void onStreamError(Torrent torrent, Exception e) { }
+    @Override
+    public void onStreamReady(Torrent torrent) { }
 
     @Override
-    public void onStreamProgress(DownloadStatus status) {
+    public void onStreamProgress(Torrent torrent, StreamStatus status) {
         mDownloadProgress = mTotalTimeDuration / 100 * status.progress;
         mSeekBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         mSeekBar.setSecondaryProgress(mDownloadProgress.intValue());
     }
 
     @Override
-    public void onStreamMetaData(Torrent torrent) { }
+    public void onStreamStopped() {}
 
     BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
 
