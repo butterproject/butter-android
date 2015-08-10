@@ -37,12 +37,12 @@ import com.sjl.foreground.Foreground;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.sv244.torrentstream.StreamStatus;
-import eu.sv244.torrentstream.Torrent;
-import eu.sv244.torrentstream.TorrentOptions;
-import eu.sv244.torrentstream.TorrentStream;
-import eu.sv244.torrentstream.exceptions.NotInitializedException;
-import eu.sv244.torrentstream.listeners.TorrentListener;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.TorrentOptions;
+import com.github.sv244.torrentstream.TorrentStream;
+import com.github.sv244.torrentstream.exceptions.NotInitializedException;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentBaseActivity;
