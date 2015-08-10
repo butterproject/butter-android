@@ -748,6 +748,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
     }
 
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+        int newProgress = (int) ((getDuration() / 100) * streamStatus.progress);
+        if (mStreamerProgress < newProgress) {
+            mStreamerProgress = newProgress;
+        }
+    }
+
     /**
      * attach and disattach surface to the lib
      */
@@ -927,9 +935,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             if (!FragmentUtil.isAdded(BaseVideoPlayerFragment.this)){
                 return;
             }
-
-            startBeamPlayerActivity();
             
+            startBeamPlayerActivity();
+
             getActivity().finish();
         }
     };
