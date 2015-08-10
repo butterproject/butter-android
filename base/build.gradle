@@ -61,8 +61,7 @@ dependencies {
 
     compile 'com.koushikdutta.async:androidasync:2.1.6'
 
-    compile 'com.frostwire:jlibtorrent:1.1.0.3'
-    compile 'com.frostwire:jlibtorrent-android:1.1.0.3'
+    compile 'com.github.sv244:torrentstream-android:1.0'
 
     compile project(':vlc-aar')
     compile project(':xmlrpc-aar')
