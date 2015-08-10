@@ -30,9 +30,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import eu.sv244.torrentstream.StreamStatus;
-import eu.sv244.torrentstream.Torrent;
-import eu.sv244.torrentstream.listeners.TorrentListener;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentBaseActivity;

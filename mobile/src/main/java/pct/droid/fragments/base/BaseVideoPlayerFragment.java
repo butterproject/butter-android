@@ -58,9 +58,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
-import eu.sv244.torrentstream.StreamStatus;
-import eu.sv244.torrentstream.Torrent;
-import eu.sv244.torrentstream.listeners.TorrentListener;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
