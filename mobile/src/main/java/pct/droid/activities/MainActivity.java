@@ -142,8 +142,6 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         }
 
         mNavigationDrawerFragment.initItems();
-
-        mTabs.setVisibility((mCurrentFragment instanceof MediaContainerFragment) ? View.VISIBLE : View.GONE);
     }
 
     @Override
