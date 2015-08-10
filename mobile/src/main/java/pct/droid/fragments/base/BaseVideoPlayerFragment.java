@@ -58,6 +58,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import eu.sv244.torrentstream.StreamStatus;
+import eu.sv244.torrentstream.Torrent;
+import eu.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
@@ -69,9 +72,7 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.TimedTextObject;
-import pct.droid.base.torrent.DownloadStatus;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.Torrent;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.FragmentUtil;
@@ -83,7 +84,7 @@ import pct.droid.dialogfragments.NumberPickerDialogFragment;
 import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
 import timber.log.Timber;
 
-public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentService.Listener {
+public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentListener {
 
     private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
@@ -716,28 +717,36 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
     @Override
-    public void onStreamStarted() {
+    public void onStreamPrepared(Torrent torrent) {
+
     }
 
     @Override
-    public void onStreamError(Exception e) {
+    public void onStreamStarted(Torrent torrent) {
+
     }
 
     @Override
-    public void onStreamReady(File videoLocation) {
+    public void onStreamStopped() {
+
     }
 
     @Override
-    public void onStreamProgress(DownloadStatus status) {
-        int newProgress = (int) ((getDuration() / 100) * status.progress);
+    public void onStreamError(Torrent torrent, Exception e) {
+
+    }
+
+    @Override
+    public void onStreamReady(Torrent torrent) {
+
+    }
+
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+        int newProgress = (int) ((getDuration() / 100) * streamStatus.progress);
         if (mStreamerProgress < newProgress) {
             mStreamerProgress = newProgress;
         }
-    }
-
-    @Override
-    public void onStreamMetaData(Torrent torrent) {
-
     }
 
     /**
