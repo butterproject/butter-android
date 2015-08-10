@@ -59,8 +59,6 @@ import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 
-import pct.droid.dialogfragments.StringArraySelectorDialogFragment;
-
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     private boolean mAttached = false, mPlayingExternal = false;
