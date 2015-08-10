@@ -63,7 +63,6 @@ import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.beaming.BeamPlayerNotificationService;
 import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.PixelUtils;
@@ -376,7 +375,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     private MediaControl.PlayStateListener mPlayStateListener = new MediaControl.PlayStateListener() {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
-            if(FragmentUtil.isAdded(BeamPlayerFragment.this)) {
+            if(!FragmentUtil.isAdded(BeamPlayerFragment.this)) {
                 return;
             }
 
@@ -395,7 +394,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
 
         @Override
         public void onError(ServiceCommandError error) {
-            if(FragmentUtil.isAdded(BeamPlayerFragment.this)) {
+            if(!FragmentUtil.isAdded(BeamPlayerFragment.this)) {
                 return;
             }
 
