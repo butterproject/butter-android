@@ -63,7 +63,8 @@ dependencies {
 
     compile 'com.github.sv244:torrentstream-android:1.0'
 
+    compile 'de.timroes:aXMLRPC:1.8.0'
+
     compile project(':vlc-aar')
-    compile project(':xmlrpc-aar')
     compile project(':connectsdk')
 }
