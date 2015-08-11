@@ -1,4 +1,2 @@
-include ':mobile', ':vlc', ':base', ':xmlrpc', ':connectsdk', ':vlc-aar', ':connectsdk-aar', ':xmlrpc-aar',':tv'
+include ':mobile', ':vlc', ':base', ':connectsdk', ':vlc-aar', ':connectsdk-aar',':tv'
 project(':tv').name="android-tv"
-
-
