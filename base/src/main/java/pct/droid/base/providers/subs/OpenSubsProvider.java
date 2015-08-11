@@ -17,17 +17,16 @@
 
 package pct.droid.base.providers.subs;
 
-import org.apache.http.MethodNotSupportedException;
-import org.xmlrpc.android.XMLRPCCallback;
-import org.xmlrpc.android.XMLRPCClient;
-import org.xmlrpc.android.XMLRPCException;
-
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import de.timroes.axmlrpc.XMLRPCCallback;
+import de.timroes.axmlrpc.XMLRPCClient;
+import de.timroes.axmlrpc.XMLRPCException;
+import de.timroes.axmlrpc.XMLRPCServerException;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Movie;
 
@@ -39,14 +38,14 @@ public class OpenSubsProvider extends SubsProvider {
     @Override
     public void getList(Movie movie, Callback callback) {
         // Movie subtitles not supported
-        callback.onFailure(new MethodNotSupportedException("Movie subtitles not supported"));
+        callback.onFailure(new NoSuchMethodException("Movie subtitles not supported"));
     }
 
     @Override
     public void getList(final Episode episode, final Callback callback) {
         login(new XMLRPCCallback() {
             @Override
-            public void onSuccess(long id, Object result) {
+            public void onResponse(long id, Object result) {
                 Map<String, Object> response = (Map<String, Object>) result;
                 String token = (String) response.get("token");
 
@@ -56,7 +55,7 @@ public class OpenSubsProvider extends SubsProvider {
                 if (!token.isEmpty()) {
                     search(episode, token, new XMLRPCCallback() {
                         @Override
-                        public void onSuccess(long id, Object result) {
+                        public void onResponse(long id, Object result) {
                             Map<String, Map<String, String>> returnMap = new HashMap<>();
                             Map<String, Integer[]> scoreMap = new HashMap<>();
                             Map<String, String> episodeMap = new HashMap<>();
@@ -107,7 +106,12 @@ public class OpenSubsProvider extends SubsProvider {
                         }
 
                         @Override
-                        public void onFailure(long id, Exception error) {
+                        public void onError(long id, XMLRPCException error) {
+                            callback.onFailure(error);
+                        }
+
+                        @Override
+                        public void onServerError(long id, XMLRPCServerException error) {
                             callback.onFailure(error);
                         }
                     });
@@ -117,7 +121,12 @@ public class OpenSubsProvider extends SubsProvider {
             }
 
             @Override
-            public void onFailure(long id, Exception error) {
+            public void onError(long id, XMLRPCException error) {
+                callback.onFailure(error);
+            }
+
+            @Override
+            public void onServerError(long id, XMLRPCServerException error) {
                 callback.onFailure(error);
             }
         });
@@ -130,9 +139,9 @@ public class OpenSubsProvider extends SubsProvider {
      */
     private void login(XMLRPCCallback callback) {
         try {
-            XMLRPCClient client = new XMLRPCClient(new URI(mApiUrl), "", "", mUserAgent);
-            client.callAsync(callback, "LogIn", new String[]{"", "", "en", mUserAgent});
-        } catch (URISyntaxException e) {
+            XMLRPCClient client = new XMLRPCClient(new URL(mApiUrl.replace("http://", "https://")), mUserAgent);
+            client.callAsync(callback, "LogIn", "", "", "en", mUserAgent);
+        } catch (MalformedURLException e) {
             e.printStackTrace();
             // Just catch and fail
         }
@@ -147,14 +156,14 @@ public class OpenSubsProvider extends SubsProvider {
      */
     private void search(Episode episode, String token, XMLRPCCallback callback) {
         try {
-            XMLRPCClient client = new XMLRPCClient(new URI(mApiUrl), "", "", mUserAgent);
+            XMLRPCClient client = new XMLRPCClient(new URL(mApiUrl), mUserAgent);
             Map<String, String> option = new HashMap<>();
             option.put("imdbid", episode.imdbId.replace("tt", ""));
             option.put("season", String.format(Locale.US, "%d", episode.season));
             option.put("episode", String.format(Locale.US, "%d", episode.episode));
             option.put("sublanguageid", "all");
-            client.callAsync(callback, "SearchSubtitles", new Object[]{token, new Object[]{option}});
-        } catch (URISyntaxException e) {
+            client.callAsync(callback, "SearchSubtitles", token, new Object[]{option});
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
