@@ -14,7 +14,7 @@
     </style>
 
 
-    <style name="Theme.Popcorn.TV.Welcome" parent="@style/Theme.Leanback.GuidedStep">
+    <style name="Theme.Popcorn.TV.GuidedStep" parent="@style/Theme.Leanback.GuidedStep">
         <item name="android:colorAccent">@color/primary</item>
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>

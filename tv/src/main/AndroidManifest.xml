@@ -54,19 +54,20 @@
         <!-- Activities -->
         <activity android:name=".activities.PTVMainActivity" />
         <activity
-            android:name=".activities.PTVPlayerActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity
             android:name=".activities.PTVWelcomeActivity"
             android:noHistory="true"
-            android:theme="@style/Theme.Popcorn.TV.Welcome" />
+            android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
         <activity android:name=".activities.PTVMediaDetailActivity" />
         <activity android:name=".activities.PTVMediaGridActivity" />
         <activity android:name=".activities.PTVSearchActivity" />
-        <activity android:name=".activities.PTVSettingsActivity" />
+        <activity
+            android:name=".activities.PTVSettingsActivity"
+            android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
         <activity android:name=".activities.PTVStreamLoadingActivity" />
         <activity android:name=".activities.PTVVideoPlayerActivity" />
-        <activity android:name=".activities.PTVUpdateActivity" />
+        <activity
+            android:name=".activities.PTVUpdateActivity"
+            android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
 
         <service android:name="pct.droid.base.torrent.TorrentService" />
 
