@@ -33,13 +33,21 @@
     <string name="loading_subs">Loading subs…</string>
 	<string name="error_files">Error: Couldn\'t write files</string>
     <string name="overview_not_available">Sorry! There is no overview available.</string>
-	<string name="no_subs">No subtitles</string>
-    <string name="episode">Episode</string>
     <string name="unknown_error">Something went wrong</string>
     <string name="torrent_failed">Failed to retrieve torrent</string>
     <string name="running">Running in background</string>
     <string name="tap_to_close">Tap to close</string>
     <string name="tap_to_resume">Tap to resume</string>
+
+    <!-- Overview strings -->
+    <string name="search_hint">Title, year, actors</string>
+    <string name="genres">Genres</string>
+    <string name="search">Search</string>
+    <string name="searching">Searching…</string>
+    <string name="no_data_found">No data found</string>
+    <string name="title_shows">Shows</string>
+    <string name="title_movies">Movies</string>
+    <string name="title_anime">Anime</string>
 
     <string name="signature_invalid">App signature invalid</string>
     <string name="possibly_dangerous">Popcorn Time has been tampered with. Please download a new install file from https://popcorntime.io/</string>
@@ -91,12 +99,36 @@
     <string name="max_connections">Maximum total connections</string>
     <string name="dht_limit">DHT limit</string>
     <string name="unlimited">Unlimited</string>
+    <string name="show_vpn">Show VPN option in menu</string>
+    <string name="pixel_format">Force video chroma</string>
+    <string name="rgb32">RGB 32-bit: default chroma</string>
+    <string name="rgb16">RGB 16-bit: better performance, lower quality</string>
+    <string name="yuv">YUV: best performance but does not always work</string>
 
 	<string name="best_fit">Best fit</string>
 	<string name="fill">Fill</string>
 	<string name="fit_horizontal">Fit horizontal</string>
 	<string name="fit_vertical">Fit vertical</string>
 	<string name="original_size">Original</string>
+
+    <!-- DetailActivity strings -->
+    <string name="minutes">min</string>
+    <string name="read_more">Read more</string>
+    <string name="watch_trailer">Watch trailer</string>
+    <string name="no_subs">No subtitles</string>
+    <string name="no_subs_available">No subtitles available</string>
+    <string name="quality">Quality</string>
+    <string name="trailer">Trailer</string>
+    <string name="season">Season</string>
+    <string name="episode">Episode</string>
+    <string name="specials">Specials</string>
+    <string name="continuing">Continuing</string>
+    <string name="ended">Ended</string>
+    <string name="aired">Aired: %s</string>
+    <string name="no_title_available">No name</string>
+    <string name="no_synopsis_available">No synopsis available</string>
+    <string name="magnet">Magnet</string>
+    <string name="scale">Scale</string>
 
 	<!-- VideoPlayerActivity strings -->
 	<string name="volume">Volume</string>
@@ -202,7 +234,6 @@ Ability to Accept Terms of Service\n\n
 By using \'POPCORN TIME\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
     <string name="accept">Accept</string>
     <string name="leave">Leave</string>
-    <string name="show_vpn">Show VPN option in menu</string>
 
     <string name="reload_video">Reload video</string>
 

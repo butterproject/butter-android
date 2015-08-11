@@ -12,13 +12,14 @@ import android.view.ViewGroup;
 
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.tv.R;
+import timber.log.Timber;
+
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import java.net.URI;
 
 
 public class MediaRowPresenter extends Presenter {
-    private static final String TAG = "MediaObjectPresenter";
     private static Context mContext;
     private static int CARD_WIDTH = 170;
     private static int CARD_HEIGHT = 213;
@@ -27,12 +28,10 @@ public class MediaRowPresenter extends Presenter {
         private Media media;
         private ImageCardView mCardView;
         private Drawable mDefaultCardImage;
-        private PicassoImageCardViewTarget mImageCardViewTarget;
 
         public ViewHolder(View view) {
             super(view);
             mCardView = (ImageCardView) view;
-            mImageCardViewTarget = new PicassoImageCardViewTarget(mCardView);
         }
 
         public void setMedia(Media m) {
@@ -52,14 +51,15 @@ public class MediaRowPresenter extends Presenter {
                     .load(uri.toString())
                     .resize(CARD_WIDTH, CARD_HEIGHT)
                     .centerCrop()
+                    .noFade()
                     .error(mDefaultCardImage)
-                    .into(mImageCardViewTarget);
+                    .into(mCardView.getMainImageView());
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.d(TAG, "onCreateViewHolder");
+        Timber.d("onCreateViewHolder");
         mContext = parent.getContext();
         ImageCardView cardView = new ImageCardView(mContext);
         cardView.setFocusable(true);
@@ -72,7 +72,7 @@ public class MediaRowPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         Media media = (Media) item;
         ((ViewHolder) viewHolder).setMedia(media);
-        Log.d(TAG, "onBindViewHolder");
+        Timber.d("onBindViewHolder");
         ((ViewHolder) viewHolder).mCardView.setTitleText(media.title);
         //((ViewHolder) viewHolder).mCardView.setContentText(movie.getStudio());
         ((ViewHolder) viewHolder).mCardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
@@ -83,36 +83,12 @@ public class MediaRowPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        Log.d(TAG, "onUnbindViewHolder");
+        Timber.d("onUnbindViewHolder");
     }
 
     @Override
     public void onViewAttachedToWindow(Presenter.ViewHolder viewHolder) {
-        Log.d(TAG, "onViewAttachedToWindow");
-    }
-
-    public static class PicassoImageCardViewTarget implements Target {
-        private ImageCardView mImageCardView;
-
-        public PicassoImageCardViewTarget(ImageCardView mImageCardView) {
-            this.mImageCardView = mImageCardView;
-        }
-
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-            Drawable bitmapDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
-            mImageCardView.setMainImage(bitmapDrawable);
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable drawable) {
-            mImageCardView.setMainImage(drawable);
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable drawable) {
-            // Do nothing, default_background manager has its own transitions
-        }
+        Timber.d("onViewAttachedToWindow");
     }
 
 }
