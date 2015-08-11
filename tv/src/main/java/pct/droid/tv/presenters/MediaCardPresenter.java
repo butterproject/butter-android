@@ -22,6 +22,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.utils.AnimUtils;
 import pct.droid.tv.R;
 
 /*
@@ -97,14 +99,19 @@ public class MediaCardPresenter extends Presenter {
 			cardView.setTitleText(item.title);
 			cardView.setContentText(!TextUtils.isEmpty(item.genre) ? item.genre : item.year);
 			cardView.setMainImageDimensions(mCardWidth, mCardHeight);
+			cardView.getMainImageView().setVisibility(View.GONE);
+            cardView.setCustomSelectedSwatch(null);
 
 			Target target = new Target() {
-				@Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-					cardView.getMainImageView().setImageBitmap(bitmap);
-					Palette.generateAsync(bitmap, 16, new Palette.PaletteAsyncListener() {
+				@Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+					Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
 						@Override public void onGenerated(Palette palette) {
 							Palette.Swatch swatch = palette.getDarkMutedSwatch();
 							cardView.setCustomSelectedSwatch(swatch);
+
+                            cardView.getMainImageView().setImageBitmap(bitmap);
+                            cardView.getMainImageView().setVisibility(View.GONE);
+                            AnimUtils.fadeIn(cardView.getMainImageView());
 						}
 					});
 				}
@@ -118,8 +125,7 @@ public class MediaCardPresenter extends Presenter {
 				}
 			};
 			//load image
-			Picasso.with(mContext).load(item.image).resize(mCardWidth, mCardHeight).centerCrop().into
-					(target);
+			Picasso.with(mContext).load(item.image).resize(mCardWidth, mCardHeight).centerCrop().into(target);
 			cardView.setTarget(target);
 		}
 	}
