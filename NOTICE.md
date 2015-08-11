@@ -35,3 +35,7 @@ This product includes the following libraries:
 * [Timber](https://github.com/JakeWharton/timber) - Logging made easy
 
 * [AndroidAsync](https://github.com/koush/AndroidAsync) - Asynchronous socket, http (client+server), websocket, and socket.io library for android. Based on nio, not threads.
+
+* [TorrentStream-Android](https://github.com/sv244/TorrentStream-Android) - Torrent streaming on Android
+
+* [aXMLRPC](https://github.com/timroes/aXMLRPC) - XML-RPC on Android

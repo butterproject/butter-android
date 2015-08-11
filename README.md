@@ -65,11 +65,6 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
      |          |-- main
      |                |-- jniLibs        # native LibVLC libraries
      |                |-- java           # LibVLC Java code
-    `|-- xmlrpc                          # xmlrpc module
-     |    |-- build.gradle               # xmlrpc build script
-     |    `-- src
-     |          |-- main
-     |                |-- java           # xmlrpc module java code
     `|-- connectsdk                      # connectsdk module
           |-- build.gradle               # connectsdk build script
           `-- src
@@ -78,6 +73,8 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
           |     |-- src                  # connectsdk module core java code
           `-- modules
                 |-- google_cast
+                      |-- src            # connectsdk module google cast java code
+                |-- firetv
                       |-- src            # connectsdk module google cast java code
 
 ## Versioning
