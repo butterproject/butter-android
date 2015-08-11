@@ -79,5 +79,8 @@
 	<string name="view_terms">View terms</string>
 	<string name="episode_number_format">Episode %d</string>
 
+	<!-- PTVSettingsFragment -->
+	<string name="version_pref">Version</string>
+
 
 </resources>
