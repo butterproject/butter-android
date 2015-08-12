@@ -51,7 +51,7 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 import timber.log.Timber;
 
-public abstract class PopcornApplication extends VLCApplication implements PopcornUpdater.Listener {
+public class PopcornApplication extends VLCApplication implements PopcornUpdater.Listener {
 
     private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;

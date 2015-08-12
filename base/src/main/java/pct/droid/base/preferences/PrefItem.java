@@ -18,6 +18,8 @@
 package pct.droid.base.preferences;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 
 import pct.droid.base.utils.PrefUtils;
 
@@ -29,25 +31,15 @@ public class PrefItem {
     private String mPrefKey;
     private Object mDefaultValue;
     private OnClickListener mOnClickListener;
-    private SubTitleGenerator mSubTitleGenerator;
+    private SubtitleGenerator mSubtitleGenerator;
+    private Boolean mHasNext = false;
 
-    public PrefItem(Context context, int iconRes, int titleRes, String prefKey, Object defaultValue, OnClickListener clickListener, SubTitleGenerator subTitleGenerator) {
-        this(context, iconRes, titleRes, prefKey, defaultValue);
-        mOnClickListener = clickListener;
-        mSubTitleGenerator = subTitleGenerator;
+    public static Builder newBuilder(Context context) {
+        return new Builder(context);
     }
 
-    public PrefItem(Context context, int iconRes, int titleRes, String prefKey, Object defaultValue, SubTitleGenerator subTitleGenerator) {
-        this(context, iconRes, titleRes, prefKey, defaultValue);
-        mSubTitleGenerator = subTitleGenerator;
-    }
+    protected PrefItem() {
 
-    public PrefItem(Context context, int iconRes, int titleRes, String prefKey, Object defaultValue) {
-        mContext = context;
-        mIconRes = iconRes;
-        mTitleRes = titleRes;
-        mPrefKey = prefKey;
-        mDefaultValue = defaultValue;
     }
 
     public Object getValue() {
@@ -94,21 +86,9 @@ public class PrefItem {
         return mDefaultValue;
     }
 
-    public void setDefaultValue(Object defaultValue) {
-        mDefaultValue = defaultValue;
-    }
-
-    public void setOnClickListener(OnClickListener clickListener) {
-        mOnClickListener = clickListener;
-    }
-
-    public void setSubTitleGenerator(SubTitleGenerator subTitleGenerator) {
-        mSubTitleGenerator = subTitleGenerator;
-    }
-
-    public String getSubTitle() {
-        if (mSubTitleGenerator != null) {
-            return mSubTitleGenerator.get(this);
+    public String getSubtitle() {
+        if (mSubtitleGenerator != null) {
+            return mSubtitleGenerator.get(this);
         }
         return "";
     }
@@ -117,17 +97,76 @@ public class PrefItem {
         return mOnClickListener != null;
     }
 
+
+    public boolean hasNext() {
+        return mHasNext;
+    }
+
+    public boolean isTitle() {
+        return mPrefKey == null;
+    }
+
     public void onClick() {
         if (mOnClickListener != null)
             mOnClickListener.onClick(this);
     }
 
     public interface OnClickListener {
-        public void onClick(PrefItem item);
+        void onClick(PrefItem item);
     }
 
-    public interface SubTitleGenerator {
-        public String get(PrefItem item);
+    public interface SubtitleGenerator {
+        String get(PrefItem item);
+    }
+
+    public static class Builder {
+
+        private PrefItem mItem;
+
+        public Builder(Context context) {
+            mItem = new PrefItem();
+            mItem.mContext = context;
+        }
+
+        public Builder setIconResource(@DrawableRes int iconRes) {
+            mItem.mIconRes = iconRes;
+            return this;
+        }
+
+        public Builder setTitleResource(@StringRes int titleRes) {
+            mItem.mTitleRes = titleRes;
+            return this;
+        }
+
+        public Builder setPreferenceKey(String prefKey) {
+            mItem.mPrefKey = prefKey;
+            return this;
+        }
+
+        public Builder setDefaultValue(Object defaultValue) {
+            mItem.mDefaultValue = defaultValue;
+            return this;
+        }
+
+        public Builder setOnClickListener(OnClickListener onClickListener) {
+            mItem.mOnClickListener = onClickListener;
+            return this;
+        }
+
+        public Builder setSubtitleGenerator(SubtitleGenerator subtitleGenerator) {
+            mItem.mSubtitleGenerator = subtitleGenerator;
+            return this;
+        }
+
+        public Builder hasNext(Boolean hasNext) {
+            mItem.mHasNext = hasNext;
+            return this;
+        }
+
+        public PrefItem build() {
+            return mItem;
+        }
+
     }
 
 }

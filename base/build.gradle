@@ -65,6 +65,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.uwetrottmann:trakt-java:4.3.1'
+    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     compile 'com.koushikdutta.async:androidasync:2.1.6'
 
