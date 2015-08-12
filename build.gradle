@@ -31,6 +31,7 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
+        maven { url 'http://guardian.github.com/maven/repo-releases' }
     }
 
     //let project evaluate its script first

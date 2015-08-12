@@ -17,6 +17,9 @@
 
 package pct.droid.base.preferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Prefs {
     public static final String SUBTITLE_COLOR = "subtitle_color";
     public static final String SUBTITLE_SIZE = "subtitle_size";

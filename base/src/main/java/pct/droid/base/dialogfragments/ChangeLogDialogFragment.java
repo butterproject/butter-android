@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.dialogfragments;
+package pct.droid.base.dialogfragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,7 +25,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
-import pct.droid.R;
+import pct.droid.base.R;
 
 public class ChangeLogDialogFragment extends DialogFragment {
 
