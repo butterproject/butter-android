@@ -1,37 +1,19 @@
 package pct.droid.tv.fragments;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
-import android.text.format.DateFormat;
 import android.view.View;
 
-import org.videolan.libvlc.LibVLC;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.PreferencesHandler;
-import pct.droid.base.preferences.Prefs;
-import pct.droid.base.updater.PopcornUpdater;
-import pct.droid.base.utils.LocaleUtils;
-import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 
 public class PTVSettingsFragment extends GuidedStepFragment implements PreferencesHandler {
-
-    String[] DEFAULT_VIEW_ITEMS;
-    String[] QUALITIES;
-    String[] PIXEL_FORMATS;
-    String[] HW_ACCEL;
 
     private List<GuidedAction> mActions;
     private List<PrefItem> mPrefs;
@@ -69,9 +51,6 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
         super.onGuidedActionClicked(action);
         int currentPos = getSelectedActionPosition();
         mPrefs.get(currentPos).onClick();
-        action.setLabel2(mPrefs.get(currentPos).getSubtitle());
-        mActions.set(currentPos, action);
-        setActions(mActions);
         setSelectedActionPosition(currentPos);
     }
 
@@ -94,7 +73,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
     }
 
     @Override
-    public void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, int lowLimit, int highLimit, OnSelectionListener onClickListener) {
+    public void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, int lowLimit, int highLimit, final OnSelectionListener onClickListener) {
         if(mode == SelectionMode.SIMPLE_CHOICE) {
             int currentPosition = (int) currentValue;
             if(currentPosition == items.length - 1) {
@@ -103,12 +82,32 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
                 currentPosition++;
             }
             onClickListener.onSelection(currentPosition, null);
+            updateAction(getSelectedActionPosition());
+        } else if(mode == SelectionMode.ADVANCED_CHOICE) {
+            PTVSettingsListFragment fragment = PTVSettingsListFragment.newInstance(title, items, (int) currentValue, new PTVSettingsListFragment.SelectionListener() {
+                @Override
+                public void onSelect(int position) {
+                    onClickListener.onSelection(position, null);
+                    updateAction(getSelectedActionPosition());
+                }
+            });
+            GuidedStepFragment.add(getFragmentManager(), fragment);
         }
         // TODO: Other modes
     }
 
     @Override
     public void showMessage(String message) {
+        if(message.equals(PreferencesHandler.ABOUT)) {
+            // todo: show about activity or something
+        } else {
+            // todo: show self-hiding message (snackbar?)
+        }
+    }
 
+    private void updateAction(int position) {
+        GuidedAction action = mActions.get(position);
+        action.setLabel2(mPrefs.get(position).getSubtitle());
+        mActions.set(position, action);
     }
 }
