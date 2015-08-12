@@ -31,6 +31,8 @@ import pct.droid.base.utils.StorageUtils;
 
 public interface PreferencesHandler {
 
+    String ABOUT = "about";
+
     enum SelectionMode {
         NORMAL, ADVANCED_CHOICE, SIMPLE_CHOICE, COLOR, NUMBER, DIRECTORY
     }
@@ -759,7 +761,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.showMessage("about");
+                            handler.showMessage(ABOUT);
                         }
                     })
                     .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {

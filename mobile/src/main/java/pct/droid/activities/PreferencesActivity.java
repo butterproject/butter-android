@@ -243,7 +243,7 @@ public class PreferencesActivity extends PopcornBaseActivity
 
     @Override
     public void showMessage(String message) {
-        if(message.equals("about")) {
+        if(message.equals(PreferencesHandler.ABOUT)) {
             AboutActivity.startActivity(this);
             return;
         }
