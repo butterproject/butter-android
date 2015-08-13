@@ -9,6 +9,7 @@ import android.view.View;
 
 import java.util.List;
 
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.tv.R;
 
 public class PTVSettingsListFragment extends GuidedStepFragment {
@@ -39,7 +40,7 @@ public class PTVSettingsListFragment extends GuidedStepFragment {
     @NonNull
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(Bundle savedInstanceState) {
-        return new GuidanceStylist.Guidance(getArguments().getString(TITLE_ARG, ""), null, getString(R.string.app_name), null);
+        return new GuidanceStylist.Guidance(getArguments().getString(TITLE_ARG, "").toUpperCase(LocaleUtils.getCurrent()), null, getString(R.string.app_name), null);
     }
 
     @Override

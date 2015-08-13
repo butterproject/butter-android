@@ -1,16 +1,20 @@
 package pct.droid.tv.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
 import android.view.View;
+import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.List;
 
 import pct.droid.base.preferences.PrefItem;
 import pct.droid.base.preferences.PreferencesHandler;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.tv.R;
 
 public class PTVSettingsFragment extends GuidedStepFragment implements PreferencesHandler {
@@ -60,7 +64,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
                 .hasNext(item.hasNext())
                 .enabled(item.isClickable())
                 .infoOnly(item.isTitle() || !item.isClickable())
-                .title(item.getTitle());
+                .title(item.isTitle() ? item.getTitle().toUpperCase(LocaleUtils.getCurrent()) : item.getTitle());
 
         if (!item.isTitle()) {
             builder.description(item.getSubtitle());
@@ -73,27 +77,65 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
     }
 
     @Override
-    public void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, int lowLimit, int highLimit, final OnSelectionListener onClickListener) {
-        if(mode == SelectionMode.SIMPLE_CHOICE) {
-            int currentPosition = (int) currentValue;
-            if(currentPosition == items.length - 1) {
-                currentPosition = 0;
-            } else {
-                currentPosition++;
-            }
-            onClickListener.onSelection(currentPosition, null);
-            updateAction(getSelectedActionPosition());
-        } else if(mode == SelectionMode.ADVANCED_CHOICE) {
-            PTVSettingsListFragment fragment = PTVSettingsListFragment.newInstance(title, items, (int) currentValue, new PTVSettingsListFragment.SelectionListener() {
-                @Override
-                public void onSelect(int position) {
-                    onClickListener.onSelection(position, null);
-                    updateAction(getSelectedActionPosition());
+    public void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, final int lowLimit, int highLimit, final OnSelectionListener onClickListener) {
+        PTVSettingsListFragment fragment;
+
+        switch (mode) {
+            case SIMPLE_CHOICE:
+                int currentPosition = (int) currentValue;
+                if(currentPosition == items.length - 1) {
+                    currentPosition = 0;
+                } else {
+                    currentPosition++;
                 }
-            });
-            GuidedStepFragment.add(getFragmentManager(), fragment);
+                onClickListener.onSelection(currentPosition, null);
+                updateAction(getSelectedActionPosition());
+                break;
+            case ADVANCED_CHOICE:
+                fragment = PTVSettingsListFragment.newInstance(title, items, (int) currentValue, new PTVSettingsListFragment.SelectionListener() {
+                    @Override
+                    public void onSelect(int position) {
+                        onClickListener.onSelection(position, null);
+                        updateAction(getSelectedActionPosition());
+                    }
+                });
+                GuidedStepFragment.add(getFragmentManager(), fragment);
+                break;
+            case NUMBER:
+                final String[] array = new String[highLimit - lowLimit];
+                for(int i = 0; i <= highLimit - lowLimit; i++) {
+                    array[i] = Integer.toString(i + lowLimit);
+                }
+
+                fragment = PTVSettingsListFragment.newInstance(title, array, ((int) currentValue - lowLimit), new PTVSettingsListFragment.SelectionListener() {
+                    @Override
+                    public void onSelect(int position) {
+                        onClickListener.onSelection(0, position + lowLimit);
+                        updateAction(getSelectedActionPosition());
+                    }
+                });
+                GuidedStepFragment.add(getFragmentManager(), fragment);
+                break;
+            case COLOR:
+                String[] colors = getResources().getStringArray(R.array.subtitle_colors);
+                final Integer[] colorCodes = new Integer[] {
+                        Color.BLACK, Color.WHITE, Color.YELLOW, Color.RED, Color.BLUE, Color.MAGENTA, Color.GREEN, Color.DKGRAY, Color.LTGRAY
+                };
+                fragment = PTVSettingsListFragment.newInstance(title, colors, Arrays.asList(colorCodes).indexOf(currentValue), new PTVSettingsListFragment.SelectionListener() {
+                    @Override
+                    public void onSelect(int position) {
+                        onClickListener.onSelection(position, colorCodes[position]);
+                        updateAction(getSelectedActionPosition());
+                    }
+                });
+                GuidedStepFragment.add(getFragmentManager(), fragment);
+                break;
+
+            case DIRECTORY:
+            default:
+                // Nothing
+                break;
         }
-        // TODO: Other modes
     }
 
     @Override
@@ -101,7 +143,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
         if(message.equals(PreferencesHandler.ABOUT)) {
             // todo: show about activity or something
         } else {
-            // todo: show self-hiding message (snackbar?)
+            Toast.makeText(getActivity(), R.string.restart_effect, Toast.LENGTH_SHORT).show();
         }
     }
 
