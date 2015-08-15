@@ -54,6 +54,9 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -170,7 +173,12 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
             progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setAlpha(85);
         }
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        Drawable secondaryProgressDrawable = progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress);
+        secondaryProgressDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        if(VersionUtils.isLollipop()) {
+            secondaryProgressDrawable.setAlpha(127);
+        }
+        progressDrawable.setDrawableByLayerId(android.R.id.secondaryProgress, secondaryProgressDrawable);
 
         mControlBar.setProgressDrawable(progressDrawable);
         mControlBar.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -648,11 +656,16 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         mControlBar.setProgress((int) currentTime);
         mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
         mControlBar.setSecondaryProgress(getStreamerProgress());
+
         if (getCurrentTime() >= 0)
             mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
-        if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
+        if (getDuration() >= 0)
+            lengthTime.setText(StringUtils.millisToString(duration));
+    }
 
-        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+        super.onStreamProgress(torrent, streamStatus);
         mControlBar.setSecondaryProgress(getStreamerProgress());
     }
 
