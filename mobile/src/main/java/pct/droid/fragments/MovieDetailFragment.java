@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -331,6 +332,22 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @OnClick(R.id.magnet)
     public void openMagnet() {
         mMagnet.open(mActivity);
+    }
+
+    @OnClick(R.id.health)
+    public void clickHealth() {
+        int seeds = sMovie.torrents.get(mSelectedQuality).seeds;
+        int peers = sMovie.torrents.get(mSelectedQuality).peers;
+        TorrentHealth health = TorrentHealth.calculate(seeds, peers);
+
+        final Snackbar snackbar = Snackbar.make(mRoot, getString(R.string.health_info, getString(health.getStringResource()), seeds, peers), Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.close, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
     }
 
     private void onSubtitleLanguageSelected(String language) {
