@@ -59,7 +59,7 @@
 
 	<!-- StreamLoadingActivity strings -->
 	<string name="waiting_torrent">Connecting…</string>
-	<string name="starting_buffering">Buffering</string>
+	<string name="starting_buffering">Starting</string>
 	<string name="streaming_started">Streaming started</string>
 	<string name="waiting_for_subtitles">Waiting for subtitles</string>
 	<string name="seeds">seeds</string>
