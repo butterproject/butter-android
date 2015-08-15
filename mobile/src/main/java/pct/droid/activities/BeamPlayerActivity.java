@@ -142,7 +142,7 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     }
 
     @Override
-    protected void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
         mService.addListener(mFragment);
     }

@@ -36,10 +36,10 @@ import pct.droid.base.preferences.PrefItem;
 
 public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Object> mItems;
+    private List<PrefItem> mItems;
     final int NORMAL = 0, HEADER = 1;
 
-    public PreferencesListAdapter(List<Object> items) {
+    public PreferencesListAdapter(List<PrefItem> items) {
         mItems = items;
     }
 
@@ -61,12 +61,12 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (getItemViewType(position) == NORMAL) {
             ViewHolder itemViewHolder = (ViewHolder) viewHolder;
-            PrefItem item = (PrefItem) mItems.get(position);
+            PrefItem item = mItems.get(position);
             itemViewHolder.itemView.setClickable(item.isClickable());
             itemViewHolder.icon.setImageResource(item.getIconResource());
             itemViewHolder.icon.setColorFilter(PopcornApplication.getAppContext().getResources().getColor(R.color.text_color), PorterDuff.Mode.SRC_IN);
             itemViewHolder.text1.setText(item.getTitle());
-            itemViewHolder.text2.setText(item.getSubTitle());
+            itemViewHolder.text2.setText(item.getSubtitle());
 
             if (item.getDefaultValue() instanceof Boolean) {
                 itemViewHolder.checkBox.setVisibility(View.VISIBLE);
@@ -76,7 +76,7 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         } else if (getItemViewType(position) == HEADER) {
             HeaderHolder headerViewHolder = (HeaderHolder) viewHolder;
-            headerViewHolder.itemView.setText((String) mItems.get(position));
+            headerViewHolder.itemView.setText(mItems.get(position).getTitle());
         }
     }
 
@@ -87,7 +87,7 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemViewType(int position) {
-        if (mItems.get(position) instanceof String) {
+        if (mItems.get(position).isTitle()) {
             return HEADER;
         }
         return NORMAL;

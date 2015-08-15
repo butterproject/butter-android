@@ -23,40 +23,8 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
-    <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
-    <string name="casting">Casting</string>
 
-	<!-- OverviewActivity strings -->
-	<string name="search_hint">Title, year, actors</string>
-	<string name="title_shows">Shows</string>
-	<string name="title_movies">Movies</string>
-    <string name="title_anime">Anime</string>
-    <string name="genres">Genres</string>
-	<string name="search">Search</string>
-	<string name="searching">Searching…</string>
-	<string name="no_data_found">No data found</string>
-	<string name="unknown_error">Something went wrong</string>
-
-	<!-- DetailActivity strings -->
-	<string name="minutes">min</string>
-    <string name="read_more">Read more</string>
-	<string name="watch_trailer">Watch trailer</string>
-	<string name="no_subs">No subtitles</string>
-    <string name="no_subs_available">No subtitles available</string>
-	<string name="subtitles">Subtitles</string>
-	<string name="quality">Quality</string>
-	<string name="trailer">Trailer</string>
-	<string name="season">Season</string>
-	<string name="episode">Episode</string>
-    <string name="specials">Specials</string>
-    <string name="continuing">Continuing</string>
-    <string name="ended">Ended</string>
-    <string name="aired">Aired: %s</string>
-	<string name="no_title_available">No name</string>
-	<string name="no_synopsis_available">No synopsis available</string>
-    <string name="magnet">Magnet</string>
-    <string name="scale">Scale</string>
+    <string name="casting">Casting</string>s
 
 	<!-- StreamLoadingActivity strings -->
     <string name="waiting_torrent">Waiting for torrent</string>
@@ -75,7 +43,7 @@
     <string name="fastforward">Fast forward</string>
     <string name="rewind">Rewind</string>
 	<string name="brightness">Brightness</string>
-	<string name="hardware_acceleration_error_title">HW acceleration error</string>
+	<string name="hardware_acceleration_error_title">HWrgb16 acceleration error</string>
 	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
 	<string name="best_fit">Best fit</string>
 	<string name="fill">Fill</string>
@@ -89,70 +57,6 @@
     <string name="leave_videoplayer_message">Are you sure you want to leave the video player? %s will stop playing.</string>
     <string name="encountered_error_title">Video error encountered</string>
     <string name="encountered_error">The video player encountered a serious error. The video file could not be opened and/or played. The format was not recognised.</string>
-
-	<!-- TermsActivity strings -->
-    <string name="terms" translatable="false">Your Acceptance\n\n
-By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
-Privacy Policy\n\n
-You understand that by using \'POPCORN TIME\' you may encounter material that you may deem to be offensive, indecent, or objectionable, and that such content may or may not be identified as having explicit material. \'POPCORN TIME\' will have no liability to you for such material – you agree that your use of \'POPCORN TIME\' is at your sole risk.\n\n
-DISCLAIMERS\n\n
-YOU EXPRESSLY AGREE THAT YOUR USE OF \'POPCORN TIME\' IS AT YOUR SOLE RISK. \'POPCORN TIME\' AND ALL PRODUCTS ARE PROVIDED TO YOU \'AS IS\' WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. \'POPCORN TIME\' MAKES ABSOLUTELY NO WARRANTIES WHATSOEVER, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT POSSIBLE UNDER APPLICABLE LAWS, YIFY DISCLAIMS ALL WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR OTHER VIOLATIONS OF RIGHTS.\n\n
-LIMITATION OF LIABILITY\n\n
-\'POPCORN TIME\' IS NOT RESPONSIBLE FOR ANY PROBLEMS OR TECHNICAL MALFUNCTION OF ANY WEBSITE, NETWORK, COMPUTER SYSTEMS, SERVERS, PROVIDERS, COMPUTER EQUIPMENT, OR SOFTWARE, OR FOR ANY FAILURE DUE TO TECHNICAL PROBLEMS OR TRAFFIC CONGESTION ON THE INTERNET OR \'POPCORN TIME\' OR COMBINATION THEREOF, INCLUDING ANY INJURY OR DAMAGE TO USERS OR TO ANY COMPUTER OR OTHER DEVICE ON OR THROUGH WHICH \'POPCORN TIME\' IS PROVIDED. UNDER NO CIRCUMSTANCES WILL \'POPCORN TIME\' BE LIABLE FOR ANY LOSS OR DAMAGE, INCLUDING PERSONAL INJURY OR DEATH, RESULTING FROM YOUR USE OF \'POPCORN TIME\'.\n\nSOURCE MATERIAL\n\nALL MOVIES ARE NOT HOSTED IN ANY SERVER AND ARE STREAMED USING THE P2P BIT TORRENT PROTOCOL. ALL MOVIES ARE PULLED IN FROM THE OPEN PUBLIC APIS. BY WATCHING A MOVIE WITH THIS APPLICATION YOU MIGHT BE COMMITING COPYRIGHT VIOLATIONS DEPENDING ON YOUR COUNTRY\'S LAWS. WE DO NOT TAKE ANY RESPONSABILITIES.\n\n
-Ability to Accept Terms of Service\n\n
-By using \'POPCORN TIME\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
-	<string name="accept">Accept</string>
-	<string name="leave">Leave</string>
-
-	<!-- SettingsActivity strings -->
-	<string name="preferences">Preferences</string>
-	<string name="general">General</string>
-	<string name="default_view">Default overview</string>
-	<string name="default_player">Default video player</string>
-	<string name="i18n_language">App language</string>
-	<string name="restart_effect">Restart application for changes to take effect</string>
-	<string name="device_language">Device language</string>
-	<string name="stream_over_wifi_only">Only stream over Wi-Fi</string>
-	<string name="internal_player">Internal</string>
-	<string name="subtitle_color">Color</string>
-	<string name="subtitle_size">Size</string>
-    <string name="subtitle_stroke_color">Outline color</string>
-    <string name="subtitle_stroke_width">Outline width</string>
-	<string name="subtitle_language">Default language</string>
-	<string name="subtitle_timing">Subtitle timing</string>
-	<string name="subtitle_settings">Subtitle settings</string>
-	<string name="no_default_set">No default language</string>
-	<string name="advanced">Advanced</string>
-	<string name="storage_location">Storage location</string>
-	<string name="storage_automatic">Automatic</string>
-	<string name="storage_choose">Choose location</string>
-	<string name="not_writable">Location not writable</string>
-	<string name="remove_cache">Remove cache on player close</string>
-	<string name="hw_acceleration">Hardware acceleration</string>
-	<string name="hw_automatic">Automatic</string>
-	<string name="hw_full">Full</string>
-	<string name="hw_decoding">Decoding only</string>
-	<string name="updates">Updates</string>
-	<string name="auto_updates">Automatic updates</string>
-	<string name="check_for_updates">Check for updates</string>
-	<string name="last_check">Last check</string>
-	<string name="about">About</string>
-	<string name="version">Version</string>
-	<string name="changelog">Changelog</string>
-	<string name="tap_to_open">Tap to open</string>
-	<string name="report_a_bug">Report a bug</string>
-	<string name="open_source_licenses">Open-source licenses</string>
-    <string name="torrents">Torrents</string>
-    <string name="download_speed">Maximum download speed</string>
-    <string name="upload_speed">Maximum upload speed</string>
-    <string name="max_connections">Maximum total connections</string>
-    <string name="dht_limit">DHT limit</string>
-    <string name="unlimited">Unlimited</string>
-    <string name="show_vpn">Show VPN option in menu</string>
-	<string name="pixel_format">Force video chroma</string>
-	<string name="rgb32">RGB 32-bit: default chroma</string>
-	<string name="rgb16">RGB 16-bit: better performance, lower quality</string>
-	<string name="yuv">YUV: best performance but does not always work</string>
 
 	<!-- WifiOnlyDialogFragment -->
 	<string name="wifi_only">Wi-Fi only</string>

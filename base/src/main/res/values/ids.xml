@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="yts_filter_a_to_z" type="id" />
+    <item name="yts_filter_genres" type="id" />
+    <item name="yts_filter_year" type="id" />
+    <item name="yts_filter_release_date" type="id" />
+    <item name="yts_filter_top_rated" type="id" />
+    <item name="yts_filter_popular_now" type="id" />
+    <item name="yts_filter_trending" type="id" />
+
+
+    <item name="eztv_filter_trending" type="id" />
+    <item name="eztv_filter_popular_now" type="id" />
+    <item name="eztv_filter_top_rated" type="id" />
+    <item name="eztv_filter_last_updated" type="id" />
+    <item name="eztv_filter_year" type="id" />
+    <item name="eztv_filter_a_to_z" type="id" />
+
+    <item name="haru_filter_popular" type="id" />
+    <item name="haru_filter_a_to_z" type="id" />
+
+</resources>

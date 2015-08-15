@@ -24,14 +24,14 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 
-import it.gmariotti.changelibs.library.view.ChangeLogListView;
+import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 import pct.droid.R;
 
 public class ChangeLogDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ChangeLogListView chgList = (ChangeLogListView) View.inflate(getActivity(), R.layout.fragment_dialog_changelog, null);
+        ChangeLogRecyclerView chgList = (ChangeLogRecyclerView) View.inflate(getActivity(), R.layout.fragment_dialog_changelog, null);
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.changelog)

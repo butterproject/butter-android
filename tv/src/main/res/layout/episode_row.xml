@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/leanback_track_row_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/leanback_track_row_horizontal_margin"
+    android:paddingRight="@dimen/leanback_track_row_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/episode_row_background_color"
+        android:src="@color/leanback_track_row_separator_highlight_color" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/leanback_episode_row_height">
+
+        <LinearLayout
+            android:id="@+id/background_view"
+            android:background="@drawable/episode_row_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/leanback_track_row_horizontal_padding">
+
+            <TextView
+                android:id="@+id/number_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="32dp"
+                tools:text="10" />
+
+            <TextView
+                android:id="@+id/title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:ellipsize="end"
+                android:gravity="center|start"
+                android:paddingRight="32dp"
+                tools:text="track title" />
+
+            <TextView
+                android:id="@+id/synopsis_textview"
+                android:layout_width="0dp"
+                android:singleLine="true"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center|start"
+                tools:text="track artist" />
+
+            <TextView
+                android:id="@+id/duration_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center|right"
+                android:paddingRight="32dp"
+                tools:text="40min" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

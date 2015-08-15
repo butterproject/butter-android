@@ -45,7 +45,7 @@ import com.github.sv244.torrentstream.exceptions.NotInitializedException;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
-import pct.droid.base.activities.TorrentBaseActivity;
+import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
 import timber.log.Timber;
@@ -123,7 +123,7 @@ public class TorrentService extends Service implements TorrentListener {
         }
     }
 
-    public void setCurrentActivity(TorrentBaseActivity activity) {
+    public void setCurrentActivity(TorrentActivity activity) {
         mCurrentActivityClass = activity.getClass();
 
         if(mInForeground) {

@@ -64,7 +64,6 @@ public class EpisodeListAdapter extends BaseAdapter {
         }
 
         Episode episode = getItem(position);
-
         if (!TextUtils.isEmpty(episode.title))
             holder.title.setText(episode.title);
         else
