@@ -238,7 +238,6 @@ public class EpisodeDialogFragment extends DialogFragment {
         else
             mSynopsis.setText(R.string.no_synopsis_available);
 
-
         String seasonStr = Integer.toString(mEpisode.season);
         if (seasonStr.length() < 2) seasonStr = "0" + seasonStr;
         String episodeStr = Integer.toString(mEpisode.episode);

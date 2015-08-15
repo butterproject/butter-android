@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="subtitle_colors">
+        <item name="white">White</item>
+        <item name="black">Black</item>
+        <item name="yellow">Yellow</item>
+        <item name="red">Red</item>
+        <item name="blue">Blue</item>
+        <item name="magenta">Magenta</item>
+        <item name="green">Green</item>
+        <item name="dark_grey">Dark Grey</item>
+        <item name="light_grey">Light Grey</item>
+    </string-array>
+</resources>

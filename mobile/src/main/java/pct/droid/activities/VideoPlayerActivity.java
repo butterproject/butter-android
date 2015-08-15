@@ -25,14 +25,13 @@ import android.view.MenuItem;
 
 import pct.droid.R;
 import pct.droid.activities.base.PopcornBaseActivity;
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.dialogfragments.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
-
-    public static final String RESUME_POSITION = "resume_position";
 
     private VideoPlayerFragment mFragment;
     private StreamInfo mStreamInfo;
@@ -51,7 +50,7 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
         }
 
         i.putExtra(INFO, info);
-        i.putExtra(RESUME_POSITION, resumePosition);
+        i.putExtra(BaseVideoPlayerFragment.RESUME_POSITION, resumePosition);
         context.startActivity(i);
         return i;
     }
@@ -64,7 +63,7 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
 
         setShowCasting(true);
 
-        mResumePosition = getIntent().getLongExtra(RESUME_POSITION, 0);
+        mResumePosition = getIntent().getLongExtra(BaseVideoPlayerFragment.RESUME_POSITION, 0);
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
         if(mStreamInfo == null) {
@@ -131,7 +130,15 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     @Override
-    protected void onTorrentServiceConnected() {
+    public void onTorrentServiceDisconnected() {
+        if (null!=mFragment){
+            mService.removeListener(mFragment);
+        }
+        super.onTorrentServiceDisconnected();
+    }
+
+    @Override
+    public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
         mService.addListener(mFragment);
     }

@@ -1,0 +1,92 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.19.2'
+    }
+}
+
+
+apply plugin: 'com.android.application'
+apply plugin: 'hugo'
+apply plugin: 'io.fabric'
+apply plugin: 'com.github.ben-manes.versions'
+
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
+
+    defaultConfig {
+        applicationId "pct.droid.tv"
+        minSdkVersion 17
+        targetSdkVersion rootProject.ext.targetSdk
+        versionCode buildNumber
+        versionName "0.1.2"
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        mainConfig {
+            keyAlias System.getenv("S_ALIAS").toString() ?: ""
+            keyPassword System.getenv("S_KEYPASS").toString() ?: ""
+            storeFile System.getenv("S_KEYSTORE").toString() ? file(System.getenv("S_KEYSTORE").toString()) : file("")
+            storePassword System.getenv("S_KEYPASS").toString() ?: ""
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.mainConfig
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            versionNameSuffix "#" + buildNumber
+            applicationIdSuffix ".dev"
+        }
+    }
+
+
+    lintOptions {
+        abortOnError false
+    }
+
+    splits {
+        abi {
+            enable true
+            universalApk false
+            reset()
+            include 'armeabi', 'armeabi-v7a', 'x86'
+        }
+    }
+
+    project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
+}
+//./gradlew dependencyUpdates -Drevision=release
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile "com.android.support:support-annotations:${rootProject.ext.appCompatVersion}"
+    compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
+//    compile "com.android.support:recyclerview-v7:${rootProject.ext.appCompatVersion}"
+    compile "com.android.support:leanback-v17:${rootProject.ext.appCompatVersion}"
+    compile "com.squareup.picasso:picasso:2.5.2"
+    compile "com.google.code.gson:gson:2.3.1"
+    compile "com.jakewharton:butterknife:7.0.1"
+
+    compile("com.crashlytics.sdk.android:crashlytics:${rootProject.ext.crashlyticsVersion}@aar") {
+        transitive = true;
+    }
+
+    compile project(':base')
+}

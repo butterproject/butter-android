@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/leanback_track_row_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/leanback_track_row_horizontal_margin"
+    android:paddingRight="@dimen/leanback_track_row_horizontal_margin">
+
+    <LinearLayout
+        android:id="@+id/background_view"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/leanback_season_row_height"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp">
+
+        <TextView
+            android:id="@+id/title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.Leanback.Row.Header"
+            android:gravity="left|bottom"
+            android:layout_marginBottom="16dp"
+            android:paddingRight="32dp"
+            tools:text="Season 1" />
+    </LinearLayout>
+</FrameLayout>

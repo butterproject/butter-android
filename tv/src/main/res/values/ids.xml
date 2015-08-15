@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <item name="more_player_tests" type="id" />
+    <item name="more_item_settings" type="id" />
+
+
+    <!-- GUIDED ACTIONS -->
+    <item name="action_accept" type="id" />
+    <item name="action_decline" type="id" />
+
+    <item name="action_general" type="id" />
+    <item name="action_default_view" type="id" />
+    <item name="action_quality" type="id" />
+    <item name="action_app_language" type="id" />
+    <item name="action_subtitles" type="id" />
+    <item name="action_subtitle_color" type="id" />
+    <item name="action_subtitle_outline_color" type="id" />
+    <item name="action_subtitle_size" type="id" />
+    <item name="action_subtitle_outline_size" type="id" />
+    <item name="action_subtitle_language" type="id" />
+    <item name="action_torrents" type="id" />
+    <item name="action_max_download" type="id" />
+    <item name="action_max_upload" type="id" />
+    <item name="action_max_connections" type="id" />
+    <item name="action_storage_location" type="id" />
+    <item name="action_remove_cache" type="id" />
+    <item name="action_advanced" type="id" />
+    <item name="action_hardware_acceleration" type="id" />
+    <item name="action_pixel_format" type="id" />
+    <item name="action_show_vpn" type="id" />
+    <item name="action_updates" type="id" />
+    <item name="action_auto_updates" type="id" />
+    <item name="action_check_updates" type="id" />
+    <item name="action_about_section" type="id" />
+    <item name="action_changelog" type="id" />
+    <item name="action_licenses" type="id" />
+    <item name="action_version" type="id" />
+    <item name="action_about" type="id" />
+
+    <item name="action_update_now" type="id" />
+    <item name="action_update_later" type="id" />
+</resources>

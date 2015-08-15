@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- default drawables (null) -->
+    <!-- override in modules -->
+
+    <drawable name="yts_filter_a_to_z">@drawable/filter_trending</drawable>
+    <drawable name="yts_filter_genres">@drawable/filter_trending</drawable>
+    <drawable name="yts_filter_year">@drawable/filter_trending</drawable>
+    <drawable name="yts_filter_release_date">@drawable/filter_trending</drawable>
+    <drawable name="yts_filter_top_rated">@drawable/filter_trending</drawable>
+    <drawable name="yts_filter_popular_now">@drawable/filter_trending</drawable>
+    <drawable name="yts_filter_trending">@drawable/filter_trending</drawable>
+
+
+    <drawable name="eztv_filter_trending">@drawable/filter_trending</drawable>
+    <drawable name="eztv_filter_popular_now">@drawable/filter_trending</drawable>
+    <drawable name="eztv_filter_top_rated">@drawable/filter_trending</drawable>
+    <drawable name="eztv_filter_last_updated">@drawable/filter_updated</drawable>
+    <drawable name="eztv_filter_year">@drawable/filter_trending</drawable>
+    <drawable name="eztv_filter_a_to_z">@drawable/filter_trending</drawable>
+
+    <drawable name="haru_filter_popular">@drawable/filter_trending</drawable>
+    <drawable name="haru_filter_a_to_z">@drawable/filter_trending</drawable>
+
+</resources>

@@ -35,7 +35,8 @@ import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
-import pct.droid.base.activities.TorrentBaseActivity;
+import pct.droid.base.activities.TorrentActivity;
+import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
@@ -74,7 +75,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
     private TorrentService mService;
-    private TorrentBaseActivity mActivity;
 
     protected StreamInfo mStreamInfo;
 
@@ -96,21 +96,20 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity = (TorrentBaseActivity) getActivity();
 
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mStreamInfo = mCallback.getStreamInformation();
                 if (mStreamInfo == null) {
-                    mActivity.finish();
+                    getActivity().finish();
                     return;
                 }
                 loadSubs();
             }
         });
 
-        if (!(mActivity instanceof TorrentBaseActivity)) {
+        if (!(getActivity() instanceof TorrentActivity)) {
             throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
         }
     }
@@ -122,10 +121,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     public void onTorrentServiceConnected() {
-        if(mActivity == null)
+        if(getActivity() == null)
             return;
 
-        mService = mActivity.getTorrentService();
+        mService = ((TorrentActivity)getActivity()).getTorrentService();
         mService.addListener(this);
         startStream();
     }
@@ -204,7 +203,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     public void onResume() {
         super.onResume();
         if (mPlayerStarted) {
-            BeamServerService.getServer().stop();
+            BeamServer beamService = BeamServerService.getServer();
+            if (beamService!=null) {
+                beamService.stop();
+            }
             getActivity().onBackPressed();
         }
 

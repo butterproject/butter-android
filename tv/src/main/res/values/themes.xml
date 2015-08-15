@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.HiddenActivity" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+    </style>
+
+
+    <style name="Theme.Popcorn.TV.GuidedStep" parent="@style/Theme.Leanback.GuidedStep">
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+
+        <item name="guidanceDescriptionStyle">@style/Theme.Popcorn.GuidanceDescriptionStyle</item>
+        <item name="guidedActionsContainerStyle">
+            @style/Theme.Popcorn.GuidedActionsContainerStyle
+        </item>
+    </style>
+
+    <style name="Theme.Popcorn.GuidanceDescriptionStyle" parent="@style/Widget.Leanback.GuidanceDescriptionStyle">
+        <item name="android:gravity">start</item>
+        <item name="android:maxLines">9999</item>
+    </style>
+
+    <style name="Theme.Popcorn.GuidedActionsContainerStyle" parent="@style/Widget.Leanback.GuidedActionsContainerStyle">
+        <item name="android:background">@color/primary_dark</item>
+    </style>
+
+
+    <style name="Theme.Popcorn.TV" parent="@style/Theme.Leanback">
+        <!--<item name="android:colorPrimary">@color/primary</item>-->
+        <!--<item name="android:colorPrimaryDark">@color/primary_dark</item>-->
+        <item name="android:colorAccent">@color/primary</item>
+    </style>
+</resources>

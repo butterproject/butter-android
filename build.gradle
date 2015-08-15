@@ -1,7 +1,3 @@
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -9,13 +5,13 @@ buildscript {
         //temporary to solve hugo error
         mavenCentral()
         jcenter()
-        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.7'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -24,6 +20,7 @@ buildscript {
 ext {
     appCompatVersion = "22.2.1"
     buildToolsVersion = "22.0.1"
+    crashlyticsVersion = "2.4.0"
     targetSdk = 22
     compileSdk = 22
     minSdk = 15
@@ -34,6 +31,7 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
+        maven { url 'http://guardian.github.com/maven/repo-releases' }
     }
 
     //let project evaluate its script first
@@ -41,16 +39,35 @@ allprojects {
         //only apply to projects that have the android plugin
         if (project.plugins.hasPlugin('com.android.application')) {
 
-            project.android.applicationVariants.all { variant ->
-                //add a generated crashlytics properties file if the project applies the crashlytics plugin
-                if (project.plugins.hasPlugin("io.fabric")) {
-                    createCrashlyticsProperties(project, variant)
+            //add the android sdk manager plugin to andriod projects
+            apply plugin: 'android-sdk-manager'
+
+            //global android settings
+
+            project.android {
+                packagingOptions {
+                    exclude 'META-INF/beans.xml'
+                    exclude 'META-INF/DEPENDENCIES'
+                    exclude 'META-INF/LICENSE'
+                    exclude 'META-INF/NOTICE'
+                    exclude 'META-INF/LICENSE.txt'
+                    exclude 'META-INF/NOTICE.txt'
+                    exclude 'META-INF/DEPENDENCIES.txt'
                 }
 
-                //rename output files
-                renameOutputFiles(project, variant)
-            }
+                applicationVariants.all { variant ->
+                    //add a generated crashlytics properties file if the project applies the crashlytics plugin
+                    if (project.plugins.hasPlugin("io.fabric")) {
+                        createCrashlyticsProperties(project, variant)
+                    }
 
+                    //rename output files
+                    renameOutputFiles(project, variant)
+                }
+            }
+        } else if (project.plugins.hasPlugin('com.android.library')) {
+            //add the android sdk manager plugin to andriod projects
+            apply plugin: 'android-sdk-manager'
         }
     }
 }
@@ -64,7 +81,8 @@ def createCrashlyticsProperties(Project project, variant) {
     File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
     def variantSuffix = variant.name.capitalize()
     def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
-    def generatePropertiesTask = task("crashlyticsGenerateProperties${variantSuffix}") << {
+
+    def generatePropertiesTask = project.task("crashlyticsGenerateProperties${variantSuffix}") << {
         Properties properties = new Properties()
         println "...copying apiSecret for ${variant.name}"
         properties.put("apiSecret", crashlyticsSecret)
