@@ -41,6 +41,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.connectsdk.device.ConnectableDevice;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -57,10 +60,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
-
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
 
 import pct.droid.base.R;
 import pct.droid.base.beaming.BeamDeviceListener;
@@ -88,7 +87,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
     private String mLocation;
-    private Long mResumePosition;
+    private Long mResumePosition, mDuration;
 
     private static final int SURFACE_BEST_FIT = 0;
     private static final int SURFACE_FIT_HORIZONTAL = 1;
@@ -231,6 +230,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
              * To workaround that, we keep the last known position in the preferences
              */
             mLibVLC.stop();
+        } else {
+            mDuration = 0l;
         }
 
         getVideoSurface().setKeepScreenOn(false);
@@ -242,9 +243,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public void onResume() {
         super.onResume();
 
-        resumeVideo();
-
         BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
+
+        onProgressChanged(PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition), mDuration);
     }
 
     @Override
@@ -307,6 +308,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (resumeTime > 0) {
             mLibVLC.setTime(resumeTime);
         }
+
+        mDuration = mLibVLC.getLength();
     }
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -350,8 +353,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             return;
 
         long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
-        long length = mLibVLC.getLength();
-        if (length > resumePosition && resumePosition > 0) {
+        mDuration = mLibVLC.getLength();
+        if (mDuration > resumePosition && resumePosition > 0) {
             setCurrentTime(resumePosition);
             PrefUtils.save(getActivity(), RESUME_POSITION, 0);
         }
@@ -422,7 +425,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
     protected long getDuration() {
-        return mLibVLC.getLength();
+        return mDuration;
     }
 
     public int getStreamerProgress() {
