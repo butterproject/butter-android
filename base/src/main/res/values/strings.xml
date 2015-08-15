@@ -237,5 +237,12 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
 
     <string name="reload_video">Reload video</string>
 
+    <!-- Health -->
+    <string name="health_info">Health: %1$s, Seeds: %2$d, Peers: %3$d</string>
+    <string name="health_bad">Bad</string>
+    <string name="health_medium">Bad</string>
+    <string name="health_good">Bad</string>
+    <string name="health_excellent">Bad</string>
+    <string name="health_unknown">Bad</string>
 
 </resources>

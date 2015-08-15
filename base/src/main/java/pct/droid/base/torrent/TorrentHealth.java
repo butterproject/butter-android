@@ -75,6 +75,22 @@ public enum TorrentHealth {
         }
     }
 
+    public int getStringResource() {
+        switch (this) {
+            case BAD:
+                return R.string.health_bad;
+            case MEDIUM:
+                return R.string.health_medium;
+            case GOOD:
+                return R.string.health_good;
+            case EXCELLENT:
+                return R.string.health_excellent;
+            default:
+            case UNKNOWN:
+                return R.string.health_unknown;
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public Drawable getImageDrawable(Context context) {
         if(VersionUtils.isLollipop()) {
