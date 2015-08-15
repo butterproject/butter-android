@@ -794,6 +794,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public boolean onOptionsItemSelected(MenuItem item) {
         int i = item.getItemId();
         if (i == R.id.action_reload) {
+            mLibVLC.stop();
             loadMedia();
             return true;
         }
