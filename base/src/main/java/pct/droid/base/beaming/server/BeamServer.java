@@ -168,12 +168,16 @@ public class BeamServer {
     }
 
     public void stop() {
-        try {
+        if(mHttpServer != null)
             mHttpServer.stop();
+        AsyncServer.getDefault().stop();
+        if(mAsyncServer != null)
             mAsyncServer.stop();
-            mWifiLock.release();
-            mWakeLock.release();
-        } catch (Exception e) {}
+
+        if(mWifiLock != null && mWifiLock.isHeld())
+        mWifiLock.release();
+        if(mWakeLock != null && mWakeLock.isHeld())
+        mWakeLock.release();
     }
 
     public static class FileType {

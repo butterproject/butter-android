@@ -49,6 +49,9 @@ import pct.droid.R;
 import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.Constants;
 import pct.droid.base.beaming.BeamManager;
+import pct.droid.base.beaming.BeamPlayerNotificationService;
+import pct.droid.base.beaming.server.BeamServer;
+import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Movie;
@@ -142,6 +145,10 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         }
 
         mNavigationDrawerFragment.initItems();
+
+        if(BeamServerService.getServer() != null)
+            BeamServerService.getServer().stop();
+        BeamPlayerNotificationService.cancelNotification();
     }
 
     @Override

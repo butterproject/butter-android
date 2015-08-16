@@ -18,9 +18,12 @@ import com.connectsdk.service.command.ServiceCommandError;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 
 public class BeamPlayerNotificationService extends Service {
+
+    public static final Integer NOTIFICATION_ID = 6991;
 
     public static final String ACTION_PLAY = "action_play";
     public static final String ACTION_PAUSE = "action_pause";
@@ -142,8 +145,14 @@ public class BeamPlayerNotificationService extends Service {
         }
 
         Notification notification = builder.build();
-        NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
-        notificationManager.notify( 1, notification );
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify( NOTIFICATION_ID, notification );
+    }
+
+    public static void cancelNotification() {
+        // Remove beamplayer notification if still available
+        NotificationManager notificationManager = (NotificationManager) PopcornApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(BeamPlayerNotificationService.NOTIFICATION_ID);
     }
 
     @Override
