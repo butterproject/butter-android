@@ -34,6 +34,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.sjl.foreground.Foreground;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,12 +53,15 @@ import timber.log.Timber;
 
 public class TorrentService extends Service implements TorrentListener {
 
+    public static final Integer NOTIFICATION_ID = 3423423;
+
     private static String WAKE_LOCK = "TorrentService_WakeLock";
 
     private static TorrentService sThis;
 
     private TorrentStream mTorrentStream;
     private Torrent mCurrentTorrent;
+    private StreamStatus mStreamStatus;
 
     private boolean mInForeground = false, mIsReady = false;
 
@@ -133,8 +137,7 @@ public class TorrentService extends Service implements TorrentListener {
     }
 
     public void startForeground() {
-        Timber.d("startForeground");
-        if (Foreground.get().isForeground() || mInForeground) return;
+        if (Foreground.get().isForeground()) return;
 
         Intent notificationIntent = new Intent(this, mCurrentActivityClass);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -146,20 +149,29 @@ public class TorrentService extends Service implements TorrentListener {
                 .setContentText(getString(R.string.tap_to_resume))
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_LOW)
                 .setContentIntent(pendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE);
+
+        if(mStreamStatus != null && mIsReady) {
+            String downloadSpeed;
+            DecimalFormat df = new DecimalFormat("#############0.00");
+            if (mStreamStatus.downloadSpeed / 1024 < 1000) {
+                downloadSpeed = df.format(mStreamStatus.downloadSpeed / 1024) + " KB/s";
+            } else {
+                downloadSpeed = df.format(mStreamStatus.downloadSpeed / (1024 * 1024)) + " MB/s";
+            }
+            String progress = df.format(mStreamStatus.progress);
+            builder.setContentText(progress + "%, ↓" + downloadSpeed);
+        }
 
         Notification notification = builder.build();
         notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
-        startForeground(3423423, notification);
-        mInForeground = true;
+        startForeground(NOTIFICATION_ID, notification);
     }
 
     public void stopForeground() {
-        Timber.d("stopForeground");
-        mInForeground = false;
         stopForeground(true);
     }
 
@@ -243,6 +255,7 @@ public class TorrentService extends Service implements TorrentListener {
             if (!mTorrentStream.isStreaming()) {
                 mTorrentStream.resumeSession();
             } else {
+                mInForeground = false;
                 stopForeground();
             }
         }
@@ -252,6 +265,7 @@ public class TorrentService extends Service implements TorrentListener {
             if (!mTorrentStream.isStreaming()) {
                 mTorrentStream.pauseSession();
             } else {
+                mInForeground = true;
                 startForeground();
             }
         }
@@ -302,6 +316,13 @@ public class TorrentService extends Service implements TorrentListener {
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
         for(TorrentListener listener : mListener) {
             listener.onStreamProgress(torrent, streamStatus);
+        }
+
+        if(mInForeground) {
+            mStreamStatus = streamStatus;
+            startForeground();
+        } else {
+            stopForeground();
         }
     }
 

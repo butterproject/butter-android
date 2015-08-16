@@ -34,7 +34,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.frostwire.jlibtorrent.FileStorage;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -42,8 +43,6 @@ import java.text.DecimalFormat;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
 import hugo.weaving.DebugLog;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;

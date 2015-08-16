@@ -77,6 +77,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     private TorrentService mService;
 
     protected StreamInfo mStreamInfo;
+    private State mState;
 
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
 
@@ -166,6 +167,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     @DebugLog
     protected void setState(final State state, final Object extra) {
+        mState = state;
+
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -214,7 +217,11 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             onStreamReady(mService.getCurrentTorrent());
         }
 
-        setState(State.WAITING_TORRENT);
+        if(mState == null) {
+            setState(State.WAITING_TORRENT);
+        } else {
+            setState(mState);
+        }
     }
 
     /**
