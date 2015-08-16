@@ -20,17 +20,19 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.TrailerPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
+import pct.droid.base.preferences.DefaultQuality;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
@@ -238,6 +240,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             if (sMovie.torrents.size() > 0) {
                 final String[] qualities = sMovie.torrents.keySet().toArray(new String[sMovie.torrents.size()]);
                 SortUtils.sortQualities(qualities);
+
                 mQuality.setData(qualities);
                 mQuality.setListener(new OptionSelector.SelectorListener() {
                     @Override
@@ -247,11 +250,13 @@ public class MovieDetailFragment extends BaseDetailFragment {
                         updateMagnet();
                     }
                 });
-                String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "720p");
-                int qualityIndex = Arrays.asList(qualities).contains(defaultQuality) ? Arrays.asList(qualities).indexOf(defaultQuality) : qualities.length - 1;
-                mSelectedQuality = qualities[qualityIndex];
+
+                String quality = DefaultQuality.get(mActivity, Arrays.asList(qualities));
+                int qualityIndex = Arrays.asList(qualities).indexOf(quality);
+                mSelectedQuality = quality;
                 mQuality.setText(mSelectedQuality);
                 mQuality.setDefault(qualityIndex);
+
                 renderHealth();
                 updateMagnet();
             }
