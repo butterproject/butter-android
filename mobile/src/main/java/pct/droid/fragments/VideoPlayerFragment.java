@@ -254,6 +254,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
     @Override
     public void onPlaybackEndReached() {
+        getVideoSurface().setKeepScreenOn(false);
         //todod:
     }
 
