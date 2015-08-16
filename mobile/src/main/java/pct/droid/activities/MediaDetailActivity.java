@@ -1,6 +1,7 @@
 package pct.droid.activities;
 
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -23,6 +24,7 @@ import butterknife.Bind;
 import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.base.PopcornBaseActivity;
+import pct.droid.base.beaming.BeamPlayerNotificationService;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
@@ -169,6 +171,7 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
             mService.stopStreaming();
         }
         BeamServerService.getServer().stop();
+        BeamPlayerNotificationService.cancelNotification();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
