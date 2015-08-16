@@ -40,6 +40,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -51,6 +52,7 @@ import butterknife.OnClick;
 import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
+import pct.droid.base.preferences.DefaultQuality;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -253,9 +255,10 @@ public class EpisodeDialogFragment extends DialogFragment {
         final String[] qualities = mEpisode.torrents.keySet().toArray(new String[mEpisode.torrents.size()]);
         SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
-        String defaultQuality = PrefUtils.get(mQuality.getContext(), Prefs.QUALITY_DEFAULT, "720p");
-        int qualityIndex = Arrays.asList(qualities).contains(defaultQuality) ? Arrays.asList(qualities).indexOf(defaultQuality) : qualities.length - 1;
-        mSelectedQuality = qualities[qualityIndex];
+
+        String quality = DefaultQuality.get(mActivity, Arrays.asList(qualities));
+        int qualityIndex = Arrays.asList(qualities).indexOf(quality);
+        mSelectedQuality = quality;
         mQuality.setText(mSelectedQuality);
         mQuality.setDefault(qualityIndex);
 
