@@ -19,13 +19,13 @@ package pct.droid.base.preferences;
 
 import android.content.Context;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import pct.droid.base.utils.PrefUtils;
 
 public class DefaultQuality {
 
-    public static String get(Context context, ArrayList<String> availableQualities) {
+    public static String get(Context context, List<String> availableQualities) {
         String quality = PrefUtils.get(context, Prefs.QUALITY_DEFAULT, "720p");
         String[] fallbackOrder = new String[] {"720p", "480p", "1080p"};
 
