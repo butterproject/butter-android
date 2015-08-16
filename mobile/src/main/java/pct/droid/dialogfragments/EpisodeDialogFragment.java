@@ -61,6 +61,7 @@ import pct.droid.base.providers.meta.MetaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.Magnet;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -82,7 +83,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     private Activity mActivity;
     private MetaProvider mMetaProvider;
     private SubsProvider mSubsProvider;
-    private boolean mAttached = false, mTouching = false, mOpened = false;
+    private boolean mTouching = false, mOpened = false;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Episode mEpisode;
     private Show mShow;
@@ -278,7 +279,7 @@ public class EpisodeDialogFragment extends DialogFragment {
             mSubsProvider.getList(mEpisode, new SubsProvider.Callback() {
                 @Override
                 public void onSuccess(Map<String, String> subtitles) {
-                    if (!mAttached) return;
+                    if (!FragmentUtil.isAdded(EpisodeDialogFragment.this)) return;
 
                     mEpisode.subtitles = subtitles;
 
@@ -378,7 +379,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mAttached = true;
     }
 
     private void updateMagnet() {
