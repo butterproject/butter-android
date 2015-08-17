@@ -20,8 +20,6 @@ package pct.droid.base.providers.subs;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.MethodNotSupportedException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +102,8 @@ public class YSubsProvider extends SubsProvider {
     @Override
     public void getList(Episode episode, Callback callback) {
         // Show subtitles not supported
-        callback.onFailure(new MethodNotSupportedException("Show subtitles not supported"));
+
+        callback.onFailure(new NoSuchMethodException("Show subtitles not supported"));
     }
 
     private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
