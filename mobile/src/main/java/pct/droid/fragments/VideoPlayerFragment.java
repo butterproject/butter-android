@@ -170,15 +170,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
             } else {
                 progressDrawable = (LayerDrawable) mControlBar.getProgressDrawable();
             }
-            progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setAlpha(85);
         }
         progressDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        Drawable secondaryProgressDrawable = progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress);
-        secondaryProgressDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        if(VersionUtils.isLollipop()) {
-            secondaryProgressDrawable.setAlpha(127);
-        }
-        progressDrawable.setDrawableByLayerId(android.R.id.secondaryProgress, secondaryProgressDrawable);
+        progressDrawable.findDrawableByLayerId(android.R.id.secondaryProgress).setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
         mControlBar.setProgressDrawable(progressDrawable);
         mControlBar.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
