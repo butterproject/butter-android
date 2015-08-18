@@ -15,7 +15,7 @@ import pct.droid.tv.fragments.PTVPlaybackOverlayFragment;
 import pct.droid.tv.fragments.PTVVideoPlayerFragment;
 
 public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback,
-        PTVVideoPlayerFragment.PlayerControlListener, PTVPlaybackOverlayFragment.FragmentListener {
+        PTVPlaybackOverlayFragment.PlaybackOverlayCallback {
 
     private PTVVideoPlayerFragment mPlayerFragment;
     private PTVPlaybackOverlayFragment mPlaybackOverlayFragment;
@@ -42,7 +42,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
-
         String location = mStreamInfo.getVideoLocation();
         if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
             location = "file://" + location;
@@ -51,6 +50,11 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
         mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mPlayerFragment.loadMedia();
     }
 
@@ -110,29 +114,9 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    public void updatePlayPauseState(boolean playing) {
-//        mPlaybackOverlayFragment.
-    }
-
-    @Override
-    public void onProgressChanged(long currentTime, long duration) {
-
-    }
-
-    @Override
     public Media getMedia() {
         return null == mStreamInfo ? null : mStreamInfo.getMedia();
     }
 
-    @Override
-    public void fastForward() {
-        mPlayerFragment.fastForward();
-
-    }
-
-    @Override
-    public void rewind() {
-        mPlayerFragment.rewind();
-    }
 }
 

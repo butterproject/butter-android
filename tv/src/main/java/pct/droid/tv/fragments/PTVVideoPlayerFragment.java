@@ -1,7 +1,6 @@
 package pct.droid.tv.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -27,11 +26,20 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
+import pct.droid.tv.events.PausePlaybackEvent;
+import pct.droid.tv.events.ProgressChangedEvent;
+import pct.droid.tv.events.ScaleVideoEvent;
+import pct.droid.tv.events.SeekBackwardEvent;
+import pct.droid.tv.events.SeekForwardEvent;
+import pct.droid.tv.events.StartPlaybackEvent;
+import pct.droid.tv.events.ToggleSubsEvent;
+import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
@@ -54,7 +62,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     private boolean mOverlayVisible = true;
 
     private Handler mDisplayHandler;
-    private PlayerControlListener playerControlListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,11 +91,15 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
 
-        if (activity instanceof PlayerControlListener)
-            this.playerControlListener = (PlayerControlListener) activity;
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -103,82 +114,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         }
 
         showOverlay();
-
-        //taken from vlc
-//			switch (keyCode) {
-//				case KeyEvent.KEYCODE_F:
-//				case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-//					seekDelta(10000);
-//					return true;
-//				case KeyEvent.KEYCODE_R:
-//				case KeyEvent.KEYCODE_MEDIA_REWIND:
-//					seekDelta(-10000);
-//					return true;
-//				case KeyEvent.KEYCODE_BUTTON_R1:
-//					seekDelta(60000);
-//					return true;
-//				case KeyEvent.KEYCODE_BUTTON_L1:
-//					seekDelta(-60000);
-//					return true;
-//				case KeyEvent.KEYCODE_BUTTON_A:
-//					if (mOverlayProgress.getVisibility() == View.VISIBLE)
-//						return false;
-//				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-//				case KeyEvent.KEYCODE_MEDIA_PLAY:
-//				case KeyEvent.KEYCODE_MEDIA_PAUSE:
-//				case KeyEvent.KEYCODE_SPACE:
-//					if (mIsNavMenu)
-//						return navigateDvdMenu(keyCode);
-//					else
-//						doPlayPause();
-//					return true;
-//				case KeyEvent.KEYCODE_O:
-//				case KeyEvent.KEYCODE_BUTTON_Y:
-//				case KeyEvent.KEYCODE_MENU:
-//					showAdvancedOptions(mAdvOptions);
-//					return true;
-//				case KeyEvent.KEYCODE_V:
-//				case KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK:
-//				case KeyEvent.KEYCODE_BUTTON_X:
-//					onAudioSubClick(mTracks);
-//					return true;
-//				case KeyEvent.KEYCODE_N:
-//					showNavMenu();
-//					return true;
-//				case KeyEvent.KEYCODE_A:
-//					resizeVideo();
-//					return true;
-//				case KeyEvent.KEYCODE_M:
-//				case KeyEvent.KEYCODE_VOLUME_MUTE:
-//					updateMute();
-//					return true;
-//				case KeyEvent.KEYCODE_S:
-//				case KeyEvent.KEYCODE_MEDIA_STOP:
-//					finish();
-//					return true;
-//				case KeyEvent.KEYCODE_DPAD_UP:
-//				case KeyEvent.KEYCODE_DPAD_DOWN:
-//				case KeyEvent.KEYCODE_DPAD_LEFT:
-//				case KeyEvent.KEYCODE_DPAD_RIGHT:
-//				case KeyEvent.KEYCODE_DPAD_CENTER:
-//				case KeyEvent.KEYCODE_ENTER:
-//					if (mIsNavMenu)
-//						return navigateDvdMenu(keyCode);
-//					else
-//						return super.onKeyDown(keyCode, event);
-//				case KeyEvent.KEYCODE_J:
-//					delayAudio(-50000l);
-//					break;
-//				case KeyEvent.KEYCODE_K:
-//					delayAudio(50000l);
-//					break;
-//				case KeyEvent.KEYCODE_G:
-//					delaySubs(-50000l);
-//					break;
-//				case KeyEvent.KEYCODE_H:
-//					delaySubs(50000l);
-//					break;
-//			}
         return true;
     }
 
@@ -211,8 +146,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     public void showOverlay() {
         if (!mOverlayVisible) {
             updatePlayPauseState();
-
-//            AnimUtils.fadeIn(mControlLayout);
         }
 
         mOverlayVisible = true;
@@ -222,8 +155,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void hideOverlay() {
-//        AnimUtils.fadeOut(mControlLayout);
-
         mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
         mOverlayVisible = false;
     }
@@ -245,7 +176,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     public void updatePlayPauseState() {
-        this.playerControlListener.updatePlayPauseState(isPlaying());
+        EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
     }
 
     @Override
@@ -323,42 +254,30 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
      */
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
-        this.playerControlListener.onProgressChanged(currentTime, duration);
-
-//        mControlBar.setMax((int) duration);
-//        mControlBar.setProgress((int) currentTime);
-//        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-//        mControlBar.setSecondaryProgress(getStreamerProgress());
-//        if (getCurrentTime() >= 0)
-//            mCurrentTimeTextView.setText(StringUtils.millisToString(currentTime));
-//        if (getDuration() >= 0) lengthTime.setText(StringUtils.millisToString(duration));
-//
-//        mControlBar.setSecondaryProgress(0); // hack to make the secondary progress appear on Android 5.0
-//        mControlBar.setSecondaryProgress(getStreamerProgress());
+        EventBus.getDefault().post(new ProgressChangedEvent(currentTime, duration));
     }
 
-//    @OnClick(R.id.play_button)
-    public void togglePlayPause() {
-        togglePlayPause();
+    public void onEventMainThread(StartPlaybackEvent event) {
+        play();
     }
 
-//    @OnClick(R.id.rewindButton)
-    public void rewind() {
+    public void onEventMainThread(PausePlaybackEvent event) {
+        pause();
+    }
+
+    public void onEventMainThread(SeekBackwardEvent event) {
         seekBackwardClick();
     }
 
-//    @OnClick(R.id.forwardButton)
-    public void fastForward() {
+    public void onEventMainThread(SeekForwardEvent event) {
         seekForwardClick();
     }
 
-//    @OnClick(R.id.scaleButton)
-    void onScaleClick() {
+    public void onEventMainThread(ScaleVideoEvent event) {
         scaleClick();
     }
 
-//    @OnClick(R.id.subsButton)
-    void onSubsClick() {
+    public void onEventMainThread(ToggleSubsEvent event) {
         subsClick();
     }
 
@@ -370,12 +289,5 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void startBeamPlayerActivity() {
 
-    }
-
-    public interface PlayerControlListener {
-
-        void updatePlayPauseState(boolean playing);
-
-        void onProgressChanged(long currentTime, long duration);
     }
 }

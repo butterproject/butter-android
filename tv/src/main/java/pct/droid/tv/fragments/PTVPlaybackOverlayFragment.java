@@ -14,9 +14,9 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
-import android.media.MediaMetadata;
-import android.media.session.MediaController;
-import android.media.session.PlaybackState;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.PlaybackOverlayFragment;
@@ -33,7 +33,6 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
 import android.support.v17.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.FastForwardAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.HighQualityAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.MoreActions;
 import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.RewindAction;
@@ -43,10 +42,20 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.greenrobot.event.EventBus;
 import pct.droid.base.providers.media.models.Media;
+import pct.droid.tv.R;
+import pct.droid.tv.events.PausePlaybackEvent;
+import pct.droid.tv.events.ScaleVideoEvent;
+import pct.droid.tv.events.SeekBackwardEvent;
+import pct.droid.tv.events.SeekForwardEvent;
+import pct.droid.tv.events.StartPlaybackEvent;
 
 /*
  * Class for video playback with media control
@@ -70,7 +79,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     private ArrayObjectAdapter mSecondaryActionsAdapter;
     private ClosedCaptioningAction mClosedCaptioningAction;
     private FastForwardAction mFastForwardAction;
-    private HighQualityAction mHighQualityAction;
+    private ScaleVideoAction mScaleVideoAction;
     private MoreActions mMoreActions;
     private PlayPauseAction mPlayPauseAction;
     private RewindAction mRewindAction;
@@ -78,40 +87,24 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     private int mCurrentItem;
     private Handler mHandler;
     private Runnable mRunnable;
-    private Media mSelectedMovie;
+    private Media mSelectedMedia;
     private int mFfwRwdSpeed = INITIAL_SPEED;
     private Timer mClickTrackingTimer;
     private int mClickCount;
 
-    private MediaController mMediaController;
-    private MediaController.Callback mMediaControllerCallback = new MediaControllerCallback();
     private int mCurrentPlaybackState;
-    private FragmentListener mListener;
+    private PlaybackOverlayCallback mListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
-        mSelectedMovie = mListener.getMedia();
+        mSelectedMedia = mListener.getMedia();
 
-//        HashMap<String, List<Movie>> movies = VideoProvider.getMovieList();
-
-//        if (movies != null) {
-//            for (Map.Entry<String, List<Movie>> entry : movies.entrySet()) {
-//                if (mSelectedMovie.getCategory().contains(entry.getKey())) {
-//                    List<Movie> list = entry.getValue();
-//                    if (list != null && !list.isEmpty()) {
-//                        for (int j = 0; j < list.size(); j++) {
-//                            mItems.add(list.get(j));
-//                            if (mSelectedMovie.getTitle().contentEquals(list.get(j).getTitle())) {
-//                                mCurrentItem = j;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        if (null!=mSelectedMedia){
+            updateVideoImage(mSelectedMedia.image);
+        }
 
         mHandler = new Handler();
 
@@ -134,16 +127,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        mListener = (FragmentListener) activity;
-
-//        mMediaController = getActivity().getMediaController();
-        Log.d(TAG, "register callback of mediaController");
-//        mMediaController.registerCallback(mMediaControllerCallback);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+        mListener = (PlaybackOverlayCallback) activity;
     }
 
     @Override
@@ -154,34 +138,33 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     }
 
     @Override
-    public void onDetach() {
-        if (mMediaController != null) {
-            Log.d(TAG, "unregister callback of mediaController");
-//            mMediaController.unregisterCallback(mMediaControllerCallback);
-        }
-        super.onDetach();
-    }
-
-    public MediaController.Callback getMediaControllerCallback() {
-        return mMediaControllerCallback;
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEvent(Object event){
+
     }
 
     private void setupRows() {
-
         ClassPresenterSelector ps = new ClassPresenterSelector();
 
         PlaybackControlsRowPresenter playbackControlsRowPresenter;
+
         if (SHOW_DETAIL) {
             playbackControlsRowPresenter = new PlaybackControlsRowPresenter(
                     new DescriptionPresenter());
         } else {
             playbackControlsRowPresenter = new PlaybackControlsRowPresenter();
         }
+
         playbackControlsRowPresenter.setOnActionClickedListener(new OnActionClickedListener() {
             public void onActionClicked(Action action) {
                 if (action.getId() == mPlayPauseAction.getId()) {
@@ -190,12 +173,15 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
                     fastForward();
                 } else if (action.getId() == mRewindAction.getId()) {
                     fastRewind();
+                } else if (action.getId() == mScaleVideoAction.getId()) {
+                    scaleVideo();
                 }
                 if (action instanceof PlaybackControlsRow.MultiAction) {
                     notifyChanged(action);
                 }
             }
         });
+
         playbackControlsRowPresenter.setSecondaryActionsHidden(HIDE_MORE_ACTIONS);
 
         ps.addClassPresenter(PlaybackControlsRow.class, playbackControlsRowPresenter);
@@ -207,17 +193,17 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         setAdapter(mRowsAdapter);
     }
 
-    public void togglePlayback(boolean playPause) {
-//        if (playPause) {
-//            mMediaController.getTransportControls().play();
-//        } else {
-//            mMediaController.getTransportControls().pause();
-//        }
+    public void togglePlayback(boolean play) {
+        if (play) {
+            EventBus.getDefault().post(new StartPlaybackEvent());
+        } else {
+            EventBus.getDefault().post(new PausePlaybackEvent());
+        }
     }
 
     private void addPlaybackControlsRow() {
         if (SHOW_DETAIL) {
-            mPlaybackControlsRow = new PlaybackControlsRow(mSelectedMovie);
+            mPlaybackControlsRow = new PlaybackControlsRow(mSelectedMedia);
         } else {
             mPlaybackControlsRow = new PlaybackControlsRow();
         }
@@ -233,15 +219,9 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
 
         Activity activity = getActivity();
         mPlayPauseAction = new PlayPauseAction(activity);
-//        mRepeatAction = new RepeatAction(activity);
-//        mThumbsUpAction = new ThumbsUpAction(activity);
-//        mThumbsDownAction = new ThumbsDownAction(activity);
-//        mShuffleAction = new ShuffleAction(activity);
-//        mSkipNextAction = new SkipNextAction(activity);
-//        mSkipPreviousAction = new SkipPreviousAction(activity);
         mFastForwardAction = new FastForwardAction(activity);
         mRewindAction = new RewindAction(activity);
-        mHighQualityAction = new HighQualityAction(activity);
+        mScaleVideoAction = new ScaleVideoAction(activity);
         mClosedCaptioningAction = new ClosedCaptioningAction(activity);
         mMoreActions = new MoreActions(activity);
 
@@ -251,7 +231,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         mPrimaryActionsAdapter.add(mFastForwardAction);
 
         // Add rest of controls to secondary adapter.
-        mSecondaryActionsAdapter.add(mHighQualityAction);
+        mSecondaryActionsAdapter.add(mScaleVideoAction);
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
         mSecondaryActionsAdapter.add(mMoreActions);
     }
@@ -295,7 +275,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
 
                     if (totalTime > 0 && totalTime <= currentTime) {
                         stopProgressAutomation();
-                        next(true);
+//                        next(true);
                     } else {
                         mHandler.postDelayed(this, updatePeriod);
                     }
@@ -305,40 +285,19 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         }
     }
 
-    private void next(boolean autoPlay) {
-//        if (++mCurrentItem >= mItems.size()) {
-//            mCurrentItem = 0;
-//        }
-//        Bundle bundle = new Bundle();
-//        bundle.putBoolean(PlaybackActivity.AUTO_PLAY, autoPlay);
-//        if (autoPlay) {
-//            mCurrentPlaybackState = PlaybackState.STATE_PAUSED;
-//        }
-//        mMediaController.getTransportControls().playFromMediaId(mItems.get(mCurrentItem).getId(), bundle);
-//        mFfwRwdSpeed = INITIAL_SPEED;
-    }
-
-    private void prev(boolean autoPlay) {
-//        if (--mCurrentItem < 0) {
-//            mCurrentItem = mItems.size() - 1;
-//        }
-//        Bundle bundle = new Bundle();
-//        bundle.putBoolean(PlaybackActivity.AUTO_PLAY, autoPlay);
-//        if (autoPlay) {
-//            mCurrentPlaybackState = PlaybackState.STATE_PAUSED;
-//        }
-//        mMediaController.getTransportControls().playFromMediaId(mItems.get(mCurrentItem).getId(), bundle);
-//        mFfwRwdSpeed = INITIAL_SPEED;
-    }
-
     private void fastForward() {
         startClickTrackingTimer();
-        mListener.fastForward();
+
+        EventBus.getDefault().post(new SeekForwardEvent());
     }
 
     private void fastRewind() {
         startClickTrackingTimer();
-        mListener.rewind();
+        EventBus.getDefault().post(new SeekBackwardEvent());
+    }
+
+    private void scaleVideo() {
+        EventBus.getDefault().post(new ScaleVideoEvent());
     }
 
     private void stopProgressAutomation() {
@@ -349,16 +308,26 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     }
 
     protected void updateVideoImage(String uri) {
-//        Glide.with(getActivity())
-//                .load(uri)
-//                .centerCrop()
-//                .into(new SimpleTarget<GlideDrawable>(CARD_WIDTH, CARD_HEIGHT) {
-//                    @Override
-//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-//                        mPlaybackControlsRow.setImageDrawable(resource);
-//                        mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
-//                    }
-//                });
+        Picasso.with(getActivity())
+                .load(uri)
+                .centerCrop()
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        mPlaybackControlsRow.setImageBitmap(getActivity(),bitmap);
+                        mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
     }
 
     private void startClickTrackingTimer() {
@@ -402,48 +371,17 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         }
     }
 
-    private class MediaControllerCallback extends MediaController.Callback {
-        @Override
-        public void onPlaybackStateChanged(PlaybackState state) {
-            Log.d(TAG, "playback state changed: " + state.getState());
-            if (state.getState() == PlaybackState.STATE_PLAYING && mCurrentPlaybackState != PlaybackState.STATE_PLAYING) {
-                mCurrentPlaybackState = PlaybackState.STATE_PLAYING;
-                startProgressAutomation();
-                setFadingEnabled(true);
-                mPlayPauseAction.setIndex(PlayPauseAction.PAUSE);
-                mPlayPauseAction.setIcon(mPlayPauseAction.getDrawable(PlayPauseAction.PAUSE));
-                notifyChanged(mPlayPauseAction);
-            } else if (state.getState() == PlaybackState.STATE_PAUSED && mCurrentPlaybackState != PlaybackState.STATE_PAUSED) {
-                mCurrentPlaybackState = PlaybackState.STATE_PAUSED;
-                stopProgressAutomation();
-                setFadingEnabled(false);
-                mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
-                mPlayPauseAction.setIcon(mPlayPauseAction.getDrawable(PlayPauseAction.PLAY));
-                notifyChanged(mPlayPauseAction);
-            }
-
-            int currentTime = (int) state.getPosition();
-            mPlaybackControlsRow.setCurrentTime(currentTime);
-            mPlaybackControlsRow.setBufferedProgress(currentTime + SIMULATED_BUFFERED_TIME);
-        }
-
-        @Override
-        public void onMetadataChanged(MediaMetadata metadata) {
-            Log.d(TAG, "received update of media metadata");
-//            updateMovieView(
-//                    metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE),
-//                    metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE),
-//                    metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI),
-//                    metadata.getLong(MediaMetadata.METADATA_KEY_DURATION)
-//            );
-        }
-    }
-
-    public interface FragmentListener {
+    public interface PlaybackOverlayCallback {
         Media getMedia();
-
-        void fastForward();
-
-        void rewind();
     }
+
+    public static class ScaleVideoAction extends Action {
+        public ScaleVideoAction(Context context) {
+            super(R.id.control_scale);
+
+            setIcon(context.getResources().getDrawable(R.drawable.ic_av_aspect_ratio));
+            setLabel1(context.getString(R.string.scale));
+        }
+    }
+
 }

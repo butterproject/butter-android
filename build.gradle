@@ -64,6 +64,11 @@ allprojects {
                     //rename output files
                     renameOutputFiles(project, variant)
                 }
+
+                dexOptions {
+                    jumboMode = true
+                    javaMaxHeapSize "2048M"
+                }
             }
         } else if (project.plugins.hasPlugin('com.android.library')) {
             //add the android sdk manager plugin to andriod projects
