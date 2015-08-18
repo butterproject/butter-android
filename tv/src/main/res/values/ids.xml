@@ -5,6 +5,7 @@
     <item name="more_player_tests" type="id" />
     <item name="more_item_settings" type="id" />
 
+    <item name="control_scale" type="id" />
 
     <!-- GUIDED ACTIONS -->
     <item name="action_accept" type="id" />

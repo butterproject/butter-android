@@ -87,7 +87,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
     private String mLocation;
-    private Long mResumePosition, mDuration;
+    private Long mResumePosition = 0l;
+    private Long mDuration = 0l;
 
     private static final int SURFACE_BEST_FIT = 0;
     private static final int SURFACE_FIT_HORIZONTAL = 1;
@@ -360,16 +361,18 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
     }
 
-    private void play() {
+    public void play() {
         mLibVLC.play();
         getVideoSurface().setKeepScreenOn(true);
 
         resumeVideo();
+        updatePlayPauseState();
     }
 
-    private void pause() {
+    public void pause() {
         mLibVLC.pause();
         getVideoSurface().setKeepScreenOn(false);
+        updatePlayPauseState();
     }
 
     public void togglePlayPause() {
@@ -385,7 +388,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         } else {
             play();
         }
-        updatePlayPauseState();
     }
 
     public void seekForwardClick() {

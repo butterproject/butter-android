@@ -34,10 +34,6 @@ android {
         abortOnError false
         lintConfig file('lint.xml')
     }
-
-    dexOptions {
-        jumboMode = true
-    }
 }
 
 dependencies {
