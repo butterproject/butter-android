@@ -148,7 +148,7 @@ public class ActionBarBackground {
             } else {
                 int paddingTop = mToolbar.getPaddingTop();
                 mActionBar.setBackgroundDrawable(td);
-                mToolbar.setPadding(mToolbar.getPaddingLeft(), paddingTop, mToolbar.getPaddingRight(), (int) getResources().getDimension(R.dimen.abc_action_bar_default_padding_material)); // fix for fitSystemWindows
+                mToolbar.setPadding(mToolbar.getPaddingLeft(), paddingTop, mToolbar.getPaddingRight(), mToolbar.getPaddingBottom()); // fix for fitSystemWindows
             }
 
             td.startTransition(500);
