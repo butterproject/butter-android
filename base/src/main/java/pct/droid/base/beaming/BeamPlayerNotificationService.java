@@ -125,7 +125,7 @@ public class BeamPlayerNotificationService extends Service {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
         NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
-                .setContentTitle(mManager.getStreamInfo().getTitle())
+                .setContentTitle(mManager.getStreamInfo().getTitle() == null ? "Video" : mManager.getStreamInfo().getTitle())
                 .setContentText("Popcorn Time")
                 .setDeleteIntent(pendingIntent)
                 .setStyle(style)
@@ -176,26 +176,27 @@ public class BeamPlayerNotificationService extends Service {
 
             mMediaControl.getPlayState(mPlayStateListener);
 
-            Picasso.with(this).load(mManager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    mImage = bitmap;
+            if(mManager.getStreamInfo().getImageUrl() != null)
+                Picasso.with(this).load(mManager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        mImage = bitmap;
 
-                    if(!mIsPlaying) {
-                        buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );
-                    } else {
-                        buildNotification( generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE ) );
+                        if(!mIsPlaying) {
+                            buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );
+                        } else {
+                            buildNotification( generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE ) );
+                        }
                     }
-                }
 
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                }
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                    }
 
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                }
-            });
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                });
 
         }
     }
