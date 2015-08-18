@@ -250,7 +250,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 subsLocation = BeamServer.getSubsURL(BeamServer.SRT);
             }
         } else {
-            BeamServer.setCurrentSubs("no-subs");
+            BeamServer.removeSubs();
         }
 
         try {

@@ -30,13 +30,10 @@ import com.koushikdutta.async.http.server.AsyncHttpServerResponse;
 import com.koushikdutta.async.http.server.HttpServerRequestCallback;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.providers.subs.SubsProvider;
-import pct.droid.base.subs.FatalParsingException;
 import pct.droid.base.subs.FormatSRT;
 import pct.droid.base.subs.FormatVTT;
 import pct.droid.base.subs.TimedTextObject;
@@ -111,6 +108,11 @@ public class BeamServer {
     }
 
     public static void setCurrentSubs(File file) {
+        if(file == null) {
+            sCurrentSubs = null;
+            return;
+        }
+
         sCurrentSubs = new File(file.getAbsolutePath().replace(".srt", "").replace(".vtt", ""));
         File vttFile = new File(sCurrentSubs.getAbsolutePath() + ".vtt");
         File srtFile = new File(sCurrentSubs.getAbsolutePath() + ".srt");
@@ -138,6 +140,10 @@ public class BeamServer {
 
     public static void setCurrentSubs(String file) {
         setCurrentSubs(new File(file));
+    }
+
+    public static void removeSubs() {
+        sCurrentSubs = null;
     }
 
     public static String getHost() {
