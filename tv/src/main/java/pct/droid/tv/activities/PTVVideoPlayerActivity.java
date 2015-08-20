@@ -55,7 +55,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     @Override
     protected void onResume() {
         super.onResume();
-        mPlayerFragment.loadMedia();
     }
 
     @Override

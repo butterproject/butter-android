@@ -1,15 +1,17 @@
 package pct.droid.activities;
 
 import android.annotation.TargetApi;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -21,7 +23,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
-import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.beaming.BeamPlayerNotificationService;
@@ -188,7 +189,7 @@ public class MediaDetailActivity extends PopcornBaseActivity implements BaseDeta
 
             if (VersionUtils.isLollipop()) {
                 mScrollView.smoothScrollTo(0, 0);
-                StreamLoadingActivity.startActivity(this, streamInfo, Pair.create((View) mBgImage, mBgImage.getTransitionName()));
+                StreamLoadingActivity.startActivity(this, streamInfo, Pair.create((View) mBgImage, ViewCompat.getTransitionName(mBgImage)));
             } else {
                 StreamLoadingActivity.startActivity(this, streamInfo);
             }

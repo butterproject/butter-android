@@ -166,7 +166,8 @@ public class TrailerPlayerActivity extends PopcornBaseActivity implements VideoP
                 }
 
                 mStreamInfo.setVideoLocation(URLDecoder.decode(result.toString()));
-                mVideoPlayerFragment.loadMedia();
+
+                mVideoPlayerFragment.onMediaReady();
             } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Error playing video!", e);
 

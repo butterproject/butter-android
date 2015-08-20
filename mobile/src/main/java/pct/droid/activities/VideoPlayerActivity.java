@@ -72,9 +72,6 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
         }
 
         mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
-
-        mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
-        mFragment.loadMedia();
     }
 
     @Override
