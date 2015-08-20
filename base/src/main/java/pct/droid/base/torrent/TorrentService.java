@@ -17,7 +17,6 @@
 
 package pct.droid.base.torrent;
 
-import android.app.Application;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -25,25 +24,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.TorrentOptions;
+import com.github.sv244.torrentstream.TorrentStream;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import com.sjl.foreground.Foreground;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.TorrentOptions;
-import com.github.sv244.torrentstream.TorrentStream;
-import com.github.sv244.torrentstream.exceptions.NotInitializedException;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
@@ -315,7 +311,9 @@ public class TorrentService extends Service implements TorrentListener {
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
         for(TorrentListener listener : mListener) {
-            listener.onStreamProgress(torrent, streamStatus);
+            if (null != listener) {
+                listener.onStreamProgress(torrent, streamStatus);
+            }
         }
 
         if(mInForeground) {
@@ -329,7 +327,9 @@ public class TorrentService extends Service implements TorrentListener {
     @Override
     public void onStreamStopped() {
         for(TorrentListener listener : mListener) {
-            listener.onStreamStopped();
+            if (listener!=null) {
+                listener.onStreamStopped();
+            }
         }
     }
 

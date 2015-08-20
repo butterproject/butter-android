@@ -30,6 +30,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +40,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.connectsdk.device.ConnectableDevice;
 import com.github.sv244.torrentstream.StreamStatus;
@@ -101,7 +103,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     private int mStreamerProgress = 0;
 
-    protected StreamInfo mStreamInfo;
     protected Media mMedia;
     private String mCurrentSubsLang = "no-subs";
     private TimedTextObject mSubs;
@@ -110,7 +111,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     private boolean mEnded = false;
     private boolean mSeeking = false;
-    private boolean mReadyToPlay = false;
     protected boolean mShowReload = false;
 
     private int mVideoHeight;
@@ -156,9 +156,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (getActivity() instanceof Callback && mCallback == null) mCallback = (Callback) getActivity();
 
         mResumePosition = mCallback.getResumePosition();
-        mStreamInfo = mCallback.getInfo();
+        StreamInfo streamInfo = mCallback.getInfo();
 
-        if (mStreamInfo==null){
+        if (streamInfo==null){
             //why is this null?
             //https://fabric.io/popcorn-time/android/apps/pct.droid/issues/55a801cd2f038749478f93c7
             //have added logging to activity lifecycle methods to further track down this issue
@@ -166,11 +166,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             return;
         }
 
-        mMedia = mStreamInfo.getMedia();
+        mMedia = streamInfo.getMedia();
 
         //start subtitles
-        if (null != mStreamInfo.getSubtitleLanguage()) {
-            mCurrentSubsLang = mStreamInfo.getSubtitleLanguage();
+        if (null != streamInfo.getSubtitleLanguage()) {
+            mCurrentSubsLang = streamInfo.getSubtitleLanguage();
             if (!mCurrentSubsLang.equals("no-subs")) {
                 mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
                 startSubtitles();
@@ -205,7 +205,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         if (mCallback.getService() != null)
             mCallback.getService().addListener(BaseVideoPlayerFragment.this);
 
-        if (mReadyToPlay) {
+        setProgressVisible(true);
+
+        //media may still be loading
+        if (!TextUtils.isEmpty(streamInfo.getVideoLocation())){
             loadMedia();
         }
     }
@@ -263,29 +266,36 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         PrefUtils.save(getActivity(), RESUME_POSITION, 0);
     }
 
+    public void onMediaReady(){
+        loadMedia();
+    }
+
     /**
      * External extras: - position (long) - position of the video to start with (in ms)
      */
     @SuppressWarnings({"unchecked"})
-    public void loadMedia() {
-        setProgressVisible(true);
+    protected void loadMedia() {
 
-        if (mStreamInfo != null && null != mStreamInfo.getVideoLocation()) {
-            mLocation = mStreamInfo.getVideoLocation();
+        StreamInfo streamInfo = mCallback.getInfo();
+        if (TextUtils.isEmpty(streamInfo.getVideoLocation())){
+            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
+            getActivity().finish();
+            return;
+        }
+
+        if (null != streamInfo.getVideoLocation()) {
+            mLocation = streamInfo.getVideoLocation();
             if (!mLocation.startsWith("file://") && !mLocation.startsWith("http://") && !mLocation.startsWith("https://")) {
                 mLocation = "file://" + mLocation;
             }
-        } else {
-            mReadyToPlay = true;
-            return;
         }
 
         getVideoSurface().setKeepScreenOn(true);
 
-        if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty()) {
-            mReadyToPlay = true;
-            return;
-        }
+//        if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty()) {
+//            mReadyToPlay = true;
+//            return;
+//        }
 
         if (!mLocation.startsWith("http"))
             mLocation = LibVLC.PathToURI(mLocation);
@@ -655,7 +665,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         showTimedCaptionText(null);
 
         mCurrentSubsLang = language;
-        mStreamInfo.setSubtitleLanguage(language);
+        mCallback.getInfo().setSubtitleLanguage(language);
 
         if (language.equals("no-subs")) {
             mSubs = null;

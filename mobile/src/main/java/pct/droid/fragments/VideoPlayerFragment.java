@@ -218,11 +218,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         }
 
         if(getAppCompatActivity().getSupportActionBar() != null) {
-            if (null != mStreamInfo) {
+            if (null != mCallback.getInfo()) {
                 if (mMedia != null && mMedia.title != null) {
-                    if (null != mStreamInfo.getQuality()) {
+                    if (null != mCallback.getInfo().getQuality()) {
                         getAppCompatActivity().getSupportActionBar().setTitle(
-                                getString(R.string.now_playing) + ": " + mMedia.title + " (" + mStreamInfo.getQuality() + ")");
+                                getString(R.string.now_playing) + ": " + mMedia.title + " (" + mCallback.getInfo().getQuality() + ")");
                     } else {
                         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.now_playing) + ": " + mMedia.title);
                     }
@@ -699,7 +699,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
 
     public void startBeamPlayerActivity(){
-        BeamPlayerActivity.startActivity(getActivity(), mStreamInfo, getCurrentTime());
+        BeamPlayerActivity.startActivity(getActivity(), mCallback.getInfo(), getCurrentTime());
     }
 
 }
