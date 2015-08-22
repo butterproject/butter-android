@@ -50,7 +50,7 @@ import pct.droid.activities.VideoPlayerActivity;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
-import pct.droid.base.fragments.StringArraySelectorDialogFragment;
+import pct.droid.base.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.base.preferences.DefaultPlayer;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.FragmentUtil;

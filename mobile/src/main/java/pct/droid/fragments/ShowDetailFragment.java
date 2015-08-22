@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.adapters.ShowDetailPagerAdapter;
-import pct.droid.base.fragments.StringArraySelectorDialogFragment;
+import pct.droid.base.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.PixelUtils;

@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.fragments;
+package pct.droid.base.dialogfragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -62,15 +62,21 @@ public class NumberPickerDialogFragment extends DialogFragment {
         final int maxValue = getArguments().getInt(MAX_VALUE);
         final int currentValue = getArguments().getInt(DEFAULT_VALUE, (int) Math.floor((numberPicker.getMaxValue() - numberPicker.getMinValue()) / 2));
 
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(maxValue - minValue);
-        numberPicker.setValue(currentValue - minValue);
-
         List<String> displayValues = new ArrayList<>();
         for(int i = minValue; i < maxValue + 1; i++) {
             displayValues.add(Integer.toString(i));
         }
         numberPicker.setDisplayedValues(displayValues.toArray(new String[displayValues.size()]));
+
+        if(minValue < 0) {
+            numberPicker.setMinValue(0);
+            numberPicker.setMaxValue(maxValue + Math.abs(minValue));
+            numberPicker.setValue(currentValue + Math.abs(minValue));
+        } else {
+            numberPicker.setMinValue(minValue);
+            numberPicker.setMaxValue(maxValue);
+            numberPicker.setValue(currentValue);
+        }
 
         if(getArguments().containsKey(FOCUSABLE) && !getArguments().getBoolean(FOCUSABLE))
             numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
