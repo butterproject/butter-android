@@ -67,6 +67,8 @@ import pct.droid.base.R;
 import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.dialogfragments.FileSelectorDialogFragment;
+import pct.droid.base.dialogfragments.NumberPickerDialogFragment;
+import pct.droid.base.dialogfragments.StringArraySelectorDialogFragment;
 import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
