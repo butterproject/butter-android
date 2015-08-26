@@ -30,6 +30,9 @@ import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.facebook.stetho.timber.StethoTree;
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
@@ -73,6 +76,13 @@ public class PopcornApplication extends VLCApplication implements PopcornUpdater
         LeakCanary.install(this);
         Foreground.init(this);
 
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                        .build()
+        );
+
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
         try {
@@ -89,6 +99,7 @@ public class PopcornApplication extends VLCApplication implements PopcornUpdater
         if (Constants.DEBUG_ENABLED) {
             Timber.plant(new Timber.DebugTree());
         }
+        Timber.plant(new StethoTree());
 
         TorrentService.start(this);
 
@@ -150,6 +161,7 @@ public class PopcornApplication extends VLCApplication implements PopcornUpdater
                 e.printStackTrace();
             }
             sHttpClient.setCache(cache);
+            sHttpClient.networkInterceptors().add(new StethoInterceptor());
         }
         return sHttpClient;
     }
