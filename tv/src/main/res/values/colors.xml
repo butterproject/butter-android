@@ -18,8 +18,8 @@
 	<color name="selectable_focused">#22FFFFFF</color>
 	<color name="selectable_pressed">#55FFFFFF</color>
 
-	<color name="primary">#FF1976D2</color>
-    <color name="primary_dark">#FF1668B9</color>
+	<color name="primary">#FF3F51B5</color>
+    <color name="primary_dark">#FF303F9F</color>
 	<color name="accent">#ED7572</color>
     <!--<color name="accent">#FF1C84EB</color>-->
 
