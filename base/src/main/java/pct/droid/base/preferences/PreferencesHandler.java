@@ -212,7 +212,7 @@ public interface PreferencesHandler {
                     })
                     .build());
 
-            if(isTV)
+            if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_wifi_only)
                     .setTitleResource(R.string.stream_over_wifi_only)
