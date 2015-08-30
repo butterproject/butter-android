@@ -153,6 +153,8 @@ public class StreamInfo implements Parcelable {
         dest.writeInt(this.mIsShow ? 1 : 0);
         dest.writeInt(this.mColor);
         dest.writeParcelable(this.mMedia, 0);
+        dest.writeString(this.mShowTitle);
+        dest.writeString(this.mShowEpisodeTitle);
     }
 
     private StreamInfo(Parcel in) {
@@ -166,6 +168,8 @@ public class StreamInfo implements Parcelable {
         this.mIsShow = in.readInt() == 1;
         this.mColor = in.readInt();
         this.mMedia = in.readParcelable(Media.class.getClassLoader());
+        this.mShowTitle = in.readString();
+        this.mShowEpisodeTitle = in.readString();
     }
 
     public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
