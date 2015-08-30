@@ -4,10 +4,17 @@ public class ProgressChangedEvent {
 
     private final long currentTime;
     private final long duration;
+    private final long bufferedTime;
 
-    public ProgressChangedEvent(long currentTime, long duration) {
+    public ProgressChangedEvent(long currentTime, long bufferedTime, long duration) {
         this.currentTime = currentTime;
+        this.bufferedTime = bufferedTime;
         this.duration = duration;
+    }
+
+    public long getBufferedTime()
+    {
+        return bufferedTime;
     }
 
     public long getCurrentTime() {
