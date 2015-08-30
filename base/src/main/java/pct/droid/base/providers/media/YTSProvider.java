@@ -170,7 +170,8 @@ public class YTSProvider extends MediaProvider {
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
-        requestBuilder.addHeader("Host", "xor.image.yt");
+        if(!API_URLS[CURRENT_API].contains("yts"))
+            requestBuilder.addHeader("Host", "xor.image.yt");
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
