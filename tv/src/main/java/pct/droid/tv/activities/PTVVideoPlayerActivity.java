@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.tv.R;
@@ -14,8 +13,7 @@ import pct.droid.tv.activities.base.PTVBaseActivity;
 import pct.droid.tv.fragments.PTVPlaybackOverlayFragment;
 import pct.droid.tv.fragments.PTVVideoPlayerFragment;
 
-public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback,
-        PTVPlaybackOverlayFragment.PlaybackOverlayCallback {
+public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback {
 
     private PTVVideoPlayerFragment mPlayerFragment;
     private PTVPlaybackOverlayFragment mPlaybackOverlayFragment;
@@ -111,11 +109,5 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         //todo: Implement ResumePosition on Android TV
         return 0L;
     }
-
-    @Override
-    public Media getMedia() {
-        return null == mStreamInfo ? null : mStreamInfo.getMedia();
-    }
-
 }
 

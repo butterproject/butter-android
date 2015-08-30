@@ -55,11 +55,11 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Bind(R.id.player_info)
     TextView mPlayerInfo;
 
-
     private static final int FADE_OUT_OVERLAY = 5000;
     private static final int FADE_OUT_INFO = 1000;
 
     private boolean mOverlayVisible = true;
+    private boolean mIsVideoPlaying = false;
 
     private Handler mDisplayHandler;
 
@@ -107,7 +107,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         return videoSurface;
     }
 
-
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_BUTTON_B) {
             return true;
@@ -116,7 +115,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         showOverlay();
         return true;
     }
-
 
     /**
      * When playback has finished, finish the player activity
@@ -175,8 +173,12 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         mPlayerInfo.setVisibility(View.INVISIBLE);
     }
 
-    public void updatePlayPauseState() {
-        EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
+    @Override
+    protected void updatePlayPauseState() {
+        if (mIsVideoPlaying != isPlaying()) {
+            mIsVideoPlaying = isPlaying();
+            EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
+        }
     }
 
     @Override
@@ -266,11 +268,13 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     public void onEventMainThread(SeekBackwardEvent event) {
-        seekBackwardClick();
+        int seek = event.getSeek() / SeekBackwardEvent.SEEK_SPEED;
+        for (int i = 0; i < seek; i++) seekBackwardClick();
     }
 
     public void onEventMainThread(SeekForwardEvent event) {
-        seekForwardClick();
+        int seek = event.getSeek() / SeekForwardEvent.SEEK_SPEED;
+        for (int i = 0; i < seek; i++) seekForwardClick();
     }
 
     public void onEventMainThread(ScaleVideoEvent event) {
@@ -283,7 +287,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     protected void updateSubtitleSize(int size) {
-
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
     }
 
     @Override
