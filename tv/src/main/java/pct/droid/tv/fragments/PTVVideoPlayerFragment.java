@@ -256,7 +256,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
      */
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
-        EventBus.getDefault().post(new ProgressChangedEvent(currentTime, duration));
+        EventBus.getDefault().post(new ProgressChangedEvent(currentTime, getStreamerProgress(), duration));
     }
 
     public void onEventMainThread(StartPlaybackEvent event) {

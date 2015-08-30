@@ -184,7 +184,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
                 }
 
                 mPlaybackControlsRow.setCurrentTime((int) progressChangedEvent.getCurrentTime());
-                mPlaybackControlsRow.setBufferedProgress((int) progressChangedEvent.getCurrentTime());
+                mPlaybackControlsRow.setBufferedProgress((int) progressChangedEvent.getBufferedTime());
                 mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
             }
         }
