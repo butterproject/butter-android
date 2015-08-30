@@ -222,9 +222,13 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         mTabs.removeAllTabs();
 
         fragmentManager.beginTransaction().replace(R.id.container, mCurrentFragment, tag).commit();
+
+        if(mCurrentFragment instanceof MediaContainerFragment) {
+            updateTabs((MediaContainerFragment) mCurrentFragment, ((MediaContainerFragment) mCurrentFragment).getCurrentSelection());
+        }
     }
 
-    public void updateTabs(final int position) {
+    public void updateTabs(MediaContainerFragment containerFragment, final int position) {
         if(mTabs == null)
             return;
 
@@ -232,9 +236,11 @@ public class MainActivity extends PopcornBaseActivity implements NavigationDrawe
         mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
         mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        if(mCurrentFragment instanceof MediaContainerFragment) {
-            MediaContainerFragment containerFragment = (MediaContainerFragment) mCurrentFragment;
+        if(containerFragment != null) {
             ViewPager viewPager = containerFragment.getViewPager();
+            if(viewPager == null)
+                return;
+
             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
             mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
