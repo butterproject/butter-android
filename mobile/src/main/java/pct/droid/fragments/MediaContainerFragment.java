@@ -23,6 +23,8 @@ public class MediaContainerFragment extends Fragment {
     public static final String EXTRA_PROVIDER = "provider";
 
     private MediaPagerAdapter mAdapter;
+    private MediaProvider mProvider;
+    private Integer mSelection = 0;
 
     @Bind(R.id.pager)
     ViewPager mViewPager;
@@ -44,23 +46,40 @@ public class MediaContainerFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
+        mAdapter = new MediaPagerAdapter(mProvider, getChildFragmentManager(), mProvider.getNavigation());
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mSelection = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        mSelection = mProvider.getDefaultNavigationIndex();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        MediaProvider provider = getArguments().getParcelable(EXTRA_PROVIDER);
-
-        mAdapter = new MediaPagerAdapter(provider, getChildFragmentManager(), provider.getNavigation());
-
-        mViewPager.setAdapter(mAdapter);
-
-        ((MainActivity) getActivity()).updateTabs(provider.getDefaultNavigationIndex());
+        ((MainActivity) getActivity()).updateTabs(this, mSelection);
     }
 
     public ViewPager getViewPager() {
         return mViewPager;
+    }
+
+    public Integer getCurrentSelection() {
+        return mSelection;
     }
 
 }
