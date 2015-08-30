@@ -32,6 +32,10 @@ public class StreamInfo implements Parcelable {
     private String mTitle;
     private String mImageUrl;
     private String mHeaderImageUrl;
+
+    private String mShowTitle;
+    private String mShowEpisodeTitle;
+
     private Boolean mIsShow = false;
     private Integer mColor = -1;
     private Media mMedia;
@@ -61,6 +65,8 @@ public class StreamInfo implements Parcelable {
                 mImageUrl = show.image;
                 mHeaderImageUrl = show.headerImage;
                 mColor = show.color;
+                mShowTitle = show.title == null ? "" : show.title;
+                mShowEpisodeTitle = media.title == null ? "" : media.title;
             } else {
                 mTitle = media.title == null ? "" : media.title;
                 mImageUrl = media.image;
@@ -80,6 +86,14 @@ public class StreamInfo implements Parcelable {
 
     public String getTitle() {
         return mTitle;
+    }
+
+    public String getShowTitle() {
+        return mShowTitle;
+    }
+
+    public String getShowEpisodeTitle() {
+        return mShowEpisodeTitle;
     }
 
     public String getImageUrl() {
