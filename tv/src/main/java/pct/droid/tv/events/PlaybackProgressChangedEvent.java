@@ -1,20 +1,13 @@
 package pct.droid.tv.events;
 
-public class ProgressChangedEvent {
+public class PlaybackProgressChangedEvent {
 
     private final long currentTime;
     private final long duration;
-    private final long bufferedTime;
 
-    public ProgressChangedEvent(long currentTime, long bufferedTime, long duration) {
+    public PlaybackProgressChangedEvent(long currentTime, long duration) {
         this.currentTime = currentTime;
-        this.bufferedTime = bufferedTime;
         this.duration = duration;
-    }
-
-    public long getBufferedTime()
-    {
-        return bufferedTime;
     }
 
     public long getCurrentTime() {
