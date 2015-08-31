@@ -82,9 +82,15 @@ import pct.droid.base.vlc.VLCInstance;
 import pct.droid.base.vlc.VLCOptions;
 import timber.log.Timber;
 
-public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVout.Callback, TorrentListener, MediaPlayer.EventListener, LibVLC.HardwareAccelerationError {
+public abstract class BaseVideoPlayerFragment
+    extends Fragment
+    implements IVLCVout.Callback,
+    TorrentListener,
+    MediaPlayer.EventListener,
+    LibVLC.HardwareAccelerationError {
 
     public static final String RESUME_POSITION = "resume_position";
+    public static final int SUBTITLE_MINIMUM_SIZE = 10;
 
     private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
@@ -100,11 +106,13 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     private static final int SURFACE_16_9 = 4;
     private static final int SURFACE_4_3 = 5;
     private static final int SURFACE_ORIGINAL = 6;
-    private int mCurrentSize = SURFACE_BEST_FIT;
-
-    private int mStreamerProgress = 0;
 
     protected Media mMedia;
+    protected boolean mShowReload = false;
+
+    private int mCurrentSize = SURFACE_BEST_FIT;
+    private int mStreamerProgress = 0;
+
     private String mCurrentSubsLang = "no-subs";
     private TimedTextObject mSubs;
     private Caption mLastSub = null;
@@ -112,7 +120,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     private boolean mEnded = false;
     private boolean mSeeking = false;
-    protected boolean mShowReload = false;
 
     private int mVideoHeight;
     private int mVideoWidth;
@@ -125,7 +132,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     private boolean mDisabledHardwareAcceleration = false;
     private int mPreviousHardwareAccelerationMode;
 
-
     protected Callback mCallback;
 
     private View mRootView;
@@ -133,7 +139,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     private static LibVLC LibVLC() {
         return VLCInstance.get(PopcornApplication.getAppContext());
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,7 +162,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         mResumePosition = mCallback.getResumePosition();
         StreamInfo streamInfo = mCallback.getInfo();
 
-        if (streamInfo==null){
+        if (streamInfo == null){
             //why is this null?
             //https://fabric.io/popcorn-time/android/apps/pct.droid/issues/55a801cd2f038749478f93c7
             //have added logging to activity lifecycle methods to further track down this issue
@@ -192,10 +197,25 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
         setProgressVisible(true);
 
-
         //media may still be loading
-        if (!TextUtils.isEmpty(streamInfo.getVideoLocation())){
+        if (!TextUtils.isEmpty(streamInfo.getVideoLocation())) {
             loadMedia();
+        }
+
+        if (null == streamInfo.getSubtitleLanguage()) {
+            // Get selected default subtitle
+            String defaultSubtitle = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs");
+            if (defaultSubtitle != "no-subs") {
+                streamInfo.setSubtitleLanguage(defaultSubtitle);
+            }
+        }
+
+        // Start subtitle
+        if (null != streamInfo.getSubtitleLanguage()) {
+            String language = streamInfo.getSubtitleLanguage();
+            if (!language.equals("no-subs")) {
+                onSubtitleLanguageSelected(language);
+            }
         }
     }
 
@@ -410,7 +430,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         seek(-10000);
     }
 
-
     public void scaleClick() {
         if (mCurrentSize < SURFACE_ORIGINAL) {
             mCurrentSize++;
@@ -552,7 +571,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         getVideoSurface().invalidate();
     }
 
-
     protected void seek(int delta) {
         if (mMediaPlayer.getLength() <= 0 && !mSeeking) return;
 
@@ -616,15 +634,25 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
             return;
         }
 
-        showTimedCaptionText(null);
-
         mCurrentSubsLang = language;
-        mCallback.getInfo().setSubtitleLanguage(language);
+        mCallback.getInfo().setSubtitleLanguage(mCurrentSubsLang);
 
-        if (language.equals("no-subs")) {
+        if (mCurrentSubsLang.equals("no-subs")) {
             mSubs = null;
             return;
         }
+
+        if (mMedia == null || mMedia.subtitles == null || mMedia.subtitles.size() == 0) {
+            mSubs = null;
+            return;
+        }
+
+        if (!mMedia.subtitles.containsKey(mCurrentSubsLang)) {
+            mSubs = null;
+            return;
+        }
+
+        showTimedCaptionText(null);
 
         SubsProvider.download(getActivity(), mMedia, language, new com.squareup.okhttp.Callback() {
             @Override
@@ -851,7 +879,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         Bundle args = new Bundle();
         args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_size));
         args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
-        args.putInt(NumberPickerDialogFragment.MIN_VALUE, 10);
+        args.putInt(NumberPickerDialogFragment.MIN_VALUE, SUBTITLE_MINIMUM_SIZE);
         args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, (int) PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
 
         NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
@@ -904,5 +932,4 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     };
 
     public abstract void startBeamPlayerActivity();
-
 }
