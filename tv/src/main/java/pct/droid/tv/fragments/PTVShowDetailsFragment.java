@@ -10,11 +10,7 @@ import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import pct.droid.base.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Episode;
@@ -31,19 +28,21 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
-import pct.droid.tv.presenters.EpisodeCardPresenter;
 import pct.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import pct.droid.tv.presenters.showdetail.EpisodeRow;
 import pct.droid.tv.presenters.showdetail.EpisodeRowPresenter;
 import pct.droid.tv.presenters.showdetail.SeasonHeaderRow;
 import pct.droid.tv.presenters.showdetail.SeasonHeaderRowPresenter;
 
-public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener, EpisodeRowPresenter.Listener {
+public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
+        implements MediaProvider.Callback,
+        OnActionClickedListener,
+        EpisodeRowPresenter.Listener {
 
-    EZTVProvider mTvProvider = new EZTVProvider();
-
+    private EZTVProvider mTvProvider = new EZTVProvider();
     private EpisodeAdapter episodeAdapter;
 
     public static Fragment newInstance(Media media, String hero) {
@@ -75,7 +74,6 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
 
     @Override
     protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
-
         this.episodeAdapter = new EpisodeAdapter(getActivity(), selector);
         return new AlbumDetailsObjectAdapter(getActivity(), selector, episodeAdapter);
     }
@@ -107,7 +105,6 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         });
 
         for (Episode episode : getShowItem().episodes) {
-
             //create list if not there
             if (!seasons.containsKey(episode.season)) {
                 seasons.put(episode.season, new ArrayList<Episode>());
@@ -145,18 +142,17 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         if (null == episode) {
             return;
         }
-        //check for network
-        if (!NetworkUtils
-                .isNetworkConnected(getActivity())) {
+        // check for network
+        if (!NetworkUtils.isNetworkConnected(getActivity())) {
             Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
         } else {
-            //start first torrent
+            // start first torrent
             if (episode.torrents.size() == 1) {
                 final List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(episode
                         .torrents.entrySet());
                 onTorrentSelected(episode, torrents.get(0));
             }
-            //ask user which torrent
+            // ask user which torrent
             else {
                 showTorrentsDialog(episode, episode
                         .torrents);
@@ -181,19 +177,21 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
     }
 
     private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-        StreamInfo info =
-                new StreamInfo(episode, getShowItem(), torrent.getValue().url, "no-subs",
-                        torrent.getKey());
+        String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs");
+        StreamInfo info = new StreamInfo(
+                episode,
+                getShowItem(),
+                torrent.getValue().url,
+                subtitleLanguage,
+                torrent.getKey());
 
         PTVStreamLoadingActivity.startActivity(getActivity(), info);
     }
-
 
     @Override
     void onDetailLoaded() {
         addSeasonsRow();
     }
-
 
     private class EpisodeAdapter extends ArrayObjectAdapter {
 
@@ -255,7 +253,6 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         }
 
     }
-
 
     private class AlbumDetailsObjectAdapter extends ArrayObjectAdapter {
         private final Context mContext;
@@ -321,6 +318,4 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment implements Me
         }
 
     }
-
-
 }
