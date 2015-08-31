@@ -24,6 +24,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -33,11 +36,12 @@ import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.events.PausePlaybackEvent;
-import pct.droid.tv.events.ProgressChangedEvent;
+import pct.droid.tv.events.PlaybackProgressChangedEvent;
 import pct.droid.tv.events.ScaleVideoEvent;
 import pct.droid.tv.events.SeekBackwardEvent;
 import pct.droid.tv.events.SeekForwardEvent;
 import pct.droid.tv.events.StartPlaybackEvent;
+import pct.droid.tv.events.StreamProgressChangedEvent;
 import pct.droid.tv.events.ToggleSubsEvent;
 import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
@@ -64,6 +68,12 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     private Handler mDisplayHandler;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDisplayHandler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_videoplayer, container, false);
         return view;
@@ -81,11 +91,8 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         setRetainInstance(true);
 
         videoSurface.setVisibility(View.VISIBLE);
-
-        mDisplayHandler = new Handler(Looper.getMainLooper());
-
         mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
+        updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16 + SUBTITLE_MINIMUM_SIZE));
 
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
@@ -220,6 +227,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     protected void showTimedCaptionText(final Caption text) {
+        if (mDisplayHandler == null) mDisplayHandler = new Handler(Looper.getMainLooper());
         mDisplayHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -250,13 +258,24 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     /**
      * Updates the overlay when the media playback progress has changed
-     *
      * @param currentTime
      * @param duration
      */
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
-        EventBus.getDefault().post(new ProgressChangedEvent(currentTime, getStreamerProgress(), duration));
+        EventBus.getDefault().post(new PlaybackProgressChangedEvent(currentTime, duration));
+    }
+
+    /**
+     * Updates stream progress status. This will dispatch StreamProgressChangedEvent event
+     * contains length of stream has been downloaded relative to total media duration.
+     * @param torrent Torrent file
+     * @param streamStatus Stream status
+     */
+    @Override
+    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
+        super.onStreamProgress(torrent, streamStatus);
+        EventBus.getDefault().post(new StreamProgressChangedEvent(getStreamerProgress()));
     }
 
     public void onEventMainThread(StartPlaybackEvent event) {

@@ -16,7 +16,6 @@ package pct.droid.tv.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,9 +42,6 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,11 +50,12 @@ import pct.droid.base.torrent.StreamInfo;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.events.PausePlaybackEvent;
-import pct.droid.tv.events.ProgressChangedEvent;
+import pct.droid.tv.events.PlaybackProgressChangedEvent;
 import pct.droid.tv.events.ScaleVideoEvent;
 import pct.droid.tv.events.SeekBackwardEvent;
 import pct.droid.tv.events.SeekForwardEvent;
 import pct.droid.tv.events.StartPlaybackEvent;
+import pct.droid.tv.events.StreamProgressChangedEvent;
 import pct.droid.tv.events.ToggleSubsEvent;
 import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
@@ -67,14 +64,10 @@ import pct.droid.tv.events.UpdatePlaybackStateEvent;
  */
 public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     private static final String TAG = "PlaybackOverlayFragment";
-    private static final boolean SHOW_DETAIL = true;
     private static final boolean HIDE_MORE_ACTIONS = true;
     private static final int BACKGROUND_TYPE = PlaybackOverlayFragment.BG_LIGHT;
-    private static final int CARD_WIDTH = 150;
-    private static final int CARD_HEIGHT = 240;
     private static final int DEFAULT_UPDATE_PERIOD = 1000;
     private static final int UPDATE_PERIOD = 16;
-    private static final int SIMULATED_BUFFERED_TIME = 0;
     private static final int CLICK_TRACKING_DELAY = 1000;
     private static final int INITIAL_SPEED = 10000;
 
@@ -122,7 +115,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
                     Object item,
                     RowPresenter.ViewHolder rowViewHolder,
                     Row row) {
-                Log.i(TAG, "onItemSelected: " + item + " row " + row);
             }
         });
     }
@@ -134,7 +126,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
 
     @Override
     public void onStop() {
-        stopProgressAutomation();
         mRowsAdapter = null;
         super.onStop();
     }
@@ -143,15 +134,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-
-        if (mStreamInfo != null){
-            try {
-                updateVideoImage(mStreamInfo.getImageUrl());
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -166,39 +148,33 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
             if (updatePlaybackStateEvent.isPlaying()) {
                 mPlayPauseAction.setIndex(PlayPauseAction.PAUSE);
                 setFadingEnabled(true);
-                // startProgressAutomation();
                 notifyPlaybackControlActionChanged(mPlayPauseAction);
             }
             else {
                 mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
                 setFadingEnabled(false);
-                // stopProgressAutomation();
                 notifyPlaybackControlActionChanged(mPlayPauseAction);
             }
         }
-        else if (event instanceof ProgressChangedEvent) {
-            if (!this.isHidden()) {
-                ProgressChangedEvent progressChangedEvent = (ProgressChangedEvent) event;
-                if (mPlaybackControlsRow.getTotalTime() == 0) {
-                    mPlaybackControlsRow.setTotalTime((int) progressChangedEvent.getDuration());
-                }
-
-                mPlaybackControlsRow.setCurrentTime((int) progressChangedEvent.getCurrentTime());
-                mPlaybackControlsRow.setBufferedProgress((int) progressChangedEvent.getBufferedTime());
-                mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+        else if (event instanceof PlaybackProgressChangedEvent) {
+            PlaybackProgressChangedEvent progressChangedEvent = (PlaybackProgressChangedEvent) event;
+            if (mPlaybackControlsRow.getTotalTime() == 0) {
+                mPlaybackControlsRow.setTotalTime((int) progressChangedEvent.getDuration());
             }
+            mPlaybackControlsRow.setCurrentTime((int) progressChangedEvent.getCurrentTime());
+            mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+        }
+        else if (event instanceof StreamProgressChangedEvent) {
+            StreamProgressChangedEvent streamProgressChangedEvent = (StreamProgressChangedEvent) event;
+            mPlaybackControlsRow.setBufferedProgress((int) streamProgressChangedEvent.getBufferedTime());
+            mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
         }
     }
 
     private void setupPlaybackControlsRow() {
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        PlaybackControlsRowPresenter playbackControlsRowPresenter;
-
-        if (SHOW_DETAIL) {
-            playbackControlsRowPresenter = new PlaybackControlsRowPresenter(new DescriptionPresenter());
-        } else {
-            playbackControlsRowPresenter = new PlaybackControlsRowPresenter();
-        }
+        PlaybackControlsRowPresenter playbackControlsRowPresenter =
+                new PlaybackControlsRowPresenter(new DescriptionPresenter());
 
         playbackControlsRowPresenter.setOnActionClickedListener(new OnActionClickedListener() {
             public void onActionClicked(Action action) {
@@ -231,11 +207,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     }
 
     private void addPlaybackControlsRow() {
-        if (SHOW_DETAIL && mStreamInfo != null) {
-            mPlaybackControlsRow = new PlaybackControlsRow(mStreamInfo.getMedia());
-        } else {
-            mPlaybackControlsRow = new PlaybackControlsRow();
-        }
+        mPlaybackControlsRow = new PlaybackControlsRow(mStreamInfo);
         mRowsAdapter.add(mPlaybackControlsRow);
 
         resetPlaybackControlRowProgress();
@@ -339,7 +311,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
                     int currentTime = mPlaybackControlsRow.getCurrentTime() + updatePeriod;
                     int totalTime = mPlaybackControlsRow.getTotalTime();
                     mPlaybackControlsRow.setCurrentTime(currentTime);
-                    mPlaybackControlsRow.setBufferedProgress(currentTime + SIMULATED_BUFFERED_TIME);
                     mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
 
                     if (totalTime > 0 && totalTime <= currentTime) {
@@ -361,28 +332,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         }
     }
 
-    private void updateVideoImage(String uri) {
-        Picasso.with(getActivity())
-                .load(uri)
-                .fit()
-                .centerCrop()
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        mPlaybackControlsRow.setImageBitmap(getActivity(), bitmap);
-                        mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    }
-                });
-    }
-
     private void startFastForwardAndRewindClickTrackingTimer() {
         if (null != mClickTrackingTimer) {
             mClickCount++;
@@ -398,12 +347,14 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
         @Override
         protected void onBindDescription(ViewHolder viewHolder, Object item) {
-            if (mStreamInfo.isShow()) {
-                viewHolder.getTitle().setText(mStreamInfo.getShowTitle());
-                viewHolder.getSubtitle().setText(mStreamInfo.getShowEpisodeTitle());
+            if (!(item instanceof StreamInfo)) return;
+            StreamInfo streamInfo = (StreamInfo) item;
+            if (streamInfo.isShow()) {
+                viewHolder.getTitle().setText(streamInfo.getShowTitle());
+                viewHolder.getSubtitle().setText(streamInfo.getShowEpisodeTitle());
             }
             else {
-                viewHolder.getTitle().setText(mStreamInfo.getTitle());
+                viewHolder.getTitle().setText(streamInfo.getTitle());
             }
         }
     }
@@ -435,5 +386,4 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
             setLabel1(context.getString(R.string.scale));
         }
     }
-
 }
