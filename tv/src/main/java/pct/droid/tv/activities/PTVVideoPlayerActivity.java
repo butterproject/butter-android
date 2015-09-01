@@ -1,5 +1,6 @@
 package pct.droid.tv.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         return i;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
