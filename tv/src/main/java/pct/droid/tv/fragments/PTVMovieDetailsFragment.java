@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
@@ -92,7 +92,7 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 		} else {
 			WatchAction action = (WatchAction) a;
 			Media.Torrent torrent = action.getTorrent();
-			String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs");
+			String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, StreamInfo.SUBTITLE_LANGUAGE_NONE);
 			StreamInfo info = new StreamInfo(
 					getMovieItem(),
 					torrent.url,

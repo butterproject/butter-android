@@ -25,6 +25,8 @@ import pct.droid.base.providers.media.models.Show;
 
 public class StreamInfo implements Parcelable {
 
+    public static final String SUBTITLE_LANGUAGE_NONE = "no-subs";
+
     private String mSubtitleLanguage;
     private String mQuality;
     private String mTorrentUrl;

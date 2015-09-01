@@ -113,7 +113,7 @@ public abstract class BaseVideoPlayerFragment
     private int mCurrentSize = SURFACE_BEST_FIT;
     private int mStreamerProgress = 0;
 
-    private String mCurrentSubsLang = "no-subs";
+    private String mCurrentSubsLang = StreamInfo.SUBTITLE_LANGUAGE_NONE;
     private TimedTextObject mSubs;
     private Caption mLastSub = null;
     private File mSubsFile = null;
@@ -204,18 +204,19 @@ public abstract class BaseVideoPlayerFragment
 
         if (null == streamInfo.getSubtitleLanguage()) {
             // Get selected default subtitle
-            String defaultSubtitle = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs");
-            if (defaultSubtitle != "no-subs") {
-                streamInfo.setSubtitleLanguage(defaultSubtitle);
-            }
+            String defaultSubtitle = PrefUtils.get(
+                    getActivity(),
+                    Prefs.SUBTITLE_DEFAULT,
+                    StreamInfo.SUBTITLE_LANGUAGE_NONE);
+            streamInfo.setSubtitleLanguage(defaultSubtitle);
+            mCurrentSubsLang = defaultSubtitle;
+            Timber.d("Using default subtitle: " + mCurrentSubsLang);
         }
 
-        // Start subtitle
-        if (null != streamInfo.getSubtitleLanguage()) {
-            String language = streamInfo.getSubtitleLanguage();
-            if (!language.equals("no-subs")) {
-                onSubtitleLanguageSelected(language);
-            }
+        if (!streamInfo.getSubtitleLanguage().equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) {
+            Timber.d("Download default subtitle");
+            mCurrentSubsLang = streamInfo.getSubtitleLanguage();
+            downloadSubtitle();
         }
     }
 
@@ -270,7 +271,6 @@ public abstract class BaseVideoPlayerFragment
         vlcVout.attachViews();
 
         BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
-
         onProgressChanged(PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition), mDuration);
     }
 
@@ -284,8 +284,6 @@ public abstract class BaseVideoPlayerFragment
     public void onMediaReady(){
         loadMedia();
     }
-
-
 
     protected void disableHardwareAcceleration() {
 
@@ -367,11 +365,9 @@ public abstract class BaseVideoPlayerFragment
 
     protected abstract SurfaceView getVideoSurface();
 
-
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 * vlc methods
 	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
 
     protected void setSeeking(boolean seeking) {
         mSeeking = seeking;
@@ -580,7 +576,6 @@ public abstract class BaseVideoPlayerFragment
         showOverlay();
         onProgressChanged(getCurrentTime(), getDuration());
         mLastSub = null;
-        checkSubs();
     }
 
     protected void setLastSub(Caption sub) {
@@ -629,7 +624,7 @@ public abstract class BaseVideoPlayerFragment
         }
     }
 
-    public void onSubtitleLanguageSelected(String language) {
+    protected void onSubtitleLanguageSelected(String language) {
         if (mCurrentSubsLang != null && (language == null || mCurrentSubsLang.equals(language))) {
             return;
         }
@@ -637,40 +632,73 @@ public abstract class BaseVideoPlayerFragment
         mCurrentSubsLang = language;
         mCallback.getInfo().setSubtitleLanguage(mCurrentSubsLang);
 
-        if (mCurrentSubsLang.equals("no-subs")) {
+        if (mCurrentSubsLang.equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) {
             mSubs = null;
+            onSubtitleEnabledStateChanged(false);
             return;
         }
 
         if (mMedia == null || mMedia.subtitles == null || mMedia.subtitles.size() == 0) {
             mSubs = null;
-            return;
+            onSubtitleEnabledStateChanged(false);
+            throw new IllegalArgumentException("Media doesn't have subtitle");
         }
 
         if (!mMedia.subtitles.containsKey(mCurrentSubsLang)) {
             mSubs = null;
-            return;
+            onSubtitleEnabledStateChanged(false);
+            throw new IllegalArgumentException("Media doesn't have subtitle with specified language");
         }
 
         showTimedCaptionText(null);
+        downloadSubtitle();
+    }
 
-        SubsProvider.download(getActivity(), mMedia, language, new com.squareup.okhttp.Callback() {
+    /**
+     * Invoked when subtitle download finished successfully.
+     */
+    private void onSubtitleDownloadSuccess() {
+        Timber.d("Subtitle downloaded successfully");
+        // Just sets and parse subtitle file here.
+        // Leave checkSubs() method handles displaying it during media playback progress
+        mSubsFile = new File(SubsProvider.getStorageLocation(
+                getActivity()),
+                mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
+        parseSubtitleFile();
+    }
+
+    /**
+     * Invoked when subtitle download failed.
+     */
+    private void onSubtitleDownloadFailed() {
+        mSubs = null;
+        mCurrentSubsLang = StreamInfo.SUBTITLE_LANGUAGE_NONE;
+        onSubtitleEnabledStateChanged(false);
+
+        try {
+            Snackbar.make(mRootView, "Subtitle download failed", Snackbar.LENGTH_SHORT).show();
+        } catch (RuntimeException runtimeException) {
+            runtimeException.printStackTrace();
+        }
+    }
+
+    /**
+     * Download subtitle file specified in when mCurrentSubsLang is not StreamInfo.SUBTITLE_LANGUAGE_NONE.
+     * Will throw NullPointerException if Media is not null.
+     */
+    private void downloadSubtitle() {
+        if (mMedia == null) throw new NullPointerException("Media is not available");
+        if (mCurrentSubsLang.equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) return;
+        Timber.d("Subtitle download");
+        SubsProvider.download(getActivity(), mMedia, mCurrentSubsLang, new com.squareup.okhttp.Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
-                mSubs = null;
-                mCurrentSubsLang = "no-subs";
-
-                try {
-                    Snackbar.make(mRootView, "Subtitle download failed", Snackbar.LENGTH_SHORT).show();
-                } catch (RuntimeException runtimeException) {
-                    runtimeException.printStackTrace();
-                }
+            public void onFailure(Request request, IOException exception) {
+                onSubtitleDownloadFailed();
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
-                mSubsFile = new File(SubsProvider.getStorageLocation(getActivity()), mMedia.videoId + "-" + mCurrentSubsLang + ".srt");
-                startSubtitles();
+                onSubtitleDownloadSuccess();
             }
         });
     }
@@ -689,6 +717,38 @@ public abstract class BaseVideoPlayerFragment
         mSarDen = sarDen;
         changeSurfaceLayout();
     }
+        /**
+         * Parse downloaded subtitle file. Will throw NullPointerException if subtitle file is null.
+         */
+    private void parseSubtitleFile() {
+        if (mSubsFile == null) throw new NullPointerException("Subtitle file is null");
+        if (mCurrentSubsLang.equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) return;
+        Timber.d("Subtitle parse");
+        try {
+            FileInputStream fileInputStream = new FileInputStream(mSubsFile);
+            FormatSRT formatSRT = new FormatSRT();
+            mSubs = formatSRT.parseFile(
+                mSubsFile.toString(),
+                FileUtils.inputstreamToCharsetString(
+                    fileInputStream,
+                    mCurrentSubsLang).split("\n"));
+            onSubtitleEnabledStateChanged(true);
+        } catch (FileNotFoundException e) {
+            if (e.getMessage().contains("EBUSY")) {
+                parseSubtitleFile();
+            }
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onSubtitleEnabledStateChanged(false);
+        }
+    }
+
+    /**
+     * Called when subtitle for current media successfully loaded or disabled.
+     * @param enabled Whether subtitle is loaded or disabled.
+     */
+    protected void onSubtitleEnabledStateChanged(boolean enabled) {}
 
     @Override
     public void onSurfacesCreated(IVLCVout ivlcVout) {
@@ -797,7 +857,7 @@ public abstract class BaseVideoPlayerFragment
         return super.onOptionsItemSelected(item);
     }
 
-    public void subsClick() {
+    protected void subsClick() {
         if (mMedia != null && mMedia.subtitles != null) {
             if (getChildFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
 
@@ -833,13 +893,13 @@ public abstract class BaseVideoPlayerFragment
         final String[] adapterSubtitles = new String[subtitles.length + 2];
         System.arraycopy(subtitles, 0, adapterSubtitles, 1, subtitles.length);
 
-        adapterSubtitles[0] = "no-subs";
+        adapterSubtitles[0] = StreamInfo.SUBTITLE_LANGUAGE_NONE;
         adapterSubtitles[adapterSubtitles.length - 1] = "custom";
         String[] readableNames = new String[adapterSubtitles.length];
 
         for (int i = 0; i < readableNames.length - 1; i++) {
             String language = adapterSubtitles[i];
-            if (language.equals("no-subs")) {
+            if (language.equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) {
                 readableNames[i] = getString(R.string.no_subs);
             } else {
                 Locale locale = LocaleUtils.toLocale(language);
@@ -849,30 +909,33 @@ public abstract class BaseVideoPlayerFragment
 
         readableNames[readableNames.length - 1] = "Custom..";
 
-        StringArraySelectorDialogFragment.showSingleChoice(getChildFragmentManager(), R.string.subtitles, readableNames,
-                Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, int position) {
-                        if (position == adapterSubtitles.length - 1) {
-                            FileSelectorDialogFragment.show(getChildFragmentManager(), new FileSelectorDialogFragment.Listener() {
-                                @Override
-                                public void onFileSelected(File f) {
-                                    if (!f.getPath().endsWith(".srt")) {
-                                        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    FileSelectorDialogFragment.hide();
-                                    mSubsFile = f;
-                                    startSubtitles();
-                                    dialog.dismiss();
+        StringArraySelectorDialogFragment.showSingleChoice(
+            getChildFragmentManager(),
+            R.string.subtitles,
+            readableNames,
+            Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang),
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(final DialogInterface dialog, int position) {
+                    if (position == adapterSubtitles.length - 1) {
+                        FileSelectorDialogFragment.show(getChildFragmentManager(), new FileSelectorDialogFragment.Listener() {
+                            @Override
+                            public void onFileSelected(File f) {
+                                if (!f.getPath().endsWith(".srt")) {
+                                    Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
+                                    return;
                                 }
-                            });
-                            return;
-                        }
-                        onSubtitleLanguageSelected(adapterSubtitles[position]);
-                        dialog.dismiss();
+                                FileSelectorDialogFragment.hide();
+                                mSubsFile = f;
+                                dialog.dismiss();
+                            }
+                        });
+                        return;
                     }
-                });
+                    onSubtitleLanguageSelected(adapterSubtitles[position]);
+                    dialog.dismiss();
+                }
+            });
     }
 
     private void subsSizeSettings() {

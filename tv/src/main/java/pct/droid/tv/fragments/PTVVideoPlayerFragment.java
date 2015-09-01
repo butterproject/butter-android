@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -42,7 +43,8 @@ import pct.droid.tv.events.SeekBackwardEvent;
 import pct.droid.tv.events.SeekForwardEvent;
 import pct.droid.tv.events.StartPlaybackEvent;
 import pct.droid.tv.events.StreamProgressChangedEvent;
-import pct.droid.tv.events.ToggleSubsEvent;
+import pct.droid.tv.events.ConfigureSubtitleEvent;
+import pct.droid.tv.events.ToggleSubtitleEvent;
 import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
@@ -64,6 +66,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     private boolean mOverlayVisible = true;
     private boolean mIsVideoPlaying = false;
+    private boolean mIsSubtitleEnabled = false;
 
     private Handler mDisplayHandler;
 
@@ -75,8 +78,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_videoplayer, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_videoplayer, container, false);
     }
 
     @Override
@@ -164,6 +166,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         mOverlayVisible = false;
     }
 
+    @Override
     protected void showPlayerInfo(String text) {
         mPlayerInfo.setVisibility(View.VISIBLE);
         mPlayerInfo.setText(text);
@@ -185,6 +188,10 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         if (mIsVideoPlaying != isPlaying()) {
             mIsVideoPlaying = isPlaying();
             EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
+            if (mIsVideoPlaying) {
+                EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
+            }
+            Log.d(this.getClass().getName(), "updatePlayPauseState. Subtitle enabled: " + mIsSubtitleEnabled);
         }
     }
 
@@ -237,9 +244,10 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
                     }
                     return;
                 }
-                SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
 
+                SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
                 ForegroundColorSpan[] toRemoveSpans = styledString.getSpans(0, styledString.length(), ForegroundColorSpan.class);
+
                 for (ForegroundColorSpan remove : toRemoveSpans) {
                     styledString.removeSpan(remove);
                 }
@@ -258,8 +266,8 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     /**
      * Updates the overlay when the media playback progress has changed
-     * @param currentTime
-     * @param duration
+     * @param currentTime Current playback time in milliseconds
+     * @param duration Total media duration in milliseconds
      */
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
@@ -287,26 +295,31 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     public void onEventMainThread(SeekBackwardEvent event) {
-        int seek = event.getSeek() / SeekBackwardEvent.SEEK_SPEED;
-        for (int i = 0; i < seek; i++) seekBackwardClick();
+        seek(event.getSeek());
     }
 
     public void onEventMainThread(SeekForwardEvent event) {
-        int seek = event.getSeek() / SeekForwardEvent.SEEK_SPEED;
-        for (int i = 0; i < seek; i++) seekForwardClick();
+        seek(event.getSeek());
     }
 
     public void onEventMainThread(ScaleVideoEvent event) {
         scaleClick();
     }
 
-    public void onEventMainThread(ToggleSubsEvent event) {
+    public void onEventMainThread(ConfigureSubtitleEvent event) {
         subsClick();
     }
 
     @Override
     protected void updateSubtitleSize(int size) {
         mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+    }
+
+    @Override
+    protected void onSubtitleEnabledStateChanged(boolean enabled) {
+        super.onSubtitleEnabledStateChanged(enabled);
+        mIsSubtitleEnabled = enabled;
+        EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
     }
 
     @Override

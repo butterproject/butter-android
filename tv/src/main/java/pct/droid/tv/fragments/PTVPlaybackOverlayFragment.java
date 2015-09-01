@@ -16,7 +16,6 @@ package pct.droid.tv.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.PlaybackOverlayFragment;
@@ -41,9 +40,10 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
+import android.view.InputEvent;
+import android.view.KeyEvent;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import de.greenrobot.event.EventBus;
 import pct.droid.base.torrent.StreamInfo;
@@ -56,22 +56,25 @@ import pct.droid.tv.events.SeekBackwardEvent;
 import pct.droid.tv.events.SeekForwardEvent;
 import pct.droid.tv.events.StartPlaybackEvent;
 import pct.droid.tv.events.StreamProgressChangedEvent;
-import pct.droid.tv.events.ToggleSubsEvent;
+import pct.droid.tv.events.ConfigureSubtitleEvent;
+import pct.droid.tv.events.ToggleSubtitleEvent;
 import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
 /*
  * Class for video playback with media control
  */
-public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
+public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
+        implements OnActionClickedListener,
+        OnItemViewSelectedListener,
+        PlaybackOverlaySupportFragment.InputEventHandler {
     private static final String TAG = "PlaybackOverlayFragment";
     private static final boolean HIDE_MORE_ACTIONS = true;
     private static final int BACKGROUND_TYPE = PlaybackOverlayFragment.BG_LIGHT;
-    private static final int DEFAULT_UPDATE_PERIOD = 1000;
-    private static final int UPDATE_PERIOD = 16;
-    private static final int CLICK_TRACKING_DELAY = 1000;
-    private static final int INITIAL_SPEED = 10000;
 
-    private final Handler mClickTrackingHandler = new Handler();
+    private static final int MODE_NOTHING = 0;
+    private static final int MODE_FAST_FORWARD = 1;
+    private static final int MODE_REWIND = 2;
+
     private ArrayObjectAdapter mRowsAdapter;
     private ArrayObjectAdapter mPrimaryActionsAdapter;
     private ArrayObjectAdapter mSecondaryActionsAdapter;
@@ -82,15 +85,15 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     private PlayPauseAction mPlayPauseAction;
     private RewindAction mRewindAction;
     private PlaybackControlsRow mPlaybackControlsRow;
-    private int mCurrentItem;
     private Handler mHandler;
     private Runnable mRunnable;
     private StreamInfo mStreamInfo;
-    private int mFastForwardOrRewindSpeed = INITIAL_SPEED;
     private Timer mClickTrackingTimer;
     private int mClickCount;
 
     private int mCurrentPlaybackState;
+    private int mCurrentMode = MODE_NOTHING;
+    private long mSelectedActionId = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,28 +109,15 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
 
         setBackgroundType(BACKGROUND_TYPE);
         setFadingEnabled(false);
-        setupPlaybackControlsRow();
+        setupPlaybackControlPresenter();
 
-        setOnItemViewSelectedListener(new OnItemViewSelectedListener() {
-            @Override
-            public void onItemSelected(
-                    Presenter.ViewHolder itemViewHolder,
-                    Object item,
-                    RowPresenter.ViewHolder rowViewHolder,
-                    Row row) {
-            }
-        });
+        setOnItemViewSelectedListener(this);
+        setInputEventHandler(this);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onStop() {
-        mRowsAdapter = null;
-        super.onStop();
     }
 
     @Override
@@ -142,19 +132,91 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onStop() {
+        mRowsAdapter = null;
+        super.onStop();
+    }
+
+    @Override
+    public void onActionClicked(Action action) {
+        if (action.getId() == mPlayPauseAction.getId()) {
+            invokeTogglePlaybackAction(mPlayPauseAction.getIndex() == PlayPauseAction.PLAY);
+        }
+        else if (action.getId() == mFastForwardAction.getId()) {
+            // action handled by key press
+            // invokeTogglePlaybackAction(false);
+            // invokeFastForwardAction();
+        }
+        else if (action.getId() == mRewindAction.getId()) {
+            // action handled by key press
+            // invokeTogglePlaybackAction(false);
+            // invokeRewindAction();
+        }
+        else if (action.getId() == mScaleVideoAction.getId()) {
+            invokeScaleVideoAction();
+        }
+        else if (action.getId() == mClosedCaptioningAction.getId()) {
+            invokeOpenSubtitleSettingsAction();
+        }
+
+        if (action instanceof PlaybackControlsRow.MultiAction) {
+            notifyPlaybackControlActionChanged(action);
+        }
+    }
+
+    @Override
+    public void onItemSelected(
+            Presenter.ViewHolder itemViewHolder,
+            Object item,
+            RowPresenter.ViewHolder rowViewHolder,
+            Row row) {
+        mCurrentMode = MODE_NOTHING;
+        mSelectedActionId = 0;
+        if (item != null && item instanceof Action) {
+            Action action = (Action) item;
+            mSelectedActionId = action.getId();
+        }
+    }
+
+    @Override
+    public boolean handleInputEvent(InputEvent event) {
+        if (event instanceof KeyEvent) {
+            KeyEvent keyEvent = (KeyEvent) event;
+            if (keyEvent.getKeyCode() != KeyEvent.KEYCODE_DPAD_CENTER) return false;
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                if (mSelectedActionId == mFastForwardAction.getId()) {
+                    if (keyEvent.getRepeatCount() == 0) {
+                        mCurrentMode = MODE_FAST_FORWARD;
+                        invokeFastForwardAction();
+                    }
+                }
+                else if (mSelectedActionId == mRewindAction.getId()) {
+                    if (keyEvent.getRepeatCount() == 0) {
+                        mCurrentMode = MODE_REWIND;
+                        invokeRewindAction();
+                    }
+                }
+            }
+            else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                mCurrentMode = MODE_NOTHING;
+            }
+        }
+        return false;
+    }
+
     public void onEvent(Object event) {
         if (event instanceof UpdatePlaybackStateEvent) {
             UpdatePlaybackStateEvent updatePlaybackStateEvent = (UpdatePlaybackStateEvent) event;
             if (updatePlaybackStateEvent.isPlaying()) {
                 mPlayPauseAction.setIndex(PlayPauseAction.PAUSE);
                 setFadingEnabled(true);
-                notifyPlaybackControlActionChanged(mPlayPauseAction);
             }
             else {
                 mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
                 setFadingEnabled(false);
-                notifyPlaybackControlActionChanged(mPlayPauseAction);
             }
+            notifyPlaybackControlActionChanged(mPlayPauseAction);
         }
         else if (event instanceof PlaybackProgressChangedEvent) {
             PlaybackProgressChangedEvent progressChangedEvent = (PlaybackProgressChangedEvent) event;
@@ -169,71 +231,59 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
             mPlaybackControlsRow.setBufferedProgress((int) streamProgressChangedEvent.getBufferedTime());
             mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
         }
+        else if (event instanceof ToggleSubtitleEvent) {
+            ToggleSubtitleEvent toggleSubtitleEvent = (ToggleSubtitleEvent) event;
+            if (toggleSubtitleEvent.isEnabled()) {
+                mClosedCaptioningAction.setIndex(ClosedCaptioningAction.ON);
+            }
+            else {
+                mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);
+            }
+            notifyPlaybackControlActionChanged(mClosedCaptioningAction);
+        }
     }
 
-    private void setupPlaybackControlsRow() {
+    private void setupPlaybackControlPresenter() {
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
         PlaybackControlsRowPresenter playbackControlsRowPresenter =
-                new PlaybackControlsRowPresenter(new DescriptionPresenter());
+            new PlaybackControlsRowPresenter(new DescriptionPresenter());
 
-        playbackControlsRowPresenter.setOnActionClickedListener(new OnActionClickedListener() {
-            public void onActionClicked(Action action) {
-                if (action.getId() == mPlayPauseAction.getId()) {
-                    invokeTogglePlaybackAction(mPlayPauseAction.getIndex() == PlayPauseAction.PLAY);
-                } else if (action.getId() == mFastForwardAction.getId()) {
-                    invokeFastForwardAction();
-                } else if (action.getId() == mRewindAction.getId()) {
-                    invokeFastRewindAction();
-                } else if (action.getId() == mScaleVideoAction.getId()) {
-                    invokeScaleVideoAction();
-                } else if (action.getId() == mClosedCaptioningAction.getId()) {
-                    invokeOpenSubtitleSettingsAction();
-                }
-
-                if (action instanceof PlaybackControlsRow.MultiAction) {
-                    notifyPlaybackControlActionChanged(action);
-                }
-            }
-        });
-
+        playbackControlsRowPresenter.setOnActionClickedListener(this);
         playbackControlsRowPresenter.setSecondaryActionsHidden(false);
+
         presenterSelector.addClassPresenter(PlaybackControlsRow.class, playbackControlsRowPresenter);
         presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
 
         mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
         mRowsAdapter.clear();
-        addPlaybackControlsRow();
+        setupPlaybackControlItems();
         setAdapter(mRowsAdapter);
     }
 
-    private void addPlaybackControlsRow() {
+    private void setupPlaybackControlItems() {
         mPlaybackControlsRow = new PlaybackControlsRow(mStreamInfo);
-        mRowsAdapter.add(mPlaybackControlsRow);
-
-        resetPlaybackControlRowProgress();
+        mPlaybackControlsRow.setCurrentTime(0);
+        mPlaybackControlsRow.setBufferedProgress(0);
 
         ControlButtonPresenterSelector presenterSelector = new ControlButtonPresenterSelector();
         mPrimaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
         mSecondaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
+
         mPlaybackControlsRow.setPrimaryActionsAdapter(mPrimaryActionsAdapter);
         mPlaybackControlsRow.setSecondaryActionsAdapter(mSecondaryActionsAdapter);
 
         Activity activity = getActivity();
         mPlayPauseAction = new PlayPauseAction(activity);
-
-        mFastForwardAction = new FastForwardAction(activity, 3);
-        Drawable fastForward = activity.getResources().getDrawable(R.drawable.ic_av_forward);
-        mFastForwardAction.setDrawables(new Drawable[] { fastForward, fastForward, fastForward });
-        mFastForwardAction.setLabels(new String[] { "10 seconds", "20 seconds", "40 seconds" });
-
-        mRewindAction = new RewindAction(activity, 3);
-        Drawable rewind = activity.getResources().getDrawable(R.drawable.ic_av_rewind);
-        mRewindAction.setDrawables(new Drawable[] { rewind, rewind, rewind });
-        mRewindAction.setLabels(new String[] { "10 seconds", "20 seconds", "40 seconds" });
-
+        mFastForwardAction = new FastForwardAction(activity);
+        mRewindAction = new RewindAction(activity);
         mScaleVideoAction = new ScaleVideoAction(activity);
         mClosedCaptioningAction = new ClosedCaptioningAction(activity);
-        mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);
+
+        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) {
+            mClosedCaptioningAction.setIndex(ClosedCaptioningAction.ON);
+        } else {
+            mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);
+        }
 
         // Add main controls to primary adapter.
         mPrimaryActionsAdapter.add(mRewindAction);
@@ -244,6 +294,8 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         mSecondaryActionsAdapter.add(mScaleVideoAction);
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
         if (!HIDE_MORE_ACTIONS) mSecondaryActionsAdapter.add(mMoreActions);
+
+        mRowsAdapter.add(mPlaybackControlsRow);
     }
 
     private void notifyPlaybackControlActionChanged(Action action) {
@@ -255,18 +307,11 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
         adapter = mSecondaryActionsAdapter;
         if (adapter.indexOf(action) >= 0) {
             adapter.notifyArrayItemRangeChanged(adapter.indexOf(action), 1);
-            return;
         }
     }
 
-    private void resetPlaybackControlRowProgress() {
-        mPlaybackControlsRow.setCurrentTime(0);
-        mPlaybackControlsRow.setBufferedProgress(0);
-        mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
-    }
-
     private void invokeOpenSubtitleSettingsAction() {
-        EventBus.getDefault().post(new ToggleSubsEvent());
+        EventBus.getDefault().post(new ConfigureSubtitleEvent());
     }
 
     private void invokeTogglePlaybackAction(boolean play) {
@@ -278,70 +323,49 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
     }
 
     private void invokeFastForwardAction() {
-        startFastForwardAndRewindClickTrackingTimer();
+        final int refreshDuration = 500;
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentMode == MODE_FAST_FORWARD) {
+                    // wait until buffer catch up
+                    triggerFastForwardEvent();
+                    mHandler.postDelayed(this, refreshDuration);
+                }
+            }
+        };
+        mHandler.postDelayed(mRunnable, refreshDuration);
+    }
+
+    private void invokeRewindAction() {
+        final int refreshDuration = 500;
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentMode == MODE_REWIND) {
+                    // wait until buffer catch up
+                    triggerRewindEvent();
+                    mHandler.postDelayed(this, refreshDuration);
+                }
+            }
+        };
+        mHandler.postDelayed(mRunnable, refreshDuration);
+    }
+
+    private void triggerFastForwardEvent() {
         SeekForwardEvent event = new SeekForwardEvent();
-        event.setSeek(mFastForwardOrRewindSpeed);
+        event.setSeek(SeekForwardEvent.MINIMUM_SEEK_SPEED);
         EventBus.getDefault().post(event);
     }
 
-    private void invokeFastRewindAction() {
-        startFastForwardAndRewindClickTrackingTimer();
+    private void triggerRewindEvent() {
         SeekBackwardEvent event = new SeekBackwardEvent();
-        event.setSeek(mFastForwardOrRewindSpeed);
+        event.setSeek(SeekBackwardEvent.MINIMUM_SEEK_SPEED);
         EventBus.getDefault().post(event);
     }
 
     private void invokeScaleVideoAction() {
         EventBus.getDefault().post(new ScaleVideoEvent());
-    }
-
-    private int getProgressBarUpdatePeriod() {
-        if (getView() == null || mPlaybackControlsRow.getTotalTime() <= 0) {
-            return DEFAULT_UPDATE_PERIOD;
-        }
-        return Math.max(UPDATE_PERIOD, mPlaybackControlsRow.getTotalTime() / getView().getWidth());
-    }
-
-    private void startProgressAutomation() {
-        if (mRunnable == null) {
-            mRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    int updatePeriod = getProgressBarUpdatePeriod();
-                    int currentTime = mPlaybackControlsRow.getCurrentTime() + updatePeriod;
-                    int totalTime = mPlaybackControlsRow.getTotalTime();
-                    mPlaybackControlsRow.setCurrentTime(currentTime);
-                    mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
-
-                    if (totalTime > 0 && totalTime <= currentTime) {
-                        stopProgressAutomation();
-//                        next(true);
-                    } else {
-                        mHandler.postDelayed(this, updatePeriod);
-                    }
-                }
-            };
-            mHandler.postDelayed(mRunnable, getProgressBarUpdatePeriod());
-        }
-    }
-
-    private void stopProgressAutomation() {
-        if (mHandler != null && mRunnable != null) {
-            mHandler.removeCallbacks(mRunnable);
-            mRunnable = null;
-        }
-    }
-
-    private void startFastForwardAndRewindClickTrackingTimer() {
-        if (null != mClickTrackingTimer) {
-            mClickCount++;
-            mClickTrackingTimer.cancel();
-        } else {
-            mClickCount = 0;
-            mFastForwardOrRewindSpeed = INITIAL_SPEED;
-        }
-        mClickTrackingTimer = new Timer();
-        mClickTrackingTimer.schedule(new UpdateFastForwardRewindSpeedTask(), CLICK_TRACKING_DELAY);
     }
 
     class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
@@ -356,26 +380,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment {
             else {
                 viewHolder.getTitle().setText(streamInfo.getTitle());
             }
-        }
-    }
-
-    private class UpdateFastForwardRewindSpeedTask extends TimerTask {
-        @Override
-        public void run() {
-            mClickTrackingHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mClickCount == 0) {
-                        mFastForwardOrRewindSpeed = INITIAL_SPEED;
-                    } else if (mClickCount == 1) {
-                        mFastForwardOrRewindSpeed *= 2;
-                    } else if (mClickCount >= 2) {
-                        mFastForwardOrRewindSpeed *= 4;
-                    }
-                    mClickCount = 0;
-                    mClickTrackingTimer = null;
-                }
-            });
         }
     }
 

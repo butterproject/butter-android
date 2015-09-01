@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Episode;
@@ -177,7 +177,7 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
     }
 
     private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-        String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs");
+        String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, StreamInfo.SUBTITLE_LANGUAGE_NONE);
         StreamInfo info = new StreamInfo(
                 episode,
                 getShowItem(),
