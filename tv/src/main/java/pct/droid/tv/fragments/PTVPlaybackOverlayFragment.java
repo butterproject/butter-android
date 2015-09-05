@@ -43,13 +43,12 @@ import android.util.Log;
 import android.view.InputEvent;
 import android.view.KeyEvent;
 
-import java.util.Timer;
-
 import de.greenrobot.event.EventBus;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
+import pct.droid.tv.events.ConfigureSubtitleEvent;
 import pct.droid.tv.events.PausePlaybackEvent;
 import pct.droid.tv.events.PlaybackProgressChangedEvent;
 import pct.droid.tv.events.ScaleVideoEvent;
@@ -57,7 +56,6 @@ import pct.droid.tv.events.SeekBackwardEvent;
 import pct.droid.tv.events.SeekForwardEvent;
 import pct.droid.tv.events.StartPlaybackEvent;
 import pct.droid.tv.events.StreamProgressChangedEvent;
-import pct.droid.tv.events.ConfigureSubtitleEvent;
 import pct.droid.tv.events.ToggleSubtitleEvent;
 import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
@@ -89,12 +87,10 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private Handler mHandler;
     private Runnable mRunnable;
     private StreamInfo mStreamInfo;
-    private Timer mClickTrackingTimer;
-    private int mClickCount;
 
-    private int mCurrentPlaybackState;
     private int mCurrentMode = MODE_NOTHING;
     private long mSelectedActionId = 0;
+    private boolean keepEventBusRegistration = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,13 +120,19 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) EventBus.getDefault().register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        if (!keepEventBusRegistration) {
+            // Event is unregistered before playback paused event is sent
+            mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
+            setFadingEnabled(false);
+            notifyPlaybackControlActionChanged(mPlayPauseAction);
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
@@ -367,6 +369,10 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
     private void invokeScaleVideoAction() {
         EventBus.getDefault().post(new ScaleVideoEvent());
+    }
+
+    public void setKeepEventBusRegistration(boolean keepEventBusRegistration) {
+        this.keepEventBusRegistration = keepEventBusRegistration;
     }
 
     class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {

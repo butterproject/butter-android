@@ -1,5 +1,6 @@
 package pct.droid.tv.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,13 +38,14 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 		return i;
 	}
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
+	@SuppressLint("MissingSuperCall")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState,R.layout.activity_streamloading);
 
 		if (!getIntent().hasExtra(EXTRA_INFO)) finish();
 
 		mInfo = getIntent().getParcelableExtra(EXTRA_INFO);
-
 		mFragment = (BaseStreamLoadingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 	}
 
@@ -55,7 +57,6 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-
 		mFragment.cancelStream();
 	}
 

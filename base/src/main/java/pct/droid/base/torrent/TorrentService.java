@@ -138,6 +138,7 @@ public class TorrentService extends Service implements TorrentListener {
 
     public void startForeground() {
         if (Foreground.get().isForeground()) return;
+        if (mCurrentActivityClass == null) return;
 
         Intent notificationIntent = new Intent(this, mCurrentActivityClass);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
