@@ -46,6 +46,7 @@ import android.view.KeyEvent;
 import java.util.Timer;
 
 import de.greenrobot.event.EventBus;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
@@ -279,7 +280,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mScaleVideoAction = new ScaleVideoAction(activity);
         mClosedCaptioningAction = new ClosedCaptioningAction(activity);
 
-        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(StreamInfo.SUBTITLE_LANGUAGE_NONE)) {
+        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
             mClosedCaptioningAction.setIndex(ClosedCaptioningAction.ON);
         } else {
             mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);

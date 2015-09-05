@@ -168,7 +168,7 @@ public class YSubsProvider extends SubsProvider {
             if (mapping.containsKey(input)) {
                 return mapping.get(input);
             }
-            return "no-subs";
+            return SUBTITLE_LANGUAGE_NONE;
         }
     }
 

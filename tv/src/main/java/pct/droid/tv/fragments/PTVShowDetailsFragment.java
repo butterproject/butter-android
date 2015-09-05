@@ -26,6 +26,7 @@ import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -177,7 +178,7 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
     }
 
     private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-        String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, StreamInfo.SUBTITLE_LANGUAGE_NONE);
+        String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
         StreamInfo info = new StreamInfo(
                 episode,
                 getShowItem(),

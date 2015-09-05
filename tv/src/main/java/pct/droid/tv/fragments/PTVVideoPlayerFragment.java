@@ -106,6 +106,11 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     @Override
+    protected boolean shouldStopPlaybackOnFragmentPaused() {
+        return false;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);

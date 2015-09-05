@@ -274,6 +274,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         mAudioManager = null;
     }
 
+    @Override
+    protected boolean shouldStopPlaybackOnFragmentPaused() {
+        return true;
+    }
+
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
