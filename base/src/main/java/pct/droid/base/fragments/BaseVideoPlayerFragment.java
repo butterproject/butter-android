@@ -19,9 +19,13 @@ package pct.droid.base.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.ImageFormat;
-import android.graphics.PixelFormat;
+import android.content.res.Configuration;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,11 +39,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.connectsdk.device.ConnectableDevice;
@@ -49,11 +53,9 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.videolan.libvlc.EventHandler;
-import org.videolan.libvlc.IVideoPlayer;
+import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
-import org.videolan.vlc.util.VLCInstance;
-import org.videolan.vlc.util.WeakHandler;
+import org.videolan.libvlc.MediaPlayer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,6 +65,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
@@ -81,15 +84,17 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
-import pct.droid.base.utils.ThreadUtils;
+import pct.droid.base.vlc.VLCInstance;
+import pct.droid.base.vlc.VLCOptions;
 import timber.log.Timber;
 
-public abstract class BaseVideoPlayerFragment extends Fragment implements IVideoPlayer, TorrentListener {
+public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVout.Callback, TorrentListener, MediaPlayer.EventListener, LibVLC.HardwareAccelerationError {
 
     public static final String RESUME_POSITION = "resume_position";
 
     private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
+    private MediaPlayer mMediaPlayer;
     private String mLocation;
     private Long mResumePosition = 0l;
     private Long mDuration = 0l;
@@ -129,13 +134,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
     protected Callback mCallback;
 
-    /**
-     * Handle libvlc asynchronous events
-     */
-    private final Handler mVlcEventHandler = new VideoPlayerEventHandler(this);
-
     private View mRootView;
-    private SurfaceHolder mVideoSurfaceHolder;
+
+    private static LibVLC LibVLC() {
+        return VLCInstance.get(PopcornApplication.getAppContext());
+    }
 
 
     @Override
@@ -179,28 +182,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             }
         }
 
-        mLibVLC = VLCInstance.get();
-        mLibVLC.setHardwareAcceleration(PrefUtils.get(getActivity(), Prefs.HW_ACCELERATION, LibVLC.HW_ACCELERATION_AUTOMATIC));
-
-        mVideoSurfaceHolder = getVideoSurface().getHolder();
-        String chroma = PrefUtils.get(getActivity(), Prefs.PIXEL_FORMAT, "");
-        switch (chroma) {
-            case "YV12":
-                mVideoSurfaceHolder.setFormat(ImageFormat.YV12);
-                break;
-            case "RV16":
-                mVideoSurfaceHolder.setFormat(PixelFormat.RGB_565);
-                break;
-            default:
-                mVideoSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
-                break;
+        if(!VLCInstance.hasCompatibleCPU(getContext())) {
+            return;
         }
-        mVideoSurfaceHolder.addCallback(mSurfaceCallback);
 
-        EventHandler em = EventHandler.getInstance();
-        em.addHandler(mVlcEventHandler);
-
-        Timber.d("Hardware acceleration mode: " + Integer.toString(mLibVLC.getHardwareAcceleration()));
+        mLibVLC = LibVLC();
+        mMediaPlayer = new MediaPlayer(mLibVLC);
+        mMediaPlayer.setEventListener(this);
+        mLibVLC.setOnHardwareAccelerationError(this);
 
         PrefUtils.save(getActivity(), RESUME_POSITION, mResumePosition);
 
@@ -208,6 +197,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             mCallback.getService().addListener(BaseVideoPlayerFragment.this);
 
         setProgressVisible(true);
+
 
         //media may still be loading
         if (!TextUtils.isEmpty(streamInfo.getVideoLocation())){
@@ -226,7 +216,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         super.onPause();
 
         if (mLibVLC != null) {
-            long currentTime = mLibVLC.getTime();
+            long currentTime = mMediaPlayer.getTime();
             PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
 
             /*
@@ -235,11 +225,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
              * accessible anymore.
              * To workaround that, we keep the last known position in the preferences
              */
-            mLibVLC.stop();
+            mMediaPlayer.stop();
         } else {
             mDuration = 0l;
         }
 
+        mMediaPlayer.getVLCVout().removeCallback(this);
         getVideoSurface().setKeepScreenOn(false);
 
         BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
@@ -248,6 +239,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     @Override
     public void onResume() {
         super.onResume();
+
+        IVLCVout vlcVout = mMediaPlayer.getVLCVout();
+        if(vlcVout.areViewsAttached())
+            vlcVout.detachViews();
+
+        vlcVout.setVideoView(getVideoSurface());
+        vlcVout.addCallback(this);
+        vlcVout.attachViews();
 
         BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
 
@@ -258,13 +257,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventHandler em = EventHandler.getInstance();
-        em.removeHandler(mVlcEventHandler);
-
-        // HW acceleration was temporarily disabled because of an error, restore the previous value.
-        if (mDisabledHardwareAcceleration)
-            mLibVLC.setHardwareAcceleration(mPreviousHardwareAccelerationMode);
-
         PrefUtils.save(getActivity(), RESUME_POSITION, 0);
     }
 
@@ -272,12 +264,17 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         loadMedia();
     }
 
+
+
+    protected void disableHardwareAcceleration() {
+
+    }
+
     /**
      * External extras: - position (long) - position of the video to start with (in ms)
      */
     @SuppressWarnings({"unchecked"})
     protected void loadMedia() {
-
         StreamInfo streamInfo = mCallback.getInfo();
         if (TextUtils.isEmpty(streamInfo.getVideoLocation())){
             Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
@@ -299,18 +296,19 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 //            return;
 //        }
 
-        if (!mLocation.startsWith("http"))
-            mLocation = LibVLC.PathToURI(mLocation);
+        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(mLibVLC, Uri.parse(mLocation));
+        int hwFlag = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
 
-        Timber.d("Trying to play file: %s", mLocation);
-
-        mLibVLC.playMRL(mLocation);
+        int flags = hwFlag | VLCOptions.MEDIA_VIDEO;
+        VLCOptions.setMediaOptions(media, getActivity(), flags);
+        mMediaPlayer.setMedia(media);
+        media.release();
         mEnded = false;
 
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mLibVLC.getLength() == 0) {
+                if (mMediaPlayer.getLength() == 0) {
                     loadMedia();
                     setProgressVisible(true);
                 }
@@ -319,10 +317,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
         long resumeTime = PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition);
         if (resumeTime > 0) {
-            mLibVLC.setTime(resumeTime);
+            mMediaPlayer.setTime(resumeTime);
         }
 
-        mDuration = mLibVLC.getLength();
+        mDuration = mMediaPlayer.getLength();
+        mMediaPlayer.play();
     }
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -366,7 +365,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             return;
 
         long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
-        mDuration = mLibVLC.getLength();
+        mDuration = mMediaPlayer.getLength();
         if (mDuration > resumePosition && resumePosition > 0) {
             setCurrentTime(resumePosition);
             PrefUtils.save(getActivity(), RESUME_POSITION, 0);
@@ -374,7 +373,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
     public void play() {
-        mLibVLC.play();
+        mMediaPlayer.play();
         getVideoSurface().setKeepScreenOn(true);
 
         resumeVideo();
@@ -382,7 +381,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     }
 
     public void pause() {
-        mLibVLC.pause();
+        mMediaPlayer.pause();
         getVideoSurface().setKeepScreenOn(false);
         updatePlayPauseState();
     }
@@ -395,7 +394,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             loadMedia();
         }
 
-        if (mLibVLC.isPlaying()) {
+        if (mMediaPlayer.isPlaying()) {
             pause();
         } else {
             play();
@@ -421,21 +420,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         showOverlay();
     }
 
-    protected void disableHardwareAcceleration() {
-        mDisabledHardwareAcceleration = true;
-        mPreviousHardwareAccelerationMode = getHardwareAccelerationMode();
-
-        setHardwareAccelerationMode(LibVLC.HW_ACCELERATION_DISABLED);
-    }
-
     protected void setCurrentTime(long time) {
         if (time / getDuration() * 100 <= getStreamerProgress()) {
-            mLibVLC.setTime(time);
+            mMediaPlayer.setTime(time);
         }
     }
 
     protected long getCurrentTime() {
-        return mLibVLC.getTime();
+        return mMediaPlayer.getTime();
     }
 
     protected long getDuration() {
@@ -452,14 +444,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
      * @return
      */
     protected boolean isPlaying() {
-        if (null != mLibVLC && mLibVLC.isPlaying()) return true;
+        if (null != mLibVLC && mMediaPlayer.isPlaying()) return true;
         return false;
-    }
-
-    // Required method for LibVLC
-    public void eventHardwareAccelerationError() {
-        EventHandler em = EventHandler.getInstance();
-        em.callback(EventHandler.HardwareAccelerationError, new Bundle());
     }
 
     private void endReached() {
@@ -471,48 +457,19 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public abstract void onPlaybackEndReached();
 
     private void handleHardwareAccelerationError() {
-        mLibVLC.stop();
+        mMediaPlayer.stop();
         onHardwareAccelerationError();
-    }
-
-    protected int getHardwareAccelerationMode() {
-        return mLibVLC.getHardwareAcceleration();
-    }
-
-    private void setHardwareAccelerationMode(int mode) {
-        mLibVLC.setHardwareAcceleration(mode);
-    }
-
-    @Override
-    public void setSurfaceLayout(int width, int height, int visible_width, int visible_height, int sar_num, int sar_den) {
-        if (width * height == 0)
-            return;
-
-        // store video size
-        mVideoHeight = height;
-        mVideoWidth = width;
-        mVideoVisibleHeight = visible_height;
-        mVideoVisibleWidth = visible_width;
-        mSarNum = sar_num;
-        mSarDen = sar_den;
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                changeSurfaceSize(false);
-
-            }
-        });
-    }
-
-    @Override
-    public int configureSurface(Surface surface, final int width, final int height, final int hal) {
-        return -1;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void changeSurfaceSize(boolean message) {
         int sw = getActivity().getWindow().getDecorView().getWidth();
         int sh = getActivity().getWindow().getDecorView().getHeight();
+
+        if (mMediaPlayer != null) {
+            final IVLCVout vlcVout = mMediaPlayer.getVLCVout();
+            vlcVout.setWindowSize(sw, sh);
+        }
 
         double dw = sw, dh = sh;
 
@@ -585,9 +542,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
                 break;
         }
 
-        // force surface buffer size
-        mVideoSurfaceHolder.setFixedSize(mVideoWidth, mVideoHeight);
-
         // set display size
         ViewGroup.LayoutParams lp = getVideoSurface().getLayoutParams();
         lp.width = (int) Math.ceil(dw * mVideoWidth / mVideoVisibleWidth);
@@ -599,9 +553,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
 
 
     protected void seek(int delta) {
-        if (mLibVLC.getLength() <= 0 && !mSeeking) return;
+        if (mMediaPlayer.getLength() <= 0 && !mSeeking) return;
 
-        long position = mLibVLC.getTime() + delta;
+        long position = mMediaPlayer.getTime() + delta;
         if (position < 0) position = 0;
         setCurrentTime(position);
         showOverlay();
@@ -613,7 +567,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     protected void setLastSub(Caption sub) {
         mLastSub = sub;
     }
-
 
     private void startSubtitles() {
         new AsyncTask<Void, Void, Void>() {
@@ -637,9 +590,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }.execute();
     }
 
-
     protected void checkSubs() {
-        if (mLibVLC != null && mLibVLC.isPlaying() && mSubs != null) {
+        if (mLibVLC != null && mMediaPlayer.isPlaying() && mSubs != null) {
             Collection<Caption> subtitles = mSubs.captions.values();
             double currentTime = getCurrentTime() - mSubtitleOffset;
             if (mLastSub != null && currentTime >= mLastSub.start.getMilliseconds() && currentTime <= mLastSub.end.getMilliseconds()) {
@@ -657,7 +609,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
             }
         }
     }
-
 
     public void onSubtitleLanguageSelected(String language) {
         if (mCurrentSubsLang != null && (language == null || mCurrentSubsLang.equals(language))) {
@@ -695,41 +646,66 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         });
     }
 
+    @Override
+    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+        if (width * height == 0)
+            return;
 
-    private static class VideoPlayerEventHandler extends WeakHandler<BaseVideoPlayerFragment> {
-        public VideoPlayerEventHandler(BaseVideoPlayerFragment owner) {
-            super(owner);
+        // store video size
+        mVideoWidth = width;
+        mVideoHeight = height;
+        mVideoVisibleWidth  = visibleWidth;
+        mVideoVisibleHeight = visibleHeight;
+        mSarNum = sarNum;
+        mSarDen = sarDen;
+        changeSurfaceLayout();
+    }
+
+    @Override
+    public void onSurfacesCreated(IVLCVout ivlcVout) {
+
+    }
+
+    @Override
+    public void onSurfacesDestroyed(IVLCVout ivlcVout) {
+
+    }
+
+    @Override
+    public void onEvent(MediaPlayer.Event event) {
+        switch (event.type) {
+            case MediaPlayer.Event.Playing:
+                resumeVideo();
+                setProgressVisible(false);
+                showOverlay();
+                break;
+            case MediaPlayer.Event.EndReached:
+                endReached();
+                break;
+            case MediaPlayer.Event.EncounteredError:
+                onErrorEncountered();
+                break;
+            case MediaPlayer.Event.Opening:
+                mMediaPlayer.play();
+                break;
+            case MediaPlayer.Event.TimeChanged:
+            case MediaPlayer.Event.PositionChanged:
+                onProgressChanged(getCurrentTime(), getDuration());
+                checkSubs();
+                setProgressVisible(false);
+                break;
         }
+        updatePlayPauseState();
+    }
 
-        @Override
-        public void handleMessage(Message msg) {
-            BaseVideoPlayerFragment fragment = getOwner();
-            if (fragment == null) return;
+    @Override
+    public void eventHardwareAccelerationError() {
+        handleHardwareAccelerationError();
+    }
 
-            switch (msg.getData().getInt("event")) {
-                case EventHandler.MediaPlayerPlaying:
-                    fragment.resumeVideo();
-                    fragment.setProgressVisible(false);
-                    fragment.showOverlay();
-                    break;
-                case EventHandler.MediaPlayerEndReached:
-                    fragment.endReached();
-                    break;
-                case EventHandler.MediaPlayerEncounteredError:
-                    fragment.onErrorEncountered();
-                    break;
-                case EventHandler.HardwareAccelerationError:
-                    fragment.handleHardwareAccelerationError();
-                    break;
-                case EventHandler.MediaPlayerTimeChanged:
-                case EventHandler.MediaPlayerPositionChanged:
-                    fragment.onProgressChanged(fragment.getCurrentTime(), fragment.getDuration());
-                    fragment.checkSubs();
-                    fragment.setProgressVisible(false);
-                    break;
-            }
-            fragment.updatePlayPauseState();
-        }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void changeSurfaceLayout() {
+        changeSurfaceSize(false);
     }
 
     @Override
@@ -765,35 +741,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
         }
     }
 
-    /**
-     * attach and disattach surface to the lib
-     */
-    private final SurfaceHolder.Callback mSurfaceCallback = new SurfaceHolder.Callback() {
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            if (format == PixelFormat.RGBX_8888)
-                Timber.d("Pixel format is RGBX_8888");
-            else if (format == PixelFormat.RGB_565)
-                Timber.d("Pixel format is RGB_565");
-            else if (format == ImageFormat.YV12)
-                Timber.d("Pixel format is YV12");
-            else
-                Timber.d("Pixel format is other/unknown");
-            if (mLibVLC != null)
-                mLibVLC.attachSurface(holder.getSurface(), BaseVideoPlayerFragment.this);
-        }
-
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            if (mLibVLC != null)
-                mLibVLC.detachSurface();
-        }
-    };
-
     public interface Callback {
         Long getResumePosition();
         StreamInfo getInfo();
@@ -811,7 +758,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVideo
     public boolean onOptionsItemSelected(MenuItem item) {
         int i = item.getItemId();
         if (i == R.id.action_reload) {
-            mLibVLC.stop();
+            mMediaPlayer.stop();
+            Canvas canvas = new Canvas();
+            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+            getVideoSurface().draw(canvas);
             loadMedia();
             return true;
         }

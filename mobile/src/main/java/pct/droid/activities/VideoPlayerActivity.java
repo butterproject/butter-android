@@ -61,6 +61,8 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
+        mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+
         setShowCasting(true);
 
         mResumePosition = getIntent().getLongExtra(BaseVideoPlayerFragment.RESUME_POSITION, 0);

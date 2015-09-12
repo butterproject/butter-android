@@ -17,6 +17,7 @@
 
 package pct.droid.base;
 
+import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -39,8 +40,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
-import org.videolan.vlc.VLCApplication;
-
 import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
@@ -54,10 +53,11 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
 import timber.log.Timber;
 
-public class PopcornApplication extends VLCApplication implements PopcornUpdater.Listener {
+public class PopcornApplication extends Application implements PopcornUpdater.Listener {
 
     private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
+    private static Application sThis;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -68,6 +68,8 @@ public class PopcornApplication extends VLCApplication implements PopcornUpdater
     @Override
     public void onCreate() {
         super.onCreate();
+        sThis = this;
+
         if(!BuildConfig.GIT_BRANCH.equals("local"))
             Fabric.with(this, new Crashlytics());
 
@@ -192,5 +194,9 @@ public class PopcornApplication extends VLCApplication implements PopcornUpdater
 
             nm.notify(PopcornUpdater.NOTIFICATION_ID, notificationBuilder.build());
         }
+    }
+
+    public static Context getAppContext() {
+        return sThis;
     }
 }
