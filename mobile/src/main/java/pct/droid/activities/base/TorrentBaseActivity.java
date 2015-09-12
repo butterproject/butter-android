@@ -52,16 +52,17 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         TorrentService.bindHere(this, mServiceConnection);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         if (null != mService) {
             unbindService(mServiceConnection);
+            mService = null;
         }
     }
 
