@@ -28,6 +28,7 @@ import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import pct.droid.base.vlc.VLCOptions;
 
 public interface PreferencesHandler {
 
@@ -527,7 +528,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_hw_accel)
                     .setTitleResource(R.string.hw_acceleration)
                     .setPreferenceKey(Prefs.HW_ACCELERATION)
-                    .setDefaultValue(LibVLC.HW_ACCELERATION_AUTOMATIC)
+                    .setDefaultValue(VLCOptions.HW_ACCELERATION_AUTOMATIC)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -543,14 +544,14 @@ public interface PreferencesHandler {
                         @Override
                         public String get(PrefItem item) {
                             switch ((int) item.getValue()) {
-                                case LibVLC.HW_ACCELERATION_DECODING:
+                                case VLCOptions.HW_ACCELERATION_DECODING:
                                     return context.getString(R.string.hw_decoding);
-                                case LibVLC.HW_ACCELERATION_DISABLED:
+                                case VLCOptions.HW_ACCELERATION_DISABLED:
                                     return context.getString(R.string.disabled);
-                                case LibVLC.HW_ACCELERATION_FULL:
+                                case VLCOptions.HW_ACCELERATION_FULL:
                                     return context.getString(R.string.hw_full);
                                 default:
-                                case LibVLC.HW_ACCELERATION_AUTOMATIC:
+                                case VLCOptions.HW_ACCELERATION_AUTOMATIC:
                                     return context.getString(R.string.hw_automatic);
                             }
                         }
@@ -561,7 +562,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_pixel_format)
                     .setTitleResource(R.string.pixel_format)
                     .setPreferenceKey(Prefs.PIXEL_FORMAT)
-                    .setDefaultValue("")
+                    .setDefaultValue("YV12")
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -581,7 +582,7 @@ public interface PreferencesHandler {
                                     } else if (position == 0) {
                                         item.saveValue("RV16");
                                     } else {
-                                        item.saveValue("");
+                                        item.saveValue("RV32");
                                     }
                                 }
                             });
