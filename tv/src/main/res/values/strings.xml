@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">Popcorn Time</string>
+	<string name="app_name" translatable="false">Popcorn Time</string>
 	<string name="related_movies">Related Videos</string>
 
 	<!-- Main screen -->
@@ -35,13 +35,9 @@
 	<string name="quality_720">720p</string>
 	<string name="quality_1080">1080p</string>
 
-	<string name="rent_1">Rent By Day</string>
-	<string name="rent_2">From $1.99</string>
-	<string name="buy_1">Buy and Own</string>
-	<string name="buy_2">AT $9.99</string>
 	<string name="movie">Movie</string>
-	<string name="should_start">shouldStart</string>
-	<string name="start_position">startPosition</string>
+	<string name="should_start" translatable="false">shouldStart</string>
+	<string name="start_position" translatable="false">startPosition</string>
 	<string name="search_results">Search Results</string>
 	<string name="movie_results">Movie Results</string>
 	<string name="show_results">TV Series Results</string>
