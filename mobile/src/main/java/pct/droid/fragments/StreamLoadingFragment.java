@@ -60,7 +60,6 @@ import pct.droid.base.utils.VersionUtils;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
-    private boolean mAttached = false, mPlayingExternal = false;
     private Context mContext;
     private Torrent mCurrentTorrent;
 
@@ -101,28 +100,10 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mAttached = true;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mAttached = false;
-    }
-
-    @Override
     public void onResume() {
-        if(mPlayingExternal) {
-            BeamServerService.getServer().stop();
-            mPlayerStarted = false;
-            super.onResume();
-            mPlayerStarted = true;
+        super.onResume();
+        if(mPlayingExternal)
             setState(State.STREAMING);
-        } else {
-            super.onResume();
-        }
     }
 
     @Override
@@ -165,7 +146,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     private void updateStatus(final StreamStatus status) {
-        if (!mAttached) return;
+        if (!FragmentUtil.isAdded(this)) return;
 
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
