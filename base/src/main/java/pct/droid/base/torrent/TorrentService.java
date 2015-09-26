@@ -43,7 +43,7 @@ import java.util.List;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
 import timber.log.Timber;
 

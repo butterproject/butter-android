@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.preferences;
+package pct.droid.base.content.preferences;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;

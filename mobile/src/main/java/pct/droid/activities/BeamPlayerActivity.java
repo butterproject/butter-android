@@ -32,7 +32,7 @@ import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.beaming.server.BeamServerService;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
-import pct.droid.dialogfragments.OptionDialogFragment;
+import pct.droid.fragments.dialog.OptionDialogFragment;
 import pct.droid.fragments.BeamPlayerFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 

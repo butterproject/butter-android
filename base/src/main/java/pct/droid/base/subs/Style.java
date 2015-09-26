@@ -153,5 +153,19 @@ public class Style {
         return "default" + styleCounter++;
     }
 
+    @Override
+    public String toString() {
+        return "Style{" +
+                "id='" + iD + '\'' +
+                ", font='" + font + '\'' +
+                ", fontSize='" + fontSize + '\'' +
+                ", color='" + color + '\'' +
+                ", backgroundColor='" + backgroundColor + '\'' +
+                ", textAlign='" + textAlign + '\'' +
+                ", italic=" + italic +
+                ", bold=" + bold +
+                ", underline=" + underline +
+                '}';
+    }
 
 }

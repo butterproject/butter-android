@@ -45,13 +45,13 @@ import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
 import pct.droid.adapters.MediaGridAdapter;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ThreadUtils;
-import pct.droid.dialogfragments.LoadingDetailDialogFragment;
+import pct.droid.fragments.dialog.LoadingDetailDialogFragment;
 import timber.log.Timber;
 
 /**

@@ -15,10 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.preferences;
-
-import java.util.ArrayList;
-import java.util.List;
+package pct.droid.base.content.preferences;
 
 public class Prefs {
     public static final String SUBTITLE_COLOR = "subtitle_color";
