@@ -89,6 +89,13 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(null != mService && mService.checkStopped())
+            finish();
+    }
+
+    @Override
     protected void onStop() {
         if(null != mService)
             mService.removeListener(mFragment);
@@ -144,6 +151,12 @@ public class BeamPlayerActivity extends PopcornBaseActivity implements VideoPlay
     @Override
     public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
+
+        if(mService.checkStopped()) {
+            finish();
+            return;
+        }
+
         mService.addListener(mFragment);
     }
 }
