@@ -24,15 +24,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
-import java.io.File;
-
 import butterknife.ButterKnife;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.activities.TorrentActivity;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;

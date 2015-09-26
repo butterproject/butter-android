@@ -26,7 +26,6 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -38,7 +37,7 @@ import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.beaming.server.BeamServer;
 import pct.droid.base.beaming.server.BeamServerService;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;

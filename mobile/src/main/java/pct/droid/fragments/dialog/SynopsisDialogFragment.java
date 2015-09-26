@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.dialogfragments;
+package pct.droid.fragments.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,28 +23,38 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.widget.TextView;
 
-import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
+import butterknife.ButterKnife;
+import butterknife.Bind;
 import pct.droid.R;
 
-public class ChangeLogDialogFragment extends DialogFragment {
+public class SynopsisDialogFragment extends DialogFragment {
+
+    @Bind(R.id.synopsis)
+    TextView synopsisText;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ChangeLogRecyclerView chgList = (ChangeLogRecyclerView) View.inflate(getActivity(), R.layout.fragment_dialog_changelog, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_synopsis, null);
+        ButterKnife.bind(this, view);
 
-        return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.changelog)
-                .setView(chgList)
-                .setPositiveButton(R.string.ok,
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .setNeutralButton(R.string.close,
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         }
-                )
-                .create();
+                );
 
+        if (getArguments().containsKey("text")) {
+            synopsisText.setText(getArguments().getString("text"));
+        }
+
+        return builder.create();
     }
 
 }

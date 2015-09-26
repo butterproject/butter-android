@@ -28,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;

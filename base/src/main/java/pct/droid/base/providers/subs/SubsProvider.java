@@ -36,7 +36,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.BaseProvider;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;

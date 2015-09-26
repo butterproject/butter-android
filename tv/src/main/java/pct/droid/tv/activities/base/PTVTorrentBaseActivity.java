@@ -48,7 +48,7 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 import butterknife.ButterKnife;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.activities.TorrentActivity;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;

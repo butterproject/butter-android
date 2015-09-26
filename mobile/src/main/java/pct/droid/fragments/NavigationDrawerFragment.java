@@ -40,7 +40,7 @@ import pct.droid.R;
 import pct.droid.activities.PreferencesActivity;
 import pct.droid.adapters.NavigationAdapter;
 import pct.droid.adapters.decorators.OneShotDividerDecorator;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.HaruProvider;
 import pct.droid.base.providers.media.MediaProvider;
@@ -48,7 +48,7 @@ import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.vpn.VPNHTChecker;
 import pct.droid.base.vpn.VPNManager;
-import pct.droid.dialogfragments.VPNInfoDialogFragment;
+import pct.droid.fragments.dialog.VPNInfoDialogFragment;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback {
 
