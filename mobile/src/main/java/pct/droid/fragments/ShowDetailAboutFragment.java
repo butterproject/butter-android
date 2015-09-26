@@ -65,6 +65,9 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
+        if(sShow == null)
+            return mRoot;
+
         mTitle.setText(sShow.title);
         if (!sShow.rating.equals("-1")) {
             Double rating = Double.parseDouble(sShow.rating);
@@ -75,23 +78,24 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
             mRating.setVisibility(View.GONE);
         }
 
-        String metaDataStr = sShow.year;
+        StringBuilder metaDataStr = new StringBuilder();
+        metaDataStr.append(sShow.year);
 
         if (sShow.status != Show.Status.UNKNOWN) {
-            metaDataStr += " • ";
+            metaDataStr.append(" • ");
             if (sShow.status == Show.Status.CONTINUING) {
-                metaDataStr += getString(R.string.continuing);
+                metaDataStr.append(getString(R.string.continuing));
             } else {
-                metaDataStr += getString(R.string.ended);
+                metaDataStr.append(getString(R.string.ended));
             }
         }
 
         if (!TextUtils.isEmpty(sShow.genre)) {
-            metaDataStr += " • ";
-            metaDataStr += sShow.genre;
+            metaDataStr.append(" • ");
+            metaDataStr.append(sShow.genre);
         }
 
-        mMeta.setText(metaDataStr);
+        mMeta.setText(metaDataStr.toString());
 
         if (!TextUtils.isEmpty(sShow.synopsis)) {
             mSynopsis.setText(sShow.synopsis);
