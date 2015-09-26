@@ -18,6 +18,7 @@
 package pct.droid.base.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -71,6 +72,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     protected FragmentListener mCallback;
     private SubsProvider mSubsProvider;
+    protected boolean mPlayingExternal = false;
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
     private TorrentService mService;
@@ -115,9 +117,9 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof FragmentListener) mCallback = (FragmentListener) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FragmentListener) mCallback = (FragmentListener) context;
     }
 
     public void onTorrentServiceConnected() {
@@ -206,10 +208,11 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         super.onResume();
         if (mPlayerStarted) {
             BeamServer beamService = BeamServerService.getServer();
-            if (beamService!=null) {
+            if (beamService != null) {
                 beamService.stop();
             }
-            getActivity().onBackPressed();
+            if(!mPlayingExternal)
+                getActivity().onBackPressed();
         }
 
         if(mService != null && mService.isStreaming() && mService.isReady()) {
