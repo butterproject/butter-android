@@ -40,7 +40,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.HashMap;
 
-import pct.droid.base.io.UnicodeBOMInputStream;
+import pct.droid.base.content.UnicodeBOMInputStream;
 
 public class FileUtils {
 

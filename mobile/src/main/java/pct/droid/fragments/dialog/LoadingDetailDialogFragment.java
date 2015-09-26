@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.dialogfragments;
+package pct.droid.fragments.dialog;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import pct.droid.R;
 import pct.droid.base.providers.media.MediaProvider;

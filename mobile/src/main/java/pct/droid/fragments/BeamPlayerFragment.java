@@ -45,7 +45,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -67,8 +66,8 @@ import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.dialogfragments.LoadingBeamingDialogFragment;
-import pct.droid.dialogfragments.OptionDialogFragment;
+import pct.droid.fragments.dialog.LoadingBeamingDialogFragment;
+import pct.droid.fragments.dialog.OptionDialogFragment;
 import pct.droid.widget.SeekBar;
 import timber.log.Timber;
 

@@ -31,7 +31,7 @@ import org.videolan.libvlc.util.VLCUtil;
 
 import java.util.ArrayList;
 
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
 
 

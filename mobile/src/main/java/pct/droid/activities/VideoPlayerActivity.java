@@ -28,7 +28,7 @@ import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
-import pct.droid.dialogfragments.OptionDialogFragment;
+import pct.droid.fragments.dialog.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
 
 public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {

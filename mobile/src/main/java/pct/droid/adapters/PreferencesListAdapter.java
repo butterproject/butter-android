@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.preferences.PrefItem;
+import pct.droid.base.content.preferences.PrefItem;
 
 public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

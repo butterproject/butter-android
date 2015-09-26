@@ -20,9 +20,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,8 +30,8 @@ import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.TrailerPlayerActivity;
 import pct.droid.activities.VideoPlayerActivity;
-import pct.droid.base.preferences.DefaultQuality;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.DefaultQuality;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.Magnet;
@@ -47,7 +45,7 @@ import pct.droid.base.utils.StringUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.base.youtube.YouTubeData;
-import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.fragments.dialog.SynopsisDialogFragment;
 import pct.droid.fragments.base.BaseDetailFragment;
 import pct.droid.widget.OptionSelector;
 

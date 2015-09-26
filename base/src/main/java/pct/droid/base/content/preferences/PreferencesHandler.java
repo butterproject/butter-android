@@ -1,4 +1,4 @@
-package pct.droid.base.preferences;
+package pct.droid.base.content.preferences;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
-
-import org.videolan.libvlc.LibVLC;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ import java.util.Map;
 import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.R;
-import pct.droid.base.dialogfragments.ChangeLogDialogFragment;
+import pct.droid.base.fragments.dialog.ChangeLogDialogFragment;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;

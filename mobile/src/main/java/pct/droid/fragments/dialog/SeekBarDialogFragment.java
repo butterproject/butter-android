@@ -1,4 +1,4 @@
-package pct.droid.dialogfragments;
+package pct.droid.fragments.dialog;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;

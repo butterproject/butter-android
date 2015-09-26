@@ -44,7 +44,7 @@ import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
 import pct.droid.base.beaming.BeamManager;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.FileUtils;

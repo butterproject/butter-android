@@ -77,5 +77,15 @@ public abstract class TimedTextFileFormat {
         return null;
     }
 
+    protected String join(String[] s, String glue) {
+        if (s.length == 0)
+            return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append(s[0]);
+        for (int x = 1; x < s.length; ++x) {
+            sb.append(glue).append(s[x]);
+        }
+        return sb.toString();
+    }
 
 }

@@ -29,13 +29,12 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import io.fabric.sdk.android.Fabric;
 import pct.droid.R;
 import pct.droid.base.PopcornApplication;
-import pct.droid.activities.base.TorrentBaseActivity;
 import pct.droid.base.beaming.BeamManager;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.vpn.VPNManager;
-import pct.droid.dialogfragments.BeamDeviceSelectorDialogFragment;
+import pct.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 
 public class PopcornBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener, VPNManager.Listener {
 
