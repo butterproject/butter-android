@@ -26,7 +26,10 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
@@ -259,8 +262,14 @@ public class EZTVProvider extends MediaProvider {
                 show.rating = Double.toString(((LinkedTreeMap<String, Double>) showData.get("rating")).get("percentage") / 10);
 
                 ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
+                Set<String> episodeSet = new HashSet<>();
                 for (LinkedTreeMap<String, Object> episode : episodes) {
                     try {
+                        String episodeStr = String.format(Locale.US, "S%dE%d", ((Double) episode.get("season")).intValue(), ((Double) episode.get("episode")).intValue());
+                        if(episodeSet.contains(episodeStr))
+                            continue;
+                        episodeSet.add(episodeStr);
+
                         Episode episodeObject = new Episode(sMediaProvider, sSubsProvider, sMetaProvider);
                         LinkedTreeMap<String, LinkedTreeMap<String, Object>> torrents =
                                 (LinkedTreeMap<String, LinkedTreeMap<String, Object>>) episode.get("torrents");
