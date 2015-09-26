@@ -18,6 +18,7 @@
 package pct.droid.base.torrent;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -39,6 +40,8 @@ import com.sjl.foreground.Foreground;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
@@ -59,13 +62,14 @@ public class TorrentService extends Service implements TorrentListener {
     private Torrent mCurrentTorrent;
     private StreamStatus mStreamStatus;
 
-    private boolean mInForeground = false, mIsReady = false;
+    private boolean mInForeground = false, mIsReady = false, mStopped = false;
 
     private IBinder mBinder = new ServiceBinder();
     private List<TorrentListener> mListener = new ArrayList<>();
 
     private PowerManager.WakeLock mWakeLock;
     private Class mCurrentActivityClass;
+    private Timer mUpdateTimer;
 
     public class ServiceBinder extends Binder {
         public TorrentService getService() {
@@ -139,6 +143,11 @@ public class TorrentService extends Service implements TorrentListener {
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
+        Intent stopIntent = new Intent();
+        stopIntent.setAction(TorrentBroadcastReceiver.STOP);
+        PendingIntent pendingStopIntent = PendingIntent.getBroadcast(this, TorrentBroadcastReceiver.REQUEST_CODE, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action stopAction = new NotificationCompat.Action.Builder(R.drawable.abc_ic_clear_mtrl_alpha, getString(R.string.stop), pendingStopIntent).build();
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle("Popcorn Time - " + getString(pct.droid.base.R.string.running))
@@ -147,6 +156,7 @@ public class TorrentService extends Service implements TorrentListener {
                 .setOnlyAlertOnce(true)
                 .setPriority(Notification.PRIORITY_LOW)
                 .setContentIntent(pendingIntent)
+                .addAction(stopAction)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE);
 
         if(mStreamStatus != null && mIsReady) {
@@ -162,17 +172,29 @@ public class TorrentService extends Service implements TorrentListener {
         }
 
         Notification notification = builder.build();
-        notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
+        NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifManager.notify(NOTIFICATION_ID, notification);
         startForeground(NOTIFICATION_ID, notification);
+
+        if(mUpdateTimer == null) {
+            mUpdateTimer = new Timer();
+            mUpdateTimer.scheduleAtFixedRate(mUpdateTask, 5000, 5000);
+        }
     }
 
     public void stopForeground() {
         stopForeground(true);
+        if(mUpdateTimer != null) {
+            mUpdateTimer.cancel();
+            mUpdateTimer = null;
+        }
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
         Timber.d("streamTorrent");
+        mStopped = false;
 
         if (mTorrentStream.isStreaming()) return;
 
@@ -200,6 +222,9 @@ public class TorrentService extends Service implements TorrentListener {
     }
 
     public void stopStreaming() {
+        mStopped = true;
+        mTorrentStream.removeListener(this);
+
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
@@ -209,7 +234,6 @@ public class TorrentService extends Service implements TorrentListener {
         stopForeground();
 
         mTorrentStream.stopStream();
-        mTorrentStream.removeListener(this);
         mIsReady = false;
 
         Timber.d("Stopped torrent and removed files if possible");
@@ -221,6 +245,14 @@ public class TorrentService extends Service implements TorrentListener {
 
     public boolean isReady() {
         return mIsReady;
+    }
+
+    public boolean checkStopped() {
+        if(mStopped) {
+            mStopped = false;
+            return true;
+        }
+        return false;
     }
 
     public void addListener(@NonNull TorrentListener listener) {
@@ -318,19 +350,27 @@ public class TorrentService extends Service implements TorrentListener {
 
         if(mInForeground) {
             mStreamStatus = streamStatus;
-            startForeground();
-        } else {
-            stopForeground();
         }
     }
 
     @Override
     public void onStreamStopped() {
         for(TorrentListener listener : mListener) {
-            if (listener!=null) {
+            if (listener != null) {
                 listener.onStreamStopped();
             }
         }
     }
+
+    private TimerTask mUpdateTask = new TimerTask() {
+        @Override
+        public void run() {
+            if(mInForeground) {
+                startForeground();
+            } else {
+                stopForeground();
+            }
+        }
+    };
 
 }
