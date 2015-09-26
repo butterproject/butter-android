@@ -1,4 +1,4 @@
-package pct.droid.dialogfragments;
+package pct.droid.fragments.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

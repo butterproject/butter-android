@@ -18,7 +18,7 @@ import pct.droid.adapters.EpisodeListAdapter;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.dialogfragments.EpisodeDialogFragment;
+import pct.droid.fragments.dialog.EpisodeDialogFragment;
 import pct.droid.fragments.base.BaseDetailFragment;
 import pct.droid.widget.LinearList;
 

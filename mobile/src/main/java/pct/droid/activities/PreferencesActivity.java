@@ -42,14 +42,14 @@ import butterknife.Bind;
 import pct.droid.R;
 import pct.droid.activities.base.PopcornBaseActivity;
 import pct.droid.adapters.PreferencesListAdapter;
-import pct.droid.base.dialogfragments.NumberPickerDialogFragment;
-import pct.droid.base.dialogfragments.StringArraySelectorDialogFragment;
-import pct.droid.base.preferences.PrefItem;
-import pct.droid.base.preferences.PreferencesHandler;
+import pct.droid.base.fragments.dialog.NumberPickerDialogFragment;
+import pct.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import pct.droid.base.content.preferences.PrefItem;
+import pct.droid.base.content.preferences.PreferencesHandler;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.ResourceUtils;
-import pct.droid.dialogfragments.ColorPickerDialogFragment;
-import pct.droid.dialogfragments.SeekBarDialogFragment;
+import pct.droid.fragments.dialog.ColorPickerDialogFragment;
+import pct.droid.fragments.dialog.SeekBarDialogFragment;
 import pct.droid.utils.ToolbarUtils;
 
 public class PreferencesActivity extends PopcornBaseActivity

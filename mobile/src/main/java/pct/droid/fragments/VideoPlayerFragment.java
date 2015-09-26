@@ -63,7 +63,7 @@ import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.LocaleUtils;

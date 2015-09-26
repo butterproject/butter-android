@@ -12,8 +12,8 @@ import android.widget.Toast;
 import java.util.Arrays;
 import java.util.List;
 
-import pct.droid.base.preferences.PrefItem;
-import pct.droid.base.preferences.PreferencesHandler;
+import pct.droid.base.content.preferences.PrefItem;
+import pct.droid.base.content.preferences.PreferencesHandler;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.tv.R;
 

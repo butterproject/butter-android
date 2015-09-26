@@ -8,7 +8,7 @@ import android.support.v17.leanback.widget.GuidedAction;
 
 import java.util.List;
 
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMainActivity;

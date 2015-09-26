@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.dialogfragments;
+package pct.droid.fragments.dialog;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -40,7 +40,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -49,11 +48,10 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import butterknife.OnClick;
-import android.support.annotation.Nullable;
 import pct.droid.R;
 import pct.droid.activities.MediaDetailActivity;
-import pct.droid.base.preferences.DefaultQuality;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.DefaultQuality;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Show;

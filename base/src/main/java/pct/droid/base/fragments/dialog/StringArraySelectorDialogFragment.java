@@ -15,7 +15,7 @@
  * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pct.droid.base.dialogfragments;
+package pct.droid.base.fragments.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

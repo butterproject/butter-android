@@ -50,7 +50,7 @@ import java.util.zip.Checksum;
 import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
 

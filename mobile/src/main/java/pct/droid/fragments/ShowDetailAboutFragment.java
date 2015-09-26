@@ -21,7 +21,7 @@ import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.dialogfragments.SynopsisDialogFragment;
+import pct.droid.fragments.dialog.SynopsisDialogFragment;
 import pct.droid.fragments.base.BaseDetailFragment;
 
 public class ShowDetailAboutFragment extends BaseDetailFragment {

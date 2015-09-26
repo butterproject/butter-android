@@ -25,7 +25,7 @@
  * Date:    02 - November - 2005    
  * ____________________________________________________________________________
  */
-package pct.droid.base.io;
+package pct.droid.base.content;
 
 import java.io.IOException;
 import java.io.InputStream;

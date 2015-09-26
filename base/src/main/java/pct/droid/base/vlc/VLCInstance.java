@@ -21,13 +21,12 @@
 package pct.droid.base.vlc;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.util.VLCUtil;
 
 import pct.droid.base.Constants;
-import pct.droid.base.preferences.Prefs;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.PrefUtils;
 import timber.log.Timber;
 
