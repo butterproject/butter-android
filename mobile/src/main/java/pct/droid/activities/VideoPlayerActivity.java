@@ -77,6 +77,13 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(null != mService && mService.checkStopped())
+            finish();
+    }
+
+    @Override
     protected void onPause() {
         if(mService != null)
             mService.removeListener(mFragment);
@@ -139,6 +146,12 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
     @Override
     public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
+
+        if(mService.checkStopped()) {
+            finish();
+            return;
+        }
+
         mService.addListener(mFragment);
     }
 
