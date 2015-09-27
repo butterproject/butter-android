@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Tühista</string>
   <string name="close">Sulge</string>
   <string name="ok">OK</string>
-  <string name="enabled">Sisse lülitatud</string>
-  <string name="disabled">Välja lülitatud</string>
   <string name="casting">Edastan</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Nimi, aasta, näitlejad</string>
-  <string name="title_shows">Saated</string>
-  <string name="title_movies">Filmid</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Žanrid</string>
-  <string name="search">Otsi</string>
-  <string name="searching">Otsin...</string>
-  <string name="no_data_found">Andmeid ei leitud</string>
-  <string name="unknown_error">Midagi läks valesti</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Loe veel</string>
-  <string name="watch_trailer">Vaata treilerit</string>
-  <string name="no_subs">Subtiitrid puuduvad</string>
-  <string name="no_subs_available">Subtiitrid ei ole saadaval</string>
-  <string name="subtitles">Subtiitrid</string>
-  <string name="quality">Kvaliteet</string>
-  <string name="trailer">Treiler</string>
-  <string name="season">Hooaeg</string>
-  <string name="episode">Episood</string>
-  <string name="specials">Erilised</string>
-  <string name="continuing">Jätkuv</string>
-  <string name="ended">Lõppenud</string>
-  <string name="aired">Eetris: %s</string>
-  <string name="no_title_available">Nimi puudub</string>
-  <string name="no_synopsis_available">Lühikirjeldus puudub</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Ootan torrentit</string>
   <string name="starting_buffering">Alustan laadimist</string>
@@ -44,6 +15,7 @@
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Hetkel mängib</string>
   <string name="volume">Heli</string>
+  <string name="play">Mängi</string>
   <string name="brightness">Heledus</string>
   <string name="hardware_acceleration_error_title">HW acceleration viga</string>
   <string name="hardware_acceleration_error_message">Riistvarakiirendamisega tekkis viga. Kas te sooviksite selle välja lülitada ja uuesti proovida?</string>
@@ -59,52 +31,6 @@
   <string name="leave_videoplayer_message">Olete te kindel, et sooite lahkuda video esitamisest? %s lõpetab mängimise.</string>
   <string name="encountered_error_title">Video viga</string>
   <string name="encountered_error">Esitaja viga. Video faili ei olnud võimalik avada ja/või esitada. Tundmatu formaat. </string>
-  <!--TermsActivity strings-->
-  <string name="accept">Nõustu</string>
-  <string name="leave">Lahku</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Seaded</string>
-  <string name="general">Üldine</string>
-  <string name="default_view">Vaikimisi vaade</string>
-  <string name="default_player">Vaikimisi video esitaja</string>
-  <string name="i18n_language">Programmi keel</string>
-  <string name="restart_effect">Taaskäivita programm, et muudatused toimima hakkaks</string>
-  <string name="device_language">Seadme keel</string>
-  <string name="stream_over_wifi_only">Ainult voogedasta üle Wi-Fi</string>
-  <string name="internal_player">Sisemine</string>
-  <string name="subtitle_color">Värv</string>
-  <string name="subtitle_size">Suurus</string>
-  <string name="subtitle_stroke_color">Kontuuri värv</string>
-  <string name="subtitle_stroke_width">Kontuuri laius</string>
-  <string name="subtitle_language">Vaikimisi keel</string>
-  <string name="no_default_set">Vaikimisi keelt ei ole</string>
-  <string name="advanced">Rohkem seadeid</string>
-  <string name="storage_location">Salvestamise koht</string>
-  <string name="storage_automatic">Automaatne</string>
-  <string name="storage_choose">Vali asukoht</string>
-  <string name="not_writable">Asukohta ei ole võimalik kirjutada</string>
-  <string name="remove_cache">Tühjenda vahemälu esitaja sulgemisel</string>
-  <string name="hw_acceleration">Hardware acceleration</string>
-  <string name="hw_automatic">Automaatne</string>
-  <string name="hw_full">Täis</string>
-  <string name="hw_decoding">Ainult dekodeerimine</string>
-  <string name="updates">Uuendused</string>
-  <string name="auto_updates">Automaatsed uuendused</string>
-  <string name="check_for_updates">Kontolli uuendusi</string>
-  <string name="last_check">Viimane kontroll</string>
-  <string name="about">Info</string>
-  <string name="version">Versioon</string>
-  <string name="changelog">Muudatused</string>
-  <string name="tap_to_open">Vajuta et avada</string>
-  <string name="report_a_bug">Teata veast</string>
-  <string name="open_source_licenses">Avatud lähtekoodiga litsentsid</string>
-  <string name="torrents">Torrentid</string>
-  <string name="download_speed">Maksimaalne allalaadimiskiirus</string>
-  <string name="upload_speed">Maksimaalne üleslaadimiskiirus</string>
-  <string name="max_connections">Maksimum arv ühendusi</string>
-  <string name="dht_limit">DHT limiit</string>
-  <string name="unlimited">Piiramatu</string>
-  <string name="show_vpn">Näita VPN valikut menüüs</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">ainult Wi-Fi</string>
   <string name="wifi_only_message">Videosi saab voogedastada ainult üle Wi-Fi võrgu. Sa võid selle seadetest välja lülitada kui soovid voogedastust kasutada üle telefoni võrgu.</string>

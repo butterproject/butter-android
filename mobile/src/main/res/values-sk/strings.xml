@@ -1,37 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Zrušiť</string>
   <string name="close">Zatvoriť</string>
   <string name="ok">OK</string>
-  <string name="enabled">Zapnuté</string>
-  <string name="disabled">Vypnuté</string>
   <string name="casting">Obsadenie</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Názov, rok, herci</string>
-  <string name="title_shows">Seriály</string>
-  <string name="title_movies">Filmy</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Žánre</string>
-  <string name="search">Vyhľadávať</string>
-  <string name="searching">Vyhľadavanie...</string>
-  <string name="no_data_found">Neboli nájdené žiadne dáta</string>
-  <string name="unknown_error">Niečo sa pokazilo</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Čítať viac</string>
-  <string name="watch_trailer">Pozrieť si trailer</string>
-  <string name="no_subs">Žiadne titulky</string>
-  <string name="no_subs_available">Titulky nie sú k dispozícii</string>
-  <string name="subtitles">Titulky</string>
-  <string name="quality">Kvalita</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Séria</string>
-  <string name="episode">Epizóda</string>
-  <string name="specials">Špeciality</string>
-  <string name="continuing">Pokračujúce</string>
-  <string name="ended">Ukončené</string>
-  <string name="aired">Odvysielané: %s</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Čaká sa na torrent</string>
   <string name="starting_buffering">Začína sa ukladanie do vyrovnávacej pamäte</string>
@@ -39,9 +12,12 @@
   <string name="waiting_for_subtitles">Čakám na titulky</string>
   <string name="seeds">seeds</string>
   <string name="error_files">Chyba: Nemôžem zapisovať súbory. Prosím použite iný priestor na uloženie.</string>
+  <string name="start_external">Štart externého prehrávača</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Práve prerávam</string>
   <string name="volume">Hlasitosť</string>
+  <string name="play">Prehrať</string>
+  <string name="pause">Pauza</string>
   <string name="brightness">Jas</string>
   <string name="hardware_acceleration_error_title">Chyba HW akcelerácie</string>
   <string name="hardware_acceleration_error_message">Nastala chyba pri hardvérovej akcelerácii. Chcete ju vypnúť a skúsiť znova?</string>
@@ -50,58 +26,13 @@
   <string name="fit_horizontal">Prispôsobiť na šírku</string>
   <string name="fit_vertical">Prispôsobiť na výšku</string>
   <string name="original_size">Pôvodné</string>
+  <string name="reload_video">Znovu načítať video</string>
   <string name="comm_error">Chyba pri komunikácii</string>
   <string name="comm_message">Počas získavania videa nastala chyba. Tá môže byť spôsobená problémami so sieťou alebo s protokolmi YouTube. Skúste to opäť neskôr.</string>
   <string name="leave_videoplayer_title">Are you sure?</string>
   <string name="leave_videoplayer_message">Ste si istý, že chcete vypnúť prehrávač videa? %s zastaví prehrávanie.</string>
   <string name="encountered_error_title">Vyskytla sa chyba videa</string>
   <string name="encountered_error">V prehrávači videa sa vyskytla vážna chyba. Súbor s videom nie je možné otvoriť a/alebo prehrať. Formát nebol rozpoznaný.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Prijať</string>
-  <string name="leave">Nechať pôvodné</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Nastavenia</string>
-  <string name="general">Všeobecné</string>
-  <string name="default_view">Predvolený prehľad</string>
-  <string name="default_player">Predvolený videoprehrávač</string>
-  <string name="i18n_language">Jazyk aplikácie</string>
-  <string name="restart_effect">Reštartujte aplikáciu, aby sa vykonali zmeny</string>
-  <string name="device_language">Jazyk zariadenia</string>
-  <string name="stream_over_wifi_only">Streamovať len cez Wi-Fi</string>
-  <string name="internal_player">Vnútorný</string>
-  <string name="subtitle_color">Farba</string>
-  <string name="subtitle_size">Veľkosť</string>
-  <string name="subtitle_stroke_color">Farba obrysu</string>
-  <string name="subtitle_stroke_width">Šírka obrysu</string>
-  <string name="subtitle_language">Predvolený jazyk</string>
-  <string name="no_default_set">Žiaden predvolený jazyk</string>
-  <string name="advanced">Pokročilé</string>
-  <string name="storage_location">Umiestnenia úložiska</string>
-  <string name="storage_automatic">Automaticky</string>
-  <string name="storage_choose">Vyberte umiestnenie</string>
-  <string name="not_writable">Do daného umiestnenia sa nedá zapisovať</string>
-  <string name="remove_cache">Vymazať vyrovnávaciu pamäť pri zavretí</string>
-  <string name="hw_acceleration">Hardvérová akcelerácia</string>
-  <string name="hw_automatic">Automatická</string>
-  <string name="hw_full">Úplna</string>
-  <string name="hw_decoding">Iba pri dekódovaní</string>
-  <string name="updates">Aktualizácie</string>
-  <string name="auto_updates">Automatické aktualizácie</string>
-  <string name="check_for_updates">Skontrolovať dostupnosť aktualizácií</string>
-  <string name="last_check">Naposledy skontrolované</string>
-  <string name="about">O nás</string>
-  <string name="version">Verzia</string>
-  <string name="changelog">Changelog</string>
-  <string name="tap_to_open">Otvorte ťuknutím</string>
-  <string name="report_a_bug">Nahlásiť chybu</string>
-  <string name="open_source_licenses">Opensourcové licencie</string>
-  <string name="torrents">Torrenty</string>
-  <string name="download_speed">Maximálna rýchlosť sťahovania</string>
-  <string name="upload_speed">Maximálna rýchlosť odosielania</string>
-  <string name="max_connections">Maximálne množstvo spojení</string>
-  <string name="dht_limit">DHT limit</string>
-  <string name="unlimited">Bez limitu</string>
-  <string name="show_vpn">Zobraziť v ponuke možnosť VPN</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Iba cez Wi-Fi</string>
   <string name="wifi_only_message">Môžete streamovať videá len cez Wi-Fi. Túto možnosť môžete vypnúť v Nastaveniach, ak chcete používať mobilné dáta.</string>
@@ -131,4 +62,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht aplikácia nie je nainštalovaná</string>
   <string name="vpn_info">Aby ste mohli použiť možnosť VPN priamo z aplikácie Popcorn Time, musíte mať nainštalovanú aplikáciu VPN.ht. Nezaujíma vás to? V tom prípade môžete toto tlačidlo jednoducho skryť.</string>
+  <string name="vpn_download">Stiahnuť</string>
+  <string name="vpn_later">Neskôr</string>
+  <string name="vpn_hide">Skryť</string>
 </resources>

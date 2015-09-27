@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Annulla</string>
   <string name="close">Chiudi</string>
   <string name="ok">OK</string>
-  <string name="enabled">Attivo</string>
-  <string name="disabled">Disattivato</string>
   <string name="casting">Trasmissione contenuti a distanza</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Titolo, Anno, Attori</string>
-  <string name="title_shows">Serie</string>
-  <string name="title_movies">Film</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Generi</string>
-  <string name="search">Cerca</string>
-  <string name="searching">Ricerca...</string>
-  <string name="no_data_found">Nessun dato trovato</string>
-  <string name="unknown_error">Qualcosa è andato storto</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Leggi di più</string>
-  <string name="watch_trailer">Guarda il Trailer</string>
-  <string name="no_subs">Nessun sottotitolo</string>
-  <string name="no_subs_available">Nessun sottotitolo disponibile</string>
-  <string name="subtitles">Sottotitoli</string>
-  <string name="quality">Qualità</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Stagione</string>
-  <string name="episode">Episodio</string>
-  <string name="specials">Speciali</string>
-  <string name="continuing">In corso</string>
-  <string name="ended">Finito</string>
-  <string name="aired">Trasmesso il: %s</string>
-  <string name="no_title_available">Nessun nome</string>
-  <string name="no_synopsis_available">Nessuna trama disponibile</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Aspettando il torrent</string>
   <string name="starting_buffering">Inizio buffering</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">Aspettando i sottotitoli...</string>
   <string name="seeds">Fonti</string>
   <string name="error_files">Errore: Impossibile scrivere i files. Per cortesia prova una destinazione differente.</string>
+  <string name="start_external">Avvia lettore esterno</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">In riproduzione</string>
   <string name="volume">Volume</string>
+  <string name="play">Riproduci</string>
+  <string name="pause">Pausa</string>
+  <string name="fastforward">Avanti veloce</string>
+  <string name="rewind">Riavvolgi</string>
   <string name="brightness">Luminosità</string>
   <string name="hardware_acceleration_error_title">Errore di Accelerazione Hardware</string>
   <string name="hardware_acceleration_error_message">Si è verificato un errore con l\'accelerazione Hardware. Vuole disattivarla e riprovare?</string>
@@ -59,53 +35,6 @@
   <string name="leave_videoplayer_message">Sei sicuro di voler uscire dal visualizzatore? %s verrà terminato.</string>
   <string name="encountered_error_title">Errore video riscontrato</string>
   <string name="encountered_error">Il lettore video ha riscontrato un errore serio. Il file video non può essere aperto e/o avviato. Il formato non è stato riconosciuto.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Accetta</string>
-  <string name="leave">Abbandona</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Preferenze</string>
-  <string name="general">Generali</string>
-  <string name="default_view">Visualizzazione predefinita</string>
-  <string name="default_player">Riproduttore predefinito</string>
-  <string name="i18n_language">Lingua dell\'applicazione</string>
-  <string name="restart_effect">Riavvia l\'applicazione perché i cambiamenti abbiano effetto</string>
-  <string name="device_language">Lingua del dispositivo</string>
-  <string name="stream_over_wifi_only">Attiva lo stream solo quando connesso al wifi</string>
-  <string name="internal_player">Interno</string>
-  <string name="subtitle_color">Colore</string>
-  <string name="subtitle_size">Dimensione</string>
-  <string name="subtitle_stroke_color">Colore del contorno</string>
-  <string name="subtitle_stroke_width">Larghezza contorno</string>
-  <string name="subtitle_language">Lingua predefinita</string>
-  <string name="no_default_set">Nessuna lingua predefinita</string>
-  <string name="advanced">Avanzate</string>
-  <string name="storage_location">Percorso di memorizzazione</string>
-  <string name="storage_automatic">Automatico</string>
-  <string name="storage_choose">Seleziona destinazione</string>
-  <string name="not_writable">Destinazione non scrivibile</string>
-  <string name="remove_cache">Rimuovi files temporanei alla chiusura</string>
-  <string name="hw_acceleration">Accelerazione hardware</string>
-  <string name="hw_automatic">Automatico</string>
-  <string name="hw_full">Massima</string>
-  <string name="hw_decoding">Solo decodifica</string>
-  <string name="updates">Aggiornamenti</string>
-  <string name="auto_updates">Aggiornamenti automatici</string>
-  <string name="check_for_updates">Controlla aggiornamenti</string>
-  <string name="last_check">Ultimo Controllo</string>
-  <string name="about">Riguardo a</string>
-  <string name="version">Versione</string>
-  <string name="changelog">Cambiamenti</string>
-  <string name="tap_to_open">Tocca per aprire</string>
-  <string name="report_a_bug">Segnala un Bug</string>
-  <string name="open_source_licenses">Licenza Open-Source</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Massima velocità in download</string>
-  <string name="upload_speed">Massima velocità in upload</string>
-  <string name="max_connections">Connessioni massime totali</string>
-  <string name="dht_limit">Limite DHT</string>
-  <string name="unlimited">Illimitato</string>
-  <string name="show_vpn">Mostra l\'opzione VPN nel menu</string>
-  <string name="rgb16">RGB 16-bit: migliori prestazioni, qualità inferiore</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Solo wifi</string>
   <string name="wifi_only_message">Puoi visualizzare i video solo con una connessione wifi. Puoi disattivare questa preferenza se vuoi visualizzarli tramite connessione mobile</string>

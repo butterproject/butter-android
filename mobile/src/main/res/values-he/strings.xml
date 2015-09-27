@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">בטל</string>
   <string name="close">סגור</string>
   <string name="ok">אישור</string>
-  <string name="enabled">מופעל</string>
-  <string name="disabled">מבוטל</string>
   <string name="casting">משדר</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">כותרת, שנה, שחקנים</string>
-  <string name="title_shows">סדרות</string>
-  <string name="title_movies">סרטים</string>
-  <string name="title_anime">אנימה</string>
-  <string name="genres">ז\'אנרים</string>
-  <string name="search">חיפוש</string>
-  <string name="searching">מחפש...</string>
-  <string name="no_data_found">לא נמצא מידע</string>
-  <string name="unknown_error">משהו השתבש</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">דקות</string>
-  <string name="read_more">קראו עוד</string>
-  <string name="watch_trailer">צפייה בטריילר </string>
-  <string name="no_subs">ללא כתוביות</string>
-  <string name="no_subs_available">אין כתוביות זמינות</string>
-  <string name="subtitles">כתוביות</string>
-  <string name="quality">איכות</string>
-  <string name="trailer">טריילר</string>
-  <string name="season">עונה</string>
-  <string name="episode">פרק</string>
-  <string name="specials">מיוחדים</string>
-  <string name="continuing">בפגרה</string>
-  <string name="ended">הסתיים</string>
-  <string name="aired">עלה לשידור: %s</string>
-  <string name="no_title_available">אין שם</string>
-  <string name="no_synopsis_available">אין תיאור</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">ממתין לטורנט</string>
   <string name="starting_buffering">מתחיל טעינה</string>
@@ -44,6 +15,8 @@
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">פועל עכשיו</string>
   <string name="volume">שמע</string>
+  <string name="play">הפעל</string>
+  <string name="pause">השהה</string>
   <string name="brightness">בהירות</string>
   <string name="hardware_acceleration_error_title">שגיאה בהאצת חומרה</string>
   <string name="hardware_acceleration_error_message">קיימת שגיאה בהאצת חומרה. האם ברצונך לבטל ולנסות שוב?</string>
@@ -59,52 +32,6 @@
   <string name="leave_videoplayer_message">האם אתם בטוחים שברצונכם לצאת מנגן המדיה ? %s יופסק להתנגן.</string>
   <string name="encountered_error_title">התרחשה שגיאה בוידאו</string>
   <string name="encountered_error">נגן הוידאו נתקל בבעיה. הוידאו אינו יכול להתנגן \ להיפתח. הפורמט אינו נתמך.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">הסכמה</string>
-  <string name="leave">לעזוב</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">הגדרות</string>
-  <string name="general">כללי</string>
-  <string name="default_view">מסך פתיחה</string>
-  <string name="default_player">נגן</string>
-  <string name="i18n_language">שפת אפליקציה</string>
-  <string name="restart_effect">יש צורך בהפעלת האפליקציה מחדש לשמירת השינויים</string>
-  <string name="device_language">שפת מכשיר</string>
-  <string name="stream_over_wifi_only">הזרם רק דרך Wi-Fi</string>
-  <string name="internal_player">פנימי</string>
-  <string name="subtitle_color">צבע</string>
-  <string name="subtitle_size">גודל</string>
-  <string name="subtitle_stroke_color">צבע קו חיצוני</string>
-  <string name="subtitle_stroke_width">עובי קו חיצוני</string>
-  <string name="subtitle_language">שפה מועדפת</string>
-  <string name="no_default_set">אין שפה מועדפת</string>
-  <string name="advanced">מתקדם</string>
-  <string name="storage_location">מקום אחסון</string>
-  <string name="storage_automatic">אוטומטי</string>
-  <string name="storage_choose">בחר מיקום</string>
-  <string name="not_writable">מיקום לא אפשרי לכתיבה</string>
-  <string name="remove_cache">מחק זיכרון מוטמן בסגירת נגן</string>
-  <string name="hw_acceleration">האצת חומרה</string>
-  <string name="hw_automatic">אוטומטי</string>
-  <string name="hw_full">מלא</string>
-  <string name="hw_decoding">קידוד בלבד</string>
-  <string name="updates">עדכונים</string>
-  <string name="auto_updates">עדכונים אוטומטים</string>
-  <string name="check_for_updates">בדיקה אם יש עדכונים</string>
-  <string name="last_check">בדיקה אחרונה</string>
-  <string name="about">אודות</string>
-  <string name="version">גירסה</string>
-  <string name="changelog">יומן שינויים</string>
-  <string name="tap_to_open">לחץ לפתיחה</string>
-  <string name="report_a_bug">דיווח על תקלה</string>
-  <string name="open_source_licenses">רישיון קוד פתוח</string>
-  <string name="torrents">טורנטים</string>
-  <string name="download_speed">מהירות הורדה מקסימלית </string>
-  <string name="upload_speed">מהירות העלאה מקסימלית</string>
-  <string name="max_connections">מקסימום חיבורים</string>
-  <string name="dht_limit">הגבלת DHT</string>
-  <string name="unlimited">ללא הגבלה</string>
-  <string name="show_vpn">הצג אפשרות VPN בתפריט</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi בלבד</string>
   <string name="wifi_only_message">הצפייה מתאפשרת דרך Wi-Fi בלבד כברירת מחדל. באפשרותך לשנות הגדרה זאת ולאפשר צפייה גם דרך האינטרנט של הרשת הסלולרית.</string>

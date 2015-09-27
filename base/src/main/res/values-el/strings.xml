@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Ακύρωση</string>
+  <string name="close">Κλείσιμο</string>
+  <string name="ok">Εντάξει</string>
+  <string name="enabled">Ενεργοποιημένο</string>
+  <string name="disabled">Απενεργοποιημένο</string>
   <string name="update_available">Διαθέσιμη νέα ενημέρωση</string>
   <string name="press_install">Πατήστε για εγκατάσταση</string>
   <string name="loading_data">Φόρτωση δεδομένων...</string>
@@ -9,14 +14,104 @@
   <string name="loading_subs">Φόρτωση υποτίτλων...</string>
   <string name="error_files">Σφάλμα: Απέτυχε η εγγραφή αρχείων</string>
   <string name="overview_not_available">Συγνώμη! Δεν υπάρχει διαθέσιμη προεπισκόπηση.</string>
-  <string name="episode">Επεισόδιο</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
   <string name="torrent_failed">Αποτυχία ανάκτησης torrent</string>
   <string name="running">Τρέχει στο παρασκήνιο</string>
   <string name="tap_to_close">Πατήστε για κλείσιμο</string>
   <string name="tap_to_resume">Πατήστε για συνέχιση</string>
-  <!--Genres-->
+  <string name="stop">Διακοπή</string>
+  <!--Overview strings-->
+  <string name="search_hint">Τίτλος, έτος, ηθοποιοί</string>
+  <string name="genres">Είδη</string>
+  <string name="search">Αναζήτηση</string>
+  <string name="searching">Γίνεται αναζήτηση...</string>
+  <string name="no_data_found">Δεν βρέθηκαν δεδομένα</string>
+  <string name="title_shows">Σειρές</string>
+  <string name="title_movies">Ταινίες</string>
+  <string name="title_anime">Άνιμε</string>
+  <string name="signature_invalid">Άκυρη υπογραφή εφαρμογής</string>
+  <string name="possibly_dangerous">Το Popcorn Time έχει παραποιηθεί. Παρακαλώ κατεβάστε ένα νέο αρχείο εγκατάστασης από το https://popcorntime.io/</string>
+  <string name="subtitles">Υπότιτλοι</string>
+  <string name="now_playing">Παίζει τώρα</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Προτιμήσεις</string>
+  <string name="general">Γενικά</string>
+  <string name="default_view">Προεπιλεγμένη επισκόπηση</string>
+  <string name="default_player">Προεπιλεγμένο πρόγραμμα αναπαραγωγής βίντεο</string>
+  <string name="i18n_language">Γλώσσα εφαρμογής</string>
+  <string name="restart_effect">Επανεκκινήστε την εφαρμογή για να ισχύσουν οι αλλαγές</string>
+  <string name="device_language">Γλώσσα συσκευής</string>
+  <string name="stream_over_wifi_only">Ροή δεδομένων μόνο μέσω Wi-Fi</string>
+  <string name="internal_player">Εσωτερικό</string>
+  <string name="subtitle_color">Χρώμα</string>
+  <string name="subtitle_size">Μέγεθος</string>
+  <string name="subtitle_timing">Χρονισμός υποτίτλων</string>
+  <string name="subtitle_stroke_color">Χρώμα περιγράμματος</string>
+  <string name="subtitle_stroke_width">Πλάτος περιγράμματος</string>
+  <string name="subtitle_language">Προκαθορισμένη γλώσσα</string>
+  <string name="subtitle_settings">Ρυθμίσεις υποτίτλων</string>
+  <string name="no_default_set">Καμία προκαθορισμένη γλώσσα</string>
+  <string name="advanced">Προχωρημένες</string>
+  <string name="storage_location">Τοποθεσία αποθήκευσης</string>
+  <string name="storage_automatic">Αυτόματα</string>
+  <string name="storage_choose">Επιλογή τοποθεσίας</string>
+  <string name="not_writable">Η τοποθεσία δεν είναι εγγράψιμη</string>
+  <string name="remove_cache">Αφαίρεση κρυφής μνήμης στο κλείσιμο</string>
+  <string name="hw_acceleration">Επιτάχυνση υλικού</string>
+  <string name="hw_automatic">Αυτόματα</string>
+  <string name="hw_full">Πλήρης</string>
+  <string name="hw_decoding">Αποκωδικοποίηση μόνο</string>
+  <string name="updates">Ενημερώσεις</string>
+  <string name="auto_updates">Αυτόματες ενημερώσεις</string>
+  <string name="check_for_updates">Έλεγχος για ενημερώσεις</string>
+  <string name="last_check">Τελευταίος έλεγχος</string>
+  <string name="about">Περί</string>
+  <string name="version">Έκδοση</string>
+  <string name="changelog">Αρχείο αλλαγών</string>
+  <string name="tap_to_open">Πατήστε για άνοιγμα</string>
+  <string name="report_a_bug">Αναφορά προβλήματος</string>
+  <string name="open_source_licenses">Άδειες ανοιχτού κώδικα</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Μέγιστη ταχύτητα λήψης</string>
+  <string name="upload_speed">Μέγιστη ταχύτητα αποστολής</string>
+  <string name="max_connections">Μέγιστες συνολικές συνδέσεις</string>
+  <string name="dht_limit">Όριο DHT</string>
+  <string name="unlimited">Απεριόριστο</string>
+  <string name="show_vpn">Εμφάνιση επιλογής VPN στο μενού</string>
+  <string name="pixel_format">Εξαναγκασμός χρωματισμού βίντεο</string>
+  <string name="rgb32">RGB 32-bit: Προεπιλεγμένος χρωματισμός</string>
+  <string name="rgb16">RGB 16-bit: Καλύτερη επίδοση, χαμηλότερη ποιότητα</string>
+  <string name="yuv">YUV: Καλύτερη επίδοση αλλά δεν λειτουργεί πάντα</string>
+  <string name="best_fit">Βέλτιστη προσαρμογή</string>
+  <string name="fill">Γέμισμα</string>
+  <string name="fit_horizontal">Οριζόντια προσαρμογή</string>
+  <string name="fit_vertical">Κάθετη προσαρμογή</string>
+  <string name="original_size">Αρχική</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">λεπτά</string>
+  <string name="read_more">Διαβάστε περισσότερα</string>
+  <string name="watch_trailer">Προβολή τρέιλερ</string>
+  <string name="no_subs">Χωρίς υπότιτλους</string>
+  <string name="no_subs_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
+  <string name="quality">Ποιότητα</string>
+  <string name="trailer">Τρέιλερ</string>
+  <string name="season">Κύκλος</string>
+  <string name="episode">Επεισόδιο</string>
+  <string name="specials">Ειδικά</string>
+  <string name="continuing">Συνεχίζεται</string>
+  <string name="ended">Τελείωσε</string>
+  <string name="aired">Προβλήθηκε: %s</string>
+  <string name="no_title_available">Δεν υπάρχει όνομα</string>
+  <string name="no_synopsis_available">Δεν υπάρχει διαθέσιμη περίληψη</string>
+  <string name="magnet">Magnet</string>
+  <string name="scale">Κλίμακα</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Ένταση</string>
+  <string name="brightness">Φωτεινότητα</string>
+  <string name="hardware_acceleration_error_title">Σφάλμα επιτάχυνσης υλικού</string>
   <string name="genre_all">Όλα</string>
+  <string name="hardware_acceleration_error_message">Παρουσιάστηκε σφάλμα με την επιτάχυνση υλικού. Θα θέλατε να την απενεργοποιήσετε και να προσπαθήσετε ξανά;</string>
+  <!--Genres-->
   <string name="genre_action">Δράση</string>
   <string name="genre_adventure">Περιπέτεια</string>
   <string name="genre_animation">Κινούμενα σχέδια</string>
@@ -79,15 +174,26 @@
   <string name="genre_supernatural">Υπερφυσικά</string>
   <string name="genre_vampire">Βρυκόλακες</string>
   <!--Possible tabs-->
+  <string name="popular">ΔΗΜΟΦΙΛΗ</string>
   <string name="top_rated">ΚΟΡΥΦΑΙΑ ΒΑΘΜΟΛΟΓΙΑ</string>
   <string name="release_date">ΗΜΕΡΟΜΗΝΙΑ ΚΥΚΛΟΦΟΡΙΑΣ</string>
   <string name="last_updated">ΤΕΛΕΥΤΑΙΑ ΕΝΗΜΕΡΩΣΗ</string>
   <string name="year">ΕΤΟΣ</string>
   <string name="a_to_z">Α - Ω</string>
   <string name="trending">ΤΑΣΕΙΣ</string>
+  <string name="encountered_error_title">Προέκυψε σφάλμα βίντεο</string>
+  <string name="encountered_error">Το πρόγραμμα αναπαραγωγής βίντεο συνάντησε ένα σοβαρό σφάλμα. Το αρχείο βίντεο δεν ήταν δυνατόν να ανοίξει και/ή να αναπαραχθεί. Η μορφοποίηση δεν αναγνωρίστηκε.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Σύζευξη με την τηλεόραση</string>
   <string name="confirm_tv">Παρακαλώ επιβεβαιώστε την σύνδεση με την τηλεόρασή σας</string>
   <string name="enter_pairing_code">Εισάγετε τον κωδικό σύζευξης στην τηλεόρασή σας</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Άνοιγμα με</string>
+  <string name="select_file">Επιλογή αρχείου</string>
+  <string name="accept">Αποδοχή</string>
+  <string name="leave">Αποχώρηση</string>
+  <string name="reload_video">Εκ νέου φόρτωση βίντεο</string>
+  <!--Health-->
+  <string name="health_info">Υγεία : %1$s, Τροφοδότες: %2$d, Αποδέκτες: %3$d</string>
+  <string name="health_bad">Κακή</string>
 </resources>

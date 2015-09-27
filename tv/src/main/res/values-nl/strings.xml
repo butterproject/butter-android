@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="related_movies">Gerelateerde videos</string>
+  <!--Main screen-->
+  <string name="top_movies">Top films</string>
+  <string name="top_shows">Top tv-series</string>
+  <string name="latest_shows">Nieuwste tv-series</string>
+  <string name="browse">Bladeren</string>
+  <string name="more">Meer</string>
+  <string name="tests">Testen</string>
+  <string name="error">Fout</string>
+  <string name="ok">Oké</string>
+  <string name="pause">Pauzeren</string>
+  <string name="play">Afspelen</string>
+  <string name="stop">Stop</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Afspelen / pauzeren knop</string>
+  <string name="loading">Laden...</string>
+  <string name="no_video_found">Geen video gevonden</string>
+  <string name="popular_header">Populaire videos</string>
+  <string name="preferences">VOORKEUREN</string>
+  <string name="grid_view">Rasteroverzicht</string>
+  <string name="settings">Voorkeuren</string>
+  <string name="personal_settings">Persoonlijke instellingen</string>
+  <string name="watch_trailer_1">Trailer bekijken</string>
+  <string name="watch_trailer_2">GRATIS</string>
+  <string name="watch">Bekijken</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Film</string>
+  <string name="search_results">Zoekresultaten</string>
+  <string name="movie_results">Gevonden films</string>
+  <string name="show_results">Gevonden tv-series</string>
+  <string name="video_error_media_load_timeout">Time-out tijdens laden media</string>
+  <string name="video_error_server_unaccessible">Mediaserver is onbereikbaar</string>
+  <string name="video_error_unknown_error">Video laden is niet gelukt</string>
+  <string name="oops">Oeps</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Ja</string>
+  <string name="later">Nee, later</string>
+  <string name="new_update">Een nieuwe versie van Popcorn Time voor Android TV is beschikbaar. Wilt u nu updaten?</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Verbinden...</string>
+  <string name="starting_buffering">Starten</string>
+  <string name="streaming_started">Streamen gestart</string>
+  <string name="waiting_for_subtitles">Wachten op ondertiteling</string>
+  <string name="seeds">seeds</string>
+  <string name="error_files">Fout: Kan geen bestanden schrijven</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Controleer uw internetverbinding</string>
+  <string name="choose_quality">Kwaliteit kiezen</string>
+  <string name="more_movies">Meer films</string>
+  <string name="more_shows">Meer series</string>
+  <string name="genres">Genres</string>
+  <string name="terms_and_conditions">Algemene voorwaarden</string>
+  <string name="view_terms">Voorwaarden bekijken</string>
+  <string name="episode_number_format">Aflevering %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Versie</string>
+</resources>

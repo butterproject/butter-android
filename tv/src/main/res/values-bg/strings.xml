@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="related_movies">Свързани видеа</string>
+  <!--Main screen-->
+  <string name="top_movies">Топ филми</string>
+  <string name="top_shows">Топ сериали</string>
+  <string name="latest_shows">Последни сериали</string>
+  <string name="browse">Сърфирай</string>
+  <string name="more">Още</string>
+  <string name="tests">Тестове</string>
+  <string name="error">Грешка</string>
+  <string name="ok">ОК</string>
+  <string name="pause">Пауза</string>
+  <string name="play">Възпроизвеждане</string>
+  <string name="stop">Спри</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Възпроизведи Сложи на пауза бутон</string>
+  <string name="loading">Зареждане...</string>
+  <string name="no_video_found">Не бе открито видео</string>
+  <string name="popular_header">Популярни видеа</string>
+  <string name="preferences">ПРЕДПОЧИТАНИЯ</string>
+  <string name="grid_view">Табличен изглед</string>
+  <string name="settings">Настройки</string>
+  <string name="personal_settings">Лични настройки</string>
+  <string name="watch_trailer_1">Изгледай трейлър</string>
+  <string name="watch_trailer_2">БЕЗПЛАТНО</string>
+  <string name="watch">Гледай</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Филм</string>
+  <string name="search_results">Резултати от търсенето</string>
+  <string name="movie_results">Резултати за филми</string>
+  <string name="show_results">Резултати за сериали</string>
+  <string name="video_error_media_load_timeout">Времето за зареждане на медия изтече</string>
+  <string name="video_error_server_unaccessible">Сървърът на медията не бе достигнат</string>
+  <string name="video_error_unknown_error">Провал при зареждане на видеото</string>
+  <string name="oops">Опа</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Да</string>
+  <string name="later">Не, по-късно</string>
+  <string name="new_update">Нова версия на Popcorn Time за Android TV е налична. Искате ли да обновите сега?</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Свързване...</string>
+  <string name="starting_buffering">Започване</string>
+  <string name="streaming_started">Стриймването започна</string>
+  <string name="waiting_for_subtitles">Изчакване за субтитри</string>
+  <string name="seeds">сийдъри</string>
+  <string name="error_files">Грешка: Файловете не можаха да бъдат записани</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Моля проверете вашата интернет връзка</string>
+  <string name="choose_quality">Избери качество</string>
+  <string name="more_movies">Още филми</string>
+  <string name="more_shows">Още сериали</string>
+  <string name="genres">Жанрове</string>
+  <string name="terms_and_conditions">Правила и условия</string>
+  <string name="view_terms">Прегледай правила</string>
+  <string name="episode_number_format">Епизод %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Версия</string>
+</resources>

@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Cancel·la</string>
   <string name="close">Tanca</string>
   <string name="ok">D\'acord</string>
-  <string name="enabled">Activat</string>
-  <string name="disabled">Desactivat</string>
   <string name="casting">Emetent</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Títol, any, actors</string>
-  <string name="title_shows">Programes</string>
-  <string name="title_movies">Pel·lícules</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Gèneres</string>
-  <string name="search">Cerca</string>
-  <string name="searching">S\'està cercant... </string>
-  <string name="no_data_found">No s\'han trobat dades</string>
-  <string name="unknown_error">Alguna cosa ha fallat</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Més informació</string>
-  <string name="watch_trailer">Reprodueix el tràiler</string>
-  <string name="no_subs">Sense subtítols</string>
-  <string name="no_subs_available">No hi ha subtítols disponibles</string>
-  <string name="subtitles">Subtítols</string>
-  <string name="quality">Qualitat</string>
-  <string name="trailer">Tràiler</string>
-  <string name="season">Temporada</string>
-  <string name="episode">Episodi</string>
-  <string name="specials">Especials</string>
-  <string name="continuing">Continuant</string>
-  <string name="ended">Finalitzat</string>
-  <string name="aired">Emesa: %s</string>
-  <string name="no_title_available">Sense nom</string>
-  <string name="no_synopsis_available">Cap sinopsi disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">S\'està esperant el torrent</string>
   <string name="starting_buffering">S\'està iniciant la precàrrega</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">S\'estan esperant els subtítols</string>
   <string name="seeds">llavors</string>
   <string name="error_files">Error: No s\'ha pogut escriure. Prova una altra ubicació d\'emmagatzemament si us plau.</string>
+  <string name="start_external">Inicia un reproductor extern</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">S\'està reproduint</string>
   <string name="volume">Volum</string>
+  <string name="play">Reprodueix</string>
+  <string name="pause">Pausa</string>
+  <string name="fastforward">Avança</string>
+  <string name="rewind">Rebobina</string>
   <string name="brightness">Lluminositat</string>
   <string name="hardware_acceleration_error_title">Error d\'acceleració per maquinari</string>
   <string name="hardware_acceleration_error_message">S\'ha produït un error amb l\'acceleració per maquinari. Voleu desactivar-la i provar de nou?</string>
@@ -59,56 +35,6 @@
   <string name="leave_videoplayer_message">Segur que voleu abandonar el reproductor? %s deixarà de reproduir-se.</string>
   <string name="encountered_error_title">S\'ha trobat un error de vídeo</string>
   <string name="encountered_error">El reproductor de vídeo ha tingut un problema greu. No s\'ha pogut obrir i/o reproduir el fitxer de vídeo. No s\'ha reconegut el format.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Accepta</string>
-  <string name="leave">Eixir</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Configuració</string>
-  <string name="general">General</string>
-  <string name="default_view">Pantalla inicial per defecte</string>
-  <string name="default_player">Reproductor per defecte</string>
-  <string name="i18n_language">Idioma de l\'aplicació</string>
-  <string name="restart_effect">Reinicieu l\'aplicació per aplicar els canvis</string>
-  <string name="device_language">Idioma del dispositiu</string>
-  <string name="stream_over_wifi_only">Transmissió només per Wi-Fi</string>
-  <string name="internal_player">Intern</string>
-  <string name="subtitle_color">Color</string>
-  <string name="subtitle_size">Mida</string>
-  <string name="subtitle_stroke_color">Color del contorn</string>
-  <string name="subtitle_stroke_width">Amplada del contorn</string>
-  <string name="subtitle_language">Idioma per defecte</string>
-  <string name="no_default_set">No hi ha idioma per defecte</string>
-  <string name="advanced">Avançat</string>
-  <string name="storage_location">Directori d\'emmagatzematge</string>
-  <string name="storage_automatic">Automàtic</string>
-  <string name="storage_choose">Selecciona un directori</string>
-  <string name="not_writable">No es pot escriure a aquest directori</string>
-  <string name="remove_cache">Elimina la memòria cau en tancar</string>
-  <string name="hw_acceleration">Acceleració per maquinari</string>
-  <string name="hw_automatic">Automàtica</string>
-  <string name="hw_full">Completa</string>
-  <string name="hw_decoding">Només descodificació</string>
-  <string name="updates">Actualitzacions</string>
-  <string name="auto_updates">Actualitzacions automàtiques</string>
-  <string name="check_for_updates">Comprova si hi ha actualitzacions</string>
-  <string name="last_check">Última comprovació</string>
-  <string name="about">Quant a</string>
-  <string name="version">Versió</string>
-  <string name="changelog">Registre de canvis</string>
-  <string name="tap_to_open">Toqueu per obrir</string>
-  <string name="report_a_bug">Reporta un error</string>
-  <string name="open_source_licenses">Llicències de codi obert</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Velocitat de baixada màxima</string>
-  <string name="upload_speed">Velocitat de pujada màxima</string>
-  <string name="max_connections">Connexions màximes totals</string>
-  <string name="dht_limit">Límit DHT</string>
-  <string name="unlimited">Sense límit</string>
-  <string name="show_vpn">Mostra l\'opció de VPN al menú</string>
-  <string name="pixel_format">Forçant els colors del vídeo</string>
-  <string name="rgb32">RGB 32-bit: colors per defecte</string>
-  <string name="rgb16">RGB 16-bit: reproducció més fluida, menys qualitat</string>
-  <string name="yuv">YUV: la reproducció més fluida, però no sempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Només Wi-Fi</string>
   <string name="wifi_only_message">Només es poden transmetre vídeos per Wi-Fi. Si voleu transmetre per una connexió mòbil podeu desactivar aquesta opció a la configuració.</string>
@@ -118,9 +44,9 @@
   <string name="no_search_results">No s\'han trobat resultats</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Popcorn Time és el resultat de molts desenvolupadors i dissenyadors ajuntant un grapat d\'APIs per tal de simplificar
-⇥⇥tant com es pugui l\'experiència de veure pel·lícules torrent. Som un projecte de codi obert. Som d\'arreu del món. Ens encanten
-⇥⇥les nostres pelis. I noi, ens encanten les crispetes.</string>
+  <string name="about_message">Popcorn Time és el resultat de molts desenvolupadors i dissenyadors ajuntant un grapat d\'APIs per tal de
+simplificar tant com es pugui l\'experiència de veure pel·lícules torrent. Som un projecte de codi obert. Som d\'arreu del món. Ens encanten
+les nostres pelis. I noi, ens encanten les crispetes.</string>
   <string name="website">Lloc web</string>
   <string name="forum">Fòrum</string>
   <string name="google_plus">Google+</string>

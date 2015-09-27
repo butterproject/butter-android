@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Abbrechen</string>
+  <string name="close">Schließen</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Aktiviert</string>
+  <string name="disabled">Deaktiviert</string>
   <string name="update_available">Neue Aktualisierung verfügbar</string>
   <string name="press_install">Drücken Sie, um zu installieren</string>
   <string name="loading_data">Daten werden geladen…</string>
@@ -9,14 +14,104 @@
   <string name="loading_subs">Untertitel werden geladen…</string>
   <string name="error_files">Fehler: Dateien konnten nicht geschrieben werden</string>
   <string name="overview_not_available">Entschuldigung! Es ist keine Übersicht verfügbar.</string>
-  <string name="episode">Folge</string>
   <string name="unknown_error">Irgendetwas ist schiefgelaufen</string>
   <string name="torrent_failed">Fehler beim Abrufen des Torrent</string>
   <string name="running">Läuft im Hintergrund</string>
   <string name="tap_to_close">Tippen Sie zum Schließen</string>
   <string name="tap_to_resume">Tippen Sie zum Fortsetzen</string>
-  <!--Genres-->
+  <string name="stop">Stopp</string>
+  <!--Overview strings-->
+  <string name="search_hint">Titel, Jahr, Schauspieler</string>
+  <string name="genres">Genres</string>
+  <string name="search">Suche</string>
+  <string name="searching">Suchvorgang…</string>
+  <string name="no_data_found">Keine Daten gefunden</string>
+  <string name="title_shows">Shows</string>
+  <string name="title_movies">Filme</string>
+  <string name="title_anime">Anime</string>
+  <string name="signature_invalid">App-Signatur ist inkorrekt</string>
+  <string name="possibly_dangerous">Popcorntime wurde manipuliert. Downloaden Sie bitte die neueste Version von: https://popcorntime.io/</string>
+  <string name="subtitles">Untertitel</string>
+  <string name="now_playing">Läuft jetzt</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Einstellungen</string>
+  <string name="general">Allgemein</string>
+  <string name="default_view">Standardübersicht</string>
+  <string name="default_player">Standard-Videoabspieler</string>
+  <string name="i18n_language">Appsprache</string>
+  <string name="restart_effect">Starten Sie die Anwendung neu, damit die Änderungen wirksam werden</string>
+  <string name="device_language">Gerätesprache</string>
+  <string name="stream_over_wifi_only">Nur über Wi-Fi streamen</string>
+  <string name="internal_player">Intern</string>
+  <string name="subtitle_color">Farbe</string>
+  <string name="subtitle_size">Größe</string>
+  <string name="subtitle_timing">Untertitelzeitabstimmung</string>
+  <string name="subtitle_stroke_color">Umrissfarbe</string>
+  <string name="subtitle_stroke_width">Umrissbreite</string>
+  <string name="subtitle_language">Standardsprache</string>
+  <string name="subtitle_settings">Untertiteleinstellungen</string>
+  <string name="no_default_set">Keine Standardsprache</string>
+  <string name="advanced">Erweitert</string>
+  <string name="storage_location">Speicherort</string>
+  <string name="storage_automatic">Automatisch</string>
+  <string name="storage_choose">Speicherort auswählen</string>
+  <string name="not_writable">Speicherort nicht beschreibbar</string>
+  <string name="remove_cache">Bei Abspielerschließung Cache entfernen</string>
+  <string name="hw_acceleration">Hardwarebeschleunigung</string>
+  <string name="hw_automatic">Automatisch</string>
+  <string name="hw_full">Vollständig</string>
+  <string name="hw_decoding">Nur Dekodierung</string>
+  <string name="updates">Aktualisierungen</string>
+  <string name="auto_updates">Automatische Aktualisierungen</string>
+  <string name="check_for_updates">Nach Aktualisierungen suchen</string>
+  <string name="last_check">Letzte Prüfung</string>
+  <string name="about">Über</string>
+  <string name="version">Version</string>
+  <string name="changelog">Änderungsprotokoll</string>
+  <string name="tap_to_open">Tippen Sie zum Öffnen</string>
+  <string name="report_a_bug">Einen Fehler melden</string>
+  <string name="open_source_licenses">Open-Source-Lizenzen</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Maximale Herunterladegeschwindigkeit</string>
+  <string name="upload_speed">Maximale Hochladegeschwindigkeit</string>
+  <string name="max_connections">Maximale Gesamtverbindungen</string>
+  <string name="dht_limit">DHT-Begrenzung</string>
+  <string name="unlimited">Unbegrenzt</string>
+  <string name="show_vpn">VPN-Option im Menü anzeigen</string>
+  <string name="pixel_format">Videofarbsättigung erzwingen</string>
+  <string name="rgb32">RGB 32-Bit: Standardfarbsättigung</string>
+  <string name="rgb16">RGB 16-Bit: bessere Leistung, niedrigere Qualität</string>
+  <string name="yuv">YUV: beste Leistung, aber funktioniert nicht immer</string>
+  <string name="best_fit">Beste Anpassung</string>
+  <string name="fill">Ausfüllen</string>
+  <string name="fit_horizontal">Horizontal anpassen</string>
+  <string name="fit_vertical">Vertikal anpassen</string>
+  <string name="original_size">Original</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Weiterlesen</string>
+  <string name="watch_trailer">Filmvorschau ansehen</string>
+  <string name="no_subs">Keine Untertitel</string>
+  <string name="no_subs_available">Keine Untertitel verfügbar</string>
+  <string name="quality">Qualität</string>
+  <string name="trailer">Filmvorschau</string>
+  <string name="season">Staffel</string>
+  <string name="episode">Folge</string>
+  <string name="specials">Besonderheiten</string>
+  <string name="continuing">Forsetzen</string>
+  <string name="ended">Beendet</string>
+  <string name="aired">Ausgestrahlt: %s</string>
+  <string name="no_title_available">Kein Name</string>
+  <string name="no_synopsis_available">Keine Zusammenfassung verfügbar</string>
+  <string name="magnet">Magnet</string>
+  <string name="scale">Skalierung</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Lautstärke</string>
+  <string name="brightness">Helligkeit</string>
+  <string name="hardware_acceleration_error_title">Hardwarebeschleunigungsfehler</string>
   <string name="genre_all">Alle</string>
+  <string name="hardware_acceleration_error_message">Bei der Hardwarebeschleunigung ist ein Fehler aufgetreten. Möchten Sie sie deaktivieren und es erneut versuchen?</string>
+  <!--Genres-->
   <string name="genre_action">Action</string>
   <string name="genre_adventure">Abenteuer</string>
   <string name="genre_animation">Animation</string>
@@ -79,14 +174,23 @@
   <string name="genre_supernatural">Übernatürlich</string>
   <string name="genre_vampire">Vampir</string>
   <!--Possible tabs-->
+  <string name="popular">BELIEBT</string>
   <string name="top_rated">BESTBEWERTET</string>
   <string name="release_date">VERÖFFENTLICHUNGSDATUM</string>
   <string name="last_updated">ZULETZT AKTUALISIERT</string>
   <string name="year">JAHR</string>
   <string name="a_to_z">A - Z</string>
+  <string name="trending">WIEDERKEHREND</string>
+  <string name="encountered_error_title">Videofehler aufgetreten</string>
   <!--BeamManager-->
   <string name="pairing_tv">Mit TV paaren</string>
   <string name="confirm_tv">Bitte bestätigen Sie die Verbindung auf dem Fernseher</string>
   <string name="enter_pairing_code">Geben Sie den Paarungscode auf dem Fernseher ein</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Öffnen mit</string>
+  <string name="select_file">Wähle eine Datei</string>
+  <string name="accept">Annehmen</string>
+  <string name="leave">Verlassen</string>
+  <string name="reload_video">Video neu laden</string>
+  <!--Health-->
 </resources>

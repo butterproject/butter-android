@@ -1,38 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Annuler</string>
   <string name="close">Fermer</string>
   <string name="ok">OK</string>
-  <string name="enabled">Activé</string>
-  <string name="disabled">Désactivé</string>
   <string name="casting">Projection</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Titre, année, acteurs</string>
-  <string name="title_shows">Séries</string>
-  <string name="title_movies">Films</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Genres</string>
-  <string name="search">Recherche</string>
-  <string name="searching">Recherche...</string>
-  <string name="no_data_found">Aucune donnée trouvée</string>
-  <string name="unknown_error">Quelque chose n\'a pas fonctionné</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Plus...</string>
-  <string name="watch_trailer">Visionner la bande-annonce</string>
-  <string name="no_subs">Aucuns sous-titres</string>
-  <string name="no_subs_available">Aucun sous-titre disponible</string>
-  <string name="subtitles">Sous-titres</string>
-  <string name="quality">Qualité</string>
-  <string name="trailer">Bande-annonce</string>
-  <string name="season">Saison</string>
-  <string name="episode">Épisode</string>
-  <string name="specials">Spéciaux</string>
-  <string name="continuing">En cours</string>
-  <string name="ended">Terminé</string>
-  <string name="aired">Diffusion : %s</string>
-  <string name="no_synopsis_available">Aucun synopsis disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">En attente du torrent</string>
   <string name="starting_buffering">Mise en mémoire tampon</string>
@@ -40,9 +12,14 @@
   <string name="waiting_for_subtitles">En attente des sous-titres…</string>
   <string name="seeds">Sources</string>
   <string name="error_files">Erreur : Impossible de créer les fichiers. Réessayez en utilisant une autre destination.</string>
+  <string name="start_external">Lancer le lecteur externe</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">En cours de lecture</string>
   <string name="volume">Volume</string>
+  <string name="play">Lire</string>
+  <string name="pause">Pause</string>
+  <string name="fastforward">Avance rapide</string>
+  <string name="rewind">Rembobiner</string>
   <string name="brightness">Luminosité</string>
   <string name="hardware_acceleration_error_title">Erreur d\'accélération matérielle</string>
   <string name="hardware_acceleration_error_message">Une erreur s\'est produite avec l\'accélération matérielle. Souhaitez-vous la désactiver et réessayer ?</string>
@@ -58,56 +35,6 @@
   <string name="leave_videoplayer_message">Voulez-vous vraiment interrompre la lecture de %s ?</string>
   <string name="encountered_error_title">Erreur vidéo</string>
   <string name="encountered_error">Le lecteur a rencontré une erreur sérieuse. Le fichier vidéo n\'a pas pu être ouvert et/ou joué. Le format est inconnu.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Accepter</string>
-  <string name="leave">Quitter</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Préférences</string>
-  <string name="general">Général</string>
-  <string name="default_view">Aperçu par défaut</string>
-  <string name="default_player">Lecteur vidéo par défaut</string>
-  <string name="i18n_language">Langue de l\'application</string>
-  <string name="restart_effect">Relancez l\'application pour que les modifications soient prises en compte </string>
-  <string name="device_language">Langue de l\'appareil</string>
-  <string name="stream_over_wifi_only">Lire seulement lorsque le Wi-Fi est activé</string>
-  <string name="internal_player">Interne</string>
-  <string name="subtitle_color">Couleur</string>
-  <string name="subtitle_size">Taille</string>
-  <string name="subtitle_stroke_color">Couleur du contour</string>
-  <string name="subtitle_stroke_width">Épaisseur du contour</string>
-  <string name="subtitle_language">Langue par défaut</string>
-  <string name="no_default_set">Il n\'y a pas de langue par défaut</string>
-  <string name="advanced">Avancé</string>
-  <string name="storage_location">Emplacement du stockage</string>
-  <string name="storage_automatic">Automatique</string>
-  <string name="storage_choose">Choisir un emplacement</string>
-  <string name="not_writable">Emplacement non accessible en écriture</string>
-  <string name="remove_cache">Vider le cache à la fin de la lecture</string>
-  <string name="hw_acceleration">Accélération matérielle</string>
-  <string name="hw_automatic">Automatique</string>
-  <string name="hw_full">Maximale</string>
-  <string name="hw_decoding">Décodage uniquement</string>
-  <string name="updates">Mises à jour</string>
-  <string name="auto_updates">Mises à jour automatiques</string>
-  <string name="check_for_updates">Rechercher des mises à jour</string>
-  <string name="last_check">Dernière vérification</string>
-  <string name="about">À propos</string>
-  <string name="version">Version</string>
-  <string name="changelog">Historique des modifications</string>
-  <string name="tap_to_open">Appuyez pour ouvrir</string>
-  <string name="report_a_bug">Soumettre un rapport de bug</string>
-  <string name="open_source_licenses">Licences Open-Source</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Vitesse de téléchargement maximale</string>
-  <string name="upload_speed">Vitesse de téléversement maximale</string>
-  <string name="max_connections">Maximum de connexions</string>
-  <string name="dht_limit">Limite DHT</string>
-  <string name="unlimited">Illimité</string>
-  <string name="show_vpn">Montrer l\'option VPN dans le menu</string>
-  <string name="pixel_format">Forcer une chromatique vidéo</string>
-  <string name="rgb32">RGB 32-bit : par défaut</string>
-  <string name="rgb16">RGB 16-bit : meilleures performances, plus faible qualité</string>
-  <string name="yuv">YUV : les meilleures performances, mais ne fonctionne pas à tous les coups</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fi uniquement </string>
   <string name="wifi_only_message">Vous ne pouvez lire de vidéos que lorsque le Wi-Fi est activé. Vous pouvez désactiver cette option dans les préférences si vous souhaitez utiliser une connexion de données mobiles.</string>

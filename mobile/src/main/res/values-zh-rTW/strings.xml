@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">取消</string>
   <string name="close">關閉</string>
   <string name="ok">確定</string>
-  <string name="enabled">已啟用</string>
-  <string name="disabled">已停用</string>
   <string name="casting">串流播放</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">標題、年份、演員</string>
-  <string name="title_shows">節目</string>
-  <string name="title_movies">電影</string>
-  <string name="title_anime">動畫</string>
-  <string name="genres">類型</string>
-  <string name="search">搜尋</string>
-  <string name="searching">搜尋中…</string>
-  <string name="no_data_found">找不到資料</string>
-  <string name="unknown_error">有些東西不對勁</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">分鐘</string>
-  <string name="read_more">閱讀更多</string>
-  <string name="watch_trailer">觀賞預告</string>
-  <string name="no_subs">無字幕</string>
-  <string name="no_subs_available">沒有可用的字幕</string>
-  <string name="subtitles">字幕</string>
-  <string name="quality">畫質</string>
-  <string name="trailer">預告</string>
-  <string name="season">季</string>
-  <string name="episode">集</string>
-  <string name="specials">特輯</string>
-  <string name="continuing">待續</string>
-  <string name="ended">已完結</string>
-  <string name="aired">播出於: %s</string>
-  <string name="no_title_available">無名稱</string>
-  <string name="no_synopsis_available">抱歉，暫無簡介。</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">正等待種子</string>
   <string name="starting_buffering">正在載入至緩衝</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">正在等待字幕</string>
   <string name="seeds">種子</string>
   <string name="error_files">錯誤: 無法寫入文檔，請選擇其他存儲位置。</string>
+  <string name="start_external">啟動外部播放器</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">現正播放</string>
   <string name="volume">音量</string>
+  <string name="play">播放</string>
+  <string name="pause">暫停</string>
+  <string name="fastforward">快轉</string>
+  <string name="rewind">倒帶</string>
   <string name="brightness">亮度</string>
   <string name="hardware_acceleration_error_title">硬體加速錯誤</string>
   <string name="hardware_acceleration_error_message">硬體加速功能發生錯誤，您想要停用加速功能後再試一次嗎？</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">您確定要離開影片播放器嗎？ %s 將會停止播放。</string>
   <string name="encountered_error_title">影片播放錯誤</string>
   <string name="encountered_error">影片播放出現嚴重錯誤。無法打開或播放此影片。未知的檔案格式。</string>
-  <!--TermsActivity strings-->
-  <string name="accept">接受</string>
-  <string name="leave">離開</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">偏好設定</string>
-  <string name="general">一般</string>
-  <string name="default_view">預設總覽</string>
-  <string name="default_player">預設視訊播放器</string>
-  <string name="i18n_language">應用程式語言</string>
-  <string name="restart_effect">重新啟動應用程式讓變更生效</string>
-  <string name="device_language">裝置語言</string>
-  <string name="stream_over_wifi_only">僅透過 Wi-Fi 串流</string>
-  <string name="internal_player">內建播放器</string>
-  <string name="subtitle_color">字體顏色</string>
-  <string name="subtitle_size">字體大小</string>
-  <string name="subtitle_stroke_color">外框色彩</string>
-  <string name="subtitle_stroke_width">外框寬度</string>
-  <string name="subtitle_language">預設語言</string>
-  <string name="no_default_set">無預設語言</string>
-  <string name="advanced">進階</string>
-  <string name="storage_location">儲存位置</string>
-  <string name="storage_automatic">自動</string>
-  <string name="storage_choose">選擇位置</string>
-  <string name="not_writable">該位置無法寫入</string>
-  <string name="remove_cache">在關閉播放器時移除快取</string>
-  <string name="hw_acceleration">硬體加速</string>
-  <string name="hw_automatic">自動</string>
-  <string name="hw_full">完整</string>
-  <string name="hw_decoding">僅解碼</string>
-  <string name="updates">更新</string>
-  <string name="auto_updates">自動更新</string>
-  <string name="check_for_updates">檢查更新</string>
-  <string name="last_check">上次檢查於</string>
-  <string name="about">關於</string>
-  <string name="version">版本</string>
-  <string name="changelog">更新日誌</string>
-  <string name="tap_to_open">點擊以開啟</string>
-  <string name="report_a_bug">回報 Bug</string>
-  <string name="open_source_licenses">開放原始碼授權</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">最高下載速度</string>
-  <string name="upload_speed">最高上傳速度</string>
-  <string name="max_connections">最大連線數</string>
-  <string name="dht_limit">DHT數量限制</string>
-  <string name="unlimited">無限制</string>
-  <string name="show_vpn">選單中顯示VPN選項</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">僅 Wi-Fi</string>
   <string name="wifi_only_message">您可以僅透過 Wi-Fi 串流視訊，若您也想透過行動連線進行串流的話可在偏好設定中停用此設定。</string>

@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Annuleren</string>
   <string name="close">Sluiten</string>
   <string name="ok">Oké</string>
-  <string name="enabled">Ingeschakeld</string>
-  <string name="disabled">Uitgeschakeld</string>
   <string name="casting">Casten</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Titel, jaar, acteurs</string>
-  <string name="title_shows">Series</string>
-  <string name="title_movies">Films</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Genres</string>
-  <string name="search">Zoeken</string>
-  <string name="searching">Zoeken...</string>
-  <string name="no_data_found">Geen gegevens gevonden</string>
-  <string name="unknown_error">Er is een fout opgetreden</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Meer lezen</string>
-  <string name="watch_trailer">Trailer bekijken</string>
-  <string name="no_subs">Geen ondertiteling</string>
-  <string name="no_subs_available">Geen ondertiteling beschikbaar</string>
-  <string name="subtitles">Ondertiteling</string>
-  <string name="quality">Kwaliteit</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Seizoen</string>
-  <string name="episode">Aflevering</string>
-  <string name="specials">Speciale afleveringen</string>
-  <string name="continuing">Lopend</string>
-  <string name="ended">Geëindigd</string>
-  <string name="aired">Uitgezonden: %s</string>
-  <string name="no_title_available">Geen naam</string>
-  <string name="no_synopsis_available">Geen beschrijving beschikbaar</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Wachten op torrent</string>
   <string name="starting_buffering">Bufferen starten...</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">Wachten op ondertiteling</string>
   <string name="seeds">seeds</string>
   <string name="error_files">Fout: kon bestanden niet schrijven. Probeer alstublieft een andere opslaglocatie.</string>
+  <string name="start_external">Externe speler starten</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Speelt nu</string>
   <string name="volume">Volume</string>
+  <string name="play">Afspelen</string>
+  <string name="pause">Pauzeren</string>
+  <string name="fastforward">Vooruitspoelen</string>
+  <string name="rewind">Terugspoelen</string>
   <string name="brightness">Helderheid</string>
   <string name="hardware_acceleration_error_title">Fout: hardwareversnelling</string>
   <string name="hardware_acceleration_error_message">Er is een fout opgetreden met de hardwareversnelling. Wil je dit uitschakelen en het opnieuw proberen?</string>
@@ -59,56 +35,6 @@
   <string name="leave_videoplayer_message">Weet je zeker dat je wil afsluiten? %s stopt dan met afspelen.</string>
   <string name="encountered_error_title">Er is een fout opgetreden bij het afspelen van de video.</string>
   <string name="encountered_error">Er is een fout opgetreden in de videospeler. De video bestand kon niet geopend en/of afgespeeld worden. Het bestandsformaat kon niet worden herkend.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Accepteren</string>
-  <string name="leave">Sluiten</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Voorkeuren</string>
-  <string name="general">Algemeen</string>
-  <string name="default_view">Startscherm</string>
-  <string name="default_player">Standaard videospeler</string>
-  <string name="i18n_language">Taal</string>
-  <string name="restart_effect">Herstart de applicatie om de wijzigingen door te voeren</string>
-  <string name="device_language">Standaardtaal</string>
-  <string name="stream_over_wifi_only">Alleen streamen over Wi-Fi</string>
-  <string name="internal_player">Interne</string>
-  <string name="subtitle_color">Kleur</string>
-  <string name="subtitle_size">Grootte</string>
-  <string name="subtitle_stroke_color">Kleur omlijning</string>
-  <string name="subtitle_stroke_width">Breedte omlijning</string>
-  <string name="subtitle_language">Standaardondertiteling</string>
-  <string name="no_default_set">Geen</string>
-  <string name="advanced">Geavanceerd</string>
-  <string name="storage_location">Opslag locatie</string>
-  <string name="storage_automatic">Automatisch</string>
-  <string name="storage_choose">Kies locatie</string>
-  <string name="not_writable">Deze locatie is niet beschrijfbaar</string>
-  <string name="remove_cache">Leeg cache na sluiten videospeler</string>
-  <string name="hw_acceleration">Hardwareversnelling</string>
-  <string name="hw_automatic">Automatisch</string>
-  <string name="hw_full">Volledig</string>
-  <string name="hw_decoding">Alleen decodering</string>
-  <string name="updates">Updates</string>
-  <string name="auto_updates">Automatische updates</string>
-  <string name="check_for_updates">Controleren op updates</string>
-  <string name="last_check">Laatste controle: </string>
-  <string name="about">Over</string>
-  <string name="version">Versie</string>
-  <string name="changelog">Changelog</string>
-  <string name="tap_to_open">Tik om te openen</string>
-  <string name="report_a_bug">Een fout melden</string>
-  <string name="open_source_licenses">Open-sourcelicenties</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Maximale downloadsnelheid</string>
-  <string name="upload_speed">Maximale uploadsnelheid</string>
-  <string name="max_connections">Maximum totale verbindingen</string>
-  <string name="dht_limit">DHT-limiet</string>
-  <string name="unlimited">Ongelimiteerd</string>
-  <string name="show_vpn">VPN-optie tonen in menu</string>
-  <string name="pixel_format">Forceer video chroma</string>
-  <string name="rgb32">RGB 32-bit: standaard chroma</string>
-  <string name="rgb16">RGB 16-bit: hogere performance, lagere kwaliteit</string>
-  <string name="yuv">YUV: beste performance maar werkt niet altijd</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Alleen wifi</string>
   <string name="wifi_only_message">Je kunt alleen streamen over een Wi-Fi-verbinding. Als je wilt streamen over een mobiele verbinding kun je deze instelling veranderen in de instellingen.</string>
