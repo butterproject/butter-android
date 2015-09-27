@@ -145,6 +145,9 @@ public class YTSProvider extends MediaProvider {
             case ALPHABET:
                 sort = "title";
                 break;
+            case TRENDING:
+                sort = "trending";
+                break;
         }
 
         params.add(new NameValuePair("sort_by", sort));
@@ -271,7 +274,7 @@ public class YTSProvider extends MediaProvider {
 
                 int existingItem = isInResults(existingList, movie.videoId);
                 if (existingItem == -1) {
-                    movie.title = (String) item.get("title");
+                    movie.title = (String) item.get("title_english");
                     Double year = (Double) item.get("year");
                     movie.year = Integer.toString(year.intValue());
                     movie.rating = item.get("rating").toString();
