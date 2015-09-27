@@ -241,9 +241,9 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <!-- Health -->
     <string name="health_info">Health: %1$s, Seeds: %2$d, Peers: %3$d</string>
     <string name="health_bad">Bad</string>
-    <string name="health_medium">Bad</string>
-    <string name="health_good">Bad</string>
-    <string name="health_excellent">Bad</string>
-    <string name="health_unknown">Bad</string>
+    <string name="health_medium">Medium</string>
+    <string name="health_good">Good</string>
+    <string name="health_excellent">Excellent</string>
+    <string name="health_unknown">Unknown</string>
 
 </resources>
