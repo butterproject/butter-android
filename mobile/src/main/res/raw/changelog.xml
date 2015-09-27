@@ -18,6 +18,22 @@
 
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.2.5">
+        <changelogtext>Added option to see full torrent stats for movies</changelogtext>
+        <changelogtext>Added 480p option to default qualities</changelogtext>
+        <changelogtext>Added visibility of progress in notification when in background</changelogtext>
+        <changelogtext>Added stop action to close in notification when in background</changelogtext>
+        <changelogtext>Fixed movie description view size</changelogtext>
+        <changelogtext>Fixed English not being in the language selector</changelogtext>
+        <changelogtext>Fixed crash when opening .torrent or magnet</changelogtext>
+        <changelogtext>Fixed casting when opening from .torrent or magnet</changelogtext>
+        <changelogtext>Fixed relaunch of external player</changelogtext>
+        <changelogtext>Fixed background initialisation of torrent</changelogtext>
+        <changelogtext>Fixed video reload option</changelogtext>
+        <changelogtext>Fixed updating progress bar on resume</changelogtext>
+        <changelogtext>Fixed screen not going off when playback ended</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.2.4">
         <changelogtext>[b]New![/b] Chromecast subtitle support</changelogtext>
         <changelogtext>[b]New![/b] Partial DLNA subtitle support</changelogtext>
