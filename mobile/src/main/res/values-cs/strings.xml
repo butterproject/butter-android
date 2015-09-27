@@ -1,37 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Zrušit</string>
   <string name="close">Zavřít</string>
   <string name="ok">OK</string>
-  <string name="enabled">Povoleno</string>
-  <string name="disabled">Zakázáno</string>
   <string name="casting">Obsazení</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Název, rok, herci</string>
-  <string name="title_shows">TV pořady</string>
-  <string name="title_movies">Fílmy</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Žánry</string>
-  <string name="search">Hledat</string>
-  <string name="searching">Hledání...</string>
-  <string name="no_data_found">Žádná data nenalezena</string>
-  <string name="unknown_error">Něco se nepovedlo</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min.</string>
-  <string name="read_more">Číst dále</string>
-  <string name="watch_trailer">Přehrát trailer</string>
-  <string name="no_subs">Bez titulků</string>
-  <string name="no_subs_available">K dispozici nejsou žádné titulky</string>
-  <string name="subtitles">Titulky</string>
-  <string name="quality">Kvalita</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Řada</string>
-  <string name="episode">Díl</string>
-  <string name="specials">Speciály</string>
-  <string name="continuing">Pokračující</string>
-  <string name="ended">Ukončeno</string>
-  <string name="aired">Vysíláno: %s</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Čekání na torrent</string>
   <string name="starting_buffering">Spouštění načítání</string>
@@ -42,6 +15,7 @@
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Právě přehráváno</string>
   <string name="volume">Hlasitost</string>
+  <string name="play">Přehrát</string>
   <string name="brightness">Jas</string>
   <string name="hardware_acceleration_error_title">Chyba HW akcelerace</string>
   <string name="hardware_acceleration_error_message">Vyskytla se chyba HW akcelerace. Chcete ji vypnout a spustit úlohu znovu?</string>
@@ -56,52 +30,6 @@
   <string name="leave_videoplayer_message">Jste si jisti, že chcete opustit přehrávač? %s bude zastaveno.</string>
   <string name="encountered_error_title">Chyba přehrávání </string>
   <string name="encountered_error">Video přehrávač selhal. Tento video soubor nelze otevřít a/nebo přehrát. Formát nelze ověřit. </string>
-  <!--TermsActivity strings-->
-  <string name="accept">Přijmout</string>
-  <string name="leave">Opustit</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Nastavení</string>
-  <string name="general">Obecné</string>
-  <string name="default_view">Výchozí přehled</string>
-  <string name="default_player">Výchozí video přehrávač</string>
-  <string name="i18n_language">Jazyk aplikace</string>
-  <string name="restart_effect">K provedení změn restartujte aplikaci.</string>
-  <string name="device_language">Jazyk zařízení</string>
-  <string name="stream_over_wifi_only">Stream pouze přes Wi-Fi</string>
-  <string name="internal_player">Interní</string>
-  <string name="subtitle_color">Barva</string>
-  <string name="subtitle_size">Velikost</string>
-  <string name="subtitle_stroke_color">Barva pozadí</string>
-  <string name="subtitle_stroke_width">Šířka pozadí</string>
-  <string name="subtitle_language">Výchozí jazyk</string>
-  <string name="no_default_set">Žádný výchozí jazyk</string>
-  <string name="advanced">Pokročilé</string>
-  <string name="storage_location">Umístění úložiště</string>
-  <string name="storage_automatic">Automaticky</string>
-  <string name="storage_choose">Vybrat umístění</string>
-  <string name="not_writable">Do umístění se nedá zapisovat</string>
-  <string name="remove_cache">Vymazat cache při ukončení přehrávače</string>
-  <string name="hw_acceleration">Hardwarová akcelerace</string>
-  <string name="hw_automatic">Automatická</string>
-  <string name="hw_full">Úplná</string>
-  <string name="hw_decoding">Pouze dekódování</string>
-  <string name="updates">Aktualizace</string>
-  <string name="auto_updates">Automatické aktualizace</string>
-  <string name="check_for_updates">Vyhledávat aktualizace</string>
-  <string name="last_check">Poslední kontrola</string>
-  <string name="about">O Nás</string>
-  <string name="version">Verze</string>
-  <string name="changelog">Changelog</string>
-  <string name="tap_to_open">Ťuknutím otevřít</string>
-  <string name="report_a_bug">Nahlásit chybu</string>
-  <string name="open_source_licenses">Licence s otevřeným zdrojovým kódem</string>
-  <string name="torrents">Torrentů</string>
-  <string name="download_speed">Maximální rychlost stahování</string>
-  <string name="upload_speed">Maximální rychlost nahrávání</string>
-  <string name="max_connections">Maximální počet připojení</string>
-  <string name="dht_limit">DHT Limit</string>
-  <string name="unlimited">Bez limitu</string>
-  <string name="show_vpn">Zobrazit VPN volbu v menu </string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Pouze Wi-Fi</string>
   <string name="wifi_only_message">Streamovat videa je povoleno pouze přes Wi-Fi. Tuto možnost lze zakázat v nastavení, pokud chcete streamovat přes mobilní připojení.</string>

@@ -18,46 +18,43 @@
 
 <resources>
     <string-array name="translation_languages" translatable="false">
-        <item>ar</item>
-        <item>bg</item>
-        <item>bn</item>
-        <item>ca</item>
-        <item>cs</item>
-        <item>da</item>
-        <item>de</item>
-        <item>en</item>
         <item>el</item>
-        <item>es</item>
-        <item>es-MX</item>
-        <item>et</item>
+        <item>ca</item>
+        <item>it</item>
+        <item>cs</item>
+        <item>ar</item>
         <item>eu</item>
+        <item>et</item>
+        <item>gl</item>
+        <item>es</item>
+        <item>ru</item>
+        <item>nl</item>
+        <item>pt</item>
+        <item>nb</item>
+        <item>tr</item>
+        <item>lv</item>
+        <item>lt</item>
+        <item>pa</item>
+        <item>ro</item>
+        <item>pl</item>
+        <item>fr</item>
+        <item>bg</item>
+        <item>hr</item>
+        <item>bn</item>
+        <item>de</item>
+        <item>hu</item>
         <item>fa</item>
         <item>fi</item>
-        <item>fr</item>
-        <item>gl</item>
-        <item>he</item>
-        <item>hr</item>
-        <item>hu</item>
-        <item>it</item>
+        <item>da</item>
         <item>ja</item>
-        <item>lt</item>
-        <item>lv</item>
-        <item>mk</item>
-        <item>ms</item>
-        <item>nb</item>
-        <item>nl</item>
-        <item>pa</item>
-        <item>pl</item>
-        <item>pt</item>
-        <item>pt-BR</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>sk</item>
+        <item>he</item>
+        <item>ka</item>
         <item>sr</item>
+        <item>sq</item>
         <item>sv</item>
-        <item>th</item>
-        <item>tr</item>
-        <item>zh-CN</item>
-        <item>zh-TW</item>
+        <item>mk</item>
+        <item>sk</item>
+        <item>ms</item>
+        <item>sl</item>
     </string-array>
 </resources>

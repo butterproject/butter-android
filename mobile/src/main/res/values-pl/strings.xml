@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Anuluj</string>
   <string name="close">Zamknij</string>
   <string name="ok">OK</string>
-  <string name="enabled">Włączone</string>
-  <string name="disabled">Wyłączone</string>
   <string name="casting">Strumieniowanie</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Tytuł, rok, aktorzy</string>
-  <string name="title_shows">Seriale</string>
-  <string name="title_movies">Filmy</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Gatunki</string>
-  <string name="search">Szukaj</string>
-  <string name="searching">Wyszukiwanie...</string>
-  <string name="no_data_found">Brak danych</string>
-  <string name="unknown_error">Coś poszło nie tak</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Czytaj więcej</string>
-  <string name="watch_trailer">Zobacz zwiastun</string>
-  <string name="no_subs">Brak napisów</string>
-  <string name="no_subs_available">Napisy niedostępne</string>
-  <string name="subtitles">Napisy</string>
-  <string name="quality">Jakość</string>
-  <string name="trailer">Zwiastun</string>
-  <string name="season">Sezon</string>
-  <string name="episode">Odcinek</string>
-  <string name="specials">Specjalne</string>
-  <string name="continuing">w emisji</string>
-  <string name="ended">zakończony</string>
-  <string name="aired">Data emisji: %s</string>
-  <string name="no_title_available">Brak nazwy</string>
-  <string name="no_synopsis_available">Brak dostępnych streszczeń</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Oczekiwanie na torrent</string>
   <string name="starting_buffering">Buforowanie...</string>
@@ -44,6 +15,10 @@
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Teraz odtwarzane</string>
   <string name="volume">Głośność</string>
+  <string name="play">Odtwórz</string>
+  <string name="pause">Pauza</string>
+  <string name="fastforward">Do przodu</string>
+  <string name="rewind">Do tyłu</string>
   <string name="brightness">Jasność</string>
   <string name="hardware_acceleration_error_title">Błąd przyspieszenia dekodowania sprzętowego</string>
   <string name="hardware_acceleration_error_message">Wystąpił błąd z przyspieszonym dekodowaniem sprzętowym. Czy chcesz je wyłączyć i spróbować ponownie?</string>
@@ -59,52 +34,6 @@
   <string name="leave_videoplayer_message">Czy na pewno chcesz opuścić odtwarzać? %s zakończy odtwarzanie.</string>
   <string name="encountered_error_title">Napotkano błąd wideo</string>
   <string name="encountered_error">Odtwarzacz wideo napotkał poważny błąd. Plik wideo nie może być otwarty i/lub odtworzony. Format nie został rozpoznany.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Akcpetuj</string>
-  <string name="leave">Wyjdź</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Ustawienia</string>
-  <string name="general">Ogólne</string>
-  <string name="default_view">Domyślny widok</string>
-  <string name="default_player">Domyślny odtwarzacz wideo</string>
-  <string name="i18n_language">Język aplikacji</string>
-  <string name="restart_effect">Uruchom aplikację ponownie aby zmiany zostały zastosowane</string>
-  <string name="device_language">Język systemu</string>
-  <string name="stream_over_wifi_only">Streamuj tylko przez Wi-Fi</string>
-  <string name="internal_player">Wbudowany</string>
-  <string name="subtitle_color">Kolor</string>
-  <string name="subtitle_size">Rozmiar</string>
-  <string name="subtitle_stroke_color">Kolor obrysu</string>
-  <string name="subtitle_stroke_width">Grubość obrysu</string>
-  <string name="subtitle_language">Język domyślny</string>
-  <string name="no_default_set">Brak języka domyślnego</string>
-  <string name="advanced">Zaawansoane</string>
-  <string name="storage_location">Miejsce przechowywania</string>
-  <string name="storage_automatic">Automatycznie</string>
-  <string name="storage_choose">Wybierz lokalizację</string>
-  <string name="not_writable">Brak uprawnień do zapisu</string>
-  <string name="remove_cache">Wyczyść cache po zamknięciu odtwarzacza</string>
-  <string name="hw_acceleration">Przyspieszenie sprzętowe</string>
-  <string name="hw_automatic">Automatycznie</string>
-  <string name="hw_full">Pełne</string>
-  <string name="hw_decoding">Tylko dekodowanie</string>
-  <string name="updates">Aktualizacje</string>
-  <string name="auto_updates">Automatyczne aktualizacje</string>
-  <string name="check_for_updates">Sprawdź aktualizacje</string>
-  <string name="last_check">Ostatnio sprawdzono</string>
-  <string name="about">O serialu</string>
-  <string name="version">Wersja</string>
-  <string name="changelog">Lista zmian</string>
-  <string name="tap_to_open">Dotknij aby otworzyć</string>
-  <string name="report_a_bug">Zgłoś błąd</string>
-  <string name="open_source_licenses">Licencje open source</string>
-  <string name="torrents">Torrenty</string>
-  <string name="download_speed">Maksymalna prędkość pobierania</string>
-  <string name="upload_speed">Maksymalna prędkość wysyłania</string>
-  <string name="max_connections">Maksymalna liczba połączeń</string>
-  <string name="dht_limit">Limit DHT</string>
-  <string name="unlimited">Bez limitu</string>
-  <string name="show_vpn">Pokaż opcję VPN w menu</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Tylko Wi-Fi</string>
   <string name="wifi_only_message">Możesz streamować filmy tylko przez Wi-Fi. Możesz to wyłączyć w ustawieniach jeśli chcesz korzystać z łącza mobilnego.</string>

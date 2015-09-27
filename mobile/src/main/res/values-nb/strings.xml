@@ -1,37 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Avbryt</string>
   <string name="close">Lukk</string>
   <string name="ok">Ok</string>
-  <string name="enabled">Aktivert</string>
-  <string name="disabled">Deaktivert </string>
   <string name="casting">Casting</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Tittel, år, skuespillere</string>
-  <string name="title_shows">TV-serier</string>
-  <string name="title_movies">Filmer</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Sjangere</string>
-  <string name="search">Søk</string>
-  <string name="searching">Søker...</string>
-  <string name="no_data_found">Ingen data funnet...</string>
-  <string name="unknown_error">Noe gikk galt </string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Les mer</string>
-  <string name="watch_trailer">Se trailer</string>
-  <string name="no_subs">Ingen undertekster tilgjengelig</string>
-  <string name="no_subs_available">Ingen undertekster tilgjengelig</string>
-  <string name="subtitles">Undertekster</string>
-  <string name="quality">Kvalitet</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Sesong</string>
-  <string name="episode">Episode</string>
-  <string name="specials">Spesielle</string>
-  <string name="continuing">Fortsetter</string>
-  <string name="ended">Avsluttet</string>
-  <string name="aired">På lufta: %s</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Venter på torrent</string>
   <string name="starting_buffering">Starter buffering</string>
@@ -39,69 +12,29 @@
   <string name="waiting_for_subtitles">Venter på undertekster</string>
   <string name="seeds">Delere</string>
   <string name="error_files">Feil: Klarte ikke å skrive filer. Prøv et annet lagringssted.</string>
+  <string name="start_external">Start ekstern avspiller</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Spilles nå</string>
   <string name="volume">Lydstyrke</string>
+  <string name="play">Spill av</string>
+  <string name="pause">Pause</string>
+  <string name="fastforward">Spol fremover</string>
+  <string name="rewind">Spol tilbake</string>
   <string name="brightness">Lysstyrke</string>
   <string name="hardware_acceleration_error_title">Feil med maskinvareakselerasjon</string>
-  <string name="hardware_acceleration_error_message">En feil oppsto med maskinvare akselerasjon. Vil du deaktivere og prøve igjen?</string>
+  <string name="hardware_acceleration_error_message">En feil oppsto med maskinvareakselerasjonen. Vil du deaktivere og prøve igjen?</string>
   <string name="best_fit">Beste tilpassing</string>
   <string name="fill">Fyll</string>
   <string name="fit_horizontal">Tilpass horisontalt</string>
   <string name="fit_vertical">Fyll vertikalt</string>
   <string name="original_size">Original</string>
+  <string name="reload_video">Start video på nytt</string>
   <string name="comm_error">Kommunikasjonsfeil</string>
   <string name="comm_message">Det oppstod en feil under henting av videoen. Dette kan være på grunn av nettverksproblemer eller YouTube-protokoller. Vennligst prøv igjen senere.</string>
   <string name="leave_videoplayer_title">Er du sikker?</string>
   <string name="leave_videoplayer_message">Er du sikker på at du ønsker å forlate videospilleren? %s vil slutte å spille.</string>
   <string name="encountered_error_title">Video feil oppstod</string>
   <string name="encountered_error">Videospilleren kom over en alvorlig feil. Videofilen kunne ikke åpnes og/eller spilles. Formatet ble ikke gjenkjent.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">aksepter</string>
-  <string name="leave">Tilbake</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Preferanser</string>
-  <string name="general">Generelt</string>
-  <string name="default_view">Standard oversikt</string>
-  <string name="default_player">standard videospiller</string>
-  <string name="i18n_language">språk</string>
-  <string name="restart_effect">Re start applikasjon for å iverksette endringer  </string>
-  <string name="device_language">Språket til enheten</string>
-  <string name="stream_over_wifi_only">Bare strøm filme over Wi-Fi</string>
-  <string name="internal_player">Intern</string>
-  <string name="subtitle_color">Farge</string>
-  <string name="subtitle_size">Størrelse</string>
-  <string name="subtitle_stroke_color">Kantfarge</string>
-  <string name="subtitle_stroke_width">Kantbredde</string>
-  <string name="subtitle_language">standard språk</string>
-  <string name="no_default_set">Ingen standard språk</string>
-  <string name="advanced">Avansert</string>
-  <string name="storage_location">lagringssted </string>
-  <string name="storage_automatic">Automatisk</string>
-  <string name="storage_choose">velg sted</string>
-  <string name="not_writable">Plassering ikke skrivbar</string>
-  <string name="remove_cache">Tøm mellomlager ved lukking</string>
-  <string name="hw_acceleration">Hardware aksellerasjon</string>
-  <string name="hw_automatic">Automatisk</string>
-  <string name="hw_full">Full</string>
-  <string name="hw_decoding">Kun dekoding</string>
-  <string name="updates">oppdateringer</string>
-  <string name="auto_updates">automatisk oppdatering </string>
-  <string name="check_for_updates">Sjekk for oppdateringer</string>
-  <string name="last_check">siste sjekk</string>
-  <string name="about">Om</string>
-  <string name="version">versjon</string>
-  <string name="changelog">Endringslogg</string>
-  <string name="tap_to_open">Trykk for å åpne</string>
-  <string name="report_a_bug">rapporter feil </string>
-  <string name="open_source_licenses">Lisenser for åpne kildekoder</string>
-  <string name="torrents">Torrenter</string>
-  <string name="download_speed">Maksimal nedlastingshastighet</string>
-  <string name="upload_speed">Maksimal opplastingshastighet</string>
-  <string name="max_connections">Maksimalt antall tilkoblinger</string>
-  <string name="dht_limit">DHT-begrensing</string>
-  <string name="unlimited">Ubegrenset</string>
-  <string name="show_vpn">Vis VPN valg i menyen</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Kun Wi-Fi</string>
   <string name="wifi_only_message">Du kan bare strømme video over Wi-Fi. Dette kan du endre i preferansene dine om du nå vil strømme over mobilt nettverk.</string>
@@ -131,4 +64,7 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht app er ikke installert</string>
   <string name="vpn_info">Du må ha VPN.ht appen installert for å bruke VPN alternativet inne i Popcorn Time. Ikke interessert? Da kan du bare skjule denne knappen.</string>
+  <string name="vpn_download">Last ned</string>
+  <string name="vpn_later">Senere</string>
+  <string name="vpn_hide">Skjul</string>
 </resources>

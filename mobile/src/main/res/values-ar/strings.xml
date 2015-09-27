@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">إلغاء</string>
   <string name="close">إغلاق</string>
   <string name="ok">موافق</string>
-  <string name="enabled">مفعلة</string>
-  <string name="disabled">معطلة</string>
   <string name="casting">جاري البث</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">العنوان, السنة, الممثلون</string>
-  <string name="title_shows">المسلسلات</string>
-  <string name="title_movies">الأفلام</string>
-  <string name="title_anime">انمي</string>
-  <string name="genres">الانواع</string>
-  <string name="search">بحث</string>
-  <string name="searching">جاري البحث...</string>
-  <string name="no_data_found">لم يتم العثور على بيانات</string>
-  <string name="unknown_error">حدث خطأ ما</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">دقيقة</string>
-  <string name="read_more">إقرأ المزيد</string>
-  <string name="watch_trailer">شاهد الإعلان</string>
-  <string name="no_subs">بدون ترجمة</string>
-  <string name="no_subs_available">لا تتوفر ترجمة</string>
-  <string name="subtitles">الترجمة</string>
-  <string name="quality">جودة العرض</string>
-  <string name="trailer">إعلان الفلم</string>
-  <string name="season">الموسم</string>
-  <string name="episode">الحلقة</string>
-  <string name="specials">خاصة</string>
-  <string name="continuing">العرض مستمر</string>
-  <string name="ended">إنتهى</string>
-  <string name="aired">تاريخ العرض: %s</string>
-  <string name="no_title_available">بدون إسم</string>
-  <string name="no_synopsis_available">الملخص غير متوفر</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">في انتظار التورنت</string>
   <string name="starting_buffering">بدأ التخزين المؤقت</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">في إنتظار الترجمة</string>
   <string name="seeds">موزع</string>
   <string name="error_files">خطأ في كتابة الملفات . فضلاً حاول تغيير مكان الحفظ من الاعدادات.</string>
+  <string name="start_external">إبدأ بمشغل وسائط خارجي</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">يعرض الآن</string>
   <string name="volume">الصوت</string>
+  <string name="play">تشغيل</string>
+  <string name="pause">إيقاف مؤقت</string>
+  <string name="fastforward">تقديم سريع</string>
+  <string name="rewind">ترجيع</string>
   <string name="brightness">السطوع</string>
   <string name="hardware_acceleration_error_title">خطأ في تسارع الجهاز</string>
   <string name="hardware_acceleration_error_message">حدث خطأ في تسارع الجهاز. هل ترغب بتعطيله والمحاولة مرة اخرى؟</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">هل انت متاكد من انك تريد مغادرة مشغل الفيديو ؟ %s سيتوقف عن العرض.</string>
   <string name="encountered_error_title">طرأ خطأ في الفيديو</string>
   <string name="encountered_error">مشغل الفيديو واجه خطأ. ملف الفيديو لا يَمكن فتحه و/أو تشغيله. لم يتم التعرف على الصيغة.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">قبول</string>
-  <string name="leave">مغادرة</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">الإعدادات</string>
-  <string name="general">عام</string>
-  <string name="default_view">الشاشة الرئيسية</string>
-  <string name="default_player">مشغل الفيديو الإفتراضي</string>
-  <string name="i18n_language">لغة التطبيق</string>
-  <string name="restart_effect">أعد تشغيل التطبيق</string>
-  <string name="device_language">لغة الجهاز</string>
-  <string name="stream_over_wifi_only">المشاهدة عبر الواي فاي فقط</string>
-  <string name="internal_player">داخلي</string>
-  <string name="subtitle_color">اللون</string>
-  <string name="subtitle_size">الحجم</string>
-  <string name="subtitle_stroke_color">لون الحد الخارجي</string>
-  <string name="subtitle_stroke_width">عرض الحد الخارجي</string>
-  <string name="subtitle_language">اللغة الإفتراضية</string>
-  <string name="no_default_set">لا توجد لغة إفتراضية</string>
-  <string name="advanced">إعدادات متقدمة</string>
-  <string name="storage_location">مكان الحفظ</string>
-  <string name="storage_automatic">تلقائي</string>
-  <string name="storage_choose">إختر الموقع</string>
-  <string name="not_writable">موقع غير صالح</string>
-  <string name="remove_cache">حذف الملفات المؤقتة عند إغلاق المشغل</string>
-  <string name="hw_acceleration">تسارع الجهاز</string>
-  <string name="hw_automatic">تلقائي</string>
-  <string name="hw_full">كامل</string>
-  <string name="hw_decoding">فك الترميز فقط</string>
-  <string name="updates">التحديثات</string>
-  <string name="auto_updates">تحديثات تلقائية</string>
-  <string name="check_for_updates">البحث عن التحديثات</string>
-  <string name="last_check">آخر بحث</string>
-  <string name="about">حول</string>
-  <string name="version">النسخة</string>
-  <string name="changelog">ما الجديد</string>
-  <string name="tap_to_open">أنقر للعرض</string>
-  <string name="report_a_bug">الإبلاغ عن مشكلة</string>
-  <string name="open_source_licenses">رخصة المصدر المفتوح</string>
-  <string name="torrents">تورنت</string>
-  <string name="download_speed">سرعة التنزيل القصوى</string>
-  <string name="upload_speed">سرعة الرفع القصوى</string>
-  <string name="max_connections">عدد الإتصالات القصوى</string>
-  <string name="dht_limit">DHT limit</string>
-  <string name="unlimited">غير محدود</string>
-  <string name="show_vpn">إظهار خيار ال VPN في القائمة.</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">واي فاي فقط</string>
   <string name="wifi_only_message">يمكنك مشاهدة الفيديوهات عبر الواي فاي فقط. بإمكانك تعديل هذا الخيار في الإعدادات إذا كنت تريد المشاهدة عبر شبكة الهاتف المحمول.</string>

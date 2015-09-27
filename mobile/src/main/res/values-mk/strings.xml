@@ -1,37 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Откажи</string>
   <string name="close">Затвори</string>
   <string name="ok">Во ред</string>
-  <string name="enabled">Овозможено</string>
-  <string name="disabled">Оневозможено</string>
   <string name="casting">Кастинг</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Назив, година, актери</string>
-  <string name="title_shows">Серии</string>
-  <string name="title_movies">Филмови</string>
-  <string name="title_anime">Аниме</string>
-  <string name="genres">Жанрови</string>
-  <string name="search">Пребарување</string>
-  <string name="searching">Се бара... </string>
-  <string name="no_data_found">Не се пронајдени податоци</string>
-  <string name="unknown_error">Нешто погрешно се случува</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">минута</string>
-  <string name="read_more">Прочитај повеќе</string>
-  <string name="watch_trailer">Гледај траилер</string>
-  <string name="no_subs">Нема преводи</string>
-  <string name="no_subs_available">Не се достапни преводи</string>
-  <string name="subtitles">Преводи</string>
-  <string name="quality">Квалитет</string>
-  <string name="trailer">Траилер</string>
-  <string name="season">Сезона</string>
-  <string name="episode">Епизода</string>
-  <string name="specials">Специјални емисии</string>
-  <string name="continuing">Продолжувам</string>
-  <string name="ended">Завршено</string>
-  <string name="aired">Емитувани: %s</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Очекување на торент</string>
   <string name="starting_buffering">Започнување на баферинг</string>
@@ -42,6 +15,7 @@
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Пуштено во моментов</string>
   <string name="volume">Звук</string>
+  <string name="play">Пушти</string>
   <string name="brightness">Светлост</string>
   <string name="hardware_acceleration_error_title">Грешка во хардверско забрзување</string>
   <string name="hardware_acceleration_error_message">Пронајдена е грешка во хардверското забрзување. Дали сакате да го онеспособите и да се обидете повторно?</string>
@@ -56,52 +30,6 @@
   <string name="leave_videoplayer_message">Дали сте сигурни дека сакате да излезете? %s ќе престане да се репродуцира.</string>
   <string name="encountered_error_title">Грешка со видеото</string>
   <string name="encountered_error">Сериозна грешка во програмот за репродукција. Видео датотеката не може да се отвори и/или репродуцира. Форматот на видеото е непознат.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Прифати</string>
-  <string name="leave">Напушти</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Опции</string>
-  <string name="general">Општо</string>
-  <string name="default_view">Почетен приказ</string>
-  <string name="default_player">Основен видео плеер</string>
-  <string name="i18n_language">Јазик на апликацијата</string>
-  <string name="restart_effect">Рестартирај ја апликацијата за промените да се прилагодат</string>
-  <string name="device_language">Основен јазик</string>
-  <string name="stream_over_wifi_only">Гледање само преку Wi-Fi мрежа</string>
-  <string name="internal_player">Внатрешно</string>
-  <string name="subtitle_color">Боја</string>
-  <string name="subtitle_size">Големина</string>
-  <string name="subtitle_stroke_color">Боја на контура</string>
-  <string name="subtitle_stroke_width">Дебелина на контура</string>
-  <string name="subtitle_language">Основен јазик</string>
-  <string name="no_default_set">Без основен јазик</string>
-  <string name="advanced">Напредно</string>
-  <string name="storage_location">Локација заснимање</string>
-  <string name="storage_automatic">Автоматски</string>
-  <string name="storage_choose">Одбери локација</string>
-  <string name="not_writable">На локацијата не може да се запишува</string>
-  <string name="remove_cache">Избриши кеш при затворање на плеер </string>
-  <string name="hw_acceleration">Хардверска акцелерација </string>
-  <string name="hw_automatic">Автоматски</string>
-  <string name="hw_full">Целосна</string>
-  <string name="hw_decoding">Само декодирање</string>
-  <string name="updates">Ажурирања </string>
-  <string name="auto_updates">Автоматско ажурирање</string>
-  <string name="check_for_updates">Провери за надградби</string>
-  <string name="last_check">Последна проверка</string>
-  <string name="about">За нас</string>
-  <string name="version">Верзија</string>
-  <string name="changelog">Промени</string>
-  <string name="tap_to_open">Допри за да отвориш</string>
-  <string name="report_a_bug">Пријави софтверска грешка</string>
-  <string name="open_source_licenses">Open-source licenses</string>
-  <string name="torrents">Торенти</string>
-  <string name="download_speed">Максимална брзина за симнување</string>
-  <string name="upload_speed">Максимална брзина за праќање</string>
-  <string name="max_connections">Максимално вкупно конекции</string>
-  <string name="dht_limit">DHT лимит</string>
-  <string name="unlimited">Неограничено</string>
-  <string name="show_vpn">Прикажи ја VPN опцијата во менито</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Само преку Wi-Fi</string>
   <string name="wifi_only_message">Можете да симнувате видеа само преку Wi-Fi. Можете да ја исклучите таа опција ако сакате да симнувате и преку мобилна мрежа.</string>

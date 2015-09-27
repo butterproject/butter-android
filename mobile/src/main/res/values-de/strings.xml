@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Abbrechen</string>
   <string name="close">Schließen</string>
   <string name="ok">OK</string>
-  <string name="enabled">Aktiviert</string>
-  <string name="disabled">Deaktiviert</string>
   <string name="casting">Besetzung</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Titel, Jahr, Schauspieler</string>
-  <string name="title_shows">Shows</string>
-  <string name="title_movies">Filme</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Genres</string>
-  <string name="search">Suche</string>
-  <string name="searching">Suchvorgang…</string>
-  <string name="no_data_found">Keine Daten gefunden</string>
-  <string name="unknown_error">Irgendetwas ist schiefgelaufen</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Weiterlesen</string>
-  <string name="watch_trailer">Filmvorschau ansehen</string>
-  <string name="no_subs">Keine Untertitel</string>
-  <string name="no_subs_available">Keine Untertitel verfügbar</string>
-  <string name="subtitles">Untertitel</string>
-  <string name="quality">Qualität</string>
-  <string name="trailer">Filmvorschau</string>
-  <string name="season">Staffel</string>
-  <string name="episode">Folge</string>
-  <string name="specials">Besonderheiten</string>
-  <string name="continuing">Läuft</string>
-  <string name="ended">Beendet</string>
-  <string name="aired">Ausgestrahlt: %s</string>
-  <string name="no_title_available">Kein Name</string>
-  <string name="no_synopsis_available">Keine Zusammenfassung verfügbar</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Auf Torrent wird gewartet</string>
   <string name="starting_buffering">Pufferung wird gestartet</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">Auf Untertitel wird gewartet</string>
   <string name="seeds">Seeds</string>
   <string name="error_files">Fehler: Dateien konnten nicht geschrieben werden. Bitte versuchen Sie einen anderen Speicherort.</string>
+  <string name="start_external">Externen Abspieler starten</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Läuft jetzt</string>
   <string name="volume">Lautstärke</string>
+  <string name="play">Wiedergabe</string>
+  <string name="pause">Pause</string>
+  <string name="fastforward">Schnellvorlauf</string>
+  <string name="rewind">Rücklauf</string>
   <string name="brightness">Helligkeit</string>
   <string name="hardware_acceleration_error_title">Hardwarebeschleunigungsfehler</string>
   <string name="hardware_acceleration_error_message">Bei der Hardwarebeschleunigung ist ein Fehler aufgetreten. Möchten Sie sie deaktivieren und es erneut versuchen?</string>
@@ -58,52 +34,7 @@
   <string name="leave_videoplayer_title">Sind Sie sicher?</string>
   <string name="leave_videoplayer_message">Sind Sie sicher, dass Sie den Videoabspieler verlassen möchten? Wiedergabe von %s wird gestoppt.</string>
   <string name="encountered_error_title">Videofehler aufgetreten</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Annehmen</string>
-  <string name="leave">Verlassen</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Einstellungen</string>
-  <string name="general">Allgemein</string>
-  <string name="default_view">Standardübersicht</string>
-  <string name="default_player">Standard-Videoabspieler</string>
-  <string name="i18n_language">Appsprache</string>
-  <string name="restart_effect">Starten Sie die Anwendung neu, damit die Änderungen wirksam werden</string>
-  <string name="device_language">Gerätesprache</string>
-  <string name="stream_over_wifi_only">Nur über Wi-Fi streamen</string>
-  <string name="internal_player">Intern</string>
-  <string name="subtitle_color">Farbe</string>
-  <string name="subtitle_size">Größe</string>
-  <string name="subtitle_stroke_color">Umrissfarbe</string>
-  <string name="subtitle_stroke_width">Umrissbreite</string>
-  <string name="subtitle_language">Standardsprache</string>
-  <string name="no_default_set">Keine Standardsprache</string>
-  <string name="advanced">Erweitert</string>
-  <string name="storage_location">Speicherort</string>
-  <string name="storage_automatic">Automatisch aufgrund des freien Speichers</string>
-  <string name="storage_choose">Speicherort auswählen</string>
-  <string name="not_writable">Speicherort nicht beschreibbar</string>
-  <string name="remove_cache">Bei Abspielerschließung Cache entfernen</string>
-  <string name="hw_acceleration">Hardwarebeschleunigung</string>
-  <string name="hw_automatic">Automatisch</string>
-  <string name="hw_full">Vollständig</string>
-  <string name="hw_decoding">Nur Dekodierung</string>
-  <string name="updates">Aktualisierungen</string>
-  <string name="auto_updates">Automatische Aktualisierungen</string>
-  <string name="check_for_updates">Nach Aktualisierungen suchen</string>
-  <string name="last_check">Letzte Prüfung</string>
-  <string name="about">Über</string>
-  <string name="version">Version</string>
-  <string name="changelog">Änderungsprotokoll</string>
-  <string name="tap_to_open">Tippen Sie zum Öffnen</string>
-  <string name="report_a_bug">Einen Fehler melden</string>
-  <string name="open_source_licenses">Open-Source-Lizenzen</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Maximale Herunterladegeschwindigkeit</string>
-  <string name="upload_speed">Maximale Hochladegeschwindigkeit</string>
-  <string name="max_connections">Maximale Gesamtverbindungen</string>
-  <string name="dht_limit">DHT-Begrenzung</string>
-  <string name="unlimited">Unbegrenzt</string>
-  <string name="show_vpn">VPN-Option im Menü anzeigen</string>
+  <string name="encountered_error">Es ist ein Problem aufgetreten! Das Video konnte nicht abgespielt werden weil das Format nicht erkannt wurde.</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Nur Wi-Fi</string>
   <string name="wifi_only_message">Sie können nur Videos über Wi-Fi streamen. Dies können Sie in den Einstellungen deaktivieren, wenn über eine Mobilfunkverbindung gestreamt werden soll.</string>
@@ -130,6 +61,7 @@
   <string name="the_video">Das Video</string>
   <!--VPN dialog-->
   <string name="vpn_not_installed">App VPN.ht ist nicht installiert</string>
+  <string name="vpn_info">Um die VPN Funktion in Popcorntime nutzen zu können benötigen Sie eine VPN-app. Nicht interessiert? Verstecken Sie diese Schaltfläche einfach.</string>
   <string name="vpn_download">Herunterladen</string>
   <string name="vpn_later">Später</string>
   <string name="vpn_hide">Ausblenden</string>

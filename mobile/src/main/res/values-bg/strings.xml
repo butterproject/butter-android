@@ -1,49 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Отмени</string>
   <string name="close">Затвори</string>
   <string name="ok">ОК</string>
-  <string name="enabled">Включено</string>
-  <string name="disabled">Изключено</string>
   <string name="casting">Стриймване към други у-ва</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Заглавие , година , актьори</string>
-  <string name="title_shows">Сериали</string>
-  <string name="title_movies">Филми</string>
-  <string name="title_anime">Аниме</string>
-  <string name="genres">Жанрове</string>
-  <string name="search">Търси</string>
-  <string name="searching">Търсене...</string>
-  <string name="no_data_found">Не са открити данни</string>
-  <string name="unknown_error">Нещо се обърка</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">мин</string>
-  <string name="read_more">Прочети повече</string>
-  <string name="watch_trailer">Изгледай трейлър</string>
-  <string name="no_subs">Няма субтитри</string>
-  <string name="no_subs_available">Няма налични субтитри</string>
-  <string name="subtitles">Субтитри</string>
-  <string name="quality">Качество</string>
-  <string name="trailer">Трейлър</string>
-  <string name="season">Сезон</string>
-  <string name="episode">Епизод</string>
-  <string name="specials">Събития</string>
-  <string name="continuing">Продължаващ</string>
-  <string name="ended">Приключил</string>
-  <string name="aired">Излъчено: %s</string>
-  <string name="no_title_available">Няма име</string>
-  <string name="no_synopsis_available">Няма налично резюме</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Изчакване за торент</string>
-  <string name="starting_buffering">Начало на буферирането </string>
+  <string name="starting_buffering">Започване на буферирането </string>
   <string name="streaming_started">Стриймването започна</string>
   <string name="waiting_for_subtitles">Изчакване за субтитри</string>
   <string name="seeds">сийдъри</string>
   <string name="error_files">Грешка: Файловете не можаха да бъдат записани. Моля опитайте с друго място за съхранение.</string>
+  <string name="start_external">Стартирай външният плейър</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Сега се възпроизвежда</string>
   <string name="volume">Сила на звука</string>
+  <string name="play">Възпроизвеждане</string>
+  <string name="pause">Пауза</string>
+  <string name="fastforward">Превърти напред</string>
+  <string name="rewind">Превърти назад</string>
   <string name="brightness">Контраст</string>
   <string name="hardware_acceleration_error_title">Грешка в хардуерното ускорение</string>
   <string name="hardware_acceleration_error_message">Стана грешка с хардуерното ускорение. Искате ли да го изключите и пробвате наново?</string>
@@ -59,56 +35,6 @@
   <string name="leave_videoplayer_message">Сигурни ли сте, че искате да напуснете видеоплейъра? %s ще спре да се възпроизвежда. </string>
   <string name="encountered_error_title">Възникна грешка с видеото</string>
   <string name="encountered_error">Възникна сериозна грешка с видеоплейърът. Видео файлът не може да бъде отворен и/или възпроизведен. Форматът не бе разпознат.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Приеми</string>
-  <string name="leave">Напусни</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Предпочитания</string>
-  <string name="general">Общи</string>
-  <string name="default_view">Начален изглед</string>
-  <string name="default_player">Начален видео плейър</string>
-  <string name="i18n_language">Език</string>
-  <string name="restart_effect">Рестартирайте приложението,за да видите промените</string>
-  <string name="device_language">Език на устройството</string>
-  <string name="stream_over_wifi_only">Стриймвай само при Wi-Fi</string>
-  <string name="internal_player">Вътрешен</string>
-  <string name="subtitle_color">Цвят</string>
-  <string name="subtitle_size">Размер</string>
-  <string name="subtitle_stroke_color">Очертание на цвят</string>
-  <string name="subtitle_stroke_width">Очертание на широчина</string>
-  <string name="subtitle_language">Начален език</string>
-  <string name="no_default_set">Без начален език</string>
-  <string name="advanced">Разширени</string>
-  <string name="storage_location">Място на съхранение</string>
-  <string name="storage_automatic">Автоматично</string>
-  <string name="storage_choose">Избери местоположение</string>
-  <string name="not_writable">Местоположението не е достъпно за запис</string>
-  <string name="remove_cache">Премахни кеша при затваряне на плейъра</string>
-  <string name="hw_acceleration">Хардуерно ускорение</string>
-  <string name="hw_automatic">Автоматично</string>
-  <string name="hw_full">Пълно</string>
-  <string name="hw_decoding">Само декодиращо</string>
-  <string name="updates">Обновления</string>
-  <string name="auto_updates">Автоматични обновления</string>
-  <string name="check_for_updates">Проверявай за обновления</string>
-  <string name="last_check">Последно проверено</string>
-  <string name="about">Относно</string>
-  <string name="version">Версия</string>
-  <string name="changelog">Дневник на промените</string>
-  <string name="tap_to_open">Цъкни да отвориш</string>
-  <string name="report_a_bug">Докладвай за бъг</string>
-  <string name="open_source_licenses">Лицензи с отворен код</string>
-  <string name="torrents">Торенти</string>
-  <string name="download_speed">Максимална скорост на теглене</string>
-  <string name="upload_speed">Максимална скорост на качване</string>
-  <string name="max_connections">Максимални общо връзки</string>
-  <string name="dht_limit">DHT ограничение</string>
-  <string name="unlimited">Неограничени</string>
-  <string name="show_vpn">Показвай VPN опция в менюто</string>
-  <string name="pixel_format">Принудителни видео цветове</string>
-  <string name="rgb32">RGB 32-бита: стандартни цветове</string>
-  <string name="rgb16">RGB 16-бита: по-добро изпълнение, по-ниско качество</string>
-  <string name="yuv">YUV: най-добро изпълнение, но не винаги работи</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Само чрез Wi-Fi</string>
   <string name="wifi_only_message">Може да стриймвате видеа само чрез Wi-Fi.Може да изключите това в \"предпочитания\" в случай,че искате да стриймвате чрез клетъчна връзка.</string>

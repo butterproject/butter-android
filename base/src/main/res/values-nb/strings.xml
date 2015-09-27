@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Avbryt</string>
+  <string name="close">Lukk</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Aktivert</string>
+  <string name="disabled">Deaktivert</string>
   <string name="update_available">Ny oppdatering tilgjengelig</string>
   <string name="press_install">Trykk for å installere</string>
   <string name="loading_data">Laster inn...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">Laster undertekster…</string>
   <string name="error_files">Feil: Kunne ikke skrive filer</string>
   <string name="overview_not_available">Beklager! Det finnes ingen tilgjengelig oversikt.</string>
-  <string name="episode">Episode</string>
   <string name="unknown_error">Noe gikk galt </string>
   <string name="torrent_failed">Kunne ikke hente torrent</string>
   <string name="running">Kjører i bakgrunnen</string>
   <string name="tap_to_close">Trykk for å lukke</string>
   <string name="tap_to_resume">Trykk for å fortsette</string>
+  <string name="stop">Stopp</string>
+  <!--Overview strings-->
+  <string name="search_hint">Tittel, år, skuespillere</string>
+  <string name="genres">Sjangere</string>
+  <string name="search">Søk</string>
+  <string name="searching">Søker…</string>
+  <string name="no_data_found">Ingen data funnet</string>
+  <string name="title_shows">Programmer</string>
+  <string name="title_movies">Filmer</string>
+  <string name="title_anime">Anime</string>
   <string name="signature_invalid">App signatur ugyldig</string>
   <string name="possibly_dangerous">Popcorn Time har blitt tuklet med, Venligst last ned en ny verson fra https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="subtitles">Undertekster</string>
+  <string name="now_playing">Spilles nå</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Innstillinger</string>
+  <string name="general">Generelt</string>
+  <string name="default_view">Standard oversikt</string>
+  <string name="default_player">Standard videospiller</string>
+  <string name="i18n_language">Språk i appen</string>
+  <string name="restart_effect">Start appen på nytt for at endringene skal tre i kraft</string>
+  <string name="device_language">Språk på enheten</string>
+  <string name="stream_over_wifi_only">Kun strømming over Wi-Fi</string>
+  <string name="internal_player">Intern</string>
+  <string name="subtitle_color">Farge</string>
+  <string name="subtitle_size">Størrelse</string>
+  <string name="subtitle_timing">Timing av undertekst</string>
+  <string name="subtitle_stroke_color">Kantfarge</string>
+  <string name="subtitle_stroke_width">Kantbredde</string>
+  <string name="subtitle_language">Standardspråk</string>
+  <string name="subtitle_settings">Innstillinger for undertekster</string>
+  <string name="no_default_set">Ingen standardspråk</string>
+  <string name="advanced">Avansert</string>
+  <string name="storage_location">Lagringssted</string>
+  <string name="storage_automatic">Automatisk</string>
+  <string name="storage_choose">Velg plassering</string>
+  <string name="not_writable">Plassering er ikke skrivbar</string>
+  <string name="remove_cache">Fjern hurtigbuffer når spilleren lukkes</string>
+  <string name="hw_acceleration">Maskinvareakselerasjon</string>
+  <string name="hw_automatic">Automatisk</string>
+  <string name="hw_full">Full</string>
+  <string name="hw_decoding">Kun dekoding</string>
+  <string name="updates">Oppdateringer</string>
+  <string name="auto_updates">Automatiske oppdateringer</string>
+  <string name="check_for_updates">Se etter oppdateringer</string>
+  <string name="last_check">Siste sjekk</string>
+  <string name="about">Om</string>
+  <string name="version">Versjon</string>
+  <string name="changelog">Endringslogg</string>
+  <string name="tap_to_open">Klikk for å åpne</string>
+  <string name="report_a_bug">Rapporter en feil</string>
+  <string name="open_source_licenses">Lisenser for åpen kildekode</string>
+  <string name="torrents">Torrenter</string>
+  <string name="download_speed">Maksimal nedlastingshastighet</string>
+  <string name="upload_speed">Maksimal opplastingshastighet</string>
+  <string name="max_connections">Maksimalt antall tilkoblinger</string>
+  <string name="dht_limit">DHT-begrensing</string>
+  <string name="unlimited">Ubegrenset</string>
+  <string name="show_vpn">Vis VPN alternativet i menyen</string>
+  <string name="pixel_format">Tving video chroma</string>
+  <string name="rgb32">RGB 32-bit: standard chroma</string>
+  <string name="rgb16">RGB 16-bit: bedre ytelse, lavere kvalitet</string>
+  <string name="yuv">YUV: best ytelse, men fungerer ikke alltid</string>
+  <string name="best_fit">Det som passer best</string>
+  <string name="fill">Fyll</string>
+  <string name="fit_horizontal">Tilpass horisontalt</string>
+  <string name="fit_vertical">Tilpass vertikalt</string>
+  <string name="original_size">Original</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Les mer</string>
+  <string name="watch_trailer">Se trailer</string>
+  <string name="no_subs">Ingen undertekster</string>
+  <string name="no_subs_available">Ingen undertekster tilgjengelig</string>
+  <string name="quality">Kvalitet</string>
+  <string name="trailer">Trailer</string>
+  <string name="season">Sesong</string>
+  <string name="episode">Episode</string>
+  <string name="specials">Spesial</string>
+  <string name="continuing">Fortsetter</string>
+  <string name="ended">Endte</string>
+  <string name="aired">På lufta: %s</string>
+  <string name="no_title_available">Ikke noe navn</string>
+  <string name="no_synopsis_available">Ingen beskrivelse tilgjengelig</string>
+  <string name="magnet">Magnet</string>
+  <string name="scale">Skala</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Volum</string>
+  <string name="brightness">Lysstyrke</string>
+  <string name="hardware_acceleration_error_title">Feil med maskinvareakselerasjon</string>
   <string name="genre_all">Alle</string>
+  <string name="hardware_acceleration_error_message">En feil oppsto med maskinvareakselerasjonen. Vil du deaktivere og prøve igjen?</string>
+  <!--Genres-->
   <string name="genre_action">Action</string>
   <string name="genre_adventure">Eventyr</string>
   <string name="genre_animation">Animasjon</string>
@@ -88,10 +181,19 @@
   <string name="year">ÅR</string>
   <string name="a_to_z">A - Å</string>
   <string name="trending">TRENDING</string>
+  <string name="encountered_error_title">Video feil oppstod</string>
+  <string name="encountered_error">Videospilleren kom over en alvorlig feil. Videofilen kunne ikke åpnes og/eller spilles. Formatet ble ikke gjenkjent.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Sammenkobling med TV</string>
   <string name="confirm_tv">Vennligst bekreft tilkoblingen på TVen</string>
   <string name="enter_pairing_code">Skriv inn koden for sammenkobling på TVen</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Åpne med</string>
   <string name="select_file">Velg fil</string>
+  <string name="accept">Aksepter</string>
+  <string name="leave">Tilbake</string>
+  <string name="reload_video">Start video på nytt</string>
+  <!--Health-->
+  <string name="health_info">Helse: %1$s, Seeds: %2$d, Peers: %3$d</string>
+  <string name="health_bad">Dårlig</string>
 </resources>

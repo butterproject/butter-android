@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">বাতিল</string>
   <string name="close">বন্ধ</string>
   <string name="ok">ঠিক আছে</string>
-  <string name="enabled">সক্রিয়</string>
-  <string name="disabled">নিষ্ক্রিয়</string>
   <string name="casting">কাস্টিং</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">শিরোনাম, বছর, অভিনেতা</string>
-  <string name="title_shows">অনুষ্ঠান</string>
-  <string name="title_movies">চলচ্চিত্র</string>
-  <string name="title_anime">অ্যানিমে</string>
-  <string name="genres">ধরন</string>
-  <string name="search">অনুসন্ধান</string>
-  <string name="searching">অনুসন্ধান হচ্ছে...</string>
-  <string name="no_data_found">কোন উপাত্ত পাওয়া যায়নি</string>
-  <string name="unknown_error">কিছুতে ত্রুটি হয়েছে</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">মিনিট</string>
-  <string name="read_more">আরও পড়ুন</string>
-  <string name="watch_trailer">ট্রেইলার দেখুন</string>
-  <string name="no_subs">কোন সাবটাইটেল নেই</string>
-  <string name="no_subs_available">কোন সাবটাইটেল উপলব্ধ নেই</string>
-  <string name="subtitles">সাবটাইটেল</string>
-  <string name="quality">গুণমান</string>
-  <string name="trailer">ট্রেইলার</string>
-  <string name="season">মৌসুম</string>
-  <string name="episode">পর্ব</string>
-  <string name="specials">বিশেষ</string>
-  <string name="continuing">অব্যাহত</string>
-  <string name="ended">সমাপ্ত হয়েছে</string>
-  <string name="aired">প্রচারিত: %s</string>
-  <string name="no_title_available">নাম নেই</string>
-  <string name="no_synopsis_available">কোন সারসংক্ষেপ উপলব্ধ নেই</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">টরেন্টের জন্য অপেক্ষারত</string>
   <string name="starting_buffering">বাফারিং শুরু হচ্ছে</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">সাবটাইটেলের জন্য অপেক্ষারত</string>
   <string name="seeds">সিড</string>
   <string name="error_files">ত্রুটি: ফাইলসমূহ লেখা যাচ্ছে না। দয়া করে একটি ভিন্ন সঞ্চয়ের অবস্থানে চেষ্টা করুন।</string>
+  <string name="start_external">বহিঃস্থ প্লেয়ার শুরু করুন</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">এখন চলছে</string>
   <string name="volume">ভলিউম</string>
+  <string name="play">চালান</string>
+  <string name="pause">বিরতি</string>
+  <string name="fastforward">দ্রুত সামনে</string>
+  <string name="rewind">গুটিয়ে</string>
   <string name="brightness">উজ্জ্বলতা</string>
   <string name="hardware_acceleration_error_title">HW ত্বরণ ত্রুটি</string>
   <string name="hardware_acceleration_error_message">হার্ডওয়্যার ত্বরণে একটি ত্রুটি ঘটেছে। আপনি কি এটি নিষ্ক্রিয় করে আবার চেষ্টা করতে চান?</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">আপনি কি ভিডিও প্লেয়ার ছেড়ে চলে যাওয়ার ব্যাপারে নিশ্চিত? %s চালানো বন্ধ হয়ে যাবে।</string>
   <string name="encountered_error_title">ভিডিও ত্রুটির সম্মুখীন হয়েছে</string>
   <string name="encountered_error">ভিডিও প্লেয়ার একটি গুরুতর ত্রুটির সম্মুখীন হয়েছে। ভিডিও ফাইল খোলা এবং/অথবা চালানো যাবেনা। ফরম্যাটটি স্বীকৃত ছিল না।</string>
-  <!--TermsActivity strings-->
-  <string name="accept">গ্রহণ</string>
-  <string name="leave">ত্যাগ</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">পছন্দসমূহ</string>
-  <string name="general">সাধারণ</string>
-  <string name="default_view">ডিফল্ট অবলোকন</string>
-  <string name="default_player">ডিফল্ট ভিডিও প্লেয়ার</string>
-  <string name="i18n_language">অ্যাপের ভাষা</string>
-  <string name="restart_effect">পরিবর্তন কার্যকর করার জন্য অ্যাপ্লিকেশন পুনরায় আরম্ভ করুন</string>
-  <string name="device_language">ডিভাইসের ভাষা</string>
-  <string name="stream_over_wifi_only">শুধুমাত্র ওয়াই-ফাই থাকাকালীনে স্ট্রিম করুন</string>
-  <string name="internal_player">অভ্যন্তরীণ</string>
-  <string name="subtitle_color">রং</string>
-  <string name="subtitle_size">আকার</string>
-  <string name="subtitle_stroke_color">রুপরেখার রং</string>
-  <string name="subtitle_stroke_width">রুপরেখার প্রস্থ</string>
-  <string name="subtitle_language">ডিফল্ট ভাষা</string>
-  <string name="no_default_set">কোন ডিফল্ট ভাষা নেই</string>
-  <string name="advanced">উন্নত</string>
-  <string name="storage_location">সঞ্চয়ের অবস্থান</string>
-  <string name="storage_automatic">স্বয়ংক্রিয়</string>
-  <string name="storage_choose">অবস্থান নির্বাচন করুন</string>
-  <string name="not_writable">অবস্থান লিখনযোগ্য নয়</string>
-  <string name="remove_cache">প্লেয়ার বন্ধের সময় ক্যাশে সরান</string>
-  <string name="hw_acceleration">হার্ডওয়্যার ত্বরণ</string>
-  <string name="hw_automatic">স্বয়ংক্রিয়</string>
-  <string name="hw_full">পূর্ণ</string>
-  <string name="hw_decoding">ডিকোডিং শুধুমাত্র</string>
-  <string name="updates">হালনাগাদ</string>
-  <string name="auto_updates">স্বয়ংক্রিয় হালনাগাদ করুন</string>
-  <string name="check_for_updates">হালনাগাদের জন্য পরীক্ষা করুন</string>
-  <string name="last_check">সর্বশেষ দেখা হয়েছে</string>
-  <string name="about">সম্পর্কে</string>
-  <string name="version">সংস্করণ</string>
-  <string name="changelog">পরিবর্তনলগ</string>
-  <string name="tap_to_open">খুলতে টোকা দিন</string>
-  <string name="report_a_bug">একটি ত্রুটির অভিযোগ করুন</string>
-  <string name="open_source_licenses">মুক্ত-উৎসের লাইসেন্স</string>
-  <string name="torrents">টরেন্ট</string>
-  <string name="download_speed">সর্বোচ্চ ডাউনলোডের গতি</string>
-  <string name="upload_speed">সর্বোচ্চ আপলোডের গতি</string>
-  <string name="max_connections">সর্বোচ্চ মোট সংযোগ</string>
-  <string name="dht_limit">DHT সীমা</string>
-  <string name="unlimited">সীমাহীন</string>
-  <string name="show_vpn">মেনুতে VPN অপশন দেখান</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">ওয়াই-ফাই শুধুমাত্র</string>
   <string name="wifi_only_message">আপনি শুধুমাত্র ওয়াই-ফাইয়ের মাধ্যমে ভিডিও স্ট্রিম করতে পারবেন। আপনি যদি মোবাইল থেকে স্ট্রিম করতে চান, তাহলে আপনি পছন্দসমূহ থেকে নিষ্ক্রিয় করতে পারবেন।</string>

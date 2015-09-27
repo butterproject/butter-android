@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Nutraukti</string>
+  <string name="close">Uždaryti</string>
+  <string name="ok">Gerai</string>
+  <string name="enabled">Įjungta</string>
+  <string name="disabled">Išjungta</string>
   <string name="update_available">Prienamas atnaaujinimas</string>
   <string name="press_install">Paspauskite, norėdami įdiegti</string>
   <string name="loading_data">Įkeliami duomenys...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">Įkeliami subtitrai...</string>
   <string name="error_files">Klaida: neįmanoma įrašyti failų</string>
   <string name="overview_not_available">Atsiprašome! Nėra prieinamos apžvalgos.</string>
-  <string name="episode">Epizodas</string>
   <string name="unknown_error">Kažkas negerai</string>
   <string name="torrent_failed">Nepavyko gauti torento</string>
   <string name="running">Veikia fone</string>
   <string name="tap_to_close">Palieskite, norėdami uždarykite</string>
   <string name="tap_to_resume">Spustelėkite, norėdami pratęsti</string>
+  <string name="stop">Sustabdyti</string>
+  <!--Overview strings-->
+  <string name="search_hint">Pavadinimas, metai, aktoriai</string>
+  <string name="genres">Žanrai</string>
+  <string name="search">Ieškoti</string>
+  <string name="searching">Ieškoma...</string>
+  <string name="no_data_found">Duomenų nerasta</string>
+  <string name="title_shows">Laidos</string>
+  <string name="title_movies">Filmai</string>
+  <string name="title_anime">Anime</string>
   <string name="signature_invalid">Programos parašas klaidingas</string>
   <string name="possibly_dangerous">Popcorn Time buvo sugadintas. Atsisiųskite naują įdiegimo failą iš https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="subtitles">Subtitrai</string>
+  <string name="now_playing">Dabar atkuriama</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Nustatymai</string>
+  <string name="general">Pagrindiniai</string>
+  <string name="default_view">Numatytoji apžvalga</string>
+  <string name="default_player">Numatytasis vaizdo grotuvas</string>
+  <string name="i18n_language">Programos kalba</string>
+  <string name="restart_effect">Paleiskite programą iš naujo, norėdami pritaikyti pakeitimus</string>
+  <string name="device_language">Įrenginio kalba</string>
+  <string name="stream_over_wifi_only">Perduoti srautą tik per Wi-Fi</string>
+  <string name="internal_player">Vidinis</string>
+  <string name="subtitle_color">Spalva</string>
+  <string name="subtitle_size">Dydis</string>
+  <string name="subtitle_timing">Subtitrų laikas</string>
+  <string name="subtitle_stroke_color">Kontūro spalva</string>
+  <string name="subtitle_stroke_width">Kontūro plotis</string>
+  <string name="subtitle_language">Numatytoji kalba</string>
+  <string name="subtitle_settings">Subtitrų nustatymai</string>
+  <string name="no_default_set">Nėra numatytosios kalbos</string>
+  <string name="advanced">Papildomi</string>
+  <string name="storage_location">Saugyklos vieta</string>
+  <string name="storage_automatic">Automatiškai</string>
+  <string name="storage_choose">Pasirinkti vietą</string>
+  <string name="not_writable">Negalima įrašyti į šią vietą</string>
+  <string name="remove_cache">Išvalyti podėlį uždarius grotuvą</string>
+  <string name="hw_acceleration">Aparatinės įrangos spartinimas</string>
+  <string name="hw_automatic">Automatiškai</string>
+  <string name="hw_full">Pilnas</string>
+  <string name="hw_decoding">Tik dekodavimas</string>
+  <string name="updates">Atnaujinimai</string>
+  <string name="auto_updates">Automatiniai atnaujinimai</string>
+  <string name="check_for_updates">Ieškoti atnaujinimų</string>
+  <string name="last_check">Paskutinis patikrinimas</string>
+  <string name="about">Apie</string>
+  <string name="version">Versija</string>
+  <string name="changelog">Pakeitimų žurnalas</string>
+  <string name="tap_to_open">Spustelėkite, norėdami atidaryti</string>
+  <string name="report_a_bug">Pranešti apie klaidą</string>
+  <string name="open_source_licenses">Atvirojo kodo licenzijos</string>
+  <string name="torrents">Torentai</string>
+  <string name="download_speed">Maksimalus atsiuntimo greitis</string>
+  <string name="upload_speed">Maksimalus išsiuntimo greitis</string>
+  <string name="max_connections">Maksimalus prisijungimų skaičius</string>
+  <string name="dht_limit">DHT riba</string>
+  <string name="unlimited">Neribojama</string>
+  <string name="show_vpn">Rodyti VPN parinktį meniu</string>
+  <string name="pixel_format">Priverstinis spalvų sodrumas</string>
+  <string name="rgb32">RGB 32-bit: numatytasis sodrumas</string>
+  <string name="rgb16">RGB 16-bit: geresnis našumas, žemesnė kokybė</string>
+  <string name="yuv">YUV: geriausias našumas, tačiau ne visada veikia</string>
+  <string name="best_fit">Geriausiai tinkantis</string>
+  <string name="fill">Užpildyti</string>
+  <string name="fit_horizontal">Pritaikyti horizontaliai</string>
+  <string name="fit_vertical">Pritaikyti vertikaliai</string>
+  <string name="original_size">Originalus</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Skaityti daugiau</string>
+  <string name="watch_trailer">Žiūrėti anonsą</string>
+  <string name="no_subs">Be subtitrų</string>
+  <string name="no_subs_available">Nėra prieinamų subtitrų</string>
+  <string name="quality">Kokybė</string>
+  <string name="trailer">Anonsas</string>
+  <string name="season">Sezonas</string>
+  <string name="episode">Epizodas</string>
+  <string name="specials">Specialūs</string>
+  <string name="continuing">Tęsiama</string>
+  <string name="ended">Baigėsi</string>
+  <string name="aired">Rodyta: %s</string>
+  <string name="no_title_available">Be vardo</string>
+  <string name="no_synopsis_available">Nėra trumpos apžvalgos</string>
+  <string name="magnet">Magnetinė nuoroda</string>
+  <string name="scale">Mastelis</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Garsumas</string>
+  <string name="brightness">Šviesumas</string>
+  <string name="hardware_acceleration_error_title">HW spartinimo klaida</string>
   <string name="genre_all">Visi</string>
+  <string name="hardware_acceleration_error_message">Įvyko klaida susijusi su aparatinės įrangos spartinimu. Ar norite jį išjungti ir pabandyti dar kartą?</string>
+  <!--Genres-->
   <string name="genre_action">Veiksmo</string>
   <string name="genre_adventure">Nuotykių</string>
   <string name="genre_animation">Animacinis</string>
@@ -88,10 +181,19 @@
   <string name="year">METAI</string>
   <string name="a_to_z">A - Z</string>
   <string name="trending">POPULIARU</string>
+  <string name="encountered_error_title">Įvyko vaizdo atkūrimo klaida</string>
+  <string name="encountered_error">Vaizdo grotuvas susidūrė su rimta klaida. Vaizdo failas negali būti atidarytas ir/ar atkurtas. Formatas neatpažintas.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Poruojama su TV</string>
   <string name="confirm_tv">Patvirtinkite prisijungimą televizoriuje</string>
   <string name="enter_pairing_code">Įveskite poravimo kodą televizoriuje</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Atverti su</string>
   <string name="select_file">Pasirinkti failą</string>
+  <string name="accept">Sutikti</string>
+  <string name="leave">Išeiti</string>
+  <string name="reload_video">Iš naujo įkelti vaizdo įrašą</string>
+  <!--Health-->
+  <string name="health_info">Būsena: %1$s, Skleidėjų: %2$d, Siuntėjų: %3$d</string>
+  <string name="health_bad">Blogas</string>
 </resources>

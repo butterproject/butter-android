@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="related_movies">Susiję vaizdo įrašai</string>
+  <!--Main screen-->
+  <string name="top_movies">Geriausi filmai</string>
+  <string name="top_shows">Geriausios TV serialai</string>
+  <string name="latest_shows">Naujausios TV serialai</string>
+  <string name="browse">Naršyti</string>
+  <string name="more">Daugiau</string>
+  <string name="tests">Testai</string>
+  <string name="error">Klaida</string>
+  <string name="ok">Gerai</string>
+  <string name="pause">Pristabdyti</string>
+  <string name="play">Atkurti</string>
+  <string name="stop">Sustabdyti</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Atkurti pristabdyti mygtukas</string>
+  <string name="loading">Įkeliama...</string>
+  <string name="no_video_found">Nerasta jokių vaizdo įrašų</string>
+  <string name="popular_header">Populiarūs vaizdo įrašai</string>
+  <string name="preferences">PARINKTYS</string>
+  <string name="grid_view">Tinklelio rodinys</string>
+  <string name="settings">Nustatymai</string>
+  <string name="personal_settings">Asmeniniai nustatymai</string>
+  <string name="watch_trailer_1">Žiūrėti anonsą</string>
+  <string name="watch_trailer_2">NEMOKAMA</string>
+  <string name="watch">Žiūrėti</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Filmas</string>
+  <string name="search_results">Paieškos rezultatai</string>
+  <string name="movie_results">Filmų rezultatai</string>
+  <string name="show_results">TV serialų rezultatai</string>
+  <string name="video_error_media_load_timeout">Media įrašo įkėlimo laukimo laikas baigėsi</string>
+  <string name="video_error_server_unaccessible">Media serveris buvo nepasiekiamas</string>
+  <string name="video_error_unknown_error">Nepavyko įkelti vaizdo įrašo</string>
+  <string name="oops">Oi</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Taip</string>
+  <string name="later">Ne, vėliau</string>
+  <string name="new_update">Prieiname nauja Popcorn Time versija, skirta Android TV. Ar norite atnaujinti dabar?</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Prisijungiama...</string>
+  <string name="starting_buffering">Pradedama</string>
+  <string name="streaming_started">Srauto perdavimas pradėtas</string>
+  <string name="waiting_for_subtitles">Laukiama subtitrų</string>
+  <string name="seeds">skleidėjai</string>
+  <string name="error_files">Klaida: neįmanoma įrašyti failų</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Patikrinkite savo interneto ryšį</string>
+  <string name="choose_quality">Pasirinkite kokybę</string>
+  <string name="more_movies">Daugiau filmų</string>
+  <string name="more_shows">Daugiau laidų</string>
+  <string name="genres">Žanrai</string>
+  <string name="terms_and_conditions">Taisyklės ir sąlygos</string>
+  <string name="view_terms">Peržiūrėti taisykles</string>
+  <string name="episode_number_format">Epizodas %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Versija</string>
+</resources>
