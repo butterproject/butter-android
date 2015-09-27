@@ -127,8 +127,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             return;
 
         mService = ((TorrentActivity)getActivity()).getTorrentService();
-        mService.addListener(this);
-        startStream();
+        if(mService != null) {
+            mService.addListener(this);
+            startStream();
+        }
     }
 
     public void onTorrentServiceDisconnected() {
