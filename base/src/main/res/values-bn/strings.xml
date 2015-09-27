@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">বাতিল</string>
+  <string name="close">বন্ধ</string>
+  <string name="ok">ঠিক আছে</string>
+  <string name="enabled">সক্রিয়</string>
+  <string name="disabled">নিষ্ক্রিয়</string>
   <string name="update_available">নতুন হালনাগাদ উপলব্ধ</string>
   <string name="press_install">ইনস্টল করতে টিপুন</string>
   <string name="loading_data">উপাত্ত লোড হচ্ছে...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">সাব লোড হচ্ছে...</string>
   <string name="error_files">ত্রুটি: ফাইল লেখা যাচ্ছে না</string>
   <string name="overview_not_available">দুঃখিত! এখানে কোন আলোকপাত উপলব্ধ নেই।</string>
-  <string name="episode">পর্ব</string>
-  <string name="unknown_error">কিছুতে ত্রুটি হয়েছে</string>
+  <string name="unknown_error">কিছু একটায় ত্রুটি হয়েছে</string>
   <string name="torrent_failed">টরেন্ট পুনরুদ্ধার করতে ব্যর্থ</string>
   <string name="running">পটভূমিতে চলমান</string>
   <string name="tap_to_close">বন্ধ করতে টোকা দিন</string>
   <string name="tap_to_resume">পুনঃসূচনা করতে টোকা দিন</string>
+  <string name="stop">থামুন</string>
+  <!--Overview strings-->
+  <string name="search_hint">শিরোনাম, বছর, অভিনেতা</string>
+  <string name="genres">ধরন</string>
+  <string name="search">অনুসন্ধান</string>
+  <string name="searching">অনুসন্ধান হচ্ছে...</string>
+  <string name="no_data_found">কোন উপাত্ত পাওয়া যায়নি</string>
+  <string name="title_shows">অনুষ্ঠান</string>
+  <string name="title_movies">চলচ্চিত্র</string>
+  <string name="title_anime">অ্যানিমে</string>
   <string name="signature_invalid">অ্যাপ স্বাক্ষর অবৈধ</string>
   <string name="possibly_dangerous">পপকর্ন টাইম ক্ষতিগ্রস্ত হয়েছে। দয়া করে https://popcorntime.io/ থেকে একটি নতুন ফাইল ইনস্টল করুন</string>
-  <!--Genres-->
+  <string name="subtitles">সাবটাইটেল</string>
+  <string name="now_playing">এখন চলছে</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">পছন্দসমূহ</string>
+  <string name="general">সাধারণ</string>
+  <string name="default_view">ডিফল্ট অবলোকন</string>
+  <string name="default_player">ডিফল্ট ভিডিও প্লেয়ার</string>
+  <string name="i18n_language">অ্যাপের ভাষা</string>
+  <string name="restart_effect">পরিবর্তন কার্যকর করার জন্য অ্যাপ্লিকেশন পুনরায় আরম্ভ করুন</string>
+  <string name="device_language">ডিভাইসের ভাষা</string>
+  <string name="stream_over_wifi_only">শুধুমাত্র ওয়াই-ফাই থাকাকালীনে স্ট্রিম করুন</string>
+  <string name="internal_player">অভ্যন্তরীণ</string>
+  <string name="subtitle_color">রং</string>
+  <string name="subtitle_size">আকার</string>
+  <string name="subtitle_timing">সাবটাইটেল সময়নির্ণয়</string>
+  <string name="subtitle_stroke_color">রুপরেখার রং</string>
+  <string name="subtitle_stroke_width">রুপরেখার প্রস্থ</string>
+  <string name="subtitle_language">ডিফল্ট ভাষা</string>
+  <string name="subtitle_settings">সাবটাইটেল সেটিংস</string>
+  <string name="no_default_set">কোন ডিফল্ট ভাষা নেই</string>
+  <string name="advanced">উন্নত</string>
+  <string name="storage_location">সঞ্চয়ের অবস্থান</string>
+  <string name="storage_automatic">স্বয়ংক্রিয়</string>
+  <string name="storage_choose">অবস্থান নির্বাচন করুন</string>
+  <string name="not_writable">অবস্থান লিখনযোগ্য নয়</string>
+  <string name="remove_cache">প্লেয়ার বন্ধের সময় ক্যাশে সরান</string>
+  <string name="hw_acceleration">হার্ডওয়্যার ত্বরণ</string>
+  <string name="hw_automatic">স্বয়ংক্রিয়</string>
+  <string name="hw_full">পূর্ণ</string>
+  <string name="hw_decoding">ডিকোডিং শুধুমাত্র</string>
+  <string name="updates">হালনাগাদ</string>
+  <string name="auto_updates">স্বয়ংক্রিয় হালনাগাদ করুন</string>
+  <string name="check_for_updates">হালনাগাদের জন্য পরীক্ষা করুন</string>
+  <string name="last_check">সর্বশেষ দেখা হয়েছে</string>
+  <string name="about">সম্পর্কে</string>
+  <string name="version">সংস্করণ</string>
+  <string name="changelog">পরিবর্তনলগ</string>
+  <string name="tap_to_open">খুলতে টোকা দিন</string>
+  <string name="report_a_bug">একটি ত্রুটির অভিযোগ করুন</string>
+  <string name="open_source_licenses">মুক্ত-উৎসের লাইসেন্স</string>
+  <string name="torrents">টরেন্ট</string>
+  <string name="download_speed">সর্বোচ্চ ডাউনলোডের গতি</string>
+  <string name="upload_speed">সর্বোচ্চ আপলোডের গতি</string>
+  <string name="max_connections">সর্বোচ্চ মোট সংযোগ</string>
+  <string name="dht_limit">DHT সীমা</string>
+  <string name="unlimited">সীমাহীন</string>
+  <string name="show_vpn">মেনুতে VPN অপশন দেখান</string>
+  <string name="pixel_format">ভিডিও ক্রোমাকে বাধ্য করুন</string>
+  <string name="rgb32">RGB ৩২-বিট: ডিফল্ট ক্রোমা</string>
+  <string name="rgb16">RGB ১৬-বিট: উন্নত কর্মক্ষমতা, নিম্ন মান</string>
+  <string name="yuv">YUV: সেরা কর্মক্ষমতা, কিন্তু সবসময় কাজ করে না</string>
+  <string name="best_fit">সেরা মাপ</string>
+  <string name="fill">পূরণ</string>
+  <string name="fit_horizontal">অনুভূমিক মাপসই</string>
+  <string name="fit_vertical">উল্লম্ব মাপসই</string>
+  <string name="original_size">আসল</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">মিনিট</string>
+  <string name="read_more">আরও পড়ুন</string>
+  <string name="watch_trailer">ট্রেইলার দেখুন</string>
+  <string name="no_subs">কোন সাবটাইটেল নেই</string>
+  <string name="no_subs_available">কোন সাবটাইটেল উপলব্ধ নেই</string>
+  <string name="quality">গুণমান</string>
+  <string name="trailer">ট্রেইলার</string>
+  <string name="season">মৌসুম</string>
+  <string name="episode">পর্ব</string>
+  <string name="specials">বিশেষ</string>
+  <string name="continuing">অব্যাহত</string>
+  <string name="ended">সমাপ্ত হয়েছে</string>
+  <string name="aired">প্রচারিত: %s</string>
+  <string name="no_title_available">নাম নেই</string>
+  <string name="no_synopsis_available">কোন সারসংক্ষেপ উপলব্ধ নেই</string>
+  <string name="magnet">চুম্বক</string>
+  <string name="scale">স্কেল</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">ভলিউম</string>
+  <string name="brightness">উজ্জ্বলতা</string>
+  <string name="hardware_acceleration_error_title">HW ত্বরণ ত্রুটি</string>
   <string name="genre_all">সব</string>
+  <string name="hardware_acceleration_error_message">হার্ডওয়্যার ত্বরণে একটি ত্রুটি ঘটেছে। আপনি কি এটি নিষ্ক্রিয় করে আবার চেষ্টা করতে চান?</string>
+  <!--Genres-->
   <string name="genre_action">অ্যাকশন</string>
   <string name="genre_adventure">দুঃসাহসিক</string>
   <string name="genre_animation">অ্যানিমেশন</string>
@@ -88,10 +181,19 @@
   <string name="year">বছর</string>
   <string name="a_to_z">A - Z</string>
   <string name="trending">প্রবণতা</string>
+  <string name="encountered_error_title">ভিডিও ত্রুটির সম্মুখীন হয়েছে</string>
+  <string name="encountered_error">ভিডিও প্লেয়ার একটি গুরুতর ত্রুটির সম্মুখীন হয়েছে। ভিডিও ফাইল খোলা এবং/অথবা চালানো যাবেনা। ফরম্যাটটি স্বীকৃত ছিল না।</string>
   <!--BeamManager-->
   <string name="pairing_tv">টিভির সাথে পিয়ারিং</string>
   <string name="confirm_tv">দয়া করে আপনার টিভির সংযোগ নিশ্চিত করুন</string>
   <string name="enter_pairing_code">টিভিতে পিয়ারিং কোড লিখুন</string>
+  <!--TermsActivity strings-->
   <string name="open_with">এটি দিয়ে খুলুন</string>
   <string name="select_file">ফাইল নির্বাচন করুন</string>
+  <string name="accept">গ্রহণ</string>
+  <string name="leave">ত্যাগ</string>
+  <string name="reload_video">ভিডিও পুনঃলোড করুন</string>
+  <!--Health-->
+  <string name="health_info">স্বাস্থ্য: %1$s, সিড: %2$d, পিয়ার: %3$d</string>
+  <string name="health_bad">খারাপ</string>
 </resources>

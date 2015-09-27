@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--General strings-->
+  <string name="cancel">გაუქმება</string>
+  <string name="close">დახურვა</string>
+  <string name="ok">OK</string>
+  <string name="casting">ნაკადი</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">ტორენტის ლოდინი</string>
+  <string name="starting_buffering">ბუფერის დაწყება</string>
+  <string name="streaming_started">ნაკადი დაიწყო</string>
+  <string name="waiting_for_subtitles">სუბტიტრების ლოდინი</string>
+  <string name="seeds">სიდები</string>
+  <string name="error_files">შეცდომა: ფაილების ჩაწერა ვერ მოხერხდა. გთხოვთ ცადეთ სხვა ადგილმდებარეობა.</string>
+  <string name="start_external">გარე დამკვრელის ჩართვა</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="now_playing">ახლა ჩართულია</string>
+  <string name="volume">ხმა</string>
+  <string name="play">Play</string>
+  <string name="pause">შეჩერება</string>
+  <string name="fastforward">წინ გადახვევა</string>
+  <string name="rewind">უკან გადახვევა</string>
+  <string name="brightness">სიკაშკაშე</string>
+  <string name="hardware_acceleration_error_title">HW აჩქარების შეცდომა</string>
+  <string name="hardware_acceleration_error_message">აპარატურის აჩქარებისას დაფიქსირდა შეცდომა. გსურთ მისი გამორთვა და ხელახლა ცდა?</string>
+  <string name="best_fit">საუკეთესო მორგება</string>
+  <string name="fill">შევსება</string>
+  <string name="fit_horizontal">ჰორიზონტალური მორგება</string>
+  <string name="fit_vertical">ვერიკალური მორგება</string>
+  <string name="original_size">ორიგინალური</string>
+  <string name="reload_video">ვიდეოს ხელახლა ჩატვირთვა</string>
+  <string name="comm_error">კომუნიკაციების შეცდომა</string>
+  <string name="comm_message">ვიდეოს ამორჩევისას დაფიქსირდა შეცდომა. ეს შეიძლება გამოეწვია ქსელის შეცდომებს ან YouTube-ის პროტოკოლებს. გთხოვთ ცადეთ ახლიდან მოგვიანებით.</string>
+  <string name="leave_videoplayer_title">დარწმუნებული ხართ?</string>
+  <string name="leave_videoplayer_message">დარწმუნებული ხართ რომ გსურთ ვიდეო დამკვრელის დატოვება? %s გაითიშება.</string>
+  <string name="encountered_error_title">დაფიქსირდა ვიდეო შეცდომა</string>
+  <string name="encountered_error">თუ ვიდეო დამკვრელი წააწყდა სერიოზულ პრობლემას. ვიდეო ფაილი ვერ გაიხსნება და/ან დაიკვრება. ფორმატის ამოცნობა ვერ მოხერხდა.</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">მარტო Wi-Fi-ით</string>
+  <string name="wifi_only_message">ვიდეოების ნახვა შეგიძლიათ მხოლოდ Wi-Fi-თ. თუ გსურთ მობილურ კავშირით ყურება, შეგიძლიათ ეს პარამეტრი გათიშოთ.</string>
+  <!--NavigationDrawer-->
+  <string name="drawer_open">ნავიგაციის დაფის გახსნა</string>
+  <string name="drawer_close">ნავიგაციის დაფის დახურვა</string>
+  <string name="no_search_results">ძებნის შედეგი არაა</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Popcorn Time! არის უამრავი დეველოპერის და დიზაინერის მიერ რამდენიმე API-ების შეერთების შედეგი,
+		რათა ტორენტ ფილმების ყურება რაც შეიძლება მარტივი იყოს.\n\nჩვენ ღია წყაროს პროექტი ვართ. ჩვენ მთელი მსოფლიოდან ვართ. ჩვენ
+		გვიყვარს ფილმები. და ძმაო, პოპკორნი ხომ გვიყვარს და გვიყვარს.</string>
+  <string name="website">ვებგვერდი</string>
+  <string name="forum">ფორუმი</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">ბლოგი</string>
+  <string name="twitter">Twitter</string>
+  <!--Beam dialog-->
+  <string name="connected_to">დაკავშირებულია</string>
+  <string name="disconnect">Disconnect</string>
+  <string name="select_beaming">აირჩიეთ სხივის ხელსაწყო</string>
+  <string name="starting_beam">ვიდეო სხივის ინიციალიზაცია...</string>
+  <string name="beaming_failed">თქვენ სხივურ მოწყობილობაზე ვიდეოს დაკვრა ვერ ხერხდება. გსურთ ახლიდან ცდა? შესაძლოა აპს მეტი ნაწილების ჩამოტვირთვა დასჭირდეს სანამ თქვენი მოწყობილობა ამ ვიდეოს დაკვრას შეძლებს.</string>
+  <string name="the_video">ვიდეო</string>
+  <!--VPN dialog-->
+  <string name="vpn_not_installed">VPN.ht აპი დაყენებული არ არის</string>
+  <string name="vpn_info">Popcorn Time შიდა VPN პარამეტრის გამოსაყენებლად საჭიროა VPN.ht აპის დაყენება. არ გაინტერესებთ? მაშინ შეგიძლიათ ეს ღილაკი უბრალოდ დამალოთ.</string>
+  <string name="vpn_download">ჩამოტვირთვა</string>
+  <string name="vpn_later">მერე</string>
+  <string name="vpn_hide">დამალვა</string>
+</resources>

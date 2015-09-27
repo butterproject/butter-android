@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Peruuta</string>
+  <string name="close">Sulje</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Käytössä</string>
+  <string name="disabled">Ei käytössä</string>
   <string name="update_available">Uusi päivitys saatavissa</string>
   <string name="press_install">Paina asentaaksesi</string>
   <string name="loading_data">Ladataan...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">Ladataan tekstityksiä...</string>
   <string name="error_files">Virhe: tiedostoja ei voitu kirjoittaa</string>
   <string name="overview_not_available">Pahoittelut! Yleisnäkymä ei ole saatavilla.</string>
-  <string name="episode">jakso</string>
   <string name="unknown_error">Jotain meni pieleen</string>
   <string name="torrent_failed">Torrentin haussa oli ongelma</string>
   <string name="running">Pyörii taustalla</string>
   <string name="tap_to_close">Sulje painamalla</string>
   <string name="tap_to_resume">Palaa painamalla</string>
+  <string name="stop">Pysäytä</string>
+  <!--Overview strings-->
+  <string name="search_hint">Nimi, vuosi, näyttelijät</string>
+  <string name="genres">Lajit</string>
+  <string name="search">Etsi</string>
+  <string name="searching">Haetaan...</string>
+  <string name="no_data_found">Tietoja ei löytynyt</string>
+  <string name="title_shows">TV-ohjelmat</string>
+  <string name="title_movies">Elokuvat</string>
+  <string name="title_anime">Anime</string>
   <string name="signature_invalid">Sovelluksen allekirjoitus on väärä</string>
-  <string name="possibly_dangerous">Popcorn Timea on peukaloitu. Lataa uusi asennustiedosto osoitteesta https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="possibly_dangerous">Popcorn Timea on muunneltu. Lataa uusi asennustiedosto osoitteesta https://popcorntime.io/</string>
+  <string name="subtitles">Tekstitykset</string>
+  <string name="now_playing">Toistetaan</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Asetukset</string>
+  <string name="general">Yleinen</string>
+  <string name="default_view">Aloitusnäkymä</string>
+  <string name="default_player">Oletus videosoitin</string>
+  <string name="i18n_language">Ohjelman kieli</string>
+  <string name="restart_effect">Käynnistä ohjelma uudelleen ottaaksesi muutokset käyttöön</string>
+  <string name="device_language">Laitteen kieli</string>
+  <string name="stream_over_wifi_only">Suoratoista vain Wi-Fi -yhteydellä</string>
+  <string name="internal_player">Sisäinen</string>
+  <string name="subtitle_color">Väri</string>
+  <string name="subtitle_size">Koko</string>
+  <string name="subtitle_timing">Tekstityksen ajastus</string>
+  <string name="subtitle_stroke_color">Reunaviivan väri</string>
+  <string name="subtitle_stroke_width">Reunaviivan paksuus</string>
+  <string name="subtitle_language">Oletuskieli</string>
+  <string name="subtitle_settings">Tekstitysasetukset</string>
+  <string name="no_default_set">Ei oletuskieltä</string>
+  <string name="advanced">Lisäasetukset</string>
+  <string name="storage_location">Tallennuskohde</string>
+  <string name="storage_automatic">Automaattinen</string>
+  <string name="storage_choose">Valitse tallennuskohde</string>
+  <string name="not_writable">Kohde ei ole saatavilla</string>
+  <string name="remove_cache">Tyhjennä väliaikaistiedostot sulkiessa</string>
+  <string name="hw_acceleration">Laitteistokiihdytys</string>
+  <string name="hw_automatic">Automaattinen</string>
+  <string name="hw_full">Täysi</string>
+  <string name="hw_decoding">Vain dekoodaus</string>
+  <string name="updates">Päivitykset</string>
+  <string name="auto_updates">Automaattiset päivitykset</string>
+  <string name="check_for_updates">Tarkista päivitykset</string>
+  <string name="last_check">Viimeisin tarkastus</string>
+  <string name="about">Tietoa</string>
+  <string name="version">Versio</string>
+  <string name="changelog">Muutosloki</string>
+  <string name="tap_to_open">Avaa painamalla</string>
+  <string name="report_a_bug">Ilmoita viasta</string>
+  <string name="open_source_licenses">Avoimen lähdekoodin lisenssi</string>
+  <string name="torrents">Torrentit</string>
+  <string name="download_speed">Latausraja</string>
+  <string name="upload_speed">Lähetysraja</string>
+  <string name="max_connections">Yhteysraja</string>
+  <string name="dht_limit">DHT-raja</string>
+  <string name="unlimited">Rajoittamaton</string>
+  <string name="show_vpn">Näytä VPN-kuvake valikossa</string>
+  <string name="pixel_format">Pakota videon väri</string>
+  <string name="rgb32">RGB 32-bit: vakio väri</string>
+  <string name="rgb16">RGB 16-bit: parempi suorituskyky, huonompi laatu</string>
+  <string name="yuv">YUV: paras suorituskyky, mutta toimivuudessa voi esiintyä ongelmia</string>
+  <string name="best_fit">Sovita</string>
+  <string name="fill">Täytä</string>
+  <string name="fit_horizontal">Venytä sivuttaissuunnassa</string>
+  <string name="fit_vertical">Venytä pystysuunnassa</string>
+  <string name="original_size">Alkuperäinen</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Lue lisää</string>
+  <string name="watch_trailer">Katso traileri</string>
+  <string name="no_subs">Valitse tekstitys</string>
+  <string name="no_subs_available">Tekstityksiä ei ole saatavilla</string>
+  <string name="quality">Laatu</string>
+  <string name="trailer">Traileri</string>
+  <string name="season">Tuotantokausi</string>
+  <string name="episode">jakso</string>
+  <string name="specials">Erikois</string>
+  <string name="continuing">Jatketaan</string>
+  <string name="ended">Loppunut</string>
+  <string name="aired">Esitetty: %s</string>
+  <string name="no_title_available">Ei nimeä</string>
+  <string name="no_synopsis_available">Kuvausta ei ole saatavilla</string>
+  <string name="magnet">Magnet</string>
+  <string name="scale">Skaalaus</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Äänenvoimakkuus</string>
+  <string name="brightness">Kirkkaus</string>
+  <string name="hardware_acceleration_error_title">Virhe HW-kiihdytyksessä</string>
   <string name="genre_all">Kaikki</string>
+  <string name="hardware_acceleration_error_message">Laitteistokiihdytyksessä tapahtui virhe. Haluaisitko ottaa sen pois päältä ja yrittää uudelleen?</string>
+  <!--Genres-->
   <string name="genre_action">Toiminta</string>
   <string name="genre_adventure">Seikkailu</string>
   <string name="genre_animation">Animaatio</string>
@@ -87,11 +180,20 @@
   <string name="last_updated">VIIMEKSI PÄIVITETTY</string>
   <string name="year">VUOSI</string>
   <string name="a_to_z">A - Z</string>
-  <string name="trending">Trendit</string>
+  <string name="trending">NOUSUSSA</string>
+  <string name="encountered_error_title">Ongelmia videon kanssa</string>
+  <string name="encountered_error">Videosoitin kohtasi vakavan virheen, jonka takia videotiedostoa ei voitu avata tai toistaa - videoformaattia ei tunnistettu.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Parita TV</string>
   <string name="confirm_tv">Vahvista yhteys televisiostasi</string>
   <string name="enter_pairing_code">Syötä parituskoodi televisiossasi</string>
-  <string name="open_with">Avaa </string>
+  <!--TermsActivity strings-->
+  <string name="open_with">Avaa</string>
   <string name="select_file">Valitse tiedosto</string>
+  <string name="accept">Hyväksy</string>
+  <string name="leave">Poistu</string>
+  <string name="reload_video">Lataa video uudelleen</string>
+  <!--Health-->
+  <string name="health_info">Saatavuus: %1$s, Jakajat: %2$d, Lataajat: %3$d</string>
+  <string name="health_bad">Huono</string>
 </resources>

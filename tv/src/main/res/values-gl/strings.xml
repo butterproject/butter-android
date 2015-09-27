@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="related_movies">Vídeos relacionados</string>
+  <!--Main screen-->
+  <string name="top_movies">Mellores Filmes</string>
+  <string name="top_shows">Mellores Series</string>
+  <string name="latest_shows">Últimas Series</string>
+  <string name="browse">Buscar</string>
+  <string name="more">Máis</string>
+  <string name="tests">Probas</string>
+  <string name="error">Erro</string>
+  <string name="ok">Feito</string>
+  <string name="pause">Pausa</string>
+  <string name="play">Reproducir</string>
+  <string name="stop">Deter</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Botón Repr./Pausa</string>
+  <string name="loading">Cargando...</string>
+  <string name="no_video_found">Non se atoparon vídeos</string>
+  <string name="popular_header">Vídeos populares</string>
+  <string name="preferences">PREFERENCIAS</string>
+  <string name="grid_view">Vista en Grella</string>
+  <string name="settings">Axustes</string>
+  <string name="personal_settings">Axustes persoais</string>
+  <string name="watch_trailer_1">Ver o avance</string>
+  <string name="watch_trailer_2">DE BALDE</string>
+  <string name="watch">Ver</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Filme</string>
+  <string name="search_results">Resultados da busca</string>
+  <string name="movie_results">Filmes atopados</string>
+  <string name="show_results">Series atopadas</string>
+  <string name="video_error_media_load_timeout">A carga do medio esgotou o tempo de espera</string>
+  <string name="video_error_server_unaccessible">Non foi posible chegar ao servidor de medios</string>
+  <string name="video_error_unknown_error">Produciuse un erro ao cargar o vídeo</string>
+  <string name="oops">Vaites!</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Si</string>
+  <string name="later">Non, despois</string>
+  <string name="new_update">Unha nova versión do Popcorn Time para Android TV está dispoñible. Queres actualizar agora?</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Conectando...</string>
+  <string name="starting_buffering">Iniciando</string>
+  <string name="streaming_started">Reprodución iniciada</string>
+  <string name="waiting_for_subtitles">Agardando polos subtítulos</string>
+  <string name="seeds">sementes</string>
+  <string name="error_files">Erro: non foi posible escribir nos arquivos</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Verifica a túa conexión a internet</string>
+  <string name="choose_quality">Escoller calidade</string>
+  <string name="more_movies">Máis Filmes</string>
+  <string name="more_shows">Máis Series</string>
+  <string name="genres">Xéneros</string>
+  <string name="terms_and_conditions">Termos e Condicións</string>
+  <string name="view_terms">Ver os termos</string>
+  <string name="episode_number_format">Episodio %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Versión</string>
+</resources>

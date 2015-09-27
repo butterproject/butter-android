@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">キャンセル</string>
   <string name="close">閉じる</string>
   <string name="ok">OK</string>
-  <string name="enabled">有効</string>
-  <string name="disabled">使用禁止</string>
   <string name="casting">キャスト</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">タイトル、年、出演者</string>
-  <string name="title_shows">テレビ番組</string>
-  <string name="title_movies">動画</string>
-  <string name="title_anime">アニメ</string>
-  <string name="genres">ジャンル</string>
-  <string name="search">検索</string>
-  <string name="searching">検索中...</string>
-  <string name="no_data_found">データが見つかりません</string>
-  <string name="unknown_error">何か不具合がありました</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">分</string>
-  <string name="read_more">もっと読む</string>
-  <string name="watch_trailer">トレーラーを見る</string>
-  <string name="no_subs">何の字幕もありません</string>
-  <string name="no_subs_available">利用可能な字幕はありません</string>
-  <string name="subtitles">字幕</string>
-  <string name="quality">品質</string>
-  <string name="trailer">トレーラー</string>
-  <string name="season">シーズン</string>
-  <string name="episode">エピソード</string>
-  <string name="specials">スペシャル</string>
-  <string name="continuing">連続</string>
-  <string name="ended">終了</string>
-  <string name="aired">放映: %s</string>
-  <string name="no_title_available">名前なし</string>
-  <string name="no_synopsis_available">概要はありません</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">トレントの待機中です</string>
   <string name="starting_buffering">バッファリングを開始</string>
@@ -44,6 +15,7 @@
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">再生中</string>
   <string name="volume">ボリューム</string>
+  <string name="play">遊ぶ</string>
   <string name="brightness">明るさ</string>
   <string name="hardware_acceleration_error_title">ハードウェア・アクセラレーションエラー</string>
   <string name="hardware_acceleration_error_message">ハードウェア・アクセラレーションのエラーが発生しました。ハードウェア・アクセラレーションを無効にしてもう一度試しますか？</string>
@@ -59,52 +31,6 @@
   <string name="leave_videoplayer_message">ビデオプレイヤーから離れますか？%sは再生をストップします。</string>
   <string name="encountered_error_title">ビデオエラーが発生しました</string>
   <string name="encountered_error">ビデオプレーヤーに重大なエラーが発生しました。ビデオファイルを開らき、再生することができませんでした。フォーマットが認識されませんでした。</string>
-  <!--TermsActivity strings-->
-  <string name="accept">受諾する</string>
-  <string name="leave">去る</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">環境設定</string>
-  <string name="general">一般</string>
-  <string name="default_view">起動時に表示するもの</string>
-  <string name="default_player">デフォルトのビデオプレーヤー</string>
-  <string name="i18n_language">アプリの言語</string>
-  <string name="restart_effect">変更を有効にするためにアプリを再起動する</string>
-  <string name="device_language">デバイスの言語</string>
-  <string name="stream_over_wifi_only">Wi-Fiでのみストリームする</string>
-  <string name="internal_player">内蔵</string>
-  <string name="subtitle_color">色</string>
-  <string name="subtitle_size">サイズ</string>
-  <string name="subtitle_stroke_color">輪郭の色</string>
-  <string name="subtitle_stroke_width">輪郭の大きさ</string>
-  <string name="subtitle_language">デフォルトの言語</string>
-  <string name="no_default_set">デフォルトの言語がありません</string>
-  <string name="advanced">詳細</string>
-  <string name="storage_location">ストレージの場所</string>
-  <string name="storage_automatic">自動</string>
-  <string name="storage_choose">場所を選択</string>
-  <string name="not_writable">書き込み可能ではありません</string>
-  <string name="remove_cache">プレーヤーを閉じた時にキャッシュを削除する</string>
-  <string name="hw_acceleration">ハードウェア・アクセラレーション</string>
-  <string name="hw_automatic">自動</string>
-  <string name="hw_full">フル</string>
-  <string name="hw_decoding">デコードのみ</string>
-  <string name="updates">アップデート</string>
-  <string name="auto_updates">自動アップデート</string>
-  <string name="check_for_updates">アップデートを確認</string>
-  <string name="last_check">最後のチェック</string>
-  <string name="about">約</string>
-  <string name="version">バージョン</string>
-  <string name="changelog">変更履歴</string>
-  <string name="tap_to_open">タップして開く</string>
-  <string name="report_a_bug">バグを報告</string>
-  <string name="open_source_licenses">オープンソースライセンス</string>
-  <string name="torrents">トレント</string>
-  <string name="download_speed">最大ダウンロード速度</string>
-  <string name="upload_speed">最大アップロード速度</string>
-  <string name="max_connections">最大合計接続数</string>
-  <string name="dht_limit">DHTリミット</string>
-  <string name="unlimited">無制限</string>
-  <string name="show_vpn">メニューにVPNオプションを表示</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Wi-Fiのみ</string>
   <string name="wifi_only_message">Wi-Fi経由でのみビデオをストリーミングすることができます。モバイルネットワーク経由でストリーミングする場合は、環境設定でこれを無効にすることができます。</string>

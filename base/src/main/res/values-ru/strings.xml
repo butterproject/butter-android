@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Отмена</string>
+  <string name="close">Закрыть</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Включено</string>
+  <string name="disabled">Отключено</string>
   <string name="update_available">Доступно новое обновление</string>
   <string name="press_install">Нажмите для установки</string>
   <string name="loading_data">Загрузка данных...</string>
@@ -10,16 +15,104 @@
   <string name="error_files">Ошибка: не удалось записать файлы</string>
   <string name="overview_not_available">Извините!
 Обзор не доступен.</string>
-  <string name="episode">Эпизод</string>
   <string name="unknown_error">Что-то пошло не так</string>
   <string name="torrent_failed">Не удалось получить торрент</string>
   <string name="running">Работает в фоновом режиме</string>
   <string name="tap_to_close">Нажмите чтобы закрыть</string>
   <string name="tap_to_resume">Нажмите чтобы возобновить </string>
+  <string name="stop">Стоп</string>
+  <!--Overview strings-->
+  <string name="search_hint">Название, год, актеры</string>
+  <string name="genres">Жанры</string>
+  <string name="search">Поиск</string>
+  <string name="searching">Поиск...</string>
+  <string name="no_data_found">Данные не найдены</string>
+  <string name="title_shows">Сериалы</string>
+  <string name="title_movies">Фильмы</string>
+  <string name="title_anime">Аниме</string>
   <string name="signature_invalid">Подпись приложения недействительна</string>
   <string name="possibly_dangerous">Popcorn Time был подделан. Вы можете скачать новый установочный файл на https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="subtitles">Субтитры</string>
+  <string name="now_playing">Сейчас воспроизводится</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Настройки</string>
+  <string name="general">Основные</string>
+  <string name="default_view">Стартовая страница</string>
+  <string name="default_player">Видео проигрыватель по умолчанию</string>
+  <string name="i18n_language">Язык приложения</string>
+  <string name="restart_effect">Перезапустить приложение для отображения изменений</string>
+  <string name="device_language">Язык устройства</string>
+  <string name="stream_over_wifi_only">Транслировать только по Wi-Fi</string>
+  <string name="internal_player">Встроенный</string>
+  <string name="subtitle_color">Цвет</string>
+  <string name="subtitle_size">Размер</string>
+  <string name="subtitle_timing">Тайминг субтитров</string>
+  <string name="subtitle_stroke_color">Цвет обводки</string>
+  <string name="subtitle_stroke_width">Толщина обводки</string>
+  <string name="subtitle_language">Язык по умолчанию</string>
+  <string name="subtitle_settings">Настройки субтитров</string>
+  <string name="no_default_set">Язык не по умолчанию</string>
+  <string name="advanced">Дополнительно</string>
+  <string name="storage_location">Расположение хранилища</string>
+  <string name="storage_automatic">Автоматически</string>
+  <string name="storage_choose">Выбрать местоположение</string>
+  <string name="not_writable">Местоположение недоступно для записи</string>
+  <string name="remove_cache">Удалять кэш плеера после закрытия</string>
+  <string name="hw_acceleration">Аппаратное ускорение</string>
+  <string name="hw_automatic">Автоматически</string>
+  <string name="hw_full">Полное</string>
+  <string name="hw_decoding">Только декодирование</string>
+  <string name="updates">Обновления</string>
+  <string name="auto_updates">Автоматическое обновление</string>
+  <string name="check_for_updates">Проверить обновления</string>
+  <string name="last_check">Последняя проверка</string>
+  <string name="about">О приложении</string>
+  <string name="version">Версия</string>
+  <string name="changelog">Список изменений</string>
+  <string name="tap_to_open">Нажмите для открытия</string>
+  <string name="report_a_bug">Сообщить об ошибке</string>
+  <string name="open_source_licenses">Open-source лицензии</string>
+  <string name="torrents">Торренты</string>
+  <string name="download_speed">Максимальная скорость скачивания</string>
+  <string name="upload_speed">Максимальная скорость отдачи</string>
+  <string name="max_connections">Максимальное количество соединений</string>
+  <string name="dht_limit">Лимит DHT</string>
+  <string name="unlimited">Неограничено</string>
+  <string name="show_vpn">Показывать пункт VPN в меню</string>
+  <string name="pixel_format">Принудительная насыщенность цвета</string>
+  <string name="rgb32">RGB 32-bit: стандартная насыщенность</string>
+  <string name="rgb16">RGB 16-bit: хорошая производительность, низкое качество</string>
+  <string name="yuv">YUV: Макс. производительность, но не всегда работает</string>
+  <string name="best_fit">Оптимальная подгонка</string>
+  <string name="fill">Подгонка по размеру экрана</string>
+  <string name="fit_horizontal">Подогнать по горизонтали</string>
+  <string name="fit_vertical">Подогнать по вертикали</string>
+  <string name="original_size">Оригинальный</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">мин</string>
+  <string name="read_more">Читать дальше</string>
+  <string name="watch_trailer">Смотреть трейлер</string>
+  <string name="no_subs">Без субтитров</string>
+  <string name="no_subs_available">Субтитры не доступны</string>
+  <string name="quality">Качество</string>
+  <string name="trailer">Трейлер</string>
+  <string name="season">Сезон</string>
+  <string name="episode">Эпизод</string>
+  <string name="specials">Дополнительные материалы</string>
+  <string name="continuing">Продолжается</string>
+  <string name="ended">Завершен</string>
+  <string name="aired">Вышли в эфир: %s</string>
+  <string name="no_title_available">Нет названия</string>
+  <string name="no_synopsis_available">Краткое содержание не доступно</string>
+  <string name="magnet">Magnet-ссылка</string>
+  <string name="scale">Масштаб</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Громкость</string>
+  <string name="brightness">Яркость</string>
+  <string name="hardware_acceleration_error_title">Ошибка HW ускорения</string>
   <string name="genre_all">Все</string>
+  <string name="hardware_acceleration_error_message">Произошла ошибка с аппаратным ускорением. Вы хотите отключить его и попробовать еще раз?</string>
+  <!--Genres-->
   <string name="genre_action">Боевик</string>
   <string name="genre_adventure">Приключения</string>
   <string name="genre_animation">Анимационный</string>
@@ -55,65 +148,32 @@
   <string name="genre_western">Вестерн</string>
   <!--Anime:-->
   <string name="genre_cars">Автомобили</string>
-  <string name="genre_dementia">
-        Деменция
-        </string>
+  <string name="genre_dementia">Деменция</string>
   <string name="genre_demons">Демоны</string>
-  <string name="genre_ecchi">
-        Этти
-        </string>
-  <string name="genre_game">
-        Игра
-        </string>
-  <string name="genre_harem">
-        Гарем
-        </string>
-  <string name="genre_josei">
-        Дзёсэй
-        </string>
+  <string name="genre_ecchi">Этти</string>
+  <string name="genre_game">Игра</string>
+  <string name="genre_harem">Гарем</string>
+  <string name="genre_josei">Дзёсэй</string>
   <string name="genre_kids">Дети</string>
   <string name="genre_magic">Волшебство</string>
   <string name="genre_martial_arts">Боевые искусства</string>
-  <string name="genre_mecha">
-        Меха
-        </string>
+  <string name="genre_mecha">Меха</string>
   <string name="genre_military">Военный</string>
-  <string name="genre_police">
-        Полиция
-        </string>
+  <string name="genre_police">Полиция</string>
   <string name="genre_parody">Пародия</string>
   <string name="genre_psychological">Психологический</string>
-  <string name="genre_samurai">
-        Самурай
-        </string>
-  <string name="genre_school">
-        Школа
-        </string>
-  <string name="genre_seinen">
-        Сэйнэн
-        </string>
-  <string name="genre_shoujo">
-        Сёдзё
-        </string>
-  <string name="genre_shoujo_ai">
-        Сёдзё-Ай</string>
-  <string name="genre_shounen">
-        Сёнэн
-        </string>
-  <string name="genre_shounen_ai">
-        Сёнэн-Ай
-        </string>
+  <string name="genre_samurai">Самурай</string>
+  <string name="genre_school">Школа</string>
+  <string name="genre_seinen">Сэйнэн</string>
+  <string name="genre_shoujo">Сёдзё</string>
+  <string name="genre_shoujo_ai">Сёдзё-Ай</string>
+  <string name="genre_shounen">Сёнэн</string>
+  <string name="genre_shounen_ai">Сёнэн-Ай</string>
   <string name="genre_slice_of_life">Slice of Life</string>
-  <string name="genre_space">
-        Космос
-        </string>
-  <string name="genre_super_power">
-        Супер Сила
-        </string>
+  <string name="genre_space">Космос</string>
+  <string name="genre_super_power">Супер Сила</string>
   <string name="genre_supernatural">Сверхъестественный</string>
-  <string name="genre_vampire">
-        Вампир
-        </string>
+  <string name="genre_vampire">Вампир</string>
   <!--Possible tabs-->
   <string name="popular">ПОПУЛЯРНОЕ</string>
   <string name="top_rated">Топовые в рейтинге</string>
@@ -122,10 +182,23 @@
   <string name="year">Год</string>
   <string name="a_to_z">А - Я</string>
   <string name="trending">ТРЕНДОВЫЕ</string>
+  <string name="encountered_error_title">Непредвиденная ошибка видео</string>
+  <string name="encountered_error">Проигрыватель видео обнаружил серьезную ошибку. Невозможно открыть и/или воспроизвести видеофайл. Формат не распознан.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Сопряжение с TV</string>
   <string name="confirm_tv">Пожалуйста, подтвердите соединение на TV</string>
   <string name="enter_pairing_code">Введите код подключения на TV</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Открыть с помощью</string>
   <string name="select_file">Выберите файл</string>
+  <string name="accept">Принять</string>
+  <string name="leave">Отказаться</string>
+  <string name="reload_video">Перезагрузить видео</string>
+  <!--Health-->
+  <string name="health_info">Статус: %1$s, Сиды: %2$d, Пиры: %3$d</string>
+  <string name="health_bad">Плохо</string>
+  <string name="health_medium">Средне</string>
+  <string name="health_good">Хорошо</string>
+  <string name="health_excellent">Превосходно</string>
+  <string name="health_unknown">Неизвестно</string>
 </resources>

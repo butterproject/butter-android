@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="related_movies">Σχετικά βίντεο</string>
+  <!--Main screen-->
+  <string name="top_movies">Κορυφαίες ταινίες</string>
+  <string name="top_shows">Κορυφαίες τηλεοπτικές σειρές</string>
+  <string name="latest_shows">Τελευταίες τηλεοπτικές σειρές</string>
+  <string name="browse">Πλοήγηση</string>
+  <string name="more">Περισσότερα</string>
+  <string name="tests">Δοκιμές</string>
+  <string name="error">Σφάλμα</string>
+  <string name="ok">Εντάξει</string>
+  <string name="pause">Παύση</string>
+  <string name="play">Αναπαραγωγή</string>
+  <string name="stop">Διακοπή</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Κουμπί αναπαραγωγής/παύσης</string>
+  <string name="loading">Γίνεται φόρτωση...</string>
+  <string name="no_video_found">Δεν βρέθηκε βίντεο</string>
+  <string name="popular_header">Δημοφιλή βίντεο</string>
+  <string name="preferences">ΠΡΟΤΙΜΗΣΕΙΣ</string>
+  <string name="grid_view">Προβολή πλέγματος</string>
+  <string name="settings">Ρυθμίσεις</string>
+  <string name="personal_settings">Προσωπικές ρυθμίσεις</string>
+  <string name="watch_trailer_1">Προβολή τρέιλερ</string>
+  <string name="watch_trailer_2">ΔΩΡΕΑΝ</string>
+  <string name="watch">Προβολή</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Ταινία</string>
+  <string name="search_results">Αποτελέσματα αναζήτησης</string>
+  <string name="movie_results">Αποτελέσματα ταινιών</string>
+  <string name="show_results">Αποτελέσματα τηλεοπτικών σειρών</string>
+  <string name="video_error_media_load_timeout">Η φόρτωση των πολυμέσων απέτυχε</string>
+  <string name="video_error_server_unaccessible">Ο διακομιστής πολυμέσων δεν ήταν προσβάσιμος</string>
+  <string name="video_error_unknown_error">Αποτυχία φόρτωσης βίντεο</string>
+  <string name="oops">Ουπς</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Ναι</string>
+  <string name="later">Όχι, αργότερα</string>
+  <string name="new_update">Μία νέα έκδοση του Popcorn Time για Android TV είναι διαθέσιμη. Θέλετε να κάνετε ενημέρωση τώρα;</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Γίνεται σύνδεση...</string>
+  <string name="starting_buffering">Εκκίνηση</string>
+  <string name="streaming_started">Άρχισε η ροή δεδομένων</string>
+  <string name="waiting_for_subtitles">Αναμονή για υπότιτλους</string>
+  <string name="seeds">τροφοδότες</string>
+  <string name="error_files">Σφάλμα: Απέτυχε η εγγραφή αρχείων</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Ελέγξτε τη σύνδεση του δικτύου σας</string>
+  <string name="choose_quality">Επιλογή ποιότητας</string>
+  <string name="more_movies">Περισσότερες ταινίες</string>
+  <string name="more_shows">Περισσότερες σειρές</string>
+  <string name="genres">Είδη</string>
+  <string name="terms_and_conditions">Όροι και προϋποθέσεις</string>
+  <string name="view_terms">Προβολή όρων</string>
+  <string name="episode_number_format">Επεισόδιο %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Έκδοση</string>
+</resources>

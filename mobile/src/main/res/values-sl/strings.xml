@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Prekliči</string>
   <string name="close">Zapri</string>
   <string name="ok">OK</string>
-  <string name="enabled">Omogočeno</string>
-  <string name="disabled">Onemogočeno</string>
   <string name="casting">Prenos/Predstavitev</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Naslov, leto, igralci</string>
-  <string name="title_shows">Oddaje</string>
-  <string name="title_movies">Filmi</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Zvrsti</string>
-  <string name="search">Iskanje</string>
-  <string name="searching">Iskanje...</string>
-  <string name="no_data_found">Ni najdenih podatkov</string>
-  <string name="unknown_error">Nekaj ​​je šlo narobe</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Več o tem</string>
-  <string name="watch_trailer">Napovednik</string>
-  <string name="no_subs">Ni podnapisov</string>
-  <string name="no_subs_available">Podnapisi niso na voljo</string>
-  <string name="subtitles">Podnapisi</string>
-  <string name="quality">Kvaliteta</string>
-  <string name="trailer">Napovednik</string>
-  <string name="season">Sezona</string>
-  <string name="episode">Epizoda</string>
-  <string name="specials">Posebne</string>
-  <string name="continuing">Nadaljuje</string>
-  <string name="ended">Končano</string>
-  <string name="aired">Na sporedu: %s</string>
-  <string name="no_title_available">Ni imena</string>
-  <string name="no_synopsis_available">Povzetek ni na voljo</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Čakanje na torent</string>
   <string name="starting_buffering">Začetek prednalaganja</string>
@@ -41,11 +12,16 @@
   <string name="waiting_for_subtitles">Čakam na podnapise</string>
   <string name="seeds">sejalci</string>
   <string name="error_files">Napaka: Ne morem zapisovati datotek. Prosimo poskusite z drugo lokacijo za shranjevanje.</string>
+  <string name="start_external">Zaženi zunanji predvajalnik</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Trenutno se predvaja</string>
   <string name="volume">Glasnost</string>
+  <string name="play">Predvajaj</string>
+  <string name="pause">Pavza</string>
+  <string name="fastforward">Previj naprej</string>
+  <string name="rewind">Previj nazaj</string>
   <string name="brightness">Svetlost</string>
-  <string name="hardware_acceleration_error_title">Napaka HW pospeška</string>
+  <string name="hardware_acceleration_error_title">Napaka strojnega pospeševanja</string>
   <string name="hardware_acceleration_error_message">Prišlo je do napake pri strojnem pospeševanju. Bi ga radi onemogočili in poskusili znova?</string>
   <string name="best_fit">Najboljša prilagodljivost</string>
   <string name="fill">Zapolni</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">Ali ste sigurni da želite zapustiti video predvajalnik? %s bo prenehal s predvajanjem.</string>
   <string name="encountered_error_title">Video je naletel na napako</string>
   <string name="encountered_error">Video predvajalnik je naletel na resno napako. Video datoteko ni mogoče odpreti in/ali predvajati. Format ni bil prepoznan.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Sprejmi</string>
-  <string name="leave">Zapusti</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Nastavitve</string>
-  <string name="general">Splošno</string>
-  <string name="default_view">Privzeto večnamenski pogled</string>
-  <string name="default_player">Privzeto video predvajalnik</string>
-  <string name="i18n_language">Jezik aplikacije</string>
-  <string name="restart_effect">Ponovno zaženi aplikacijo da spremembe začnejo veljati</string>
-  <string name="device_language">Jezik naprave</string>
-  <string name="stream_over_wifi_only">Prenašaj samo preko Wi-Fi</string>
-  <string name="internal_player">Notranji</string>
-  <string name="subtitle_color">Barva</string>
-  <string name="subtitle_size">Velikost</string>
-  <string name="subtitle_stroke_color">Zunanja obrobna barva</string>
-  <string name="subtitle_stroke_width">Zunanja obrobna širina</string>
-  <string name="subtitle_language">Privzeti jezik</string>
-  <string name="no_default_set">Brez privzetega jezika</string>
-  <string name="advanced">Napredno</string>
-  <string name="storage_location">Lokacija za shranjevanje</string>
-  <string name="storage_automatic">Samodejno</string>
-  <string name="storage_choose">Izberi lokacijo</string>
-  <string name="not_writable">Lokacija ni zapisljiva</string>
-  <string name="remove_cache">Odstrani cache ob zaprtju predvajalnika</string>
-  <string name="hw_acceleration">Strojno pospeševanje</string>
-  <string name="hw_automatic">Samodejno</string>
-  <string name="hw_full">Polno</string>
-  <string name="hw_decoding">Samo dekodiranje</string>
-  <string name="updates">Posodobitve</string>
-  <string name="auto_updates">Samodejno posodabljanje</string>
-  <string name="check_for_updates">Preveri za posodobitvami</string>
-  <string name="last_check">Nazadnje preverjeno</string>
-  <string name="about">Info</string>
-  <string name="version">Različica</string>
-  <string name="changelog">Dnevnik Sprememb</string>
-  <string name="tap_to_open">Odpri z dotikom</string>
-  <string name="report_a_bug">Prijavi napako</string>
-  <string name="open_source_licenses">Odprto-kodne licence</string>
-  <string name="torrents">Torenti</string>
-  <string name="download_speed">Najvišje hitrost prenosa</string>
-  <string name="upload_speed">Najvišje hitrost nalaganja</string>
-  <string name="max_connections">Najvišje skupne povezave</string>
-  <string name="dht_limit">DHT omejitev</string>
-  <string name="unlimited">Neomejeno</string>
-  <string name="show_vpn">Pokaži VPN opcijo in meni</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Samo Wi-Fi</string>
   <string name="wifi_only_message">Video vsebine lahko prenašaš samo preko Wi-Fi. Lahko pa to tudi onemogočiš v nastavitvah, če želiš prenašat preko mobilne povezave.</string>
@@ -133,4 +63,7 @@
   <!--VPN dialog-->
   <string name="vpn_not_installed">VPN.ht aplikacija ni nameščena</string>
   <string name="vpn_info">Če hočete uporabljati VPN opcijo, ki je v sami Popcorn Time aplikaciji, potem morate imeti nameščen VPN.ht. Vas ne zanima? Potem lahko kar skrijete tale gumb.</string>
+  <string name="vpn_download">Prenesi</string>
+  <string name="vpn_later">Kasneje</string>
+  <string name="vpn_hide">Skrij</string>
 </resources>

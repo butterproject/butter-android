@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Cancelar</string>
   <string name="close">Cerrar</string>
   <string name="ok">Ok</string>
-  <string name="enabled">Habilitado</string>
-  <string name="disabled">Deshabilitado</string>
   <string name="casting">Transmitiendo</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Título, año, actores</string>
-  <string name="title_shows">Programas</string>
-  <string name="title_movies">Películas</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Géneros</string>
-  <string name="search">Buscar</string>
-  <string name="searching">Buscando...</string>
-  <string name="no_data_found">No se encontraron datos</string>
-  <string name="unknown_error">Algo salió mal</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Leer más</string>
-  <string name="watch_trailer">Ver trailer</string>
-  <string name="no_subs">Sin subtítulos</string>
-  <string name="no_subs_available">No hay subtítulos disponibles</string>
-  <string name="subtitles">Subtítulos</string>
-  <string name="quality">Calidad</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Temporada</string>
-  <string name="episode">Episodio</string>
-  <string name="specials">Especiales</string>
-  <string name="continuing">Continúa</string>
-  <string name="ended">Finalizada</string>
-  <string name="aired">Emitido: %s</string>
-  <string name="no_title_available">Sin nombre</string>
-  <string name="no_synopsis_available">No hay sinopsis disponible</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Esperando el archivo</string>
   <string name="starting_buffering">Iniciando almacenamiento</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">Esperando los subtítulos</string>
   <string name="seeds">fuentes</string>
   <string name="error_files">Error: No se pueden escribir los archivos. Por favor, selecciona otra ubicación de almacenamiento.</string>
+  <string name="start_external">Iniciar reproductor externo</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Reproduciendo ahora</string>
   <string name="volume">Volúmen</string>
+  <string name="play">Reproducir</string>
+  <string name="pause">Pausa</string>
+  <string name="fastforward">Avance rápido</string>
+  <string name="rewind">Retroceder</string>
   <string name="brightness">Brillo</string>
   <string name="hardware_acceleration_error_title">Error de aceleración por hardware</string>
   <string name="hardware_acceleration_error_message">Ocurrió un error con la aceleración por hardware. ¿Deseas desactivarla e intentarlo de nuevo?</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">¿Estás seguro que quieres cerrar el programa? %s detendrá la reproducción.</string>
   <string name="encountered_error_title">Se encontró un error de video</string>
   <string name="encountered_error">El reproductor encontró un error grave. El vídeo no se puede abrir y/o reproducir. No se reconoce el formato.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Aceptar</string>
-  <string name="leave">Abandonar</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Preferencias</string>
-  <string name="general">General</string>
-  <string name="default_view">Vista inicial predeterminada</string>
-  <string name="default_player">Reproductor predeterminado</string>
-  <string name="i18n_language">Idioma de la aplicación</string>
-  <string name="restart_effect">Reiniciar la aplicación para que los cambios tengan efecto</string>
-  <string name="device_language">Idioma del dispositivo </string>
-  <string name="stream_over_wifi_only">Reproducir sólo por Wi-Fi</string>
-  <string name="internal_player">Interno</string>
-  <string name="subtitle_color">Color</string>
-  <string name="subtitle_size">Tamaño</string>
-  <string name="subtitle_stroke_color">Color del borde</string>
-  <string name="subtitle_stroke_width">Grosor del borde</string>
-  <string name="subtitle_language">Idioma predeterminado</string>
-  <string name="no_default_set">Sin idioma predeterminado</string>
-  <string name="advanced">Avanzadas</string>
-  <string name="storage_location">Ubicación de almacenamiento</string>
-  <string name="storage_automatic">Automático</string>
-  <string name="storage_choose">Seleccionar ubicación</string>
-  <string name="not_writable">La ubicación es de sólo lectura</string>
-  <string name="remove_cache">Eliminar caché al salir</string>
-  <string name="hw_acceleration">Aceleración por hardware</string>
-  <string name="hw_automatic">Automático</string>
-  <string name="hw_full">Completa</string>
-  <string name="hw_decoding">Sólo decodificación</string>
-  <string name="updates">Actualizaciones</string>
-  <string name="auto_updates">Actualizaciones automáticas</string>
-  <string name="check_for_updates">Comprobar actualizaciones</string>
-  <string name="last_check">Última comprobación</string>
-  <string name="about">Acerca de</string>
-  <string name="version">Versión</string>
-  <string name="changelog">Historial</string>
-  <string name="tap_to_open">Toca para abrir</string>
-  <string name="report_a_bug">Informar de un error</string>
-  <string name="open_source_licenses">Licencias de código abierto</string>
-  <string name="torrents">Archivos</string>
-  <string name="download_speed">Velocidad máxima de bajada</string>
-  <string name="upload_speed">Velocidad máxima de subida</string>
-  <string name="max_connections">Total de conexiones, máximo:</string>
-  <string name="dht_limit">Límite DHT</string>
-  <string name="unlimited">Ilimitadas</string>
-  <string name="show_vpn">Mostrar la opción de VPN en el menú</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Sólo Wi-Fi</string>
   <string name="wifi_only_message">La reproducción de videos sólo es posible a través de Wi-Fi. Puedes desactivar esto en \"Configuración\" si deseas utilizar tu conexión de datos móviles.</string>
