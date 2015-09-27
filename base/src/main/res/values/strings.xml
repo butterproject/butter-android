@@ -17,6 +17,8 @@
   -->
 
 <resources>
+
+    <string name="app_name" translatable="false">Popcorn Time</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
@@ -216,6 +218,7 @@
     <string name="encountered_error">The video player encountered a serious error. The video file could not be opened and/or played. The format was not recognised.</string>
 
     <!-- BeamManager -->
+    <string name="beaming">Beaming</string>
     <string name="pairing_tv">Pairing with TV</string>
     <string name="confirm_tv">Please confirm the connection on your TV</string>
     <string name="enter_pairing_code">Enter Pairing Code on TV</string>
@@ -245,5 +248,118 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="health_good">Good</string>
     <string name="health_excellent">Excellent</string>
     <string name="health_unknown">Unknown</string>
+
+    <!-- StreamLoadingActivity strings -->
+    <string name="waiting_torrent">Waiting for torrent</string>
+    <string name="starting_buffering">Starting buffering</string>
+    <string name="streaming_started">Streaming started</string>
+    <string name="waiting_for_subtitles">Waiting for subtitles</string>
+    <string name="seeds">seeds</string>
+    <string name="start_external">Start external player</string>
+
+    <!-- VideoPlayerActivity strings -->
+    <string name="fastforward">Fast forward</string>
+    <string name="rewind">Rewind</string>
+    <string name="comm_error">Communications Error</string>
+    <string name="comm_message">An error occurred during the retrieval of the video. This could be due to network issues or YouTube protocols. Please try again later.</string>
+    <string name="leave_videoplayer_title">Are you sure?</string>
+    <string name="leave_videoplayer_message">Are you sure you want to leave the video player? %s will stop playing.</string>
+
+    <!-- WifiOnlyDialogFragment -->
+    <string name="wifi_only">Wi-Fi only</string>
+    <string name="wifi_only_message">You can only stream videos over Wi-Fi. You can disable this in preferences if you want to stream over a cellular connection.</string>
+
+    <!-- NavigationDrawer -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="no_search_results">No search results found</string>
+    <string name="vpn">VPN</string>
+
+    <!-- AboutFragment -->
+    <string name="about_message">Popcorn Time is the result of many developers and designers putting a bunch of APIs together to make the
+		experience of watching torrent movies as simple as possible.\n\nWe are an open source project. We are from all over the world. We
+		love our movies. And boy, do we love popcorn.</string>
+    <string name="website">Website</string>
+    <string name="forum">Forum</string>
+    <string name="google_plus">Google+</string>
+    <string name="facebook">Facebook</string>
+    <string name="git">Git</string>
+    <string name="blog">Blog</string>
+    <string name="twitter">Twitter</string>
+
+    <!-- Beam dialog -->
+    <string name="connected_to">Connected to</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="select_beaming">Select device for beaming</string>
+    <string name="starting_beam">Initialising video beaming...</string>
+    <string name="beaming_failed">The video could not play on your beaming device. Would you like to try again? The app might need to download more parts before your device is able to play the video.</string>
+    <string name="the_video">The video</string>
+
+    <!-- VPN dialog -->
+    <string name="vpn_not_installed">VPN.ht app not installed</string>
+    <string name="vpn_info">You need to have the VPN.ht app installed to use the VPN option from inside Popcorn Time. Not interested? Then you can just hide this button.</string>
+    <string name="vpn_download">Download</string>
+    <string name="vpn_later">Later</string>
+    <string name="vpn_hide">Hide</string>
+
+    <!-- Android TV below -->
+
+    <string name="related_movies">Related Videos</string>
+
+    <!-- Main screen -->
+    <string name="top_movies">Top Movies</string>
+    <string name="top_shows">Top TV Series</string>
+    <string name="latest_shows">Latest TV Series</string>
+    <string name="browse">Browse</string>
+    <string name="more">More</string>
+    <string name="tests">Tests</string>
+
+    <string name="error">Error</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="init_text">00:00</string>
+    <string name="play_pause_description">Play Pause Button</string>
+    <string name="loading">Loading…</string>
+    <string name="no_video_found">No video was found</string>
+    <string name="popular_header">Popular Videos</string>
+    <string name="grid_view">Grid View</string>
+    <string name="settings">Settings</string>
+    <string name="personal_settings">Personal Settings</string>
+
+    <string name="watch_trailer_1">Watch trailer</string>
+    <string name="watch_trailer_2">FREE</string>
+
+    <string name="watch">Watch</string>
+
+    <string name="quality_720">720p</string>
+    <string name="quality_1080">1080p</string>
+
+    <string name="movie">Movie</string>
+    <string name="should_start" translatable="false">shouldStart</string>
+    <string name="start_position" translatable="false">startPosition</string>
+    <string name="search_results">Search Results</string>
+    <string name="movie_results">Movie Results</string>
+    <string name="show_results">TV Series Results</string>
+    <string name="video_error_media_load_timeout">Media loading timed out</string>
+    <string name="video_error_server_unaccessible">Media server was not reachable</string>
+    <string name="video_error_unknown_error">Failed to load video</string>
+    <string name="oops">Oops</string>
+
+    <!-- PTVUpdateFragment -->
+    <string name="now">Yes</string>
+    <string name="later">No, later</string>
+    <string name="new_update">A new version of Popcorn Time for Android TV is available. Do you want to update now?</string>
+
+    <string name="network_message">Check your internet connection</string>
+
+    <string name="choose_quality">Choose quality</string>
+    <string name="more_movies">More Movies</string>
+    <string name="more_shows">More Shows</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="view_terms">View terms</string>
+    <string name="episode_number_format">Episode %d</string>
+
+    <!-- PTVSettingsFragment -->
+    <string name="version_pref">Version</string>
 
 </resources>

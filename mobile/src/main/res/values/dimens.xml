@@ -26,23 +26,17 @@
     <dimen name="list_text_size">16sp</dimen>
     <dimen name="list_text_margin_horizontal">16dp</dimen>
 
-    <dimen name="iconlist_item_height">56dp</dimen>
     <dimen name="iconlist_icon_width">24dp</dimen>
     <dimen name="iconlist_icon_margin_horizontal">16dp</dimen>
     <dimen name="iconlist_text_margin_horizontal">72dp</dimen>
-    <dimen name="iconlist_text_padding_top">16dp</dimen>
-    <dimen name="iconlist_text_padding_bottom">20dp</dimen>
     <dimen name="iconlist_secondary_text_size">14sp</dimen>
-    <dimen name="iconlist_item_twolines_height">72dp</dimen>
     <dimen name="iconlist_text_twolines_padding">10dp</dimen>
 
     <dimen name="navlist_item_height">48dp</dimen>
     <dimen name="navlist_item_header">172dp</dimen>
-    <dimen name="navlist_item_header_padding">16dp</dimen>
 
     <dimen name="action_margin">32dp</dimen>
     <dimen name="context_icon">28dp</dimen>
-    <dimen name="divider_margin">72dp</dimen>
     <dimen name="first_keyline">16dp</dimen>
     <dimen name="second_keyline">72dp</dimen>
     <dimen name="toolbar_horizontal_padding">4dp</dimen>
@@ -55,7 +49,6 @@
     <dimen name="player_controls_corners">7dp</dimen>
     <dimen name="player_controls_distance">8dp</dimen>
     <dimen name="player_subtitles_bottom_margin">16dp</dimen>
-    <dimen name="player_subtitles_default_text_size">16dp</dimen>
     <dimen name="beamplayer_controls_margin">48dp</dimen>
 
     <dimen name="settings_subheader_text_size">14sp</dimen>
@@ -74,7 +67,6 @@
     <dimen name="optionselector_text_margin_start">72dp</dimen>
     <dimen name="optionselector_volume_margin_start">56dp</dimen>
     <dimen name="optionselector_text_margin_end">16dp</dimen>
-    <dimen name="optionselecter_margin_end">32dp</dimen>
     <dimen name="optionselector_text_size">15sp</dimen>
 
     <dimen name="griditem_title_horizontal">16dp</dimen>
