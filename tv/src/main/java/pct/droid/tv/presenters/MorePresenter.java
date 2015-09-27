@@ -7,6 +7,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 
 import pct.droid.base.providers.media.MediaProvider;
+import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.StringUtils;
 
 public class MorePresenter extends Presenter {
@@ -43,10 +44,10 @@ public class MorePresenter extends Presenter {
 		private final int mId;
 		private MediaProvider.NavInfo mNavInfo;
 
-		public MoreItem(int id,String text, @DrawableRes int iconResId,@Nullable MediaProvider.NavInfo info) {
+		public MoreItem(int id, String text, @DrawableRes int iconResId, @Nullable MediaProvider.NavInfo info) {
 			mId = id;
 			mIcon = iconResId;
-			mTitle = text;
+			mTitle = text.toUpperCase(LocaleUtils.getCurrent());
 			this.mNavInfo = info;
 		}
 
