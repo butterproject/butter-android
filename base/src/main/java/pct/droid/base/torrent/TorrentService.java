@@ -180,17 +180,13 @@ public class TorrentService extends Service implements TorrentListener {
 
         if(mUpdateTimer == null) {
             mUpdateTimer = new Timer();
-            mUpdateTask.cancel();
-            mUpdateTimer.cancel();
-            mUpdateTimer.purge();
-            mUpdateTimer.scheduleAtFixedRate(mUpdateTask, 5000, 5000);
+            mUpdateTimer.scheduleAtFixedRate(new UpdateTask(), 5000, 5000);
         }
     }
 
     public void stopForeground() {
         stopForeground(true);
         if(mUpdateTimer != null) {
-            mUpdateTask.cancel();
             mUpdateTimer.cancel();
             mUpdateTimer.purge();
             mUpdateTimer = null;
@@ -367,7 +363,7 @@ public class TorrentService extends Service implements TorrentListener {
         }
     }
 
-    private TimerTask mUpdateTask = new TimerTask() {
+    private class UpdateTask extends TimerTask {
         @Override
         public void run() {
             if(mInForeground) {
