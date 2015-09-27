@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Mégse</string>
+  <string name="close">Bezárás</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Engedélyezve</string>
+  <string name="disabled">Tiltva</string>
   <string name="update_available">Új frissítés érhető el</string>
   <string name="press_install">Nyomja meg a telepítéshez</string>
   <string name="loading_data">Adatok betöltése…</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">Feliratok betöltése…</string>
   <string name="error_files">Hiba: Nem írhatók a fájlok</string>
   <string name="overview_not_available">Elnézést! Nincs elérhető áttekintés.</string>
-  <string name="episode">Epizód</string>
   <string name="unknown_error">Valami rosszul sült el</string>
   <string name="torrent_failed">Torrent letöltése sikertelen</string>
   <string name="running">Futás a háttérben</string>
   <string name="tap_to_close">Érintse meg a bezáráshoz</string>
   <string name="tap_to_resume">Érintse meg a folytatáshoz</string>
+  <string name="stop">Megállít</string>
+  <!--Overview strings-->
+  <string name="search_hint">Cím, év, színészek</string>
+  <string name="genres">Műfajok</string>
+  <string name="search">Keresés</string>
+  <string name="searching">Keresés…</string>
+  <string name="no_data_found">Nem található adat</string>
+  <string name="title_shows">Műsorok</string>
+  <string name="title_movies">Filmek</string>
+  <string name="title_anime">Anime</string>
   <string name="signature_invalid">App aláírás érvénytelen</string>
   <string name="possibly_dangerous">A Popcorn Time módosítva lett. Töltsön le egy új telepítőfájlt: https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="subtitles">Feliratok</string>
+  <string name="now_playing">Most játszott</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Beállítások</string>
+  <string name="general">Általános</string>
+  <string name="default_view">Alapértelmezett áttekintés</string>
+  <string name="default_player">Alapértelmezett videó lejátszó</string>
+  <string name="i18n_language">Alkalmazás nyelve</string>
+  <string name="restart_effect">Indítsa újra az alkalmazást a változtatások érvénybe léptetéséhez</string>
+  <string name="device_language">Készülék nyelve</string>
+  <string name="stream_over_wifi_only">Stream csak Wi-Fi-n</string>
+  <string name="internal_player">Belső</string>
+  <string name="subtitle_color">Szín</string>
+  <string name="subtitle_size">Méret</string>
+  <string name="subtitle_timing">Felirat időzítése</string>
+  <string name="subtitle_stroke_color">Körvonal szín</string>
+  <string name="subtitle_stroke_width">Körvonal szélesség</string>
+  <string name="subtitle_language">Alapértelmezett nyelv</string>
+  <string name="subtitle_settings">Felirat beállítások</string>
+  <string name="no_default_set">Nincs alapértelmezett nyelv</string>
+  <string name="advanced">Haladó</string>
+  <string name="storage_location">Tároló hely</string>
+  <string name="storage_automatic">Automatikus</string>
+  <string name="storage_choose">Hely választás</string>
+  <string name="not_writable">A hely nem írható</string>
+  <string name="remove_cache">Gyorsítótár törlése lejátszó bezárásakor</string>
+  <string name="hw_acceleration">Hardveres gyorsítás</string>
+  <string name="hw_automatic">Automatikus</string>
+  <string name="hw_full">Teljes</string>
+  <string name="hw_decoding">Csak dekódolás</string>
+  <string name="updates">Frissítések</string>
+  <string name="auto_updates">Automatikus frissítések</string>
+  <string name="check_for_updates">Frissítések keresése</string>
+  <string name="last_check">Utolsó ellenőrzés</string>
+  <string name="about">Névjegy</string>
+  <string name="version">Verzió</string>
+  <string name="changelog">Változások listája</string>
+  <string name="tap_to_open">Érintse meg a megnyitáshoz</string>
+  <string name="report_a_bug">Hiba jelentése</string>
+  <string name="open_source_licenses">Nyílt forráskódú licencek</string>
+  <string name="torrents">Torrentek</string>
+  <string name="download_speed">Maximális letöltési sebesség</string>
+  <string name="upload_speed">Maximális feltöltési sebesség</string>
+  <string name="max_connections">Maximális összes kapcsolatok</string>
+  <string name="dht_limit">DHT limit</string>
+  <string name="unlimited">Korlátlan</string>
+  <string name="show_vpn">Mutassa a VPN opciót a menüben</string>
+  <string name="pixel_format">Kényszerítse a videó színtelítettséget</string>
+  <string name="rgb32">RGB 32-bit: alapértelmezett színtelítettség</string>
+  <string name="rgb16">RGB 16-bit: jobb teljesítmény, rosszabb minőség</string>
+  <string name="yuv">YUV: legjobb teljesítmény de nem mindig működik</string>
+  <string name="best_fit">Legjobban illeszkedő</string>
+  <string name="fill">Kitőlt</string>
+  <string name="fit_horizontal">Vízszintes illesztés</string>
+  <string name="fit_vertical">Függőleges illesztés</string>
+  <string name="original_size">Eredeti</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">perc</string>
+  <string name="read_more">Bővebben</string>
+  <string name="watch_trailer">Előzetes megnézése</string>
+  <string name="no_subs">Nincs felirat</string>
+  <string name="no_subs_available">Nincs elérhető felirat</string>
+  <string name="quality">Minőség</string>
+  <string name="trailer">Előzetes</string>
+  <string name="season">Évad</string>
+  <string name="episode">Epizód</string>
+  <string name="specials">Különlegességek</string>
+  <string name="continuing">Folytatódik</string>
+  <string name="ended">Befejeződött</string>
+  <string name="aired">Vetítve: %s</string>
+  <string name="no_title_available">Nincs név</string>
+  <string name="no_synopsis_available">Nincs elérhető szinopszis</string>
+  <string name="magnet">Mágnes</string>
+  <string name="scale">Méretarány</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Hangerő</string>
+  <string name="brightness">Fényerő</string>
+  <string name="hardware_acceleration_error_title">HW gyorsítás hiba</string>
   <string name="genre_all">Minden</string>
+  <string name="hardware_acceleration_error_message">Egy hiba történt a hardver gyorsítással. Szeretné kikapcsolni és újra megpróbálni?</string>
+  <!--Genres-->
   <string name="genre_action">Akció</string>
   <string name="genre_adventure">Kaland</string>
   <string name="genre_animation">Animációs</string>
@@ -88,10 +181,19 @@
   <string name="year">ÉV</string>
   <string name="a_to_z">A - Z</string>
   <string name="trending">FELKAPOTT</string>
+  <string name="encountered_error_title">Videó hiba történt</string>
+  <string name="encountered_error">A videó lejátszó súlyos hibába ütközött. A videó fájl nem nyitható meg és/vagy nem játszható le. A formátum nem felismerhető.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Párosítás TV-vel</string>
   <string name="confirm_tv">Erősítse meg a kapcsolatot a TV-n</string>
   <string name="enter_pairing_code">Adja meg a párosítási kódot a TV-n</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Megnyitás ezzel</string>
   <string name="select_file">Fájl kiválasztása</string>
+  <string name="accept">Elfogad</string>
+  <string name="leave">Kilépés</string>
+  <string name="reload_video">Videó újratöltése</string>
+  <!--Health-->
+  <string name="health_info">Egészség: %1$s, Seed: %2$d, Peer: %3$d</string>
+  <string name="health_bad">Rossz</string>
 </resources>

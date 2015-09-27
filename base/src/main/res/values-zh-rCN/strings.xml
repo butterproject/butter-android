@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">取消</string>
+  <string name="close">关闭</string>
+  <string name="ok">确定</string>
+  <string name="enabled">启用</string>
+  <string name="disabled">禁用</string>
   <string name="update_available">更新可用</string>
   <string name="press_install">点击安装</string>
   <string name="loading_data">数据载入中...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">字幕载入中...</string>
   <string name="error_files">错误：无法写入文件</string>
   <string name="overview_not_available">抱歉，无预览可用。</string>
-  <string name="episode">集</string>
   <string name="unknown_error">出现未知问题</string>
   <string name="torrent_failed">无法提取种子</string>
   <string name="running">后台运行</string>
   <string name="tap_to_close">点击关闭</string>
   <string name="tap_to_resume">点击继续</string>
+  <string name="stop">停止</string>
+  <!--Overview strings-->
+  <string name="search_hint">名称, 年份, 艺人</string>
+  <string name="genres">流派</string>
+  <string name="search">搜索</string>
+  <string name="searching">搜索中...</string>
+  <string name="no_data_found">未找到数据</string>
+  <string name="title_shows">电视剧</string>
+  <string name="title_movies">电影</string>
+  <string name="title_anime">动漫</string>
   <string name="signature_invalid">应用程序签名无效</string>
   <string name="possibly_dangerous">Popcorn Time 已被篡改。请从官方网站 https://popcorntime.io/ 下载新的安装文件。</string>
-  <!--Genres-->
+  <string name="subtitles">字幕</string>
+  <string name="now_playing">正在播放</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">设置</string>
+  <string name="general">一般选项</string>
+  <string name="default_view">默认视图</string>
+  <string name="default_player">默认视频播放器</string>
+  <string name="i18n_language">应用程序语言</string>
+  <string name="restart_effect">重启程序以应用更改</string>
+  <string name="device_language">设备语言</string>
+  <string name="stream_over_wifi_only">只在Wi-Fi环境下传输</string>
+  <string name="internal_player">内置播放器</string>
+  <string name="subtitle_color">字体颜色</string>
+  <string name="subtitle_size">字体大小</string>
+  <string name="subtitle_timing">字幕调速</string>
+  <string name="subtitle_stroke_color">轮廓颜色</string>
+  <string name="subtitle_stroke_width">轮廓宽度</string>
+  <string name="subtitle_language">默认语言</string>
+  <string name="subtitle_settings">字幕设置</string>
+  <string name="no_default_set">无默认语言</string>
+  <string name="advanced">高级选项</string>
+  <string name="storage_location">存储位置</string>
+  <string name="storage_automatic">自动</string>
+  <string name="storage_choose">选择位置</string>
+  <string name="not_writable">位置无法写入</string>
+  <string name="remove_cache">关闭播放器时清除缓存</string>
+  <string name="hw_acceleration">硬件加速</string>
+  <string name="hw_automatic">自动</string>
+  <string name="hw_full">完全加速</string>
+  <string name="hw_decoding">仅加速解码</string>
+  <string name="updates">更新</string>
+  <string name="auto_updates">自动更新</string>
+  <string name="check_for_updates">检查更新</string>
+  <string name="last_check">上次检查</string>
+  <string name="about">关于</string>
+  <string name="version">版本</string>
+  <string name="changelog">更新日志</string>
+  <string name="tap_to_open">点击打开</string>
+  <string name="report_a_bug">问题反馈</string>
+  <string name="open_source_licenses">开源许可</string>
+  <string name="torrents">种子</string>
+  <string name="download_speed">下载速度上限</string>
+  <string name="upload_speed">上传速度上限</string>
+  <string name="max_connections">总连接数上限</string>
+  <string name="dht_limit">DHT 上限</string>
+  <string name="unlimited">无限制</string>
+  <string name="show_vpn">菜单中显示VPN选项</string>
+  <string name="pixel_format">色彩增强</string>
+  <string name="rgb32">RGB 32位：默认饱和度</string>
+  <string name="rgb16">RGB 16位：性能更好，但质量较低</string>
+  <string name="yuv">YUV：性能最佳但可能无法生效</string>
+  <string name="best_fit">最佳尺寸</string>
+  <string name="fill">适应窗口</string>
+  <string name="fit_horizontal">适应宽度</string>
+  <string name="fit_vertical">适应高度</string>
+  <string name="original_size">原始尺寸</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">分钟</string>
+  <string name="read_more">阅读详情</string>
+  <string name="watch_trailer">观看预告片</string>
+  <string name="no_subs">无字幕</string>
+  <string name="no_subs_available">无字幕可用</string>
+  <string name="quality">质量</string>
+  <string name="trailer">预告片</string>
+  <string name="season">季</string>
+  <string name="episode">集</string>
+  <string name="specials">特辑</string>
+  <string name="continuing">连载中</string>
+  <string name="ended">已完结</string>
+  <string name="aired">已上映：%s</string>
+  <string name="no_title_available">无名称</string>
+  <string name="no_synopsis_available">暂无简介</string>
+  <string name="magnet">磁力链接</string>
+  <string name="scale">色度</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">音量</string>
+  <string name="brightness">亮度</string>
+  <string name="hardware_acceleration_error_title">硬件加速错误</string>
   <string name="genre_all">所有</string>
+  <string name="hardware_acceleration_error_message">使用硬件加速时发生错误。要重试吗？</string>
+  <!--Genres-->
   <string name="genre_action">动作</string>
   <string name="genre_adventure">冒险</string>
   <string name="genre_animation">动画</string>
@@ -88,10 +181,19 @@
   <string name="year">年份</string>
   <string name="a_to_z">字母</string>
   <string name="trending">流行</string>
+  <string name="encountered_error_title">视频播放出错</string>
+  <string name="encountered_error">视频播放出现严重错误。无法打开或播放此视频文件。未能识别出文件格式。</string>
   <!--BeamManager-->
   <string name="pairing_tv">匹配电视</string>
   <string name="confirm_tv">请在您的电视中确认连接</string>
   <string name="enter_pairing_code">输入配对码匹配电视</string>
+  <!--TermsActivity strings-->
   <string name="open_with">打开方式</string>
   <string name="select_file">选择文件</string>
+  <string name="accept">接受</string>
+  <string name="leave">离开</string>
+  <string name="reload_video">重新载入视频</string>
+  <!--Health-->
+  <string name="health_info">健康度： %1$s, 种子： %2$d, 连接： %3$d</string>
+  <string name="health_bad">较差</string>
 </resources>

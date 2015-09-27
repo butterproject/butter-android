@@ -1,49 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Cancelar</string>
   <string name="close">Pechar</string>
   <string name="ok">Feito</string>
-  <string name="enabled">Activado</string>
-  <string name="disabled">Desactivado</string>
   <string name="casting">Reparto</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Título, ano, actores</string>
-  <string name="title_shows">Series</string>
-  <string name="title_movies">Filmes</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Xéneros</string>
-  <string name="search">Buscar</string>
-  <string name="searching">Buscando...</string>
-  <string name="no_data_found">Non se atoparon datos</string>
-  <string name="unknown_error">Algo foi mal</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Leer máis</string>
-  <string name="watch_trailer">Ver o trailer</string>
-  <string name="no_subs">Sen subtítulos</string>
-  <string name="no_subs_available">Non che temos subtítulos dispoñibles</string>
-  <string name="subtitles">Subtítulos</string>
-  <string name="quality">Calidade</string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Tempada</string>
-  <string name="episode">Episodio</string>
-  <string name="specials">Especiais</string>
-  <string name="continuing">En emisión</string>
-  <string name="ended">Rematou</string>
-  <string name="aired">Emitida: %s</string>
-  <string name="no_title_available">Sen nome</string>
-  <string name="no_synopsis_available">Non dispón dunha sinopse.</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Esperando polo torrent</string>
-  <string name="starting_buffering">Empezando a carga</string>
+  <string name="starting_buffering">Comezando coa carga</string>
   <string name="streaming_started">Reprodución iniciada</string>
   <string name="waiting_for_subtitles">Agardando polos subtítulos</string>
   <string name="seeds">sementes</string>
   <string name="error_files">Error: Non se puideron escribir os arquivos. Por favor, tenta gardalos noutra localización.</string>
+  <string name="start_external">Iniciar o reprodutor externo</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Reproducindo</string>
   <string name="volume">Volume</string>
+  <string name="play">Reproducir</string>
+  <string name="pause">Pausa</string>
+  <string name="fastforward">Avance rápido</string>
+  <string name="rewind">Rebobinar</string>
   <string name="brightness">Brillo</string>
   <string name="hardware_acceleration_error_title">Erro na aceleración por hw</string>
   <string name="hardware_acceleration_error_message">Produciuse un erro na aceleración por hardware, queres desactivala e tentalo de novo?</string>
@@ -54,61 +30,11 @@
   <string name="original_size">Orixinal</string>
   <string name="reload_video">Cargar de novo o vídeo</string>
   <string name="comm_error">Erro nas comunicacións</string>
-  <string name="comm_message">Houbo un erro durante a carga do video. Isto podería deberse a problemas da rede ou a protocolos do YouTube. Téntao de novo máis tarde.</string>
+  <string name="comm_message">Houbo un erro durante a carga do video. Isto podería deberse a problemas na rede ou a algún protocolo do YouTube. Téntao de novo máis tarde.</string>
   <string name="leave_videoplayer_title">Estás seguro?</string>
   <string name="leave_videoplayer_message">De seguro que queres saír do reproductor? Deixarás de reproducir %s.</string>
-  <string name="encountered_error_title">Atopouse un erro no video</string>
+  <string name="encountered_error_title">Atopouse un erro no vídeo</string>
   <string name="encountered_error">O reproductor de vídeo atopou un erro moi serio. O arquivo de vídeo non puido abrirse e/ou reproducirse. Non se recoñeceu o formato.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Aceptar</string>
-  <string name="leave">Saír</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Preferencias</string>
-  <string name="general">Xeral</string>
-  <string name="default_view">Vista predefinida</string>
-  <string name="default_player">Reprodutor predefinido</string>
-  <string name="i18n_language">Idioma da app</string>
-  <string name="restart_effect">Reiniciar a aplicación para que os trocos teñan efecto</string>
-  <string name="device_language">Idioma do dispositivo</string>
-  <string name="stream_over_wifi_only">Só reproducir a través de Wi-Fi</string>
-  <string name="internal_player">Interno</string>
-  <string name="subtitle_color">Cor</string>
-  <string name="subtitle_size">Tamaño</string>
-  <string name="subtitle_stroke_color">Cor do contorno</string>
-  <string name="subtitle_stroke_width">Ancho do contorno</string>
-  <string name="subtitle_language">Idioma predefinido</string>
-  <string name="no_default_set">Sen idioma predefinido</string>
-  <string name="advanced">Avanzado</string>
-  <string name="storage_location">Localización de almacenamento</string>
-  <string name="storage_automatic">Automático</string>
-  <string name="storage_choose">Escoller localización</string>
-  <string name="not_writable">Localización de só lectura</string>
-  <string name="remove_cache">Eliminar a caché ó pechar o reprodutor</string>
-  <string name="hw_acceleration">Aceleración por hardware</string>
-  <string name="hw_automatic">Automático</string>
-  <string name="hw_full">Completo</string>
-  <string name="hw_decoding">Só decodificación</string>
-  <string name="updates">Actualizacións</string>
-  <string name="auto_updates">Actualizacións autom.</string>
-  <string name="check_for_updates">Buscar actualizacións</string>
-  <string name="last_check">Última verificación</string>
-  <string name="about">Sobre</string>
-  <string name="version">Versión</string>
-  <string name="changelog">Rexistro de cambios</string>
-  <string name="tap_to_open">Premer para abrir</string>
-  <string name="report_a_bug">Informar dun erro</string>
-  <string name="open_source_licenses">Licenzas de código aberto</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Velocidade máxima de baixada</string>
-  <string name="upload_speed">Velocidade máxima de subida</string>
-  <string name="max_connections">Conexiones máximas totais</string>
-  <string name="dht_limit">Límite DHT</string>
-  <string name="unlimited">Sen límite</string>
-  <string name="show_vpn">Amosar a opción para VPN no menú</string>
-  <string name="pixel_format">Forzar o video chroma</string>
-  <string name="rgb32">RGB 32-bit: chroma por defecto</string>
-  <string name="rgb16">RGB 16-bit: mellor rendemento, menos calidade</string>
-  <string name="yuv">YUV: mellor rendemento, pero non sempre funciona</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Só Wi-Fi</string>
   <string name="wifi_only_message">Só podes reproducir vídeos a través de Wi-Fi. Podes desactivar isto nas preferencias se queres reproducir vídeos mediante a conexión móbil.</string>
@@ -119,8 +45,7 @@
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
   <string name="about_message">O Popcorn Time é obra dun feixe de programadores e deseñadores axuntando unha morea de APIs diferentes, para conseguirmos que
-⇥⇥a túa experiencia ó veres filmes polo torrent sexa o máis sinxela posible.\n\nSomos un proxecto de código aberto. Vimos de todas as partes do mundo. Gústannos
-⇥⇥os filmes. E por suposto, degoiramos os flocos de millo.</string>
+⇥⇥a túa experiencia ó veres filmes polo torrent sexa o mellor posible.\n\O noso un proxecto de código a Somos de todos os sitios do mundo. Mólannos ⇥⇥moito os días de sofá, peli e mantiña. E meu, por suposto, degoiramos uns bos flocos de millo.</string>
   <string name="website">Sitio web</string>
   <string name="forum">Conferencias</string>
   <string name="google_plus">Google+</string>

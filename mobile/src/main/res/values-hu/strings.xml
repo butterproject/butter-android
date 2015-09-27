@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Mégse</string>
   <string name="close">Bezárás</string>
   <string name="ok">OK</string>
-  <string name="enabled">Engedélyezve</string>
-  <string name="disabled">Kikapcsolva</string>
   <string name="casting">Vetítés</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Cím, év, színészek</string>
-  <string name="title_shows">Műsorok</string>
-  <string name="title_movies">Filmek</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Műfajok</string>
-  <string name="search">Keresés</string>
-  <string name="searching">Keresés…</string>
-  <string name="no_data_found">Nem található adat</string>
-  <string name="unknown_error">Valami rosszul sült el</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">perc</string>
-  <string name="read_more">Bővebben</string>
-  <string name="watch_trailer">Előzetes megnézése</string>
-  <string name="no_subs">Nincs felirat</string>
-  <string name="no_subs_available">Nincs elérhető felirat</string>
-  <string name="subtitles">Feliratok</string>
-  <string name="quality">Minőség</string>
-  <string name="trailer">Előzetes</string>
-  <string name="season">Évad</string>
-  <string name="episode">Epizód</string>
-  <string name="specials">Különlegességek</string>
-  <string name="continuing">Folytatódik</string>
-  <string name="ended">Befejeződött</string>
-  <string name="aired">Vetítve: %s</string>
-  <string name="no_title_available">Nincs név</string>
-  <string name="no_synopsis_available">Nincs elérhető szinopszis</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Várakozás torrentre</string>
   <string name="starting_buffering">Pufferelés kezdése</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">Várakozás feliratra</string>
   <string name="seeds">seedek</string>
   <string name="error_files">Hiba: Nem írhatók a fájlok. Kérem próbáljon egy másik tárhelyet.</string>
+  <string name="start_external">Külső lejátszó indítása</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Most játszott</string>
   <string name="volume">Hangerő</string>
+  <string name="play">Lejátszás</string>
+  <string name="pause">Szünet</string>
+  <string name="fastforward">Gyors előretekerés</string>
+  <string name="rewind">Visszatekerés</string>
   <string name="brightness">Fényerő</string>
   <string name="hardware_acceleration_error_title">HW gyorsítás hiba</string>
   <string name="hardware_acceleration_error_message">Egy hiba történt a hardver gyorsítással. Szeretné kikapcsolni és újra megpróbálni?</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">Biztos, hogy elhagyja a videó lejátszót? %s lejátszása meg fog állni.</string>
   <string name="encountered_error_title">Videó hiba történt</string>
   <string name="encountered_error">A videó lejátszó súlyos hibába ütközött. A videó fájl nem nyitható meg és/vagy nem játszható le. A formátum nem felismerhető.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Elfogad</string>
-  <string name="leave">Kilépés</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Beállítások</string>
-  <string name="general">Általános</string>
-  <string name="default_view">Kezdőképernyő</string>
-  <string name="default_player">Alapértelmezett videó lejátszó</string>
-  <string name="i18n_language">Alkalmazás nyelve</string>
-  <string name="restart_effect">Indítsa újra az alkalmazást a változtatások érvénybe léptetéséhez</string>
-  <string name="device_language">Készülék nyelve</string>
-  <string name="stream_over_wifi_only">Stream csak Wi-Fi-n</string>
-  <string name="internal_player">Belső</string>
-  <string name="subtitle_color">Szín</string>
-  <string name="subtitle_size">Méret</string>
-  <string name="subtitle_stroke_color">Körvonal szín</string>
-  <string name="subtitle_stroke_width">Körvonal szélesség</string>
-  <string name="subtitle_language">Alapértelmezett nyelv</string>
-  <string name="no_default_set">Nincs alapértelmezett nyelv</string>
-  <string name="advanced">Haladó</string>
-  <string name="storage_location">Tároló hely</string>
-  <string name="storage_automatic">Automaitkus</string>
-  <string name="storage_choose">Hely választás</string>
-  <string name="not_writable">A hely nem írható</string>
-  <string name="remove_cache">Gyorsítótár törlése lejátszó bezárásakor</string>
-  <string name="hw_acceleration">Hardveres gyorsítás</string>
-  <string name="hw_automatic">Automatikus</string>
-  <string name="hw_full">Teljes</string>
-  <string name="hw_decoding">Csak dekódolás</string>
-  <string name="updates">Frissítések</string>
-  <string name="auto_updates">Automatikus frissítések</string>
-  <string name="check_for_updates">Frissítések keresése</string>
-  <string name="last_check">Utolsó ellenőrzés</string>
-  <string name="about">Névjegy</string>
-  <string name="version">Verzió</string>
-  <string name="changelog">Változások listája</string>
-  <string name="tap_to_open">Érintse meg a megnyitáshoz</string>
-  <string name="report_a_bug">Hiba jelentése</string>
-  <string name="open_source_licenses">Nyílt forráskódú engedélyek</string>
-  <string name="torrents">Torrentek</string>
-  <string name="download_speed">Maximális letöltési sebesség</string>
-  <string name="upload_speed">Maximális feltöltési sebesség</string>
-  <string name="max_connections">Maximális összes kapcsolatok</string>
-  <string name="dht_limit">DHT limit</string>
-  <string name="unlimited">Korlátlan</string>
-  <string name="show_vpn">Mutassa a VPN opciót a menüben</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">csak Wi-Fi</string>
   <string name="wifi_only_message">Csak Wi-Fi-n tud videót streamelni. Kikapcsolhatja a beállításoknál ha mobil hálózaton keresztűl akar streamelni.</string>

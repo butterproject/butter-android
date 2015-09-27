@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Main screen-->
+  <string name="latest_shows">Neueste Fernsehserien</string>
+  <string name="browse">Durchsuchen</string>
+  <string name="more">Mehr</string>
+  <string name="tests">Tests</string>
+  <string name="error">Fehler</string>
+  <string name="ok">OK</string>
+  <string name="pause">Pause</string>
+  <string name="play">Wiedergabe</string>
+  <string name="stop">Stopp</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Schaltfläche Wiedergabe-Pause</string>
+  <string name="loading">Ladevorgang…</string>
+  <string name="no_video_found">Kein Video gefunden</string>
+  <string name="popular_header">Beliebte Videos</string>
+  <string name="preferences">VOREINSTELLUNGEN</string>
+  <string name="grid_view">Gitteransicht</string>
+  <string name="settings">Einstellungen</string>
+  <string name="personal_settings">Persönliche Einstellungen</string>
+  <string name="watch_trailer_1">Filmvorschau ansehen</string>
+  <string name="watch_trailer_2">FREI</string>
+  <string name="watch">Ansehen</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Spielfilm</string>
+  <string name="search_results">Suchergebnisse</string>
+  <string name="video_error_media_load_timeout">Zeitüberschreitung beim Medienladevorgang</string>
+  <string name="video_error_server_unaccessible">Medienserver war nicht erreichbar</string>
+  <string name="video_error_unknown_error">Fehler beim Laden des Videos</string>
+  <string name="oops">Upps</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Ja</string>
+  <string name="later">Nein, später</string>
+  <string name="new_update">Eine neue Version von Popcorn Time für Android TV ist verfügbar. Möchten Sie jetzt aktualisieren?</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Verbindungsaufbau…</string>
+  <string name="starting_buffering">Startvorgang</string>
+  <string name="streaming_started">Streaming gestartet</string>
+  <string name="waiting_for_subtitles">Auf Untertitel wird gewartet</string>
+  <string name="seeds">Seeds</string>
+  <string name="error_files">Fehler: Konnte Dateien nicht schreiben</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Prüfen Sie Ihre Internetverbindung</string>
+  <string name="choose_quality">Qualität auswählen</string>
+  <string name="more_movies">Weitere Filme</string>
+  <string name="genres">Genres</string>
+  <string name="terms_and_conditions">Geschäftsbedingungen</string>
+  <string name="episode_number_format">Folge %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Version</string>
+</resources>

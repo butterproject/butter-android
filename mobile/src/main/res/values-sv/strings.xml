@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">Avbryt</string>
   <string name="close">Stäng</string>
   <string name="ok">OK</string>
-  <string name="enabled">Aktiverad</string>
-  <string name="disabled">Inaktiverad</string>
   <string name="casting">Casting</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Titel, år, skådespelare</string>
-  <string name="title_shows">Serier</string>
-  <string name="title_movies">Filmer</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Genrer</string>
-  <string name="search">Sök</string>
-  <string name="searching">Söker...</string>
-  <string name="no_data_found">Ingen data hittades</string>
-  <string name="unknown_error">Något gick fel</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Läs mer</string>
-  <string name="watch_trailer">Se trailer</string>
-  <string name="no_subs">Inga undertexter</string>
-  <string name="no_subs_available">Inga undertexter tillgängliga</string>
-  <string name="subtitles">Undertexter</string>
-  <string name="quality">Kvalité </string>
-  <string name="trailer">Trailer</string>
-  <string name="season">Säsong</string>
-  <string name="episode">Episode</string>
-  <string name="specials">Specials</string>
-  <string name="continuing">Fortsätter</string>
-  <string name="ended">Avslutad </string>
-  <string name="aired">Sändes: %s</string>
-  <string name="no_title_available">Inget namn</string>
-  <string name="no_synopsis_available">Ingen sammanfattning tillgänglig</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Väntar på torrent</string>
   <string name="starting_buffering">Startar buffring</string>
@@ -41,9 +12,14 @@
   <string name="waiting_for_subtitles">Väntar på undertexter</string>
   <string name="seeds">seeds</string>
   <string name="error_files">Fel: Kunde inte skriva filer. Vänligen använd en annorlunda lagringsplats.</string>
+  <string name="start_external">Starta extern spelare</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Nu spelas</string>
   <string name="volume">Volym</string>
+  <string name="play">Spelar</string>
+  <string name="pause">Pausa</string>
+  <string name="fastforward">Snabbspola</string>
+  <string name="rewind">Spola tillbaka</string>
   <string name="brightness">Ljusstyrka</string>
   <string name="hardware_acceleration_error_title">Hårdvaruaccelerations fel</string>
   <string name="hardware_acceleration_error_message">Ett fel inträffade med hårdvaruaccelerationen. Vill du inaktivera den och försöka igen?</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">Är du säker på att du vill lämna videospelaren? %s kommer att sluta spela.</string>
   <string name="encountered_error_title">Videofel stött på</string>
   <string name="encountered_error">Videospelaren stött på ett allvarligt fel. Videofilen kunde inte öppnas och/eller spelas. Formatet kunde inte identifieras.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Accept</string>
-  <string name="leave">Lämna</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Inställningar</string>
-  <string name="general">Allmänt</string>
-  <string name="default_view">Förvald vy</string>
-  <string name="default_player">Standardvideospelare</string>
-  <string name="i18n_language">Applikation språk</string>
-  <string name="restart_effect">Starta om applikationen för ändringarna ska börja gälla</string>
-  <string name="device_language">Enhets språk</string>
-  <string name="stream_over_wifi_only">Endast strömma över Wi-Fi</string>
-  <string name="internal_player">Intern</string>
-  <string name="subtitle_color">Färg</string>
-  <string name="subtitle_size">Storlek</string>
-  <string name="subtitle_stroke_color">Kontur färg</string>
-  <string name="subtitle_stroke_width">Kontur bredd</string>
-  <string name="subtitle_language">Standardspråk</string>
-  <string name="no_default_set">Inget standardspråk</string>
-  <string name="advanced">Avancerat</string>
-  <string name="storage_location">Lagringsplats</string>
-  <string name="storage_automatic">Automatisk</string>
-  <string name="storage_choose">Välj plats</string>
-  <string name="not_writable">Plats ej skrivbar</string>
-  <string name="remove_cache">Ta bort cache om spelaren stäng</string>
-  <string name="hw_acceleration">Hårdvaruacceleration</string>
-  <string name="hw_automatic">Automatisk</string>
-  <string name="hw_full">Full</string>
-  <string name="hw_decoding">Endast avkodning</string>
-  <string name="updates">Uppdateringar</string>
-  <string name="auto_updates">Automatiska uppdateringar</string>
-  <string name="check_for_updates">Leta uppdateringar</string>
-  <string name="last_check">Senaste kontrollerad</string>
-  <string name="about">Om</string>
-  <string name="version">Version</string>
-  <string name="changelog">Changelog</string>
-  <string name="tap_to_open">Tryck för att öppna</string>
-  <string name="report_a_bug">Rapportera ett fel</string>
-  <string name="open_source_licenses">Öppen källkod-licenser</string>
-  <string name="torrents">Torrents</string>
-  <string name="download_speed">Högsta nedladdningshastighet</string>
-  <string name="upload_speed">Högsta uppladdningshastighet</string>
-  <string name="max_connections">Högsta totala anslutningar</string>
-  <string name="dht_limit">DHT gräns</string>
-  <string name="unlimited">Obegränsad</string>
-  <string name="show_vpn">Visa VPN-alternativ i menyn</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Endast Wi-Fi</string>
   <string name="wifi_only_message">Du kan bara streama videor via Wi-Fi. Du kan inaktivera den här i inställningarna om du vill strömma över en mobilanslutning</string>

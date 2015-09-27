@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Annuler</string>
+  <string name="close">Fermer</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Activé</string>
+  <string name="disabled">Désactivé</string>
   <string name="update_available">Nouvelle mise à jour disponible</string>
   <string name="press_install">Appuyez pour installer</string>
   <string name="loading_data">Chargement des données...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">Chargement des sous-titres...</string>
   <string name="error_files">Erreur lors de la création des fichiers</string>
   <string name="overview_not_available">Désolé, aucune information disponible.</string>
-  <string name="episode">Épisode</string>
   <string name="unknown_error">Quelque chose n\'a pas fonctionné</string>
   <string name="torrent_failed">Erreur lors de la récupération du torrent</string>
   <string name="running">Exécution en arrière-plan</string>
   <string name="tap_to_close">Appuyez pour fermer</string>
   <string name="tap_to_resume">Appuyez pour continuer</string>
+  <string name="stop">Stop</string>
+  <!--Overview strings-->
+  <string name="search_hint">Titre, année, acteurs</string>
+  <string name="genres">Genres</string>
+  <string name="search">Recherche</string>
+  <string name="searching">Recherche...</string>
+  <string name="no_data_found">Aucune donnée trouvée</string>
+  <string name="title_shows">Séries</string>
+  <string name="title_movies">Films</string>
+  <string name="title_anime">Anime</string>
   <string name="signature_invalid">Signature de l\'application non-valide</string>
   <string name="possibly_dangerous">Popcorn Time a été altéré par un tiers. Téléchargez un autre installeur sur https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="subtitles">Sous-titres</string>
+  <string name="now_playing">En cours de lecture</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Préférences</string>
+  <string name="general">Général</string>
+  <string name="default_view">Aperçu par défaut</string>
+  <string name="default_player">Lecteur vidéo par défaut</string>
+  <string name="i18n_language">Langue de l\'application</string>
+  <string name="restart_effect">Relancez l\'application pour que les modifications soient prises en compte </string>
+  <string name="device_language">Langue de l\'appareil</string>
+  <string name="stream_over_wifi_only">Lire seulement lorsque le Wi-Fi est activé</string>
+  <string name="internal_player">Interne</string>
+  <string name="subtitle_color">Couleur</string>
+  <string name="subtitle_size">Taille</string>
+  <string name="subtitle_timing">Minutage des sous-titres</string>
+  <string name="subtitle_stroke_color">Couleur du contour</string>
+  <string name="subtitle_stroke_width">Épaisseur du contour</string>
+  <string name="subtitle_language">Langue par défaut</string>
+  <string name="subtitle_settings">Réglages des sous-titres</string>
+  <string name="no_default_set">Aucune langue par défaut</string>
+  <string name="advanced">Avancé</string>
+  <string name="storage_location">Emplacement du stockage</string>
+  <string name="storage_automatic">Automatique</string>
+  <string name="storage_choose">Choisir un emplacement</string>
+  <string name="not_writable">Emplacement non accessible en écriture</string>
+  <string name="remove_cache">Vider le cache à la fin de la lecture</string>
+  <string name="hw_acceleration">Accélération matérielle</string>
+  <string name="hw_automatic">Automatique</string>
+  <string name="hw_full">Maximale</string>
+  <string name="hw_decoding">Décodage uniquement</string>
+  <string name="updates">Mises à jour</string>
+  <string name="auto_updates">Mises à jour automatiques</string>
+  <string name="check_for_updates">Rechercher des mises à jour</string>
+  <string name="last_check">Dernière vérification</string>
+  <string name="about">À propos</string>
+  <string name="version">Version</string>
+  <string name="changelog">Historique des modifications</string>
+  <string name="tap_to_open">Appuyez pour ouvrir</string>
+  <string name="report_a_bug">Soumettre un rapport de bug</string>
+  <string name="open_source_licenses">Licences Open-Source</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Vitesse de téléchargement maximale</string>
+  <string name="upload_speed">Vitesse de téléversement maximale</string>
+  <string name="max_connections">Maximum de connexions</string>
+  <string name="dht_limit">Limite DHT</string>
+  <string name="unlimited">Illimité</string>
+  <string name="show_vpn">Montrer l\'option VPN dans le menu</string>
+  <string name="pixel_format">Forcer une chromatique vidéo</string>
+  <string name="rgb32">RGB 32-bit : par défaut</string>
+  <string name="rgb16">RGB 16-bit : meilleures performances, plus faible qualité</string>
+  <string name="yuv">YUV : les meilleures performances, mais ne fonctionne pas à tous les coups</string>
+  <string name="best_fit">Adapter</string>
+  <string name="fill">Remplir</string>
+  <string name="fit_horizontal">Ajuster horizontalement</string>
+  <string name="fit_vertical">Ajuster verticalement</string>
+  <string name="original_size">Original</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Plus...</string>
+  <string name="watch_trailer">Visionner la bande-annonce</string>
+  <string name="no_subs">Aucun sous-titre</string>
+  <string name="no_subs_available">Aucun sous-titre disponible</string>
+  <string name="quality">Qualité</string>
+  <string name="trailer">Bande-annonce</string>
+  <string name="season">Saison</string>
+  <string name="episode">Épisode</string>
+  <string name="specials">Spéciaux</string>
+  <string name="continuing">En cours</string>
+  <string name="ended">Terminé</string>
+  <string name="aired">Diffusion : %s</string>
+  <string name="no_title_available">Sans nom</string>
+  <string name="no_synopsis_available">Aucun synopsis disponible</string>
+  <string name="magnet">Lien magnet</string>
+  <string name="scale">Échelle</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Volume</string>
+  <string name="brightness">Luminosité</string>
+  <string name="hardware_acceleration_error_title">Erreur d\'accélération matérielle</string>
   <string name="genre_all">Tous</string>
+  <string name="hardware_acceleration_error_message">Une erreur s\'est produite avec l\'accélération matérielle. Souhaitez-vous la désactiver et réessayer ?</string>
+  <!--Genres-->
   <string name="genre_action">Action</string>
   <string name="genre_adventure">Aventure</string>
   <string name="genre_animation">Animation</string>
@@ -88,10 +181,19 @@
   <string name="year">ANNÉE</string>
   <string name="a_to_z">A - Z</string>
   <string name="trending">TENDANCE</string>
+  <string name="encountered_error_title">Erreur vidéo</string>
+  <string name="encountered_error">Le lecteur a rencontré une erreur sérieuse. Le fichier vidéo n\'a pas pu être ouvert et/ou joué. Le format est inconnu.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Jumelage à un téléviseur</string>
   <string name="confirm_tv">Confirmez la connexion au téléviseur</string>
   <string name="enter_pairing_code">Entrez le code de jumelage du téléviseur</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Ouvrir avec</string>
   <string name="select_file">Sélectionnez un fichier</string>
+  <string name="accept">Accepter</string>
+  <string name="leave">Quitter</string>
+  <string name="reload_video">Recharger la vidéo</string>
+  <!--Health-->
+  <string name="health_info">Santé : %1$s, sources : %2$d, clients : %3$d</string>
+  <string name="health_bad">Mauvaise</string>
 </resources>

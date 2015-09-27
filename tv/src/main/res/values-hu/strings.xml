@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="related_movies">Kapcsolódó videók</string>
+  <!--Main screen-->
+  <string name="top_movies">Legnépszerűbb Filmek</string>
+  <string name="top_shows">Legnépszerűbb TV Sorozatok</string>
+  <string name="latest_shows">Legújabb TV sorozatok</string>
+  <string name="browse">Böngészés </string>
+  <string name="more">Továbbiak</string>
+  <string name="tests">Tesztek</string>
+  <string name="error">Hiba</string>
+  <string name="ok">OK</string>
+  <string name="pause">Szünet</string>
+  <string name="play">Lejátszás</string>
+  <string name="stop">Megállít</string>
+  <string name="init_text">00:00</string>
+  <string name="play_pause_description">Lejátszás Szünet gomb</string>
+  <string name="loading">Betöltés...</string>
+  <string name="no_video_found">Nem található videó</string>
+  <string name="popular_header">Népszerű videók</string>
+  <string name="preferences">BEÁLLÍTÁSOK</string>
+  <string name="grid_view">Rács Nézet</string>
+  <string name="settings">Beállítások</string>
+  <string name="personal_settings">Személyes Beállítások</string>
+  <string name="watch_trailer_1">Előzetes megnézése</string>
+  <string name="watch">Megnéz</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Film</string>
+  <string name="search_results">Keresési Eredmények</string>
+  <string name="movie_results">Film találatok</string>
+  <string name="show_results">Sorozat találatok</string>
+  <string name="video_error_media_load_timeout">Média betöltése időtúllépés miatt megszakadt</string>
+  <string name="video_error_server_unaccessible">Média szerver nem volt elérhető</string>
+  <string name="video_error_unknown_error">Nem sikerült betölteni a videót</string>
+  <string name="oops">Hoppá</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Igen</string>
+  <string name="later">Nem, később</string>
+  <string name="new_update">A Popcorn Time új verziója elérhető Android TV-re. Szeretné most frissíteni?</string>
+  <!--Categories-->
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Csatlakozás...</string>
+  <string name="starting_buffering">Kezdés</string>
+  <string name="streaming_started">Adatfolyam elkezdődött</string>
+  <string name="waiting_for_subtitles">Várakozás feliratra</string>
+  <string name="seeds">seedek</string>
+  <string name="error_files">Hiba: Nem írhatók a fájlok</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="network_message">Ellenőrizze internetkapcsolatát</string>
+  <string name="choose_quality">Válassz minőséget</string>
+  <string name="more_movies">Több Film</string>
+  <string name="more_shows">Több Műsor</string>
+  <string name="genres">Műfajok</string>
+  <string name="terms_and_conditions">Felhasználási feltételek</string>
+  <string name="view_terms">Feltételek megtekintése</string>
+  <string name="episode_number_format">Epizód %d</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Verzió</string>
+</resources>

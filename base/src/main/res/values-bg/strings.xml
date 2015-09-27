@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="cancel">Откажи</string>
+  <string name="close">Затвори</string>
+  <string name="ok">ОК</string>
+  <string name="enabled">Включено</string>
+  <string name="disabled">Изключено</string>
   <string name="update_available">Има нов ъпдейт</string>
-  <string name="press_install">Цъкни да инсталираш</string>
+  <string name="press_install">Цъкни, за да инсталираш</string>
   <string name="loading_data">Зареждане на данни...</string>
   <string name="loading_details">Зареждани на детайли...</string>
   <string name="loading_shows">Зареждане на сериали...</string>
@@ -9,16 +14,104 @@
   <string name="loading_subs">Зареждане на субтитри...</string>
   <string name="error_files">Грешка: Файловете не можаха да бъдат записани</string>
   <string name="overview_not_available">Съжаляваме! Няма наличен обзорен изглед.</string>
-  <string name="episode">Епизод</string>
   <string name="unknown_error">Нещо се обърка</string>
   <string name="torrent_failed">Провал в изтеглянето на торента</string>
   <string name="running">Върви на фон</string>
-  <string name="tap_to_close">Цъкни да затвориш</string>
-  <string name="tap_to_resume">Цъкни да продължиш</string>
+  <string name="tap_to_close">Цъкни, за да затвориш</string>
+  <string name="tap_to_resume">Цъкни, за да продължиш</string>
+  <string name="stop">Спри</string>
+  <!--Overview strings-->
+  <string name="search_hint">Заглавие, година, актьори</string>
+  <string name="genres">Жанрове</string>
+  <string name="search">Търси</string>
+  <string name="searching">Търсене...</string>
+  <string name="no_data_found">Не са открити данни</string>
+  <string name="title_shows">Сериали</string>
+  <string name="title_movies">Филми</string>
+  <string name="title_anime">Аниме</string>
   <string name="signature_invalid">Подписа на приложението е невалиден</string>
   <string name="possibly_dangerous">Popcorn Time е бил подправен. Моля изтеглете нов инсталационен файл от https://popcorntime.io/</string>
-  <!--Genres-->
+  <string name="subtitles">Субтитри</string>
+  <string name="now_playing">Сега се възпроизвежда</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Предпочитания</string>
+  <string name="general">Общи</string>
+  <string name="default_view">Начален изглед</string>
+  <string name="default_player">Начален видео плейър</string>
+  <string name="i18n_language">Език на приложението</string>
+  <string name="restart_effect">Рестартирайте приложението, за да видите промените</string>
+  <string name="device_language">Език на устройството</string>
+  <string name="stream_over_wifi_only">Стриймвай само при Wi-Fi</string>
+  <string name="internal_player">Вътрешен</string>
+  <string name="subtitle_color">Цвят</string>
+  <string name="subtitle_size">Размер</string>
+  <string name="subtitle_timing">Синхронизиране на субтитрите</string>
+  <string name="subtitle_stroke_color">Очертание на цвят</string>
+  <string name="subtitle_stroke_width">Очертание на широчина</string>
+  <string name="subtitle_language">Начален език</string>
+  <string name="subtitle_settings">Настройки на субтитрите</string>
+  <string name="no_default_set">Без начален език</string>
+  <string name="advanced">Разширени</string>
+  <string name="storage_location">Място на съхранение</string>
+  <string name="storage_automatic">Автоматично</string>
+  <string name="storage_choose">Избери местоположение</string>
+  <string name="not_writable">Местоположението не е достъпно за запис</string>
+  <string name="remove_cache">Премахвай кеша при затваряне на плейъра</string>
+  <string name="hw_acceleration">Хардуерно ускорение</string>
+  <string name="hw_automatic">Автоматично</string>
+  <string name="hw_full">Пълно</string>
+  <string name="hw_decoding">Само декодиращо</string>
+  <string name="updates">Обновления</string>
+  <string name="auto_updates">Автоматични обновления</string>
+  <string name="check_for_updates">Провери за обновления</string>
+  <string name="last_check">Последно проверено</string>
+  <string name="about">Относно</string>
+  <string name="version">Версия</string>
+  <string name="changelog">Дневник на промените</string>
+  <string name="tap_to_open">Цъкни, за да отвориш</string>
+  <string name="report_a_bug">Докладвай за бъг</string>
+  <string name="open_source_licenses">Лицензи с отворен код</string>
+  <string name="torrents">Торенти</string>
+  <string name="download_speed">Максимално скорост на теглене</string>
+  <string name="upload_speed">Максимална скорост на качване</string>
+  <string name="max_connections">Максимални общо връзки</string>
+  <string name="dht_limit">DHT ограничение</string>
+  <string name="unlimited">Неограничени</string>
+  <string name="show_vpn">Показвай VPN опцията в менюто</string>
+  <string name="pixel_format">Принудително оцветяване на видеото</string>
+  <string name="rgb32">RGB 32-бита: стандартни цветове</string>
+  <string name="rgb16">RGB 16-бита: по-добро изпълнение, по-ниско качество</string>
+  <string name="yuv">YUV: най-добро изпълнение, но не винаги работи</string>
+  <string name="best_fit">Най-добре побрано</string>
+  <string name="fill">Запълни</string>
+  <string name="fit_horizontal">Побери хоризонтално</string>
+  <string name="fit_vertical">Побери вертикално</string>
+  <string name="original_size">Оригинално</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">мин</string>
+  <string name="read_more">Прочети още</string>
+  <string name="watch_trailer">Изгледай трейлър</string>
+  <string name="no_subs">Няма субтитри</string>
+  <string name="no_subs_available">Няма налични субтитри</string>
+  <string name="quality">Качество</string>
+  <string name="trailer">Трейлър</string>
+  <string name="season">Сезон</string>
+  <string name="episode">Епизод</string>
+  <string name="specials">Специални издания</string>
+  <string name="continuing">Продължаващи</string>
+  <string name="ended">Приключил</string>
+  <string name="aired">Излъчено на: %s</string>
+  <string name="no_title_available">Без име</string>
+  <string name="no_synopsis_available">Няма налично резюме</string>
+  <string name="magnet">Магнит</string>
+  <string name="scale">Размер</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Сила на звука</string>
+  <string name="brightness">Контраст</string>
+  <string name="hardware_acceleration_error_title">Грешка в хардуерното ускорение</string>
   <string name="genre_all">Всички</string>
+  <string name="hardware_acceleration_error_message">Стана грешка с хардуерното ускорение. Искате ли да го изключите и пробвате наново?</string>
+  <!--Genres-->
   <string name="genre_action">Екшън</string>
   <string name="genre_adventure">Приключенски</string>
   <string name="genre_animation">Анимационни</string>
@@ -88,10 +181,19 @@
   <string name="year">ГОДИНА</string>
   <string name="a_to_z">А - Я</string>
   <string name="trending">ТЕНДЕНЦИИ</string>
+  <string name="encountered_error_title">Възникна грешка с видеото</string>
+  <string name="encountered_error">Възникна сериозна грешка с видеоплейърът. Видео файлът не може да бъде отворен и/или възпроизведен. Форматът не бе разпознат.</string>
   <!--BeamManager-->
   <string name="pairing_tv">Сдвояване с ТВ</string>
   <string name="confirm_tv">Моля потвърдете връзката на вашият ТВ</string>
   <string name="enter_pairing_code">Въведете сдвояващ код на ТВ</string>
+  <!--TermsActivity strings-->
   <string name="open_with">Отвори с/със</string>
   <string name="select_file">Избери файл</string>
+  <string name="accept">Приеми</string>
+  <string name="leave">Напусни</string>
+  <string name="reload_video">Презареди видео</string>
+  <!--Health-->
+  <string name="health_info">Здраве: %1$s, Сийдъри: %2$d, Пиъри: %3$d</string>
+  <string name="health_bad">Лошо</string>
 </resources>

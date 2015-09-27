@@ -1,39 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--General strings-->
   <string name="cancel">İptal</string>
   <string name="close">Kapat</string>
   <string name="ok">Tamam</string>
-  <string name="enabled">Etkinleştir</string>
-  <string name="disabled">Devre dışı</string>
   <string name="casting">Yayın</string>
-  <!--OverviewActivity strings-->
-  <string name="search_hint">Başlık, yıl, oyuncular</string>
-  <string name="title_shows">Diziler</string>
-  <string name="title_movies">Filmler</string>
-  <string name="title_anime">Anime</string>
-  <string name="genres">Türler</string>
-  <string name="search">Ara</string>
-  <string name="searching">Aranıyor...</string>
-  <string name="no_data_found">Veri bulunamadı</string>
-  <string name="unknown_error">Bir şeyler ters gitti</string>
-  <!--DetailActivity strings-->
-  <string name="minutes">min</string>
-  <string name="read_more">Daha fazla oku</string>
-  <string name="watch_trailer">Fragman izle</string>
-  <string name="no_subs">Altyazı mevcut değil</string>
-  <string name="no_subs_available">Altyazı mevcut değil</string>
-  <string name="subtitles">Altyazılar</string>
-  <string name="quality">Kalite</string>
-  <string name="trailer">Fragman</string>
-  <string name="season">Sezon</string>
-  <string name="episode">Bölüm</string>
-  <string name="specials">Özeller</string>
-  <string name="continuing">Devam ediyor</string>
-  <string name="ended">Tamamlandı</string>
-  <string name="aired">Yayın Tarihi: %s</string>
-  <string name="no_title_available">Ad yok</string>
-  <string name="no_synopsis_available">Özet mevcut değil</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Torrent bekleniyor</string>
   <string name="starting_buffering">Önbelleğe alma başlatılıyor</string>
@@ -41,11 +12,16 @@
   <string name="waiting_for_subtitles">Altyazı bekleniyor</string>
   <string name="seeds">Göndericiler</string>
   <string name="error_files">Hata: Dosyalar kaydedilemedi. Lütfen farklı bir alana kaydetmeyi deneyin.</string>
+  <string name="start_external">Harici oynatıcıyı başlat</string>
   <!--VideoPlayerActivity strings-->
   <string name="now_playing">Oynatılıyor</string>
   <string name="volume">Ses</string>
+  <string name="play">Oynat</string>
+  <string name="pause">Durdur</string>
+  <string name="fastforward">Hızlı ileri</string>
+  <string name="rewind">Geri</string>
   <string name="brightness">Parlaklık</string>
-  <string name="hardware_acceleration_error_title">Donanım ivmesi hatası</string>
+  <string name="hardware_acceleration_error_title">Donanım hızlandırma hatası</string>
   <string name="hardware_acceleration_error_message">Donanım ivmesinde hata oluştu. Donanım ivmesini devre dışı bırakıp tekrar denemek ister misiniz?</string>
   <string name="best_fit">En iyi sığdırma</string>
   <string name="fill">Ekranı Doldur</string>
@@ -59,52 +35,6 @@
   <string name="leave_videoplayer_message">Video oynatıcıdan çıkmak istediğinize emin misiniz? %s yürütmesi duracak.</string>
   <string name="encountered_error_title">Video hatasıyla karşılaşıldı</string>
   <string name="encountered_error">Video oynatıcısı bir dizi hatayla karşılaştı. Video dosyası açılamadı ve/veya oynatılamadı. Format geçerli değil.</string>
-  <!--TermsActivity strings-->
-  <string name="accept">Kabul et</string>
-  <string name="leave">Ayrıl</string>
-  <!--SettingsActivity strings-->
-  <string name="preferences">Ayarlar</string>
-  <string name="general">Genel</string>
-  <string name="default_view">Varsayılan önizleme</string>
-  <string name="default_player">Varsayılan video oynatıcısı</string>
-  <string name="i18n_language">Uygulmama dili</string>
-  <string name="restart_effect">Değişikliklerin uygulanması için uygulamayı yeniden başlat</string>
-  <string name="device_language">Cihaz dili</string>
-  <string name="stream_over_wifi_only">Sadece Wi-Fi üzerinden yayın yap</string>
-  <string name="internal_player">Dahili</string>
-  <string name="subtitle_color">Renk</string>
-  <string name="subtitle_size">Boyut</string>
-  <string name="subtitle_stroke_color">Kenar rengi</string>
-  <string name="subtitle_stroke_width">Kenar kalınlığı</string>
-  <string name="subtitle_language">Varsayılan dil</string>
-  <string name="no_default_set">Varsayılan dil yok</string>
-  <string name="advanced">Gelişmiş</string>
-  <string name="storage_location">Depolama dizini</string>
-  <string name="storage_automatic">Otomatik</string>
-  <string name="storage_choose">Dizin seç</string>
-  <string name="not_writable">Dizin yazılabilir değil</string>
-  <string name="remove_cache">Oynatıcıyı kapatınca önbelleği temizle</string>
-  <string name="hw_acceleration">Donanım ivmesi</string>
-  <string name="hw_automatic">Otomatik</string>
-  <string name="hw_full">Tam</string>
-  <string name="hw_decoding">Yalnızca kod çözme</string>
-  <string name="updates">Güncellemeler</string>
-  <string name="auto_updates">Otomatik güncellemeler</string>
-  <string name="check_for_updates">Güncellemeleri kontrol et</string>
-  <string name="last_check">Son kontrol</string>
-  <string name="about">Hakkında</string>
-  <string name="version">Sürüm</string>
-  <string name="changelog">Değişiklik kaydı</string>
-  <string name="tap_to_open">Açmak için dokun</string>
-  <string name="report_a_bug">Hata bildir</string>
-  <string name="open_source_licenses">Açık kaynak lisansı</string>
-  <string name="torrents">Torrentler</string>
-  <string name="download_speed">En yüksek indirme hızı</string>
-  <string name="upload_speed">En yüksek gönderme hızı</string>
-  <string name="max_connections">En fazla bağlantı sayısı</string>
-  <string name="dht_limit">DHT sınırı</string>
-  <string name="unlimited">Sınırsız</string>
-  <string name="show_vpn">VPN seçeneğini menüde göster</string>
   <!--WifiOnlyDialogFragment-->
   <string name="wifi_only">Sadece Wi-Fi</string>
   <string name="wifi_only_message">Sadece Wi-Fi üzerinden yayın yapabilirisiniz. Eğer telefon bağlantısı ile yayın yapmak istiyorsanız bu özelliği ayarlardan kapatabilirsiniz.</string>
