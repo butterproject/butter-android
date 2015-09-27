@@ -146,7 +146,7 @@ public class YTSProvider extends MediaProvider {
                 sort = "title";
                 break;
             case TRENDING:
-                sort = "trending";
+                sort = "trending_score";
                 break;
         }
 
