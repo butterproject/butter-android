@@ -141,7 +141,12 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void changeGenre(String genre) {
         if (!(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
             if(mCurrentCall != null)
-                mCurrentCall.cancel();
+                PopcornApplication.getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCurrentCall.cancel();
+                    }
+                });
             mAdapter.clearItems();
             mGenre = mFilters.genre = genre;
             mFilters.page = 1;
@@ -289,7 +294,12 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         if (null == mAdapter) return;
 
         if(mCurrentCall != null)
-            mCurrentCall.cancel();
+            PopcornApplication.getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mCurrentCall.cancel();
+                }
+            });
 
         mEndOfListReached = false;
 
