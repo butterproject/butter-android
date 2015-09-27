@@ -585,7 +585,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     }
 
     protected void checkSubs() {
-        if (mLibVLC != null && mMediaPlayer.isPlaying() && mSubs != null) {
+        if (mLibVLC != null && mMediaPlayer != null && mMediaPlayer.isPlaying() && mSubs != null) {
             Collection<Caption> subtitles = mSubs.captions.values();
             double currentTime = getCurrentTime() - mSubtitleOffset;
             if (mLastSub != null && currentTime >= mLastSub.start.getMilliseconds() && currentTime <= mLastSub.end.getMilliseconds()) {
