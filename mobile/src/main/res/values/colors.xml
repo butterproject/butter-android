@@ -45,7 +45,6 @@
     <color name="nav_drawer_focused_bg">#414144</color>
     <color name="nav_drawer_pressed_bg">#313134</color>
 	<color name="nav_drawer_deselected">#CFFF</color>
-	<color name="nav_drawer_highlight">#1FFF</color>
 
     <!-- Detail view colors -->
     <color name="detail_header_title_bg">#383D42</color>

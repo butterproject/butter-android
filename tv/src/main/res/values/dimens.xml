@@ -18,18 +18,7 @@
     <dimen name="leanback_track_row_width">960dip</dimen>
     <dimen name="leanback_episode_row_height">48dip</dimen>
     <dimen name="leanback_season_row_height">64dip</dimen>
-    <dimen name="leanback_track_row_divider_height">1.0dip</dimen>
-    <dimen name="leanback_track_row_height_with_divider">49.0dip</dimen>
     <dimen name="leanback_track_row_horizontal_margin">132.0dip</dimen>
     <dimen name="leanback_track_row_horizontal_padding">32.0dip</dimen>
-    <dimen name="leanback_track_row_info_width">56.0dip</dimen>
-    <dimen name="leanback_track_row_info_width_with_padding">88.0dip</dimen>
-    <dimen name="leanback_track_row_icon_size">24.0dip</dimen>
-    <dimen name="leanback_track_row_title_width">464.0dip</dimen>
-    <dimen name="leanback_track_row_details_selector_width">668.0dip</dimen>
-    <dimen name="leanback_track_row_radio_selector_width">72.0dip</dimen>
-    <dimen name="leanback_track_row_selector_round_rect_radius">36.0dip</dimen>
-
-
 
 </resources>
