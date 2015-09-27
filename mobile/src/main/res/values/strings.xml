@@ -43,7 +43,7 @@
     <string name="fastforward">Fast forward</string>
     <string name="rewind">Rewind</string>
 	<string name="brightness">Brightness</string>
-	<string name="hardware_acceleration_error_title">HWrgb16 acceleration error</string>
+	<string name="hardware_acceleration_error_title">HW acceleration error</string>
 	<string name="hardware_acceleration_error_message">An error occurred with hardware acceleration. Would you like to disable it and try again?</string>
 	<string name="best_fit">Best fit</string>
 	<string name="fill">Fill</string>
