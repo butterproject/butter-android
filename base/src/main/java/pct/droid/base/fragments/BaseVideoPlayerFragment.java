@@ -234,8 +234,15 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     public void onResume() {
         super.onResume();
 
+        if(mMediaPlayer == null) {
+            mLibVLC = LibVLC();
+            mMediaPlayer = new MediaPlayer(mLibVLC);
+            mMediaPlayer.setEventListener(this);
+            mLibVLC.setOnHardwareAccelerationError(this);
+        }
+
         IVLCVout vlcVout = mMediaPlayer.getVLCVout();
-        if(vlcVout.areViewsAttached())
+        if (vlcVout.areViewsAttached())
             vlcVout.detachViews();
 
         vlcVout.setVideoView(getVideoSurface());
