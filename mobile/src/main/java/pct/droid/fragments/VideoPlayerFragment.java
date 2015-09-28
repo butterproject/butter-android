@@ -66,6 +66,7 @@ import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.AnimUtils;
+import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -535,6 +536,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     }
 
     public void updatePlayPauseState() {
+        if(!FragmentUtil.isAdded(this))
+            return;
+
         if (isPlaying()) {
             mPlayButton.setImageResource(R.drawable.ic_av_pause);
             mPlayButton.setContentDescription(getString(R.string.pause));
