@@ -65,7 +65,7 @@
   <string name="auto_updates">Automatikus frissítések</string>
   <string name="check_for_updates">Frissítések keresése</string>
   <string name="last_check">Utolsó ellenőrzés</string>
-  <string name="about">Névjegy</string>
+  <string name="about_app">Névjegy</string>
   <string name="version">Verzió</string>
   <string name="changelog">Változások listája</string>
   <string name="tap_to_open">Érintse meg a megnyitáshoz</string>

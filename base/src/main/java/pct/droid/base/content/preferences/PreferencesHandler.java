@@ -665,7 +665,7 @@ public interface PreferencesHandler {
                     })
                     .build());
 
-            prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.about).build());
+            prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.about_app).build());
 
             if (!Constants.DEBUG_ENABLED && !isTV) {
                 prefItems.add(PrefItem.newBuilder(context)
@@ -754,7 +754,7 @@ public interface PreferencesHandler {
 
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_about)
-                    .setTitleResource(R.string.about)
+                    .setTitleResource(R.string.about_app)
                     .setPreferenceKey("")
                     .setDefaultValue("")
                     .setOnClickListener(new PrefItem.OnClickListener() {

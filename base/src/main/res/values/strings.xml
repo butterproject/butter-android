@@ -90,7 +90,7 @@
     <string name="auto_updates">Automatic updates</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="last_check">Last check</string>
-    <string name="about">About</string>
+    <string name="about_app">About</string>
     <string name="version">Version</string>
     <string name="changelog">Changelog</string>
     <string name="tap_to_open">Tap to open</string>
@@ -132,6 +132,8 @@
     <string name="no_synopsis_available">No synopsis available</string>
     <string name="magnet">Magnet</string>
     <string name="scale">Scale</string>
+    <!-- About as in 'About serie X' -->
+    <string name="about_series">About</string>
 
 	<!-- VideoPlayerActivity strings -->
 	<string name="volume">Volume</string>

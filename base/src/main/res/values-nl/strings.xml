@@ -65,7 +65,7 @@
   <string name="auto_updates">Automatische updates</string>
   <string name="check_for_updates">Controleren op updates</string>
   <string name="last_check">Laatste controle</string>
-  <string name="about">Over</string>
+  <string name="about_app">Over</string>
   <string name="version">Versie</string>
   <string name="changelog">Changelog</string>
   <string name="tap_to_open">Tik om te openen</string>

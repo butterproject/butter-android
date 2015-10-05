@@ -65,7 +65,7 @@
   <string name="auto_updates">Automatiske oppdateringer</string>
   <string name="check_for_updates">Se etter oppdateringer</string>
   <string name="last_check">Siste sjekk</string>
-  <string name="about">Om</string>
+  <string name="about_app">Om</string>
   <string name="version">Versjon</string>
   <string name="changelog">Endringslogg</string>
   <string name="tap_to_open">Klikk for å åpne</string>

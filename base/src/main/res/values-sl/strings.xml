@@ -65,7 +65,7 @@
   <string name="auto_updates">Samodejno posodabljanje</string>
   <string name="check_for_updates">Preveri za posodobitvami</string>
   <string name="last_check">Nazadnje preverjeno</string>
-  <string name="about">O programu</string>
+  <string name="about_app">O programu</string>
   <string name="version">Različica</string>
   <string name="changelog">Dnevnik sprememb</string>
   <string name="tap_to_open">Dotaknite se za odpiranje</string>

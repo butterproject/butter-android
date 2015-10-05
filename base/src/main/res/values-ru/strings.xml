@@ -66,7 +66,7 @@
   <string name="auto_updates">Автоматическое обновление</string>
   <string name="check_for_updates">Проверить обновления</string>
   <string name="last_check">Последняя проверка</string>
-  <string name="about">О приложении</string>
+  <string name="about_app">О приложении</string>
   <string name="version">Версия</string>
   <string name="changelog">Список изменений</string>
   <string name="tap_to_open">Нажмите для открытия</string>

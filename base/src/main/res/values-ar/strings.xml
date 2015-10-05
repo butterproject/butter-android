@@ -65,7 +65,7 @@
   <string name="auto_updates">تحديثات تلقائية</string>
   <string name="check_for_updates">البحث عن التحديثات</string>
   <string name="last_check">آخر بحث</string>
-  <string name="about">حول</string>
+  <string name="about_app">حول</string>
   <string name="version">النسخة</string>
   <string name="changelog">ما الجديد</string>
   <string name="tap_to_open">أنقر للفتح</string>

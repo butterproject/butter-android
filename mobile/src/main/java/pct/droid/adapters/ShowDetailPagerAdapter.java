@@ -52,7 +52,7 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
                 return mContext.getString(R.string.specials);
             return mContext.getString(R.string.season) + " " + seasonNumber;
         }
-        return mContext.getString(R.string.about);
+        return mContext.getString(R.string.about_series);
     }
 
 }

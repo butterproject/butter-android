@@ -65,7 +65,7 @@
   <string name="auto_updates">Mises à jour automatiques</string>
   <string name="check_for_updates">Rechercher des mises à jour</string>
   <string name="last_check">Dernière vérification</string>
-  <string name="about">À propos</string>
+  <string name="about_app">À propos</string>
   <string name="version">Version</string>
   <string name="changelog">Historique des modifications</string>
   <string name="tap_to_open">Appuyez pour ouvrir</string>
