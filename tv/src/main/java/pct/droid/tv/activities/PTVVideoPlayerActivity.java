@@ -1,21 +1,21 @@
 package pct.droid.tv.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
 import pct.droid.tv.fragments.PTVPlaybackOverlayFragment;
 import pct.droid.tv.fragments.PTVVideoPlayerFragment;
 
-public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback,
-        PTVPlaybackOverlayFragment.PlaybackOverlayCallback {
+public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback {
 
     private PTVVideoPlayerFragment mPlayerFragment;
     private PTVPlaybackOverlayFragment mPlaybackOverlayFragment;
@@ -23,6 +23,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     public final static String INFO = "stream_info";
 
     private StreamInfo mStreamInfo;
+    private boolean mIsBackPressed = false;
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -36,6 +37,13 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         return i;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mIsBackPressed = true;
+    }
+
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
@@ -53,8 +61,36 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
+
+        if (mIsBackPressed) {
+            mPlayerFragment.deactivateMediaSession();
+        }
+
+        if (mPlayerFragment.isMediaSessionActive()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                requestVisibleBehind(false);
+            }
+            mPlaybackOverlayFragment.setKeepEventBusRegistration(true);
+            return;
+        }
+        else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                requestVisibleBehind(false);
+            }
+            mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
+            PrefUtils.save(this, "resume_position", 0);
+        }
+
+        if (mService != null)
+            mService.removeListener(mPlayerFragment);
+    }
+
+    @Override
+    public void onVisibleBehindCanceled() {
+        mPlayerFragment.pause();
+        super.onVisibleBehindCanceled();
     }
 
     @Override
@@ -75,16 +111,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (null != mPlayerFragment) {
-            if (!mPlayerFragment.onKeyDown(keyCode, event)) {
-                return false;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public StreamInfo getInfo() {
         return mStreamInfo;
     }
@@ -95,15 +121,14 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    public void onTorrentServiceConnected() {
-        mService.addListener(mPlayerFragment);
+    protected void onResume() {
+        super.onResume();
+        mIsBackPressed = false;
     }
 
     @Override
-    protected void onPause() {
-        if (mService != null)
-            mService.removeListener(mPlayerFragment);
-        super.onPause();
+    public void onTorrentServiceConnected() {
+        mService.addListener(mPlayerFragment);
     }
 
     @Override
@@ -111,11 +136,5 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         //todo: Implement ResumePosition on Android TV
         return 0L;
     }
-
-    @Override
-    public Media getMedia() {
-        return null == mStreamInfo ? null : mStreamInfo.getMedia();
-    }
-
 }
 
