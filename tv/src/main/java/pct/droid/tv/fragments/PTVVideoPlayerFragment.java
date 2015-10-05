@@ -1,24 +1,22 @@
 package pct.droid.tv.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -40,8 +38,8 @@ import java.lang.ref.WeakReference;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
-import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.content.preferences.Prefs;
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.torrent.StreamInfo;
@@ -60,18 +58,14 @@ import pct.droid.tv.events.StreamProgressChangedEvent;
 import pct.droid.tv.events.ToggleSubtitleEvent;
 import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
-
     @Bind(R.id.video_surface)
     SurfaceView videoSurface;
 
     @Bind(R.id.subtitle_text)
     TextView mSubtitleText;
 
-    private boolean mIsVideoPlaying = false;
     private boolean mIsSubtitleEnabled = false;
-    private boolean keepEventBusRegistration = false;
     private boolean mMediaSessionMetadataApplied = false;
     private Handler mDisplayHandler;
     private MediaSession mMediaSession;
@@ -103,30 +97,50 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         setRetainInstance(true);
 
         videoSurface.setVisibility(View.VISIBLE);
-        mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
-        updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16 + SUBTITLE_MINIMUM_SIZE));
+        mSubtitleText.setVisibility(View.INVISIBLE);
+
+        mSubtitleText.setTextColor(
+            PrefUtils.get(
+                getActivity(),
+                Prefs.SUBTITLE_COLOR,
+                ContextCompat.getColor(getActivity(), R.color.subtitle_default_text_color)));
+        mSubtitleText.setText("");
+        updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, SUBTITLE_MINIMUM_SIZE));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!EventBus.getDefault().isRegistered(this)) EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+        else {
+            loadMedia();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (!keepEventBusRegistration) EventBus.getDefault().unregister(this);
+        if (!isMediaSessionActive()) {
+            EventBus.getDefault().unregister(this);
+        }
+        else {
+            EventBus.getDefault().post(new PausePlaybackEvent());
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!isMediaSessionActive()) {
+            mMediaSession.release();
+        }
     }
 
     @Override
     protected SurfaceView getVideoSurface() {
         return videoSurface;
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return super.isPlaying();
     }
 
     @Override
@@ -158,37 +172,28 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     @Override
-    protected boolean shouldStopPlaybackOnFragmentPaused() {
-        return !keepEventBusRegistration;
-    }
-
-    @Override
     protected void updatePlayPauseState() {
-        if (mIsVideoPlaying != isPlaying()) {
-            mIsVideoPlaying = isPlaying();
+        EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
+        EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
 
-            EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
-            EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
-
-            if (mMediaSession != null) {
-                PlaybackState.Builder builder = new PlaybackState.Builder();
-                builder.setActions(mIsVideoPlaying
-                        ? PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE
-                        : PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PLAY);
-                builder.setState(
-                        mIsVideoPlaying ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED,
-                        getCurrentTime(),
-                        1.0f);
-                mMediaSession.setPlaybackState(builder.build());
-            }
+        if (mMediaSession != null) {
+            PlaybackState.Builder builder = new PlaybackState.Builder();
+            builder.setActions(isPlaying()
+                ? PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE
+                : PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PLAY);
+            builder.setState(
+                isPlaying() ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED,
+                getCurrentTime(),
+                1.0f);
+            mMediaSession.setPlaybackState(builder.build());
         }
     }
 
     @Override
     public void onHardwareAccelerationError() {
         showErrorDialog(
-                getString(R.string.hardware_acceleration_error_title),
-                getString(R.string.hardware_acceleration_error_message));
+            getString(R.string.hardware_acceleration_error_title),
+            getString(R.string.hardware_acceleration_error_message));
     }
 
     @Override
@@ -200,6 +205,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
                 if (text == null) {
                     if (mSubtitleText.getText().length() > 0) {
                         mSubtitleText.setText("");
+                        mSubtitleText.setVisibility(View.INVISIBLE);
                     }
                     return;
                 }
@@ -213,6 +219,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
                 if (!mSubtitleText.getText().toString().equals(styledString.toString())) {
                     mSubtitleText.setText(styledString);
+                    mSubtitleText.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -224,17 +231,18 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
         EventBus.getDefault().post(new PlaybackProgressChangedEvent(currentTime, duration));
+
         if (mMediaSession != null && duration > 0) {
             PlaybackState.Builder builder = new PlaybackState.Builder();
             builder.setActions(isPlaying()
-                    ? PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE
-                    : PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PLAY);
+                ? PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE
+                : PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PLAY);
             builder.setState(
-                    isPlaying()
-                            ? PlaybackState.STATE_PLAYING
-                            : PlaybackState.STATE_PAUSED,
-                    getCurrentTime(),
-                    1.0f);
+                isPlaying()
+                    ? PlaybackState.STATE_PLAYING
+                    : PlaybackState.STATE_PAUSED,
+                getCurrentTime(),
+                1.0f);
             mMediaSession.setPlaybackState(builder.build());
 
             if (!mMediaSessionMetadataApplied) {
@@ -245,8 +253,8 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     public void onPlaybackEndReached() {
-        mMediaSession.setActive(false);
         EventBus.getDefault().post(new UpdatePlaybackStateEvent(false));
+        mMediaSession.setActive(false);
     }
 
     @Override
@@ -288,23 +296,21 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     protected void updateSubtitleSize(int size) {
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10 + size);
     }
 
     @Override
     protected void onSubtitleEnabledStateChanged(boolean enabled) {
         super.onSubtitleEnabledStateChanged(enabled);
         mIsSubtitleEnabled = enabled;
+        mSubtitleText.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
         EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
     }
 
     @Override
     public void startBeamPlayerActivity() { }
 
-    public void setKeepEventBusRegistration(boolean keepEventBusRegistration) {
-        this.keepEventBusRegistration = keepEventBusRegistration;
-    }
-
+    @SuppressWarnings("unused")
     public void onEventMainThread(StartPlaybackEvent event) {
         play();
 
@@ -316,6 +322,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(PausePlaybackEvent event) {
         pause();
 
@@ -327,18 +334,22 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(SeekBackwardEvent event) {
         seek(event.getSeek());
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(SeekForwardEvent event) {
         seek(event.getSeek());
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(ScaleVideoEvent event) {
         scaleClick();
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(ConfigureSubtitleEvent event) {
         subsClick();
     }
@@ -350,7 +361,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         mMediaSession.setCallback(new PopcornTimeMediaSessionCallback(activity));
         mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mMediaSession.setActive(true);
-
         activity.setMediaController(new MediaController(activity, mMediaSession.getSessionToken()));
     }
 
@@ -398,7 +408,14 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public boolean isMediaSessionActive() {
+        return mMediaSession.isActive();
+    }
+
+    public void deactivateMediaSession() {
+        if (mMediaSession != null && mMediaSession.isActive()) mMediaSession.setActive(false);
+    }
+
     private class PopcornTimeMediaSessionCallback extends MediaSession.Callback {
         private final WeakReference<Context> contextReference;
 
@@ -448,20 +465,13 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
             KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) return false;
 
-            if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY) {
-                EventBus.getDefault().post(new StartPlaybackEvent());
-                return true;
-            }
             if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PAUSE) {
                 EventBus.getDefault().post(new PausePlaybackEvent());
                 return true;
             }
             if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
-                if (mIsVideoPlaying) {
+                if (isPlaying()) {
                     EventBus.getDefault().post(new PausePlaybackEvent());
-                }
-                else {
-                    EventBus.getDefault().post(new StartPlaybackEvent());
                 }
                 return true;
             }
