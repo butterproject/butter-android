@@ -19,6 +19,9 @@
 <resources>
 
     <string-array name="file_types" translatable="false">
+        <item>TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS AC3 (5.1) 640 Kbps</item>
+        <item>TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS MP3 167 Kbps</item>
+        <item>TASM2, MP4 1080p h264 High 4.0 11.6 Mbps 24 FPS AC3 (5.1) 640 Kbps</item>
         <item>BBB, MP4 1080p h264 High 4.1 3 Mbps 30 FPS AAC 356 Kbps</item>
         <item>BBB, MP4 1080p h264 High 4.1 3 Mbps 30 FPS MP3 160 Kbps</item>
         <item>BBB, MP4 1080p h264 High 4.1 3 Mbps 30 FPS AC3 (5.1) 320 Kbps</item>
@@ -38,37 +41,34 @@
         <item>BBB, MP4 2K h265 High 5.1 8.9 Mbps 60 FPS MP3 160 Kbps</item>
         <item>BBB, MP4 2K h264 High 5.1 8.9 Mbps 60 FPS MP3 160 Kbps</item>
         <item>BBB, MP4 4K h264 High 5.1 12.4 Mbps 60 FPS MP3 160 Kbps</item>
-        <item>TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS AC3 (5.1) 640 Kbps</item>
-        <item>TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS MP3 167 Kbps</item>
-        <item>TASM2, MP4 1080p h264 High 4.0 11.6 Mbps 24 FPS AC3 (5.1) 640 Kbps</item>
         <item>YouTube, Cinemates - Thug Life Hollywood Compilation</item>
         <item>YouTube, Cash Cash - Surrender (Official Lyric Video) ~ Copyright Protected</item>
         <item>Open dialog</item>
     </string-array>
 
     <string-array name="files" translatable="false">
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_stereo.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_aac_ac3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_aac.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_mpeg4_mp3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_h265_1080p_30fps_normal_ac3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mkv</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_h265_2160p_60fps_normal_mp3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/Spider-Man_2_720p_24fps_mp3.mp4</item>
-        <item>https://mirror01.ptn.sh/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_mp3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_stereo.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac_ac3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_aac.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mpeg4_mp3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_ac3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mkv</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_2160p_60fps_normal_mp3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
+        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
         <item>https://www.youtube.com/watch?v=SvDMZFfwmgo</item>
         <item>http://youtu.be/K22v4xolOsc</item>
         <item>dialog</item>
