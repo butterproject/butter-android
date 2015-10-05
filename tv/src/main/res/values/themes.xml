@@ -36,8 +36,8 @@
 
 
     <style name="Theme.Popcorn.TV" parent="@style/Theme.Leanback">
-        <!--<item name="android:colorPrimary">@color/primary</item>-->
-        <!--<item name="android:colorPrimaryDark">@color/primary_dark</item>-->
-        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorAccent">@color/accent</item>
     </style>
 </resources>

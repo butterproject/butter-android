@@ -62,10 +62,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
-import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.content.preferences.Prefs;
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.AnimUtils;
+import pct.droid.base.utils.FragmentUtil;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.PrefUtils;
@@ -272,7 +273,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         super.onDestroyView();
         mAudioManager = null;
     }
-
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
@@ -535,6 +535,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     }
 
     public void updatePlayPauseState() {
+        if(!FragmentUtil.isAdded(this))
+            return;
+
         if (isPlaying()) {
             mPlayButton.setImageResource(R.drawable.ic_av_pause);
             mPlayButton.setContentDescription(getString(R.string.pause));
@@ -558,10 +561,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (fromUser && isSeeking() && progress <= (getDuration() / 100 * seekBar.getSecondaryProgress())) {
-                setLastSub(null);
+                setLastSubtitleCaption(null);
                 setCurrentTime(progress);
                 VideoPlayerFragment.this.onProgressChanged(getCurrentTime(), getDuration());
-                checkSubs();
+                progressSubtitleCaption();
             }
         }
     };

@@ -1,14 +1,11 @@
 package pct.droid.tv.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
@@ -16,45 +13,25 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
-import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.ObjectAdapter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
-import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
-import pct.droid.base.providers.media.models.Show;
-import pct.droid.base.torrent.StreamInfo;
-import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.base.utils.VersionUtils;
-import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
-import pct.droid.tv.activities.PTVStreamLoadingActivity;
-import pct.droid.tv.presenters.EpisodeCardPresenter;
-import pct.droid.tv.presenters.ShowDetailsDescriptionPresenter;
-import pct.droid.tv.utils.BackgroundUpdater;
 
-public abstract class PTVBaseDetailsFragment extends DetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
+public abstract class PTVBaseDetailsFragment extends DetailsFragment
+		implements MediaProvider.Callback,
+		OnActionClickedListener {
 
 	public static final String EXTRA_ITEM = "item";
 	public static final String EXTRA_HERO_URL = "hero_url";
@@ -65,7 +42,8 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 	private Media mItem;
 	private String mHeroImage;
 
-	@Override public void onActivityCreated(Bundle savedInstanceState) {
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		mItem = getArguments().getParcelable(EXTRA_ITEM);
@@ -95,17 +73,16 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 		return mItem;
 	}
 
-	@Override public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (activity instanceof Callback) mCallback = (Callback) activity;
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (context instanceof Callback) mCallback = (Callback) context;
 	}
-
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 	}
-
 
 	private void setupAdapter() {
 		mPresenterSelector = new ClassPresenterSelector();
@@ -170,7 +147,8 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 
 	abstract void addActions(Media item);
 
-	@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+	@Override
+	public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 		if (!isAdded()) return;
 
 		if (null == items || items.size() == 0) return;
@@ -189,12 +167,10 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment implements 
 		});
 	}
 
-
-	@Override public void onFailure(Exception e) {
+	@Override
+	public void onFailure(Exception e) {
 		//todo: on load failure
 	}
 
-	public interface Callback {
-	}
-
+	public interface Callback { }
 }
