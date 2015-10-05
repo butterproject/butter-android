@@ -32,13 +32,13 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
 import android.support.v17.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.FastForwardAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.MoreActions;
 import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.RewindAction;
 import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.InputEvent;
 import android.view.KeyEvent;
@@ -67,7 +67,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         OnItemViewSelectedListener,
         PlaybackOverlaySupportFragment.InputEventHandler {
     private static final String TAG = "PlaybackOverlayFragment";
-    private static final boolean HIDE_MORE_ACTIONS = true;
     private static final int BACKGROUND_TYPE = PlaybackOverlayFragment.BG_LIGHT;
 
     private static final int MODE_NOTHING = 0;
@@ -80,7 +79,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private ClosedCaptioningAction mClosedCaptioningAction;
     private FastForwardAction mFastForwardAction;
     private ScaleVideoAction mScaleVideoAction;
-    private MoreActions mMoreActions;
     private PlayPauseAction mPlayPauseAction;
     private RewindAction mRewindAction;
     private PlaybackControlsRow mPlaybackControlsRow;
@@ -91,6 +89,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private int mCurrentMode = MODE_NOTHING;
     private long mSelectedActionId = 0;
     private boolean keepEventBusRegistration = false;
+    private int mSeek;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,16 +145,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         if (action.getId() == mPlayPauseAction.getId()) {
             invokeTogglePlaybackAction(mPlayPauseAction.getIndex() == PlayPauseAction.PLAY);
         }
-        else if (action.getId() == mFastForwardAction.getId()) {
-            // action handled by key press
-            // invokeTogglePlaybackAction(false);
-            // invokeFastForwardAction();
-        }
-        else if (action.getId() == mRewindAction.getId()) {
-            // action handled by key press
-            // invokeTogglePlaybackAction(false);
-            // invokeRewindAction();
-        }
         else if (action.getId() == mScaleVideoAction.getId()) {
             invokeScaleVideoAction();
         }
@@ -208,6 +197,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         return false;
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(Object event) {
         if (event instanceof UpdatePlaybackStateEvent) {
             UpdatePlaybackStateEvent updatePlaybackStateEvent = (UpdatePlaybackStateEvent) event;
@@ -220,19 +210,24 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
                 setFadingEnabled(false);
             }
             notifyPlaybackControlActionChanged(mPlayPauseAction);
+            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
         }
         else if (event instanceof PlaybackProgressChangedEvent) {
+            // Ignore if currently seeking
             PlaybackProgressChangedEvent progressChangedEvent = (PlaybackProgressChangedEvent) event;
             if (mPlaybackControlsRow.getTotalTime() == 0) {
                 mPlaybackControlsRow.setTotalTime((int) progressChangedEvent.getDuration());
             }
+            if (mSeek != 0 && mCurrentMode != MODE_NOTHING) {
+                return;
+            }
             mPlaybackControlsRow.setCurrentTime((int) progressChangedEvent.getCurrentTime());
-            mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
         }
         else if (event instanceof StreamProgressChangedEvent) {
             StreamProgressChangedEvent streamProgressChangedEvent = (StreamProgressChangedEvent) event;
             mPlaybackControlsRow.setBufferedProgress((int) streamProgressChangedEvent.getBufferedTime());
-            mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
         }
         else if (event instanceof ToggleSubtitleEvent) {
             ToggleSubtitleEvent toggleSubtitleEvent = (ToggleSubtitleEvent) event;
@@ -242,6 +237,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             else {
                 mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);
             }
+
             notifyPlaybackControlActionChanged(mClosedCaptioningAction);
         }
     }
@@ -296,7 +292,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         // Add rest of controls to secondary adapter.
         mSecondaryActionsAdapter.add(mScaleVideoAction);
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
-        if (!HIDE_MORE_ACTIONS) mSecondaryActionsAdapter.add(mMoreActions);
 
         mRowsAdapter.add(mPlaybackControlsRow);
     }
@@ -326,14 +321,24 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     private void invokeFastForwardAction() {
-        final int refreshDuration = 500;
+        final int refreshDuration = 100;
         mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (mCurrentMode == MODE_FAST_FORWARD) {
-                    // wait until buffer catch up
-                    triggerFastForwardEvent();
+                    int currentTime = mPlaybackControlsRow.getCurrentTime();
+                    currentTime += SeekForwardEvent.MINIMUM_SEEK_SPEED;
+
+                    if (currentTime < mPlaybackControlsRow.getTotalTime()) {
+                        mPlaybackControlsRow.setCurrentTime(currentTime);
+                        mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+                        mSeek += SeekForwardEvent.MINIMUM_SEEK_SPEED;
+                    }
+
                     mHandler.postDelayed(this, refreshDuration);
+                }
+                else if (mSelectedActionId == mFastForwardAction.getId()) {
+                    triggerFastForwardEvent();
                 }
             }
         };
@@ -341,14 +346,24 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     private void invokeRewindAction() {
-        final int refreshDuration = 500;
+        final int refreshDuration = 100;
         mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (mCurrentMode == MODE_REWIND) {
-                    // wait until buffer catch up
-                    triggerRewindEvent();
+                    int currentTime = mPlaybackControlsRow.getCurrentTime();
+                    currentTime -= SeekBackwardEvent.MINIMUM_SEEK_SPEED;
+
+                    if (currentTime > 0) {
+                        mPlaybackControlsRow.setCurrentTime(currentTime);
+                        mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+                        mSeek += SeekBackwardEvent.MINIMUM_SEEK_SPEED;
+                    }
+
                     mHandler.postDelayed(this, refreshDuration);
+                }
+                else if (mSelectedActionId == mRewindAction.getId()) {
+                    triggerRewindEvent();
                 }
             }
         };
@@ -357,13 +372,15 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
     private void triggerFastForwardEvent() {
         SeekForwardEvent event = new SeekForwardEvent();
-        event.setSeek(SeekForwardEvent.MINIMUM_SEEK_SPEED);
+        event.setSeek(mSeek);
+        mSeek = 0;
         EventBus.getDefault().post(event);
     }
 
     private void triggerRewindEvent() {
         SeekBackwardEvent event = new SeekBackwardEvent();
-        event.setSeek(SeekBackwardEvent.MINIMUM_SEEK_SPEED);
+        event.setSeek(mSeek);
+        mSeek = 0;
         EventBus.getDefault().post(event);
     }
 
@@ -393,7 +410,10 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     public static class ScaleVideoAction extends Action {
         public ScaleVideoAction(Context context) {
             super(R.id.control_scale);
-            setIcon(context.getResources().getDrawable(R.drawable.ic_av_aspect_ratio));
+            setIcon(ResourcesCompat.getDrawable(
+                context.getResources(),
+                R.drawable.ic_av_aspect_ratio,
+                null));
             setLabel1(context.getString(R.string.scale));
         }
     }
