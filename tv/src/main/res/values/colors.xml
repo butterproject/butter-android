@@ -1,43 +1,19 @@
 <resources>
     <!-- By default -->
-    <color name="soft_opaque">#30000000</color>
-    <color name="img_soft_opaque">#30FF0000</color>
-    <color name="img_full_opaque">#00000000</color>
-    <color name="black_opaque">#AA000000</color>
     <color name="black">#59000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="orange_transparent">#AAFADCA7</color>
-    <color name="orange">#FADCA7</color>
-    <color name="yellow">#EEFF41</color>
 
     <!-- Popcorn -->
-    <!--<color name="bg">#2F383F</color>-->
-    <color name="overlay_bg">#BB2F383F</color>
-    <color name="list_selected">#55FFFFFF</color>
-
 	<color name="selectable_focused">#22FFFFFF</color>
 	<color name="selectable_pressed">#55FFFFFF</color>
 
 	<color name="primary">#FF3F51B5</color>
     <color name="primary_dark">#FF303F9F</color>
 	<color name="accent">#ED7572</color>
-    <!--<color name="accent">#FF1C84EB</color>-->
 
-    <color name="card_bg">#555</color>
-
-    <color name="trans_white">#99FFFFFF</color>
-    <color name="div_white">#22FFFFFF</color>
-    <color name="text_color">#FFFFFF</color>
-    <color name="secondary_text_color">#AAFFFFFF</color>
-    <color name="overlay">#33000000</color>
-    <color name="player_overlay">#55000000</color>
     <color name="default_background">#55000000</color>
 
-    <color name="leanback_track_main_text_color">#ffeeeeee</color>
-    <color name="leanback_track_secondary_text_color">#80eeeeee</color>
     <color name="episode_row_background_color">#444</color>
     <color name="episode_row_background_color_focused">#555</color>
-    <color name="leanback_track_title_background_color">#ff263238</color>
     <color name="leanback_track_row_separator_highlight_color">#1affffff</color>
 
     <color name="subtitle_default_text_color">#FFFFFF</color>
