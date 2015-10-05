@@ -65,7 +65,7 @@
   <string name="auto_updates">自动更新</string>
   <string name="check_for_updates">检查更新</string>
   <string name="last_check">上次检查</string>
-  <string name="about">关于</string>
+  <string name="about_app">关于</string>
   <string name="version">版本</string>
   <string name="changelog">更新日志</string>
   <string name="tap_to_open">点击打开</string>

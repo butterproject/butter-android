@@ -65,7 +65,7 @@
   <string name="auto_updates">Automatiska uppdateringar</string>
   <string name="check_for_updates">Leta efter uppdateringar</string>
   <string name="last_check">Senaste kontrollerad</string>
-  <string name="about">Om</string>
+  <string name="about_app">Om</string>
   <string name="version">Version</string>
   <string name="changelog">Changelog</string>
   <string name="tap_to_open">Tryck för att öppna</string>
