@@ -100,6 +100,7 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((TorrentService.ServiceBinder) service).getService();
             mService.addListener(PTVTorrentBaseActivity.this);
+            mService.setCurrentActivity(PTVTorrentBaseActivity.this);
             onTorrentServiceConnected();
         }
 

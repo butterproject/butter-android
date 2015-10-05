@@ -17,22 +17,17 @@
 
 package pct.droid.base.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.util.Map;
-
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
+
+import java.util.Map;
+
 import hugo.weaving.DebugLog;
 import pct.droid.base.R;
 import pct.droid.base.activities.TorrentActivity;
@@ -43,6 +38,8 @@ import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.providers.subs.SubsProvider;
+import pct.droid.base.subs.SubtitleDownloader;
+import pct.droid.base.subs.TimedTextObject;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
@@ -68,7 +65,10 @@ import pct.droid.base.utils.ThreadUtils;
  * <p/>
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
-public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentListener {
+public abstract class BaseStreamLoadingFragment extends Fragment
+        implements TorrentListener,
+        SubtitleDownloader.ISubtitleDownloaderListener,
+        SubsProvider.Callback {
 
     protected FragmentListener mCallback;
     private SubsProvider mSubsProvider;
@@ -107,7 +107,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
                     getActivity().finish();
                     return;
                 }
-                loadSubs();
+                loadSubtitles();
             }
         });
 
@@ -286,7 +286,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         startPlayer(mVideoLocation);
     }
 
-
     /**
      * Called when the torrent buffering status has been updated
      *
@@ -314,63 +313,58 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     /**
      * Downloads the subs file
      */
-    private void loadSubs() {
-        final Media data = mStreamInfo.getMedia();
-        if (null != data) {
+    private void loadSubtitles() {
+        Media media = mStreamInfo.getMedia();
+        if (media == null) return;
 
-            //if there are no subtitles specified, try to use the default subs
-            if (mStreamInfo.getSubtitleLanguage() == null && data.subtitles != null && data.subtitles.size() > 0) {
-                if (data.subtitles.containsKey(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs"))) {
-                    mStreamInfo.setSubtitleLanguage(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, "no-subs"));
-                }
+        mSubsProvider = media.getSubsProvider();
+        if (mSubsProvider == null) return;
+
+        if (mStreamInfo.isShow()) {
+            mSubsProvider.getList((Episode) media, this);
+        }
+        else {
+            mSubsProvider.getList((Movie) media, this);
+        }
+    }
+
+    @Override
+    public void onSuccess(Map<String, String> items) {
+        Media media = mStreamInfo.getMedia();
+        media.subtitles = items;
+
+        mSubsStatus = SubsStatus.SUCCESS;
+        mHasSubs = false;
+
+        if (media.subtitles == null || media.subtitles.size() == 0) return;
+
+        if (mStreamInfo.getSubtitleLanguage() == null) {
+            if (media.subtitles.containsKey(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE))) {
+                mStreamInfo.setSubtitleLanguage(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE));
             }
-
-            //todo: tidy up
-            mSubsStatus = SubsStatus.SUCCESS;
-
-            //load subtitles
-            if (data.subtitles != null && data.subtitles.size() > 0 && mStreamInfo.getSubtitleLanguage() != null) {
-                mHasSubs = true;
-                mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
-                if (!mSubtitleLanguage.equals("no-subs")) {
-                    SubsProvider.download(getActivity(), data, mSubtitleLanguage, new Callback() {
-                        @Override
-                        public void onFailure(Request request, IOException e) {
-                            mSubsStatus = SubsStatus.FAILURE;
-                        }
-
-                        @Override
-                        public void onResponse(Response response) throws IOException {
-                            mSubsStatus = SubsStatus.SUCCESS;
-                        }
-                    });
-                } else {
-                    mSubsStatus = SubsStatus.SUCCESS;
-                }
-            } else {
-                mSubsProvider = data.getSubsProvider();
-                if (null != mSubsProvider) {
-                    SubsProvider.Callback subsCallback = new SubsProvider.Callback() {
-                        @Override
-                        public void onSuccess(Map<String, String> items) {
-                            data.subtitles = items;
-                            mSubsStatus = SubsStatus.SUCCESS;
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            mSubsStatus = SubsStatus.FAILURE;
-                        }
-                    };
-
-                    if (mStreamInfo.isShow()) {
-                        mSubsProvider.getList((Episode) data, subsCallback);
-                    } else {
-                        mSubsProvider.getList((Movie) data, subsCallback);
-                    }
-                }
+            else {
+                mStreamInfo.setSubtitleLanguage(SubsProvider.SUBTITLE_LANGUAGE_NONE);
             }
         }
+
+        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+            mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
+            mSubsStatus = SubsStatus.DOWNLOADING;
+            mHasSubs = true;
+            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(getActivity(), mStreamInfo, mSubtitleLanguage);
+            subtitleDownloader.setSubtitleDownloaderListener(this);
+            subtitleDownloader.downloadSubtitle();
+        }
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        mSubsStatus = SubsStatus.FAILURE;
+    }
+
+    @Override
+    public void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile) {
+        mSubsStatus = isSuccessful ? SubsStatus.SUCCESS : SubsStatus.FAILURE;
     }
 
     public interface FragmentListener {

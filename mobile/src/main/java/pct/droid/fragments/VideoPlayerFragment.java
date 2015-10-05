@@ -62,8 +62,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pct.droid.R;
 import pct.droid.activities.BeamPlayerActivity;
-import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.content.preferences.Prefs;
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.utils.AnimUtils;
 import pct.droid.base.utils.FragmentUtil;
@@ -273,7 +273,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         super.onDestroyView();
         mAudioManager = null;
     }
-
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
@@ -562,10 +561,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (fromUser && isSeeking() && progress <= (getDuration() / 100 * seekBar.getSecondaryProgress())) {
-                setLastSub(null);
+                setLastSubtitleCaption(null);
                 setCurrentTime(progress);
                 VideoPlayerFragment.this.onProgressChanged(getCurrentTime(), getDuration());
-                checkSubs();
+                progressSubtitleCaption();
             }
         }
     };
