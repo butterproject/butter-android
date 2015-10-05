@@ -1,7 +1,6 @@
 package pct.droid.tv.activities;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -10,12 +9,12 @@ import android.view.MenuItem;
 
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
 import pct.droid.tv.fragments.PTVPlaybackOverlayFragment;
 import pct.droid.tv.fragments.PTVVideoPlayerFragment;
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoPlayerFragment.Callback {
 
     private PTVVideoPlayerFragment mPlayerFragment;
@@ -40,8 +39,8 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public void onBackPressed() {
-        mIsBackPressed = true;
         super.onBackPressed();
+        mIsBackPressed = true;
     }
 
     @SuppressLint("MissingSuperCall")
@@ -62,27 +61,30 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected void onPause() {
-        if (!mIsBackPressed && mPlayerFragment.isPlaying() && requestVisibleBehind(true)) {
-            mPlayerFragment.setKeepEventBusRegistration(true);
+        super.onPause();
+
+        if (mIsBackPressed) {
+            mPlayerFragment.deactivateMediaSession();
+        }
+
+        if (mPlayerFragment.isMediaSessionActive()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                requestVisibleBehind(false);
+            }
             mPlaybackOverlayFragment.setKeepEventBusRegistration(true);
-            super.onPause();
             return;
         }
         else {
-            requestVisibleBehind(false);
-            mPlayerFragment.setKeepEventBusRegistration(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                requestVisibleBehind(false);
+            }
             mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
+            PrefUtils.save(this, "resume_position", 0);
         }
 
         if (mService != null)
             mService.removeListener(mPlayerFragment);
-        super.onPause();
     }
 
     @Override
@@ -116,6 +118,12 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     @Override
     public TorrentService getService() {
         return mService;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIsBackPressed = false;
     }
 
     @Override

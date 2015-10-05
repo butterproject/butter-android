@@ -25,7 +25,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -58,10 +57,10 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.R;
 import pct.droid.base.beaming.BeamDeviceListener;
 import pct.droid.base.beaming.BeamManager;
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import pct.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import pct.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
-import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.subs.Caption;
@@ -87,7 +86,6 @@ public abstract class BaseVideoPlayerFragment
     public static final String RESUME_POSITION = "resume_position";
     public static final int SUBTITLE_MINIMUM_SIZE = 10;
 
-    private Handler mHandler = new Handler();
     private LibVLC mLibVLC;
     private MediaPlayer mMediaPlayer;
     private String mLocation;
@@ -124,6 +122,8 @@ public abstract class BaseVideoPlayerFragment
     private int mSarDen;
     private int mSubtitleOffset = 0;
 
+    // probably required when hardware acceleration selection during playback is implemented
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean mDisabledHardwareAcceleration = false;
 
     protected Callback mCallback;
@@ -177,12 +177,13 @@ public abstract class BaseVideoPlayerFragment
 
         PrefUtils.save(getActivity(), RESUME_POSITION, mResumePosition);
 
-        if (mCallback.getService() != null)
-            mCallback.getService().addListener(BaseVideoPlayerFragment.this);
+        if (mCallback.getService() != null) {
+            mCallback.getService().addListener(this);
+        }
 
         setProgressVisible(true);
 
-        //media may still be loading
+        // media may still be loading
         if (!TextUtils.isEmpty(streamInfo.getVideoLocation())) {
             loadMedia();
         }
@@ -215,25 +216,23 @@ public abstract class BaseVideoPlayerFragment
     public void onPause() {
         super.onPause();
 
-        if (shouldStopPlaybackOnFragmentPaused()) {
-            if (mLibVLC != null) {
-                long currentTime = mMediaPlayer.getTime();
-                PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
+        if (mLibVLC != null) {
+            long currentTime = mMediaPlayer.getTime();
+            PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
 
             /*
              * Pausing here generates errors because the vout is constantly
              * trying to refresh itself every 80ms while the surface is not
-             * accessible anymore.
-             * To workaround that, we keep the last known position in the preferences
+             * accessible anymore. To workaround that, we keep the last known
+             * position in the preferences
              */
-                mMediaPlayer.stop();
-            } else {
-                mDuration = 0l;
-            }
-
-            mMediaPlayer.getVLCVout().removeCallback(this);
-            getVideoSurface().setKeepScreenOn(false);
+            mMediaPlayer.stop();
+        } else {
+            mDuration = 0l;
         }
+
+        mMediaPlayer.getVLCVout().removeCallback(this);
+        getVideoSurface().setKeepScreenOn(false);
 
         BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
     }
@@ -242,7 +241,7 @@ public abstract class BaseVideoPlayerFragment
     public void onResume() {
         super.onResume();
 
-        if(mMediaPlayer == null) {
+        if (mMediaPlayer == null) {
             mLibVLC = LibVLC();
             mMediaPlayer = new MediaPlayer(mLibVLC);
             mMediaPlayer.setEventListener(this);
@@ -250,8 +249,9 @@ public abstract class BaseVideoPlayerFragment
         }
 
         IVLCVout vlcVout = mMediaPlayer.getVLCVout();
-        if (vlcVout.areViewsAttached())
+        if (vlcVout.areViewsAttached()) {
             vlcVout.detachViews();
+        }
 
         vlcVout.setVideoView(getVideoSurface());
         vlcVout.addCallback(this);
@@ -259,9 +259,7 @@ public abstract class BaseVideoPlayerFragment
 
         BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
 
-        if (shouldStopPlaybackOnFragmentPaused()) {
-            onProgressChanged(PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition), mDuration);
-        }
+        onProgressChanged(PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition), mDuration);
     }
 
     @Override
@@ -304,7 +302,6 @@ public abstract class BaseVideoPlayerFragment
 //            mReadyToPlay = true;
 //            return;
 //        }
-
         org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(mLibVLC, Uri.parse(mLocation));
         int hwFlag = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
         int flags = hwFlag | VLCOptions.MEDIA_VIDEO;
@@ -312,16 +309,6 @@ public abstract class BaseVideoPlayerFragment
         mMediaPlayer.setMedia(media);
         media.release();
         mEnded = false;
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mMediaPlayer.getLength() == 0) {
-                    loadMedia();
-                    setProgressVisible(true);
-                }
-            }
-        }, 2000);
 
         long resumeTime = PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition);
         if (resumeTime > 0) {
@@ -335,8 +322,6 @@ public abstract class BaseVideoPlayerFragment
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 * abstract
 	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    protected abstract boolean shouldStopPlaybackOnFragmentPaused();
 
     protected abstract void setProgressVisible(boolean visible);
 
@@ -372,29 +357,25 @@ public abstract class BaseVideoPlayerFragment
         if (mLibVLC == null)
             return;
 
-        long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
-        mDuration = mMediaPlayer.getLength();
-        if (mDuration > resumePosition && resumePosition > 0) {
-            setCurrentTime(resumePosition);
-            PrefUtils.save(getActivity(), RESUME_POSITION, 0);
+        if (getActivity() != null) {
+            long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
+            mDuration = mMediaPlayer.getLength();
+            if (mDuration > resumePosition && resumePosition > 0) {
+                setCurrentTime(resumePosition);
+                PrefUtils.save(getActivity(), RESUME_POSITION, 0);
+            }
         }
     }
 
     public void play() {
         mMediaPlayer.play();
         getVideoSurface().setKeepScreenOn(true);
-
         resumeVideo();
-        updatePlayPauseState();
     }
 
     public void pause() {
-        if (!shouldStopPlaybackOnFragmentPaused()) {
-            mMediaPlayer.pause();
-            getVideoSurface().setKeepScreenOn(false);
-        }
-
-        updatePlayPauseState();
+        mMediaPlayer.pause();
+        getVideoSurface().setKeepScreenOn(false);
     }
 
     public void togglePlayPause() {
@@ -459,6 +440,7 @@ public abstract class BaseVideoPlayerFragment
 
     private void endReached() {
         mEnded = true;
+        onPlaybackEndReached();
 		/* Exit player when reaching the end */
         // TODO: END, ASK USER TO CLOSE PLAYER?
     }
@@ -470,59 +452,60 @@ public abstract class BaseVideoPlayerFragment
         onHardwareAccelerationError();
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void changeSurfaceSize(boolean message) {
-        int sw = getActivity().getWindow().getDecorView().getWidth();
-        int sh = getActivity().getWindow().getDecorView().getHeight();
+        int screenWidth = getActivity().getWindow().getDecorView().getWidth();
+        int screenHeight = getActivity().getWindow().getDecorView().getHeight();
 
         if (mMediaPlayer != null) {
             final IVLCVout vlcVout = mMediaPlayer.getVLCVout();
-            vlcVout.setWindowSize(sw, sh);
+            vlcVout.setWindowSize(screenWidth, screenHeight);
         }
 
-        double dw = sw, dh = sh;
+        double displayWidth = screenWidth, displayHeight = screenHeight;
 
-        if (sw < sh) {
-            dw = sh;
-            dh = sw;
+        if (screenWidth < screenHeight) {
+            displayWidth = screenHeight;
+            displayHeight = screenWidth;
         }
 
         // sanity check
-        if (dw * dh == 0 || mVideoWidth * mVideoHeight == 0) {
+        if (displayWidth * displayHeight == 0 || mVideoWidth * mVideoHeight == 0) {
             Timber.e("Invalid surface size");
+            onErrorEncountered();
             return;
         }
 
         // compute the aspect ratio
-        double ar, vw;
+        double aspectRatio, visibleWidth;
         if (mSarDen == mSarNum) {
 			/* No indication about the density, assuming 1:1 */
-            vw = mVideoVisibleWidth;
-            ar = (double) mVideoVisibleWidth / (double) mVideoVisibleHeight;
+            visibleWidth = mVideoVisibleWidth;
+            aspectRatio = (double) mVideoVisibleWidth / (double) mVideoVisibleHeight;
         } else {
 			/* Use the specified aspect ratio */
-            vw = mVideoVisibleWidth * (double) mSarNum / mSarDen;
-            ar = vw / mVideoVisibleHeight;
+            visibleWidth = mVideoVisibleWidth * (double) mSarNum / mSarDen;
+            aspectRatio = visibleWidth / mVideoVisibleHeight;
         }
 
         // compute the display aspect ratio
-        double dar = dw / dh;
-
+        double displayAspectRatio = displayWidth / displayHeight;
 
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
                 if (message) showPlayerInfo(getString(R.string.best_fit));
-                if (dar < ar)
-                    dh = dw / ar;
+                if (displayAspectRatio < aspectRatio)
+                    displayHeight = displayWidth / aspectRatio;
                 else
-                    dw = dh * ar;
+                    displayWidth = displayHeight * aspectRatio;
                 break;
             case SURFACE_FIT_HORIZONTAL:
-                dh = dw / ar;
+                displayHeight = displayWidth / aspectRatio;
                 if (message) showPlayerInfo(getString(R.string.fit_horizontal));
                 break;
             case SURFACE_FIT_VERTICAL:
-                dw = dh * ar;
+                displayWidth = displayHeight * aspectRatio;
                 if (message) showPlayerInfo(getString(R.string.fit_vertical));
                 break;
             case SURFACE_FILL:
@@ -530,33 +513,32 @@ public abstract class BaseVideoPlayerFragment
                 break;
             case SURFACE_16_9:
                 if (message) showPlayerInfo("16:9");
-                ar = 16.0 / 9.0;
-                if (dar < ar)
-                    dh = dw / ar;
+                aspectRatio = 16.0 / 9.0;
+                if (displayAspectRatio < aspectRatio)
+                    displayHeight = displayWidth / aspectRatio;
                 else
-                    dw = dh * ar;
+                    displayWidth = displayHeight * aspectRatio;
                 break;
             case SURFACE_4_3:
                 if (message) showPlayerInfo("4:3");
-                ar = 4.0 / 3.0;
-                if (dar < ar)
-                    dh = dw / ar;
+                aspectRatio = 4.0 / 3.0;
+                if (displayAspectRatio < aspectRatio)
+                    displayHeight = displayWidth / aspectRatio;
                 else
-                    dw = dh * ar;
+                    displayWidth = displayHeight * aspectRatio;
                 break;
             case SURFACE_ORIGINAL:
                 if (message) showPlayerInfo(getString(R.string.original_size));
-                dh = mVideoVisibleHeight;
-                dw = vw;
+                displayHeight = mVideoVisibleHeight;
+                displayWidth = visibleWidth;
                 break;
         }
 
         // set display size
         ViewGroup.LayoutParams lp = getVideoSurface().getLayoutParams();
-        lp.width = (int) Math.ceil(dw * mVideoWidth / mVideoVisibleWidth);
-        lp.height = (int) Math.ceil(dh * mVideoHeight / mVideoVisibleHeight);
+        lp.width = (int) Math.ceil(displayWidth * mVideoWidth / mVideoVisibleWidth);
+        lp.height = (int) Math.ceil(displayHeight * mVideoHeight / mVideoVisibleHeight);
         getVideoSurface().setLayoutParams(lp);
-
         getVideoSurface().invalidate();
     }
 
@@ -571,11 +553,11 @@ public abstract class BaseVideoPlayerFragment
         mLastSub = null;
     }
 
-    protected void setLastSub(Caption sub) {
+    protected void setLastSubtitleCaption(Caption sub) {
         mLastSub = sub;
     }
 
-    protected void checkSubs() {
+    protected void progressSubtitleCaption() {
         if (mLibVLC != null && mMediaPlayer != null && mMediaPlayer.isPlaying() && mSubs != null) {
             Collection<Caption> subtitles = mSubs.captions.values();
             double currentTime = getCurrentTime() - mSubtitleOffset;
@@ -646,10 +628,23 @@ public abstract class BaseVideoPlayerFragment
         }
     }
 
+    /**
+     * This callback is called when the native vout call request a new Layout.
+     *
+     * @param vlcVout vlcVout
+     * @param width Frame width
+     * @param height Frame height
+     * @param visibleWidth Visible frame width
+     * @param visibleHeight Visible frame height
+     * @param sarNum Surface aspect ratio numerator
+     * @param sarDen Surface aspect ratio denominator
+     */
     @Override
-    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
-        if (width * height == 0)
+    public void onNewLayout(
+        IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+        if (width * height <= 0) {
             return;
+        }
 
         // store video size
         mVideoWidth = width;
@@ -658,6 +653,7 @@ public abstract class BaseVideoPlayerFragment
         mVideoVisibleHeight = visibleHeight;
         mSarNum = sarNum;
         mSarDen = sarDen;
+
         changeSurfaceLayout();
     }
 
@@ -668,40 +664,44 @@ public abstract class BaseVideoPlayerFragment
     protected void onSubtitleEnabledStateChanged(boolean enabled) {}
 
     @Override
-    public void onSurfacesCreated(IVLCVout ivlcVout) {
-
-    }
+    public void onSurfacesCreated(IVLCVout ivlcVout) { }
 
     @Override
-    public void onSurfacesDestroyed(IVLCVout ivlcVout) {
-
-    }
+    public void onSurfacesDestroyed(IVLCVout ivlcVout) { }
 
     @Override
     public void onEvent(MediaPlayer.Event event) {
         switch (event.type) {
             case MediaPlayer.Event.Playing:
+                mDuration = mMediaPlayer.getLength();
                 resumeVideo();
                 setProgressVisible(false);
                 showOverlay();
+                updatePlayPauseState();
+                break;
+            case MediaPlayer.Event.Paused:
+                setProgressVisible(true);
+                updatePlayPauseState();
                 break;
             case MediaPlayer.Event.EndReached:
                 endReached();
+                updatePlayPauseState();
                 break;
             case MediaPlayer.Event.EncounteredError:
                 onErrorEncountered();
+                updatePlayPauseState();
                 break;
             case MediaPlayer.Event.Opening:
+                setProgressVisible(true);
+                mDuration = mMediaPlayer.getLength();
                 mMediaPlayer.play();
                 break;
             case MediaPlayer.Event.TimeChanged:
             case MediaPlayer.Event.PositionChanged:
                 onProgressChanged(getCurrentTime(), getDuration());
-                checkSubs();
-                setProgressVisible(false);
+                progressSubtitleCaption();
                 break;
         }
-        updatePlayPauseState();
     }
 
     @Override
@@ -709,7 +709,6 @@ public abstract class BaseVideoPlayerFragment
         handleHardwareAccelerationError();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void changeSurfaceLayout() {
         changeSurfaceSize(false);
     }
