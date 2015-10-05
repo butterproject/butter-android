@@ -28,10 +28,16 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="16dp"
-        android:padding="8dp"
-		android:gravity="center_horizontal"
-		android:background="@color/black"
+		android:layout_marginBottom="@dimen/player_subtitles_margin"
+		android:layout_marginLeft="@dimen/player_subtitles_margin"
+		android:layout_marginStart="@dimen/player_subtitles_margin"
+		android:layout_marginRight="@dimen/player_subtitles_margin"
+		android:layout_marginEnd="@dimen/player_subtitles_margin"
+		android:padding="@dimen/player_subtitles_padding"
+		android:gravity="center_horizontal|center_vertical"
+		android:background="@color/subtitle_default_overlay"
+		android:text="@string/new_update"
+		android:textColor="@color/subtitle_default_text_color"
 		android:textSize="@dimen/player_subtitles_default_text_size" />
 
 </RelativeLayout>
