@@ -32,6 +32,10 @@ public class StreamInfo implements Parcelable {
     private String mTitle;
     private String mImageUrl;
     private String mHeaderImageUrl;
+
+    private String mShowTitle;
+    private String mShowEpisodeTitle;
+
     private Boolean mIsShow = false;
     private Integer mColor = -1;
     private Media mMedia;
@@ -61,6 +65,8 @@ public class StreamInfo implements Parcelable {
                 mImageUrl = show.image;
                 mHeaderImageUrl = show.headerImage;
                 mColor = show.color;
+                mShowTitle = show.title == null ? "" : show.title;
+                mShowEpisodeTitle = media.title == null ? "" : media.title;
             } else {
                 mTitle = media.title == null ? "" : media.title;
                 mImageUrl = media.image;
@@ -80,6 +86,14 @@ public class StreamInfo implements Parcelable {
 
     public String getTitle() {
         return mTitle;
+    }
+
+    public String getShowTitle() {
+        return mShowTitle;
+    }
+
+    public String getShowEpisodeTitle() {
+        return mShowEpisodeTitle;
     }
 
     public String getImageUrl() {
@@ -139,6 +153,8 @@ public class StreamInfo implements Parcelable {
         dest.writeInt(this.mIsShow ? 1 : 0);
         dest.writeInt(this.mColor);
         dest.writeParcelable(this.mMedia, 0);
+        dest.writeString(this.mShowTitle);
+        dest.writeString(this.mShowEpisodeTitle);
     }
 
     private StreamInfo(Parcel in) {
@@ -152,6 +168,8 @@ public class StreamInfo implements Parcelable {
         this.mIsShow = in.readInt() == 1;
         this.mColor = in.readInt();
         this.mMedia = in.readParcelable(Media.class.getClassLoader());
+        this.mShowTitle = in.readString();
+        this.mShowEpisodeTitle = in.readString();
     }
 
     public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {

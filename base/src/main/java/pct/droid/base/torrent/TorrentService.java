@@ -138,6 +138,7 @@ public class TorrentService extends Service implements TorrentListener {
 
     public void startForeground() {
         if (Foreground.get().isForeground()) return;
+        if (mCurrentActivityClass == null) return;
 
         Intent notificationIntent = new Intent(this, mCurrentActivityClass);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -180,7 +181,7 @@ public class TorrentService extends Service implements TorrentListener {
 
         if(mUpdateTimer == null) {
             mUpdateTimer = new Timer();
-            mUpdateTimer.scheduleAtFixedRate(mUpdateTask, 5000, 5000);
+            mUpdateTimer.scheduleAtFixedRate(new UpdateTask(), 5000, 5000);
         }
     }
 
@@ -188,6 +189,7 @@ public class TorrentService extends Service implements TorrentListener {
         stopForeground(true);
         if(mUpdateTimer != null) {
             mUpdateTimer.cancel();
+            mUpdateTimer.purge();
             mUpdateTimer = null;
         }
     }
@@ -362,7 +364,7 @@ public class TorrentService extends Service implements TorrentListener {
         }
     }
 
-    private TimerTask mUpdateTask = new TimerTask() {
+    private class UpdateTask extends TimerTask {
         @Override
         public void run() {
             if(mInForeground) {

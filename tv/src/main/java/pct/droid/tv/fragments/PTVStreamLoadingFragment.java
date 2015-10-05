@@ -89,7 +89,6 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 		});
 	}
 
-
 	@Override
 	protected void updateView(State state, Object extra) {
 
@@ -147,13 +146,11 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 		}
 	}
 
-
 	protected void updateBackground() {
 		StreamInfo info = mCallback.getStreamInformation();
 		  /* attempt to load background image */
 		if (null != info) {
 			String url = info.getHeaderImageUrl();
-
 			mBackgroundUpdater.updateBackgroundAsync(url);
 		}
 	}

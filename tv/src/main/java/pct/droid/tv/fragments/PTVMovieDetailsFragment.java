@@ -5,19 +5,21 @@ import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
+import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
 import pct.droid.tv.presenters.MovieDetailsDescriptionPresenter;
@@ -37,27 +39,30 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 		return fragment;
 	}
 
-
 	private Movie getMovieItem() {
 		return (Movie) getMediaItem();
 	}
 
-	@Override void loadDetails() {
+	@Override
+	void loadDetails() {
 		ArrayList<Media> mediaList = new ArrayList<>();
 		mediaList.add(getMovieItem());
 
 		mMovieProvider.getDetail(mediaList, 0, this);
 	}
 
-	@Override AbstractDetailsDescriptionPresenter getDetailPresenter() {
+	@Override
+	AbstractDetailsDescriptionPresenter getDetailPresenter() {
 		return new MovieDetailsDescriptionPresenter();
 	}
 
-	@Override void onDetailLoaded() {
+	@Override
+	void onDetailLoaded() {
 		addActions(getMovieItem());
 	}
 
-	@Override void addActions(Media item) {
+	@Override
+	void addActions(Media item) {
 		if (item instanceof Movie) {
 			Movie movie = (Movie) item;
 
@@ -79,20 +84,21 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 		return null;
 	}
 
-	@Override public void onActionClicked(Action a) {
+	@Override
+	public void onActionClicked(Action a) {
 		if (!(a instanceof WatchAction)) return;
-
-		//check for network
-		if (!NetworkUtils
-				.isNetworkConnected(getActivity())) {
+		// check for network
+		if (!NetworkUtils.isNetworkConnected(getActivity())) {
 			Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
 		} else {
 			WatchAction action = (WatchAction) a;
 			Media.Torrent torrent = action.getTorrent();
-
-			StreamInfo info =
-					new StreamInfo(getMovieItem(), torrent.url, "no-subs",
-							action.getLabel2().toString());
+			String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+			StreamInfo info = new StreamInfo(
+					getMovieItem(),
+					torrent.url,
+					subtitleLanguage,
+					action.getLabel2().toString());
 
 			PTVStreamLoadingActivity.startActivity(getActivity(), info);
 		}
@@ -115,5 +121,4 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 			mTorrent = torrent;
 		}
 	}
-
 }

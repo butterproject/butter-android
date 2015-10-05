@@ -16,4 +16,7 @@
     <color name="episode_row_background_color_focused">#555</color>
     <color name="leanback_track_row_separator_highlight_color">#1affffff</color>
 
+    <color name="subtitle_default_text_color">#FFFFFF</color>
+    <color name="subtitle_default_overlay">#55000000</color>
+
 </resources>
