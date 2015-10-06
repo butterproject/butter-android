@@ -8,6 +8,7 @@ import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
+import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.OnActionClickedListener;
@@ -33,7 +34,6 @@ import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
 import pct.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import pct.droid.tv.presenters.showdetail.EpisodeCardPresenter;
-import pct.droid.tv.presenters.showdetail.SeasonEpisodeRow;
 
 public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
         implements MediaProvider.Callback,
@@ -41,7 +41,6 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
         EpisodeCardPresenter.Listener {
 
     private EZTVProvider mTvProvider = new EZTVProvider();
-    private ArrayObjectAdapter seasonAdapter;
 
     public static Fragment newInstance(Media media, String hero) {
         PTVShowDetailsFragment fragment = new PTVShowDetailsFragment();
@@ -68,12 +67,12 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
 
     @Override
     void onDetailLoaded() {
-        updateSeasonAdapter();
+        updateShowsAdapterContent();
     }
 
     @Override
     ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
-        selector.addClassPresenter(SeasonEpisodeRow.class, new EpisodeCardPresenter(getActivity()));
+        selector.addClassPresenter(DetailsOverviewRow.class, new EpisodeCardPresenter(getActivity()));
         return null;
     }
 
@@ -82,8 +81,7 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
 
     @Override
     protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
-        this.seasonAdapter = new ArrayObjectAdapter(selector);
-        return seasonAdapter;
+        return new ArrayObjectAdapter(selector);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
         }
     }
 
-    private void updateSeasonAdapter() {
+    private void updateShowsAdapterContent() {
         final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
             @Override
             public int compare(Integer me, Integer other) {
@@ -128,6 +126,8 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
             final List<Episode> seasonEpisodes = seasons.get(episode.season);
             seasonEpisodes.add(episode);
         }
+
+        ArrayObjectAdapter objectAdapter = getObjectArrayAdapter();
 
         for (Integer seasonKey : seasons.descendingKeySet()) {
             Collections.sort(seasons.get(seasonKey), new Comparator<Episode>() {
@@ -147,10 +147,10 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
                 episodes.add(episode);
             }
             HeaderItem header = new HeaderItem(seasonKey, String.format("Season %d", seasonKey));
-            seasonAdapter.add(new ListRow(header, episodes));
+            objectAdapter.add(new ListRow(header, episodes));
         }
 
-        seasonAdapter.notifyArrayItemRangeChanged(0, seasonAdapter.size());
+        objectAdapter.notifyArrayItemRangeChanged(0, objectAdapter.size());
     }
 
     private Show getShowItem() {

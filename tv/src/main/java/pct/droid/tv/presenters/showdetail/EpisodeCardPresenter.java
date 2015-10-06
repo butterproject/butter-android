@@ -93,7 +93,7 @@ public class EpisodeCardPresenter extends Presenter {
 			super(view);
 			cardView = (ImageCardView) view;
 			imageCardViewTarget = new PicassoImageCardViewTarget(cardView);
-			defaultImage = ActivityCompat.getDrawable(mContext, R.drawable.more_player_tests);
+			defaultImage = ActivityCompat.getDrawable(mContext, R.drawable.banner);
             cardView.setMainImage(defaultImage);
 		}
 
