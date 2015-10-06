@@ -28,6 +28,7 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 import android.widget.EditText;
@@ -60,20 +61,21 @@ import pct.droid.tv.activities.PTVMediaGridActivity;
 import pct.droid.tv.activities.PTVSearchActivity;
 import pct.droid.tv.activities.PTVSettingsActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
-import pct.droid.tv.presenters.MorePresenter;
 import pct.droid.tv.presenters.MediaCardPresenter;
+import pct.droid.tv.presenters.MorePresenter;
 import pct.droid.tv.utils.BackgroundUpdater;
 
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class PTVOverviewFragment extends BrowseFragment {
+public class PTVOverviewFragment
+    extends BrowseFragment
+    implements
+    OnItemViewClickedListener,
+    OnItemViewSelectedListener{
 
     private ArrayObjectAdapter mRowsAdapter;
-    private ListRowPresenter mListRowPresenter;
     private ArrayObjectAdapter mShowAdapter;
-
-//    private Handler mHanlder/
 
     private YTSProvider mMoviesProvider = new YTSProvider();
     private EZTVProvider mShowsProvider = new EZTVProvider();
@@ -81,28 +83,23 @@ public class PTVOverviewFragment extends BrowseFragment {
 
     private BackgroundUpdater mBackgroundUpdater;
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //		loadVideoData();
 
         //setup background updater
         mBackgroundUpdater = new BackgroundUpdater();
         mBackgroundUpdater.initialise(getActivity(), R.color.black);
 
         //setup main adapter
-        mListRowPresenter = new ListRowPresenter();
-        mListRowPresenter.setShadowEnabled(false);
-        mRowsAdapter = new ArrayObjectAdapter(mListRowPresenter);
+        ListRowPresenter mainMenuRowPresenter = new ListRowPresenter();
+        mainMenuRowPresenter.setShadowEnabled(false);
+        mRowsAdapter = new ArrayObjectAdapter(mainMenuRowPresenter);
         setAdapter(mRowsAdapter);
 
         setupUIElements();
-
         setupEventListeners();
-
         setupAdapters();
-
         loadData();
     }
 
@@ -112,17 +109,41 @@ public class PTVOverviewFragment extends BrowseFragment {
         if (null != mBackgroundUpdater) mBackgroundUpdater.destroy();
     }
 
+    @Override
+    public void onItemClicked(
+        Presenter.ViewHolder itemViewHolder,
+        Object item,
+        RowPresenter.ViewHolder rowViewHolder,
+        Row row) {
+        if (item instanceof MediaCardPresenter.MediaCardItem) {
+            onMediaItemClicked((ImageCardView) itemViewHolder.view, (MediaCardPresenter.MediaCardItem) item);
+        } else if (item instanceof MorePresenter.MoreItem) {
+            onMoreItemClicked((MorePresenter.MoreItem) item);
+        }
+    }
+
+    @Override
+    public void onItemSelected(
+        Presenter.ViewHolder itemViewHolder,
+        Object item,
+        RowPresenter.ViewHolder rowViewHolder,
+        Row row) {
+        if (item instanceof MediaCardPresenter.MediaCardItem) {
+            MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
+            if (overviewItem.isLoading()) return;
+            mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
+        }
+    }
 
     private void setupUIElements() {
-        setBadgeDrawable(getActivity().getResources().getDrawable(R.drawable.header_logo));
+        setBadgeDrawable(ActivityCompat.getDrawable(getActivity(), R.drawable.header_logo));
         setTitle(getString(R.string.app_name)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
-
-        // set fastLane (or headers) background colorr
-        setBrandColor(getResources().getColor(R.color.primary));
+        // set fastLane (or headers) background color
+        setBrandColor(ActivityCompat.getColor(getActivity(), R.color.primary));
         // set search icon color
-        setSearchAffordanceColor(getResources().getColor(R.color.primary_dark));
+        setSearchAffordanceColor(ActivityCompat.getColor(getActivity(), R.color.primary_dark));
     }
 
     private void loadData() {
@@ -179,29 +200,25 @@ public class PTVOverviewFragment extends BrowseFragment {
         });
     }
 
-
     private void setupEventListeners() {
         setOnSearchClickedListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 PTVSearchActivity.startActivity(getActivity());
             }
         });
 
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        setOnItemViewClickedListener(this);
+        setOnItemViewSelectedListener(this);
     }
-
 
     private void setupAdapters() {
         setupMovies();
-        setupShows();
+        setupTVShows();
         setupMoreMovies();
-        setupMoreShows();
+        setupMoreTVShows();
         setupMore();
     }
-
 
     private void setupMovies() {
         HeaderItem moviesHeader = new HeaderItem(0, getString(R.string.top_movies));
@@ -216,44 +233,43 @@ public class PTVOverviewFragment extends BrowseFragment {
         MorePresenter morePresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
 
-        //add items
+        // add items
         List<MediaProvider.NavInfo> navigation = mMoviesProvider.getNavigation();
         for (MediaProvider.NavInfo info : navigation) {
-            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), info.getIcon(), info));
+            moreRowAdapter.add(new MorePresenter.MoreItem(
+                info.getId(),
+                info.getLabel(),
+                info.getIcon(),
+                info));
         }
 
         mRowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
     }
 
-    private void setupMoreShows() {
-        HeaderItem moreHeader = new HeaderItem(1, getString(R.string.more_shows));
-        MorePresenter morePresenter = new MorePresenter(getActivity());
-        ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
-
-        //add items
-        List<MediaProvider.NavInfo> navigation = mShowsProvider.getNavigation();
-        for (MediaProvider.NavInfo info : navigation) {
-            moreRowAdapter.add(new MorePresenter.MoreItem(info.getId(), info.getLabel(), info.getIcon(), info));
-        }
-
-        mRowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
-    }
-
-    private void removeMovies() {
-        mRowsAdapter.remove(mMoviesAdapter);
-    }
-
-    private void addMoviesLoading() {
-        mMoviesAdapter.clear();
-    }
-
-    private void setupShows() {
+    private void setupTVShows() {
         HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows));
         MediaCardPresenter mediaCardPresenter = new MediaCardPresenter(getActivity());
         mShowAdapter = new ArrayObjectAdapter(mediaCardPresenter);
         mShowAdapter.add(new MediaCardPresenter.MediaCardItem(true));
-
         mRowsAdapter.add(new ListRow(showsHeader, mShowAdapter));
+    }
+
+    private void setupMoreTVShows() {
+        HeaderItem moreHeader = new HeaderItem(1, getString(R.string.more_shows));
+        MorePresenter morePresenter = new MorePresenter(getActivity());
+        ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
+
+        // add items
+        List<MediaProvider.NavInfo> navigation = mShowsProvider.getNavigation();
+        for (MediaProvider.NavInfo info : navigation) {
+            moreRowAdapter.add(new MorePresenter.MoreItem(
+                info.getId(),
+                info.getLabel(),
+                info.getIcon(),
+                info));
+        }
+
+        mRowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
     }
 
     private void setupMore() {
@@ -261,23 +277,10 @@ public class PTVOverviewFragment extends BrowseFragment {
         MorePresenter gridPresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
         if (BuildConfig.DEBUG) {
-            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, getString(R.string.tests), R.drawable.ic_av_play, null));
+            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, getString(R.string.tests), R.drawable.more_player_tests, null));
         }
         gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, getString(R.string.preferences), R.drawable.ic_settings, null));
-
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
-    }
-
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof MediaCardPresenter.MediaCardItem) {
-                onMediaItemClicked((ImageCardView) itemViewHolder.view, (MediaCardPresenter.MediaCardItem) item);
-            } else if (item instanceof MorePresenter.MoreItem) {
-                onMoreItemClicked((MorePresenter.MoreItem) item);
-            }
-        }
     }
 
     private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
@@ -286,10 +289,21 @@ public class PTVOverviewFragment extends BrowseFragment {
                 getActivity(),
                 view.getMainImageView(),
                 PTVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
-        if (media.getMedia() instanceof Movie)
-            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
-        else if (media.getMedia() instanceof Show)
-            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
+        if (media.getMedia() instanceof Movie) {
+            PTVMediaDetailActivity.startActivity(
+                getActivity(),
+                options, media.getMedia(),
+                media.getMedia().headerImage,
+                media.getMedia().image);
+        }
+        else if (media.getMedia() instanceof Show) {
+            PTVMediaDetailActivity.startActivity(
+                getActivity(),
+                options,
+                media.getMedia(),
+                media.getMedia().headerImage,
+                media.getMedia().image);
+        }
     }
 
     private void onMoreItemClicked(MorePresenter.MoreItem moreItem) {
@@ -319,21 +333,6 @@ public class PTVOverviewFragment extends BrowseFragment {
             case R.id.yts_filter_genres:
                 Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_LONG).show();
                 break;
-        }
-    }
-
-
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
-        @Override
-        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof MediaCardPresenter.MediaCardItem) {
-                MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-                if (overviewItem.isLoading()) return;
-
-                mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
-            }
-
         }
     }
 
@@ -369,11 +368,13 @@ public class PTVOverviewFragment extends BrowseFragment {
                                     PTVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location), 0);
                                 }
                             });
+                    builder.show();
                 }
+
                 final Movie media = new Movie(new YTSProvider(), new YSubsProvider());
                 media.videoId = "bigbucksbunny";
                 media.title = file_types[index];
-                media.subtitles = new HashMap<String, String>();
+                media.subtitles = new HashMap<>();
                 media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
                 SubsProvider.download(getActivity(), media, "en", new Callback() {
