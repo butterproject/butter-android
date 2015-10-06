@@ -199,7 +199,6 @@ public class MediaCardPresenter extends Presenter {
 		}
 	}
 
-
 	public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
 		List<MediaCardItem> list = new ArrayList<>();
 		for (Media media : items) list.add(new MediaCardItem(media));

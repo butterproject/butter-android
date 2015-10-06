@@ -18,11 +18,13 @@ public class SeasonHeaderRowPresenter extends RowPresenter {
     }
 
     public ViewHolder createRowViewHolder(ViewGroup parent) {
-        return new SeasonHeaderRowViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.season_header_row, parent, false));
+        return new SeasonHeaderRowViewHolder(
+            LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.season_header_row, parent, false));
     }
 
     public static class SeasonHeaderRowViewHolder extends ViewHolder {
-
         public
         @Bind(R.id.title_textview)
         TextView titleTextView;
@@ -35,10 +37,8 @@ public class SeasonHeaderRowPresenter extends RowPresenter {
 
     protected void onBindRowViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindRowViewHolder(viewHolder, item);
-        final SeasonHeaderRow episodeRow = (SeasonHeaderRow) item;
-
-        final SeasonHeaderRowViewHolder seasonViewHolder = (SeasonHeaderRowViewHolder) viewHolder;
-
+        SeasonHeaderRow episodeRow = (SeasonHeaderRow) item;
+        SeasonHeaderRowViewHolder seasonViewHolder = (SeasonHeaderRowViewHolder) viewHolder;
         seasonViewHolder.titleTextView.setText(String.format("Season %d", episodeRow.getSeason()));
     }
 }
