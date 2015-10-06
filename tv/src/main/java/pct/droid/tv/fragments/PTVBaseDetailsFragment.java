@@ -1,7 +1,6 @@
 package pct.droid.tv.fragments;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -36,7 +35,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 	public static final String EXTRA_ITEM = "item";
 	public static final String EXTRA_HERO_URL = "hero_url";
 
-	private Callback mCallback;
 	private ArrayObjectAdapter mAdapter;
 	private ClassPresenterSelector mPresenterSelector;
 	private Media mItem;
@@ -50,7 +48,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 		mHeroImage = getArguments().getString(EXTRA_HERO_URL);
 
 		setupAdapter();
-
 		setupDetailsOverviewRowPresenter();
 
 		final DetailsOverviewRow detailRow = createDetailsOverviewRow();
@@ -74,12 +71,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 	}
 
 	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		if (context instanceof Callback) mCallback = (Callback) context;
-	}
-
-	@Override
 	public void onDestroy() {
 		super.onDestroy();
 	}
@@ -100,14 +91,14 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 
 	private void setupDetailsOverviewRowPresenter() {
 		// Set detail background and style.
-		DetailsOverviewRowPresenter headerPresenter =
-				new DetailsOverviewRowPresenter(getDetailPresenter());
+		DetailsOverviewRowPresenter headerPresenter = new DetailsOverviewRowPresenter(getDetailPresenter());
 		headerPresenter.setStyleLarge(true);
 		headerPresenter.setOnActionClickedListener(this);
 
 		// Hook up transition element.
-		headerPresenter.setSharedElementEnterTransition(getActivity(),
-				PTVMediaDetailActivity.SHARED_ELEMENT_NAME);
+		headerPresenter.setSharedElementEnterTransition(
+			getActivity(),
+			PTVMediaDetailActivity.SHARED_ELEMENT_NAME);
 
 		mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, headerPresenter);
 		mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
@@ -115,7 +106,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 
 	private DetailsOverviewRow createDetailsOverviewRow() {
 		final DetailsOverviewRow detailsRow = new DetailsOverviewRow(mItem);
-
 		Picasso.with(getActivity()).load(mHeroImage).into(new Target() {
 			@Override
 			public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -136,7 +126,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 
 			}
 		});
-
 		return detailsRow;
 	}
 
@@ -159,7 +148,6 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 
 		ThreadUtils.runOnUiThread(new Runnable() {
 			@Override public void run() {
-
 				final DetailsOverviewRow detailRow = createDetailsOverviewRow();
 				mAdapter.replace(0, detailRow);
 				onDetailLoaded();

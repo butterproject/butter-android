@@ -47,7 +47,7 @@ public class EpisodeRowPresenter extends RowPresenter {
 
     protected void onBindRowViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindRowViewHolder(viewHolder, item);
-        final EpisodeRow episodeRow = (EpisodeRow) item;
+        final SeasonEpisodeRow episodeRow = (SeasonEpisodeRow) item;
 
         final EpisodeRowViewHolder episodeViewHolder = (EpisodeRowViewHolder) viewHolder;
 
@@ -70,6 +70,6 @@ public class EpisodeRowPresenter extends RowPresenter {
     }
 
     public interface Listener {
-        void onEpisodeRowClicked(EpisodeRow row);
+        void onEpisodeRowClicked(SeasonEpisodeRow row);
     }
 }
