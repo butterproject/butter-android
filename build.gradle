@@ -21,7 +21,7 @@ ext {
     appCompatVersion = "23.0.1"
     buildToolsVersion = "22.0.1"
     crashlyticsVersion = "2.5.2"
-    targetSdk = 23
+    targetSdk = 22
     compileSdk = 23
     minSdk = 15
 }
