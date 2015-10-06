@@ -162,7 +162,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
     public void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
 
-        if (!PrefUtils.get(mContext, Prefs.AUTOMATIC_UPDATES, true) && !forced) {
+        if (!PrefUtils.get(mContext, Prefs.AUTOMATIC_UPDATES, true) && !forced && (PrefUtils.get(mContext, Prefs.WIFI_ONLY, true) && !NetworkUtils.isWifiConnected(mContext))) {
             return;
         }
 
