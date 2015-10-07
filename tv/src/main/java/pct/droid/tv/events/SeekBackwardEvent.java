@@ -1,7 +1,7 @@
 package pct.droid.tv.events;
 
 public class SeekBackwardEvent {
-    public static final int MINIMUM_SEEK_SPEED = 1000;
+    public static final int MINIMUM_SEEK_SPEED = 2000;
     private int seek = MINIMUM_SEEK_SPEED;
 
     public SeekBackwardEvent() {
