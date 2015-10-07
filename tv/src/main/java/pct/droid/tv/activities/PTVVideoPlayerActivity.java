@@ -3,10 +3,10 @@ package pct.droid.tv.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import pct.droid.base.fragments.BaseVideoPlayerFragment;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
@@ -32,7 +32,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
         Intent i = new Intent(context, PTVVideoPlayerActivity.class);
         i.putExtra(INFO, info);
-        //todo: resume position
+        // todo: resume position
         context.startActivity(i);
         return i;
     }
@@ -69,18 +69,12 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         }
 
         if (mPlayerFragment.isMediaSessionActive()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                requestVisibleBehind(false);
-            }
             mPlaybackOverlayFragment.setKeepEventBusRegistration(true);
             return;
         }
         else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                requestVisibleBehind(false);
-            }
             mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
-            PrefUtils.save(this, "resume_position", 0);
+            PrefUtils.save(this, BaseVideoPlayerFragment.RESUME_POSITION, 0);
         }
 
         if (mService != null)
