@@ -88,7 +88,7 @@ public class NumberPickerDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mOnResultListener.onNewValue(numberPicker.getValue() + minValue);
+                                mOnResultListener.onNewValue(numberPicker.getValue() + (minValue < 0 ? minValue : 0));
                                 dialog.dismiss();
                             }
                         })
