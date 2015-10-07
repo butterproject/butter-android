@@ -92,6 +92,7 @@ public class BeamServer {
         for(FileType localSubsFileType : SUB_TYPES) {
             SubtitleFileResponse localSubsFileReponse = new SubtitleFileResponse(localSubsFileType);
             mHttpServer.get("/video." + localSubsFileType.extension, localSubsFileReponse);
+            mHttpServer.addAction("HEAD", "/video." + localSubsFileType.extension, localSubsFileReponse);
         }
 
         mHttpServer.get("/(.*?)", new HttpServerRequestCallback() {
@@ -232,8 +233,7 @@ public class BeamServer {
         public void onRequest(AsyncHttpServerRequest asyncHttpServerRequest, AsyncHttpServerResponse httpServerResponse) {
             if (sCurrentVideo != null && sCurrentVideo.exists()) {
                 mFileType.setHeaders(httpServerResponse);
-                if (!asyncHttpServerRequest.getMethod().equals("HEAD"))
-                    httpServerResponse.sendFile(sCurrentVideo);
+                httpServerResponse.sendFile(sCurrentVideo);
             } else {
                 httpServerResponse.send("Not found");
                 httpServerResponse.code(404);
