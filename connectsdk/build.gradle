@@ -83,10 +83,9 @@ android {
             minifyEnabled false
         }
     }
-    android {
-        lintOptions {
-            abortOnError false
-        }
+    
+    lintOptions {
+        abortOnError false
     }
 }
 
