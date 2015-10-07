@@ -217,9 +217,7 @@ public abstract class BaseVideoPlayerFragment
         super.onPause();
 
         if (mLibVLC != null) {
-            long currentTime = mMediaPlayer.getTime();
-            PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
-
+            saveVideoCurrentTime();
             /*
              * Pausing here generates errors because the vout is constantly
              * trying to refresh itself every 80ms while the surface is not
@@ -227,14 +225,18 @@ public abstract class BaseVideoPlayerFragment
              * position in the preferences
              */
             mMediaPlayer.stop();
-        } else {
+        }
+        else {
             mDuration = 0l;
         }
 
         mMediaPlayer.getVLCVout().removeCallback(this);
-        getVideoSurface().setKeepScreenOn(false);
-
         BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
+    }
+
+    private void saveVideoCurrentTime() {
+        long currentTime = mMediaPlayer.getTime();
+        PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
     }
 
     @Override
@@ -296,12 +298,6 @@ public abstract class BaseVideoPlayerFragment
             }
         }
 
-        getVideoSurface().setKeepScreenOn(true);
-
-//        if (mLibVLC == null || mLibVLC.isPlaying() || mLocation == null || mLocation.isEmpty()) {
-//            mReadyToPlay = true;
-//            return;
-//        }
         org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(mLibVLC, Uri.parse(mLocation));
         int hwFlag = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
         int flags = hwFlag | VLCOptions.MEDIA_VIDEO;
@@ -369,13 +365,10 @@ public abstract class BaseVideoPlayerFragment
 
     public void play() {
         mMediaPlayer.play();
-        getVideoSurface().setKeepScreenOn(true);
-        resumeVideo();
     }
 
     public void pause() {
         mMediaPlayer.pause();
-        getVideoSurface().setKeepScreenOn(false);
     }
 
     public void togglePlayPause() {
@@ -448,6 +441,7 @@ public abstract class BaseVideoPlayerFragment
     public abstract void onPlaybackEndReached();
 
     private void handleHardwareAccelerationError() {
+        saveVideoCurrentTime();
         mMediaPlayer.stop();
         onHardwareAccelerationError();
     }
@@ -673,6 +667,7 @@ public abstract class BaseVideoPlayerFragment
     public void onEvent(MediaPlayer.Event event) {
         switch (event.type) {
             case MediaPlayer.Event.Playing:
+                getVideoSurface().setKeepScreenOn(true);
                 mDuration = mMediaPlayer.getLength();
                 resumeVideo();
                 setProgressVisible(false);
@@ -680,6 +675,13 @@ public abstract class BaseVideoPlayerFragment
                 updatePlayPauseState();
                 break;
             case MediaPlayer.Event.Paused:
+                getVideoSurface().setKeepScreenOn(false);
+                saveVideoCurrentTime();
+                setProgressVisible(true);
+                updatePlayPauseState();
+                break;
+            case MediaPlayer.Event.Stopped:
+                getVideoSurface().setKeepScreenOn(false);
                 setProgressVisible(true);
                 updatePlayPauseState();
                 break;
