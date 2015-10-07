@@ -36,6 +36,7 @@ import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.RewindAction;
 import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
 import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.content.res.ResourcesCompat;
@@ -81,15 +82,19 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private ScaleVideoAction mScaleVideoAction;
     private PlayPauseAction mPlayPauseAction;
     private RewindAction mRewindAction;
+    private PlaybackControlsRowPresenter mPlaybackControlsRowPresenter;
     private PlaybackControlsRow mPlaybackControlsRow;
     private Handler mHandler;
     private Runnable mRunnable;
     private StreamInfo mStreamInfo;
 
-    private int mCurrentMode = MODE_NOTHING;
     private long mSelectedActionId = 0;
-    private boolean keepEventBusRegistration = false;
+    private int mCurrentMode = MODE_NOTHING;
+    private boolean mKeepEventBusRegistration = false;
+    private boolean mIsMediaReady = false;
     private int mSeek;
+    private int mBufferedTime;
+    private int mCurrentTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,11 +106,24 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             mStreamInfo = intent.getParcelableExtra(PTVVideoPlayerActivity.INFO);
         }
 
+        setFadeCompleteListener(new OnFadeCompleteListener() {
+
+            @Override
+            public void onFadeInComplete() {
+                super.onFadeInComplete();
+                mPlaybackControlsRow.setCurrentTime(mCurrentTime);
+                mPlaybackControlsRow.setBufferedProgress(mBufferedTime);
+                if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+            }
+        });
+
         mHandler = new Handler();
 
         setBackgroundType(BACKGROUND_TYPE);
         setFadingEnabled(false);
-        setupPlaybackControlPresenter();
+
+        initialisePlaybackControlPresenter();
+        setupPlaybackControlItemsToInitialisingState();
 
         setOnItemViewSelectedListener(this);
         setInputEventHandler(this);
@@ -125,19 +143,13 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     @Override
     public void onPause() {
         super.onPause();
-        if (!keepEventBusRegistration) {
+        if (!mKeepEventBusRegistration) {
             // Event is unregistered before playback paused event is sent
             mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
             setFadingEnabled(false);
             notifyPlaybackControlActionChanged(mPlayPauseAction);
             EventBus.getDefault().unregister(this);
         }
-    }
-
-    @Override
-    public void onStop() {
-        mRowsAdapter = null;
-        super.onStop();
     }
 
     @Override
@@ -202,6 +214,11 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         if (event instanceof UpdatePlaybackStateEvent) {
             UpdatePlaybackStateEvent updatePlaybackStateEvent = (UpdatePlaybackStateEvent) event;
             if (updatePlaybackStateEvent.isPlaying()) {
+                if (!mIsMediaReady) {
+                    setupPlaybackControlItemsToReadyState();
+                    mIsMediaReady = true;
+                }
+
                 mPlayPauseAction.setIndex(PlayPauseAction.PAUSE);
                 setFadingEnabled(true);
             }
@@ -209,8 +226,9 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
                 mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
                 setFadingEnabled(false);
             }
+
             notifyPlaybackControlActionChanged(mPlayPauseAction);
-            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
         }
         else if (event instanceof PlaybackProgressChangedEvent) {
             // Ignore if currently seeking
@@ -221,13 +239,19 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             if (mSeek != 0 && mCurrentMode != MODE_NOTHING) {
                 return;
             }
-            mPlaybackControlsRow.setCurrentTime((int) progressChangedEvent.getCurrentTime());
-            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+            mCurrentTime = (int) progressChangedEvent.getCurrentTime();
+            if (!isHidden()) {
+                mPlaybackControlsRow.setCurrentTime(mCurrentTime);
+                if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+            }
         }
         else if (event instanceof StreamProgressChangedEvent) {
             StreamProgressChangedEvent streamProgressChangedEvent = (StreamProgressChangedEvent) event;
-            mPlaybackControlsRow.setBufferedProgress((int) streamProgressChangedEvent.getBufferedTime());
-            if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
+            mBufferedTime = (int) streamProgressChangedEvent.getBufferedTime();
+            if (!isHidden()) {
+                mPlaybackControlsRow.setBufferedProgress(mBufferedTime);
+                if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+            }
         }
         else if (event instanceof ToggleSubtitleEvent) {
             ToggleSubtitleEvent toggleSubtitleEvent = (ToggleSubtitleEvent) event;
@@ -242,39 +266,79 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         }
     }
 
-    private void setupPlaybackControlPresenter() {
+    private void initialisePlaybackControlPresenter() {
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        PlaybackControlsRowPresenter playbackControlsRowPresenter =
-            new PlaybackControlsRowPresenter(new DescriptionPresenter());
+        mPlaybackControlsRowPresenter = new PlaybackControlsRowPresenter(new DescriptionPresenter());
+        mPlaybackControlsRowPresenter.setSecondaryActionsHidden(false);
 
-        playbackControlsRowPresenter.setOnActionClickedListener(this);
-        playbackControlsRowPresenter.setSecondaryActionsHidden(false);
-
-        presenterSelector.addClassPresenter(PlaybackControlsRow.class, playbackControlsRowPresenter);
+        presenterSelector.addClassPresenter(PlaybackControlsRow.class, mPlaybackControlsRowPresenter);
         presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
 
         mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
-        mRowsAdapter.clear();
-        setupPlaybackControlItems();
         setAdapter(mRowsAdapter);
     }
 
-    private void setupPlaybackControlItems() {
+    private void setupPlaybackControlItemsActions() {
+        mPlaybackControlsRowPresenter.setOnActionClickedListener(this);
+    }
+
+    private void setupPlaybackControlItemsToInitialisingState() {
+        mRowsAdapter.clear();
         mPlaybackControlsRow = new PlaybackControlsRow(mStreamInfo);
         mPlaybackControlsRow.setCurrentTime(0);
         mPlaybackControlsRow.setBufferedProgress(0);
 
         ControlButtonPresenterSelector presenterSelector = new ControlButtonPresenterSelector();
         mPrimaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
-        mSecondaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
-
         mPlaybackControlsRow.setPrimaryActionsAdapter(mPrimaryActionsAdapter);
-        mPlaybackControlsRow.setSecondaryActionsAdapter(mSecondaryActionsAdapter);
+
+        Activity activity = getActivity();
+        mPlayPauseAction = new PlayPauseAction(activity);
+        mPrimaryActionsAdapter.add(mPlayPauseAction);
+
+        setupSecondaryRowPlaybackControl(presenterSelector);
+
+        mRowsAdapter.add(mPlaybackControlsRow);
+        mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+    }
+
+    private void setupPlaybackControlItemsToReadyState() {
+        mRowsAdapter.clear();
+        mPlaybackControlsRow = new PlaybackControlsRow(mStreamInfo);
+        mPlaybackControlsRow.setCurrentTime(0);
+        mPlaybackControlsRow.setBufferedProgress(0);
+
+        ControlButtonPresenterSelector presenterSelector = new ControlButtonPresenterSelector();
+        setupPrimaryRowPlaybackControl(presenterSelector);
+        setupSecondaryRowPlaybackControl(presenterSelector);
+
+        mRowsAdapter.add(mPlaybackControlsRow);
+        mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+
+        setupPlaybackControlItemsActions();
+    }
+
+    private void setupPrimaryRowPlaybackControl(ControlButtonPresenterSelector presenterSelector) {
+        mPrimaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
+        mPlaybackControlsRow.setPrimaryActionsAdapter(mPrimaryActionsAdapter);
 
         Activity activity = getActivity();
         mPlayPauseAction = new PlayPauseAction(activity);
         mFastForwardAction = new FastForwardAction(activity);
         mRewindAction = new RewindAction(activity);
+
+        // Add main controls to primary adapter.
+        mPrimaryActionsAdapter.add(mRewindAction);
+        mPrimaryActionsAdapter.add(mPlayPauseAction);
+        mPrimaryActionsAdapter.add(mFastForwardAction);
+    }
+
+    private void setupSecondaryRowPlaybackControl(PresenterSelector presenterSelector) {
+        mSecondaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
+        mPlaybackControlsRow.setSecondaryActionsAdapter(mSecondaryActionsAdapter);
+
+        Activity activity = getActivity();
+
         mScaleVideoAction = new ScaleVideoAction(activity);
         mClosedCaptioningAction = new ClosedCaptioningAction(activity);
 
@@ -284,19 +348,13 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);
         }
 
-        // Add main controls to primary adapter.
-        mPrimaryActionsAdapter.add(mRewindAction);
-        mPrimaryActionsAdapter.add(mPlayPauseAction);
-        mPrimaryActionsAdapter.add(mFastForwardAction);
-
         // Add rest of controls to secondary adapter.
         mSecondaryActionsAdapter.add(mScaleVideoAction);
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
-
-        mRowsAdapter.add(mPlaybackControlsRow);
     }
 
     private void notifyPlaybackControlActionChanged(Action action) {
+        if (action == null) return;
         ArrayObjectAdapter adapter = mPrimaryActionsAdapter;
         if (adapter.indexOf(action) >= 0) {
             adapter.notifyArrayItemRangeChanged(adapter.indexOf(action), 1);
@@ -315,8 +373,10 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private void invokeTogglePlaybackAction(boolean play) {
         if (play) {
             EventBus.getDefault().post(new StartPlaybackEvent());
+            setFadingEnabled(true);
         } else {
             EventBus.getDefault().post(new PausePlaybackEvent());
+            setFadingEnabled(false);
         }
     }
 
@@ -389,7 +449,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     public void setKeepEventBusRegistration(boolean keepEventBusRegistration) {
-        this.keepEventBusRegistration = keepEventBusRegistration;
+        this.mKeepEventBusRegistration = keepEventBusRegistration;
     }
 
     class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
