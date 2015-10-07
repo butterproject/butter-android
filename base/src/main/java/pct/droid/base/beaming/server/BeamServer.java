@@ -254,9 +254,7 @@ public class BeamServer {
             File file = new File(sCurrentSubs.getAbsolutePath() + "." + mFileType.extension);
             if (sCurrentSubs != null && file.exists()) {
                 mFileType.setHeaders(httpServerResponse);
-                if (!asyncHttpServerRequest.getMethod().equals("HEAD")) {
-                    httpServerResponse.sendFile(file);
-                }
+                httpServerResponse.sendFile(file);
             } else {
                 httpServerResponse.send("Not found");
                 httpServerResponse.code(404);
