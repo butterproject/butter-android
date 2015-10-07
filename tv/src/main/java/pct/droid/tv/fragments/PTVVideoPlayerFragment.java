@@ -1,7 +1,6 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -114,9 +114,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        else {
-            loadMedia();
-        }
     }
 
     @Override
@@ -124,9 +121,6 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         super.onPause();
         if (!isMediaSessionActive()) {
             EventBus.getDefault().unregister(this);
-        }
-        else {
-            EventBus.getDefault().post(new PausePlaybackEvent());
         }
     }
 
@@ -173,8 +167,8 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     protected void updatePlayPauseState() {
-        EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
         EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
+        EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
 
         if (mMediaSession != null) {
             PlaybackState.Builder builder = new PlaybackState.Builder();
@@ -312,7 +306,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(StartPlaybackEvent event) {
-        play();
+        togglePlayPause();
 
         if (mMediaSession != null) {
             PlaybackState.Builder builder = new PlaybackState.Builder();
@@ -324,7 +318,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(PausePlaybackEvent event) {
-        pause();
+        togglePlayPause();
 
         if (mMediaSession != null) {
             PlaybackState.Builder builder = new PlaybackState.Builder();
@@ -336,12 +330,20 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(SeekBackwardEvent event) {
-        seek(event.getSeek());
+        if (!isSeeking()) {
+            setSeeking(true);
+            seek(event.getSeek());
+            setSeeking(false);
+        }
     }
 
     @SuppressWarnings("unused")
     public void onEventMainThread(SeekForwardEvent event) {
-        seek(event.getSeek());
+        if (!isSeeking()) {
+            setSeeking(true);
+            seek(event.getSeek());
+            setSeeking(false);
+        }
     }
 
     @SuppressWarnings("unused")
