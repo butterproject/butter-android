@@ -19,9 +19,27 @@ package pct.droid.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.facebook.stetho.common.Util;
+
+import org.videolan.libvlc.util.AndroidUtil;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import pct.droid.R;
 import pct.droid.activities.base.PopcornBaseActivity;
@@ -30,6 +48,7 @@ import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.fragments.dialog.OptionDialogFragment;
 import pct.droid.fragments.VideoPlayerFragment;
+import timber.log.Timber;
 
 public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPlayerFragment.Callback {
 
@@ -67,6 +86,109 @@ public class VideoPlayerActivity extends PopcornBaseActivity implements VideoPla
 
         mResumePosition = getIntent().getLongExtra(BaseVideoPlayerFragment.RESUME_POSITION, 0);
         mStreamInfo = getIntent().getParcelableExtra(INFO);
+
+        if (TextUtils.equals(getIntent().getAction(), Intent.ACTION_VIEW)) {
+            Bundle extras = getIntent().getExtras();
+            mStreamInfo = new StreamInfo("");
+            /* Started from external application 'content' */
+            Uri data = getIntent().getData();
+            if (data != null && TextUtils.equals(data.getScheme(), "content")) {
+
+
+                // Mail-based apps - download the stream to a temporary file and play it
+                if(data.getHost().equals("com.fsck.k9.attachmentprovider")
+                        || data.getHost().equals("gmail-ls")) {
+                    InputStream is = null;
+                    OutputStream os = null;
+                    try {
+                        Cursor cursor = getContentResolver().query(data,
+                                new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null);
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+                            String filename = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+                            cursor.close();
+                            Timber.i("Getting file " + filename + " from content:// URI");
+
+                            is = getContentResolver().openInputStream(data);
+                            os = new FileOutputStream(Environment.getExternalStorageDirectory().getPath() + "/Download/" + filename);
+                            byte[] buffer = new byte[1024];
+                            int bytesRead = 0;
+                            while((bytesRead = is.read(buffer)) >= 0) {
+                                os.write(buffer, 0, bytesRead);
+                            }
+                            mStreamInfo.setVideoLocation(AndroidUtil.PathToUri(Environment.getExternalStorageDirectory().getPath() + "/Download/" + filename).toString());
+                        }
+                    } catch (Exception e) {
+                        Timber.e("Couldn't download file from mail URI");
+                        return;
+                    } finally {
+                        try {
+                            is.close();
+                            os.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                // Media or MMS URI
+                else if (TextUtils.equals(data.getAuthority(), "media")){
+                    try {
+                        Cursor cursor = getContentResolver().query(data,
+                                new String[]{ MediaStore.Video.Media.DATA }, null, null, null);
+                        if (cursor != null) {
+                            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+                            if (cursor.moveToFirst())
+                                mStreamInfo.setVideoLocation(AndroidUtil.PathToUri(cursor.getString(column_index)).toString());
+                            cursor.close();
+                        }
+                        // other content-based URI (probably file pickers)
+                        else {
+                            mStreamInfo.setVideoLocation(data.toString());
+                        }
+                    } catch (Exception e) {
+                        mStreamInfo.setVideoLocation(data.toString());
+                        if (data.getScheme() == null)
+                            mStreamInfo.setVideoLocation(AndroidUtil.PathToUri(data.getPath()).toString());
+                        Timber.e("Couldn't read the file from media or MMS");
+                    }
+                } else {
+                    ParcelFileDescriptor inputPFD = null;
+                    try {
+                        inputPFD = getContentResolver().openFileDescriptor(data, "r");
+                        if (AndroidUtil.isHoneycombMr1OrLater())
+                            mStreamInfo.setVideoLocation(AndroidUtil.LocationToUri("fd://" + inputPFD.getFd()).toString());
+                        else {
+                            String fdString = inputPFD.getFileDescriptor().toString();
+                            mStreamInfo.setVideoLocation(AndroidUtil.LocationToUri("fd://" + fdString.substring(15, fdString.length() - 1)).toString());
+                        }
+                    } catch (FileNotFoundException e) {
+                        Timber.e("Couldn't understand the intent");
+                        return;
+                    }
+                }
+            } /* External application */
+            else if (getIntent().getDataString() != null) {
+                // Plain URI
+                final String location = getIntent().getDataString();
+                // Remove VLC prefix if needed
+                if (location.startsWith("vlc://")) {
+                    mStreamInfo.setVideoLocation(AndroidUtil.LocationToUri(location.substring(6)).toString());
+                } else {
+                    data = getIntent().getData();
+                    if (data.getScheme() == null)
+                        mStreamInfo.setVideoLocation(AndroidUtil.PathToUri(data.getPath()).toString());
+                    else
+                        mStreamInfo.setVideoLocation(data.toString());
+                }
+            } else {
+                Timber.e("Couldn't understand the intent");
+                return;
+            }
+
+            // Try to get the position
+            if(extras != null)
+                mResumePosition = extras.getLong("position", -1);
+        }
 
         if(mStreamInfo == null) {
             finish();
