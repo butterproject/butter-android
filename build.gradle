@@ -56,11 +56,6 @@ allprojects {
                 }
 
                 applicationVariants.all { variant ->
-                    //add a generated crashlytics properties file if the project applies the crashlytics plugin
-                    if (project.plugins.hasPlugin("io.fabric")) {
-                        createCrashlyticsProperties(project, variant)
-                    }
-
                     //rename output files
                     renameOutputFiles(project, variant)
                 }
@@ -74,32 +69,6 @@ allprojects {
             //add the android sdk manager plugin to andriod projects
             apply plugin: 'android-sdk-manager'
         }
-    }
-}
-
-def createCrashlyticsProperties(Project project, variant) {
-    def crashlyticsSecret = System.getenv("CRASHLYTICS_API_SECRET") ?: "aca1e95d3653c0a18d3c1c417f0455ebc16513a3eae385948c64153ef22a1beb"
-    // Valid keys of non-existing organization on Crashlytics to make local building possible
-    def crashlyticsKey = System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93"
-    // Valid keys of non-existing organization on Crashlytics to make local building possible
-
-    File crashlyticsProperties = new File("${project.projectDir.absolutePath}/crashlytics.properties")
-    def variantSuffix = variant.name.capitalize()
-    def generateResourcesTask = project.tasks.getByName("crashlyticsGenerateResources${variantSuffix}")
-
-    def generatePropertiesTask = project.task("crashlyticsGenerateProperties${variantSuffix}") << {
-        Properties properties = new Properties()
-        println "...copying apiSecret for ${variant.name}"
-        properties.put("apiSecret", crashlyticsSecret)
-        println "...copying apiKey for ${variant.name}"
-        properties.put("apiKey", crashlyticsKey)
-        properties.store(new FileWriter(crashlyticsProperties), "")
-    }
-    generateResourcesTask.dependsOn generatePropertiesTask
-    def assembleTask = project.tasks.getByName("assemble${variantSuffix}")
-    assembleTask.doLast {
-        println "...removing crashlytics.properties"
-        crashlyticsProperties.delete()
     }
 }
 
