@@ -264,7 +264,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.subtitle_size)
                     .setPreferenceKey(Prefs.SUBTITLE_SIZE)
                     .hasNext(true)
-                    .setDefaultValue(16)
+                    .setDefaultValue(context.getResources().getInteger(R.integer.player_subtitles_default_text_size))
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -336,7 +336,7 @@ public interface PreferencesHandler {
 
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_subtitle_lang)
-                    .setTitleResource(R.string.subtitle_language)
+                    .setTitleResource(R.string.default_subtitle_language)
                     .setPreferenceKey(Prefs.SUBTITLE_DEFAULT)
                     .hasNext(true)
                     .setDefaultValue("")

@@ -144,7 +144,8 @@ public abstract class BaseVideoPlayerFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return mRootView = super.onCreateView(inflater, container, savedInstanceState);
+        mRootView = super.onCreateView(inflater, container, savedInstanceState);
+        return mRootView;
     }
 
     @Override
@@ -204,6 +205,8 @@ public abstract class BaseVideoPlayerFragment
             mCurrentSubsLang = streamInfo.getSubtitleLanguage();
             loadOrDownloadSubtitle();
         }
+
+        updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, getResources().getInteger(R.integer.player_subtitles_default_text_size)));
     }
 
     @Override
@@ -861,7 +864,7 @@ public abstract class BaseVideoPlayerFragment
         args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_size));
         args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
         args.putInt(NumberPickerDialogFragment.MIN_VALUE, SUBTITLE_MINIMUM_SIZE);
-        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, getResources().getInteger(R.integer.player_subtitles_default_text_size));
 
         NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
         dialogFragment.setArguments(args);
