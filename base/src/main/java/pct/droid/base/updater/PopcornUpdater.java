@@ -53,6 +53,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
+import timber.log.Timber;
 
 public class PopcornUpdater extends Observable {
 
@@ -172,7 +173,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
             lastUpdate = System.currentTimeMillis();
             PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
 
-            if (BuildConfig.GIT_BRANCH.contains("local")) return;
+            if (!forced && BuildConfig.GIT_BRANCH.contains("local")) return;
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 mAbi = Build.CPU_ABI.toLowerCase(Locale.US);
