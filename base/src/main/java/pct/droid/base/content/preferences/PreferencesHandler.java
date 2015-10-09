@@ -560,7 +560,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_pixel_format)
                     .setTitleResource(R.string.pixel_format)
                     .setPreferenceKey(Prefs.PIXEL_FORMAT)
-                    .setDefaultValue("YV12")
+                    .setDefaultValue("RV32")
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {

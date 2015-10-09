@@ -29,7 +29,7 @@ android {
     defaultConfig {
         applicationId "pct.droid.tv"
         minSdkVersion 21
-        targetSdkVersion rootProject.ext.targetSdk
+        targetSdkVersion 22 //rootProject.ext.targetSdk
         versionCode buildNumber
         versionName "0.1.0"
         multiDexEnabled true
