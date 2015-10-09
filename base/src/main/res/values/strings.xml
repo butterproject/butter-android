@@ -73,7 +73,8 @@
     <string name="subtitle_timing">Subtitle timing</string>
     <string name="subtitle_stroke_color">Outline color</string>
     <string name="subtitle_stroke_width">Outline width</string>
-    <string name="subtitle_language">Default language</string>
+    <string name="default_subtitle_language">Default language</string>
+    <string name="subtitle_language">Subtitle language</string>
     <string name="subtitle_settings">Subtitle settings</string>
     <string name="no_default_set">No default language</string>
     <string name="advanced">Advanced</string>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
@@ -44,6 +45,7 @@ import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.subs.Caption;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.widget.StrokedTextView;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
@@ -63,7 +65,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     SurfaceView videoSurface;
 
     @Bind(R.id.subtitle_text)
-    TextView mSubtitleText;
+    StrokedTextView mSubtitleText;
 
     private boolean mIsSubtitleEnabled = false;
     private boolean mMediaSessionMetadataApplied = false;
@@ -99,13 +101,10 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         videoSurface.setVisibility(View.VISIBLE);
         mSubtitleText.setVisibility(View.INVISIBLE);
 
-        mSubtitleText.setTextColor(
-            PrefUtils.get(
-                getActivity(),
-                Prefs.SUBTITLE_COLOR,
-                ContextCompat.getColor(getActivity(), R.color.subtitle_default_text_color)));
         mSubtitleText.setText("");
-        updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, SUBTITLE_MINIMUM_SIZE));
+        mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
+        mSubtitleText.setStrokeColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
+        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_WIDTH, 2));
     }
 
     @Override
@@ -186,8 +185,8 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void onHardwareAccelerationError() {
         showErrorDialog(
-            getString(R.string.hardware_acceleration_error_title),
-            getString(R.string.hardware_acceleration_error_message));
+                getString(R.string.hardware_acceleration_error_title),
+                getString(R.string.hardware_acceleration_error_message));
     }
 
     @Override
@@ -290,7 +289,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     protected void updateSubtitleSize(int size) {
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10 + size);
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
     }
 
     @Override
@@ -474,6 +473,8 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
             if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
                 if (isPlaying()) {
                     EventBus.getDefault().post(new PausePlaybackEvent());
+                } else {
+                    EventBus.getDefault().post(new StartPlaybackEvent());
                 }
                 return true;
             }

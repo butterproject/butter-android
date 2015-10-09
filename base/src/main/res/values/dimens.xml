@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="player_subtitles_default_text_size">16</integer>
+</resources>

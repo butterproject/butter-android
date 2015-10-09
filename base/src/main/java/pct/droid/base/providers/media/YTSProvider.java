@@ -293,7 +293,7 @@ public class YTSProvider extends MediaProvider {
                     if (torrents != null) {
                         for (LinkedTreeMap<String, Object> torrentObj : torrents) {
                             String quality = (String) torrentObj.get("quality");
-                            if (quality == null || quality.equals("3D")) continue;
+                            if (quality == null) continue;
 
                             Media.Torrent torrent = new Media.Torrent();
 
