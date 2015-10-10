@@ -316,13 +316,11 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
-        Intent trailerIntent = new Intent(mActivity, TrailerPlayerActivity.class);
         if (!YouTubeData.isYouTubeUrl(sMovie.trailer)) {
-            trailerIntent = new Intent(mActivity, VideoPlayerActivity.class);
+            VideoPlayerActivity.startActivity(mActivity, new StreamInfo(sMovie, null, null, null, null, sMovie.trailer));
+        } else {
+            TrailerPlayerActivity.startActivity(mActivity, sMovie.trailer, sMovie);
         }
-        trailerIntent.putExtra(TrailerPlayerActivity.DATA, sMovie);
-        trailerIntent.putExtra(TrailerPlayerActivity.LOCATION, sMovie.trailer);
-        startActivity(trailerIntent);
     }
 
     @OnClick(R.id.play_button)

@@ -92,6 +92,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private int mCurrentMode = MODE_NOTHING;
     private boolean mKeepEventBusRegistration = false;
     private boolean mIsMediaReady = false;
+    private boolean mSubsButtonEnabled = true;
     private int mSeek;
     private int mBufferedTime;
     private int mCurrentTime;
@@ -101,10 +102,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            mStreamInfo = intent.getParcelableExtra(PTVVideoPlayerActivity.INFO);
-        }
+        mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
 
         setFadeCompleteListener(new OnFadeCompleteListener() {
 
@@ -189,13 +187,13 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             KeyEvent keyEvent = (KeyEvent) event;
             if (keyEvent.getKeyCode() != KeyEvent.KEYCODE_DPAD_CENTER) return false;
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                if (mSelectedActionId == mFastForwardAction.getId()) {
+                if (mFastForwardAction != null && mSelectedActionId == mFastForwardAction.getId()) {
                     if (keyEvent.getRepeatCount() == 0) {
                         mCurrentMode = MODE_FAST_FORWARD;
                         invokeFastForwardAction();
                     }
                 }
-                else if (mSelectedActionId == mRewindAction.getId()) {
+                else if (mRewindAction != null && mSelectedActionId == mRewindAction.getId()) {
                     if (keyEvent.getRepeatCount() == 0) {
                         mCurrentMode = MODE_REWIND;
                         invokeRewindAction();
@@ -351,7 +349,21 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
         // Add rest of controls to secondary adapter.
         mSecondaryActionsAdapter.add(mScaleVideoAction);
+        if(mSubsButtonEnabled)
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
+    }
+
+    public void enableSubsButton(Boolean b) {
+        mSubsButtonEnabled = b;
+        if(b) {
+            if(mSecondaryActionsAdapter.indexOf(mClosedCaptioningAction) == -1)
+                mSecondaryActionsAdapter.add(mClosedCaptioningAction);
+        } else {
+            mSecondaryActionsAdapter.remove(mClosedCaptioningAction);
+        }
+
+        if(mRowsAdapter != null)
+            mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
     }
 
     private void notifyPlaybackControlActionChanged(Action action) {

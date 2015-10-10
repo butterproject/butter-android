@@ -1,6 +1,8 @@
 package pct.droid.tv.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
@@ -20,8 +22,11 @@ import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.youtube.YouTubeData;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVStreamLoadingActivity;
+import pct.droid.tv.activities.PTVTrailerPlayerActivity;
+import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 
 public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
@@ -68,6 +73,8 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 
 			List<String> qualities = new ArrayList(movie.torrents.keySet());
 
+            addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch), getResources().getString(R.string.trailer)));
+
 			for (String quality : qualities) {
 
 				Media.Torrent torrent = movie.torrents.get(quality);
@@ -86,22 +93,30 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 
 	@Override
 	public void onActionClicked(Action a) {
-		if (!(a instanceof WatchAction)) return;
-		// check for network
-		if (!NetworkUtils.isNetworkConnected(getActivity())) {
-			Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
-		} else {
-			WatchAction action = (WatchAction) a;
-			Media.Torrent torrent = action.getTorrent();
-			String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
-			StreamInfo info = new StreamInfo(
-					getMovieItem(),
-					torrent.url,
-					subtitleLanguage,
-					action.getLabel2().toString());
+        if(a instanceof WatchAction) {
+            // check for network
+            if (!NetworkUtils.isNetworkConnected(getActivity())) {
+                Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
+            } else {
+                WatchAction action = (WatchAction) a;
+                Media.Torrent torrent = action.getTorrent();
+                String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+                StreamInfo info = new StreamInfo(
+                        getMovieItem(),
+                        torrent.url,
+                        subtitleLanguage,
+                        action.getLabel2().toString());
 
-			PTVStreamLoadingActivity.startActivity(getActivity(), info);
-		}
+                PTVStreamLoadingActivity.startActivity(getActivity(), info);
+            }
+        } else if(a instanceof TrailerAction) {
+            Movie movie = getMovieItem();
+            if (!YouTubeData.isYouTubeUrl(movie.trailer)) {
+                PTVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(movie, null, null, null, null, movie.trailer));
+            } else {
+                PTVTrailerPlayerActivity.startActivity(getActivity(), movie.trailer, movie);
+            }
+        }
 	}
 
 	public static class WatchAction extends android.support.v17.leanback.widget.Action {
@@ -121,4 +136,11 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 			mTorrent = torrent;
 		}
 	}
+
+    public static class TrailerAction extends android.support.v17.leanback.widget.Action {
+
+        public TrailerAction(long id, CharSequence label1, CharSequence label2) {
+            super(id, label1, label2);
+        }
+    }
 }

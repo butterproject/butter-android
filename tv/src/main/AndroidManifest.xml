@@ -64,6 +64,7 @@
             android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
         <activity android:name=".activities.PTVStreamLoadingActivity" />
         <activity android:name=".activities.PTVVideoPlayerActivity" />
+        <activity android:name=".activities.PTVTrailerPlayerActivity" />
         <activity
             android:name=".activities.PTVUpdateActivity"
             android:theme="@style/Theme.Popcorn.TV.GuidedStep" />

@@ -82,15 +82,6 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
 
         switch (mode) {
             case SIMPLE_CHOICE:
-                int currentPosition = (int) currentValue;
-                if(currentPosition == items.length - 1) {
-                    currentPosition = 0;
-                } else {
-                    currentPosition++;
-                }
-                onClickListener.onSelection(currentPosition, null);
-                updateAction(getSelectedActionPosition());
-                break;
             case ADVANCED_CHOICE:
                 fragment = PTVSettingsListFragment.newInstance(title, items, (int) currentValue, new PTVSettingsListFragment.SelectionListener() {
                     @Override
@@ -119,7 +110,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
             case COLOR:
                 String[] colors = getResources().getStringArray(R.array.subtitle_colors);
                 final Integer[] colorCodes = new Integer[] {
-                        Color.BLACK, Color.WHITE, Color.YELLOW, Color.RED, Color.BLUE, Color.MAGENTA, Color.GREEN, Color.DKGRAY, Color.LTGRAY
+                        Color.WHITE, Color.BLACK, Color.YELLOW, Color.RED, Color.BLUE, Color.MAGENTA, Color.GREEN, Color.DKGRAY, Color.LTGRAY
                 };
                 fragment = PTVSettingsListFragment.newInstance(title, colors, Arrays.asList(colorCodes).indexOf(currentValue), new PTVSettingsListFragment.SelectionListener() {
                     @Override
@@ -151,5 +142,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
         GuidedAction action = mActions.get(position);
         action.setLabel2(mPrefs.get(position).getSubtitle());
         mActions.set(position, action);
+
+        super.onCreateActions(mActions, null);
     }
 }

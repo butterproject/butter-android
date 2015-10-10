@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -59,77 +60,82 @@ public class RecommendationService extends IntentService {
             return;
         }
 
-        MediaProvider.Filters movieFilter = new MediaProvider.Filters();
-        movieFilter.order = MediaProvider.Filters.Order.DESC;
-        movieFilter.sort = MediaProvider.Filters.Sort.POPULARITY;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                MediaProvider.Filters movieFilter = new MediaProvider.Filters();
+                movieFilter.order = MediaProvider.Filters.Order.DESC;
+                movieFilter.sort = MediaProvider.Filters.Sort.POPULARITY;
 
-        MediaProvider.Filters showsFilter = new MediaProvider.Filters();
-        showsFilter.order = MediaProvider.Filters.Order.DESC;
-        showsFilter.sort = MediaProvider.Filters.Sort.DATE;
+                MediaProvider.Filters showsFilter = new MediaProvider.Filters();
+                showsFilter.order = MediaProvider.Filters.Order.DESC;
+                showsFilter.sort = MediaProvider.Filters.Sort.DATE;
 
-        final AtomicBoolean mMoviesCallFinished = new AtomicBoolean(false);
-        final AtomicBoolean mShowsCallFinished = new AtomicBoolean(false);
+                final AtomicBoolean mMoviesCallFinished = new AtomicBoolean(false);
+                final AtomicBoolean mShowsCallFinished = new AtomicBoolean(false);
 
 
-        Timber.d("Fetching movies");
-        //fetch movies
-        mMovieProvider.getList(movieFilter, new MediaProvider.Callback() {
-            @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                Timber.d(String.format("loaded %s movies", items.size()));
-                mMovies.addAll(items);
-                mMoviesCallFinished.set(true);
+                Timber.d("Fetching movies");
+                //fetch movies
+                mMovieProvider.getList(movieFilter, new MediaProvider.Callback() {
+                    @Override
+                    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                        Timber.d(String.format("loaded %s movies", items.size()));
+                        mMovies.addAll(items);
+                        mMoviesCallFinished.set(true);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Timber.d("Failed to fetch movies");
+                        mMoviesCallFinished.set(true);
+                    }
+                });
+
+                Timber.d("Fetching shows");
+                //fetch shows
+                mShowProvider.getList(showsFilter, new MediaProvider.Callback() {
+                    @Override
+                    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                        Timber.d(String.format("loaded %s shows", items.size()));
+                        mShows.addAll(items);
+                        mShowsCallFinished.set(true);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Timber.d("Failed to fetch shows");
+                        mShowsCallFinished.set(true);
+                    }
+                });
+
+                //wait for callbacks to finish
+                while (!mShowsCallFinished.get() || !mMoviesCallFinished.get()) {
+                    Timber.d("Waiting on callbacks");
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Timber.d("mShowsCallFinished: " + mShowsCallFinished.get());
+                Timber.d("mMoviesCallFinished: " + mMoviesCallFinished.get());
+                //process items
+
+                Timber.d("Updating recommendation cards");
+                if (mMovies.size() == 0 && mShows.size() == 0)
+                    return;
+
+
+                RecommendationBuilder builder = new RecommendationBuilder()
+                        .setContext(getApplicationContext())
+                        .setSmallIcon(R.drawable.header_logo);
+
+                buildMovieRecommendations(builder);
+                buildShowRecommendations(builder);
             }
-
-            @Override
-            public void onFailure(Exception e) {
-                Timber.d("Failed to fetch movies");
-                mMoviesCallFinished.set(true);
-            }
-        });
-
-        Timber.d("Fetching shows");
-        //fetch shows
-        mShowProvider.getList(showsFilter, new MediaProvider.Callback() {
-            @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                Timber.d(String.format("loaded %s shows", items.size()));
-                mShows.addAll(items);
-                mShowsCallFinished.set(true);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Timber.d("Failed to fetch shows");
-                mShowsCallFinished.set(true);
-            }
-        });
-
-        //wait for callbacks to finish
-        while (!mShowsCallFinished.get() || !mMoviesCallFinished.get()) {
-            Timber.d("Waiting on callbacks");
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Timber.d("mShowsCallFinished: " + mShowsCallFinished.get());
-        Timber.d("mMoviesCallFinished: " + mMoviesCallFinished.get());
-        //process items
-
-        Timber.d("Updating recommendation cards");
-        if (mMovies.size() == 0 && mShows.size() == 0)
-            return;
-
-
-        RecommendationBuilder builder = new RecommendationBuilder()
-                .setContext(getApplicationContext())
-                .setSmallIcon(R.drawable.header_logo);
-
-        buildMovieRecommendations(builder);
-        buildShowRecommendations(builder);
+        }, 10000);
     }
 
     private void buildMovieRecommendations(@NonNull RecommendationBuilder builder) {

@@ -1,6 +1,7 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,8 +17,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -27,7 +26,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
@@ -48,7 +47,6 @@ import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.widget.StrokedTextView;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
-import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.events.ConfigureSubtitleEvent;
 import pct.droid.tv.events.PausePlaybackEvent;
 import pct.droid.tv.events.PlaybackProgressChangedEvent;
@@ -62,10 +60,11 @@ import pct.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Bind(R.id.video_surface)
-    SurfaceView videoSurface;
-
+    SurfaceView mVideoSurface;
     @Bind(R.id.subtitle_text)
     StrokedTextView mSubtitleText;
+    @Bind(R.id.progress_indicator)
+    ProgressBar mProgressIndicator;
 
     private boolean mIsSubtitleEnabled = false;
     private boolean mMediaSessionMetadataApplied = false;
@@ -76,10 +75,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            mStreamInfo = intent.getParcelableExtra(PTVVideoPlayerActivity.INFO);
-        }
+        mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
     }
 
     @Override
@@ -98,7 +94,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
 
-        videoSurface.setVisibility(View.VISIBLE);
+        mVideoSurface.setVisibility(View.VISIBLE);
         mSubtitleText.setVisibility(View.INVISIBLE);
 
         mSubtitleText.setText("");
@@ -126,14 +122,14 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (!isMediaSessionActive()) {
+        if (!isMediaSessionActive() && mMediaSession != null) {
             mMediaSession.release();
         }
     }
 
     @Override
     protected SurfaceView getVideoSurface() {
-        return videoSurface;
+        return mVideoSurface;
     }
 
     @Override
@@ -191,7 +187,9 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     @Override
     protected void showTimedCaptionText(final Caption text) {
-        if (mDisplayHandler == null) mDisplayHandler = new Handler(Looper.getMainLooper());
+        if (mDisplayHandler == null)
+            mDisplayHandler = new Handler(Looper.getMainLooper());
+
         mDisplayHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -219,7 +217,15 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     @Override
-    protected void setProgressVisible(boolean visible) { }
+    protected void setProgressVisible(boolean visible) {
+        if(mProgressIndicator.getVisibility() == View.VISIBLE && visible)
+            return;
+
+        if(mProgressIndicator.getVisibility() == View.GONE && !visible)
+            return;
+
+        mProgressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
 
     @Override
     protected void onProgressChanged(long currentTime, long duration) {
@@ -375,8 +381,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, mStreamInfo.getShowTitle());
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE, mStreamInfo.getShowEpisodeTitle());
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, mStreamInfo.getShowTitle());
-        }
-        else {
+        } else {
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, mStreamInfo.getTitle());
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, mStreamInfo.getTitle());
         }
@@ -410,7 +415,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     public boolean isMediaSessionActive() {
-        return mMediaSession.isActive();
+        return mMediaSession != null && mMediaSession.isActive();
     }
 
     public void deactivateMediaSession() {
