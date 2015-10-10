@@ -82,9 +82,9 @@ public class EZTVProvider extends MediaProvider {
         }
 
         if (filters.order == Filters.Order.ASC) {
-            params.add(new NameValuePair("order", "asc"));
+            params.add(new NameValuePair("order", "-1"));
         } else {
-            params.add(new NameValuePair("order", "desc"));
+            params.add(new NameValuePair("order", "1"));
         }
 
         String sort = "";
