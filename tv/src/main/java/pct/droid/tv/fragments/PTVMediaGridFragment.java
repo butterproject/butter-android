@@ -66,7 +66,7 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
     private Callback mCallback;
 
     private BackgroundUpdater mBackgroundUpdater;
-    private int mCurrentPage = 0 ;
+    private int mCurrentPage = 1;
 
     public static PTVMediaGridFragment newInstance() {
         PTVMediaGridFragment fragment = new PTVMediaGridFragment();
@@ -115,7 +115,7 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
     }
 
     private MediaProvider.Filters getFilters() {
-        MediaProvider.Filters filters = mCallback.getFilters();
+        MediaProvider.Filters filters = new MediaProvider.Filters(mCallback.getFilters());
         filters.page = mCurrentPage;
         return filters;
     }

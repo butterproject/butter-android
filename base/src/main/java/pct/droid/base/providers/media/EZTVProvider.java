@@ -82,9 +82,9 @@ public class EZTVProvider extends MediaProvider {
         }
 
         if (filters.order == Filters.Order.ASC) {
-            params.add(new NameValuePair("order", "-1"));
-        } else {
             params.add(new NameValuePair("order", "1"));
+        } else {
+            params.add(new NameValuePair("order", "-1"));
         }
 
         String sort = "";
@@ -235,9 +235,12 @@ public class EZTVProvider extends MediaProvider {
                 show.seasons = ((Double) showData.get("num_seasons")).intValue();
                 show.year = (String) showData.get("year");
                 LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) showData.get("images");
-                show.image = images.get("poster").replace("/original/", "/medium/");
-                show.fullImage = images.get("poster");
-                show.headerImage = images.get("fanart").replace("/original/", "/medium/");
+                if(!images.get("poster").contains("images/posterholder.png")) {
+                    show.image = images.get("poster").replace("/original/", "/medium/");
+                    show.fullImage = images.get("poster");
+                }
+                if(!images.get("poster").contains("images/posterholder.png"))
+                    show.headerImage = images.get("fanart").replace("/original/", "/medium/");
 
                 if (showData.get("status") != null) {
                     String status = (String) showData.get("status");
@@ -323,8 +326,10 @@ public class EZTVProvider extends MediaProvider {
                 show.tvdbId = (String) item.get("tvdb_id");
                 show.year = (String) item.get("year");
                 LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
-                show.image = images.get("poster").replace("/original/", "/medium/");
-                show.headerImage = images.get("fanart").replace("/original/", "/medium/");
+                if(!images.get("poster").contains("images/posterholder.png"))
+                    show.image = images.get("poster").replace("/original/", "/medium/");
+                if(!images.get("poster").contains("images/posterholder.png"))
+                    show.headerImage = images.get("fanart").replace("/original/", "/medium/");
 
                 existingList.add(show);
             }
