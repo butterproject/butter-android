@@ -341,7 +341,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mClosedCaptioningAction = new ClosedCaptioningAction(activity);
         mClosedCaptioningAction.setIcon(getResources().getDrawable(R.drawable.ic_av_subs, null));
 
-        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+        if (mStreamInfo!= null && mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
             mClosedCaptioningAction.setIndex(ClosedCaptioningAction.ON);
         } else {
             mClosedCaptioningAction.setIndex(ClosedCaptioningAction.OFF);

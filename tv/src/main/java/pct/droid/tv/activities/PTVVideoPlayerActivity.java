@@ -48,6 +48,13 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
+        createStreamInfo();
+
+        mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
+    }
+
+    private void createStreamInfo() {
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
         String location = mStreamInfo.getVideoLocation();
@@ -55,9 +62,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
             location = "file://" + location;
         }
         mStreamInfo.setVideoLocation(location);
-
-        mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-        mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
     }
 
     @Override
@@ -106,6 +110,8 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public StreamInfo getInfo() {
+        if(mStreamInfo == null)
+            createStreamInfo();
         return mStreamInfo;
     }
 
