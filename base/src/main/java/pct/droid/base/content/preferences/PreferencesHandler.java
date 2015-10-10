@@ -64,6 +64,7 @@ public interface PreferencesHandler {
             final String[] qualities = context.getResources().getStringArray(R.array.video_qualities);
             final String[] pixelFormats = { context.getString(R.string.rgb16), context.getString(R.string.rgb32), context.getString(R.string.yuv) };
 
+            if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_default_view)
                     .setTitleResource(R.string.default_view)
@@ -139,6 +140,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_action_quality)
                     .setTitleResource(R.string.quality)
                     .setPreferenceKey(Prefs.QUALITY_DEFAULT)
+                    .hasNext(true)
                     .setDefaultValue("720p")
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
@@ -243,7 +245,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), null, SelectionMode.COLOR, (Integer) item.getValue(), 0, 0, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), null, SelectionMode.COLOR, item.getValue(), 0, 0, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -526,6 +528,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_hw_accel)
                     .setTitleResource(R.string.hw_acceleration)
                     .setPreferenceKey(Prefs.HW_ACCELERATION)
+                    .hasNext(true)
                     .setDefaultValue(VLCOptions.HW_ACCELERATION_AUTOMATIC)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
@@ -560,6 +563,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_pixel_format)
                     .setTitleResource(R.string.pixel_format)
                     .setPreferenceKey(Prefs.PIXEL_FORMAT)
+                    .hasNext(true)
                     .setDefaultValue("RV32")
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override

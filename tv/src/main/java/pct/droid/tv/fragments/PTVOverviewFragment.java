@@ -193,7 +193,7 @@ public class PTVOverviewFragment
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "error getting movie list", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.movies_error, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

@@ -680,12 +680,10 @@ public abstract class BaseVideoPlayerFragment
             case MediaPlayer.Event.Paused:
                 getVideoSurface().setKeepScreenOn(false);
                 saveVideoCurrentTime();
-                setProgressVisible(true);
                 updatePlayPauseState();
                 break;
             case MediaPlayer.Event.Stopped:
                 getVideoSurface().setKeepScreenOn(false);
-                setProgressVisible(true);
                 updatePlayPauseState();
                 break;
             case MediaPlayer.Event.EndReached:
