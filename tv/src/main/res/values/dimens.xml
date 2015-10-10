@@ -13,8 +13,8 @@
     <dimen name="player_controls_padding">16dp</dimen>
     <dimen name="player_controls_corners">3dp</dimen>
     <dimen name="player_controls_distance">8dp</dimen>
-    <dimen name="player_subtitles_margin">32dp</dimen>
-    <integer name="player_subtitles_default_text_size">26</integer>
+    <dimen name="player_subtitles_margin">24dp</dimen>
+    <integer name="player_subtitles_default_text_size">24</integer>
 
     <dimen name="leanback_track_row_width">960dip</dimen>
     <dimen name="leanback_episode_row_height">48dip</dimen>
