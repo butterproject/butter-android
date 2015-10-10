@@ -51,7 +51,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/player_subtitles_bottom_margin"
+        android:layout_marginBottom="@dimen/player_subtitles_margin"
+        android:layout_marginRight="@dimen/player_subtitles_margin"
+        android:layout_alignLeft="@dimen/player_subtitles_margin"
         android:textDirection="anyRtl"
         android:gravity="center_horizontal" />
 

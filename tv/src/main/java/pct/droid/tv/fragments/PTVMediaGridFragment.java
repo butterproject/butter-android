@@ -16,6 +16,7 @@ package pct.droid.tv.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.app.VerticalGridFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -65,8 +66,7 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
     private Callback mCallback;
 
     private BackgroundUpdater mBackgroundUpdater;
-    private int mCurrentPage=0;
-
+    private int mCurrentPage = 0 ;
 
     public static PTVMediaGridFragment newInstance() {
         PTVMediaGridFragment fragment = new PTVMediaGridFragment();
@@ -82,9 +82,9 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mCallback = (Callback) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (Callback) context;
     }
 
     private void setupFragment() {
