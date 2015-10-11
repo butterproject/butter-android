@@ -15,7 +15,6 @@ package pct.droid.tv.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.PlaybackOverlayFragment;
@@ -48,7 +47,6 @@ import de.greenrobot.event.EventBus;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.tv.R;
-import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.events.ConfigureSubtitleEvent;
 import pct.droid.tv.events.PausePlaybackEvent;
 import pct.droid.tv.events.PlaybackProgressChangedEvent;
@@ -125,11 +123,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
         setOnItemViewSelectedListener(this);
         setInputEventHandler(this);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     @Override
