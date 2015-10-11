@@ -8,12 +8,14 @@ android {
 
     def buildNumber = (System.getenv('BUILD_NUMBER') == null ? 0 : System.getenv('BUILD_NUMBER')) as int
     def gitBranch = (System.getenv('GIT_BRANCH') == null ? 'local' : System.getenv('GIT_BRANCH').replace('origin/', ''))
+    def releaseType = (System.getenv('RELEASE_TYPE') == null ? 'NONE' : System.getenv('RELEASE_TYPE'))
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         buildConfigField 'Integer', 'BUILD_NUMBER', '' + buildNumber + ''
         buildConfigField 'String', 'GIT_BRANCH', '\"' + gitBranch + '\"'
+        buildConfigField 'String', 'RELEASE_TYPE', '\"' + releaseType + '\"'
         manifestPlaceholders = [crashlyticsApiKey: System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93"]
         versionCode buildNumber
         multiDexEnabled true
