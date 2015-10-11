@@ -53,6 +53,7 @@ import pct.droid.base.PopcornApplication;
 import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.VersionUtils;
 import timber.log.Timber;
 
 public class PopcornUpdater extends Observable {
@@ -72,7 +73,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
     private long UPDATE_INTERVAL = 3 * HOURS;
 
     public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
-    private final String DATA_URLS[] = {"https://ci.popcontime.io/android", "https://ci.popcorntime.cc/android", "https://ci.popcorntime.re/android",  "https://ci.get-popcorn.com/android"};
+    private final String DATA_URLS[] = {"https://ci.popcorntime.io/android", "https://ci.popcorntime.cc/android", "https://ci.popcorntime.re/android",  "https://ci.get-popcorn.com/android"};
     private Integer mCurrentUrl = 0;
 
     public static final String LAST_UPDATE_CHECK = "update_check";
@@ -234,7 +235,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
                         channel = variant.get(mChannelStr).get(mAbi);
                     }
 
-                    if (channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) {
+                    if ((channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) && VersionUtils.isUsingCorrectBuild()) {
                         setChanged();
                         notifyObservers(STATUS_NO_UPDATE);
                     } else {

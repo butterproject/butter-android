@@ -116,7 +116,7 @@ public class PopcornApplication extends Application implements PopcornUpdater.Li
                     installIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
                     startActivity(installIntent);
                 }
-            }).checkUpdates(true);
+            }).checkUpdatesManually();
         }
 
         File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
