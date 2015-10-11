@@ -54,7 +54,6 @@ import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.utils.NetworkUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.VersionUtils;
-import timber.log.Timber;
 
 public class PopcornUpdater extends Observable {
 
