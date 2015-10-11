@@ -281,7 +281,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
                             .apply();
 
                     if(mListener != null) {
-                        mListener.updateAvailable();
+                        mListener.updateAvailable(fileName);
                     }
                 }
             }
@@ -340,7 +340,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
     }
 
     public interface Listener {
-        void updateAvailable();
+        void updateAvailable(String fileName);
     }
 
 }

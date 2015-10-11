@@ -22,7 +22,7 @@ public class PTVMainActivity extends PTVBaseActivity {
 
         PopcornUpdater.getInstance(this, new PopcornUpdater.Listener() {
             @Override
-            public void updateAvailable() {
+            public void updateAvailable(String filePath) {
                 PTVUpdateActivity.startActivity(PTVMainActivity.this);
             }
         }).checkUpdates(false);

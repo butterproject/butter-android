@@ -12,9 +12,9 @@ public class PTVPopcornApplication extends PopcornApplication {
     }
 
     @Override
-    public void updateAvailable() {
+    public void updateAvailable(String filePath) {
         if(!VersionUtils.isAndroidTV()) {
-            super.updateAvailable();
+            super.updateAvailable(filePath);
         }
     }
 }
