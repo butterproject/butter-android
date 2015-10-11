@@ -91,8 +91,7 @@ public class MoreCardView extends BaseCardView implements View.OnFocusChangeList
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-
-            setBackgroundResource(R.color.lb_basic_card_bg_color);
+            setBackgroundResource(R.color.primary_dark);
         } else {
             setBackgroundResource(R.color.default_background);
         }
