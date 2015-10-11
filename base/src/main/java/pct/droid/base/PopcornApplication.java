@@ -51,6 +51,7 @@ import pct.droid.base.utils.FileUtils;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.base.utils.StorageUtils;
+import pct.droid.base.utils.VersionUtils;
 import timber.log.Timber;
 
 public class PopcornApplication extends Application implements PopcornUpdater.Listener {
@@ -103,7 +104,20 @@ public class PopcornApplication extends Application implements PopcornUpdater.Li
         }
         Timber.plant(new StethoTree());
 
-        TorrentService.start(this);
+        PopcornUpdater.getInstance(this, this).checkUpdates(false);
+
+        if(VersionUtils.isUsingCorrectBuild()) {
+            TorrentService.start(this);
+        } else {
+            PopcornUpdater.getInstance(this, new PopcornUpdater.Listener() {
+                @Override
+                public void updateAvailable(String updateFile) {
+                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                    installIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
+                    startActivity(installIntent);
+                }
+            }).checkUpdates(true);
+        }
 
         File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
         File directory = new File(path, "/torrents/");
@@ -128,8 +142,6 @@ public class PopcornApplication extends Application implements PopcornUpdater.Li
         OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
         builder.downloader(downloader);
         Picasso.setSingletonInstance(builder.build());
-
-        PopcornUpdater.getInstance(this, this).checkUpdates(false);
     }
 
     @Override
@@ -175,10 +187,9 @@ public class PopcornApplication extends Application implements PopcornUpdater.Li
     }
 
     @Override
-    public void updateAvailable() {
+    public void updateAvailable(String updateFile) {
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String updateFile = PrefUtils.get(this, PopcornUpdater.UPDATE_FILE, "");
         if (updateFile.length() > 0) {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_notif_logo)
