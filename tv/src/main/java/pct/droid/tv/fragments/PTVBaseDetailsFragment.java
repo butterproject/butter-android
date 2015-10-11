@@ -15,6 +15,7 @@ import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
+import android.support.v17.leanback.widget.PTVDetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 
 import com.squareup.picasso.Picasso;
@@ -91,7 +92,7 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 
 	private void setupDetailsOverviewRowPresenter() {
 		// Set detail background and style.
-		DetailsOverviewRowPresenter headerPresenter = new DetailsOverviewRowPresenter(getDetailPresenter());
+		PTVDetailsOverviewRowPresenter headerPresenter = new PTVDetailsOverviewRowPresenter(getDetailPresenter());
 		headerPresenter.setStyleLarge(true);
 		headerPresenter.setOnActionClickedListener(this);
 
