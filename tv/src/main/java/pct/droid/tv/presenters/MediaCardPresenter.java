@@ -17,6 +17,7 @@ package pct.droid.tv.presenters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.v17.leanback.widget.BaseCardView;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v7.graphics.Palette;
@@ -45,7 +46,6 @@ public class MediaCardPresenter extends Presenter {
 	private static Context mContext;
 	private static int mCardWidth;
 	private static int mCardHeight;
-    private final int mCardNoImagePadding;
 
 	private final int mDefaultInfoBackgroundColor;
 	private final int mDefaultSelectedInfoBackgroundColor;
@@ -55,8 +55,6 @@ public class MediaCardPresenter extends Presenter {
 		mDefaultInfoBackgroundColor = context.getResources().getColor(R.color.default_background);
 		mCardWidth = (int) context.getResources().getDimension(R.dimen.card_width);
 		mCardHeight = (int) context.getResources().getDimension(R.dimen.card_height);
-
-        mCardNoImagePadding = (int) context.getResources().getDimension(R.dimen.card_noimage_padding);
 	}
 
 	@Override
@@ -73,6 +71,7 @@ public class MediaCardPresenter extends Presenter {
 			}
 		};
 
+		cardView.setInfoAreaBackgroundColor(mDefaultInfoBackgroundColor);
 		cardView.setFocusable(true);
 		cardView.setFocusableInTouchMode(true);
 		return new ViewHolder(cardView);
@@ -89,7 +88,7 @@ public class MediaCardPresenter extends Presenter {
 	public void onBindLoadingViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
 		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 		cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		cardView.setMainImage(mContext.getResources().getDrawable(R.drawable.placeholder_inset));
+		cardView.setMainImage(mContext.getResources().getDrawable(R.drawable.placeholder_inset, null));
 		cardView.setTitleText(mContext.getString(R.string.loading));
 		cardView.setMainImageDimensions(mCardWidth, mCardHeight);
 	}
@@ -123,9 +122,8 @@ public class MediaCardPresenter extends Presenter {
 				}
 
 				@Override public void onBitmapFailed(Drawable errorDrawable) {
-					cardView.getMainImageView().setImageResource(R.drawable.popcorn_logo);
+					cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
                     cardView.getMainImageView().setAlpha(0.4f);
-                    cardView.getMainImageView().setPadding(mCardNoImagePadding, 0, mCardNoImagePadding, 0);
 					cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 					cardView.getMainImageView().setVisibility(View.GONE);
 					AnimUtils.fadeIn(cardView.getMainImageView());
@@ -140,9 +138,8 @@ public class MediaCardPresenter extends Presenter {
 			Picasso.with(mContext).load(item.image).resize(mCardWidth, mCardHeight).centerCrop().into(target);
 			cardView.setTarget(target);
 		} else {
-            cardView.getMainImageView().setImageResource(R.drawable.popcorn_logo);
+            cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
             cardView.getMainImageView().setAlpha(0.4f);
-            cardView.getMainImageView().setPadding(mCardNoImagePadding, 0, mCardNoImagePadding, 0);
             cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             cardView.getMainImageView().setVisibility(View.GONE);
             AnimUtils.fadeIn(cardView.getMainImageView());
@@ -170,14 +167,17 @@ public class MediaCardPresenter extends Presenter {
 
 		public CustomImageCardView(Context context) {
 			super(context);
+			setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
 		}
 
 		public CustomImageCardView(Context context, AttributeSet attrs) {
 			super(context, attrs);
+			setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
 		}
 
 		public CustomImageCardView(Context context, AttributeSet attrs, int defStyle) {
 			super(context, attrs, defStyle);
+			setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
 		}
 
 		public Palette.Swatch getCustomSelectedSwatch() {

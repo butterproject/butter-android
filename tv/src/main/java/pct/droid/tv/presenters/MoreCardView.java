@@ -2,6 +2,7 @@ package pct.droid.tv.presenters;
 
 import android.content.Context;
 import android.support.v17.leanback.widget.BaseCardView;
+import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Target;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pct.droid.tv.R;
 
 public class MoreCardView extends BaseCardView implements View.OnFocusChangeListener {
+
+    private Palette.Swatch mCustomSelectedSwatch;
+
+    private Target mTarget;
 
     @Bind(R.id.main_image)
     ImageView imageView;
@@ -40,7 +47,7 @@ public class MoreCardView extends BaseCardView implements View.OnFocusChangeList
 
         ButterKnife.bind(this, v);
 
-        setBackgroundResource(R.color.lb_error_background_color_opaque);
+        setBackgroundResource(R.color.default_background);
         setCardType(BaseCardView.CARD_TYPE_INFO_UNDER);
         setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
         setFocusable(true);
@@ -84,9 +91,10 @@ public class MoreCardView extends BaseCardView implements View.OnFocusChangeList
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
+
             setBackgroundResource(R.color.lb_basic_card_bg_color);
         } else {
-            setBackgroundResource(R.color.lb_error_background_color_opaque);
+            setBackgroundResource(R.color.default_background);
         }
     }
 }
