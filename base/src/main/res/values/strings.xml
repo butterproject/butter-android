@@ -26,7 +26,7 @@
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="update_available">New update available</string>
-    <string name="wrong_abi">Uhoh! You\'re using the wrong version of Popcorn Time for Android. The right version is being downloaded right now. If the installer is not started within a minute then your device is not supported or your internet connection is broken, which means you should try again later.</string>
+    <string name="wrong_abi">Uhoh! You\'re using the wrong version of Popcorn Time for Android. The right version is being downloaded right now, if possible. If the installer is not started within a minute then your device is not supported or your internet connection is broken, which means you should try again later. If the installer fails then you must install the right version manually.</string>
     <string name="press_install">Press to install</string>
 	<string name="movies_error" translatable="false">No movies found</string>
     <string name="loading_data">Loading data…</string>
