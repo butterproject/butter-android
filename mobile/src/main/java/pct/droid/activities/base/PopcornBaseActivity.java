@@ -17,7 +17,9 @@
 
 package pct.droid.activities.base;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -31,8 +33,10 @@ import pct.droid.R;
 import pct.droid.base.PopcornApplication;
 import pct.droid.base.beaming.BeamManager;
 import pct.droid.base.content.preferences.Prefs;
+import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
+import pct.droid.base.utils.VersionUtils;
 import pct.droid.base.vpn.VPNManager;
 import pct.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 
@@ -47,6 +51,23 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
         super.onCreate(savedInstanceState, layoutId);
         if(Fabric.isInitialized())
             CrashlyticsCore.getInstance().log(getClass().getName() + " onCreate");
+
+        if(!VersionUtils.isUsingCorrectBuild()) {
+            new AlertDialog.Builder(this)
+                    .setMessage(pct.droid.base.R.string.wrong_abi)
+                    .setCancelable(false)
+                    .show();
+
+            PopcornUpdater.getInstance(this, new PopcornUpdater.Listener() {
+                @Override
+                public void updateAvailable(String updateFile) {
+                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                    installIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
+                    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(installIntent);
+                }
+            }).checkUpdatesManually();
+        }
     }
 
     @Override

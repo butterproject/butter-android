@@ -109,21 +109,6 @@ public class PopcornApplication extends Application implements PopcornUpdater.Li
 
         if(VersionUtils.isUsingCorrectBuild()) {
             TorrentService.start(this);
-        } else {
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.wrong_abi)
-                    .setCancelable(false)
-                    .show();
-
-            PopcornUpdater.getInstance(this, new PopcornUpdater.Listener() {
-                @Override
-                public void updateAvailable(String updateFile) {
-                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
-                    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(installIntent);
-                }
-            }).checkUpdatesManually();
         }
 
         File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
