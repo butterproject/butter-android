@@ -10,7 +10,7 @@
     <color name="primary_dark">#FF303F9F</color>
 	<color name="accent">#FFFFFF</color>
 
-    <color name="default_background">#55000000</color>
+    <color name="default_background">#202129</color>
 
     <color name="episode_row_background_color">#444</color>
     <color name="episode_row_background_color_focused">#555</color>
