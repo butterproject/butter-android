@@ -47,6 +47,9 @@ public class VersionUtils {
 
     public static boolean isUsingCorrectBuild() {
         String buidAbi = getBuildAbi();
+        if(buidAbi.equalsIgnoreCase("local"))
+            return true;
+
         String deviceAbi;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             deviceAbi = Build.CPU_ABI;
@@ -66,6 +69,9 @@ public class VersionUtils {
         try {
             PackageInfo info = manager.getPackageInfo(PopcornApplication.getAppContext().getPackageName(), 0);
             Integer versionCode = info.versionCode;
+
+            if(versionCode == 0)
+                return "local";
 
             if(versionCode > 4000000) {
                 return "x86";
