@@ -188,7 +188,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
                 mVariantStr = "mobile";
             }
 
-            if (BuildConfig.BUILD_TYPE.equals("release")) {
+            if (BuildConfig.RELEASE_TYPE.toLowerCase(Locale.US).contains("release")) {
                 mChannelStr = "release";
             } else {
                 mChannelStr = BuildConfig.GIT_BRANCH;
