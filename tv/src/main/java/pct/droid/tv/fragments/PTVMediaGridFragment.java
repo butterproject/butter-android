@@ -15,7 +15,6 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.app.VerticalGridFragment;
@@ -28,7 +27,6 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -56,35 +54,52 @@ import timber.log.Timber;
  */
 public class PTVMediaGridFragment extends VerticalGridFragment implements OnItemViewClickedListener, OnItemViewSelectedListener {
 
-    private MediaProvider mProvider;
-
     private static final int NUM_COLUMNS = 6;
 
+    private MediaProvider mProvider;
     private List<MediaCardPresenter.MediaCardItem> mItems = new ArrayList<>();
-
     private ArrayObjectAdapter mAdapter;
     private Callback mCallback;
-
     private BackgroundUpdater mBackgroundUpdater;
     private int mCurrentPage = 1;
 
     public static PTVMediaGridFragment newInstance() {
-        PTVMediaGridFragment fragment = new PTVMediaGridFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setTitle(StringUtils.capWords((String) getActivity().getTitle()));
-        setupFragment();
+        return new PTVMediaGridFragment();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mCallback = (Callback) context;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setupFragment();
+   }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Activity activity = getActivity();
+        setTitle(StringUtils.capWords((String) activity.getTitle()));
+
+        if (activity instanceof Callback && mCallback == null) {
+            mCallback = (Callback) getActivity();
+        }
+
+        switch (mCallback.getType()) {
+            case MOVIE:
+                mProvider = new YTSProvider();
+                break;
+            case SHOW:
+                mProvider = new EZTVProvider();
+                break;
+        }
+
+        loadItems();
     }
 
     private void setupFragment() {
@@ -97,21 +112,10 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
         setGridPresenter(gridPresenter);
 
         mAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
-        switch (mCallback.getType()) {
-            case MOVIE:
-                mProvider = new YTSProvider();
-                break;
-            case SHOW:
-                mProvider = new EZTVProvider();
-                break;
-        }
-
         setAdapter(mAdapter);
 
         setOnItemViewClickedListener(this);
         setOnItemViewSelectedListener(this);
-
-        loadItems();
     }
 
     private MediaProvider.Filters getFilters() {
@@ -179,6 +183,7 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
             PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
@@ -204,10 +209,5 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
         MediaProvider.Filters getFilters();
 
         PTVMediaGridActivity.ProviderType getType();
-    }
-
-    private static class EndlessArrayAdapter extends ArrayObjectAdapter{
-
-
     }
 }
