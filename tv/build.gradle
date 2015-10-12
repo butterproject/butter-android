@@ -52,7 +52,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            versionNameSuffix "#" + buildNumber
+            versionNameSuffix ("#" + (buildNumber == 0 ? "local" : buildNumber).toString())
             applicationIdSuffix ".dev"
         }
     }
