@@ -69,18 +69,16 @@ import pct.droid.tv.utils.BackgroundUpdater;
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class PTVOverviewFragment
-    extends BrowseFragment
-    implements
-    OnItemViewClickedListener,
-    OnItemViewSelectedListener{
+public class PTVOverviewFragment extends BrowseFragment implements OnItemViewClickedListener, OnItemViewSelectedListener {
+
+    private Integer mSelectedRow = 0;
 
     private ArrayObjectAdapter mRowsAdapter;
     private ArrayObjectAdapter mShowAdapter;
+    private ArrayObjectAdapter mMoviesAdapter;
 
     private YTSProvider mMoviesProvider = new YTSProvider();
     private EZTVProvider mShowsProvider = new EZTVProvider();
-    private ArrayObjectAdapter mMoviesAdapter;
 
     private BackgroundUpdater mBackgroundUpdater;
 
@@ -111,11 +109,7 @@ public class PTVOverviewFragment
     }
 
     @Override
-    public void onItemClicked(
-        Presenter.ViewHolder itemViewHolder,
-        Object item,
-        RowPresenter.ViewHolder rowViewHolder,
-        Row row) {
+    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             onMediaItemClicked((MediaCardPresenter.CustomImageCardView) itemViewHolder.view, (MediaCardPresenter.MediaCardItem) item);
         } else if (item instanceof MorePresenter.MoreItem) {
@@ -124,11 +118,9 @@ public class PTVOverviewFragment
     }
 
     @Override
-    public void onItemSelected(
-        Presenter.ViewHolder itemViewHolder,
-        Object item,
-        RowPresenter.ViewHolder rowViewHolder,
-        Row row) {
+    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        mSelectedRow = mRowsAdapter.indexOf(row);
+
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
             if (overviewItem.isLoading()) return;
@@ -159,6 +151,9 @@ public class PTVOverviewFragment
                 List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
                 mShowAdapter.clear();
                 mShowAdapter.addAll(0, list);
+
+                if(mSelectedRow == 1)
+                    mBackgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
             }
 
             @DebugLog
@@ -168,7 +163,7 @@ public class PTVOverviewFragment
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "error getting show list", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.encountered_error, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -185,6 +180,9 @@ public class PTVOverviewFragment
                 List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
                 mMoviesAdapter.clear();
                 mMoviesAdapter.addAll(0, list);
+
+                if(mSelectedRow == 0)
+                    mBackgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
             }
 
             @DebugLog
@@ -238,10 +236,10 @@ public class PTVOverviewFragment
         List<MediaProvider.NavInfo> navigation = mMoviesProvider.getNavigation();
         for (MediaProvider.NavInfo info : navigation) {
             moreRowAdapter.add(new MorePresenter.MoreItem(
-                info.getId(),
-                info.getLabel(),
-                info.getIcon(),
-                info));
+                    info.getId(),
+                    info.getLabel(),
+                    info.getIcon(),
+                    info));
         }
 
         mRowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
@@ -264,10 +262,10 @@ public class PTVOverviewFragment
         List<MediaProvider.NavInfo> navigation = mShowsProvider.getNavigation();
         for (MediaProvider.NavInfo info : navigation) {
             moreRowAdapter.add(new MorePresenter.MoreItem(
-                info.getId(),
-                info.getLabel(),
-                info.getIcon(),
-                info));
+                    info.getId(),
+                    info.getLabel(),
+                    info.getIcon(),
+                    info));
         }
 
         mRowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
@@ -314,7 +312,7 @@ public class PTVOverviewFragment
             case R.id.yts_filter_popular_now:
             case R.id.yts_filter_year:
             case R.id.yts_filter_top_rated:
-                PTVMediaGridActivity.startActivity(getActivity(),moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.MOVIE, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
+                PTVMediaGridActivity.startActivity(getActivity(), moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.MOVIE, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
                 break;
             case R.id.eztv_filter_a_to_z:
             case R.id.eztv_filter_trending:
@@ -322,7 +320,7 @@ public class PTVOverviewFragment
             case R.id.eztv_filter_popular_now:
             case R.id.eztv_filter_year:
             case R.id.eztv_filter_top_rated:
-                PTVMediaGridActivity.startActivity(getActivity(),moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.SHOW, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
+                PTVMediaGridActivity.startActivity(getActivity(), moreItem.getNavInfo().getLabel(), PTVMediaGridActivity.ProviderType.SHOW, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
                 break;
             case R.id.yts_filter_genres:
                 Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_LONG).show();

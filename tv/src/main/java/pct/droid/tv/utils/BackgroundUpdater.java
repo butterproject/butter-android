@@ -71,7 +71,7 @@ public class BackgroundUpdater {
 
         //load actual background image
         Picasso.with(mContext)
-                .load(uri.toString())
+                .load(uri)
                 .error(mDefaultBackground)
                 .into(mBackgroundImageTarget);
     }
