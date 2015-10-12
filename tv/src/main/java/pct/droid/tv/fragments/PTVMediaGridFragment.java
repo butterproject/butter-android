@@ -178,9 +178,9 @@ public class PTVMediaGridFragment extends VerticalGridFragment implements OnItem
                 view.getMainImageView(),
                 PTVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
         if (media.getMedia() instanceof Movie)
-            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
+            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia());
         else if (media.getMedia() instanceof Show)
-            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia(), media.getMedia().headerImage, media.getMedia().image);
+            PTVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia());
     }
 
     @SuppressWarnings("SuspiciousMethodCalls")

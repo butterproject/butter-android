@@ -29,8 +29,6 @@ import pct.droid.tv.utils.BackgroundUpdater;
 public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieDetailsFragment.Callback {
 
     public static final String EXTRA_ITEM = "item";
-    public static final String EXTRA_BACKGROUND_URL = "background_url";
-    public static final String EXTRA_HERO_URL = "hero_url";
 
     public static final String SHARED_ELEMENT_NAME = "hero";
 
@@ -39,21 +37,19 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
     private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
 
 
-    public static Intent startActivity(Activity activity, Media item,String background,String hero) {
-        return startActivity(activity, null, item,background,hero);
+    public static Intent startActivity(Activity activity, Media item) {
+        return startActivity(activity, null, item);
     }
 
-    public static Intent startActivity(Activity activity, Bundle options, Media item,String background,String hero) {
-        Intent intent = buildIntent(activity, item, background, hero);
+    public static Intent startActivity(Activity activity, Bundle options, Media item) {
+        Intent intent = buildIntent(activity, item);
         activity.startActivity(intent, options);
         return intent;
     }
 
-    public static Intent buildIntent(Context context, Media item,String background,String hero){
+    public static Intent buildIntent(Context context, Media item){
         Intent intent = new Intent(context, PTVMediaDetailActivity.class);
         intent.putExtra(EXTRA_ITEM, item);
-        intent.putExtra(EXTRA_BACKGROUND_URL, background);
-        intent.putExtra(EXTRA_HERO_URL, hero);
         return intent;
     }
 
@@ -68,21 +64,21 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
 
         mBackgroundUpdater.initialise(this, R.color.black);
         mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
-        String backgroundImage = getIntent().getStringExtra(EXTRA_BACKGROUND_URL);
-        String heroImage = getIntent().getStringExtra(EXTRA_HERO_URL);
 
-        updateBackground(backgroundImage);
+        updateBackground(mItem.headerImage);
 
         if (VersionUtils.isLollipop()) {
             postponeEnterTransition();
         }
+
         if (mItem instanceof Movie) {
 //            .addSharedElement(View sharedElement, String name)
-            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVMovieDetailsFragment.newInstance(mItem, heroImage)).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVMovieDetailsFragment.newInstance(mItem)).commit();
         } else {
-            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVShowDetailsFragment.newInstance(mItem, heroImage)).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVShowDetailsFragment.newInstance(mItem)).commit();
         }
         getFragmentManager().executePendingTransactions();
+
         if (VersionUtils.isLollipop()) {
             startPostponedEnterTransition();
         }

@@ -458,9 +458,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
             if (media == null) return;
             Intent detailIntent = PTVMediaDetailActivity.buildIntent(
                     context,
-                    media,
-                    media.headerImage == null ? "" : media.headerImage,
-                    media.image == null ? "" : media.image);
+                    media);
             detailIntent.setAction(media.videoId);
             context.startActivity(detailIntent);
         }
