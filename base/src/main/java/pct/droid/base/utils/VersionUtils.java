@@ -70,7 +70,7 @@ public class VersionUtils {
             PackageInfo info = manager.getPackageInfo(PopcornApplication.getAppContext().getPackageName(), 0);
             Integer versionCode = info.versionCode;
 
-            if(versionCode == 0)
+            if(Integer.toString(versionCode).endsWith("000000"))
                 return "local";
 
             if(versionCode > 4000000) {
