@@ -33,12 +33,11 @@ public class PTVMovieDetailsFragment extends PTVBaseDetailsFragment implements M
 
 	YTSProvider mMovieProvider = new YTSProvider();
 
-	public static Fragment newInstance(Media media, String hero) {
+	public static Fragment newInstance(Media media) {
 		PTVMovieDetailsFragment fragment = new PTVMovieDetailsFragment();
 
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(EXTRA_ITEM, media);
-		bundle.putString(EXTRA_HERO_URL, hero);
 
 		fragment.setArguments(bundle);
 		return fragment;

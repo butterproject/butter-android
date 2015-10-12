@@ -70,9 +70,10 @@
             android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
 
         <service android:name="pct.droid.base.torrent.TorrentService" />
+        <service android:name=".service.RecommendationService" android:enabled="true" />
 
         <receiver
-            android:name=".service.BootReceiver"
+            android:name=".receivers.BootReceiver"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
@@ -80,10 +81,8 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".service.RecommendationService"
-            android:enabled="true" >
-        </service>
+        <provider android:authorities="pct.droid.tv.RecommendationContentProvider"
+            android:name=".service.recommendation.RecommendationContentProvider" android:exported="true" />
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <meta-data android:name="com.crashlytics.ApiKey" android:value="${crashlyticsApiKey}" />

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package pct.droid.tv.service;
+package pct.droid.tv.service.recommendation;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -29,7 +29,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
-import pct.droid.base.utils.PixelUtils;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 
@@ -39,10 +38,6 @@ import pct.droid.tv.R;
 public class RecommendationBuilder {
     private static final String TAG = "RecommendationBuilder";
 
-//    private static int CARD_WIDTH = 313;
-//    private static int CARD_HEIGHT = 176;
-
-    public static final String EXTRA_BACKGROUND_IMAGE_URL = "background_image_url";
     private Context mContext;
     private NotificationManager mNotificationManager;
 
@@ -88,7 +83,7 @@ public class RecommendationBuilder {
         return this;
     }
 
-    public RecommendationBuilder setBackground(String uri) {
+    public RecommendationBuilder setBackgroundContentUri(String uri) {
         mBackgroundUri = uri;
         return this;
     }
@@ -116,7 +111,7 @@ public class RecommendationBuilder {
 
             Bundle extras = new Bundle();
             if (mBackgroundUri != null) {
-                extras.putString(EXTRA_BACKGROUND_IMAGE_URL, mBackgroundUri);
+                extras.putString(Notification.EXTRA_BACKGROUND_IMAGE_URI, mBackgroundUri);
             }
 
             Bitmap image = Picasso.with(mContext)

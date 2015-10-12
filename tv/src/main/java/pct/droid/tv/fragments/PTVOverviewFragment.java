@@ -16,6 +16,7 @@ package pct.droid.tv.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -116,7 +117,7 @@ public class PTVOverviewFragment
         RowPresenter.ViewHolder rowViewHolder,
         Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
-            onMediaItemClicked((ImageCardView) itemViewHolder.view, (MediaCardPresenter.MediaCardItem) item);
+            onMediaItemClicked((MediaCardPresenter.CustomImageCardView) itemViewHolder.view, (MediaCardPresenter.MediaCardItem) item);
         } else if (item instanceof MorePresenter.MoreItem) {
             onMoreItemClicked((MorePresenter.MoreItem) item);
         }
@@ -283,27 +284,20 @@ public class PTVOverviewFragment
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
     }
 
-    private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
+    private void onMediaItemClicked(MediaCardPresenter.CustomImageCardView view, MediaCardPresenter.MediaCardItem media) {
         if (media.isLoading()) return;
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
                 view.getMainImageView(),
                 PTVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
-        if (media.getMedia() instanceof Movie) {
-            PTVMediaDetailActivity.startActivity(
-                getActivity(),
-                options, media.getMedia(),
-                media.getMedia().headerImage,
-                media.getMedia().image);
-        }
-        else if (media.getMedia() instanceof Show) {
-            PTVMediaDetailActivity.startActivity(
+
+        Media mediaItem = media.getMedia();
+        mediaItem.color = view.getCustomSelectedSwatch().getRgb();
+
+        PTVMediaDetailActivity.startActivity(
                 getActivity(),
                 options,
-                media.getMedia(),
-                media.getMedia().headerImage,
-                media.getMedia().image);
-        }
+                mediaItem);
     }
 
     private void onMoreItemClicked(MorePresenter.MoreItem moreItem) {

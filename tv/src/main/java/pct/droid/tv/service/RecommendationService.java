@@ -4,24 +4,13 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
-import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.squareup.okhttp.Call;
-
-import junit.runner.Version;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import pct.droid.base.PopcornApplication;
 import pct.droid.base.providers.media.EZTVProvider;
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
@@ -32,7 +21,8 @@ import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
-import pct.droid.tv.fragments.PTVMovieDetailsFragment;
+import pct.droid.tv.service.recommendation.RecommendationBuilder;
+import pct.droid.tv.service.recommendation.RecommendationContentProvider;
 import timber.log.Timber;
 
 public class RecommendationService extends IntentService {
@@ -149,7 +139,7 @@ public class RecommendationService extends IntentService {
                 Timber.d("Recommendation - " + movie.title);
                 PRIORITY--;
                 TOTAL_COUNT--;
-                builder.setBackground(movie.image)
+                builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(movie.headerImage, "UTF-8"))
                         .setId(TOTAL_COUNT)
                         .setPriority(PRIORITY)
                         .setTitle(movie.title)
@@ -181,7 +171,7 @@ public class RecommendationService extends IntentService {
 
                 PRIORITY--;
                 TOTAL_COUNT--;
-                builder.setBackground(show.image)
+                builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(show.headerImage, "UTF-8"))
                         .setId(TOTAL_COUNT)
                         .setPriority(PRIORITY)
                         .setTitle(show.title)
@@ -206,7 +196,7 @@ public class RecommendationService extends IntentService {
     }
 
     private PendingIntent buildPendingIntent(Media media) {
-        Intent detailIntent = PTVMediaDetailActivity.buildIntent(this, media, media.headerImage, media.image);
+        Intent detailIntent = PTVMediaDetailActivity.buildIntent(this, media);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(PTVMediaDetailActivity.class);

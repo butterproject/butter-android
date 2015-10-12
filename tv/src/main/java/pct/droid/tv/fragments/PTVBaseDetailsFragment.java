@@ -46,7 +46,7 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 		super.onActivityCreated(savedInstanceState);
 
 		mItem = getArguments().getParcelable(EXTRA_ITEM);
-		mHeroImage = getArguments().getString(EXTRA_HERO_URL);
+		mHeroImage = mItem.image;
 
 		setupAdapter();
 		setupDetailsOverviewRowPresenter();
@@ -93,6 +93,7 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 	private void setupDetailsOverviewRowPresenter() {
 		// Set detail background and style.
 		PTVDetailsOverviewRowPresenter headerPresenter = new PTVDetailsOverviewRowPresenter(getDetailPresenter());
+        headerPresenter.setBackgroundColor(mItem.color);
 		headerPresenter.setStyleLarge(true);
 		headerPresenter.setOnActionClickedListener(this);
 
@@ -107,6 +108,7 @@ public abstract class PTVBaseDetailsFragment extends DetailsFragment
 
 	private DetailsOverviewRow createDetailsOverviewRow() {
 		final DetailsOverviewRow detailsRow = new DetailsOverviewRow(mItem);
+
 		Picasso.with(getActivity()).load(mHeroImage).into(new Target() {
 			@Override
 			public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

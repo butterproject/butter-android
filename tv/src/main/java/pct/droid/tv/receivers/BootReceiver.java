@@ -12,7 +12,7 @@
  * the License.
  */
 
-package pct.droid.tv.service;
+package pct.droid.tv.receivers;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -20,6 +20,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import pct.droid.tv.service.RecommendationService;
 
 /*
  * This class extends BroadCastReceiver and publishes recommendations on bootup 

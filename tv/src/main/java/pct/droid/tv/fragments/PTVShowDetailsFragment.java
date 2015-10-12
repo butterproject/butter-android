@@ -42,12 +42,11 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
 
     private EZTVProvider mTvProvider = new EZTVProvider();
 
-    public static Fragment newInstance(Media media, String hero) {
+    public static Fragment newInstance(Media media) {
         PTVShowDetailsFragment fragment = new PTVShowDetailsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_ITEM, media);
-        bundle.putString(EXTRA_HERO_URL, hero);
 
         fragment.setArguments(bundle);
         return fragment;

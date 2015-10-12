@@ -146,7 +146,7 @@ public class PTVSearchFragment extends android.support.v17.leanback.app.SearchFr
 				if (object instanceof MediaCardPresenter.MediaCardItem) {
 					MediaCardPresenter.MediaCardItem item = (MediaCardPresenter.MediaCardItem) object;
 					Media media = item.getMedia();
-					PTVMediaDetailActivity.startActivity(getActivity(), media,media.headerImage,media.image);
+					PTVMediaDetailActivity.startActivity(getActivity(), media);
 				}
 			}
 		};
