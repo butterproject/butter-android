@@ -14,8 +14,10 @@ import java.util.List;
 
 import pct.droid.base.content.preferences.PrefItem;
 import pct.droid.base.content.preferences.PreferencesHandler;
+import pct.droid.base.updater.PopcornUpdater;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.PTVUpdateActivity;
 
 public class PTVSettingsFragment extends GuidedStepFragment implements PreferencesHandler {
 
@@ -26,6 +28,17 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setSelectedActionPosition(0);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        PopcornUpdater.getInstance(getContext()).setListener(new PopcornUpdater.Listener() {
+            @Override
+            public void updateAvailable(String filePath) {
+                PTVUpdateActivity.startActivity(getActivity());
+            }
+        });
     }
 
     @NonNull
