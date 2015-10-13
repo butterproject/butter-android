@@ -21,6 +21,8 @@
     <!-- 1.5 ratio, height to width-->
     <dimen name="card_width">120dp</dimen>
     <dimen name="card_height">180dp</dimen>
+    <dimen name="card_thumbnail_width">180dp</dimen>
+    <dimen name="card_thumbnail_height">120dp</dimen>
     <dimen name="card_noimage_padding">16dp</dimen>
 
     <dimen name="player_control_button_size">96dp</dimen>

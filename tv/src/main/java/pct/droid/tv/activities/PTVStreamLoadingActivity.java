@@ -27,30 +27,40 @@ import android.support.v4.util.Pair;
 import android.view.View;
 
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
 
 public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStreamLoadingFragment.FragmentListener {
 
-	public final static String EXTRA_INFO = "mInfo";
+	public final static String EXTRA_STREAM_INFO = "stream_info";
+	public final static String EXTRA_SHOW_INFO = "show_info";
 
 	private StreamInfo mInfo;
 	private BaseStreamLoadingFragment mFragment;
 
 	public static Intent startActivity(Activity activity, StreamInfo info) {
 		Intent i = new Intent(activity, PTVStreamLoadingActivity.class);
-		i.putExtra(EXTRA_INFO, info);
+		i.putExtra(EXTRA_STREAM_INFO, info);
+		activity.startActivity(i);
+		return i;
+	}
+
+	public static Intent startActivity(Activity activity, StreamInfo info, Show show) {
+		Intent i = new Intent(activity, PTVStreamLoadingActivity.class);
+		i.putExtra(EXTRA_STREAM_INFO, info);
+		i.putExtra(EXTRA_SHOW_INFO, show);
 		activity.startActivity(i);
 		return i;
 	}
 
 	public static Intent startActivity(Activity activity, StreamInfo info, Pair<View, String>... elements) {
 		Intent i = new Intent(activity, PTVStreamLoadingActivity.class);
-		i.putExtra(EXTRA_INFO, info);
+		i.putExtra(EXTRA_STREAM_INFO, info);
 
-		ActivityOptionsCompat options =
-				ActivityOptionsCompat.makeSceneTransitionAnimation(activity, elements);
+		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+			activity, elements);
 		ActivityCompat.startActivity(activity, i, options.toBundle());
 		return i;
 	}
@@ -60,9 +70,9 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState,R.layout.activity_streamloading);
 
-		if (!getIntent().hasExtra(EXTRA_INFO)) finish();
+		if (!getIntent().hasExtra(EXTRA_STREAM_INFO)) finish();
 
-		mInfo = getIntent().getParcelableExtra(EXTRA_INFO);
+		mInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
 		mFragment = (BaseStreamLoadingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 	}
 

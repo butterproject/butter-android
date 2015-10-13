@@ -43,8 +43,8 @@ public class EpisodeCardPresenter extends Presenter {
     private Listener clickListener;
 
     public EpisodeCardPresenter(Context context) {
-		mCardWidth = (int) context.getResources().getDimension(R.dimen.card_height);
-		mCardHeight = (int) context.getResources().getDimension(R.dimen.card_width);
+		mCardWidth = (int) context.getResources().getDimension(R.dimen.card_thumbnail_width);
+		mCardHeight = (int) context.getResources().getDimension(R.dimen.card_thumbnail_height);
 	}
 
     public void setOnClickListener(@NonNull Listener listener) {
