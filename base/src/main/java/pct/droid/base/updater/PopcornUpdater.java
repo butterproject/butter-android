@@ -198,6 +198,16 @@ public final String STATUS_NO_UPDATE = "no_updates";
                     .build();
 
             mHttpClient.newCall(request).enqueue(mCallback);
+        } else if(PrefUtils.contains(mContext, UPDATE_FILE)) {
+            String fileName = PrefUtils.get(mContext, UPDATE_FILE, "");
+            if (fileName.length() > 0) {
+                if (new File(mContext.getFilesDir().getAbsolutePath() + "/" + fileName).delete()) {
+                    PrefUtils.remove(mContext, UPDATE_FILE);
+                } else {
+                    if(mListener != null)
+                        mListener.updateAvailable(fileName);
+                }
+            }
         }
     }
 
