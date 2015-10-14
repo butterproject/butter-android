@@ -20,8 +20,7 @@ package pct.droid.base.providers.media.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.subs.SubsProvider;
@@ -41,7 +40,7 @@ public class Show extends Media implements Parcelable {
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
     public Integer seasons = 0;
-    public List<Episode> episodes = new ArrayList<>();
+    public LinkedList<Episode> episodes = new LinkedList<>();
 
     public Show(MediaProvider mediaProvider, SubsProvider subsProvider) {
         super(mediaProvider, subsProvider);
