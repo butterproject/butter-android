@@ -19,9 +19,14 @@ package pct.droid.tv.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import pct.droid.base.content.preferences.Prefs;
+import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.service.RecommendationService;
 
@@ -36,11 +41,24 @@ public class PTVLaunchActivity extends Activity {
 
 		Boolean firstRun = PrefUtils.get(this, Prefs.FIRST_RUN, true);
 
-
 		if (firstRun) {
 			//run the welcome wizard
 			PTVWelcomeActivity.startActivity(this);
-		} else
+		} else {
+			String action = getIntent().getAction();
+			Uri data = getIntent().getData();
+			if (action != null && action.equals(Intent.ACTION_VIEW) && data != null) {
+				String streamUrl = data.toString();
+				try {
+					streamUrl = URLDecoder.decode(streamUrl, "utf-8");
+					PTVStreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl));
+					finish();
+					return;
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
 			PTVMainActivity.startActivity(this);
+		}
 	}
 }

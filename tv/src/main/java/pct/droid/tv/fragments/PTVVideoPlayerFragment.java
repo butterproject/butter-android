@@ -390,6 +390,9 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
     private void setupMediaMetadata() {
         mMediaSessionMetadataApplied = false;
+        if(mStreamInfo.getMedia() == null)
+            return;
+
         final MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
         metadataBuilder.putString(MediaMetadata.METADATA_KEY_MEDIA_ID, mStreamInfo.getMedia().videoId);
         metadataBuilder.putLong(MediaMetadata.METADATA_KEY_DURATION, getDuration());
