@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -54,6 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.facebook.stetho.common.android.FragmentCompat;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 
@@ -320,7 +322,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                         doVolumeTouch(y_changed);
                     }
                     if ((int) mTouchX < (screen.widthPixels / 2)) {
-                        doBrightnessTouch(y_changed);
+                        if(Settings.System.canWrite(getContext())) {
+                            doVolumeTouch(y_changed);
+                        } else {
+                            doBrightnessTouch(y_changed);
+                        }
                     }
                 } else {
                     // Seek (Right or Left move)
