@@ -191,7 +191,7 @@ public class PopcornApplication extends Application implements PopcornUpdater.Li
                     .setDefaults(NotificationCompat.DEFAULT_ALL);
 
             Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-            notificationIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
+            notificationIntent.setDataAndType(Uri.parse("file://" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
 
             notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0));
 
