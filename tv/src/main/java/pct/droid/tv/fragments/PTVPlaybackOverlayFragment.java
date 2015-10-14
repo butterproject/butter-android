@@ -106,13 +106,21 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
 
         setFadeCompleteListener(new OnFadeCompleteListener() {
-
             @Override
             public void onFadeInComplete() {
                 super.onFadeInComplete();
                 mPlaybackControlsRow.setCurrentTime(mCurrentTime);
                 mPlaybackControlsRow.setBufferedProgress(mBufferedTime);
+                mSelectedActionId = mPlayPauseAction.getId();
+
                 if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+            }
+
+            @Override
+            public void onFadeOutComplete() {
+                super.onFadeOutComplete();
+                mCurrentMode = MODE_NOTHING;
+                mSelectedActionId = 0;
             }
         });
 
@@ -349,19 +357,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
     }
 
-    public void enableSubsButton(Boolean b) {
-        mSubsButtonEnabled = b;
-        if(b) {
-            if(mSecondaryActionsAdapter.indexOf(mClosedCaptioningAction) == -1)
-                mSecondaryActionsAdapter.add(mClosedCaptioningAction);
-        } else {
-            mSecondaryActionsAdapter.remove(mClosedCaptioningAction);
-        }
-
-        if(mRowsAdapter != null)
-            mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
-    }
-
     private void notifyPlaybackControlActionChanged(Action action) {
         if (action == null) return;
         ArrayObjectAdapter adapter = mPrimaryActionsAdapter;
@@ -373,6 +368,25 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         if (adapter.indexOf(action) >= 0) {
             adapter.notifyArrayItemRangeChanged(adapter.indexOf(action), 1);
         }
+    }
+
+    public void toggleSubtitleAction(Boolean enabled) {
+        mSubsButtonEnabled = enabled;
+        if(enabled) {
+            if(mSecondaryActionsAdapter.indexOf(mClosedCaptioningAction) == -1)
+                mSecondaryActionsAdapter.add(mClosedCaptioningAction);
+        } else {
+            mSecondaryActionsAdapter.remove(mClosedCaptioningAction);
+        }
+
+        if(mRowsAdapter != null)
+            mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+    }
+
+    public boolean isPrimaryActionSelected() {
+        return mSelectedActionId == mPlayPauseAction.getId()
+            || mSelectedActionId == mRewindAction.getId()
+            || mSelectedActionId == mFastForwardAction.getId();
     }
 
     private void invokeOpenSubtitleSettingsAction() {

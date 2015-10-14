@@ -21,6 +21,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -33,6 +35,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +77,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     private boolean mIsBackPressed = false;
     private Episode mEpisodeInfo;
     private Show mShow;
+    private boolean mAllowShowNextEpisode;
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -118,62 +123,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         setupNextEpisodeCard();
     }
 
-    private void setupNextEpisodeCard() {
-        createEpisodeInfo();
-        // if not a TV show
-        if (mShow == null) {
-            mNextEpisode.setVisibility(View.GONE);
-            return;
-        }
-
-        // if already on end of TV show episodes
-        if (mEpisodeInfo.episode == mShow.episodes.size() - 1) {
-            return;
-        }
-
-        mNextEpisode.setVisibility(View.VISIBLE);
-
-        final Episode episode = mShow.episodes.get(mEpisodeInfo.episode + 1);
-
-        String imageUrl = episode.image;
-        if (!imageUrl.equals("")) {
-            Picasso.with(this)
-                .load(imageUrl)
-                .resize(
-                    (int) getResources().getDimension(R.dimen.card_thumbnail_width),
-                    (int) getResources().getDimension(R.dimen.card_thumbnail_height)
-                ).centerCrop().error(ActivityCompat.getDrawable(this, R.drawable.banner))
-                .into(mNextEpisodeThumbnail);
-        }
-
-        mNextEpisodeTitle.setText(episode.title);
-        mNextEpisodeCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String subtitleLanguage = PrefUtils.get(
-                    PTVVideoPlayerActivity.this,
-                    Prefs.SUBTITLE_DEFAULT,
-                    SubsProvider.SUBTITLE_LANGUAGE_NONE);
-
-                List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(
-                    episode.torrents.entrySet());
-
-                @SuppressWarnings("SuspiciousMethodCalls")
-                StreamInfo info = new StreamInfo(
-                    episode,
-                    mShow,
-                    mEpisodeInfo.torrents.get(0).url,
-                    subtitleLanguage,
-                    torrents.get(0).getKey());
-
-                PTVStreamLoadingActivity.startActivity(
-                    PTVVideoPlayerActivity.this,
-                    info,
-                    mShow);
-            }
-        });
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -209,13 +158,32 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-            mNextEpisodeCancel.requestFocus();
-            mNextEpisodeCancel.setSelected(true);
-            return true;
+    public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
+        if (!mAllowShowNextEpisode) {
+            return false;
         }
-        return super.onKeyDown(keyCode, event);
+
+        if (event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP) {
+            return false;
+        }
+
+        if (!mPlaybackOverlayFragment.isVisible() || !mPlaybackOverlayFragment.isPrimaryActionSelected()) {
+            return false;
+        }
+
+        mNextEpisode.setVisibility(View.VISIBLE);
+        mNextEpisodeCancel.requestFocus();
+        mNextEpisodeCancel.setSelected(true);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mNextEpisode != null) {
+                    mNextEpisode.setVisibility(View.GONE);
+                }
+            }
+        }, 3000);
+        return true;
     }
 
     @Override
@@ -255,6 +223,78 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     public Long getResumePosition() {
         //todo: Implement ResumePosition on Android TV
         return 0L;
+    }
+
+    private void setupNextEpisodeCard() {
+        mAllowShowNextEpisode = false;
+        mNextEpisode.setVisibility(View.GONE);
+
+        createEpisodeInfo();
+        // if not a TV show
+        if (mShow == null) {
+            return;
+        }
+
+        Collections.sort(mShow.episodes, new Comparator<Episode>() {
+            @Override
+            public int compare(Episode me, Episode them) {
+                return me.season * 10 + me.episode - them.season * 10 + them.episode;
+            }
+        });
+
+        int episodeIndex = 0;
+        for (Episode episode : mShow.episodes) {
+            if (mEpisodeInfo.season == episode.season && mEpisodeInfo.episode == episode.episode) {
+                break;
+            }
+            episodeIndex++;
+        }
+
+        // if already on end of TV show episodes
+        if (episodeIndex == mShow.episodes.size() - 1) {
+            return;
+        }
+
+        mAllowShowNextEpisode = true;
+        final Episode episode = mShow.episodes.get(episodeIndex + 1);
+
+        String imageUrl = episode.image;
+        if (!imageUrl.equals("")) {
+            Picasso.with(this)
+                .load(imageUrl)
+                .resize(
+                    (int) getResources().getDimension(R.dimen.card_thumbnail_width),
+                    (int) getResources().getDimension(R.dimen.card_thumbnail_height)
+                ).centerCrop().error(ActivityCompat.getDrawable(this, R.drawable.banner))
+                .into(mNextEpisodeThumbnail);
+        }
+
+        mNextEpisodeTitle.setText(episode.title);
+        mNextEpisodeCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String subtitleLanguage = PrefUtils.get(
+                    PTVVideoPlayerActivity.this,
+                    Prefs.SUBTITLE_DEFAULT,
+                    SubsProvider.SUBTITLE_LANGUAGE_NONE);
+
+                List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(
+                    episode.torrents.entrySet());
+
+                @SuppressWarnings("SuspiciousMethodCalls")
+                StreamInfo info = new StreamInfo(
+                    episode,
+                    mShow,
+                    mEpisodeInfo.torrents.get(0).url,
+                    subtitleLanguage,
+                    torrents.get(0).getKey());
+
+                PTVStreamLoadingActivity.startActivity(
+                    PTVVideoPlayerActivity.this,
+                    info,
+                    mShow);
+            }
+        });
     }
 
     private void createEpisodeInfo() {
