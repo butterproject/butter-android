@@ -27,6 +27,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 
 import com.google.gson.Gson;
@@ -125,7 +126,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
 
             String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
             if (updateFile.length() > 0) {
-                if (new File(context.getFilesDir().getAbsolutePath() + "/" + updateFile).delete()) {
+                if (new File(updateFile).delete()) {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 }
             }
@@ -203,7 +204,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
         } else if(PrefUtils.contains(mContext, UPDATE_FILE)) {
             String fileName = PrefUtils.get(mContext, UPDATE_FILE, "");
             if (fileName.length() > 0) {
-                if (!new File(mContext.getFilesDir().getAbsolutePath() + "/" + fileName).exists()) {
+                if (!new File(fileName).exists()) {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 } else {
                     if(mListener != null)
@@ -279,22 +280,21 @@ public final String STATUS_NO_UPDATE = "no_updates";
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
-                    File downloadedFile = new File(mContext.getFilesDir(), fileName);
+                    File downloadedFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
                     BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
                     sink.writeAll(response.body().source());
                     sink.close();
 
-                    PrefUtils.save(mContext, UPDATE_FILE, fileName);
+                    String updateFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
 
-                    String update_file_path = mContext.getFilesDir().getAbsolutePath() + "/" + fileName;
                     PrefUtils.getPrefs(mContext).edit()
-                            .putString(SHA1_KEY, SHA1(update_file_path))
+                            .putString(SHA1_KEY, SHA1(updateFilePath))
                             .putString(UPDATE_FILE, fileName)
                             .putLong(SHA1_TIME, System.currentTimeMillis())
                             .apply();
 
                     if(mListener != null) {
-                        mListener.updateAvailable(fileName);
+                        mListener.updateAvailable(updateFilePath);
                     }
                 }
             }

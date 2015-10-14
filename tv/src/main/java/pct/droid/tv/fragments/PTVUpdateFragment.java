@@ -3,6 +3,7 @@ package pct.droid.tv.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
@@ -42,7 +43,7 @@ public class PTVUpdateFragment extends GuidedStepFragment {
             case R.id.action_update_now:
                 String updateFile = PrefUtils.get(getActivity(), PopcornUpdater.UPDATE_FILE, "");
                 Intent updateIntent = new Intent(Intent.ACTION_VIEW);
-                updateIntent.setDataAndType(Uri.parse("file://" + getActivity().getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
+                updateIntent.setDataAndType(Uri.parse("file://" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
 
                 getActivity().startActivity(updateIntent);
             case R.id.action_update_later:
