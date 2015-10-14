@@ -39,7 +39,6 @@ import com.squareup.okhttp.Response;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Locale;
@@ -63,8 +62,8 @@ public class PopcornUpdater extends Observable {
     private static PopcornUpdater sThis;
 
     public static int NOTIFICATION_ID = 0xDEADBEEF;    
-public final String STATUS_CHECKING = "checking_updates";
-public final String STATUS_NO_UPDATE = "no_updates";
+    public final String STATUS_CHECKING = "checking_updates";
+    public final String STATUS_NO_UPDATE = "no_updates";
     public final String STATUS_GOT_UPDATE = "got_update";
     public final String STATUS_HAVE_UPDATE = "have_update";
 
