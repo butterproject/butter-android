@@ -62,7 +62,7 @@ public class PopcornBaseActivity extends TorrentBaseActivity implements BeamMana
                 @Override
                 public void updateAvailable(String updateFile) {
                     Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(Uri.parse("file://" + getFilesDir().getAbsolutePath() + "/" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
+                    installIntent.setDataAndType(Uri.parse("file://" + updateFile), PopcornUpdater.ANDROID_PACKAGE);
                     installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(installIntent);
                 }
