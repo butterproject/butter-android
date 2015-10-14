@@ -279,7 +279,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
-                    File downloadedFile = new File(mContext.getCacheDir(), fileName);
+                    File downloadedFile = new File(mContext.getFilesDir(), fileName);
                     BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
                     sink.writeAll(response.body().source());
                     sink.close();
