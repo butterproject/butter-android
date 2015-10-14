@@ -69,7 +69,7 @@
             android:layout_marginBottom="@dimen/player_controls_distance"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:text="@android:string/cancel"/>
+            android:text="@string/play"/>
     </RelativeLayout>
 
 </FrameLayout>
