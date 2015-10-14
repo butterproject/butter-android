@@ -246,7 +246,8 @@ public class PopcornUpdater extends Observable {
                         channel = variant.get(mChannelStr).get(mAbi);
                     }
 
-                    if ((channel == null || channel.checksum.equals(PrefUtils.get(mContext, SHA1_KEY, "0")) || channel.versionCode <= mVersionCode) && VersionUtils.isUsingCorrectBuild()) {
+                    ApplicationInfo appinfo = mContext.getApplicationInfo();
+                    if ((channel == null || channel.checksum.equals(SHA1(appinfo.sourceDir)) || channel.versionCode <= mVersionCode) && VersionUtils.isUsingCorrectBuild()) {
                         setChanged();
                         notifyObservers(STATUS_NO_UPDATE);
                     } else {
@@ -288,7 +289,7 @@ public class PopcornUpdater extends Observable {
 
                     PrefUtils.getPrefs(mContext).edit()
                             .putString(SHA1_KEY, SHA1(updateFilePath))
-                            .putString(UPDATE_FILE, fileName)
+                            .putString(UPDATE_FILE, updateFilePath)
                             .putLong(SHA1_TIME, System.currentTimeMillis())
                             .apply();
 
