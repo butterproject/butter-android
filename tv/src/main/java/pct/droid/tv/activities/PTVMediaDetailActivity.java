@@ -1,27 +1,34 @@
+/*
+ * This file is part of Popcorn Time.
+ *
+ * Popcorn Time is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Popcorn Time is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package pct.droid.tv.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.app.ActivityCompat;
-import android.view.View;
-
-import java.util.List;
-import java.util.Map;
 
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
 import pct.droid.base.utils.VersionUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
-import pct.droid.tv.fragments.PTVBaseDetailsFragment;
 import pct.droid.tv.fragments.PTVMovieDetailsFragment;
 import pct.droid.tv.fragments.PTVShowDetailsFragment;
 import pct.droid.tv.utils.BackgroundUpdater;
