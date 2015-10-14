@@ -47,6 +47,8 @@ import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import okio.BufferedSink;
+import okio.Okio;
 import pct.droid.base.BuildConfig;
 import pct.droid.base.Constants;
 import pct.droid.base.PopcornApplication;
@@ -121,9 +123,9 @@ public final String STATUS_NO_UPDATE = "no_updates";
             PrefUtils.save(mContext, SHA1_KEY, SHA1(appinfo.sourceDir));
             PrefUtils.save(mContext, SHA1_TIME, System.currentTimeMillis());
 
-            String update_file = PrefUtils.get(mContext, UPDATE_FILE, "");
-            if (update_file.length() > 0) {
-                if (new File(context.getFilesDir().getAbsolutePath() + "/" + update_file).delete()) {
+            String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
+            if (updateFile.length() > 0) {
+                if (new File(context.getFilesDir().getAbsolutePath() + "/" + updateFile).delete()) {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 }
             }
@@ -201,7 +203,7 @@ public final String STATUS_NO_UPDATE = "no_updates";
         } else if(PrefUtils.contains(mContext, UPDATE_FILE)) {
             String fileName = PrefUtils.get(mContext, UPDATE_FILE, "");
             if (fileName.length() > 0) {
-                if (new File(mContext.getFilesDir().getAbsolutePath() + "/" + fileName).delete()) {
+                if (!new File(mContext.getFilesDir().getAbsolutePath() + "/" + fileName).exists()) {
                     PrefUtils.remove(mContext, UPDATE_FILE);
                 } else {
                     if(mListener != null)
@@ -277,9 +279,10 @@ public final String STATUS_NO_UPDATE = "no_updates";
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
-                    FileOutputStream fos = mContext.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
-                    fos.write(response.body().bytes());
-                    fos.close();
+                    File downloadedFile = new File(mContext.getCacheDir(), fileName);
+                    BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
+                    sink.writeAll(response.body().source());
+                    sink.close();
 
                     PrefUtils.save(mContext, UPDATE_FILE, fileName);
 
