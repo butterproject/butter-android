@@ -16,12 +16,10 @@ package pct.droid.tv.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
@@ -50,7 +48,6 @@ import pct.droid.base.providers.media.MediaProvider;
 import pct.droid.base.providers.media.YTSProvider;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
-import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.torrent.StreamInfo;
@@ -60,7 +57,7 @@ import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVMediaDetailActivity;
 import pct.droid.tv.activities.PTVMediaGridActivity;
 import pct.droid.tv.activities.PTVSearchActivity;
-import pct.droid.tv.activities.PTVSettingsActivity;
+import pct.droid.tv.activities.PTVPreferencesActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.presenters.MediaCardPresenter;
 import pct.droid.tv.presenters.MorePresenter;
@@ -304,7 +301,7 @@ public class PTVOverviewFragment extends BrowseFragment implements OnItemViewCli
                 openPlayerTestDialog();
                 break;
             case R.id.more_item_settings:
-                PTVSettingsActivity.startActivity(getActivity());
+                PTVPreferencesActivity.startActivity(getActivity());
                 break;
             case R.id.yts_filter_a_to_z:
             case R.id.yts_filter_trending:

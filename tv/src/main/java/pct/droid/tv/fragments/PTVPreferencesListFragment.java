@@ -12,20 +12,20 @@ import java.util.List;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.tv.R;
 
-public class PTVSettingsListFragment extends GuidedStepFragment {
+public class PTVPreferencesListFragment extends GuidedStepFragment {
 
     private static final String TITLE_ARG = "titleres", ITEMS_ARG = "items", CURRENT_POS = "current";
 
     private SelectionListener mListener;
 
 
-    public static PTVSettingsListFragment newInstance(@NonNull String title, @NonNull String[] items, int currentPos, @NonNull SelectionListener listener) {
+    public static PTVPreferencesListFragment newInstance(@NonNull String title, @NonNull String[] items, int currentPos, @NonNull SelectionListener listener) {
         Bundle args = new Bundle();
         args.putString(TITLE_ARG, title);
         args.putStringArray(ITEMS_ARG, items);
         args.putInt(CURRENT_POS, currentPos);
 
-        PTVSettingsListFragment fragment = new PTVSettingsListFragment();
+        PTVPreferencesListFragment fragment = new PTVPreferencesListFragment();
         fragment.setArguments(args);
         fragment.mListener = listener;
         return fragment;
