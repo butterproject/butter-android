@@ -60,7 +60,7 @@
         <activity android:name=".activities.PTVMediaGridActivity" />
         <activity android:name=".activities.PTVSearchActivity" />
         <activity
-            android:name=".activities.PTVSettingsActivity"
+            android:name=".activities.PTVPreferencesActivity"
             android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
         <activity android:name=".activities.PTVStreamLoadingActivity" />
         <activity android:name=".activities.PTVVideoPlayerActivity" />

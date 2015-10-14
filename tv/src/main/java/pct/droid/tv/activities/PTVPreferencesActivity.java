@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.GuidedStepFragment;
 
-import pct.droid.tv.R;
 import pct.droid.tv.activities.base.PTVBaseActivity;
-import pct.droid.tv.fragments.PTVSettingsFragment;
+import pct.droid.tv.fragments.PTVPreferencesFragment;
 
-public class PTVSettingsActivity extends PTVBaseActivity {
+public class PTVPreferencesActivity extends PTVBaseActivity {
 
     public static Intent startActivity(Activity activity) {
-        Intent intent = new Intent(activity, PTVSettingsActivity.class);
+        Intent intent = new Intent(activity, PTVPreferencesActivity.class);
         activity.startActivity(intent);
         return intent;
     }
@@ -22,7 +21,7 @@ public class PTVSettingsActivity extends PTVBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (null == savedInstanceState) {
-            GuidedStepFragment.add(getFragmentManager(), new PTVSettingsFragment());
+            GuidedStepFragment.add(getFragmentManager(), new PTVPreferencesFragment());
         }
     }
 

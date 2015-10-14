@@ -19,7 +19,7 @@ import pct.droid.base.utils.LocaleUtils;
 import pct.droid.tv.R;
 import pct.droid.tv.activities.PTVUpdateActivity;
 
-public class PTVSettingsFragment extends GuidedStepFragment implements PreferencesHandler {
+public class PTVPreferencesFragment extends GuidedStepFragment implements PreferencesHandler {
 
     private List<GuidedAction> mActions;
     private List<PrefItem> mPrefs;
@@ -91,12 +91,12 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
 
     @Override
     public void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, final int lowLimit, int highLimit, final OnSelectionListener onClickListener) {
-        PTVSettingsListFragment fragment;
+        PTVPreferencesListFragment fragment;
 
         switch (mode) {
             case SIMPLE_CHOICE:
             case ADVANCED_CHOICE:
-                fragment = PTVSettingsListFragment.newInstance(title, items, (int) currentValue, new PTVSettingsListFragment.SelectionListener() {
+                fragment = PTVPreferencesListFragment.newInstance(title, items, (int) currentValue, new PTVPreferencesListFragment.SelectionListener() {
                     @Override
                     public void onSelect(int position) {
                         onClickListener.onSelection(position, null);
@@ -111,7 +111,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
                     array[i] = Integer.toString(i + lowLimit);
                 }
 
-                fragment = PTVSettingsListFragment.newInstance(title, array, ((int) currentValue - lowLimit), new PTVSettingsListFragment.SelectionListener() {
+                fragment = PTVPreferencesListFragment.newInstance(title, array, ((int) currentValue - lowLimit), new PTVPreferencesListFragment.SelectionListener() {
                     @Override
                     public void onSelect(int position) {
                         onClickListener.onSelection(0, position + lowLimit);
@@ -125,7 +125,7 @@ public class PTVSettingsFragment extends GuidedStepFragment implements Preferenc
                 final Integer[] colorCodes = new Integer[] {
                         Color.WHITE, Color.BLACK, Color.YELLOW, Color.RED, Color.BLUE, Color.MAGENTA, Color.GREEN, Color.DKGRAY, Color.LTGRAY
                 };
-                fragment = PTVSettingsListFragment.newInstance(title, colors, Arrays.asList(colorCodes).indexOf(currentValue), new PTVSettingsListFragment.SelectionListener() {
+                fragment = PTVPreferencesListFragment.newInstance(title, colors, Arrays.asList(colorCodes).indexOf(currentValue), new PTVPreferencesListFragment.SelectionListener() {
                     @Override
                     public void onSelect(int position) {
                         onClickListener.onSelection(position, colorCodes[position]);
