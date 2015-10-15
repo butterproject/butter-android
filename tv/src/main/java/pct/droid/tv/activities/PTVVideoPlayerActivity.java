@@ -79,12 +79,17 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
-
         createStreamInfo();
 
         mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIsBackPressed = false;
     }
 
     @Override
@@ -97,7 +102,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
         if (mPlayerFragment.isMediaSessionActive()) {
             mPlaybackOverlayFragment.setKeepEventBusRegistration(true);
-            return;
         }
         else {
             mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
@@ -106,16 +110,16 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    public void onVisibleBehindCanceled() {
-        mPlayerFragment.pause();
-        super.onVisibleBehindCanceled();
-    }
-
-    @Override
     protected void onDestroy() {
         if (mService != null)
             mService.stopStreaming();
         super.onDestroy();
+    }
+
+    @Override
+    public void onVisibleBehindCanceled() {
+        mPlayerFragment.pause();
+        super.onVisibleBehindCanceled();
     }
 
     @Override
@@ -130,7 +134,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public StreamInfo getInfo() {
-        if(mStreamInfo == null)
+        if (mStreamInfo == null)
             createStreamInfo();
         return mStreamInfo;
     }
@@ -138,12 +142,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     @Override
     public TorrentService getService() {
         return mService;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mIsBackPressed = false;
     }
 
     @Override
@@ -171,5 +169,13 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         }
 
         mStreamInfo.setVideoLocation(location);
+    }
+
+    public void skipTo(StreamInfo info, Show show) {
+        mPlayerFragment.deactivateMediaSession();
+        mPlayerFragment.onPlaybackEndReached();
+        getTorrentService().removeListener(mPlayerFragment);
+        finish();
+        PTVStreamLoadingActivity.startActivity(this, info, show);
     }
 }
