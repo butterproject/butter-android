@@ -68,15 +68,14 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 	@SuppressLint("MissingSuperCall")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState,R.layout.activity_streamloading);
+		super.onCreate(savedInstanceState, R.layout.activity_streamloading);
 
 		if (!getIntent().hasExtra(EXTRA_STREAM_INFO)) finish();
-
 		mInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
 		mFragment = (BaseStreamLoadingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 	}
 
-	@Override
+    @Override
 	public StreamInfo getStreamInformation() {
 		return mInfo;
 	}
@@ -87,7 +86,8 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 		mFragment.cancelStream();
 	}
 
-	@Override public void onTorrentServiceDisconnected() {
+	@Override
+    public void onTorrentServiceDisconnected() {
 		if (null != mFragment) {
 			mFragment.onTorrentServiceDisconnected();
 		}
@@ -99,5 +99,4 @@ public class PTVStreamLoadingActivity extends PTVBaseActivity implements BaseStr
 			mFragment.onTorrentServiceConnected();
 		}
 	}
-
 }
