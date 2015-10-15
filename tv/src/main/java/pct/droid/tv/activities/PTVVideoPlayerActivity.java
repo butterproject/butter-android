@@ -155,6 +155,11 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
+    public void onTorrentServiceDisconnected() {
+        mService.removeListener(mPlayerFragment);
+    }
+
+    @Override
     public Long getResumePosition() {
         //todo: Implement ResumePosition on Android TV
         return 0L;
