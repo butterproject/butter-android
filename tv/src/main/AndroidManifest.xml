@@ -164,8 +164,8 @@
         <activity
             android:name=".activities.PTVPreferencesActivity"
             android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
-        <activity android:name=".activities.PTVStreamLoadingActivity" />
-        <activity android:name=".activities.PTVVideoPlayerActivity" />
+        <activity android:name=".activities.PTVStreamLoadingActivity" android:noHistory="true" />
+        <activity android:name=".activities.PTVVideoPlayerActivity" android:noHistory="true" />
         <activity android:name=".activities.PTVTrailerPlayerActivity" />
         <activity
             android:name=".activities.PTVUpdateActivity"

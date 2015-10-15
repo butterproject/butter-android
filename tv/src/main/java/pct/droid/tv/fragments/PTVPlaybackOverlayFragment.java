@@ -17,9 +17,13 @@
 package pct.droid.tv.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.PlaybackOverlayFragment;
 import android.support.v17.leanback.app.PlaybackOverlaySupportFragment;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
@@ -46,10 +50,23 @@ import android.util.Log;
 import android.view.InputEvent;
 import android.view.KeyEvent;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import de.greenrobot.event.EventBus;
+import pct.droid.base.content.preferences.Prefs;
+import pct.droid.base.providers.media.models.Episode;
+import pct.droid.base.providers.media.models.Media;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.torrent.StreamInfo;
+import pct.droid.base.utils.PrefUtils;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.PTVStreamLoadingActivity;
+import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.events.ConfigureSubtitleEvent;
 import pct.droid.tv.events.PausePlaybackEvent;
 import pct.droid.tv.events.PlaybackProgressChangedEvent;
@@ -69,7 +86,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         OnItemViewSelectedListener,
         PlaybackOverlaySupportFragment.InputEventHandler {
     private static final String TAG = "PlaybackOverlayFragment";
-    private static final int BACKGROUND_TYPE = PlaybackOverlayFragment.BG_LIGHT;
 
     private static final int MODE_NOTHING = 0;
     private static final int MODE_FAST_FORWARD = 1;
@@ -79,15 +95,20 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private ArrayObjectAdapter mPrimaryActionsAdapter;
     private ArrayObjectAdapter mSecondaryActionsAdapter;
     private ClosedCaptioningAction mClosedCaptioningAction;
-    private FastForwardAction mFastForwardAction;
     private ScaleVideoAction mScaleVideoAction;
     private PlayPauseAction mPlayPauseAction;
     private RewindAction mRewindAction;
+    private FastForwardAction mFastForwardAction;
+    private PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
+    private PlaybackControlsRow.SkipNextAction mSkipNextAction;
     private PlaybackControlsRowPresenter mPlaybackControlsRowPresenter;
     private PlaybackControlsRow mPlaybackControlsRow;
     private Handler mHandler;
     private Runnable mRunnable;
     private StreamInfo mStreamInfo;
+    private Show mShow;
+    private Episode mNextEpisode;
+    private Episode mPreviousEpisode;
 
     private long mSelectedActionId = 0;
     private int mCurrentMode = MODE_NOTHING;
@@ -103,8 +124,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
-        mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
-
         setFadeCompleteListener(new OnFadeCompleteListener() {
             @Override
             public void onFadeInComplete() {
@@ -113,7 +132,8 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
                 mPlaybackControlsRow.setBufferedProgress(mBufferedTime);
                 mSelectedActionId = mPlayPauseAction.getId();
 
-                if (mRowsAdapter != null) mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+                if (mRowsAdapter != null)
+                    mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
             }
 
             @Override
@@ -126,14 +146,20 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
         mHandler = new Handler();
 
-        setBackgroundType(BACKGROUND_TYPE);
+        setBackgroundType(PlaybackOverlayFragment.BG_LIGHT);
         setFadingEnabled(false);
-
-        initialisePlaybackControlPresenter();
-        setupPlaybackControlItemsToInitialisingState();
-
         setOnItemViewSelectedListener(this);
         setInputEventHandler(this);
+        initialisePlaybackControlPresenter();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
+        setupPlaybackControlItemsToInitialisingState();
+        setupTVShowNextPreviousEpisodes();
     }
 
     @Override
@@ -155,7 +181,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     @Override
-    public void onActionClicked(Action action) {
+    public void onActionClicked(@NonNull Action action) {
         if (action.getId() == mPlayPauseAction.getId()) {
             invokeTogglePlaybackAction(mPlayPauseAction.getIndex() == PlayPauseAction.PLAY);
         }
@@ -164,6 +190,12 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         }
         else if (action.getId() == mClosedCaptioningAction.getId()) {
             invokeOpenSubtitleSettingsAction();
+        }
+        if (mSkipPreviousAction != null && action.getId() == mSkipPreviousAction.getId()) {
+            playSelectedEpisode(mPreviousEpisode);
+        }
+        if (mSkipNextAction != null && action.getId() == mSkipNextAction.getId()) {
+            playSelectedEpisode(mNextEpisode);
         }
 
         if (action instanceof PlaybackControlsRow.MultiAction) {
@@ -186,7 +218,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     @Override
-    public boolean handleInputEvent(InputEvent event) {
+    public boolean handleInputEvent(@NonNull InputEvent event) {
         if (event instanceof KeyEvent) {
             KeyEvent keyEvent = (KeyEvent) event;
             if (keyEvent.getKeyCode() != KeyEvent.KEYCODE_DPAD_CENTER) return false;
@@ -212,7 +244,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     @SuppressWarnings("unused")
-    public void onEvent(Object event) {
+    public void onEvent(@NonNull Object event) {
         if (event instanceof UpdatePlaybackStateEvent) {
             UpdatePlaybackStateEvent updatePlaybackStateEvent = (UpdatePlaybackStateEvent) event;
             if (updatePlaybackStateEvent.isPlaying()) {
@@ -268,6 +300,23 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         }
     }
 
+    public void toggleSubtitleAction(Boolean enabled) {
+        mSubsButtonEnabled = enabled;
+        if(enabled) {
+            if(mSecondaryActionsAdapter.indexOf(mClosedCaptioningAction) == -1)
+                mSecondaryActionsAdapter.add(mClosedCaptioningAction);
+        } else {
+            mSecondaryActionsAdapter.remove(mClosedCaptioningAction);
+        }
+
+        if(mRowsAdapter != null)
+            mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
+    }
+
+    public void setKeepEventBusRegistration(boolean keepEventBusRegistration) {
+        this.mKeepEventBusRegistration = keepEventBusRegistration;
+    }
+
     private void initialisePlaybackControlPresenter() {
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
         mPlaybackControlsRowPresenter = new PlaybackControlsRowPresenter(new DescriptionPresenter());
@@ -320,7 +369,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         setupPlaybackControlItemsActions();
     }
 
-    private void setupPrimaryRowPlaybackControl(ControlButtonPresenterSelector presenterSelector) {
+    private void setupPrimaryRowPlaybackControl(@NonNull ControlButtonPresenterSelector presenterSelector) {
         mPrimaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
         mPlaybackControlsRow.setPrimaryActionsAdapter(mPrimaryActionsAdapter);
 
@@ -329,13 +378,23 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mFastForwardAction = new FastForwardAction(activity);
         mRewindAction = new RewindAction(activity);
 
+        if (mPreviousEpisode != null) {
+            mSkipPreviousAction = new PlaybackControlsRow.SkipPreviousAction(activity);
+            mPrimaryActionsAdapter.add(mSkipPreviousAction);
+        }
+
         // Add main controls to primary adapter.
         mPrimaryActionsAdapter.add(mRewindAction);
         mPrimaryActionsAdapter.add(mPlayPauseAction);
         mPrimaryActionsAdapter.add(mFastForwardAction);
+
+        if (mNextEpisode != null) {
+            mSkipNextAction = new PlaybackControlsRow.SkipNextAction(activity);
+            mPrimaryActionsAdapter.add(mSkipNextAction);
+        }
     }
 
-    private void setupSecondaryRowPlaybackControl(PresenterSelector presenterSelector) {
+    private void setupSecondaryRowPlaybackControl(@NonNull PresenterSelector presenterSelector) {
         mSecondaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
         mPlaybackControlsRow.setSecondaryActionsAdapter(mSecondaryActionsAdapter);
 
@@ -357,8 +416,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mSecondaryActionsAdapter.add(mClosedCaptioningAction);
     }
 
-    private void notifyPlaybackControlActionChanged(Action action) {
-        if (action == null) return;
+    private void notifyPlaybackControlActionChanged(@NonNull Action action) {
         ArrayObjectAdapter adapter = mPrimaryActionsAdapter;
         if (adapter.indexOf(action) >= 0) {
             adapter.notifyArrayItemRangeChanged(adapter.indexOf(action), 1);
@@ -368,25 +426,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         if (adapter.indexOf(action) >= 0) {
             adapter.notifyArrayItemRangeChanged(adapter.indexOf(action), 1);
         }
-    }
-
-    public void toggleSubtitleAction(Boolean enabled) {
-        mSubsButtonEnabled = enabled;
-        if(enabled) {
-            if(mSecondaryActionsAdapter.indexOf(mClosedCaptioningAction) == -1)
-                mSecondaryActionsAdapter.add(mClosedCaptioningAction);
-        } else {
-            mSecondaryActionsAdapter.remove(mClosedCaptioningAction);
-        }
-
-        if(mRowsAdapter != null)
-            mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
-    }
-
-    public boolean isPrimaryActionSelected() {
-        return mSelectedActionId == mPlayPauseAction.getId()
-            || mSelectedActionId == mRewindAction.getId()
-            || mSelectedActionId == mFastForwardAction.getId();
     }
 
     private void invokeOpenSubtitleSettingsAction() {
@@ -471,10 +510,77 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         EventBus.getDefault().post(new ScaleVideoEvent());
     }
 
-    public void setKeepEventBusRegistration(boolean keepEventBusRegistration) {
-        this.mKeepEventBusRegistration = keepEventBusRegistration;
+    private void setupTVShowNextPreviousEpisodes() {
+        if (mStreamInfo == null) {
+            mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
+        }
+
+        if (!mStreamInfo.isShow()) {
+            return;
+        }
+
+        Episode mEpisodeInfo = (Episode) mStreamInfo.getMedia();
+        mShow = getActivity().getIntent().getParcelableExtra(PTVVideoPlayerActivity.EXTRA_SHOW_INFO);
+        if (mShow == null) return;
+
+        SkipEpisodeAsyncTask skipEpisodeAsyncTask = new SkipEpisodeAsyncTask(mEpisodeInfo);
+        skipEpisodeAsyncTask.execute(mShow);
     }
 
+    private void playSelectedEpisode(@NonNull final Episode episode) {
+        List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(episode.torrents.entrySet());
+
+        if (torrents.size() == 0) {
+            // probably will never happen, just in case
+            new AlertDialog.Builder(getActivity())
+                .setMessage(getString(R.string.no_video_found))
+                .show();
+        }
+        else if (torrents.size() == 1) {
+            Media.Torrent torrent = torrents.get(0).getValue();
+            String torrentKey = torrents.get(0).getKey();
+            onTorrentSelected(episode, torrent, torrentKey);
+        }
+        else {
+            final ArrayList<String> choices = new ArrayList<>(episode.torrents.keySet());
+            final ArrayList<Media.Torrent> torrentArray = new ArrayList<>(episode.torrents.values());
+            new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.choose_quality))
+                .setSingleChoiceItems(
+                    choices.toArray(new CharSequence[choices.size()]),
+                    0,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            onTorrentSelected(episode, torrentArray.get(index), choices.get(index));
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
+    }
+
+    private void onTorrentSelected(@NonNull Episode episode, @NonNull Media.Torrent torrent, @NonNull String torrentKey) {
+        String subtitleLanguage = PrefUtils.get(
+            getActivity(),
+            Prefs.SUBTITLE_DEFAULT,
+            SubsProvider.SUBTITLE_LANGUAGE_NONE);
+
+        StreamInfo info = new StreamInfo(
+            episode,
+            mShow,
+            torrent.url,
+            subtitleLanguage,
+            torrentKey);
+
+        PTVStreamLoadingActivity.startActivity(
+            getActivity(),
+            info,
+            mShow);
+    }
+
+    /**
+     * Detail presenter to allow showing movie or TV show details properly.
+     */
     class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
         @Override
         protected void onBindDescription(ViewHolder viewHolder, Object item) {
@@ -490,7 +596,7 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         }
     }
 
-    public static class ScaleVideoAction extends Action {
+    class ScaleVideoAction extends Action {
         public ScaleVideoAction(Context context) {
             super(R.id.control_scale);
             setIcon(ResourcesCompat.getDrawable(
@@ -498,6 +604,59 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
                 R.drawable.ic_av_aspect_ratio,
                 null));
             setLabel1(context.getString(R.string.scale));
+        }
+    }
+
+    /**
+     * Sort available episodes of a TV show. Then determine if a previous or next
+     * episode is available. Sorting probably can take a while.
+     */
+    class SkipEpisodeAsyncTask extends AsyncTask<Show, Void, Void> {
+
+        private final Episode mEpisode;
+
+        public SkipEpisodeAsyncTask(Episode episode) {
+            mEpisode = episode;
+        }
+
+        @Override
+        protected Void doInBackground(Show... shows) {
+            for (Show show : shows) {
+                Collections.sort(show.episodes, new Comparator<Episode>() {
+                    @Override
+                    public int compare(Episode me, Episode them) {
+                        return (me.season * 10 + me.episode) - (them.season * 10 + them.episode);
+                    }
+                });
+
+                int episodeIndex = 0;
+                int episodes = show.episodes.size() - 1;
+
+                for (Episode episode : show.episodes) {
+                    if (mEpisode.season == episode.season && mEpisode.episode == episode.episode) {
+                        break;
+                    }
+                    episodeIndex++;
+                }
+
+                if (episodeIndex < episodes) {
+                    mNextEpisode = show.episodes.get(episodeIndex + 1);
+                }
+
+                if (episodeIndex > 0) {
+                    mPreviousEpisode = show.episodes.get(episodeIndex - 1);
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (mPreviousEpisode != null || mNextEpisode != null) {
+                setupPlaybackControlItemsToReadyState();
+            }
         }
     }
 }

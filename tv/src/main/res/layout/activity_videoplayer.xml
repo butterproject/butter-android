@@ -34,42 +34,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
-        android:id="@+id/next_episode"
-        android:layout_width="@dimen/card_thumbnail_width"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_margin="@dimen/player_controls_margin"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:background="@color/default_background">
-        <ImageView
-            android:id="@+id/next_episode_thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/card_thumbnail_height"
-            android:background="@drawable/banner"/>
-        <TextView
-            android:id="@+id/next_episode_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/next_episode_thumbnail"
-            android:padding="@dimen/player_controls_distance"
-            android:text="@string/no_title_available"
-            android:singleLine="true"
-            android:ellipsize="end"/>
-        <Button
-            android:id="@+id/next_episode_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/next_episode_title"
-            android:layout_marginEnd="@dimen/player_controls_distance"
-            android:layout_marginBottom="@dimen/player_controls_distance"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:text="@string/play"/>
-    </RelativeLayout>
-
 </FrameLayout>
