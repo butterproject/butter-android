@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
+import pct.droid.base.activities.TorrentActivity;
 import pct.droid.base.content.preferences.Prefs;
 import pct.droid.base.providers.media.models.Episode;
 import pct.droid.base.providers.media.models.Media;
@@ -537,15 +538,23 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
                 .show();
         }
         else if (torrents.size() == 1) {
-            Media.Torrent torrent = torrents.get(0).getValue();
-            String torrentKey = torrents.get(0).getKey();
-            onTorrentSelected(episode, torrent, torrentKey);
+            final Media.Torrent torrent = torrents.get(0).getValue();
+            final String torrentKey = torrents.get(0).getKey();
+
+            new AlertDialog.Builder(getActivity())
+                .setTitle(episode.title)
+                .setPositiveButton(getString(R.string.play), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        onTorrentSelected(episode, torrent, torrentKey);
+                    }
+                }).show();
         }
         else {
             final ArrayList<String> choices = new ArrayList<>(episode.torrents.keySet());
             final ArrayList<Media.Torrent> torrentArray = new ArrayList<>(episode.torrents.values());
             new AlertDialog.Builder(getActivity())
-                .setTitle(getString(R.string.choose_quality))
+                .setTitle(episode.title)
                 .setSingleChoiceItems(
                     choices.toArray(new CharSequence[choices.size()]),
                     0,
@@ -560,6 +569,11 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     private void onTorrentSelected(@NonNull Episode episode, @NonNull Media.Torrent torrent, @NonNull String torrentKey) {
+        if (getActivity() instanceof TorrentActivity) {
+            TorrentActivity torrentActivity = (TorrentActivity) getActivity();
+            torrentActivity.getTorrentService().stopStreaming();
+        }
+
         String subtitleLanguage = PrefUtils.get(
             getActivity(),
             Prefs.SUBTITLE_DEFAULT,
