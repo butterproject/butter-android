@@ -17,11 +17,10 @@
 
 package pct.droid.tv.activities;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import pct.droid.base.providers.media.models.Media;
@@ -36,13 +35,9 @@ import pct.droid.tv.utils.BackgroundUpdater;
 public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieDetailsFragment.Callback {
 
     public static final String EXTRA_ITEM = "item";
-
     public static final String SHARED_ELEMENT_NAME = "hero";
 
-    private Media mItem;
-
     private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
-
 
     public static Intent startActivity(Activity activity, Media item) {
         return startActivity(activity, null, item);
@@ -64,25 +59,24 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
      * Called when the activity is first created.
      */
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_media_details);
 
         mBackgroundUpdater.initialise(this, R.color.black);
-        mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
+        Media media = getIntent().getParcelableExtra(EXTRA_ITEM);
 
-        updateBackground(mItem.headerImage);
+        updateBackground(media.headerImage);
 
         if (VersionUtils.isLollipop()) {
             postponeEnterTransition();
         }
 
-        if (mItem instanceof Movie) {
-//            .addSharedElement(View sharedElement, String name)
-            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVMovieDetailsFragment.newInstance(mItem)).commit();
+        if (media instanceof Movie) {
+            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVMovieDetailsFragment.newInstance(media)).commit();
         } else {
-            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVShowDetailsFragment.newInstance(mItem)).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment, PTVShowDetailsFragment.newInstance(media)).commit();
         }
         getFragmentManager().executePendingTransactions();
 
@@ -100,7 +94,4 @@ public class PTVMediaDetailActivity extends PTVBaseActivity implements PTVMovieD
     protected void updateBackground(String backgroundImage) {
         mBackgroundUpdater.updateBackground(backgroundImage);
     }
-
-
-
 }
