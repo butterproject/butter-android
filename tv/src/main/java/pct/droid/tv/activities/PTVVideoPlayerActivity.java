@@ -103,9 +103,6 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
             mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
             PrefUtils.save(this, BaseVideoPlayerFragment.RESUME_POSITION, 0);
         }
-
-        if (mService != null)
-            mService.removeListener(mPlayerFragment);
     }
 
     @Override
