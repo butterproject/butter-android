@@ -104,8 +104,8 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private PlaybackControlsRow.SkipNextAction mSkipNextAction;
     private PlaybackControlsRowPresenter mPlaybackControlsRowPresenter;
     private PlaybackControlsRow mPlaybackControlsRow;
-    private Handler mHandler;
-    private Runnable mRunnable;
+    private Handler mHandlerPlayback;
+    private Handler mHandlerPlaybackSpeed;
     private StreamInfo mStreamInfo;
     private Show mShow;
     private Episode mNextEpisode;
@@ -119,6 +119,8 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private int mSeek;
     private int mBufferedTime;
     private int mCurrentTime;
+    private int mFastForwardSpeed = SeekForwardEvent.MINIMUM_SEEK_SPEED;
+    private int mRewindSpeed = SeekBackwardEvent.MINIMUM_SEEK_SPEED;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,7 +147,8 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             }
         });
 
-        mHandler = new Handler();
+        mHandlerPlayback = new Handler();
+        mHandlerPlaybackSpeed = new Handler();
 
         setBackgroundType(PlaybackOverlayFragment.BG_LIGHT);
         setFadingEnabled(false);
@@ -157,7 +160,6 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mStreamInfo = ((PTVVideoPlayerFragment.Callback) getActivity()).getInfo();
         setupPlaybackControlItemsToInitialisingState();
         setupTVShowNextPreviousEpisodes();
@@ -445,52 +447,84 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
     private void invokeFastForwardAction() {
         final int refreshDuration = 100;
-        mRunnable = new Runnable() {
+        final int speedRefreshDuration = 5000;
+
+        Runnable runnablePlayback = new Runnable() {
             @Override
             public void run() {
                 if (mCurrentMode == MODE_FAST_FORWARD) {
                     int currentTime = mPlaybackControlsRow.getCurrentTime();
-                    currentTime += SeekForwardEvent.MINIMUM_SEEK_SPEED;
+                    currentTime += mFastForwardSpeed;
 
                     if (currentTime < mPlaybackControlsRow.getTotalTime()) {
                         mPlaybackControlsRow.setCurrentTime(currentTime);
                         mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
-                        mSeek += SeekForwardEvent.MINIMUM_SEEK_SPEED;
+                        mSeek += mFastForwardSpeed;
                     }
 
-                    mHandler.postDelayed(this, refreshDuration);
-                }
-                else if (mSelectedActionId == mFastForwardAction.getId()) {
+                    mHandlerPlayback.postDelayed(this, refreshDuration);
+                } else if (mSelectedActionId == mFastForwardAction.getId()) {
                     triggerFastForwardEvent();
                 }
             }
         };
-        mHandler.postDelayed(mRunnable, refreshDuration);
+
+        Runnable runnablePlaybackSpeed = new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentMode == MODE_FAST_FORWARD) {
+                    mFastForwardSpeed *= 2;
+                    mHandlerPlaybackSpeed.postDelayed(this, speedRefreshDuration);
+                }
+                else {
+                    mFastForwardSpeed = SeekForwardEvent.MINIMUM_SEEK_SPEED;
+                }
+            }
+        };
+
+        mHandlerPlayback.postDelayed(runnablePlayback, refreshDuration);
+        mHandlerPlaybackSpeed.postDelayed(runnablePlaybackSpeed, speedRefreshDuration);
     }
 
     private void invokeRewindAction() {
         final int refreshDuration = 100;
-        mRunnable = new Runnable() {
+        final int speedRefreshDuration = 5000;
+
+        Runnable runnablePlayback = new Runnable() {
             @Override
             public void run() {
                 if (mCurrentMode == MODE_REWIND) {
                     int currentTime = mPlaybackControlsRow.getCurrentTime();
-                    currentTime -= SeekBackwardEvent.MINIMUM_SEEK_SPEED;
+                    currentTime -= mRewindSpeed;
 
                     if (currentTime > 0) {
                         mPlaybackControlsRow.setCurrentTime(currentTime);
                         mRowsAdapter.notifyArrayItemRangeChanged(0, 1);
-                        mSeek += SeekBackwardEvent.MINIMUM_SEEK_SPEED;
+                        mSeek += mRewindSpeed;
                     }
 
-                    mHandler.postDelayed(this, refreshDuration);
-                }
-                else if (mSelectedActionId == mRewindAction.getId()) {
+                    mHandlerPlayback.postDelayed(this, refreshDuration);
+                } else if (mSelectedActionId == mRewindAction.getId()) {
                     triggerRewindEvent();
                 }
             }
         };
-        mHandler.postDelayed(mRunnable, refreshDuration);
+
+        Runnable runnablePlaybackSpeed = new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentMode == MODE_REWIND) {
+                    mRewindSpeed *= 2;
+                    mHandlerPlaybackSpeed.postDelayed(this, speedRefreshDuration);
+                }
+                else {
+                    mRewindSpeed = SeekBackwardEvent.MINIMUM_SEEK_SPEED;
+                }
+            }
+        };
+
+        mHandlerPlayback.postDelayed(runnablePlayback, refreshDuration);
+        mHandlerPlaybackSpeed.postDelayed(runnablePlaybackSpeed, speedRefreshDuration);
     }
 
     private void triggerFastForwardEvent() {
@@ -586,10 +620,16 @@ public class PTVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             subtitleLanguage,
             torrentKey);
 
-        PTVStreamLoadingActivity.startActivity(
-            getActivity(),
-            info,
-            mShow);
+        if (getActivity() instanceof PTVVideoPlayerActivity) {
+            PTVVideoPlayerActivity activity = (PTVVideoPlayerActivity) getActivity();
+            activity.skipTo(info, mShow);
+        }
+        else {
+            PTVStreamLoadingActivity.startActivity(
+                getActivity(),
+                info,
+                mShow);
+        }
     }
 
     /**
