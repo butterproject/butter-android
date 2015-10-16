@@ -43,8 +43,6 @@ import pct.droid.base.R;
 import pct.droid.base.providers.media.models.Genre;
 import pct.droid.base.providers.media.models.Media;
 import pct.droid.base.providers.media.models.Movie;
-import pct.droid.base.providers.meta.MetaProvider;
-import pct.droid.base.providers.meta.TraktProvider;
 import pct.droid.base.providers.subs.SubsProvider;
 import pct.droid.base.providers.subs.YSubsProvider;
 import pct.droid.base.utils.LocaleUtils;
@@ -53,15 +51,15 @@ public class YTSProvider extends MediaProvider {
 
     private static final YTSProvider sMediaProvider = new YTSProvider();
     private static Integer CURRENT_API = 0;
-    private static final String[] API_URLS = {
-            "https://yts.to/api/v2/",
-            "https://yts.io/api/v2/",
-            "https://yts.sh/api/v2/",
-            "https://xor.image.yt/api/v2/",
-            "http://cloudflare.com/api/v2/",
-            "http://reddit.com/api/v2/",
+    private static final String[][] API_URLS = {
+            {"https://xor.image.yt/api/v2/", "ptt"},
+            {"http://cloudflare.com/api/v2/", "ptt"},
+            {"http://reddit.com/api/v2/", "ptt"},
+            {"https://yts.to/api/v2/", "json"},
+            {"https://yts.io/api/v2/", "json"},
+            {"https://yts.sh/api/v2/", "json"}
     };
-    public static String CURRENT_URL = API_URLS[CURRENT_API];
+    public static String CURRENT_URL = API_URLS[CURRENT_API][0];
 
     private static final SubsProvider sSubsProvider = new YSubsProvider();
     private static Filters sFilters = new Filters();
@@ -158,7 +156,7 @@ public class YTSProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(CURRENT_URL + "list_movies_pct.json?" + query);
+        requestBuilder.url(CURRENT_URL + "list_movies_pct." + API_URLS[CURRENT_API][1] + "?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, filters, callback);
@@ -173,7 +171,7 @@ public class YTSProvider extends MediaProvider {
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
-        if(!API_URLS[CURRENT_API].contains("yts"))
+        if(!API_URLS[CURRENT_API][0].contains("yts"))
             requestBuilder.addHeader("Host", "xor.image.yt");
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -182,7 +180,14 @@ public class YTSProvider extends MediaProvider {
                 if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
                 } else {
-                    url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);
+                    if(url.contains(API_URLS[CURRENT_API][0])) {
+                        url = url.replace(API_URLS[CURRENT_API][0], API_URLS[CURRENT_API + 1][0]);
+                        url = url.replace(API_URLS[CURRENT_API][1], API_URLS[CURRENT_API + 1][1]);
+                        CURRENT_API++;
+                    } else {
+                        url = url.replace(API_URLS[CURRENT_API - 1][0], API_URLS[CURRENT_API][0]);
+                        url = url.replace(API_URLS[CURRENT_API - 1][1], API_URLS[CURRENT_API][1]);
+                    }
                     requestBuilder.url(url);
                     fetchList(currentList, requestBuilder, filters, callback);
                 }

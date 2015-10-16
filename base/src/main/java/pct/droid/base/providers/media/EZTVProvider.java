@@ -143,7 +143,12 @@ public class EZTVProvider extends MediaProvider {
                 if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
                 } else {
-                    url = url.replace(API_URLS[CURRENT_API], API_URLS[++CURRENT_API]);
+                    if(url.contains(API_URLS[CURRENT_API])) {
+                        url = url.replace(API_URLS[CURRENT_API], API_URLS[CURRENT_API + 1]);
+                        CURRENT_API++;
+                    } else {
+                        url = url.replace(API_URLS[CURRENT_API - 1], API_URLS[CURRENT_API]);
+                    }
                     requestBuilder.url(url);
                     fetchList(currentList, requestBuilder, filters, callback);
                 }
