@@ -52,9 +52,9 @@ public class YTSProvider extends MediaProvider {
     private static final YTSProvider sMediaProvider = new YTSProvider();
     private static Integer CURRENT_API = 0;
     private static final String[][] API_URLS = {
-            {"https://xor.image.yt/api/v2/", "ptt"},
-            {"http://cloudflare.com/api/v2/", "ptt"},
-            {"http://reddit.com/api/v2/", "ptt"},
+            {"https://xor.image.yt/api/v2/", "ppt"},
+            {"http://cloudflare.com/api/v2/", "ppt"},
+            {"http://reddit.com/api/v2/", "ppt"},
             {"https://yts.to/api/v2/", "json"},
             {"https://yts.io/api/v2/", "json"},
             {"https://yts.sh/api/v2/", "json"}
