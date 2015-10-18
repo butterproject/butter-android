@@ -70,7 +70,7 @@ public class PTVTrailerPlayerActivity extends PTVBaseActivity implements PTVVide
 
         mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
-        mPlaybackOverlayFragment.enableSubsButton(false);
+        mPlaybackOverlayFragment.toggleSubtitleAction(false);
 
         QueryYouTubeTask youTubeTask = new QueryYouTubeTask();
         youTubeTask.execute(YouTubeData.getYouTubeVideoId(youTubeUrl));

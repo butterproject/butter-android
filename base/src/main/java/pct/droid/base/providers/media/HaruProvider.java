@@ -28,6 +28,7 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -344,7 +345,7 @@ public class HaruProvider extends MediaProvider {
                     }
                 }
 
-                show.episodes = new ArrayList<>(episodeMap.values());
+                show.episodes = new LinkedList<>(episodeMap.values());
 
                 media = show;
             }

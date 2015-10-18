@@ -23,7 +23,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import butterknife.ButterKnife;
 import pct.droid.base.fragments.BaseVideoPlayerFragment;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.PrefUtils;
@@ -37,7 +39,8 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     private PTVVideoPlayerFragment mPlayerFragment;
     private PTVPlaybackOverlayFragment mPlaybackOverlayFragment;
 
-    public final static String INFO = "stream_info";
+    public final static String EXTRA_STREAM_INFO = "stream_info";
+    public final static String EXTRA_SHOW_INFO = "episode_info";
 
     private StreamInfo mStreamInfo;
     private boolean mIsBackPressed = false;
@@ -46,9 +49,21 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         return startActivity(context, info, 0);
     }
 
-    public static Intent startActivity(Context context, StreamInfo info, long resumePosition) {
+    public static Intent startActivity(
+        Context context,
+        StreamInfo info,
+        @SuppressWarnings("UnusedParameters") long resumePosition) {
         Intent i = new Intent(context, PTVVideoPlayerActivity.class);
-        i.putExtra(INFO, info);
+        i.putExtra(EXTRA_STREAM_INFO, info);
+        // todo: resume position
+        context.startActivity(i);
+        return i;
+    }
+
+    public static Intent startActivity(Context context, StreamInfo info, Show show) {
+        Intent i = new Intent(context, PTVVideoPlayerActivity.class);
+        i.putExtra(EXTRA_STREAM_INFO, info);
+        i.putExtra(EXTRA_SHOW_INFO, show);
         // todo: resume position
         context.startActivity(i);
         return i;
@@ -64,21 +79,17 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
-
         createStreamInfo();
 
         mPlayerFragment = (PTVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         mPlaybackOverlayFragment = (PTVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
+        ButterKnife.bind(this);
     }
 
-    private void createStreamInfo() {
-        mStreamInfo = getIntent().getParcelableExtra(INFO);
-
-        String location = mStreamInfo.getVideoLocation();
-        if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
-            location = "file://" + location;
-        }
-        mStreamInfo.setVideoLocation(location);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIsBackPressed = false;
     }
 
     @Override
@@ -91,21 +102,11 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
         if (mPlayerFragment.isMediaSessionActive()) {
             mPlaybackOverlayFragment.setKeepEventBusRegistration(true);
-            return;
         }
         else {
             mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
             PrefUtils.save(this, BaseVideoPlayerFragment.RESUME_POSITION, 0);
         }
-
-        if (mService != null)
-            mService.removeListener(mPlayerFragment);
-    }
-
-    @Override
-    public void onVisibleBehindCanceled() {
-        mPlayerFragment.pause();
-        super.onVisibleBehindCanceled();
     }
 
     @Override
@@ -113,6 +114,12 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         if (mService != null)
             mService.stopStreaming();
         super.onDestroy();
+    }
+
+    @Override
+    public void onVisibleBehindCanceled() {
+        mPlayerFragment.pause();
+        super.onVisibleBehindCanceled();
     }
 
     @Override
@@ -127,7 +134,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     public StreamInfo getInfo() {
-        if(mStreamInfo == null)
+        if (mStreamInfo == null)
             createStreamInfo();
         return mStreamInfo;
     }
@@ -138,14 +145,13 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mIsBackPressed = false;
+    public void onTorrentServiceConnected() {
+        mService.addListener(mPlayerFragment);
     }
 
     @Override
-    public void onTorrentServiceConnected() {
-        mService.addListener(mPlayerFragment);
+    public void onTorrentServiceDisconnected() {
+        mService.removeListener(mPlayerFragment);
     }
 
     @Override
@@ -153,5 +159,23 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
         //todo: Implement ResumePosition on Android TV
         return 0L;
     }
-}
 
+    private void createStreamInfo() {
+        mStreamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
+        String location = mStreamInfo.getVideoLocation();
+
+        if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
+            location = "file://" + location;
+        }
+
+        mStreamInfo.setVideoLocation(location);
+    }
+
+    public void skipTo(StreamInfo info, Show show) {
+        mPlayerFragment.deactivateMediaSession();
+        mPlayerFragment.onPlaybackEndReached();
+        getTorrentService().removeListener(mPlayerFragment);
+        finish();
+        PTVStreamLoadingActivity.startActivity(this, info, show);
+    }
+}

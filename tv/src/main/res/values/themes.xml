@@ -61,9 +61,11 @@
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
         <item name="android:colorAccent">@color/primary_dark</item>
 
+        <item name="android:colorControlNormal">@color/accent</item>
+        <item name="android:colorControlActivated">@color/accent</item>
+
         <item name="playbackProgressPrimaryColor">@color/accent</item>
         <item name="playbackControlsIconHighlightColor">@color/primary</item>
-        <item name="defaultBrandColor">@color/primary</item>
     </style>
 
 </resources>

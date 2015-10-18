@@ -271,6 +271,7 @@ public class PTVVideoPlayerFragment extends BaseVideoPlayerFragment {
     public void onPlaybackEndReached() {
         EventBus.getDefault().post(new UpdatePlaybackStateEvent(false));
         mMediaSession.setActive(false);
+        mMediaSession.release();
     }
 
     @Override

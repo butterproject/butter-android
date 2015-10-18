@@ -51,9 +51,11 @@ import java.text.DecimalFormat;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pct.droid.base.fragments.BaseStreamLoadingFragment;
+import pct.droid.base.providers.media.models.Show;
 import pct.droid.base.torrent.StreamInfo;
 import pct.droid.base.utils.ThreadUtils;
 import pct.droid.tv.R;
+import pct.droid.tv.activities.PTVStreamLoadingActivity;
 import pct.droid.tv.activities.PTVVideoPlayerActivity;
 import pct.droid.tv.utils.BackgroundUpdater;
 
@@ -155,11 +157,17 @@ public class PTVStreamLoadingFragment extends BaseStreamLoadingFragment {
 		}
 	}
 
-	@Override protected void startPlayerActivity(String location, int resumePosition) {
-
+	@Override
+	protected void startPlayerActivity(String location, int resumePosition) {
 		if (getActivity() != null && !mPlayerStarted) {
 			mStreamInfo.setVideoLocation(location);
-			PTVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, resumePosition);
+			if (getActivity().getIntent().hasExtra(PTVStreamLoadingActivity.EXTRA_SHOW_INFO)) {
+				Show show = getActivity().getIntent().getParcelableExtra(PTVStreamLoadingActivity.EXTRA_SHOW_INFO);
+				PTVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, show);
+			}
+			else {
+				PTVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, resumePosition);
+			}
 		}
 	}
 

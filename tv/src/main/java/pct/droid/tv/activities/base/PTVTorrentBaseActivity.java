@@ -36,7 +36,9 @@ import pct.droid.base.torrent.TorrentService;
 import pct.droid.base.utils.LocaleUtils;
 import pct.droid.base.utils.PrefUtils;
 
-public abstract class PTVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity {
+public abstract class PTVTorrentBaseActivity
+    extends FragmentActivity
+    implements TorrentListener, TorrentActivity, ServiceConnection {
 
     protected Handler mHandler;
     protected TorrentService mService;
@@ -53,14 +55,16 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        TorrentService.bindHere(this, mServiceConnection);
+        TorrentService.bindHere(this, this);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (null != mService)
-            unbindService(mServiceConnection);
+    protected void onPause() {
+        super.onPause();
+        if (null != mService) {
+            mService.removeListener(this);
+            unbindService(this);
+        }
     }
 
     @Override
@@ -78,22 +82,20 @@ public abstract class PTVTorrentBaseActivity extends FragmentActivity implements
         return mService;
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
-            mService.addListener(PTVTorrentBaseActivity.this);
-            mService.setCurrentActivity(PTVTorrentBaseActivity.this);
-            onTorrentServiceConnected();
-        }
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        mService = ((TorrentService.ServiceBinder) service).getService();
+        mService.addListener(this);
+        mService.setCurrentActivity(this);
+        onTorrentServiceConnected();
+    }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService.removeListener(PTVTorrentBaseActivity.this);
-            mService = null;
-            onTorrentServiceDisconnected();
-        }
-    };
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        mService.removeListener(this);
+        mService = null;
+        onTorrentServiceDisconnected();
+    }
 
     public void onTorrentServiceConnected() {
         // Placeholder

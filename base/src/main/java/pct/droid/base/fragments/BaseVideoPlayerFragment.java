@@ -274,6 +274,14 @@ public abstract class BaseVideoPlayerFragment
         PrefUtils.save(getActivity(), RESUME_POSITION, 0);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mCallback.getService() != null) {
+            mCallback.getService().removeListener(this);
+        }
+    }
+
     public void onMediaReady(){
         loadMedia();
     }

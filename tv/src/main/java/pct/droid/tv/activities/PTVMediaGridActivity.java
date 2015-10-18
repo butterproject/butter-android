@@ -17,6 +17,7 @@
 
 package pct.droid.tv.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ public class PTVMediaGridActivity extends PTVBaseActivity implements PTVMediaGri
         return intent;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_movie_media_grid);

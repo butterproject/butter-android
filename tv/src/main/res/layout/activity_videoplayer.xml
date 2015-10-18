@@ -17,14 +17,16 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/fragment"
         class="pct.droid.tv.fragments.PTVVideoPlayerFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_videoplayer"/>
 
     <fragment
         android:id="@+id/playback_overlay_fragment"

@@ -113,14 +113,12 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
 
         // start first torrent
         if (episode.torrents.size() == 1) {
-            List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(
-                episode.torrents.entrySet());
+            List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(episode.torrents.entrySet());
             onTorrentSelected(episode, torrents.get(0));
         }
         // ask user which torrent
         else {
-            showTorrentsDialog(episode, episode
-                .torrents);
+            showTorrentsDialog(episode, episode.torrents);
         }
     }
 
@@ -193,14 +191,16 @@ public class PTVShowDetailsFragment extends PTVBaseDetailsFragment
             getActivity(),
             Prefs.SUBTITLE_DEFAULT,
             SubsProvider.SUBTITLE_LANGUAGE_NONE);
+
+        Show show = getShowItem();
+
         StreamInfo info = new StreamInfo(
                 episode,
-                getShowItem(),
+                show,
                 torrent.getValue().url,
                 subtitleLanguage,
                 torrent.getKey());
 
-        PTVStreamLoadingActivity.startActivity(getActivity(), info);
+        PTVStreamLoadingActivity.startActivity(getActivity(), info, show);
     }
-
 }
