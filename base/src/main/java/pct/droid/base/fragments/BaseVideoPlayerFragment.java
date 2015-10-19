@@ -33,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +89,6 @@ public abstract class BaseVideoPlayerFragment
 
     private LibVLC mLibVLC;
     private MediaPlayer mMediaPlayer;
-    private String mLocation;
     private Long mResumePosition = 0l;
     private Long mDuration = 0l;
 
@@ -135,6 +135,12 @@ public abstract class BaseVideoPlayerFragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) mCallback = (Callback) context;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
@@ -144,50 +150,51 @@ public abstract class BaseVideoPlayerFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = super.onCreateView(inflater, container, savedInstanceState);
-        return mRootView;
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mRootView = view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getActivity() instanceof Callback && mCallback == null) mCallback = (Callback) getActivity();
+        if (getActivity() instanceof Callback && mCallback == null) {
+            mCallback = (Callback) getActivity();
+        }
 
         mResumePosition = mCallback.getResumePosition();
+        PrefUtils.save(getActivity(), RESUME_POSITION, mResumePosition);
+
+        if (!VLCInstance.hasCompatibleCPU(getContext())) {
+            getActivity().finish();
+            return;
+        }
+
         StreamInfo streamInfo = mCallback.getInfo();
 
         if (streamInfo == null){
-            //why is this null?
-            //https://fabric.io/popcorn-time/android/apps/pct.droid/issues/55a801cd2f038749478f93c7
-            //have added logging to activity lifecycle methods to further track down this issue
             getActivity().finish();
             return;
         }
 
         mMedia = streamInfo.getMedia();
 
-        if (!VLCInstance.hasCompatibleCPU(getContext())) {
-            return;
-        }
-
         mLibVLC = LibVLC();
-        mMediaPlayer = new MediaPlayer(mLibVLC);
-        mMediaPlayer.setEventListener(this);
         mLibVLC.setOnHardwareAccelerationError(this);
 
-        PrefUtils.save(getActivity(), RESUME_POSITION, mResumePosition);
+        mMediaPlayer = new MediaPlayer(mLibVLC);
+        mMediaPlayer.setEventListener(this);
 
         if (mCallback.getService() != null) {
             mCallback.getService().addListener(this);
         }
 
         setProgressVisible(true);
-
-        // media may still be loading
-        if (!TextUtils.isEmpty(streamInfo.getVideoLocation())) {
-            loadMedia();
-        }
 
         if (null == streamInfo.getSubtitleLanguage()) {
             // Get selected default subtitle
@@ -207,76 +214,43 @@ public abstract class BaseVideoPlayerFragment
         }
 
         updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, getResources().getInteger(R.integer.player_subtitles_default_text_size)));
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Callback) mCallback = (Callback) context;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (mLibVLC != null) {
-            saveVideoCurrentTime();
-            /*
-             * Pausing here generates errors because the vout is constantly
-             * trying to refresh itself every 80ms while the surface is not
-             * accessible anymore. To workaround that, we keep the last known
-             * position in the preferences
-             */
-            mMediaPlayer.stop();
-        }
-        else {
-            mDuration = 0l;
-        }
-
-        mMediaPlayer.getVLCVout().removeCallback(this);
-        BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
-    }
-
-    private void saveVideoCurrentTime() {
-        long currentTime = mMediaPlayer.getTime();
-        PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
+        prepareVlcVout();
+        loadMedia();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        if (mMediaPlayer == null) {
-            mLibVLC = LibVLC();
-            mMediaPlayer = new MediaPlayer(mLibVLC);
-            mMediaPlayer.setEventListener(this);
-            mLibVLC.setOnHardwareAccelerationError(this);
-        }
-
-        IVLCVout vlcVout = mMediaPlayer.getVLCVout();
-        if (vlcVout.areViewsAttached()) {
-            vlcVout.detachViews();
-        }
-
-        vlcVout.setVideoView(getVideoSurface());
-        vlcVout.addCallback(this);
-        vlcVout.attachViews();
-
+        prepareVlcVout();
         BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
-
         onProgressChanged(PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition), mDuration);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
 
-        PrefUtils.save(getActivity(), RESUME_POSITION, 0);
+        saveVideoCurrentTime();
+        mMediaPlayer.stop();
+
+        final IVLCVout vlcout = mMediaPlayer.getVLCVout();
+        vlcout.removeCallback(this);
+        vlcout.detachViews();
+
+        BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        PrefUtils.save(getActivity(), RESUME_POSITION, 0);
+
+        mMediaPlayer.release();
+        mLibVLC.release();
+
         if (mCallback.getService() != null) {
             mCallback.getService().removeListener(this);
         }
@@ -287,7 +261,8 @@ public abstract class BaseVideoPlayerFragment
     }
 
     protected void disableHardwareAcceleration() {
-
+        mDisabledHardwareAcceleration = true;
+        saveVideoCurrentTime();
     }
 
     /**
@@ -296,39 +271,37 @@ public abstract class BaseVideoPlayerFragment
     @SuppressWarnings({"unchecked"})
     protected void loadMedia() {
         StreamInfo streamInfo = mCallback.getInfo();
-        if (TextUtils.isEmpty(streamInfo.getVideoLocation())){
+
+        String videoLocation;
+        if (TextUtils.isEmpty(streamInfo.getVideoLocation())) {
             Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
             getActivity().finish();
             return;
         }
-
-        if (null != streamInfo.getVideoLocation()) {
-            mLocation = streamInfo.getVideoLocation();
-            if (!mLocation.startsWith("file://") && !mLocation.startsWith("http://") && !mLocation.startsWith("https://")) {
-                mLocation = "file://" + mLocation;
+        else {
+            videoLocation = streamInfo.getVideoLocation();
+            if (!videoLocation.startsWith("file://") && !videoLocation.startsWith("http://") && !videoLocation.startsWith("https://")) {
+                videoLocation = "file://" + videoLocation;
             }
         }
 
-        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(mLibVLC, Uri.parse(mLocation));
-        int hwFlag = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
-        int flags = hwFlag | VLCOptions.MEDIA_VIDEO;
-        VLCOptions.setMediaOptions(media, getActivity(), flags);
-        mMediaPlayer.setMedia(media);
-        media.release();
-        mEnded = false;
+        int flags = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
+        flags = flags | VLCOptions.MEDIA_VIDEO;
 
-        long resumeTime = PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition);
-        if (resumeTime > 0) {
-            mMediaPlayer.setTime(resumeTime);
+        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(mLibVLC, Uri.parse(videoLocation));
+        VLCOptions.setMediaOptions(media, getActivity(), flags);
+
+        mMediaPlayer.setMedia(media);
+
+        long resumeFrom = PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition);
+        if (resumeFrom > 0) {
+            mMediaPlayer.setTime(resumeFrom);
         }
 
         mDuration = mMediaPlayer.getLength();
         mMediaPlayer.play();
+        mEnded = false;
     }
-
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	 * abstract
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     protected abstract void setProgressVisible(boolean visible);
 
@@ -348,10 +321,6 @@ public abstract class BaseVideoPlayerFragment
 
     protected abstract SurfaceView getVideoSurface();
 
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	 * vlc methods
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
     protected void setSeeking(boolean seeking) {
         mSeeking = seeking;
     }
@@ -360,10 +329,22 @@ public abstract class BaseVideoPlayerFragment
         return mSeeking;
     }
 
-    private void resumeVideo() {
-        if (mLibVLC == null)
-            return;
+    private void prepareVlcVout() {
+        final IVLCVout vlcVout = mMediaPlayer.getVLCVout();
 
+        if (!vlcVout.areViewsAttached()) {
+            vlcVout.setVideoView(getVideoSurface());
+            vlcVout.addCallback(this);
+            vlcVout.attachViews();
+        }
+    }
+
+    private void saveVideoCurrentTime() {
+        long currentTime = mMediaPlayer.getTime();
+        PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
+    }
+
+    private void resumeVideo() {
         if (getActivity() != null) {
             long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
             mDuration = mMediaPlayer.getLength();
@@ -383,9 +364,6 @@ public abstract class BaseVideoPlayerFragment
     }
 
     public void togglePlayPause() {
-        if (mLibVLC == null)
-            return;
-
         if (mEnded) {
             loadMedia();
         }
@@ -439,14 +417,12 @@ public abstract class BaseVideoPlayerFragment
      * @return true if video is played using VLC
      */
     protected boolean isPlaying() {
-        return mLibVLC != null && mMediaPlayer.isPlaying();
+        return mMediaPlayer.isPlaying();
     }
 
     private void endReached() {
         mEnded = true;
         onPlaybackEndReached();
-		/* Exit player when reaching the end */
-        // TODO: END, ASK USER TO CLOSE PLAYER?
     }
 
     public abstract void onPlaybackEndReached();
@@ -476,7 +452,7 @@ public abstract class BaseVideoPlayerFragment
         }
 
         // sanity check
-        if (displayWidth * displayHeight == 0 || mVideoWidth * mVideoHeight == 0) {
+        if (displayWidth * displayHeight <= 1 || mVideoWidth * mVideoHeight <= 1) {
             Timber.e("Invalid surface size");
             onErrorEncountered();
             return;
@@ -540,9 +516,15 @@ public abstract class BaseVideoPlayerFragment
         }
 
         // set display size
+        int finalWidth = (int) Math.ceil(displayWidth * mVideoWidth / mVideoVisibleWidth);
+        int finalHeight = (int) Math.ceil(displayHeight * mVideoHeight / mVideoVisibleHeight);
+
+        SurfaceHolder holder = getVideoSurface().getHolder();
+        holder.setFixedSize(finalWidth, finalHeight);
+
         ViewGroup.LayoutParams lp = getVideoSurface().getLayoutParams();
-        lp.width = (int) Math.ceil(displayWidth * mVideoWidth / mVideoVisibleWidth);
-        lp.height = (int) Math.ceil(displayHeight * mVideoHeight / mVideoVisibleHeight);
+        lp.width = finalWidth;
+        lp.height = finalHeight;
         getVideoSurface().setLayoutParams(lp);
         getVideoSurface().invalidate();
     }
@@ -678,7 +660,7 @@ public abstract class BaseVideoPlayerFragment
     public void onEvent(MediaPlayer.Event event) {
         switch (event.type) {
             case MediaPlayer.Event.Playing:
-                getVideoSurface().setKeepScreenOn(true);
+                getVideoSurface().getHolder().setKeepScreenOn(true);
                 mDuration = mMediaPlayer.getLength();
                 resumeVideo();
                 setProgressVisible(false);
@@ -686,12 +668,12 @@ public abstract class BaseVideoPlayerFragment
                 updatePlayPauseState();
                 break;
             case MediaPlayer.Event.Paused:
-                getVideoSurface().setKeepScreenOn(false);
+                getVideoSurface().getHolder().setKeepScreenOn(false);
                 saveVideoCurrentTime();
                 updatePlayPauseState();
                 break;
             case MediaPlayer.Event.Stopped:
-                getVideoSurface().setKeepScreenOn(false);
+                getVideoSurface().getHolder().setKeepScreenOn(false);
                 updatePlayPauseState();
                 break;
             case MediaPlayer.Event.EndReached:
@@ -725,29 +707,19 @@ public abstract class BaseVideoPlayerFragment
     }
 
     @Override
-    public void onStreamPrepared(Torrent torrent) {
-
-    }
+    public void onStreamPrepared(Torrent torrent) { }
 
     @Override
-    public void onStreamStarted(Torrent torrent) {
-
-    }
+    public void onStreamStarted(Torrent torrent) { }
 
     @Override
-    public void onStreamStopped() {
-
-    }
+    public void onStreamStopped() { }
 
     @Override
-    public void onStreamError(Torrent torrent, Exception e) {
-
-    }
+    public void onStreamError(Torrent torrent, Exception e) { }
 
     @Override
-    public void onStreamReady(Torrent torrent) {
-
-    }
+    public void onStreamReady(Torrent torrent) { }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
