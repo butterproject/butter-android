@@ -44,6 +44,7 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     private StreamInfo mStreamInfo;
     private boolean mIsBackPressed = false;
+    private boolean mCurrentStreamStopped = false;
 
     public static Intent startActivity(Context context, StreamInfo info) {
         return startActivity(context, info, 0);
@@ -111,8 +112,10 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
 
     @Override
     protected void onDestroy() {
-        if (mService != null)
+        if (!mCurrentStreamStopped) {
             mService.stopStreaming();
+            mCurrentStreamStopped = true;
+        }
         super.onDestroy();
     }
 
@@ -172,10 +175,14 @@ public class PTVVideoPlayerActivity extends PTVBaseActivity implements PTVVideoP
     }
 
     public void skipTo(StreamInfo info, Show show) {
-        mPlayerFragment.deactivateMediaSession();
+        mService.stopStreaming();
+        mCurrentStreamStopped = true;
+
+        mPlayerFragment.pause();
         mPlayerFragment.onPlaybackEndReached();
-        getTorrentService().removeListener(mPlayerFragment);
+
         finish();
+
         PTVStreamLoadingActivity.startActivity(this, info, show);
     }
 }
