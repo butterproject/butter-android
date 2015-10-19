@@ -50,7 +50,7 @@ public class PTVPreferencesFragment extends GuidedStepFragment implements Prefer
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        PopcornUpdater.getInstance(getContext()).setListener(new PopcornUpdater.Listener() {
+        PopcornUpdater.getInstance(getActivity().getApplicationContext()).setListener(new PopcornUpdater.Listener() {
             @Override
             public void updateAvailable(String filePath) {
                 PTVUpdateActivity.startActivity(getActivity());
