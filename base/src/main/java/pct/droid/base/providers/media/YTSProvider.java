@@ -215,7 +215,9 @@ public class YTSProvider extends MediaProvider {
                         return;
                     }
 
-                    if (result.status != null && result.status.equals("error")) {
+                    if(result == null) {
+                        callback.onFailure(new NetworkErrorException("No response"));
+                    } else if (result.status != null && result.status.equals("error")) {
                         callback.onFailure(new NetworkErrorException(result.status_message));
                     } else if(result.data != null && ((result.data.get("movies") != null && ((ArrayList<LinkedTreeMap<String, Object>>)result.data.get("movies")).size() <= 0) || ((Double)result.data.get("movie_count")).intValue() <= currentList.size())) {
                         callback.onFailure(new NetworkErrorException("No movies found"));
