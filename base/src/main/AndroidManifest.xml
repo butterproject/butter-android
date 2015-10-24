@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="pct.droid.base">
+	package="butter.droid.base">
 
 	<application>
 
-		<service android:name=".torrent.TorrentService" />
+		<service android:name="butter.droid.base.torrent.TorrentService" />
 
 	</application>
 

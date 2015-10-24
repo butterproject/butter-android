@@ -1,25 +1,24 @@
-[Popcorn Time for Android](https://git.popcorntime.io/popcorntime/android)  [![Build Status](http://ci.popcorntime.io/buildStatus/icon?job=Popcorn-Android)](http://ci.popcorntime.io/job/Popcorn-Android/)
+Butter for Android
 ----
 
 Allow any Android user to watch movies easily streaming from torrents, without any particular knowledge.
 
-Visit the project's website at <http://popcorntime.io>.
+Visit the project's website at <http://butterproject.org>.
 
-* [Continuous Integration](http://ci.popcorntime.io/job/Popcorn-Android/)
-* [Issue Tracker](https://git.popcorntime.io/popcorntime/android/issues)
+* [Issue Tracker](https://github.com/butterproject/butter-android/issues)
 
 ## Community
 
-Keep track of Popcorn Time development and community activity.
+Keep track of Butter development and community activity.
 
-* Follow Popcorn Time on [Twitter](https://twitter.com/popcorntimetv), [Facebook](https://www.facebook.com/PopcornTimeTv) and [Google+](https://plus.google.com/+PopcorntimeIo).
-* Read and subscribe to the [The Official Popcorn Time Blog](http://blog.popcorntime.io).
-* Join in discussions on the [Popcorn Time Forum](https://discuss.popcorntime.io)
-* Connect with us on IRC at `#popcorntime` on freenode ([web access](http://webchat.freenode.net/?channels=popcorntime))
+* Follow Butter on [Twitter](https://twitter.com/butterproject), [Facebook](https://www.facebook.com/ButterProjectOrg/) and [Google+](https://plus.google.com/communities/111003619134556931561).
+* Read and subscribe to [The Official Butter Blog](https://github.com/butterproject/blog).
+* Join in discussions on the [Butter Forum](https://discuss.butterproject.org)
+* Connect with us on IRC at `#butterproject` on freenode ([web access](http://webchat.freenode.net/?channels=butterproject))
 
 ## Getting Involved
 
-Want to report a bug, request a feature, contribute or translate Popcorn Time? Check out our in-depth guide to [Contributing to Popcorn Time](CONTRIBUTING.md).
+Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](CONTRIBUTING.md).
 
 ## Build Instructions ##
 
@@ -79,7 +78,7 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
 
 ## Versioning
 
-For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Popcorn Time will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
+For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Butter will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
 
 ###Beta versions
 
@@ -113,6 +112,4 @@ Note: some dependencies are external libraries, which might be covered by a diff
 
 ***
 
-If you want to contact us: [hello@popcorntime.io](mailto:hello@popcorntime.io)
-
-Copyright (c) 2014 Popcorn Time Foundation - Released under the [GPL V3 license](https://git.popcorntime.io/popcorntime/android/blob/development/LICENSE.md).
+Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).development/LICENSE.md).

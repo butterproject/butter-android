@@ -1,4 +1,4 @@
-# Contributing to Popcorn Time
+# Contributing to Butter
 
 So you're interested in giving us a hand? That's awesome! We've put together some brief guidelines that should help
 you get started quickly and easily.
@@ -15,7 +15,7 @@ There are lots and lots of ways to get involved, this document covers:
 <a name="report-a-bug"></a>
 ## General guidelines
 
-If you're about to raise an issue because think you've found a problem with Popcorn Time, or you'd like to make a request
+If you're about to raise an issue because think you've found a problem with Butter, or you'd like to make a request
 for a new feature in the codebase, or any other reason then please read this first.
 
 The GitLab issue tracker is the preferred channel for [bug reports](#bugs),
@@ -26,7 +26,7 @@ requests](#pull-requests), but please respect the following restrictions:
 has already reported your problem or requested your idea.
 
 * Please **do not** use the issue tracker for personal support requests (use
-  [the forum](http://discuss.popcorntime.io) or IRC - #popcorntime on freenode).
+  [the forum](http://discuss.butterproject.org) or IRC - #butterproject on freenode).
 
 * Please **do not** derail or troll issues. Keep the discussion on topic and respect the opinions of others.
 
@@ -40,7 +40,7 @@ Guidelines for bug reports:
 
 1. **Use the GitLab issue search** &mdash; check if the issue has already been reported.
 
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` or look for [closed issues](/popcorntime/android/issues?state=closed).
+2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` or look for closed issues.
 
 3. Is your issue about a design or front end feature or bug? The most helpful thing in the world is if we can *see* what you're talking about.
 
@@ -67,8 +67,8 @@ Any other information you want to share that is relevant to the issue being repo
 
 ### Technical details:
 
-* Popcorn Time Version: stable 0.1.0
-* Downloaded from: popcorntime.io
+* Butter Version: stable 0.1.0
+* Downloaded from: butterproject.org
 * Connection: 10mbs
 ```
 
@@ -87,7 +87,7 @@ likely to be common.
 <a name="changes"></a>
 ### Change Requests
 
-Change requests cover both architectural and functional changes to how Popcorn Time works. If you have an idea for a
+Change requests cover both architectural and functional changes to how Butter works. If you have an idea for a
 new or different dependency, a refactor, or an improvement to a feature, etc  - please be sure to:
 
 1. **Use the GitLab search** and check someone else didn't get there first
@@ -104,7 +104,7 @@ Pull requests are awesome. If you're looking to raise a PR for something which d
 
 ## Contributor License Agreement
 
-By contributing your code to Popcorn Time you grant the Popcorn Time Foundation a non-exclusive, irrevocable, worldwide,
+By contributing your code to Butter you grant the Butter Foundation a non-exclusive, irrevocable, worldwide,
 royalty-free, sublicenseable, transferable license under all of Your relevant intellectual property rights
 (including copyright, patent, and any other rights), to use, copy, prepare derivative works of, distribute and
 publicly perform and display the Contributions on any licensing terms, including without limitation:
@@ -121,7 +121,7 @@ claims, or has the right to claim, any right in any invention or patent related 
 represent that You are not legally obligated, whether by entering into an agreement or otherwise, in any way that
 conflicts with the terms of this license.
 
-The Popcorn Time Foundation acknowledges that, except as explicitly described in this Agreement, any Contribution which
+The Butter Foundation acknowledges that, except as explicitly described in this Agreement, any Contribution which
 you provide is on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED,
 INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS
 FOR A PARTICULAR PURPOSE.

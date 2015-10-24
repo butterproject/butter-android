@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <resources>
 
-    <string name="app_name" translatable="false">Popcorn Time</string>
+    <string name="app_name" translatable="false">Butter</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
@@ -26,7 +26,7 @@
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="update_available">New update available</string>
-    <string name="wrong_abi">Uhoh! You\'re using the wrong version of Popcorn Time for Android. The right version is being downloaded right now, if possible. If the installer is not started within a minute then your device is not supported or your internet connection is broken, which means you should try again later. If the installer fails then you must install the right version manually.</string>
+    <string name="wrong_abi">Uhoh! You\'re using the wrong version of Butter for Android. The right version is being downloaded right now, if possible. If the installer is not started within a minute then your device is not supported or your internet connection is broken, which means you should try again later. If the installer fails then you must install the right version manually.</string>
     <string name="press_install">Press to install</string>
 	<string name="movies_error" translatable="false">No movies found</string>
     <string name="loading_data">Loading data…</string>
@@ -54,7 +54,7 @@
     <string name="title_anime">Anime</string>
 
     <string name="signature_invalid">App signature invalid</string>
-    <string name="possibly_dangerous">Popcorn Time has been tampered with. Please download a new install file from https://popcorntime.io/</string>
+    <string name="possibly_dangerous">This app has been tampered with. Please download a new install file from butterproject.org</string>
 
 	<string name="subtitles">Subtitles</string>
 	<string name="now_playing">Now playing</string>
@@ -231,15 +231,15 @@
     <string name="open_with">Open with</string>
 <string name="select_file">Select file</string>
     <string name="terms" translatable="false">Your Acceptance\n\n
-By using the \'POPCORN TIME\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
+By using the \'BUTTER\' app you signify your agreement to (1) these terms and conditions (the \'Terms of Service\').\n\n
 Privacy Policy\n\n
-You understand that by using \'POPCORN TIME\' you may encounter material that you may deem to be offensive, indecent, or objectionable, and that such content may or may not be identified as having explicit material. \'POPCORN TIME\' will have no liability to you for such material – you agree that your use of \'POPCORN TIME\' is at your sole risk.\n\n
+You understand that by using \'BUTTER\' you may encounter material that you may deem to be offensive, indecent, or objectionable, and that such content may or may not be identified as having explicit material. \'BUTTER\' will have no liability to you for such material – you agree that your use of \'BUTTER\' is at your sole risk.\n\n
 DISCLAIMERS\n\n
-YOU EXPRESSLY AGREE THAT YOUR USE OF \'POPCORN TIME\' IS AT YOUR SOLE RISK. \'POPCORN TIME\' AND ALL PRODUCTS ARE PROVIDED TO YOU \'AS IS\' WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. \'POPCORN TIME\' MAKES ABSOLUTELY NO WARRANTIES WHATSOEVER, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT POSSIBLE UNDER APPLICABLE LAWS, YIFY DISCLAIMS ALL WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR OTHER VIOLATIONS OF RIGHTS.\n\n
+YOU EXPRESSLY AGREE THAT YOUR USE OF \'BUTTER\' IS AT YOUR SOLE RISK. \'BUTTER\' AND ALL PRODUCTS ARE PROVIDED TO YOU \'AS IS\' WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. \'BUTTER\' MAKES ABSOLUTELY NO WARRANTIES WHATSOEVER, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT POSSIBLE UNDER APPLICABLE LAWS, YIFY DISCLAIMS ALL WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR OTHER VIOLATIONS OF RIGHTS.\n\n
 LIMITATION OF LIABILITY\n\n
-\'POPCORN TIME\' IS NOT RESPONSIBLE FOR ANY PROBLEMS OR TECHNICAL MALFUNCTION OF ANY WEBSITE, NETWORK, COMPUTER SYSTEMS, SERVERS, PROVIDERS, COMPUTER EQUIPMENT, OR SOFTWARE, OR FOR ANY FAILURE DUE TO TECHNICAL PROBLEMS OR TRAFFIC CONGESTION ON THE INTERNET OR \'POPCORN TIME\' OR COMBINATION THEREOF, INCLUDING ANY INJURY OR DAMAGE TO USERS OR TO ANY COMPUTER OR OTHER DEVICE ON OR THROUGH WHICH \'POPCORN TIME\' IS PROVIDED. UNDER NO CIRCUMSTANCES WILL \'POPCORN TIME\' BE LIABLE FOR ANY LOSS OR DAMAGE, INCLUDING PERSONAL INJURY OR DEATH, RESULTING FROM YOUR USE OF \'POPCORN TIME\'.\n\nSOURCE MATERIAL\n\nALL MOVIES ARE NOT HOSTED IN ANY SERVER AND ARE STREAMED USING THE P2P BIT TORRENT PROTOCOL. ALL MOVIES ARE PULLED IN FROM THE OPEN PUBLIC APIS. BY WATCHING A MOVIE WITH THIS APPLICATION YOU MIGHT BE COMMITING COPYRIGHT VIOLATIONS DEPENDING ON YOUR COUNTRY\'S LAWS. WE DO NOT TAKE ANY RESPONSABILITIES.\n\n
+\'BUTTER\' IS NOT RESPONSIBLE FOR ANY PROBLEMS OR TECHNICAL MALFUNCTION OF ANY WEBSITE, NETWORK, COMPUTER SYSTEMS, SERVERS, PROVIDERS, COMPUTER EQUIPMENT, OR SOFTWARE, OR FOR ANY FAILURE DUE TO TECHNICAL PROBLEMS OR TRAFFIC CONGESTION ON THE INTERNET OR \'BUTTER\' OR COMBINATION THEREOF, INCLUDING ANY INJURY OR DAMAGE TO USERS OR TO ANY COMPUTER OR OTHER DEVICE ON OR THROUGH WHICH \'BUTTER\' IS PROVIDED. UNDER NO CIRCUMSTANCES WILL \'BUTTER\' BE LIABLE FOR ANY LOSS OR DAMAGE, INCLUDING PERSONAL INJURY OR DEATH, RESULTING FROM YOUR USE OF \'BUTTER\'.\n\nSOURCE MATERIAL\n\nALL MOVIES ARE NOT HOSTED IN ANY SERVER AND ARE STREAMED USING THE P2P BIT TORRENT PROTOCOL. ALL MOVIES ARE PULLED IN FROM THE OPEN PUBLIC APIS. BY WATCHING A MOVIE WITH THIS APPLICATION YOU MIGHT BE COMMITING COPYRIGHT VIOLATIONS DEPENDING ON YOUR COUNTRY\'S LAWS. WE DO NOT TAKE ANY RESPONSABILITIES.\n\n
 Ability to Accept Terms of Service\n\n
-By using \'POPCORN TIME\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
+By using \'BUTTER\' or accessing this site you affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. If you are under 13 years of age, then please do not use the Service. There are lots of other great web sites for you. Talk to your parents about what sites are appropriate for you.</string>
     <string name="accept">Accept</string>
     <string name="leave">Leave</string>
 
@@ -280,9 +280,8 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="vpn">VPN</string>
 
     <!-- AboutFragment -->
-    <string name="about_message">Popcorn Time is the result of many developers and designers putting a bunch of APIs together to make the
-		experience of watching torrent movies as simple as possible.\n\nWe are an open source project. We are from all over the world. We
-		love our movies. And boy, do we love popcorn.</string>
+    <string name="about_message">Butter is the result of many developers and designers putting a bunch of APIs together to make the
+		experience of streaming torrents as simple as possible.\n\nWe are an open source project. We are from all over the world.</string>
     <string name="website">Website</string>
     <string name="forum">Forum</string>
     <string name="google_plus">Google+</string>
@@ -298,13 +297,6 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <string name="starting_beam">Initialising video beaming…</string>
     <string name="beaming_failed">The video could not play on your beaming device. Would you like to try again? The app might need to download more parts before your device is able to play the video.</string>
     <string name="the_video">The video</string>
-
-    <!-- VPN dialog -->
-    <string name="vpn_not_installed">VPN.ht app not installed</string>
-    <string name="vpn_info">You need to have the VPN.ht app installed to use the VPN option from inside Popcorn Time. Not interested? Then you can just hide this button.</string>
-    <string name="vpn_download">Download</string>
-    <string name="vpn_later">Later</string>
-    <string name="vpn_hide">Hide</string>
 
     <!-- Android TV below -->
 
@@ -352,7 +344,7 @@ By using \'POPCORN TIME\' or accessing this site you affirm that you are either 
     <!-- PTVUpdateFragment -->
     <string name="now">Yes</string>
     <string name="later">No, later</string>
-    <string name="new_update">A new version of Popcorn Time for Android TV is available. Do you want to update now?</string>
+    <string name="new_update">A new version of Butter for Android TV is available. Do you want to update now?</string>
 
     <string name="network_message">Check your internet connection</string>
 

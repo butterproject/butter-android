@@ -37,7 +37,7 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 android:background="@color/detail_header_title_bg">
-                <pct.droid.widget.AutoResizeRobotoTextView
+                <butter.droid.widget.AutoResizeRobotoTextView
                     android:id="@+id/title"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:isIndicator="true"
-                    style="@style/RatingBar.PopcornTime"
+                    style="@style/Theme.Butter.RatingBar"
                     android:max="10"
                     android:progress="5"/>
                 <com.devspark.robototextview.widget.RobotoTextView
@@ -102,7 +102,7 @@
                 android:layout_marginBottom="@dimen/detail_vertical_offset"
                 >
                 <com.devspark.robototextview.widget.RobotoButton
-                    style="@style/DetailButton.PopcornTime"
+                    style="@style/Theme.Butter.DetailButton"
                     android:id="@+id/read_more"
                     android:layout_marginRight="@dimen/detail_button_margin"
                     android:layout_marginEnd="@dimen/detail_button_margin"
@@ -122,7 +122,7 @@
         android:layout_marginTop="@dimen/detail_vertical_offset"
         android:background="@android:color/transparent" />
 
-    <pct.droid.widget.WrappingViewPager
+    <butter.droid.widget.WrappingViewPager
         android:id="@+id/pager"
         android:layout_below="@id/tabs"
         android:layout_width="match_parent"

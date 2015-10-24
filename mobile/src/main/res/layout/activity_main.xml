@@ -1,18 +1,18 @@
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
@@ -39,7 +39,7 @@
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
-                style="@style/Theme.PopcornTime.TabLayout"
+                style="@style/Theme.Butter.TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary" />
@@ -52,7 +52,7 @@
 			app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 	</android.support.design.widget.CoordinatorLayout>
 
-	<pct.droid.widget.ScrimInsetsFrameLayout
+	<butter.droid.widget.ScrimInsetsFrameLayout
 		android:id="@+id/navigation_drawer_container"
 		android:layout_width="@dimen/nav_drawer_width"
 		android:layout_gravity="start"
@@ -63,9 +63,9 @@
 
 		<fragment
 			android:id="@+id/navigation_drawer_fragment"
-			class="pct.droid.fragments.NavigationDrawerFragment"
+			class="butter.droid.fragments.NavigationDrawerFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
-	</pct.droid.widget.ScrimInsetsFrameLayout>
+	</butter.droid.widget.ScrimInsetsFrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

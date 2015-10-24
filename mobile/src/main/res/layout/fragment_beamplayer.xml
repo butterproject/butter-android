@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,7 +32,7 @@
         android:layout_centerInParent="true"
         android:scaleType="centerInside"
         android:alpha="0.7"
-        android:src="@drawable/popcorn_logo" />
+        android:src="@drawable/butter_logo" />
 
     <ImageView
         android:id="@+id/cover_image"
@@ -123,7 +123,7 @@
                         />
                 </LinearLayout>
 
-                <pct.droid.widget.SeekBar
+                <butter.droid.widget.SeekBar
                     android:id="@+id/seekbar"
                     android:duplicateParentState="false"
                     android:layout_width="match_parent"
@@ -155,7 +155,7 @@
                     android:orientation="horizontal"
                     android:contentDescription="@string/volume">
 
-                    <pct.droid.widget.SeekBar
+                    <butter.droid.widget.SeekBar
                         android:id="@+id/volumebar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

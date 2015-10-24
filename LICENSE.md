@@ -1,5 +1,5 @@
-Popcorn Time - Streaming video through torrents
-Copyright (c) 2014 Popcorn Time and the contributors (popcorntime.io)
+Butter - Streaming video through torrents
+Copyright (c) 2014 - 2015 Butter and the contributors (butterproject.org)
 
 If you distribute a copy or make a fork of the project, you have to credit this project as source.
 
@@ -16,14 +16,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/ .
 
-If you want to contact us : hello@popcorntime.io
+If you want to contact us : butter@xaiki.net
 
 
-Popcorn Time - Streaming video through torrents
-Copyright (c) 2014 Popcorn Time and the contributors (popcorntime.io)
-Popcorn Time is released under the GPL
+Butter - Streaming video through torrents
+Copyright (c) 2014 - 2015 Butter and the contributors (butterproject.org)
+Butter is released under the GPL
 
-Last update: December 24, 2014
+Last update: October 24, 2015
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -650,6 +650,6 @@ copy of the Program in return for a fee.
 END OF TERMS AND CONDITIONS
 
 The source code for any program binaries or compressed scripts that are
-included with Popcorn Time can be freely obtained at the following URL:
+included with Butter can be freely obtained at the following URL:
 
-https://git.popcorntime.io/
+https://git.butterproject.org/

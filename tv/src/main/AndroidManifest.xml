@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pct.droid.tv" >
+    package="butter.droid.tv" >
 
     <!-- Features -->
     <uses-feature
@@ -44,15 +44,15 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="pct.droid.tv.PTVPopcornApplication"
+        android:name=".TVButterApplication"
         android:allowBackup="false"
         android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Popcorn.TV" >
+        android:theme="@style/Theme.Butter.TV" >
 
         <activity
-            android:name=".activities.PTVLaunchActivity"
+            android:name=".activities.TVLaunchActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:theme="@style/Theme.HiddenActivity" >
@@ -153,29 +153,29 @@
         </activity>
 
         <!-- Activities -->
-        <activity android:name=".activities.PTVMainActivity" />
+        <activity android:name=".activities.TVMainActivity" />
         <activity
-            android:name=".activities.PTVWelcomeActivity"
+            android:name=".activities.TVWelcomeActivity"
             android:noHistory="true"
-            android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
-        <activity android:name=".activities.PTVMediaDetailActivity" />
-        <activity android:name=".activities.PTVMediaGridActivity" />
-        <activity android:name=".activities.PTVSearchActivity" />
+            android:theme="@style/Theme.Butter.TV.GuidedStep" />
+        <activity android:name=".activities.TVMediaDetailActivity" />
+        <activity android:name=".activities.TVMediaGridActivity" />
+        <activity android:name=".activities.TVSearchActivity" />
         <activity
-            android:name=".activities.PTVPreferencesActivity"
-            android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
-        <activity android:name=".activities.PTVStreamLoadingActivity" android:noHistory="true" />
-        <activity android:name=".activities.PTVVideoPlayerActivity" android:launchMode="singleTask" />
-        <activity android:name=".activities.PTVTrailerPlayerActivity" />
+            android:name=".activities.TVPreferencesActivity"
+            android:theme="@style/Theme.Butter.TV.GuidedStep" />
+        <activity android:name=".activities.TVStreamLoadingActivity" android:noHistory="true" />
+        <activity android:name=".activities.TVVideoPlayerActivity" android:launchMode="singleTask" />
+        <activity android:name=".activities.TVTrailerPlayerActivity" />
         <activity
-            android:name=".activities.PTVUpdateActivity"
-            android:theme="@style/Theme.Popcorn.TV.GuidedStep" />
+            android:name=".activities.TVUpdateActivity"
+            android:theme="@style/Theme.Butter.TV.GuidedStep" />
 
-        <service android:name="pct.droid.base.torrent.TorrentService" />
-        <service android:name=".service.RecommendationService" android:enabled="true" />
+        <service android:name="butter.droid.base.torrent.TorrentService" />
+        <service android:name="butter.droid.tv.service.RecommendationService" android:enabled="true" />
 
         <receiver
-            android:name=".receivers.BootReceiver"
+            android:name="butter.droid.tv.receivers.BootReceiver"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
@@ -183,8 +183,8 @@
             </intent-filter>
         </receiver>
 
-        <provider android:authorities="pct.droid.tv.RecommendationContentProvider"
-            android:name=".service.recommendation.RecommendationContentProvider" android:exported="true" />
+        <provider android:authorities="butter.droid.tv.RecommendationContentProvider"
+            android:name="butter.droid.tv.service.recommendation.RecommendationContentProvider" android:exported="true" />
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <meta-data android:name="com.crashlytics.ApiKey" android:value="${crashlyticsApiKey}" />

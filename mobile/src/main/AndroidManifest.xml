@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="pct.droid"
+    package="butter.droid"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,14 +22,14 @@
         android:icon="@mipmap/ic_launcher"
         android:logo="@drawable/ic_logo"
         android:label="@string/app_name"
-        android:theme="@style/Theme.PopcornTime"
-        android:name=".base.PopcornApplication"
+        android:theme="@style/Theme.Butter"
+        android:name="butter.droid.base.ButterApplication"
         android:supportsRtl="true">
 
 		<activity
-			android:name=".activities.MainActivity"
+			android:name="butter.droid.activities.MainActivity"
             android:label="@null"
-			android:theme="@style/Theme.PopcornTime.NavigationDrawer"
+			android:theme="@style/Theme.Butter.NavigationDrawer"
 			android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -123,37 +123,37 @@
         </activity>
 
 		<activity
-			android:name=".activities.MediaDetailActivity"
-			android:theme="@style/Theme.PopcornTime.Detail"
-			android:parentActivityName=".activities.MainActivity">
+			android:name="butter.droid.activities.MediaDetailActivity"
+			android:theme="@style/Theme.Butter.Detail"
+			android:parentActivityName="butter.droid.activities.MainActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".activities.MainActivity" />
+				android:value="butter.droid.activities.MainActivity" />
 		</activity>
 
         <activity
-            android:name=".activities.SearchActivity"
-            android:theme="@style/Theme.PopcornTime.Search" />
+            android:name="butter.droid.activities.SearchActivity"
+            android:theme="@style/Theme.Butter.Search" />
 
-        <activity android:name=".activities.TermsActivity" />
+        <activity android:name="butter.droid.activities.TermsActivity" />
 
         <activity
-            android:name=".activities.AboutActivity"
+            android:name="butter.droid.activities.AboutActivity"
             android:label="@string/about_app" />
 
         <activity
-            android:name=".activities.PreferencesActivity"
-            android:parentActivityName=".activities.MainActivity" />
+            android:name="butter.droid.activities.PreferencesActivity"
+            android:parentActivityName="butter.droid.activities.MainActivity" />
 
 		<activity
             android:launchMode="singleTask"
-			android:name=".activities.StreamLoadingActivity"
-            android:theme="@style/Theme.PopcornTime.Detail" />
+			android:name="butter.droid.activities.StreamLoadingActivity"
+            android:theme="@style/Theme.Butter.Detail" />
 
 		<activity
             android:launchMode="singleTask"
-			android:name=".activities.VideoPlayerActivity"
+			android:name="butter.droid.activities.VideoPlayerActivity"
 			android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -431,19 +431,19 @@
         </activity>
 
         <activity
-            android:name=".activities.BeamPlayerActivity"
-            android:theme="@style/Theme.PopcornTime.RemoteControl"
+            android:name="butter.droid.activities.BeamPlayerActivity"
+            android:theme="@style/Theme.Butter.RemoteControl"
             android:screenOrientation="sensorPortrait" />
 
 		<activity
-			android:name=".activities.TrailerPlayerActivity"
+			android:name="butter.droid.activities.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
-        <service android:name=".base.torrent.TorrentService" />
-        <service android:name=".base.beaming.server.BeamServerService" />
-        <service android:name=".base.beaming.BeamPlayerNotificationService" />
+        <service android:name="butter.droid.base.torrent.TorrentService" />
+        <service android:name="butter.droid.base.beaming.server.BeamServerService" />
+        <service android:name="butter.droid.base.beaming.BeamPlayerNotificationService" />
 
-        <receiver android:name=".base.torrent.TorrentBroadcastReceiver" android:exported="false">
+        <receiver android:name="butter.droid.base.torrent.TorrentBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="pct.droid.base.torrent.TorrentBroadcastReceiver.STOP" />
             </intent-filter>

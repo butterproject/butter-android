@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-~ This file is part of Popcorn Time.
+~ This file is part of Butter.
 ~
-~ Popcorn Time is free software: you can redistribute it and/or modify
+~ Butter is free software: you can redistribute it and/or modify
 ~ it under the terms of the GNU General Public License as published by
 ~ the Free Software Foundation, either version 3 of the License, or
 ~ (at your option) any later version.
 ~
-~ Popcorn Time is distributed in the hope that it will be useful,
+~ Butter is distributed in the hope that it will be useful,
 ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
 ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ~ GNU General Public License for more details.
 ~
 ~ You should have received a copy of the GNU General Public License
-~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -62,11 +62,11 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:isIndicator="true"
-                style="@style/RatingBar.PopcornTime"
+                style="@style/Theme.Butter.RatingBar"
                 android:max="10"
                 android:progress="5"/>
 
-            <pct.droid.widget.SquareImageView
+            <butter.droid.widget.SquareImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_marginLeft="6dp"
@@ -129,7 +129,7 @@
         android:paddingBottom="@dimen/detail_vertical_offset"
         >
         <com.devspark.robototextview.widget.RobotoButton
-            style="@style/DetailButton.PopcornTime"
+            style="@style/Theme.Butter.DetailButton"
             android:id="@+id/read_more"
             android:layout_marginRight="@dimen/detail_button_margin"
             android:layout_marginEnd="@dimen/detail_button_margin"
@@ -137,7 +137,7 @@
             app:typeface="roboto_medium"  />
 
         <com.devspark.robototextview.widget.RobotoButton
-            style="@style/DetailButton.PopcornTime"
+            style="@style/Theme.Butter.DetailButton"
             android:visibility="gone"
             android:id="@+id/watch_trailer"
             android:text="@string/watch_trailer"

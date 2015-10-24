@@ -21,7 +21,7 @@ android {
 
 
     defaultConfig {
-        applicationId "pct.droid"
+        applicationId "butter.droid"
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         versionCode buildNumber

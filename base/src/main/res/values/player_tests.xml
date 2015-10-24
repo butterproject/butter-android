@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <resources>
@@ -47,28 +47,28 @@
     </string-array>
 
     <string-array name="files" translatable="false">
-        <item>https://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/Spider-Man_2_720p_24fps_mp3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_stereo.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac_ac3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_aac.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mpeg4_mp3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_ac3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mkv</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_h265_2160p_60fps_normal_mp3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
-        <item>https://get.popcorntime.io/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_mp3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_stereo.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_aac_ac3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_ac3_aac.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_mpeg4_mp3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mkv</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.mkv</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_ac3.mkv</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_h265_1080p_30fps_normal_ac3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_h265_1080p_30fps_normal_aac.mkv</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_mp3.avi</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_vorbis.webm</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_vp9_vorbis.webm</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_h265_2160p_60fps_normal_mp3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_2160p_60fps_normal_mp3.mp4</item>
+        <item>https://get.butterproject.org/nwtests/bbb_sunflower_native_60fps_normal_mp3.mp4</item>
         <item>https://www.youtube.com/watch?v=SvDMZFfwmgo</item>
         <item>http://youtu.be/K22v4xolOsc</item>
         <item>dialog</item>

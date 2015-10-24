@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
@@ -37,25 +37,25 @@
 		<item name="android:listDivider">@drawable/list_divider</item>
 		<!--<item name="windowActionBarOverlay">true</item>-->
 		<item name="android:windowBackground">@color/bg</item>
-        <item name="android:ratingBarStyle">@style/RatingBar.PopcornTime</item>
+        <item name="android:ratingBarStyle">@style/Theme.Butter.RatingBar</item>
 
         <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
         <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
         <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
 	</style>
 
-	<style name="Theme.PopcornTime" parent="Theme.Base">
-		<item name="android:seekBarStyle">@style/SeekBar.PopcornTime</item>
-		<item name="android:progressBarStyleHorizontal">@style/ProgressBar.PopcornTime</item>
+	<style name="Theme.Butter" parent="Theme.Base">
+		<item name="android:seekBarStyle">@style/Theme.Butter.SeekBar</item>
+		<item name="android:progressBarStyleHorizontal">@style/Theme.Butter.ProgressBar</item>
 	</style>
 
-	<style name="Theme.PopcornTime.Search" parent="Theme.PopcornTime">
+	<style name="Theme.Butter.Search" parent="Theme.Butter">
 		<item name="android:windowAnimationStyle">@style/ActivityFadeAnimation</item>
 	</style>
 
-    <style name="Theme.PopcornTime.Detail" parent="Theme.PopcornTime.TransparentStatusBar"/>
+    <style name="Theme.Butter.Detail" parent="Theme.Butter.TransparentStatusBar"/>
 
-    <style name="Theme.PopcornTime.RemoteControl" parent="Theme.PopcornTime.TransparentStatusBar"/>
+    <style name="Theme.Butter.RemoteControl" parent="Theme.Butter.TransparentStatusBar"/>
 
 	<style name="ActivityFadeAnimation" parent="@android:style/Animation.Activity">
 		<item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
@@ -88,16 +88,16 @@
         <item name="android:windowExitAnimation">@anim/episode_fade_out</item>
     </style>
 
-    <style name="Theme.PopcornTime.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="Theme.Butter.Toolbar.SearchView" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 		<item name="colorControlNormal">@android:color/white</item>
 		<item name="colorAccent">@android:color/white</item>
 	</style>
 
-	<style name="Theme.PopcornTime.NavigationDrawer" parent="Theme.PopcornTime"></style>
+	<style name="Theme.Butter.NavigationDrawer" parent="Theme.Butter"></style>
 
-	<style name="Theme.PopcornTime.TransparentStatusBar" parent="Theme.PopcornTime"></style>
+	<style name="Theme.Butter.TransparentStatusBar" parent="Theme.Butter"></style>
 
-	<style name="ProgressBar.PopcornTime" parent="android:Widget.ProgressBar.Horizontal">
+	<style name="Theme.Butter.ProgressBar" parent="android:Widget.ProgressBar.Horizontal">
 		<item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
 		<item name="android:indeterminateDrawable">
 			@drawable/progress_indeterminate_horizontal_holo_light
@@ -106,7 +106,7 @@
 		<item name="android:maxHeight">16dip</item>
 	</style>
 
-    <style name="SeekBar.PopcornTime" parent="android:Widget.SeekBar">
+    <style name="Theme.Butter.SeekBar" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal</item>
         <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal</item>
         <item name="android:minHeight">13dip</item>
@@ -117,7 +117,7 @@
         <item name="android:paddingRight">16dip</item>
     </style>
 
-    <style name="AboutButton" parent="android:Widget.Button">
+    <style name="Theme.Butter.AboutButton" parent="android:Widget.Button">
         <item name="android:layout_marginTop">32dp</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:layout_marginLeft">16dp</item>
@@ -130,13 +130,13 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="RatingBar.PopcornTime" parent="android:Widget.RatingBar">
+    <style name="Theme.Butter.RatingBar" parent="android:Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar</item>
         <item name="android:minHeight">16dp</item>
         <item name="android:maxHeight">16dp</item>
     </style>
 
-    <style name="DetailButton.PopcornTime" parent="android:Widget.Button">
+    <style name="Theme.Butter.DetailButton" parent="android:Widget.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">16dp</item>
@@ -168,7 +168,7 @@
         <item name="android:paddingRight">0dp</item>
     </style>
 
-    <style name="Theme.PopcornTime.TabLayout" parent="Widget.Design.TabLayout">
+    <style name="Theme.Butter.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/white</item>
     </style>
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <resources>
@@ -35,28 +35,26 @@
     </style>
 
 
-    <style name="Theme.Popcorn.TV.GuidedStep" parent="@style/Theme.Leanback.GuidedStep">
+    <style name="Theme.Butter.TV.GuidedStep" parent="@style/Theme.Leanback.GuidedStep">
         <item name="android:colorAccent">@color/primary</item>
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
 
-        <item name="guidanceDescriptionStyle">@style/Theme.Popcorn.GuidanceDescriptionStyle</item>
-        <item name="guidedActionsContainerStyle">
-            @style/Theme.Popcorn.GuidedActionsContainerStyle
-        </item>
+        <item name="guidanceDescriptionStyle">@style/Theme.Butter.GuidanceDescriptionStyle</item>
+        <item name="guidedActionsContainerStyle">@style/Theme.Butter.GuidedActionsContainerStyle</item>
     </style>
 
-    <style name="Theme.Popcorn.GuidanceDescriptionStyle" parent="@style/Widget.Leanback.GuidanceDescriptionStyle">
+    <style name="Theme.Butter.GuidanceDescriptionStyle" parent="@style/Widget.Leanback.GuidanceDescriptionStyle">
         <item name="android:gravity">start</item>
         <item name="android:maxLines">9999</item>
     </style>
 
-    <style name="Theme.Popcorn.GuidedActionsContainerStyle" parent="@style/Widget.Leanback.GuidedActionsContainerStyle">
+    <style name="Theme.Butter.GuidedActionsContainerStyle" parent="@style/Widget.Leanback.GuidedActionsContainerStyle">
         <item name="android:background">@color/primary_dark</item>
     </style>
 
 
-    <style name="Theme.Popcorn.TV" parent="@style/Theme.Leanback">
+    <style name="Theme.Butter.TV" parent="@style/Theme.Leanback">
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
         <item name="android:colorAccent">@color/primary_dark</item>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <pct.droid.widget.ObservableParallaxScrollView
+    <butter.droid.widget.ObservableParallaxScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,7 +30,7 @@
                     android:layout_marginRight="32dp"
                     android:layout_centerInParent="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/popcorn_logo"
+                    android:src="@drawable/butter_logo"
                     android:alpha="0.6" />
 
                 <ImageView
@@ -64,7 +64,7 @@
 
         </LinearLayout>
 
-    </pct.droid.widget.ObservableParallaxScrollView>
+    </butter.droid.widget.ObservableParallaxScrollView>
 
     <include
         layout="@layout/toolbar"

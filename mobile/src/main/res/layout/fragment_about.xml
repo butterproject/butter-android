@@ -1,38 +1,38 @@
 <!--
-  ~ This file is part of Popcorn Time.
+  ~ This file is part of Butter.
   ~
-  ~ Popcorn Time is free software: you can redistribute it and/or modify
+  ~ Butter is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Popcorn Time is distributed in the hope that it will be useful,
+  ~ Butter is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <ScrollView xmlns:tools="http://schemas.android.com/tools"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="match_parent"
-	tools:context="pct.droid.activities.AboutActivity"
-	tools:showIn="pct.droid.activities.AboutActivity"
+	tools:context="butter.droid.activities.AboutActivity"
+	tools:showIn="butter.droid.activities.AboutActivity"
 	android:fitsSystemWindows="false"
 	android:layout_width="match_parent">
 
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		tools:context="pct.droid.fragments.AboutFragment">
+		tools:context="butter.droid.fragments.AboutFragment">
 
 		<ImageView
 			android:id="@+id/logo_imageview"
 			android:layout_width="wrap_content"
 			android:layout_margin="32dp"
-			android:src="@drawable/popcorn_logo"
+			android:src="@drawable/butter_logo"
 			android:layout_height="wrap_content" />
 
 		<com.devspark.robototextview.widget.RobotoTextView
@@ -55,10 +55,10 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
             <com.devspark.robototextview.widget.RobotoTextView
-                android:id="@+id/popcorn_button"
-                android:drawableTop="@drawable/icon_popcorn"
+                android:id="@+id/butter_button"
+                android:drawableTop="@drawable/icon_butter"
                 android:text="@string/website"
-                style="@style/AboutButton"
+                style="@style/Theme.Butter.AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -66,7 +66,7 @@
                 android:id="@+id/discuss_button"
                 android:drawableTop="@drawable/icon_discourse"
                 android:text="@string/forum"
-                style="@style/AboutButton"
+                style="@style/Theme.Butter.AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -74,7 +74,7 @@
                 android:id="@+id/blog_button"
                 android:drawableTop="@drawable/icon_blog"
                 android:text="@string/blog"
-                style="@style/AboutButton"
+                style="@style/Theme.Butter.AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -90,7 +90,7 @@
                 android:id="@+id/twitter_button"
                 android:drawableTop="@drawable/icon_twitter"
                 android:text="@string/twitter"
-                style="@style/AboutButton"
+                style="@style/Theme.Butter.AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -98,7 +98,7 @@
                 android:id="@+id/facebook_button"
                 android:drawableTop="@drawable/icon_facebook"
                 android:text="@string/facebook"
-                style="@style/AboutButton"
+                style="@style/Theme.Butter.AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -107,7 +107,7 @@
                 android:drawableTop="@drawable/icon_git"
                 android:text="@string/git"
                 android:layout_marginBottom="64dp"
-                style="@style/AboutButton"
+                style="@style/Theme.Butter.AboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

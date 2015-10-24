@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[popcorn-time-app.android-base-strings]
+[butterproject.android]
 file_filter = base/src/main/res/values-<lang>/strings.xml
 source_lang = en
 source_file = base/src/main/res/values/strings.xml
