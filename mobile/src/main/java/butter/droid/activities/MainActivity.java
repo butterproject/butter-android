@@ -228,7 +228,8 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mTabs.getTabAt(position).select();
+                        if(mTabs.getTabCount() > position)
+                            mTabs.getTabAt(position).select();
                     }
                 }, 10);
             }
