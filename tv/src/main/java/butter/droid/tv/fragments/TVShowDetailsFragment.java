@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.providers.media.EZTVProvider;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
@@ -57,7 +56,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment
         OnActionClickedListener,
         EpisodeCardPresenter.Listener {
 
-    private EZTVProvider mTvProvider = new EZTVProvider();
+    private MediaProvider mTvProvider;// = new X();
 
     public static Fragment newInstance(Media media) {
         TVShowDetailsFragment fragment = new TVShowDetailsFragment();
