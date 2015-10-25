@@ -247,11 +247,13 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
     }
 
     private void setupTVShows() {
+        /*
         HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows));
         MediaCardPresenter mediaCardPresenter = new MediaCardPresenter(getActivity());
         mShowAdapter = new ArrayObjectAdapter(mediaCardPresenter);
         mShowAdapter.add(new MediaCardPresenter.MediaCardItem(true));
         mRowsAdapter.add(new ListRow(showsHeader, mShowAdapter));
+        */
     }
 
     private void setupMoreTVShows() {
