@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="cancel">Cancelar</string>
+  <string name="close">Cerrar</string>
+  <string name="ok">OK</string>
+  <string name="enabled">Activado</string>
+  <string name="disabled">Desactivado</string>
+  <string name="update_available">Nueva actualización disponible</string>
+  <string name="wrong_abi">¡Uh! Estás usando la versión equivocado de Butter para Android. La correcta se está instalando ahora mismo, si es posible. Si el instalador no inicia dentro de un minuto, tu dispositivo no soporta Butter o la conexión a internet es mala, lo que significa que deberás intentar más tarde. Si el instalador da error, instalá la versión manualmente.</string>
+  <string name="press_install">Presioná para instalar</string>
+  <string name="loading_data">Cargando datos...</string>
+  <string name="loading_details">Cargando detalles...</string>
+  <string name="loading_shows">Cargando shows...</string>
+  <string name="loading_movies">Cargando películas...</string>
+  <string name="loading_subs">Cargando subtítulos...</string>
+  <string name="error_files">Error: No se pudieron escribir los archivos</string>
+  <string name="overview_not_available">Perdón! Aca no hay una descripción general disponible.</string>
+  <string name="unknown_error">Algo salió mal</string>
+  <string name="torrent_failed">Fallo la recuperación de torrent</string>
+  <string name="running">Corriendo en el fondo</string>
+  <string name="tap_to_close">Apretá para cerrar</string>
+  <string name="tap_to_resume">Apreta para resumir</string>
+  <string name="stop">Pará</string>
+  <!--Overview strings-->
+  <string name="search_hint">Titulo, año, actores</string>
+  <string name="genres">Género</string>
+  <string name="search">Buscar</string>
+  <string name="searching">Buscando...</string>
+  <string name="no_data_found">No se encontraron los datos</string>
+  <string name="title_shows">Shows</string>
+  <string name="title_movies">Películas</string>
+  <string name="title_anime">Anime</string>
+  <string name="signature_invalid">App firma no valida</string>
+  <string name="possibly_dangerous">Butter fué manipulado, Por favor, descarga un nuevo archivo de instalación de: http://butterproject.org/</string>
+  <string name="subtitles">Subtítulos</string>
+  <string name="now_playing">Ahora reproduciendo</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Preferencias</string>
+  <string name="general">General.</string>
+  <string name="default_view">Vista predeterminada</string>
+  <string name="default_player">Reproductor de video predeterminado</string>
+  <string name="i18n_language">Idioma de la app</string>
+  <string name="restart_effect">Reiniciá la aplicación para aplicar los cambios</string>
+  <string name="device_language">Idioma del dispositivo</string>
+  <string name="stream_over_wifi_only">Reproducir solo con Wi-Fi</string>
+  <string name="internal_player">Interno</string>
+  <string name="subtitle_color">Color</string>
+  <string name="subtitle_size">Tamaño</string>
+  <string name="subtitle_timing">Timing de subtítulos</string>
+  <string name="subtitle_stroke_color">Color de contorno</string>
+  <string name="subtitle_stroke_width">Ancho de contorno</string>
+  <string name="default_subtitle_language">Idioma por defecto</string>
+  <string name="subtitle_language">Idioma de los subtítulos</string>
+  <string name="subtitle_settings">Configuración de subtítulos</string>
+  <string name="no_default_set">Idioma no predeterminado</string>
+  <string name="advanced">Avanzado</string>
+  <string name="storage_location">Ubicación de almacenamiento</string>
+  <string name="storage_automatic">Automático</string>
+  <string name="storage_choose">Elegir localización</string>
+  <string name="not_writable">Localización no grabable</string>
+  <string name="remove_cache">Borrar caché al cerrar reproductor</string>
+  <string name="hw_acceleration">Aceleración de hardware</string>
+  <string name="hw_automatic">Automático</string>
+  <string name="hw_full">Lleno</string>
+  <string name="hw_decoding">Solo descifrar</string>
+  <string name="updates">Actualizaciones</string>
+  <string name="auto_updates">Actualizaciones automáticas</string>
+  <string name="check_for_updates">Verificar actualizaciones</string>
+  <string name="last_check">Última verificación</string>
+  <string name="about_app">Acerca de...</string>
+  <string name="version">Versión</string>
+  <string name="changelog">Changelog</string>
+  <string name="tap_to_open">Pulsá para abrir</string>
+  <string name="report_a_bug">Reportá un error</string>
+  <string name="open_source_licenses">Licencias de código abierto</string>
+  <string name="torrents">Torrents</string>
+  <string name="download_speed">Máxima velocidad de descarga</string>
+  <string name="upload_speed">Máxima velocidad de subida</string>
+  <string name="max_connections">Máximas conexiones totales</string>
+  <string name="dht_limit">Límite DHT</string>
+  <string name="unlimited">Ilimitado</string>
+  <string name="show_vpn">Mostrar en el menú opciones de VPN</string>
+  <string name="pixel_format">Forzar chroma de video</string>
+  <string name="rgb32">RGB 32-bit: Chroma por defecto</string>
+  <string name="rgb16">RGB 16-bit: Mejor funcionamiento, peor calidad</string>
+  <string name="yuv">YUV: Mejor funcionamiento pero no siempre anda bien</string>
+  <string name="best_fit">Mejor forma</string>
+  <string name="fill">Llenar</string>
+  <string name="fit_horizontal">Forma horizontal</string>
+  <string name="fit_vertical">Forma vertical</string>
+  <string name="original_size">Original</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">min</string>
+  <string name="read_more">Leer más</string>
+  <string name="watch_trailer">Ver tráiler</string>
+  <string name="no_subs">Sin subtítulos</string>
+  <string name="no_subs_available">No hay subtítulos disponibles</string>
+  <string name="quality">Calidad</string>
+  <string name="trailer">Trailer</string>
+  <string name="season">Temporada</string>
+  <string name="episode">Episodio</string>
+  <string name="specials">Especiales</string>
+  <string name="continuing">Al aire</string>
+  <string name="ended">Finalizada</string>
+  <string name="aired">Al aire: %s</string>
+  <string name="no_title_available">Sin nombre</string>
+  <string name="no_synopsis_available">No hay sinopsis disponible</string>
+  <string name="magnet">Imán</string>
+  <string name="scale">Escala</string>
+  <!--About as in 'About serie X'-->
+  <string name="about_series">Acerca de...</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Volúmen</string>
+  <string name="brightness">Brillo</string>
+  <string name="hardware_acceleration_error_title">Error de aceleración de Hardware</string>
+  <string name="genre_all">Todo</string>
+  <string name="hardware_acceleration_error_message">Hubo un error con la aceleración de hardware. ¿La desactivás e intentás de nuevo?</string>
+  <!--Genres-->
+  <string name="genre_action">Acción</string>
+  <string name="genre_adventure">Aventura</string>
+  <string name="genre_animation">Animació</string>
+  <string name="genre_biography">Biografía</string>
+  <string name="genre_comedy">Comedia</string>
+  <string name="genre_crime">Crimen</string>
+  <string name="genre_children">Infantil</string>
+  <string name="genre_documentary">Documental</string>
+  <string name="genre_drama">Drama</string>
+  <string name="genre_family">Familiar</string>
+  <string name="genre_fantasy">Fantasía</string>
+  <string name="genre_film_noir">Film Noir</string>
+  <string name="genre_game_show">Concursos</string>
+  <string name="genre_history">Histórico</string>
+  <string name="genre_home_garden">Casa y Jardín</string>
+  <string name="genre_horror">Terror</string>
+  <string name="genre_mini_series">Mini Series</string>
+  <string name="genre_music">Música</string>
+  <string name="genre_musical">Musical</string>
+  <string name="genre_mystery">Misterio</string>
+  <string name="genre_news">Noticias</string>
+  <string name="genre_reality">Reality</string>
+  <string name="genre_romance">Romántico</string>
+  <string name="genre_sci_fi">Ciencia Ficció</string>
+  <string name="genre_short">Corto</string>
+  <string name="genre_special_interest">Interés especial</string>
+  <string name="genre_soap">Telenovela</string>
+  <string name="genre_sport">Deporte</string>
+  <string name="genre_suspense">Suspenso</string>
+  <string name="genre_talk_show">Entrevistas</string>
+  <string name="genre_thriller">Suspenso</string>
+  <string name="genre_war">Bélica</string>
+  <string name="genre_western">Western</string>
+  <!--Anime:-->
+  <string name="genre_cars">Autos</string>
+  <string name="genre_dementia">Demencia</string>
+  <string name="genre_demons">Demonios</string>
+  <string name="genre_ecchi">Ecchi</string>
+  <string name="genre_game">Juego</string>
+  <string name="genre_harem">Harem</string>
+  <string name="genre_josei">Josei</string>
+  <string name="genre_kids">Niños</string>
+  <string name="genre_magic">Magia</string>
+  <string name="genre_martial_arts">Artes marciales</string>
+  <string name="genre_mecha">Mecha</string>
+  <string name="genre_military">Militar</string>
+  <string name="genre_police">Policia</string>
+  <string name="genre_parody">Parodia</string>
+  <string name="genre_psychological">Psicológico</string>
+  <string name="genre_samurai">Samurai</string>
+  <string name="genre_school">Escuela</string>
+  <string name="genre_seinen">Seinen</string>
+  <string name="genre_shoujo">Shoujo</string>
+  <string name="genre_shoujo_ai">Shoujo Ai</string>
+  <string name="genre_shounen">Shounen</string>
+  <string name="genre_shounen_ai">Shounen Ai</string>
+  <string name="genre_slice_of_life">Slice of Life</string>
+  <string name="genre_space">Espacial</string>
+  <string name="genre_super_power">Súper poder</string>
+  <string name="genre_supernatural">Sobrenatural</string>
+  <string name="genre_vampire">Vampiro</string>
+  <!--Possible tabs-->
+  <string name="popular">POPULARES</string>
+  <string name="top_rated">MEJOR PUNTUADAS</string>
+  <string name="release_date">FECHA DE ESTRENO</string>
+  <string name="last_updated">ÚLTIMAS ACTUALIZADAS</string>
+  <string name="year">AÑO</string>
+  <string name="a_to_z">A - Z</string>
+  <string name="trending">TENDENCIAS</string>
+  <string name="encountered_error_title">Error de video encontrado</string>
+  <string name="encountered_error">El reproductor de video encontró un error grave. El archivo de video no puede abrirse y/o reproducirse. El formato no fue reconocido.</string>
+  <!--BeamManager-->
+  <string name="pairing_tv">Conectando con la TV</string>
+  <string name="confirm_tv">Por favor, confirmá la conexión en tu TV</string>
+  <string name="enter_pairing_code">Ingresar código en la TV</string>
+  <!--TermsActivity strings-->
+  <string name="open_with">Abrir con</string>
+  <string name="select_file">Seleccionar archivo</string>
+  <string name="accept">Aceptar</string>
+  <string name="leave">Salir</string>
+  <string name="reload_video">Recargar video</string>
+  <!--Health-->
+  <string name="health_bad">Mala</string>
+  <string name="health_medium">No tan mal</string>
+  <string name="health_good">Buena</string>
+  <string name="health_excellent">Excelente</string>
+  <string name="health_unknown">Desconocido</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Esperando por torrent</string>
+  <string name="starting_buffering">Empezando búfer</string>
+  <string name="streaming_started">Streaming empezado</string>
+  <string name="waiting_for_subtitles">Cargando subtítulos</string>
+  <string name="start_external">Abrir reproductor externo</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="fastforward">Adelantar</string>
+  <string name="rewind">Rebobinar</string>
+  <string name="comm_error">Error de comunicación</string>
+  <string name="comm_message">Hubo un error mientras se descargaba el video. Esto puede ser por problemas de la red o protocolos de YouTube. Intentá más tarde.</string>
+  <string name="leave_videoplayer_title">¿Estás seguro?</string>
+  <string name="leave_videoplayer_message">¿Estás seguro de que querés salir del reproductor de video? %s se parará.</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Sólo por Wi-Fi</string>
+  <string name="wifi_only_message">Solo podés reproducir video con Wi-Fi. Podés desactivar esto en Preferencias si querés reproducirlos con señal móvil.</string>
+  <!--NavigationDrawer-->
+  <string name="no_search_results">No se encontraron resultados para esta búsqueda</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="website">Web</string>
+  <string name="forum">Foro</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Blog</string>
+  <string name="twitter">Twitter</string>
+  <!--Beam dialog-->
+  <string name="disconnect">Desconectar</string>
+  <!--Android TV below-->
+  <!--Main screen-->
+  <string name="error">Error</string>
+  <string name="play">Play</string>
+  <string name="settings">Configuración</string>
+  <string name="watch_trailer_1">Ver trailer</string>
+  <string name="movie">Movie</string>
+  <!--PTVUpdateFragment-->
+  <string name="choose_quality">Choose quality</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Versión</string>
+</resources>
