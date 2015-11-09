@@ -109,10 +109,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             videoViewHolder.title.setText(item.title);
             videoViewHolder.year.setText(item.year);
 
-            videoViewHolder.coverImage.setVisibility(View.GONE);
-            videoViewHolder.title.setVisibility(View.GONE);
-            videoViewHolder.year.setVisibility(View.GONE);
-
             if (item.image != null && !item.image.equals("")) {
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                         .resize(mItemWidth, mItemHeight)
