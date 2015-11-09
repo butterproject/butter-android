@@ -105,7 +105,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final OverviewItem overviewItem = getItem(position);
             Media item = overviewItem.media;
 
-
             videoViewHolder.title.setText(item.title);
             videoViewHolder.year.setText(item.year);
 
@@ -113,22 +112,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
                         .resize(mItemWidth, mItemHeight)
                         .transform(DrawGradient.INSTANCE)
-                        .into(videoViewHolder.coverImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                overviewItem.isImageError = false;
-                                AnimUtils.fadeIn(videoViewHolder.coverImage);
-                                AnimUtils.fadeIn(videoViewHolder.title);
-                                AnimUtils.fadeIn(videoViewHolder.year);
-                            }
-
-                            @Override
-                            public void onError() {
-                                overviewItem.isImageError = true;
-                                AnimUtils.fadeIn(videoViewHolder.title);
-                                AnimUtils.fadeIn(videoViewHolder.year);
-                            }
-                        });
+                        .into(videoViewHolder.coverImage);
             }
         }
     }
@@ -203,7 +187,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View v, Media item, int position);
+        void onItemClick(View v, Media item, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -264,7 +248,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     class OverviewItem {
         Media media;
-        boolean isImageError = true;
         boolean isLoadingItem = false;
 
         OverviewItem(Media media) {

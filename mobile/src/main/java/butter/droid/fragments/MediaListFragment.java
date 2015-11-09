@@ -323,19 +323,25 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         @DebugLog
         public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
             if (!(mGenre == null ? "" : mGenre).equals(filters.genre == null ? "" : filters.genre)) return; // nothing changed according to the provider, so don't do anything
+
+            items.removeAll(mItems);
+            if(items.size() == 0) {
+                mEndOfListReached = true;
+                changed = false;
+            }
+
             if(!changed) {
                 setState(State.LOADED);
                 return;
             }
 
-            mItems.clear();
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     setState(State.LOADED);
                 }
             });
-            if (null != items) mItems.addAll(items);
+            mItems.addAll(items);
 
             //fragment may be detached, so we dont want to update the UI
             if (!isAdded())
@@ -347,7 +353,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.setItems(items);
+                    mAdapter.setItems(mItems);
                     mPreviousTotal = mTotalItemCount = mAdapter.getItemCount();
                 }
             });
@@ -460,7 +466,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 }
             }
 
-            if (!mEndOfListReached && !(mState == State.SEARCHING) && !(mState == State.LOADING_PAGE) && !(mState == State.LOADING) && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
+            if (!mEndOfListReached && mState != State.SEARCHING && mState != State.LOADING_PAGE && mState != State.LOADING && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
                     mLoadingTreshold)) {
 
                 mFilters.page = mPage;
