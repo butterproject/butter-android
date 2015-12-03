@@ -1,4 +1,4 @@
-Butter for Android
+[Butter for Android](https://github.com/butterproject/butter-android)
 ----
 
 Allow any Android user to watch movies easily streaming from torrents, without any particular knowledge.
@@ -18,7 +18,7 @@ Keep track of Butter development and community activity.
 
 ## Getting Involved
 
-Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](CONTRIBUTING.md).
+Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](CONTRIBUTING.md#contributing-to-butter).
 
 ## Build Instructions ##
 
