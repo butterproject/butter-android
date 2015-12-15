@@ -1,3 +1,0 @@
-set solib-search-path jni/obj/local/arm64-v8a
-source /home/sv244/android-ndk-linux/prebuilt/common/gdb/common.setup
-directory /home/sv244/android-ndk-linux/platforms/android-21/arch-arm64/usr/include /home/sv244/vlc-android/vlc/modules/codec/omxil /home/sv244/vlc-android/android-headers/21/frameworks/native/include /home/sv244/vlc-android/android-headers/21/frameworks/av/include /home/sv244/vlc-android/android-headers/21/system/core/include /home/sv244/vlc-android/android-headers/21/hardware/libhardware/include jni /home/sv244/android-ndk-linux/sources/cxx-stl/system /home/sv244/vlc-android/vlc/include
