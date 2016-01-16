@@ -40,6 +40,19 @@ public class NetworkUtils {
         return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
 
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     * is ethernet connected
+	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    /**
+     * Get whether or not an ethernet connection is currently connected.
+     */
+    public static boolean isEthernetConnected(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) return false;
+        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET).isConnected();
+    }
+
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 * is network connected
 	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
