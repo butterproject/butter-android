@@ -179,6 +179,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     public void playStream(StreamInfo streamInfo) {
         if (PrefUtils.get(this, Prefs.WIFI_ONLY, true) &&
                 !NetworkUtils.isWifiConnected(this) &&
+                !NetworkUtils.isEthernetConnected(this) &&
                 NetworkUtils.isNetworkConnected(this)) {
             MessageDialogFragment.show(getFragmentManager(), R.string.wifi_only, R.string.wifi_only_message);
         } else {
