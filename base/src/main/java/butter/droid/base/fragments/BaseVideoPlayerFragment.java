@@ -113,6 +113,7 @@ public abstract class BaseVideoPlayerFragment
 
     private boolean mEnded = false;
     private boolean mSeeking = false;
+    private boolean mMediaReady = false;
 
     private int mVideoHeight;
     private int mVideoWidth;
@@ -216,7 +217,8 @@ public abstract class BaseVideoPlayerFragment
         updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, getResources().getInteger(R.integer.player_subtitles_default_text_size)));
 
         prepareVlcVout();
-        loadMedia();
+        if(mMediaReady)
+            loadMedia();
     }
 
     @Override
@@ -257,7 +259,12 @@ public abstract class BaseVideoPlayerFragment
     }
 
     public void onMediaReady(){
-        loadMedia();
+        if(!mMediaReady) {
+            mMediaReady = true;
+        }
+        if(mLibVLC != null) {
+            loadMedia();
+        }
     }
 
     protected void disableHardwareAcceleration() {
