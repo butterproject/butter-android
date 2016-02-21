@@ -45,7 +45,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MoviesProvider;
+import butter.droid.base.providers.media.TVProvider;
 import hugo.weaving.DebugLog;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
@@ -76,8 +77,8 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
     private ArrayObjectAdapter mShowAdapter;
     private ArrayObjectAdapter mMoviesAdapter;
 
-    private VodoProvider mMoviesProvider = new VodoProvider();
-    // private XProvider mShowsProvider = x
+    private MediaProvider mMoviesProvider = new MoviesProvider();
+    private MediaProvider mShowsProvider = new TVProvider();
 
     private BackgroundUpdater mBackgroundUpdater;
 
@@ -143,7 +144,6 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
         showsFilter.sort = MediaProvider.Filters.Sort.DATE;
         showsFilter.order = MediaProvider.Filters.Order.DESC;
 
-        /*
         mShowsProvider.getList(null, showsFilter, new MediaProvider.Callback() {
             @DebugLog
             @Override
@@ -168,7 +168,6 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 });
             }
         });
-        */
 
         final MediaProvider.Filters movieFilters = new MediaProvider.Filters();
         movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
@@ -247,17 +246,14 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
     }
 
     private void setupTVShows() {
-        /*
         HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows));
         MediaCardPresenter mediaCardPresenter = new MediaCardPresenter(getActivity());
         mShowAdapter = new ArrayObjectAdapter(mediaCardPresenter);
         mShowAdapter.add(new MediaCardPresenter.MediaCardItem(true));
         mRowsAdapter.add(new ListRow(showsHeader, mShowAdapter));
-        */
     }
 
     private void setupMoreTVShows() {
-        /*
         HeaderItem moreHeader = new HeaderItem(1, getString(R.string.more_shows));
         MorePresenter morePresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
@@ -273,7 +269,6 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
         }
 
         mRowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
-        */
     }
 
     private void setupMore() {
@@ -357,7 +352,7 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                             .setPositiveButton("Start", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Movie media = new Movie(new VodoProvider(), new YSubsProvider());
+                                    Movie media = new Movie(new MoviesProvider(), new YSubsProvider());
 
                                     media.videoId = "dialogtestvideo";
                                     media.title = "User input test video";
@@ -368,7 +363,7 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                     builder.show();
                 }
 
-                final Movie media = new Movie(new VodoProvider(), new YSubsProvider());
+                final Movie media = new Movie(new MoviesProvider(), new YSubsProvider());
                 media.videoId = "bigbucksbunny";
                 media.title = file_types[index];
                 media.subtitles = new HashMap<>();

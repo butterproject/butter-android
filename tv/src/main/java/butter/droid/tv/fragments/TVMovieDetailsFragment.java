@@ -30,7 +30,7 @@ import java.util.List;
 
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -46,7 +46,7 @@ import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
-	VodoProvider mMovieProvider = new VodoProvider();
+	MoviesProvider mMovieProvider = new MoviesProvider();
 
 	public static Fragment newInstance(Media media) {
 		TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
