@@ -42,7 +42,7 @@ android {
     def buildNumber = (System.getenv("BUILD_NUMBER") == null ? advancedVersioning.versionCode : System.getenv("BUILD_NUMBER")) as int
 
     defaultConfig {
-        applicationId "butter.droid.tv"
+        applicationId "pct.droid.tv"
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdk
         versionCode buildNumber
