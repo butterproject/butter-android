@@ -216,6 +216,7 @@ public abstract class BaseVideoPlayerFragment
         updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, getResources().getInteger(R.integer.player_subtitles_default_text_size)));
 
         prepareVlcVout();
+        loadMedia();
     }
 
     @Override
