@@ -1,18 +1,23 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.20.1'
-    }
-}
-
-
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+apply plugin: 'android-sdk-manager'
+apply plugin: 'org.moallemi.advanced-build-version'
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
-apply plugin: 'io.fabric'
 apply plugin: 'com.github.ben-manes.versions'
 
 
@@ -20,20 +25,29 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+advancedVersioning {
+    codeOptions {
+        versionCodeType org.moallemi.gradle.internal.VersionCodeType.AUTO_INCREMENT_ONE_STEP
+    }
+    nameOptions {
+        versionMajor 0
+        versionMinor 1
+        versionPatch 2
+    }
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
     buildToolsVersion rootProject.ext.buildToolsVersion
-    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? 0 : System.getenv("BUILD_NUMBER")) as int
+    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? advancedVersioning.versionCode : System.getenv("BUILD_NUMBER")) as int
 
     defaultConfig {
         applicationId "butter.droid.tv"
         minSdkVersion 21
-        targetSdkVersion 22 //rootProject.ext.targetSdk
+        targetSdkVersion rootProject.ext.targetSdk
         versionCode buildNumber
-        versionName "0.1.0"
+        versionName advancedVersioning.versionName
         multiDexEnabled true
-        manifestPlaceholders = [crashlyticsApiKey: System.getenv("CRASHLYTICS_API_KEY") ?: "b246d46ecb3f6b64f3ce24c0c2055cc4fd101c93"]
     }
 
     signingConfigs {
@@ -66,28 +80,12 @@ android {
             enable true
             universalApk false
             reset()
-            include 'arm64-v8a', 'armeabi-v7a', 'x86'
+            include 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
         }
     }
 
-    project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4]
+    project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4, "x86_64": 5]
 }
-/*
- * This file is part of Butter.
- *
- * Butter is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Butter is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Butter. If not, see <http://www.gnu.org/licenses/>.
- */
 
 //./gradlew dependencyUpdates -Drevision=release
 dependencies {
@@ -97,9 +95,8 @@ dependencies {
     compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:leanback-v17:${rootProject.ext.appCompatVersion}"
     compile "com.squareup.picasso:picasso:2.5.2"
-    compile "com.google.code.gson:gson:2.3.1"
     compile "com.jakewharton:butterknife:7.0.1"
-    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'de.greenrobot:eventbus:2.4.1'
 
     compile project(':base')
 }

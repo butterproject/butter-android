@@ -17,10 +17,15 @@
 
 package butter.droid.tv.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -32,13 +37,24 @@ import butter.droid.tv.service.RecommendationService;
 
 public class TVLaunchActivity extends Activity {
 
+	private static final int PERMISSIONS_REQUEST = 1232;
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		Intent recommendationIntent = new Intent(this, RecommendationService.class);
 		startService(recommendationIntent);
 
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
+			return;
+		}
+
+		proceedCreate();
+	}
+
+	private void proceedCreate() {
 		Boolean firstRun = PrefUtils.get(this, Prefs.FIRST_RUN, true);
 
 		if (firstRun) {
@@ -61,4 +77,18 @@ public class TVLaunchActivity extends Activity {
 			TVMainActivity.startActivity(this);
 		}
 	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST: {
+				if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+					proceedCreate();
+				} else {
+					finish();
+				}
+			}
+		}
+	}
+
 }

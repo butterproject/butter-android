@@ -7,20 +7,20 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.1'
+        classpath 'com.android.tools.build:gradle:1.5.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath 'org.moallemi.gradle.advanced-build-version:gradle-plugin:1.5.1'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 ext {
-    appCompatVersion = "23.0.1"
-    buildToolsVersion = "22.0.1"
-    crashlyticsVersion = "2.5.2"
+    appCompatVersion = "23.1.1"
+    buildToolsVersion = "23.0.1"
     targetSdk = 23
     compileSdk = 23
     minSdk = 15
@@ -38,12 +38,7 @@ allprojects {
     project.afterEvaluate {
         //only apply to projects that have the android plugin
         if (project.plugins.hasPlugin('com.android.application')) {
-
-            //add the android sdk manager plugin to andriod projects
-            apply plugin: 'android-sdk-manager'
-
-            //global android settings
-
+            //global android setting
             project.android {
                 packagingOptions {
                     exclude 'META-INF/beans.xml'
@@ -65,9 +60,6 @@ allprojects {
                     javaMaxHeapSize "2048M"
                 }
             }
-        } else if (project.plugins.hasPlugin('com.android.library')) {
-            //add the android sdk manager plugin to andriod projects
-            apply plugin: 'android-sdk-manager'
         }
     }
 }
@@ -75,7 +67,7 @@ allprojects {
 def renameOutputFiles(Project project, variant) {
     variant.outputs.each { output ->
         def abi = output.getFilter(com.android.build.OutputFile.ABI);
-        output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 1000000 + output.versionCode
+        output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 10000000 + output.versionCode
 
         def alignedOutputFile = output.outputFile
         def unalignedOutputFile = output.packageApplication.outputFile
