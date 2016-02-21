@@ -61,11 +61,9 @@ public class ButterUpdater extends Observable {
 
     private static ButterUpdater sThis;
 
-    public static int NOTIFICATION_ID = 0xDEADBEEF;    
-    public final String STATUS_CHECKING = "checking_updates";
+    public static int NOTIFICATION_ID = 0x808C049;
     public final String STATUS_NO_UPDATE = "no_updates";
     public final String STATUS_GOT_UPDATE = "got_update";
-    public final String STATUS_HAVE_UPDATE = "have_update";
 
     private final long MINUTES = 60 * 1000;
     private final long HOURS = 60 * MINUTES;
@@ -74,7 +72,7 @@ public class ButterUpdater extends Observable {
     private long UPDATE_INTERVAL = 3 * HOURS;
 
     public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
-    private final String DATA_URLS[] = {"https://butterproject.org/android"};
+    private final String DATA_URLS[] = BuildConfig.UPDATE_URLS;
     private Integer mCurrentUrl = 0;
 
     public static final String LAST_UPDATE_CHECK = "update_check";
@@ -196,7 +194,7 @@ public class ButterUpdater extends Observable {
             }
 
             Request request = new Request.Builder()
-                    .url(DATA_URLS[mCurrentUrl] + "/" + mVariantStr + ".json")
+                    .url(DATA_URLS[mCurrentUrl])
                     .build();
 
             mHttpClient.newCall(request).enqueue(mCallback);
@@ -219,7 +217,7 @@ public class ButterUpdater extends Observable {
             if(mCurrentUrl < DATA_URLS.length - 1) {
                 mCurrentUrl++;
                 Request newRequest = new Request.Builder()
-                        .url(DATA_URLS[mCurrentUrl] + "/" + mVariantStr + ".json")
+                        .url(DATA_URLS[mCurrentUrl])
                         .build();
 
                 mHttpClient.newCall(newRequest).enqueue(mCallback);

@@ -71,20 +71,10 @@ public class ButterApplication extends Application implements ButterUpdater.List
         super.onCreate();
         sThis = this;
 
-        if(!BuildConfig.GIT_BRANCH.equals("local"))
-            Fabric.with(this, new Crashlytics());
-
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
         LeakCanary.install(this);
         Foreground.init(this);
-
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                        .build()
-        );
 
         Constants.DEBUG_ENABLED = false;
         int versionCode = 0;
@@ -102,7 +92,6 @@ public class ButterApplication extends Application implements ButterUpdater.List
         if (Constants.DEBUG_ENABLED) {
             Timber.plant(new Timber.DebugTree());
         }
-        Timber.plant(new StethoTree());
 
         ButterUpdater.getInstance(this, this).checkUpdates(false);
 
@@ -122,12 +111,6 @@ public class ButterApplication extends Application implements ButterUpdater.List
 
         Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         Timber.i("Chosen cache location: " + directory);
-
-
-        if (PrefUtils.get(this, Prefs.INSTALLED_VERSION, 0) < versionCode) {
-            PrefUtils.save(this, Prefs.INSTALLED_VERSION, versionCode);
-            FileUtils.recursiveDelete(new File(StorageUtils.getIdealCacheDirectory(this) + "/backend"));
-        }
 
         Picasso.Builder builder = new Picasso.Builder(getAppContext());
         OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
