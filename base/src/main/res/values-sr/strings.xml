@@ -31,7 +31,7 @@
   <string name="title_movies">Филмови</string>
   <string name="title_anime">Аниме</string>
   <string name="signature_invalid">Потпис апликације није исправан</string>
-  <string name="possibly_dangerous">Butter је фалсификован. Преузмите нови инсталациони фајл на: http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time је фалсификован. Преузмите нови инсталациони фајл на: http://butterproject.org/</string>
   <string name="subtitles">Титлови</string>
   <string name="now_playing">Пуштам</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Нема резултата претраге</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter је направљен тако што је група програмера и дизајнера саставила гомиле АПИ-ја како
+  <string name="about_message">Popcorn Time је направљен тако што је група програмера и дизајнера саставила гомиле АПИ-ја како
 ⇥⇥би искуство гледања торент филмова учинила што једноставнијим.\n\nМи смо пројекат отвореног кода. Ми смо из целог света.
 		Ми волимо наше филмове. А, брате, волимо и кокице.</string>
   <string name="website">Веб сајт</string>

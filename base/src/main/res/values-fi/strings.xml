@@ -224,7 +224,7 @@
   <string name="no_search_results">Hakusi ei tuottanut yhtään osumaa</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter on monen kehittäjän ja suunnittelijan yhteistyön tulos. Tarkoitus on tehdä torrent-elokuvien katsomisesta mahdollisimman yksinkertaista! Olemme avoimeen lähdekoodiin perustuva projekti. Toimimme kaikkialla maailmassa. Rakastamme elokuviamme ja voi kuinka rakastammekaan popcornia.</string>
+  <string name="about_message">Popcorn Time on monen kehittäjän ja suunnittelijan yhteistyön tulos. Tarkoitus on tehdä torrent-elokuvien katsomisesta mahdollisimman yksinkertaista! Olemme avoimeen lähdekoodiin perustuva projekti. Toimimme kaikkialla maailmassa. Rakastamme elokuviamme ja voi kuinka rakastammekaan popcornia.</string>
   <string name="website">Internet-sivut</string>
   <string name="forum">Foorumi</string>
   <string name="google_plus">Google+</string>
@@ -274,7 +274,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Kyllä</string>
   <string name="later">Ei, myöhemmin</string>
-  <string name="new_update">Uusi versio Butter:sta Android TV:lle on saatavilla. Haluatko päivittää heti?</string>
+  <string name="new_update">Uusi versio Popcorn Time:sta Android TV:lle on saatavilla. Haluatko päivittää heti?</string>
   <string name="network_message">Tarkasta internetyhteytesi</string>
   <string name="choose_quality">Valitse laatu</string>
   <string name="more_movies">Lisää elokuvia</string>

@@ -6,7 +6,7 @@
   <string name="enabled">启用</string>
   <string name="disabled">禁用</string>
   <string name="update_available">更新可用</string>
-  <string name="wrong_abi">抱歉！您的 Android 设备未运行合适版本的 Butter。条件允许的话，将会为您下载合适的版本。若一分钟之内安装包还未开始下载，说明您的设备不支持或您的网络连接有问题，请您稍后重试。若自动安装失败，请您用其他方式手动安装合适版本。</string>
+  <string name="wrong_abi">抱歉！您的 Android 设备未运行合适版本的 Popcorn Time。条件允许的话，将会为您下载合适的版本。若一分钟之内安装包还未开始下载，说明您的设备不支持或您的网络连接有问题，请您稍后重试。若自动安装失败，请您用其他方式手动安装合适版本。</string>
   <string name="press_install">点击安装</string>
   <string name="loading_data">数据载入中...</string>
   <string name="loading_details">详情载入中...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">电影</string>
   <string name="title_anime">动漫</string>
   <string name="signature_invalid">应用程序签名无效</string>
-  <string name="possibly_dangerous">Butter 已被篡改。请从官方网站 http://butterproject.org/ 下载新的安装文件。</string>
+  <string name="possibly_dangerous">Popcorn Time 已被篡改。请从官方网站 http://butterproject.org/ 下载新的安装文件。</string>
   <string name="subtitles">字幕</string>
   <string name="now_playing">正在播放</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">未搜索到任何结果</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter 是众多开发者和设计师共同努力的成果，
+  <string name="about_message">Popcorn Time 是众多开发者和设计师共同努力的成果，
 我们将大量API融汇在一起只为把种子观影体验变得简洁至极。
 我们的项目是开源的。我们来自世界不同的角落。
 我们热爱电影。 还有，我们超爱爆米花。</string>
@@ -282,7 +282,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">好的</string>
   <string name="later">以后</string>
-  <string name="new_update">发现新版本的 Butter for Android TV，您想要现在升级吗？</string>
+  <string name="new_update">发现新版本的 Popcorn Time for Android TV，您想要现在升级吗？</string>
   <string name="network_message">检查您的网络连接</string>
   <string name="choose_quality">选择影片质量</string>
   <string name="more_movies">更多电影</string>

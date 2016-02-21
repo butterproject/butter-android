@@ -6,7 +6,7 @@
   <string name="enabled">Dibenarkan</string>
   <string name="disabled">Dilumpuhkan</string>
   <string name="update_available">Kemaskini baharu tersedia</string>
-  <string name="wrong_abi">Alamak! Anda telah guna versi Butter untuk Android yang salah. Versi sepatutnya sedang dimuat turun, jika boleh. Jika pemasang tidak dimulakan dalam tempoh seminit maka peranti anda tidak disokong atau sambungan internet anda bermasalah, iaitu anda perlu mula sekali lagi kemudian. Jika pemasang gagal maka anda mesti pasang versi yang betul secara manual.</string>
+  <string name="wrong_abi">Alamak! Anda telah guna versi Popcorn Time untuk Android yang salah. Versi sepatutnya sedang dimuat turun, jika boleh. Jika pemasang tidak dimulakan dalam tempoh seminit maka peranti anda tidak disokong atau sambungan internet anda bermasalah, iaitu anda perlu mula sekali lagi kemudian. Jika pemasang gagal maka anda mesti pasang versi yang betul secara manual.</string>
   <string name="press_install">Tekan untuk pasang</string>
   <string name="loading_data">Memuatkan data...</string>
   <string name="loading_details">Memuatkan perincian...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Cereka</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Tandatangan apl tidak sah</string>
-  <string name="possibly_dangerous">Butter telah diubahsuai. Sila muat turun fail pemasangan baharu dari http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time telah diubahsuai. Sila muat turun fail pemasangan baharu dari http://butterproject.org/</string>
   <string name="subtitles">Sarikata</string>
   <string name="now_playing">Kini dimainkan</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Tiada keputusan gelintar ditemui</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter adalah hasil usaha ramai pembangun dan pereka yang menggabungkan beberapa API supaya
+  <string name="about_message">Popcorn Time adalah hasil usaha ramai pembangun dan pereka yang menggabungkan beberapa API supaya
 		pengalaman menonton cereka torrent menjadi mudah.\n\nKami merupakan projek sumber terbuka. Kami berasal dari pelbagai lokasi diseluruh dunia.
 		Kami menyukai cereka. Semestinya kami menyukai popcorn.</string>
   <string name="website">Laman Sesawang</string>
@@ -281,7 +281,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Ya</string>
   <string name="later">Tidak, kemudian</string>
-  <string name="new_update">Satu versi baharu Butter untuk TV Android telah tersedia. Anda mahu kemaskini sekarang?</string>
+  <string name="new_update">Satu versi baharu Popcorn Time untuk TV Android telah tersedia. Anda mahu kemaskini sekarang?</string>
   <string name="network_message">Periksa sambungan internet anda</string>
   <string name="choose_quality">Pilih kualiti</string>
   <string name="more_movies">Lagi Cereka</string>

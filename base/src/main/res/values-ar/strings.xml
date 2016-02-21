@@ -261,7 +261,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">نعم</string>
   <string name="later">لا، لاحقا</string>
-  <string name="new_update">نسخة جديدة من Butter for Android TV متاحة الآن. هل تريد التحديث الآن؟</string>
+  <string name="new_update">نسخة جديدة من Popcorn Time for Android TV متاحة الآن. هل تريد التحديث الآن؟</string>
   <string name="network_message">إفحص إتصالك بالأنترنت</string>
   <string name="choose_quality">اختيار الجودة</string>
   <string name="more_movies">أفلام أكثر</string>

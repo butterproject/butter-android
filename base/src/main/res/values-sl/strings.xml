@@ -6,7 +6,7 @@
   <string name="enabled">Omogočeno</string>
   <string name="disabled">Onemogočeno</string>
   <string name="update_available">Na voljo je nova posodobitev</string>
-  <string name="wrong_abi">O joj! Uporabljate napačno različico programa Butter za Android. Prava različica se prenaša sedaj, če je to mogoče. Če se namestitveni program ne zažene v minuti, vaša naprava ni podprta ali pa je vaša internetna povezava prekinjena, kar pomeni, da poskusite ponovno kasneje. Če namestitvenemu programu takrat spodleti, boste morali pravo različico namestiti ročno.</string>
+  <string name="wrong_abi">O joj! Uporabljate napačno različico programa Popcorn Time za Android. Prava različica se prenaša sedaj, če je to mogoče. Če se namestitveni program ne zažene v minuti, vaša naprava ni podprta ali pa je vaša internetna povezava prekinjena, kar pomeni, da poskusite ponovno kasneje. Če namestitvenemu programu takrat spodleti, boste morali pravo različico namestiti ročno.</string>
   <string name="press_install">Pritisni za namestitev</string>
   <string name="loading_data">Nalaganje podatkov...</string>
   <string name="loading_details">Nalaganje podrobnosti...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Filmi</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Neveljaven podpis aplikacije</string>
-  <string name="possibly_dangerous">Zaznan je bil poseg v program Butter. Prenesite novo namestitveno datoteko z naslova http://butterproject.org/</string>
+  <string name="possibly_dangerous">Zaznan je bil poseg v program Popcorn Time. Prenesite novo namestitveno datoteko z naslova http://butterproject.org/</string>
   <string name="subtitles">Podnapisi</string>
   <string name="now_playing">Zdaj se predvaja</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Ni našlo iskanih rezultatov</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter je rezultat mnogih razvijalcev in oblikovalcev kateri so združili kup API-jev skupaj, da bi omogočili
+  <string name="about_message">Popcorn Time je rezultat mnogih razvijalcev in oblikovalcev kateri so združili kup API-jev skupaj, da bi omogočili
 ⇥⇥izkušnjo ob gledanju filmskih torentov na najenostavnejši način.\n\nSmo odprto kodni projekt. Prihajamo iz vseh koncev sveta. Imamo ⇥⇥radi naše filme. In obožujemo kokice.</string>
   <string name="website">Spletna stran</string>
   <string name="forum">Forum</string>
@@ -280,7 +280,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Da</string>
   <string name="later">Ne, pozneje</string>
-  <string name="new_update">Na voljo je nova različica programa Butter za Android TV. Ali ga želite posodobiti zdaj?</string>
+  <string name="new_update">Na voljo je nova različica programa Popcorn Time za Android TV. Ali ga želite posodobiti zdaj?</string>
   <string name="network_message">Preverite internetno povezavo</string>
   <string name="choose_quality">Izberi kvaliteto</string>
   <string name="more_movies">Več filmov</string>

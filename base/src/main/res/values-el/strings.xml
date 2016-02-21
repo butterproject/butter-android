@@ -6,7 +6,7 @@
   <string name="enabled">Ενεργοποιημένο</string>
   <string name="disabled">Απενεργοποιημένο</string>
   <string name="update_available">Διαθέσιμη νέα ενημέρωση</string>
-  <string name="wrong_abi">Ωχ! Χρησιμοποιείτε τη λάθος έκδοση του Butter για Android. Η σωστή έκδοση λαμβάνεται αυτή τη στιγμή, εάν είναι δυνατόν. Αν το πρόγραμμα εγκατάστασης δεν εκκινήσει μέσα σε ένα λεπτό τότε η συσκευή σας δεν υποστηρίζεται ή η σύνδεση σας στο ίντερνετ έχει κάποιο πρόβλημα, το οποίο σημαίνει ότι θα πρέπει να δοκιμάσετε ξανά αργότερα. Αν το πρόγραμμα εγκατάστασης αποτύχει τότε πρέπει να εγκαταστήσετε τη σωστή έκδοση χειροκίνητα.</string>
+  <string name="wrong_abi">Ωχ! Χρησιμοποιείτε τη λάθος έκδοση του Popcorn Time για Android. Η σωστή έκδοση λαμβάνεται αυτή τη στιγμή, εάν είναι δυνατόν. Αν το πρόγραμμα εγκατάστασης δεν εκκινήσει μέσα σε ένα λεπτό τότε η συσκευή σας δεν υποστηρίζεται ή η σύνδεση σας στο ίντερνετ έχει κάποιο πρόβλημα, το οποίο σημαίνει ότι θα πρέπει να δοκιμάσετε ξανά αργότερα. Αν το πρόγραμμα εγκατάστασης αποτύχει τότε πρέπει να εγκαταστήσετε τη σωστή έκδοση χειροκίνητα.</string>
   <string name="press_install">Πατήστε για εγκατάσταση</string>
   <string name="loading_data">Φόρτωση δεδομένων...</string>
   <string name="loading_details">Φόρτωση λεπτομερειών...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Ταινίες</string>
   <string name="title_anime">Άνιμε</string>
   <string name="signature_invalid">Άκυρη υπογραφή εφαρμογής</string>
-  <string name="possibly_dangerous">Το Butter έχει παραποιηθεί. Παρακαλώ κατεβάστε ένα νέο αρχείο εγκατάστασης από το http://butterproject.org/</string>
+  <string name="possibly_dangerous">Το Popcorn Time έχει παραποιηθεί. Παρακαλώ κατεβάστε ένα νέο αρχείο εγκατάστασης από το http://butterproject.org/</string>
   <string name="subtitles">Υπότιτλοι</string>
   <string name="now_playing">Παίζει τώρα</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Δεν βρέθηκαν αποτελέσματα αναζήτησης</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Το Butter είναι το αποτέλεσμα πολλών προγραμματιστών και σχεδιαστών που χρησιμοποίησαν αρκετά API για να κάνουν την
+  <string name="about_message">Το Popcorn Time είναι το αποτέλεσμα πολλών προγραμματιστών και σχεδιαστών που χρησιμοποίησαν αρκετά API για να κάνουν την
 		εμπειρία της προβολής ταινιών μέσω torrent όσο το δυνατόν απλούστερη.\n\nΕίμαστε ένα έργο ανοιχτού κώδικα. Είμαστε από όλο τον κόσμο.
 		Αγαπάμε τις ταινίες μας. Και ο φίλε, αγαπάμε το ποπκόρν.</string>
   <string name="website">Ιστοσελίδα</string>
@@ -281,7 +281,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Ναι</string>
   <string name="later">Όχι, αργότερα</string>
-  <string name="new_update">Μία νέα έκδοση του Butter για Android TV είναι διαθέσιμη. Θέλετε να κάνετε ενημέρωση τώρα;</string>
+  <string name="new_update">Μία νέα έκδοση του Popcorn Time για Android TV είναι διαθέσιμη. Θέλετε να κάνετε ενημέρωση τώρα;</string>
   <string name="network_message">Ελέγξτε τη σύνδεση του δικτύου σας</string>
   <string name="choose_quality">Επιλογή ποιότητας</string>
   <string name="more_movies">Περισσότερες ταινίες</string>

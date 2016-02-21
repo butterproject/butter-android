@@ -6,7 +6,7 @@
   <string name="enabled">Etkin</string>
   <string name="disabled">Devre dışı</string>
   <string name="update_available">Yeni güncelleme bulundu</string>
-  <string name="wrong_abi">Butter for Android\'in yanlış sürümünü kullanıyorsunuz.  Doğru sürüm şu anda indiriliyor. Eğer kurulum bir dakika içinde başlamazsa, cihazınız desteklenmiyor olabilir veya internet bağlantınızda problem olabilir. Bu durumda daha sonra tekrar denemelisiniz. Eğer kurulum başarısız olursa, doğru sürümü elle yüklemelisiniz.</string>
+  <string name="wrong_abi">Popcorn Time for Android\'in yanlış sürümünü kullanıyorsunuz.  Doğru sürüm şu anda indiriliyor. Eğer kurulum bir dakika içinde başlamazsa, cihazınız desteklenmiyor olabilir veya internet bağlantınızda problem olabilir. Bu durumda daha sonra tekrar denemelisiniz. Eğer kurulum başarısız olursa, doğru sürümü elle yüklemelisiniz.</string>
   <string name="press_install">Yüklemek için tıklayın</string>
   <string name="loading_data">Veri yükleniyor...</string>
   <string name="loading_details">Detaylar yükleniyor...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Filmler</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Uygulamanın imzası geçersiz</string>
-  <string name="possibly_dangerous">Butter dosyası bozulmuş. Lütfen yeni bir kurulum dosyasını http://butterproject.org/ adresinden indirin</string>
+  <string name="possibly_dangerous">Popcorn Time dosyası bozulmuş. Lütfen yeni bir kurulum dosyasını http://butterproject.org/ adresinden indirin</string>
   <string name="subtitles">Altyazılar</string>
   <string name="now_playing">Oynatılıyor</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Arama sonucu bulunamadı</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter pek çok geliştiricinin ve tasarımcının bir araya gelerek torrent filmleri izlemeyi olabildiğince kolaylaştırmak için API\'ler oluşturmasıyla ortaya çıkmış bir üründür. Bu bir açık kaynak kodlu projedir. Biz dünyanın her yerinde bulunmaktayız. Biz filmleri seviyoruz. Ve çocuklar, biz patlamış mısırı seviyoruz.</string>
+  <string name="about_message">Popcorn Time pek çok geliştiricinin ve tasarımcının bir araya gelerek torrent filmleri izlemeyi olabildiğince kolaylaştırmak için API\'ler oluşturmasıyla ortaya çıkmış bir üründür. Bu bir açık kaynak kodlu projedir. Biz dünyanın her yerinde bulunmaktayız. Biz filmleri seviyoruz. Ve çocuklar, biz patlamış mısırı seviyoruz.</string>
   <string name="website">Website</string>
   <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
@@ -279,7 +279,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Evet</string>
   <string name="later">Hayır, sonra</string>
-  <string name="new_update">Butter\'ın Android TV için yeni bir versiyonu kullanılabilir durumda. Şimdi güncellemek ister misiniz?</string>
+  <string name="new_update">Popcorn Time\'ın Android TV için yeni bir versiyonu kullanılabilir durumda. Şimdi güncellemek ister misiniz?</string>
   <string name="network_message">İnternet bağlantınızı kontrol edin</string>
   <string name="choose_quality">Kaliteyi seç</string>
   <string name="more_movies">Daha fazla film</string>

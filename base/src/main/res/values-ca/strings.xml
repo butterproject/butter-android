@@ -6,7 +6,7 @@
   <string name="enabled">Activat</string>
   <string name="disabled">Desactivat</string>
   <string name="update_available">Actualitzacions disponibles</string>
-  <string name="wrong_abi">Oh oh! Esteu utilitzant la versió incorrecta de Butter per a Android. En cas que hagi estat possible, es deu estar descarregant la versió correcta. Si l\'instal·lador no s\'inicia en un minut significa que el vostre dispositiu no és compatible o que la connexió a Internet no funciona. Si és així, torneu-ho a provar més tard. En cas que falli l\'instal·lador haureu d\'instal·lar la versió correcta de forma manual.</string>
+  <string name="wrong_abi">Oh oh! Esteu utilitzant la versió incorrecta de Popcorn Time per a Android. En cas que hagi estat possible, es deu estar descarregant la versió correcta. Si l\'instal·lador no s\'inicia en un minut significa que el vostre dispositiu no és compatible o que la connexió a Internet no funciona. Si és així, torneu-ho a provar més tard. En cas que falli l\'instal·lador haureu d\'instal·lar la versió correcta de forma manual.</string>
   <string name="press_install">Premeu per instal·lar</string>
   <string name="loading_data">S\'estan carregant les dades...</string>
   <string name="loading_details">S\'estan carregant els detalls...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Pel·lícules</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Signatura de l\'aplicació no vàlida</string>
-  <string name="possibly_dangerous">Butter ha estat compromesa. Baixeu un nou fitxer d\'instal·lació de http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time ha estat compromesa. Baixeu un nou fitxer d\'instal·lació de http://butterproject.org/</string>
   <string name="subtitles">Subtítols</string>
   <string name="now_playing">S\'està reproduint</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">No s\'han trobat resultats</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter és el resultat de molts desenvolupadors i dissenyadors ajuntant un grapat d\'APIs per tal de
+  <string name="about_message">Popcorn Time és el resultat de molts desenvolupadors i dissenyadors ajuntant un grapat d\'APIs per tal de
 simplificar tant com es pugui l\'experiència de veure pel·lícules torrent. Som un projecte de codi obert. Som d\'arreu del món. Ens encanten
 les nostres pelis. I noi, ens encanten les crispetes.</string>
   <string name="website">Lloc web</string>

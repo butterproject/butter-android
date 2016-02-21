@@ -6,7 +6,7 @@
   <string name="enabled">Įjungta</string>
   <string name="disabled">Išjungta</string>
   <string name="update_available">Prienamas atnaaujinimas</string>
-  <string name="wrong_abi">Ojoj! Jūs naudojate neteisingą Butter versiją, skirtą Android. Teisinga versija atsiunčiama šiuos metu, jei tik tai įmanoma. Jei diegimas neprasidės per minutę, jūsų įrenginys nepalaikomas arba neveikia interneto ryšys, todėl galite pamėginti vėliau. Jei diegimas nepavyksta, jums reikia teisingą versiją įdiegti rankiniu būdu.</string>
+  <string name="wrong_abi">Ojoj! Jūs naudojate neteisingą Popcorn Time versiją, skirtą Android. Teisinga versija atsiunčiama šiuos metu, jei tik tai įmanoma. Jei diegimas neprasidės per minutę, jūsų įrenginys nepalaikomas arba neveikia interneto ryšys, todėl galite pamėginti vėliau. Jei diegimas nepavyksta, jums reikia teisingą versiją įdiegti rankiniu būdu.</string>
   <string name="press_install">Paspauskite, norėdami įdiegti</string>
   <string name="loading_data">Įkeliami duomenys...</string>
   <string name="loading_details">Įkeliama informacija...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Filmai</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Programos parašas klaidingas</string>
-  <string name="possibly_dangerous">Butter buvo sugadintas. Atsisiųskite naują įdiegimo failą iš http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time buvo sugadintas. Atsisiųskite naują įdiegimo failą iš http://butterproject.org/</string>
   <string name="subtitles">Subtitrai</string>
   <string name="now_playing">Dabar atkuriama</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Nerasta paieškos rezultatų</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter! yra rezultatas daugelio kūrėjų ir dizainerių, sujungusių krūvą API sąsajų į vieną visumą,
+  <string name="about_message">Popcorn Time! yra rezultatas daugelio kūrėjų ir dizainerių, sujungusių krūvą API sąsajų į vieną visumą,
 		kad torrent filmų žiūrėjimas būtų kaip įmanoma paprastesnis.\n\nMes esame atvirojo kodo projektas. Mes esama iš viso pasaulio. Mes
 		mėgstame filmus. Ir žmogau, mes mėgstame spragėsius.</string>
   <string name="website">Tinklalapis</string>
@@ -281,7 +281,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Taip</string>
   <string name="later">Ne, vėliau</string>
-  <string name="new_update">Prieiname nauja Butter versija, skirta Android TV. Ar norite atnaujinti dabar?</string>
+  <string name="new_update">Prieiname nauja Popcorn Time versija, skirta Android TV. Ar norite atnaujinti dabar?</string>
   <string name="network_message">Patikrinkite savo interneto ryšį</string>
   <string name="choose_quality">Pasirinkite kokybę</string>
   <string name="more_movies">Daugiau filmų</string>
