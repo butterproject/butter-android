@@ -305,6 +305,10 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
 
     public void toggleSubtitleAction(Boolean enabled) {
         mSubsButtonEnabled = enabled;
+
+        if(mSecondaryActionsAdapter == null)
+            return;
+
         if(enabled) {
             if(mSecondaryActionsAdapter.indexOf(mClosedCaptioningAction) == -1)
                 mSecondaryActionsAdapter.add(mClosedCaptioningAction);
