@@ -30,10 +30,6 @@ import android.net.Uri;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 
-import com.crashlytics.android.Crashlytics;
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp.StethoInterceptor;
-import com.facebook.stetho.timber.StethoTree;
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
@@ -42,7 +38,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-import io.fabric.sdk.android.Fabric;
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.torrent.TorrentService;
@@ -149,7 +144,6 @@ public class ButterApplication extends Application implements ButterUpdater.List
                 e.printStackTrace();
             }
             sHttpClient.setCache(cache);
-            sHttpClient.networkInterceptors().add(new StethoInterceptor());
         }
         return sHttpClient;
     }

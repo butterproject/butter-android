@@ -6,7 +6,7 @@
   <string name="enabled">Nyalakan</string>
   <string name="disabled">Matikan</string>
   <string name="update_available">Pembaruan telah tersedia</string>
-  <string name="wrong_abi">Gawat! Anda menggunakan Butter versi yang salah untuk Android. Versi yang tepat sedang diunduh sekarang, jika memungkinkan. Jika pemasangan tidak dimulai dalam waktu satu menit mungkin perangkat Anda tidak didukung atau koneksi internet Anda mati, yang berarti Anda harus mencoba lagi nanti. Jika pemasangan gagal maka Anda harus memasang versi yang tepat secara manual.</string>
+  <string name="wrong_abi">Gawat! Anda menggunakan Popcorn Time versi yang salah untuk Android. Versi yang tepat sedang diunduh sekarang, jika memungkinkan. Jika pemasangan tidak dimulai dalam waktu satu menit mungkin perangkat Anda tidak didukung atau koneksi internet Anda mati, yang berarti Anda harus mencoba lagi nanti. Jika pemasangan gagal maka Anda harus memasang versi yang tepat secara manual.</string>
   <string name="press_install">Mohon di pasang</string>
   <string name="loading_data">Memuat data...</string>
   <string name="loading_details">Memuat detil...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Film</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Signature aplikasi tidak valid</string>
-  <string name="possibly_dangerous">Butter telah rusak. Sila unduh dan pasang ulang berkas dari http://butterproject.org/.</string>
+  <string name="possibly_dangerous">Popcorn Time telah rusak. Sila unduh dan pasang ulang berkas dari http://butterproject.org/.</string>
   <string name="subtitles">Terjemahan</string>
   <string name="now_playing">Sedang diputar</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Tidak dapat menemukan apapun</string>
   <string name="vpn">Jaringan Pribadi Virtual</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter adalah karya dari banyak pengembang dan desainer yang menggabungkan berbagai macam API untuk memberikan
+  <string name="about_message">Popcorn Time adalah karya dari banyak pengembang dan desainer yang menggabungkan berbagai macam API untuk memberikan
 ⇥⇥pengalaman menonton film melalui torrent semudah mungkin.\n\nKami adalah proyek terbuka. Kami berasal dari seluruh dunia. Kami
 ⇥⇥mencintai film kami. Dan nak, kami juga mencintai popcorn kami.</string>
   <string name="website">Website</string>
@@ -280,7 +280,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Ya</string>
   <string name="later">Nggak, ntar aja</string>
-  <string name="new_update">Versi baru dari Butter untuk Android TV telah tersedia. Mau memperbaruinya sekarang?</string>
+  <string name="new_update">Versi baru dari Popcorn Time untuk Android TV telah tersedia. Mau memperbaruinya sekarang?</string>
   <string name="network_message">Cek koneksi internet Anda</string>
   <string name="choose_quality">Pilih kualitas</string>
   <string name="more_movies">Lebih Banyak Film</string>

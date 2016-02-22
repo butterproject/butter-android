@@ -6,7 +6,7 @@
   <string name="enabled">Activado</string>
   <string name="disabled">Desactivado</string>
   <string name="update_available">Nueva actualización disponible</string>
-  <string name="wrong_abi">¡Uh! Estás usando la versión equivocado de Butter para Android. La correcta se está instalando ahora mismo, si es posible. Si el instalador no inicia dentro de un minuto, tu dispositivo no soporta Butter o la conexión a internet es mala, lo que significa que deberás intentar más tarde. Si el instalador da error, instalá la versión manualmente.</string>
+  <string name="wrong_abi">¡Uh! Estás usando la versión equivocado de Popcorn Time para Android. La correcta se está instalando ahora mismo, si es posible. Si el instalador no inicia dentro de un minuto, tu dispositivo no soporta Popcorn Time o la conexión a internet es mala, lo que significa que deberás intentar más tarde. Si el instalador da error, instalá la versión manualmente.</string>
   <string name="press_install">Presioná para instalar</string>
   <string name="loading_data">Cargando datos...</string>
   <string name="loading_details">Cargando detalles...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Películas</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">App firma no valida</string>
-  <string name="possibly_dangerous">Butter fué manipulado, Por favor, descarga un nuevo archivo de instalación de: http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time fué manipulado, Por favor, descarga un nuevo archivo de instalación de: http://butterproject.org/</string>
   <string name="subtitles">Subtítulos</string>
   <string name="now_playing">Ahora reproduciendo</string>
   <!--SettingsActivity strings-->

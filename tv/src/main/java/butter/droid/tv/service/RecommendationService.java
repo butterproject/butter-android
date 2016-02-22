@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MoviesProvider;
+import butter.droid.base.providers.media.TVProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -53,8 +54,8 @@ public class RecommendationService extends IntentService {
     private static final int MAX_MOVIE_RECOMMENDATIONS = 3;
     private static final int MAX_SHOW_RECOMMENDATIONS = 3;
 
-    // private XProvider mShowProvider = x
-    private VodoProvider mMovieProvider = new VodoProvider();
+    private MediaProvider mShowProvider = new TVProvider();
+    private MediaProvider mMovieProvider = new MoviesProvider();
 
     private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
     private int TOTAL_COUNT=0;

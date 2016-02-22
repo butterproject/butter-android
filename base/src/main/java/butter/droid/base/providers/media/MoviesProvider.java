@@ -1,18 +1,18 @@
 /*
- * This file is part of Butter.
+ * This file is part of Popcorn Time.
  *
- * Butter is free software: you can redistribute it and/or modify
+ * Popcorn Time is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Butter is distributed in the hope that it will be useful,
+ * Popcorn Time is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ * along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package butter.droid.base.providers.media;
@@ -36,24 +36,23 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
+import butter.droid.base.BuildConfig;
+import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
+import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.subs.YSubsProvider;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.StringUtils;
 
-public class VodoProvider extends MediaProvider {
+public class MoviesProvider extends MediaProvider {
 
-    private static final VodoProvider sMediaProvider = new VodoProvider();
+    private static final MoviesProvider sMediaProvider = new MoviesProvider();
     private static Integer CURRENT_API = 0;
-    private static final String[] API_URLS = {
-            "http://vodo.net/popcorn"
-    };
-    public static String CURRENT_URL = API_URLS[CURRENT_API];
+    private static final String[] API_URLS = BuildConfig.MOVIE_URLS;
 
-    private static Filters sFilters = new Filters();
+    private static final SubsProvider sSubsProvider = new YSubsProvider();
 
     @Override
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
@@ -72,8 +71,6 @@ public class VodoProvider extends MediaProvider {
 
     @Override
     public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
-        sFilters = filters;
-
         final ArrayList<Media> currentList;
         if (existingList == null) {
             currentList = new ArrayList<>();
@@ -136,16 +133,15 @@ public class VodoProvider extends MediaProvider {
         }
 
         Request.Builder requestBuilder = new Request.Builder();
-        String query = "?" + buildQuery(params);
-        // query not used, but still here as example
-        requestBuilder.url(CURRENT_URL);
+        String query = buildQuery(params);
+        requestBuilder.url(API_URLS[CURRENT_API] + "list_movies_pct.json?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, filters, callback);
     }
 
     /**
-     * Fetch the list of movies from YTS
+     * Fetch the list of movies from API
      *
      * @param currentList    Current shown list to be extended
      * @param requestBuilder Request to be executed
@@ -162,10 +158,8 @@ public class VodoProvider extends MediaProvider {
                 } else {
                     if(url.contains(API_URLS[CURRENT_API])) {
                         url = url.replace(API_URLS[CURRENT_API], API_URLS[CURRENT_API + 1]);
-                        url = url.replace(API_URLS[CURRENT_API], API_URLS[CURRENT_API + 1]);
                         CURRENT_API++;
                     } else {
-                        url = url.replace(API_URLS[CURRENT_API - 1], API_URLS[CURRENT_API]);
                         url = url.replace(API_URLS[CURRENT_API - 1], API_URLS[CURRENT_API]);
                     }
                     requestBuilder.url(url);
@@ -184,9 +178,9 @@ public class VodoProvider extends MediaProvider {
                         return;
                     }
 
-                    VodoResponse result;
+                    APIResponse result;
                     try {
-                        result = mGson.fromJson(responseStr, VodoResponse.class);
+                        result = mGson.fromJson(responseStr, APIResponse.class);
                     } catch (IllegalStateException e) {
                         onFailure(response.request(), new IOException("JSON Failed"));
                         return;
@@ -197,15 +191,17 @@ public class VodoProvider extends MediaProvider {
 
                     if(result == null) {
                         callback.onFailure(new NetworkErrorException("No response"));
-                    } else if(result.downloads == null || result.downloads.size() <= 0) {
+                    } else if (result.status != null && result.status.equals("error")) {
+                        callback.onFailure(new NetworkErrorException(result.status_message));
+                    } else if(result.data != null && ((result.data.get("movies") != null && ((ArrayList<LinkedTreeMap<String, Object>>)result.data.get("movies")).size() <= 0) || ((Double)result.data.get("movie_count")).intValue() <= currentList.size())) {
                         callback.onFailure(new NetworkErrorException("No movies found"));
                     } else {
-                        ArrayList<Media> formattedData = result.formatForApp(currentList);
+                        ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
                         callback.onSuccess(filters, formattedData, true);
                         return;
                     }
                 }
-                onFailure(response.request(), new IOException("Couldn't connect to Vodo"));
+                onFailure(response.request(), new IOException("Couldn't connect to YTS"));
             }
         });
     }
@@ -218,8 +214,10 @@ public class VodoProvider extends MediaProvider {
         return null;
     }
 
-    private class VodoResponse {
-        public ArrayList<LinkedTreeMap<String, Object>> downloads;
+    private class APIResponse {
+        public String status;
+        public String status_message;
+        public LinkedTreeMap<String, Object> data;
 
         /**
          * Test if there is an item that already exists
@@ -243,44 +241,56 @@ public class VodoProvider extends MediaProvider {
          * @param existingList List to be extended
          * @return List with items
          */
-        public ArrayList<Media> formatForApp(ArrayList<Media> existingList) {
+        public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
             ArrayList<LinkedTreeMap<String, Object>> movies = new ArrayList<>();
-            if (downloads != null) {
-                movies = downloads;
+            if (data != null) {
+                movies = (ArrayList<LinkedTreeMap<String, Object>>) data.get("movies");
             }
 
             for (LinkedTreeMap<String, Object> item : movies) {
-                Movie movie = new Movie(sMediaProvider, null);
+                Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
-                movie.imdbId = (String) item.get("ImdbCode");
-                movie.videoId = movie.imdbId.substring(2);
+                movie.videoId = (String) item.get("imdb_code");
+                movie.imdbId = movie.videoId;
 
                 int existingItem = isInResults(existingList, movie.videoId);
                 if (existingItem == -1) {
-                    movie.title = (String) item.get("MovieTitleClean");
-                    String yearStr = item.get("MovieYear").toString();
-                    Double year = Double.parseDouble(yearStr);
+                    movie.title = (String) item.get("title_english");
+                    Double year = (Double) item.get("year");
                     movie.year = Integer.toString(year.intValue());
-                    movie.rating = item.get("MovieRating").toString();
-                    movie.genre = StringUtils.uppercaseFirst(item.get("Genre").toString().split(",")[0]);
-                    movie.image = (String) item.get("CoverImage");
-                    movie.headerImage = (String) item.get("CoverImage");
-                    movie.trailer = null;
-                    String runtimeStr = item.get("Runtime").toString();
-                    Double runtime = 0d;
-                    if(!runtimeStr.isEmpty())
-                        runtime = Double.parseDouble(runtimeStr);
+                    movie.rating = item.get("rating").toString();
+                    movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
+                    movie.image = (String) item.get("large_cover_image");
+                    movie.headerImage = (String) item.get("background_image_original");
+                    movie.trailer = "https://youtube.com/watch?v=" + item.get("yt_trailer_code");
+                    Double runtime = (Double) item.get("runtime");
                     movie.runtime = Integer.toString(runtime.intValue());
-                    movie.synopsis = (String) item.get("Synopsis");
-                    movie.certification = null;
+                    movie.synopsis = (String) item.get("description_full");
+                    movie.certification = (String) item.get("mpa_rating");
                     movie.fullImage = movie.image;
 
-                    Media.Torrent torrent = new Media.Torrent();
-                    torrent.seeds = 0;
-                    torrent.peers = 0;
-                    torrent.hash = null;
-                    torrent.url = (String) item.get("TorrentUrl");
-                    movie.torrents.put(item.get("Quality").toString(), torrent);
+                    ArrayList<LinkedTreeMap<String, Object>> torrents =
+                            (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
+                    if (torrents != null) {
+                        for (LinkedTreeMap<String, Object> torrentObj : torrents) {
+                            String quality = (String) torrentObj.get("quality");
+                            if (quality == null) continue;
+
+                            Media.Torrent torrent = new Media.Torrent();
+
+                            torrent.seeds = ((Double) torrentObj.get("seeds")).intValue();
+                            torrent.peers = ((Double) torrentObj.get("peers")).intValue();
+                            torrent.hash = (String) torrentObj.get("hash");
+                            try {
+                                torrent.url = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                                torrent.url = (String) torrentObj.get("url");
+                            }
+
+                            movie.torrents.put(quality, torrent);
+                        }
+                    }
 
                     existingList.add(movie);
                 }
@@ -288,6 +298,7 @@ public class VodoProvider extends MediaProvider {
             return existingList;
         }
     }
+
     @Override
     public int getLoadingMessage() {
         return R.string.loading_movies;
@@ -296,13 +307,43 @@ public class VodoProvider extends MediaProvider {
     @Override
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
+        tabs.add(new NavInfo(R.id.yts_filter_trending,Filters.Sort.TRENDING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.trending),R.drawable.yts_filter_trending));
+        tabs.add(new NavInfo(R.id.yts_filter_popular_now,Filters.Sort.POPULARITY, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.popular),R.drawable.yts_filter_popular_now));
+        tabs.add(new NavInfo(R.id.yts_filter_top_rated,Filters.Sort.RATING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.top_rated),R.drawable.yts_filter_top_rated));
+        tabs.add(new NavInfo(R.id.yts_filter_release_date,Filters.Sort.DATE, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.release_date),R.drawable.yts_filter_release_date));
+        tabs.add(new NavInfo(R.id.yts_filter_year,Filters.Sort.YEAR, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.year),R.drawable.yts_filter_year));
         tabs.add(new NavInfo(R.id.yts_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.ASC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.yts_filter_a_to_z));
         return tabs;
     }
 
     @Override
     public List<Genre> getGenres() {
-        return null;
+        List<Genre> returnList = new ArrayList<>();
+        returnList.add(new Genre(null, R.string.genre_all));
+        returnList.add(new Genre("action", R.string.genre_action));
+        returnList.add(new Genre("adventure", R.string.genre_adventure));
+        returnList.add(new Genre("animation", R.string.genre_animation));
+        returnList.add(new Genre("biography", R.string.genre_biography));
+        returnList.add(new Genre("comedy", R.string.genre_comedy));
+        returnList.add(new Genre("crime", R.string.genre_crime));
+        returnList.add(new Genre("documentary", R.string.genre_documentary));
+        returnList.add(new Genre("drama", R.string.genre_drama));
+        returnList.add(new Genre("family", R.string.genre_family));
+        returnList.add(new Genre("fantasy", R.string.genre_fantasy));
+        returnList.add(new Genre("filmnoir", R.string.genre_film_noir));
+        returnList.add(new Genre("history", R.string.genre_history));
+        returnList.add(new Genre("horror", R.string.genre_horror));
+        returnList.add(new Genre("music", R.string.genre_music));
+        returnList.add(new Genre("musical", R.string.genre_musical));
+        returnList.add(new Genre("mystery", R.string.genre_mystery));
+        returnList.add(new Genre("romance", R.string.genre_romance));
+        returnList.add(new Genre("scifi", R.string.genre_sci_fi));
+        returnList.add(new Genre("short", R.string.genre_short));
+        returnList.add(new Genre("sport", R.string.genre_sport));
+        returnList.add(new Genre("thriller", R.string.genre_thriller));
+        returnList.add(new Genre("war", R.string.genre_war));
+        returnList.add(new Genre("western", R.string.genre_western));
+        return returnList;
     }
 
 }

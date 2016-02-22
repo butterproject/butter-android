@@ -17,14 +17,20 @@
 
 package butter.droid.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -42,7 +48,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MoviesProvider;
 import butterknife.Bind;
 import android.support.annotation.Nullable;
 import butter.droid.BuildConfig;
@@ -72,6 +78,7 @@ import timber.log.Timber;
  */
 public class MainActivity extends ButterBaseActivity implements NavigationDrawerFragment.Callbacks {
 
+    private static final int PERMISSIONS_REQUEST = 123;
     private Fragment mCurrentFragment;
 
     @Bind(R.id.toolbar)
@@ -83,19 +90,17 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
     TabLayout mTabs;
     NavigationDrawerFragment mNavigationDrawerFragment;
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
-        /*
-        if(SignUtils.checkAppSignature(this) != SignUtils.VALID && !butter.droid.base.BuildConfig.GIT_BRANCH.equals("local")) {
-            MessageDialogFragment.show(getFragmentManager(), R.string.signature_invalid, R.string.possibly_dangerous, false);
-            return;
-        }
-        */
-
         if (!PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
             startActivity(new Intent(this, TermsActivity.class));
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
         }
 
         String action = getIntent().getAction();
@@ -195,7 +200,6 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
 
         if(mTabs.getTabCount() > 0)
             mTabs.getTabAt(0).select();
-        mTabs.removeAllTabs();
 
         fragmentManager.beginTransaction().replace(R.id.container, mCurrentFragment, tag).commit();
 
@@ -208,20 +212,18 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         if(mTabs == null)
             return;
 
-        mTabs.removeAllTabs();
-        mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
-        mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-
         if(containerFragment != null) {
             ViewPager viewPager = containerFragment.getViewPager();
             if(viewPager == null)
                 return;
 
+            mTabs.setupWithViewPager(viewPager);
+            mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
+            mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+            mTabs.setVisibility(View.VISIBLE);
+
             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
             mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
-            mTabs.setupWithViewPager(viewPager);
-            mTabs.setVisibility(View.VISIBLE);
 
             if(mTabs.getTabCount() > 0) {
                 mTabs.getTabAt(0).select();
@@ -264,7 +266,7 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
                             .setPositiveButton("Start", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Movie media = new Movie(new VodoProvider(), new YSubsProvider());
+                                    Movie media = new Movie(new MoviesProvider(), new YSubsProvider());
 
                                     media.videoId = "dialogtestvideo";
                                     media.title = "User input test video";
@@ -282,13 +284,13 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
                     builder.show();
                 } else if (YouTubeData.isYouTubeUrl(location)) {
                     Intent i = new Intent(MainActivity.this, TrailerPlayerActivity.class);
-                    Movie media = new Movie(new VodoProvider(), new YSubsProvider());
+                    Movie media = new Movie(new MoviesProvider(), new YSubsProvider());
                     media.title = file_types[index];
                     i.putExtra(TrailerPlayerActivity.DATA, media);
                     i.putExtra(TrailerPlayerActivity.LOCATION, location);
                     startActivity(i);
                 } else {
-                    final Movie media = new Movie(new VodoProvider(), new YSubsProvider());
+                    final Movie media = new Movie(new MoviesProvider(), new YSubsProvider());
                     media.videoId = "bigbucksbunny";
                     media.title = file_types[index];
                     media.subtitles = new HashMap<>();
@@ -322,4 +324,16 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
 
         builder.show();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                if (grantResults.length < 1 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    finish();
+                }
+            }
+        }
+    }
+
 }

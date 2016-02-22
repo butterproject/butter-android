@@ -6,7 +6,7 @@
   <string name="enabled">Aktivert</string>
   <string name="disabled">Deaktivert</string>
   <string name="update_available">Ny oppdatering tilgjengelig</string>
-  <string name="wrong_abi">Oi! Du bruker feil versjon av Butter for Android. Den riktige versjonen lastes ned nå hvis det er mulig. Hvis installasjonsprogrammet ikke starter i løpet av et minutt er ikke enheten støttet, eller så er forbindelsen til internett brutt og det betyr at du bør prøve igjen senere. Hvis installasjonen feiler må du installere den riktige versjonen manuelt.</string>
+  <string name="wrong_abi">Oi! Du bruker feil versjon av Popcorn Time for Android. Den riktige versjonen lastes ned nå hvis det er mulig. Hvis installasjonsprogrammet ikke starter i løpet av et minutt er ikke enheten støttet, eller så er forbindelsen til internett brutt og det betyr at du bør prøve igjen senere. Hvis installasjonen feiler må du installere den riktige versjonen manuelt.</string>
   <string name="press_install">Trykk for å installere</string>
   <string name="loading_data">Laster inn...</string>
   <string name="loading_details">Laster detaljer...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Filmer</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">App signatur ugyldig</string>
-  <string name="possibly_dangerous">Butter har blitt tuklet med, Venligst last ned en ny verson fra http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time har blitt tuklet med, Venligst last ned en ny verson fra http://butterproject.org/</string>
   <string name="subtitles">Undertekster</string>
   <string name="now_playing">Spilles nå</string>
   <!--SettingsActivity strings-->
@@ -229,7 +229,7 @@
   <string name="no_search_results">Ingen søkeresultater funnet</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter er resultatet av at mange utviklere og designere har puset sammen en haug med API\'er for å
+  <string name="about_message">Popcorn Time er resultatet av at mange utviklere og designere har puset sammen en haug med API\'er for å
 gjøre opplevelsen av å se torrents så enkel som mulig.\n\nVi er et Åpne kildekode-prosjekt. Vi er fra hele verden. Vi
 elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <string name="website">Nettside</string>
@@ -282,7 +282,7 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <!--PTVUpdateFragment-->
   <string name="now">Ja</string>
   <string name="later">Nei, senere</string>
-  <string name="new_update">En ny versjon av Butter for Android TV er tilgjengelig. Ønsker du å oppdatere nå?</string>
+  <string name="new_update">En ny versjon av Popcorn Time for Android TV er tilgjengelig. Ønsker du å oppdatere nå?</string>
   <string name="network_message">Sjekk din internettforbindelse</string>
   <string name="choose_quality">Velg kvalitet</string>
   <string name="more_movies">Mer Filmer</string>

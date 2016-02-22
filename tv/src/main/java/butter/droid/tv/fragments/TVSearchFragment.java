@@ -34,7 +34,8 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MoviesProvider;
+import butter.droid.base.providers.media.TVProvider;
 import hugo.weaving.DebugLog;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
@@ -47,8 +48,8 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 		implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider {
 	private static final int SEARCH_DELAY_MS = 300;
 
-	//private XProvider mShowsProvider = x
-	private VodoProvider mMovieProvider = new VodoProvider();
+	private MediaProvider mShowsProvider = new TVProvider();
+	private MediaProvider mMovieProvider = new MoviesProvider();
 	private MediaProvider.Filters mSearchFilter = new MediaProvider.Filters();
 
 	private ArrayObjectAdapter mRowsAdapter;
@@ -116,7 +117,6 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 
 		mSearchFilter.keywords = query;
 		mSearchFilter.page = 1;
-		/*
 		mShowsProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
 				List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
@@ -127,7 +127,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 
 			}
 		});
-		*/
+
 
 		mMovieProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {

@@ -320,7 +320,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                         doVolumeTouch(y_changed);
                     }
                     if ((int) mTouchX < (screen.widthPixels / 2)) {
-                        if(Settings.System.canWrite(getContext())) {
+                        if(VersionUtils.isMarshmallow() && Settings.System.canWrite(getContext())) {
                             doVolumeTouch(y_changed);
                         } else {
                             doBrightnessTouch(y_changed);
@@ -416,14 +416,16 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol));
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private void initBrightnessTouch() {
         float brightnesstemp = 0.6f;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO &&
                     Settings.System.getInt(getActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-                Settings.System.putInt(getActivity().getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS_MODE,
-                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                if (VersionUtils.isMarshmallow() && Settings.System.canWrite(getActivity()))
+                    Settings.System.putInt(getActivity().getContentResolver(),
+                            Settings.System.SCREEN_BRIGHTNESS_MODE,
+                            Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
                 mRestoreAutoBrightness = android.provider.Settings.System.getInt(getActivity().getContentResolver(),
                         android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
             } else {

@@ -227,7 +227,7 @@
   <string name="no_search_results">Keine Suchergebnisse gefunden</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter ist das Resultat von Entwickern und Graphiker, die einen Haufen an Programmierschnittstellen verknüpft haben um das Erlebnis beim Schauen von Filmen mittels Torrents so simpel wie nur möglich zu gestalten.\n\nWir sind ein Open-Source-Projekt. Wir kommen von überall her. Wir lieben unsere Filme und wir lieben Popcorn.</string>
+  <string name="about_message">Popcorn Time ist das Resultat von Entwickern und Graphiker, die einen Haufen an Programmierschnittstellen verknüpft haben um das Erlebnis beim Schauen von Filmen mittels Torrents so simpel wie nur möglich zu gestalten.\n\nWir sind ein Open-Source-Projekt. Wir kommen von überall her. Wir lieben unsere Filme und wir lieben Popcorn.</string>
   <string name="website">Webseite</string>
   <string name="forum">Forum</string>
   <string name="google_plus">Google+</string>
@@ -278,7 +278,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Ja</string>
   <string name="later">Nein, später</string>
-  <string name="new_update">Eine neue Version von Butter für Android TV ist verfügbar. Möchten Sie jetzt aktualisieren?</string>
+  <string name="new_update">Eine neue Version von Popcorn Time für Android TV ist verfügbar. Möchten Sie jetzt aktualisieren?</string>
   <string name="network_message">Prüfen Sie Ihre Internetverbindung</string>
   <string name="choose_quality">Qualität auswählen</string>
   <string name="more_movies">Weitere Filme</string>

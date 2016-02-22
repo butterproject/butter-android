@@ -26,9 +26,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.crashlytics.android.core.CrashlyticsCore;
-
-import io.fabric.sdk.android.Fabric;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.beaming.BeamManager;
@@ -47,8 +44,6 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
     @Override
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState, layoutId);
-        if(Fabric.isInitialized())
-            CrashlyticsCore.getInstance().log(getClass().getName() + " onCreate");
 
         if(!VersionUtils.isUsingCorrectBuild()) {
             new AlertDialog.Builder(this)
@@ -70,8 +65,6 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     @Override
     protected void onResume() {
-        if(Fabric.isInitialized())
-            CrashlyticsCore.getInstance().log(getClass().getName() + " onResume");
         String language = PrefUtils.get(this, Prefs.LOCALE, ButterApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
@@ -79,23 +72,9 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
-        if(Fabric.isInitialized())
-            CrashlyticsCore.getInstance().log(getClass().getName() + " onPause");
         BeamManager.getInstance(this).removeListener(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(Fabric.isInitialized())
-            CrashlyticsCore.getInstance().log(getClass().getName() + " onStop");
     }
 
     protected void onHomePressed() {

@@ -6,7 +6,7 @@
   <string name="enabled">Omogućeno</string>
   <string name="disabled">Onemogućeno</string>
   <string name="update_available">Nova nadopuna dostupna</string>
-  <string name="wrong_abi">Uh! Koristite krivu verziju Butter-a za Android. Prava verzija se upravo preuzima, ako je moguće. Ako instalacije ne počne kroz minutu onda vaš uređaj nije podržan ili je vaša internet veza prekinuta stoga pokušajte kasnije ponovno. Ako instalacije ne uspije, onda morate instalirati pravu verziju ručno.</string>
+  <string name="wrong_abi">Uh! Koristite krivu verziju Popcorn Time-a za Android. Prava verzija se upravo preuzima, ako je moguće. Ako instalacije ne počne kroz minutu onda vaš uređaj nije podržan ili je vaša internet veza prekinuta stoga pokušajte kasnije ponovno. Ako instalacije ne uspije, onda morate instalirati pravu verziju ručno.</string>
   <string name="press_install">Pritisnite za instalaciju</string>
   <string name="loading_data">Učitavanje podataka...</string>
   <string name="loading_details">Učitavanje pojedinosti...</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Filmovi</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">Neispravan potpis aplikacije</string>
-  <string name="possibly_dangerous">Butter je neovlašteno promijenjen. Preuzmite novu instalacijsku datoteku s http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time je neovlašteno promijenjen. Preuzmite novu instalacijsku datoteku s http://butterproject.org/</string>
   <string name="subtitles">Podnaslovi</string>
   <string name="now_playing">Trenutno gledate</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Nema traženih rezultata</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter je rezultat truda mnogo razvijatelja i dizajnera koji su spojili hrpu API-ija zajedno kako bi učinili
+  <string name="about_message">Popcorn Time je rezultat truda mnogo razvijatelja i dizajnera koji su spojili hrpu API-ija zajedno kako bi učinili
 		iskustvo gledanja filmova putem torrenta što jednostavnijim.\n\nOvo je projekt otvorenog kôda. Mi smo sa svih strana svijeta. Volimo
 		gledati filmove. A najviše od svega, volimo kokice.</string>
   <string name="website">Web stranica</string>

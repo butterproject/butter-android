@@ -6,7 +6,7 @@
   <string name="enabled">Включено</string>
   <string name="disabled">Отключено</string>
   <string name="update_available">Доступно новое обновление</string>
-  <string name="wrong_abi">Аха! Вы используете не ту версию Butter для Android. Правильная версия загружается прямо сейчас, если это возможно. Если программа установки не запускается в течение минуты, значит ваше устройство не поддерживается, или ваше интернет-соединение разорвано, что означает, что вы должны попробовать еще раз. Если программа установки не работает, то нужно установить правильную версию вручную.</string>
+  <string name="wrong_abi">Аха! Вы используете не ту версию Popcorn Time для Android. Правильная версия загружается прямо сейчас, если это возможно. Если программа установки не запускается в течение минуты, значит ваше устройство не поддерживается, или ваше интернет-соединение разорвано, что означает, что вы должны попробовать еще раз. Если программа установки не работает, то нужно установить правильную версию вручную.</string>
   <string name="press_install">Нажмите для установки</string>
   <string name="loading_data">Загрузка данных...</string>
   <string name="loading_details">Загрузка данных...</string>
@@ -32,7 +32,7 @@
   <string name="title_movies">Фильмы</string>
   <string name="title_anime">Аниме</string>
   <string name="signature_invalid">Подпись приложения недействительна</string>
-  <string name="possibly_dangerous">Butter был подделан. Вы можете скачать новый установочный файл на http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time был подделан. Вы можете скачать новый установочный файл на http://butterproject.org/</string>
   <string name="subtitles">Субтитры</string>
   <string name="now_playing">Сейчас воспроизводится</string>
   <!--SettingsActivity strings-->
@@ -231,7 +231,7 @@
   <string name="no_search_results">Результаты поиска не найдены</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">Butter - результат работы разработчиков  и дизайнеров, сложивших многие API в одно целоe
+  <string name="about_message">Popcorn Time - результат работы разработчиков  и дизайнеров, сложивших многие API в одно целоe
 для удобного просмотра фильмов через торренты.\n\nЭто проект с открытым исходным кодом. Мылюбим смотреть фильмы. 
 А также любим похрустеть попкорном.</string>
   <string name="website">Вебсайт</string>
@@ -284,7 +284,7 @@
   <!--PTVUpdateFragment-->
   <string name="now">Да</string>
   <string name="later">Нет, позже</string>
-  <string name="new_update">Доступна новая версия Butter для Android TV. Вы хотите обновить прямо сейчас?</string>
+  <string name="new_update">Доступна новая версия Popcorn Time для Android TV. Вы хотите обновить прямо сейчас?</string>
   <string name="network_message">Проверьте подключение к Интернету</string>
   <string name="choose_quality">Выберите качество</string>
   <string name="more_movies">Больше фильмов</string>

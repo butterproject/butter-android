@@ -6,7 +6,7 @@
   <string name="enabled">Engedélyezve</string>
   <string name="disabled">Tiltva</string>
   <string name="update_available">Új frissítés érhető el</string>
-  <string name="wrong_abi">O-ó! A Butter rossz verzióját használod Androidra. A jó verzió letöltődik most, ha lehetséges. Ha a telepítő nem indul el egy percen belül, akkor a készüléked nem támogatott, vagy az internet kapcsolatod megszakadt, ami azt jelenti, hogy meg kéne próbálnod később. Ha a telepítő meghibásodik, akkor manuálisan kell telepítened a jó verziót.</string>
+  <string name="wrong_abi">O-ó! A Popcorn Time rossz verzióját használod Androidra. A jó verzió letöltődik most, ha lehetséges. Ha a telepítő nem indul el egy percen belül, akkor a készüléked nem támogatott, vagy az internet kapcsolatod megszakadt, ami azt jelenti, hogy meg kéne próbálnod később. Ha a telepítő meghibásodik, akkor manuálisan kell telepítened a jó verziót.</string>
   <string name="press_install">Nyomja meg a telepítéshez</string>
   <string name="loading_data">Adatok betöltése…</string>
   <string name="loading_details">Részletek betöltése…</string>
@@ -31,7 +31,7 @@
   <string name="title_movies">Filmek</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">App aláírás érvénytelen</string>
-  <string name="possibly_dangerous">A Butter módosítva lett. Töltsön le egy új telepítőfájlt: http://butterproject.org/</string>
+  <string name="possibly_dangerous">A Popcorn Time módosítva lett. Töltsön le egy új telepítőfájlt: http://butterproject.org/</string>
   <string name="subtitles">Feliratok</string>
   <string name="now_playing">Most játszott</string>
   <!--SettingsActivity strings-->
@@ -228,7 +228,7 @@
   <string name="no_search_results">Nem található keresési eredmény</string>
   <string name="vpn">VPN</string>
   <!--AboutFragment-->
-  <string name="about_message">A Butter! számtalan fejlesztő és dizájner munkájának eredménye, akik összeraktak pár API-t, hogy a torrentes filmnézés élményét a lehető legegyszerűbbé tegyék.\n\n
+  <string name="about_message">A Popcorn Time! számtalan fejlesztő és dizájner munkájának eredménye, akik összeraktak pár API-t, hogy a torrentes filmnézés élményét a lehető legegyszerűbbé tegyék.\n\n
 Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműködőink. Szeretjük a filmeket, és legfőképp a popcornt.</string>
   <string name="website">Weboldal</string>
   <string name="forum">Fórum</string>
@@ -280,7 +280,7 @@ Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműk�
   <!--PTVUpdateFragment-->
   <string name="now">Igen</string>
   <string name="later">Nem, később</string>
-  <string name="new_update">A Butter új verziója elérhető Android TV-re. Szeretné most frissíteni?</string>
+  <string name="new_update">A Popcorn Time új verziója elérhető Android TV-re. Szeretné most frissíteni?</string>
   <string name="network_message">Ellenőrizze internetkapcsolatát</string>
   <string name="choose_quality">Válassz minőséget</string>
   <string name="more_movies">Több Film</string>
