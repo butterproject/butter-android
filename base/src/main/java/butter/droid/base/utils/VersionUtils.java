@@ -70,13 +70,13 @@ public class VersionUtils {
             if(info.versionName.contains("local"))
                 return "local";
 
-            if(versionCode > 4000000) {
+            if(versionCode > 40000000) {
                 return "x86";
-            } else if(versionCode > 3000000) {
+            } else if(versionCode > 30000000) {
                 return "arm64-v8a";
-            } else if(versionCode > 2000000) {
+            } else if(versionCode > 20000000) {
                 return "armeabi-v7a";
-            } else if(versionCode > 1000000) {
+            } else if(versionCode > 10000000) {
                 return "armeabi";
             }
         } catch (PackageManager.NameNotFoundException e) {
