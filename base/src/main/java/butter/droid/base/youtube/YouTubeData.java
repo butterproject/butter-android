@@ -81,7 +81,9 @@ public class YouTubeData {
         request.url(YOUTUBE_VIDEO_INFORMATION_URL + videoId);
         Call call = client.newCall(request.build());
         Response response = call.execute();
-
+        if(!response.isSuccessful())
+            return null;
+        
         String infoStr = response.body().string();
 
         String[] args = infoStr.split("&");
