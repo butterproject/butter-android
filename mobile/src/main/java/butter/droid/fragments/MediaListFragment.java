@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
 
@@ -49,6 +50,7 @@ import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
@@ -292,6 +294,10 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void triggerSearch(String searchQuery) {
         if (!isAdded()) return;
         if (null == mAdapter) return;
+        if (!NetworkUtils.isNetworkConnected(getActivity())) {
+            Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if(mCurrentCall != null)
             ButterApplication.getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
