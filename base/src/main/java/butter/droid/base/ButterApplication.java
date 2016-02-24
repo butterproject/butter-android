@@ -37,6 +37,7 @@ import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
@@ -133,6 +134,9 @@ public class ButterApplication extends Application implements ButterUpdater.List
     public static OkHttpClient getHttpClient() {
         if (sHttpClient == null) {
             sHttpClient = new OkHttpClient();
+            sHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
+            sHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
+            sHttpClient.setRetryOnConnectionFailure(true);
 
             int cacheSize = 10 * 1024 * 1024;
             File cacheLocation = new File(PrefUtils.get(ButterApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(ButterApplication.getAppContext()).toString()));
