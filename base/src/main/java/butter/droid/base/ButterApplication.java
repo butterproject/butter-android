@@ -135,7 +135,7 @@ public class ButterApplication extends Application implements ButterUpdater.List
         if (sHttpClient == null) {
             sHttpClient = new OkHttpClient();
             sHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-            sHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);
+            sHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
             sHttpClient.setRetryOnConnectionFailure(true);
 
             int cacheSize = 10 * 1024 * 1024;
