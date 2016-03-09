@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ This file is part of Butter.
+  ~ This file is part of Popcorn Time.
   ~
-  ~ Butter is free software: you can redistribute it and/or modify
+  ~ Popcorn Time is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ Butter is distributed in the hope that it will be useful,
+  ~ Popcorn Time is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<!--
-  ~ This file is part of Butter.
-  ~
-  ~ Butter is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Butter is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Popcorn Time. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <changelog bulletedList="true">
+
+    <changelogversion versionName="0.1.3">
+      <changelogtext>Fix video playback</changelogtext>
+      <changelogtext>Fix tv shows</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.1.2">
+      <changelogtext>Based on Butter source</changelogtext>
+      <changelogtext>Fix usage of Android Marshmallow permissions</changelogtext>
+    </changelogversion>
 
     <changelogversion versionName="0.1.0">
         <changelogtext>Initial release</changelogtext>

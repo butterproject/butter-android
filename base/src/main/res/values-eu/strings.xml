@@ -1,0 +1,269 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="cancel">Ezeztatu</string>
+  <string name="close">Itxi</string>
+  <string name="ok">Ados</string>
+  <string name="enabled">Gaituta</string>
+  <string name="disabled">Ezgaituta</string>
+  <string name="update_available">Eguneraketa berria eskuragarri</string>
+  <string name="press_install">Egin klik instalatzeko</string>
+  <string name="loading_data">Datuak gertzen...</string>
+  <string name="loading_details">Xehetasunak gertatzen...</string>
+  <string name="loading_shows">Ikuskizunak gertatzen...</string>
+  <string name="loading_movies">Filmak gertatzen...</string>
+  <string name="loading_subs">Azpidatziak gertatzen...</string>
+  <string name="error_files">Akatsa: Ezinezkoa agiriak idaztea</string>
+  <string name="overview_not_available">Barkatu! Ez dago gainkuspenik eskuragarri.</string>
+  <string name="unknown_error">Zerbait gaizki joan da</string>
+  <string name="torrent_failed">Akatsa torrenta berreskuratzean</string>
+  <string name="running">Atzealdean martxan</string>
+  <string name="tap_to_close">Ikutu isteko</string>
+  <string name="tap_to_resume">Ikutu berrekiteko</string>
+  <string name="stop">Gelditu</string>
+  <!--Overview strings-->
+  <string name="search_hint">Izenburua, urtea, antzezleak</string>
+  <string name="genres">Motak</string>
+  <string name="search">Bilatu</string>
+  <string name="searching">Bilatzen...</string>
+  <string name="no_data_found">Ez da daturik aurkitu</string>
+  <string name="title_shows">Ikuskizunak</string>
+  <string name="title_movies">Filmak</string>
+  <string name="title_anime">Animea</string>
+  <string name="signature_invalid">Aplikazioaren sinadura baliogabea da</string>
+  <string name="possibly_dangerous">Butter manipulatua izan da. Mesedez jeitsi eta ezarri agiri berri bat hemendik: http://butterproject.org/</string>
+  <string name="subtitles">Azpidatziak</string>
+  <string name="now_playing">Orain irakurtzen</string>
+  <!--SettingsActivity strings-->
+  <string name="preferences">Hobespenak</string>
+  <string name="general">Orokorra</string>
+  <string name="default_view">Berezko gainbegirada</string>
+  <string name="default_player">Berezko bideo irakurgailua</string>
+  <string name="i18n_language">Aplikazioaren hizkuntza</string>
+  <string name="restart_effect">Berrabiarazi aplikazioa aldaketek eragina izateko</string>
+  <string name="device_language">Gailuaren hizkuntza</string>
+  <string name="stream_over_wifi_only">Wi-Fiarekin bakarrik jariotu</string>
+  <string name="internal_player">Barneko</string>
+  <string name="subtitle_color">Kolorea</string>
+  <string name="subtitle_size">Tamaina</string>
+  <string name="subtitle_timing">Azpidatzi denborapena</string>
+  <string name="subtitle_stroke_color">Inguru kolorea</string>
+  <string name="subtitle_stroke_width">Inguru zabalera</string>
+  <string name="default_subtitle_language">Lehenetsiko hizkuntza</string>
+  <string name="subtitle_language">Azpidatzi hizkuntza</string>
+  <string name="subtitle_settings">Azpidatzi ezarpenak</string>
+  <string name="no_default_set">Berezko hizkuntzarik ez</string>
+  <string name="advanced">Aurreratua</string>
+  <string name="storage_location">Biltegiratze kokalekua</string>
+  <string name="storage_automatic">Automatikoa</string>
+  <string name="storage_choose">Hautatu kokalekua</string>
+  <string name="not_writable">Kokalekua ez da idazgarria</string>
+  <string name="remove_cache">Kendu katxea irakurgailua ixterakoan</string>
+  <string name="hw_acceleration">Hardware azelerazioa</string>
+  <string name="hw_automatic">Automatikoa</string>
+  <string name="hw_full">Osoa</string>
+  <string name="hw_decoding">Dekodetzean bakarrik</string>
+  <string name="updates">Eguneraketak</string>
+  <string name="auto_updates">Eguneraketak automatikoak</string>
+  <string name="check_for_updates">Egiaztatu eguneraketarik dagoen</string>
+  <string name="last_check">Azken egiaztapena</string>
+  <string name="about_app">Honi buruz</string>
+  <string name="version">Bertsioa</string>
+  <string name="changelog">Aldaketa-oharra</string>
+  <string name="tap_to_open">Ikutu irekitzeko</string>
+  <string name="report_a_bug">Jakinarazi akats bat</string>
+  <string name="open_source_licenses">Iturburu-irekiko baimenak</string>
+  <string name="torrents">Torrentak</string>
+  <string name="download_speed">Gehienezko deskarga abiadura</string>
+  <string name="upload_speed">Gehienezko igoera abiadura</string>
+  <string name="max_connections">Gehienezko  guztira konexioak</string>
+  <string name="dht_limit">DHT Muga</string>
+  <string name="unlimited">Mugarik Gabe</string>
+  <string name="show_vpn">Erakutsi VPN aukera menuan</string>
+  <string name="pixel_format">Behartu bideo chroma</string>
+  <string name="rgb32">RGB 32-bit: lehenetsiko chroma</string>
+  <string name="rgb16">RGB 16-bit: errendimendu hobea, kalitate gutxiagoko</string>
+  <string name="yuv">YUV: errendimendu onena baina ez dabil beti </string>
+  <string name="best_fit">Doitzeko onena</string>
+  <string name="fill">Bete</string>
+  <string name="fit_horizontal">Doitzeko horizontala</string>
+  <string name="fit_vertical">Doitzeko bertikala</string>
+  <string name="original_size">Jatorrizkoa</string>
+  <!--DetailActivity strings-->
+  <string name="minutes">gutxienezko</string>
+  <string name="read_more">Gehiago irakurri</string>
+  <string name="watch_trailer">Ikusi trailerra</string>
+  <string name="no_subs">Azpititulurik ez</string>
+  <string name="quality">Kalitatea</string>
+  <string name="season">Denboraldia</string>
+  <string name="episode">Atala</string>
+  <string name="continuing">Etengabeko</string>
+  <string name="ended">Bukatua</string>
+  <string name="no_title_available">Izenik gabe</string>
+  <string name="scale">Eskala</string>
+  <!--About as in 'About serie X'-->
+  <string name="about_series">Honi buruz</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="volume">Bolumena</string>
+  <string name="brightness">Argitasuna</string>
+  <string name="genre_all">Denak</string>
+  <!--Genres-->
+  <string name="genre_action">Ekintza</string>
+  <string name="genre_adventure">Abentura</string>
+  <string name="genre_animation">Animazioa</string>
+  <string name="genre_biography">Biografia</string>
+  <string name="genre_comedy">Barrezkoa</string>
+  <string name="genre_crime">Gaizkintza</string>
+  <string name="genre_children">Haurrak</string>
+  <string name="genre_documentary">Dokumentala</string>
+  <string name="genre_drama">Drama</string>
+  <string name="genre_family">Sendia</string>
+  <string name="genre_fantasy">Fantasia</string>
+  <string name="genre_film_noir">Zinema-beltza</string>
+  <string name="genre_game_show">Lehiaketak</string>
+  <string name="genre_history">Historia</string>
+  <string name="genre_home_garden">Etxea eta Lorategia</string>
+  <string name="genre_horror">Beldurrezkoa</string>
+  <string name="genre_mini_series">Telesail Laburrak</string>
+  <string name="genre_music">Musika</string>
+  <string name="genre_musical">Musikala</string>
+  <string name="genre_mystery">Misterioa</string>
+  <string name="genre_news">Albisteak</string>
+  <string name="genre_reality">Reality</string>
+  <string name="genre_romance">Erromantikoa</string>
+  <string name="genre_sci_fi">Zientzia-Fikzioa</string>
+  <string name="genre_short">Laburmetraia</string>
+  <string name="genre_special_interest">Interes berezia</string>
+  <string name="genre_soap">Telekomedia</string>
+  <string name="genre_sport">Kirola</string>
+  <string name="genre_suspense">Suspensea</string>
+  <string name="genre_talk_show">Elkarrizketa Saioa</string>
+  <string name="genre_thriller">Thrillerra</string>
+  <string name="genre_war">Guda</string>
+  <string name="genre_western">Western</string>
+  <!--Anime:-->
+  <string name="genre_cars">Autoak</string>
+  <string name="genre_dementia">Dementia</string>
+  <string name="genre_demons">Deabruak</string>
+  <string name="genre_ecchi">Ecchi</string>
+  <string name="genre_game">Jolasa</string>
+  <string name="genre_harem">Harem</string>
+  <string name="genre_josei">Josei</string>
+  <string name="genre_kids">Haurrak</string>
+  <string name="genre_magic">Magia</string>
+  <string name="genre_martial_arts">Arte martzialak</string>
+  <string name="genre_mecha">Mecha</string>
+  <string name="genre_military">Militarra</string>
+  <string name="genre_police">Polizia</string>
+  <string name="genre_parody">Parodia</string>
+  <string name="genre_psychological">Psikologikoa</string>
+  <string name="genre_samurai">Samuraia</string>
+  <string name="genre_school">Ikastetxea</string>
+  <string name="genre_seinen">Seinen</string>
+  <string name="genre_shoujo">Shoujo</string>
+  <string name="genre_shoujo_ai">Shoujo Ai</string>
+  <string name="genre_shounen">Shounen</string>
+  <string name="genre_shounen_ai">Shounen Ai</string>
+  <string name="genre_slice_of_life">Bizitzaren zatia</string>
+  <string name="genre_space">Espazioa</string>
+  <string name="genre_super_power">Super Boterea</string>
+  <string name="genre_supernatural">Naturaz-gaindikoa</string>
+  <string name="genre_vampire">Banpiroa</string>
+  <!--Possible tabs-->
+  <string name="popular">EZAGUNA</string>
+  <string name="top_rated">MAILATUENA</string>
+  <string name="release_date">ARGITARATZE EGUNA</string>
+  <string name="last_updated">AZKEN EGUNERAKETA</string>
+  <string name="year">URTEA</string>
+  <string name="a_to_z">A - Z</string>
+  <string name="trending">JOERA</string>
+  <!--BeamManager-->
+  <string name="beaming">Transmisioa</string>
+  <string name="pairing_tv">TB-rekin parekatzen</string>
+  <string name="confirm_tv">Mesedez baieztatu zure TB elkarketa</string>
+  <string name="enter_pairing_code">Sartu TB Parekatze Kodea</string>
+  <!--TermsActivity strings-->
+  <string name="open_with">Irekin honekin</string>
+  <string name="select_file">Hautatu agiria</string>
+  <string name="accept">Onartu</string>
+  <string name="leave">Utzi</string>
+  <string name="reload_video">Birkargatu video</string>
+  <!--Health-->
+  <string name="health_bad">Txarra</string>
+  <string name="health_medium">Onargarria</string>
+  <string name="health_good">Ona</string>
+  <string name="health_excellent">Bikaina</string>
+  <string name="health_unknown">Ezezaguna</string>
+  <!--StreamLoadingActivity strings-->
+  <string name="waiting_torrent">Torrenta itxaroten</string>
+  <string name="starting_buffering">Buferreratzea abiatzen</string>
+  <string name="streaming_started">Jarioa hasita</string>
+  <string name="waiting_for_subtitles">Azpidatziak itxaroten</string>
+  <string name="seeds">emaleak</string>
+  <string name="start_external">Abiarazi kanpoko irakurgailua</string>
+  <!--VideoPlayerActivity strings-->
+  <string name="fastforward">Azkar aurrera</string>
+  <string name="rewind">Atzerabildu</string>
+  <string name="comm_error">Komunikazio Akatsa</string>
+  <string name="comm_message">Akats bat gertatu da bideoa eskuratzerakoan. Hau sare arazoengaitik edo YouTube protokoloagaitik izan daiteke. Mesedez saiatu berriro geroago.</string>
+  <string name="leave_videoplayer_title">Zihur zaude?</string>
+  <string name="leave_videoplayer_message">Zihur zaude bideo irakurgailua uztea nahi duzula? %s-k irakurketa geldituko du.</string>
+  <!--WifiOnlyDialogFragment-->
+  <string name="wifi_only">Wi-Fi bidez bakarrik</string>
+  <string name="wifi_only_message">Bideoak Wi-Fi erabiliz bakarrik jariotu ditzakezu. Hobespen hau hobespenetan ezgaitu dezakezu mugikor elkarketaren bidez jariotu nahi baduzu. </string>
+  <!--NavigationDrawer-->
+  <string name="drawer_open">Ireki nabigazio tiradera</string>
+  <string name="drawer_close">Itxi nabigazio tiradera</string>
+  <string name="no_search_results">Ez da bilaketa emaitzarik aurkitu</string>
+  <string name="vpn">VPN</string>
+  <!--AboutFragment-->
+  <string name="about_message">Butter API mordo bat batera jarri dituzten garatzaile eta diseinatzaile baten emaitza da
+⇥⇥torrent filmak ikusteko jarduera ahalik eta arruntena izateko.\n\nKode irekiko egitasmoa gara. Mundu osokoak gara.
+⇥⇥Maite ditugu gure filmak. Eta mutil, krispetak ere maite ditugu.</string>
+  <string name="website">Webgunea</string>
+  <string name="forum">Eztabaidagunea</string>
+  <string name="google_plus">Google+</string>
+  <string name="facebook">Facebook</string>
+  <string name="git">Git</string>
+  <string name="blog">Bloga</string>
+  <string name="twitter">Twitter</string>
+  <!--Beam dialog-->
+  <string name="connected_to">Elkartuta hona:</string>
+  <string name="disconnect">Eten</string>
+  <string name="select_beaming">Hautatu bidalketarako gailua</string>
+  <string name="beaming_failed">Bideo ezin da iraurri zure bidalitako gailuan. Berriro saitzea nahi duzu? Aplikazioak badaiteke zati gehiago jeitsi behar izatea zure gailua bideo irakurtzeko gai izan aurretik.</string>
+  <string name="the_video">Bideoa</string>
+  <!--Android TV below-->
+  <string name="related_movies">Erlazionatutako Bideoak</string>
+  <!--Main screen-->
+  <string name="top_movies">Top Filmak</string>
+  <string name="top_shows">Top Telesailak</string>
+  <string name="latest_shows">Asken Telesailak</string>
+  <string name="more">Gehiago</string>
+  <string name="error">Akatsa</string>
+  <string name="pause">Pausatu</string>
+  <string name="play">Irakurri</string>
+  <string name="init_text">00:00</string>
+  <string name="settings">Ezarpenak</string>
+  <string name="watch_trailer_1">Ikusi trailerra</string>
+  <string name="watch_trailer_2">DOHAIN</string>
+  <string name="watch">Ikusi</string>
+  <string name="quality_720">720p</string>
+  <string name="quality_1080">1080p</string>
+  <string name="movie">Filma</string>
+  <string name="movie_results">Filmen Emaitzak</string>
+  <string name="show_results">Telesailen Emaitzak</string>
+  <string name="oops">Oops</string>
+  <!--PTVUpdateFragment-->
+  <string name="now">Bai</string>
+  <string name="later">Ez, geroago</string>
+  <string name="new_update">Butter Android TV-ko bertsio berria dago eskuragarri. Eguneratu nahi duzu?</string>
+  <string name="network_message">Egiaztatu zure internet konexioa</string>
+  <string name="choose_quality">Hautatu kalitatea</string>
+  <string name="more_movies">Film Gehiago</string>
+  <string name="more_shows">Ikuskizun Gehiago</string>
+  <string name="terms_and_conditions">Erabilera eta Baldintzak</string>
+  <string name="view_terms">Ikusi  Erabilerak</string>
+  <string name="episode_number_format">%d Pasarte</string>
+  <!--PTVSettingsFragment-->
+  <string name="version_pref">Bertsioa</string>
+</resources>
