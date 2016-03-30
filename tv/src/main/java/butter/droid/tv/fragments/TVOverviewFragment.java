@@ -290,7 +290,9 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
         Media mediaItem = media.getMedia();
-        mediaItem.color = view.getCustomSelectedSwatch().getRgb();
+        if (view.getCustomSelectedSwatch() != null) {
+            mediaItem.color = view.getCustomSelectedSwatch().getRgb();
+        }
 
         TVMediaDetailActivity.startActivity(
                 getActivity(),
