@@ -26,7 +26,7 @@ requests](#pull-requests), but please respect the following restrictions:
 has already reported your problem or requested your idea.
 
 * Please **do not** use the issue tracker for personal support requests (use
-  [the forum](http://discuss.butterproject.org) or IRC - #butterproject on freenode).
+  [the forum](https://www.reddit.com/r/ButterProject) or IRC - #butterproject on freenode).
 
 * Please **do not** derail or troll issues. Keep the discussion on topic and respect the opinions of others.
 
