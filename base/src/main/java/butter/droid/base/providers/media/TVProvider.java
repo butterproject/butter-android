@@ -173,7 +173,7 @@ public class TVProvider extends MediaProvider {
                 } catch (Exception e) {
                     callback.onFailure(e);
                 }
-                callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to TVAPI"));
             }
         });
     }
