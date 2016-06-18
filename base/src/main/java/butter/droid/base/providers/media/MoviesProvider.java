@@ -23,7 +23,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
@@ -31,14 +30,15 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.SocketException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import butter.droid.base.R;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.ButterApplication;
+import butter.droid.base.R;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -86,7 +86,7 @@ public class MoviesProvider extends MediaProvider {
         }
 
         if (filters.keywords != null) {
-            params.add(new NameValuePair("query_term", filters.keywords));
+            params.add(new NameValuePair("keywords", filters.keywords));
         }
 
         if (filters.genre != null) {
@@ -94,9 +94,9 @@ public class MoviesProvider extends MediaProvider {
         }
 
         if (filters.order == Filters.Order.ASC) {
-            params.add(new NameValuePair("order_by", "asc"));
+            params.add(new NameValuePair("order", "1"));
         } else {
-            params.add(new NameValuePair("order_by", "desc"));
+            params.add(new NameValuePair("order", "-1"));
         }
 
         if(filters.langCode != null) {
@@ -106,35 +106,35 @@ public class MoviesProvider extends MediaProvider {
         String sort;
         switch (filters.sort) {
             default:
-            case POPULARITY:
-                sort = "seeds";
-                break;
             case YEAR:
                 sort = "year";
                 break;
             case DATE:
-                sort = "date_added";
+                sort = "updated";
                 break;
             case RATING:
                 sort = "rating";
                 break;
             case ALPHABET:
-                sort = "title";
+                sort = "name";
                 break;
             case TRENDING:
-                sort = "trending_score";
+                sort = "trending";
                 break;
         }
 
-        params.add(new NameValuePair("sort_by", sort));
+        params.add(new NameValuePair("sort", sort));
 
+        String url = API_URLS[CURRENT_API] + "movies/";
         if (filters.page != null) {
-            params.add(new NameValuePair("page", Integer.toString(filters.page)));
+            url += filters.page;
+        } else {
+            url += "1";
         }
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(API_URLS[CURRENT_API] + "list_movies_pct.json?" + query);
+        requestBuilder.url(url + "?" + query);
         requestBuilder.tag(MEDIA_CALL);
 
         return fetchList(currentList, requestBuilder, filters, callback);
@@ -169,39 +169,30 @@ public class MoviesProvider extends MediaProvider {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseStr;
-                    try {
-                        responseStr = response.body().string();
-                    } catch (SocketException e) {
-                        onFailure(response.request(), new IOException("Socket failed"));
-                        return;
-                    }
+                try {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
 
-                    APIResponse result;
-                    try {
-                        result = mGson.fromJson(responseStr, APIResponse.class);
-                    } catch (IllegalStateException e) {
-                        onFailure(response.request(), new IOException("JSON Failed"));
-                        return;
-                    } catch (JsonSyntaxException e) {
-                        onFailure(response.request(), new IOException("JSON Failed"));
-                        return;
-                    }
+                        ArrayList<LinkedTreeMap<String, Object>> list = null;
+                        if (responseStr.isEmpty()) {
+                            list = new ArrayList<>();
+                        } else {
+                            list = (ArrayList<LinkedTreeMap<String, Object>>) mGson.fromJson(responseStr, ArrayList.class);
+                        }
 
-                    if(result == null) {
-                        callback.onFailure(new NetworkErrorException("No response"));
-                    } else if (result.status != null && result.status.equals("error")) {
-                        callback.onFailure(new NetworkErrorException(result.status_message));
-                    } else if(result.data != null && ((result.data.get("movies") != null && ((ArrayList<LinkedTreeMap<String, Object>>)result.data.get("movies")).size() <= 0) || ((Double)result.data.get("movie_count")).intValue() <= currentList.size())) {
-                        callback.onFailure(new NetworkErrorException("No movies found"));
-                    } else {
-                        ArrayList<Media> formattedData = result.formatForPopcorn(currentList);
-                        callback.onSuccess(filters, formattedData, true);
-                        return;
+                        MovieResponse result = new MovieResponse(list);
+                        if (list == null) {
+                            callback.onFailure(new NetworkErrorException("Empty response"));
+                        } else {
+                            ArrayList<Media> formattedData = result.formatListForPopcorn(currentList);
+                            callback.onSuccess(filters, formattedData, list.size() > 0);
+                            return;
+                        }
                     }
+                } catch (Exception e) {
+                    callback.onFailure(e);
                 }
-                onFailure(response.request(), new IOException("Couldn't connect to YTS"));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to MOVIEAPI"));
             }
         });
     }
@@ -214,86 +205,58 @@ public class MoviesProvider extends MediaProvider {
         return null;
     }
 
-    private class APIResponse {
-        public String status;
-        public String status_message;
-        public LinkedTreeMap<String, Object> data;
+    private class MovieResponse {
+        ArrayList<LinkedTreeMap<String, Object>> moviesList;
 
-        /**
-         * Test if there is an item that already exists
-         *
-         * @param results List with items
-         * @param id      Id of item to check for
-         * @return Return the index of the item in the results
-         */
-        private int isInResults(ArrayList<Media> results, String id) {
-            int i = 0;
-            for (Media item : results) {
-                if (item.videoId.equals(id)) return i;
-                i++;
-            }
-            return -1;
+        public MovieResponse(ArrayList<LinkedTreeMap<String, Object>> moviesList) {
+            this.moviesList = moviesList;
         }
 
-        /**
-         * Format data for the application
-         *
-         * @param existingList List to be extended
-         * @return List with items
-         */
-        public ArrayList<Media> formatForPopcorn(ArrayList<Media> existingList) {
-            ArrayList<LinkedTreeMap<String, Object>> movies = new ArrayList<>();
-            if (data != null) {
-                movies = (ArrayList<LinkedTreeMap<String, Object>>) data.get("movies");
-            }
-
-            for (LinkedTreeMap<String, Object> item : movies) {
+        public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
+            for (LinkedTreeMap<String, Object> item : moviesList) {
                 Movie movie = new Movie(sMediaProvider, sSubsProvider);
 
-                movie.videoId = (String) item.get("imdb_code");
+                movie.videoId = (String) item.get("imdb_id");
                 movie.imdbId = movie.videoId;
 
-                int existingItem = isInResults(existingList, movie.videoId);
-                if (existingItem == -1) {
-                    movie.title = (String) item.get("title_english");
-                    Double year = (Double) item.get("year");
-                    movie.year = Integer.toString(year.intValue());
-                    movie.rating = item.get("rating").toString();
-                    movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
-                    movie.image = (String) item.get("large_cover_image");
-                    movie.headerImage = (String) item.get("background_image_original");
-                    movie.trailer = "https://youtube.com/watch?v=" + item.get("yt_trailer_code");
-                    Double runtime = (Double) item.get("runtime");
-                    movie.runtime = Integer.toString(runtime.intValue());
-                    movie.synopsis = (String) item.get("description_full");
-                    movie.certification = (String) item.get("mpa_rating");
-                    movie.fullImage = movie.image;
+                movie.title = (String) item.get("title");
+                movie.year = (String) item.get("year");
+                movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
+                movie.rating = Double.toString(((LinkedTreeMap<String, Double>) item.get("rating")).get("percentage") / 10);
+                movie.trailer = (String) item.get("trailer");
+                movie.runtime = (String) item.get("runtime");
+                movie.synopsis = (String) item.get("synopsis");
+                movie.certification = (String) item.get("certification");
 
-                    ArrayList<LinkedTreeMap<String, Object>> torrents =
-                            (ArrayList<LinkedTreeMap<String, Object>>) item.get("torrents");
-                    if (torrents != null) {
-                        for (LinkedTreeMap<String, Object> torrentObj : torrents) {
-                            String quality = (String) torrentObj.get("quality");
+                LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
+                if(!images.get("poster").contains("images/posterholder.png")) {
+                    movie.image = images.get("poster").replace("/original/", "/medium/");
+                    movie.fullImage = images.get("poster");
+                }
+                if(!images.get("poster").contains("images/posterholder.png"))
+                    movie.headerImage = images.get("fanart").replace("/original/", "/medium/");
+
+                LinkedTreeMap<String, LinkedTreeMap<String, LinkedTreeMap<String, Object>>> torrents = (LinkedTreeMap<String, LinkedTreeMap<String, LinkedTreeMap<String, Object>>>) item.get("torrents");
+                if (torrents != null) {
+                    for (Map.Entry<String, LinkedTreeMap<String, LinkedTreeMap<String, Object>>> langTorrentObj : torrents.entrySet()) {
+                        String langCode = langTorrentObj.getKey();
+                        for (Map.Entry<String, LinkedTreeMap<String, Object>> torrentEntry : langTorrentObj.getValue().entrySet()) {
+                            LinkedTreeMap<String, Object> torrentObj = torrentEntry.getValue();
+                            String quality = torrentEntry.getKey();
                             if (quality == null) continue;
 
                             Media.Torrent torrent = new Media.Torrent();
 
-                            torrent.seeds = ((Double) torrentObj.get("seeds")).intValue();
-                            torrent.peers = ((Double) torrentObj.get("peers")).intValue();
-                            torrent.hash = (String) torrentObj.get("hash");
-                            try {
-                                torrent.url = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                                torrent.url = (String) torrentObj.get("url");
-                            }
+                            torrent.seeds = ((Double) torrentObj.get("seed")).intValue();
+                            torrent.peers = ((Double) torrentObj.get("peer")).intValue();
+                            torrent.url = (String) torrentObj.get("url");
 
-                            movie.torrents.put(quality, torrent);
+                            movie.torrents.put(LocaleUtils.toLocale(langCode).getDisplayLanguage() + " - " + quality, torrent);
                         }
                     }
-
-                    existingList.add(movie);
                 }
+
+                existingList.add(movie);
             }
             return existingList;
         }
@@ -330,16 +293,17 @@ public class MoviesProvider extends MediaProvider {
         returnList.add(new Genre("drama", R.string.genre_drama));
         returnList.add(new Genre("family", R.string.genre_family));
         returnList.add(new Genre("fantasy", R.string.genre_fantasy));
-        returnList.add(new Genre("filmnoir", R.string.genre_film_noir));
+        returnList.add(new Genre("film-noir", R.string.genre_film_noir));
         returnList.add(new Genre("history", R.string.genre_history));
         returnList.add(new Genre("horror", R.string.genre_horror));
         returnList.add(new Genre("music", R.string.genre_music));
         returnList.add(new Genre("musical", R.string.genre_musical));
         returnList.add(new Genre("mystery", R.string.genre_mystery));
         returnList.add(new Genre("romance", R.string.genre_romance));
-        returnList.add(new Genre("scifi", R.string.genre_sci_fi));
+        returnList.add(new Genre("science-fiction", R.string.genre_sci_fi));
         returnList.add(new Genre("short", R.string.genre_short));
-        returnList.add(new Genre("sport", R.string.genre_sport));
+        returnList.add(new Genre("sports", R.string.genre_sport));
+        returnList.add(new Genre("suspense", R.string.genre_suspense));
         returnList.add(new Genre("thriller", R.string.genre_thriller));
         returnList.add(new Genre("war", R.string.genre_war));
         returnList.add(new Genre("western", R.string.genre_western));
