@@ -681,7 +681,7 @@ public interface PreferencesHandler {
                             @Override
                             public void onClick(final PrefItem item) {
                                 Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse("https://github.com/butterproject/butter-android/issues/new"));
+                                i.setData(Uri.parse("https://github.com/popcorn-official/popcorn-android/issues/new"));
                                 context.startActivity(i);
                             }
                         })
