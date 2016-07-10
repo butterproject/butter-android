@@ -35,9 +35,12 @@ public class NetworkUtils {
      * Get whether or not a wifi connection is currently connected.
      */
     public static boolean isWifiConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager == null) return false;
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        if (isNetworkConnected(context)) {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            return (cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI);
+        } else {
+            return false;
+        }
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,9 +51,12 @@ public class NetworkUtils {
      * Get whether or not an ethernet connection is currently connected.
      */
     public static boolean isEthernetConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager == null) return false;
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET).isConnected();
+        if (isNetworkConnected(context)) {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            return (cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_ETHERNET);
+        } else {
+            return false;
+        }
     }
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -61,13 +67,10 @@ public class NetworkUtils {
      * Get whether or not any network connection is present (eg. wifi, 3G, etc.).
      */
     public static boolean isNetworkConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager == null) return false;
-        NetworkInfo[] info = connectivityManager.getAllNetworkInfo();
-        if (info == null) return false;
-        for (int i = 0; i < info.length; i++)
-            if (info[i].getState() == NetworkInfo.State.CONNECTED) return true;
-        return false;
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     /**
@@ -81,6 +84,5 @@ public class NetworkUtils {
         int ip = wifiInfo.getIpAddress();
         return String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
     }
-
 
 }
