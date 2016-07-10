@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butter.droid.base.adapters.models.Option;
 
@@ -68,9 +68,9 @@ public class FileArrayAdapter extends ArrayAdapter<Option> {
     }
 
     class ViewHolder {
-        @Bind(android.R.id.text1)
+        @BindView(android.R.id.text1)
         TextView text1;
-        @Bind(android.R.id.text2)
+        @BindView(android.R.id.text2)
         TextView text2;
 
         public ViewHolder(View v) {

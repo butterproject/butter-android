@@ -39,7 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
@@ -62,17 +62,17 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     private Torrent mCurrentTorrent;
 
     View mRoot;
-    @Bind(R.id.progress_indicator)
+    @BindView(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
-    @Bind(R.id.primary_textview)
+    @BindView(R.id.primary_textview)
     TextView mPrimaryTextView;
-    @Bind(R.id.secondary_textview)
+    @BindView(R.id.secondary_textview)
     TextView mSecondaryTextView;
-    @Bind(R.id.tertiary_textview)
+    @BindView(R.id.tertiary_textview)
     TextView mTertiaryTextView;
-    @Bind(R.id.background_imageview)
+    @BindView(R.id.background_imageview)
     ImageView mBackgroundImageView;
-    @Bind(R.id.startexternal_button)
+    @BindView(R.id.startexternal_button)
     Button mStartExternalButton;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

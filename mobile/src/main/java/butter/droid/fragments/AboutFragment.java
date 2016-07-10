@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.base.Constants;
@@ -36,19 +36,19 @@ import butter.droid.base.utils.IntentUtils;
 
 public class AboutFragment extends Fragment {
 
-    @Bind(R.id.logo_imageview)
+    @BindView(R.id.logo_imageview)
     ImageView mLogoImageView;
-    @Bind(R.id.facebook_button)
+    @BindView(R.id.facebook_button)
     TextView mFacebookButton;
-    @Bind(R.id.git_button)
+    @BindView(R.id.git_button)
     TextView mGitButton;
-    @Bind(R.id.blog_button)
+    @BindView(R.id.blog_button)
     TextView mBlogButton;
-    @Bind(R.id.butter_button)
+    @BindView(R.id.butter_button)
     TextView mButterButton;
-    @Bind(R.id.discuss_button)
+    @BindView(R.id.discuss_button)
     TextView mDiscussButton;
-    @Bind(R.id.twitter_button)
+    @BindView(R.id.twitter_button)
     TextView mTwitterButton;
 
     private OnFragmentInteractionListener mListener;

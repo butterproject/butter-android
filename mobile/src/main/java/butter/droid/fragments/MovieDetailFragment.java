@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butter.droid.R;
@@ -55,30 +55,30 @@ public class MovieDetailFragment extends BaseDetailFragment {
     private Boolean mAttached = false;
     private Magnet mMagnet;
 
-    @Bind(R.id.play_button)
+    @BindView(R.id.play_button)
     ImageButton mPlayButton;
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
-    @Bind(R.id.health)
+    @BindView(R.id.health)
     ImageView mHealth;
-    @Bind(R.id.meta)
+    @BindView(R.id.meta)
     TextView mMeta;
-    @Bind(R.id.synopsis)
+    @BindView(R.id.synopsis)
     TextView mSynopsis;
-    @Bind(R.id.read_more)
+    @BindView(R.id.read_more)
     Button mReadMore;
-    @Bind(R.id.watch_trailer)
+    @BindView(R.id.watch_trailer)
     Button mWatchTrailer;
-    @Bind(R.id.magnet)
+    @BindView(R.id.magnet)
     ImageButton mOpenMagnet;
-    @Bind(R.id.rating)
+    @BindView(R.id.rating)
     RatingBar mRating;
-    @Bind(R.id.subtitles)
+    @BindView(R.id.subtitles)
     OptionSelector mSubtitles;
-    @Bind(R.id.quality)
+    @BindView(R.id.quality)
     OptionSelector mQuality;
     @Nullable
-    @Bind(R.id.cover_image)
+    @BindView(R.id.cover_image)
     ImageView mCoverImage;
 
     public static MovieDetailFragment newInstance(Movie movie) {

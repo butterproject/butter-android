@@ -32,7 +32,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import butter.droid.R;
 import butter.droid.fragments.NavigationDrawerFragment;
@@ -167,13 +167,13 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public class ItemRowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(android.R.id.icon)
+        @BindView(android.R.id.icon)
         ImageView icon;
-        @Bind(android.R.id.text1)
+        @BindView(android.R.id.text1)
         TextView title;
-        @Bind(android.R.id.checkbox)
+        @BindView(android.R.id.checkbox)
         Switch checkbox;
-        @Bind(android.R.id.progress)
+        @BindView(android.R.id.progress)
         ProgressBar progressBar;
 
         public ItemRowHolder(View itemView) {
@@ -201,13 +201,13 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static class HeaderHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.bg_imageview)
+        @BindView(R.id.bg_imageview)
         ImageView mBackgroundImageView;
-        @Bind(R.id.profile_imageview)
+        @BindView(R.id.profile_imageview)
         CircleImageView mProfileImageView;
-        @Bind(R.id.title_textview)
+        @BindView(R.id.title_textview)
         TextView mTitleTextView;
-        @Bind(R.id.subtitle_textview)
+        @BindView(R.id.subtitle_textview)
         TextView mSubtitleTextView;
 
         public HeaderHolder(View itemView) {
