@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -66,7 +67,13 @@ dependencies {
     compile 'com.github.sv244:torrentstream-android:1.1.0'
 
     compile 'de.timroes:aXMLRPC:1.8.1'
+    compile "com.google.dagger:dagger:${rootProject.ext.daggerVersion}"
 
     compile project(':vlc')
     compile project(':connectsdk')
+
+    apt "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
+
+    provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+
 }

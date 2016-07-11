@@ -81,7 +81,7 @@ public class ButterUpdater extends Observable {
     private static final String SHA1_TIME = "sha1_update_time";
     private static final String SHA1_KEY = "sha1_update";
 
-    private final OkHttpClient mHttpClient = ButterApplication.getHttpClient();
+    private final OkHttpClient mHttpClient = ButterApplication.getAppContext().getHttpClient();
     private final Gson mGson = new Gson();
     private final Handler mUpdateHandler = new Handler();
 

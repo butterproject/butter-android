@@ -18,6 +18,7 @@ apply plugin: 'org.moallemi.advanced-build-version'
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'com.neenbedankt.android-apt'
 
 
 repositories {
@@ -98,4 +99,8 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.1'
 
     compile project(':base')
+
+    apt "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
+
+    provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }

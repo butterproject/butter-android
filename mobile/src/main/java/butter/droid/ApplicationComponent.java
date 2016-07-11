@@ -15,28 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv;
+package butter.droid;
 
-import butter.droid.base.BaseApplicationModule;
-import butter.droid.base.ButterApplication;
-import butter.droid.base.utils.VersionUtils;
+import javax.inject.Singleton;
 
-public class TVButterApplication extends ButterApplication {
+import dagger.Component;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+@Singleton @Component(
+        modules = ApplicationModule.class
+)
+public interface ApplicationComponent {
 
-        DaggerApplicationComponent.builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .build()
-                .inject(this);
-    }
+    void inject(MobileButterApplication application);
 
-    @Override
-    public void updateAvailable(String filePath) {
-        if(!VersionUtils.isAndroidTV()) {
-            super.updateAvailable(filePath);
-        }
-    }
 }

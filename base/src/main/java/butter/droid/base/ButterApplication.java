@@ -33,11 +33,11 @@ import android.support.v4.app.NotificationCompat;
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
@@ -52,9 +52,11 @@ import timber.log.Timber;
 
 public class ButterApplication extends Application implements ButterUpdater.Listener {
 
-    private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
-    private static Application sThis;
+    private static ButterApplication sThis;
+
+    @Inject OkHttpClient okHttpClient;
+    @Inject Picasso picasso;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -108,10 +110,7 @@ public class ButterApplication extends Application implements ButterUpdater.List
         Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         Timber.i("Chosen cache location: " + directory);
 
-        Picasso.Builder builder = new Picasso.Builder(getAppContext());
-        OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
-        builder.downloader(downloader);
-        Picasso.setSingletonInstance(builder.build());
+        Picasso.setSingletonInstance(picasso);
     }
 
     @Override
@@ -131,25 +130,8 @@ public class ButterApplication extends Application implements ButterUpdater.List
         return sDefSystemLanguage;
     }
 
-    public static OkHttpClient getHttpClient() {
-        if (sHttpClient == null) {
-            sHttpClient = new OkHttpClient();
-            sHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-            sHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
-            sHttpClient.setRetryOnConnectionFailure(true);
-
-            int cacheSize = 10 * 1024 * 1024;
-            File cacheLocation = new File(PrefUtils.get(ButterApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(ButterApplication.getAppContext()).toString()));
-            cacheLocation.mkdirs();
-            com.squareup.okhttp.Cache cache = null;
-            try {
-                cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            sHttpClient.setCache(cache);
-        }
-        return sHttpClient;
+    public OkHttpClient getHttpClient() {
+        return okHttpClient;
     }
 
     public static String getStreamDir() {
@@ -179,7 +161,7 @@ public class ButterApplication extends Application implements ButterUpdater.List
         }
     }
 
-    public static Context getAppContext() {
+    public static ButterApplication getAppContext() {
         return sThis;
     }
 }

@@ -45,7 +45,7 @@ public abstract class BaseProvider {
     protected Call mCurrentCall;
 
     protected OkHttpClient getClient() {
-        return ButterApplication.getHttpClient();
+        return ButterApplication.getAppContext().getHttpClient();
     }
 
     /**

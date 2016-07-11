@@ -75,7 +75,7 @@ public class YouTubeData {
     public static String calculateYouTubeUrl(String quality, boolean fallback, String videoId) throws IOException {
 
         String uriStr = null;
-        OkHttpClient client = ButterApplication.getHttpClient();
+        OkHttpClient client = ButterApplication.getAppContext().getHttpClient();
 
         Request.Builder request = new Request.Builder();
         request.url(YOUTUBE_VIDEO_INFORMATION_URL + videoId);

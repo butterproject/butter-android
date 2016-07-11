@@ -59,7 +59,7 @@ public class RecommendationContentProvider extends ContentProvider {
 					"UTF-8");
 			pipe = ParcelFileDescriptor.createPipe();
 
-			OkHttpClient httpClient = ButterApplication.getHttpClient();
+			OkHttpClient httpClient = ButterApplication.getAppContext().getHttpClient();
 			OkUrlFactory factory = new OkUrlFactory(httpClient);
 			HttpURLConnection connection = factory.open(new URL(decodedUrl));
 

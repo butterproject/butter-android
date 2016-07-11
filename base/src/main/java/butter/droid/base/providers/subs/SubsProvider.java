@@ -77,7 +77,7 @@ public abstract class SubsProvider extends BaseProvider {
      * @return Call
      */
     public static Call download(final Context context, final Media media, final String languageCode, final com.squareup.okhttp.Callback callback) {
-        OkHttpClient client = ButterApplication.getHttpClient();
+        OkHttpClient client = ButterApplication.getAppContext().getHttpClient();
         if (media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();

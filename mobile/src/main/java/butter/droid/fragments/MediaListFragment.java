@@ -143,7 +143,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void changeGenre(String genre) {
         if (!(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
             if(mCurrentCall != null)
-                ButterApplication.getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
+                ButterApplication.getAppContext().getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
                     @Override
                     public void run() {
                         mCurrentCall.cancel();
@@ -300,7 +300,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         }
 
         if(mCurrentCall != null)
-            ButterApplication.getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
+            ButterApplication.getAppContext().getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
                 @Override
                 public void run() {
                     mCurrentCall.cancel();

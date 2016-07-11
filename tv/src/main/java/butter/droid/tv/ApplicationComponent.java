@@ -17,26 +17,15 @@
 
 package butter.droid.tv;
 
-import butter.droid.base.BaseApplicationModule;
-import butter.droid.base.ButterApplication;
-import butter.droid.base.utils.VersionUtils;
+import javax.inject.Singleton;
 
-public class TVButterApplication extends ButterApplication {
+import dagger.Component;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+@Singleton @Component(
+        modules = ApplicationModule.class
+)
+public interface ApplicationComponent {
 
-        DaggerApplicationComponent.builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .build()
-                .inject(this);
-    }
+    void inject(TVButterApplication application);
 
-    @Override
-    public void updateAvailable(String filePath) {
-        if(!VersionUtils.isAndroidTV()) {
-            super.updateAvailable(filePath);
-        }
-    }
 }
