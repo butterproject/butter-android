@@ -30,7 +30,7 @@ import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 import butter.droid.R;
 
 public class ColorPickerDialogFragment extends DialogFragment {
@@ -40,11 +40,11 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
     private ResultListener mOnResultListener;
 
-    @Bind(R.id.picker)
+    @BindView(R.id.picker)
     ColorPicker colorPicker;
-    @Bind(R.id.svbar)
+    @BindView(R.id.svbar)
     SVBar svBar;
-    @Bind(R.id.opacitybar)
+    @BindView(R.id.opacitybar)
     OpacityBar opacityBar;
 
     @NonNull

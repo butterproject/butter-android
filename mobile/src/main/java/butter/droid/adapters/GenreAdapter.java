@@ -44,7 +44,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Genre;
 
@@ -65,7 +65,7 @@ public class GenreAdapter extends RecyclerView.Adapter {
             v.setOnClickListener(this);
         }
 
-        @Bind(android.R.id.text1)
+        @BindView(android.R.id.text1)
         TextView text1;
 
         @Override

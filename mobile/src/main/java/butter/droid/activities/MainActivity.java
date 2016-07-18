@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -48,9 +49,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import butter.droid.base.providers.media.VodoProvider;
-import butterknife.Bind;
-import android.support.annotation.Nullable;
 import butter.droid.BuildConfig;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
@@ -59,19 +57,18 @@ import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.beaming.BeamPlayerNotificationService;
 import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.PrefUtils;
-import butter.droid.base.utils.SignUtils;
 import butter.droid.base.youtube.YouTubeData;
-import butter.droid.fragments.dialog.MessageDialogFragment;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
-import timber.log.Timber;
+import butterknife.BindView;
 
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
@@ -81,12 +78,12 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
     private static final int PERMISSIONS_REQUEST = 123;
     private Fragment mCurrentFragment;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.navigation_drawer_container)
+    @BindView(R.id.navigation_drawer_container)
     ScrimInsetsFrameLayout mNavigationDrawerContainer;
     @Nullable
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabs;
     NavigationDrawerFragment mNavigationDrawerFragment;
 

@@ -22,15 +22,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butter.droid.tv.R;
 
 public class MoreViewHolder extends Presenter.ViewHolder implements View.OnFocusChangeListener {
 
-    @Bind(R.id.text)
+    @BindView(R.id.text)
     TextView textview;
-    @Bind(R.id.icon)
+    @BindView(R.id.icon)
     ImageView imageview;
 
     public MoreViewHolder(View view) {

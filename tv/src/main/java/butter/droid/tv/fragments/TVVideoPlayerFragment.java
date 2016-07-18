@@ -52,7 +52,7 @@ import com.squareup.picasso.Target;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import butter.droid.base.content.preferences.Prefs;
@@ -76,11 +76,11 @@ import butter.droid.tv.events.ToggleSubtitleEvent;
 import butter.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
-    @Bind(R.id.video_surface)
+    @BindView(R.id.video_surface)
     SurfaceView mVideoSurface;
-    @Bind(R.id.subtitle_text)
+    @BindView(R.id.subtitle_text)
     StrokedTextView mSubtitleText;
-    @Bind(R.id.progress_indicator)
+    @BindView(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
 
     private boolean mIsSubtitleEnabled = false;

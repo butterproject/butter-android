@@ -38,7 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.adapters.PreferencesListAdapter;
@@ -58,11 +58,11 @@ public class PreferencesActivity extends ButterBaseActivity
     private List<PrefItem> mPrefItems = new ArrayList<>();
     private LinearLayoutManager mLayoutManager;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @Bind(R.id.rootLayout)
+    @BindView(R.id.rootLayout)
     ViewGroup rootLayout;
 
     public static Intent startActivity(Activity activity) {
