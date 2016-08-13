@@ -29,7 +29,6 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -41,11 +40,16 @@ import butter.droid.base.providers.subs.SubsProvider;
  */
 public abstract class BaseProvider {
 
+    private final OkHttpClient client;
     protected Gson mGson = new Gson();
     protected Call mCurrentCall;
 
+    public BaseProvider(OkHttpClient client) {
+        this.client = client;
+    }
+
     protected OkHttpClient getClient() {
-        return ButterApplication.getAppContext().getHttpClient();
+        return client;
     }
 
     /**

@@ -30,8 +30,7 @@ import butter.droid.utils.ToolbarUtils;
 
 public class AboutActivity extends ButterBaseActivity implements AboutFragment.OnFragmentInteractionListener {
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    @Bind(R.id.toolbar) Toolbar toolbar;
 
     public static Intent startActivity(Activity activity) {
         Intent intent = new Intent(activity, AboutActivity.class);

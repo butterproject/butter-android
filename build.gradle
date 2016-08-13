@@ -20,7 +20,7 @@ buildscript {
 
 ext {
     appCompatVersion = "23.1.1"
-    buildToolsVersion = "23.0.1"
+    buildToolsVersion = "24.0.1"
     targetSdk = 23
     compileSdk = 23
     minSdk = 15

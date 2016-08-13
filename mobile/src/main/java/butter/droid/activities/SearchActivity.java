@@ -17,6 +17,7 @@
 
 package butter.droid.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,25 +40,19 @@ import butter.droid.utils.ToolbarUtils;
  */
 public class SearchActivity extends ButterBaseActivity {
 
-    public static final String EXTRA_PROVIDER = "extra_provider";
-
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
-    @Bind(R.id.searchview)
-    SearchView mSearchview;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.searchview) SearchView mSearchview;
 
     private MediaListFragment mFragment;
 
-    public static Intent startActivity(Activity activity, MediaProvider provider) {
+    public static Intent startActivity(Activity activity) {
         Intent intent = new Intent(activity, SearchActivity.class);
-        intent.putExtra(EXTRA_PROVIDER, provider);
         activity.startActivity(intent);
 //		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out,);
         return intent;
     }
 
-    @Override
+    @SuppressLint("MissingSuperCall") @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_search);
         setSupportActionBar(toolbar);
@@ -65,7 +60,6 @@ public class SearchActivity extends ButterBaseActivity {
         setShowCasting(true);
 
         ToolbarUtils.updateToolbarHeight(this, toolbar);
-        MediaProvider provider = getIntent().getExtras().getParcelable(EXTRA_PROVIDER);
 
         mSearchview.onActionViewExpanded();
         mSearchview.setOnQueryTextListener(mSearchListener);
@@ -77,8 +71,8 @@ public class SearchActivity extends ButterBaseActivity {
         }
 
         //create and add the media fragment
-        mFragment =
-                MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider, MediaProvider.Filters.Sort.POPULARITY, MediaProvider.Filters.Order.DESC);
+        mFragment = MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, MediaProvider.Filters.Sort.POPULARITY,
+                MediaProvider.Filters.Order.DESC);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
     }

@@ -35,8 +35,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import butter.droid.base.providers.media.VodoProvider;
-import hugo.weaving.DebugLog;
+import javax.inject.Inject;
+
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -45,9 +46,9 @@ import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVMediaDetailActivity;
-import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.utils.BackgroundUpdater;
+import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 
@@ -58,7 +59,8 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
 
     private static final int NUM_COLUMNS = 6;
 
-    private MediaProvider mProvider;
+    @Inject ProviderManager providerManager;
+
     private List<MediaCardPresenter.MediaCardItem> mItems = new ArrayList<>();
     private ArrayObjectAdapter mAdapter;
     private Callback mCallback;
@@ -92,15 +94,6 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
             mCallback = (Callback) getActivity();
         }
 
-        switch (mCallback.getType()) {
-            case MOVIE:
-                mProvider = new VodoProvider();
-                break;
-            case SHOW:
-                //mProvider = new EZTVProvider();
-                break;
-        }
-
         loadItems();
     }
 
@@ -127,10 +120,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     }
 
     private void loadItems() {
-        if(mProvider == null)
-            return;
-
-        mProvider.getList(null, getFilters(), new MediaProvider.Callback() {
+        providerManager.getCurrentMediaProvider().getList(null, getFilters(), new MediaProvider.Callback() {
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
@@ -212,7 +202,5 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
 
     public interface Callback {
         MediaProvider.Filters getFilters();
-
-        TVMediaGridActivity.ProviderType getType();
     }
 }

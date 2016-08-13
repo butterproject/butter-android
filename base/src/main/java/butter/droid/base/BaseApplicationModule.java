@@ -22,11 +22,15 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import butter.droid.base.data.DataModule;
+import butter.droid.base.manager.ManagerModule;
 import dagger.Module;
 import dagger.Provides;
 
 @Module(
-        includes = DataModule.class
+        includes = {
+                DataModule.class,
+                ManagerModule.class
+        }
 )
 public class BaseApplicationModule {
 

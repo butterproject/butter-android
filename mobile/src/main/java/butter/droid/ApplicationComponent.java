@@ -19,6 +19,15 @@ package butter.droid;
 
 import javax.inject.Singleton;
 
+import butter.droid.activities.MainActivity;
+import butter.droid.fragments.MediaContainerFragment;
+import butter.droid.fragments.MediaGenreSelectionFragment;
+import butter.droid.fragments.MediaListFragment;
+import butter.droid.fragments.MovieDetailFragment;
+import butter.droid.fragments.NavigationDrawerFragment;
+import butter.droid.fragments.StreamLoadingFragment;
+import butter.droid.fragments.dialog.EpisodeDialogFragment;
+import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import dagger.Component;
 
 @Singleton @Component(
@@ -27,5 +36,16 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(MobileButterApplication application);
+
+    void inject(MainActivity activity);
+
+    void inject(NavigationDrawerFragment fragment);
+    void inject(MediaContainerFragment fragment);
+    void inject(MediaListFragment fragment);
+    void inject(MediaGenreSelectionFragment fragment);
+    void inject(LoadingDetailDialogFragment fragment);
+    void inject(StreamLoadingFragment fragment);
+    void inject(EpisodeDialogFragment fragment);
+    void inject(MovieDetailFragment fragment);
 
 }

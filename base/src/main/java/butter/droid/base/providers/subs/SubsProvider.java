@@ -55,6 +55,10 @@ public abstract class SubsProvider extends BaseProvider {
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
+    public SubsProvider(OkHttpClient client) {
+        super(client);
+    }
+
     public abstract void getList(Movie movie, Callback callback);
 
     public abstract void getList(Episode episode, Callback callback);

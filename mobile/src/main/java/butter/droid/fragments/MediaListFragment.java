@@ -39,14 +39,15 @@ import com.squareup.okhttp.Call;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
-import hugo.weaving.DebugLog;
+import javax.inject.Inject;
+
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.MediaDetailActivity;
 import butter.droid.adapters.MediaGridAdapter;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
@@ -54,6 +55,9 @@ import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 /**
@@ -72,7 +76,6 @@ import timber.log.Timber;
  */
 public class MediaListFragment extends Fragment implements LoadingDetailDialogFragment.Callback {
 
-    public static final String EXTRA_PROVIDER = "extra_provider";
     public static final String EXTRA_SORT = "extra_sort";
     public static final String EXTRA_ORDER = "extra_order";
     public static final String EXTRA_GENRE = "extra_genre";
@@ -80,6 +83,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
     public static final int LOADING_DIALOG_FRAGMENT = 1;
+
+    @Inject ProviderManager providerManager;
 
     private Context mContext;
     private MediaGridAdapter mAdapter;
@@ -108,7 +113,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
-    private MediaProvider mProvider;
     private Call mCurrentCall;
     private int mPage = 1;
     private MediaProvider.Filters mFilters = new MediaProvider.Filters();
@@ -124,14 +128,13 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     @Bind(R.id.progress_textview)
     TextView mProgressTextView;
 
-    public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
-        return newInstance(mode, provider, filter, defOrder, null);
+    public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
+        return newInstance(mode, filter, defOrder, null);
     }
 
-    public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder, String genre) {
+    public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder, String genre) {
         MediaListFragment frag = new MediaListFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_PROVIDER, provider);
         args.putSerializable(EXTRA_MODE, mode);
         args.putSerializable(EXTRA_SORT, filter);
         args.putSerializable(EXTRA_ORDER, defOrder);
@@ -152,7 +155,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             mAdapter.clearItems();
             mGenre = mFilters.genre = genre;
             mFilters.page = 1;
-            mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);
+            mCurrentCall = providerManager.getCurrentMediaProvider()
+                    .getList(new MediaProvider.Filters(mFilters), mCallback);
             setState(State.LOADING);
         }
     }
@@ -160,6 +164,10 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
     }
 
     @Override
@@ -201,7 +209,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         super.onActivityCreated(savedInstanceState);
 
         //get the provider type and create a provider
-        mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
         mSort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
         mDefOrder = (MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER);
         mFilters.sort = mSort;
@@ -217,7 +224,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         //don't load initial data in search mode
         if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
-            mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
+            mCurrentCall = providerManager.getCurrentMediaProvider()
+                    .getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
             setState(State.LOADING);
         } else updateUI();
     }
@@ -244,7 +252,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         mLoadingMessage = R.string.searching;
                         break;
                     default:
-                        int providerMessage = mProvider.getLoadingMessage();
+                        int providerMessage = providerManager.getCurrentMediaProvider().getLoadingMessage();
                         mLoadingMessage = providerMessage > 0 ? providerMessage : R.string.loading_data;
                         break;
                 }
@@ -321,7 +329,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mFilters.keywords = searchQuery;
         mFilters.page = 1;
         mPage = 1;
-        mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);
+        mCurrentCall = providerManager.getCurrentMediaProvider()
+                .getList(new MediaProvider.Filters(mFilters), mCallback);
     }
 
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
@@ -405,7 +414,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         }
                     });
                 } else {
-                    mCurrentCall = mProvider.getList(mItems, new MediaProvider.Filters(mFilters), this);
+                    mCurrentCall = providerManager.getCurrentMediaProvider()
+                            .getList(mItems, new MediaProvider.Filters(mFilters), this);
                 }
                 mRetries++;
             }
@@ -476,7 +486,8 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                     mLoadingTreshold)) {
 
                 mFilters.page = mPage;
-                mCurrentCall = mProvider.getList(mItems, new MediaProvider.Filters(mFilters), mCallback);
+                mCurrentCall = providerManager.getCurrentMediaProvider()
+                        .getList(mItems, new MediaProvider.Filters(mFilters), mCallback);
 
                 mPreviousTotal = mTotalItemCount = mLayoutManager.getItemCount();
                 setState(State.LOADING_PAGE);

@@ -28,8 +28,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -43,6 +45,8 @@ import timber.log.Timber;
 
 public class RecommendationService extends IntentService {
 
+    @Inject ProviderManager providerManager;
+
     private ArrayList<Media> mMovies = new ArrayList<>();
     private ArrayList<Media> mShows = new ArrayList<>();
 
@@ -52,9 +56,6 @@ public class RecommendationService extends IntentService {
 
     private static final int MAX_MOVIE_RECOMMENDATIONS = 3;
     private static final int MAX_SHOW_RECOMMENDATIONS = 3;
-
-    // private XProvider mShowProvider = x
-    private VodoProvider mMovieProvider = new VodoProvider();
 
     private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
     private int TOTAL_COUNT=0;
@@ -84,22 +85,26 @@ public class RecommendationService extends IntentService {
         final AtomicBoolean mShowsCallFinished = new AtomicBoolean(false);
 
 
-        Timber.d("Fetching movies");
         //fetch movies
-        mMovieProvider.getList(movieFilter, new MediaProvider.Callback() {
-            @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                Timber.d(String.format("loaded %s movies", items.size()));
-                mMovies.addAll(items);
-                mMoviesCallFinished.set(true);
-            }
+        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
+            Timber.d("Fetching movies");
+            //noinspection ConstantConditions
+            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
+                    .getList(movieFilter, new MediaProvider.Callback() {
+                @Override
+                public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                    Timber.d(String.format("loaded %s movies", items.size()));
+                    mMovies.addAll(items);
+                    mMoviesCallFinished.set(true);
+                }
 
-            @Override
-            public void onFailure(Exception e) {
-                Timber.d("Failed to fetch movies");
-                mMoviesCallFinished.set(true);
-            }
-        });
+                @Override
+                public void onFailure(Exception e) {
+                    Timber.d("Failed to fetch movies");
+                    mMoviesCallFinished.set(true);
+                }
+            });
+        }
 
         /*
         Disabled, since no shows provider

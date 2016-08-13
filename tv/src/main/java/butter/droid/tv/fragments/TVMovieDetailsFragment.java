@@ -28,9 +28,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -46,7 +48,7 @@ import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
-	VodoProvider mMovieProvider = new VodoProvider();
+	@Inject ProviderManager providerManager;
 
 	public static Fragment newInstance(Media media) {
 		TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
@@ -67,7 +69,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 		ArrayList<Media> mediaList = new ArrayList<>();
 		mediaList.add(getMovieItem());
 
-		mMovieProvider.getDetail(mediaList, 0, this);
+		providerManager.getCurrentMediaProvider().getDetail(mediaList, 0, this);
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 		if (item instanceof Movie) {
 			Movie movie = (Movie) item;
 
-			List<String> qualities = new ArrayList(movie.torrents.keySet());
+			List<String> qualities = new ArrayList<>(movie.torrents.keySet());
 
             addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch), getResources().getString(R.string.trailer)));
 

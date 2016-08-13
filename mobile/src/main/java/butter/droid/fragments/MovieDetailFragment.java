@@ -23,6 +23,10 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import butter.droid.MobileButterApplication;
+import butter.droid.base.manager.provider.ProviderManager;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,36 +54,25 @@ import butter.droid.widget.OptionSelector;
 
 public class MovieDetailFragment extends BaseDetailFragment {
 
+    @Inject ProviderManager providerManager;
+
     private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Boolean mAttached = false;
     private Magnet mMagnet;
 
-    @Bind(R.id.play_button)
-    ImageButton mPlayButton;
-    @Bind(R.id.title)
-    TextView mTitle;
-    @Bind(R.id.health)
-    ImageView mHealth;
-    @Bind(R.id.meta)
-    TextView mMeta;
-    @Bind(R.id.synopsis)
-    TextView mSynopsis;
-    @Bind(R.id.read_more)
-    Button mReadMore;
-    @Bind(R.id.watch_trailer)
-    Button mWatchTrailer;
-    @Bind(R.id.magnet)
-    ImageButton mOpenMagnet;
-    @Bind(R.id.rating)
-    RatingBar mRating;
-    @Bind(R.id.subtitles)
-    OptionSelector mSubtitles;
-    @Bind(R.id.quality)
-    OptionSelector mQuality;
-    @Nullable
-    @Bind(R.id.cover_image)
-    ImageView mCoverImage;
+    @Bind(R.id.play_button) ImageButton mPlayButton;
+    @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.health) ImageView mHealth;
+    @Bind(R.id.meta) TextView mMeta;
+    @Bind(R.id.synopsis) TextView mSynopsis;
+    @Bind(R.id.read_more) Button mReadMore;
+    @Bind(R.id.watch_trailer) Button mWatchTrailer;
+    @Bind(R.id.magnet) ImageButton mOpenMagnet;
+    @Bind(R.id.rating) RatingBar mRating;
+    @Bind(R.id.subtitles) OptionSelector mSubtitles;
+    @Bind(R.id.quality) OptionSelector mQuality;
+    @Nullable @Bind(R.id.cover_image) ImageView mCoverImage;
 
     public static MovieDetailFragment newInstance(Movie movie) {
         sMovie = movie;
@@ -89,6 +82,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -164,8 +161,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mSubtitles.setText(R.string.loading_subs);
             mSubtitles.setClickable(false);
 
-            if (sMovie.getSubsProvider() != null) {
-                sMovie.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
+            if (providerManager.hasSubsProvider()) {
+                providerManager.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
                     @Override
                     public void onSuccess(Map<String, String> subtitles) {
                         if (!mAttached) return;

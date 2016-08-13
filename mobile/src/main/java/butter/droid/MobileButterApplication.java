@@ -22,13 +22,23 @@ import butter.droid.base.ButterApplication;
 
 public class MobileButterApplication extends ButterApplication {
 
+    private ApplicationComponent component;
+
     @Override public void onCreate() {
         super.onCreate();
 
-        DaggerApplicationComponent.builder()
+        component = DaggerApplicationComponent.builder()
                 .baseApplicationModule(new BaseApplicationModule(this))
-                .build()
-                .inject(this);
+                .build();
+        component.inject(this);
+    }
+
+    public ApplicationComponent getComponent() {
+        return component;
+    }
+
+    public static MobileButterApplication getAppContext() {
+        return (MobileButterApplication) ButterApplication.getAppContext();
     }
 
 }

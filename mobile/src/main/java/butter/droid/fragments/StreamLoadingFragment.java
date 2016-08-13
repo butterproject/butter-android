@@ -39,6 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
+import butter.droid.MobileButterApplication;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,18 +63,20 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     private Torrent mCurrentTorrent;
 
     View mRoot;
-    @Bind(R.id.progress_indicator)
-    ProgressBar mProgressIndicator;
-    @Bind(R.id.primary_textview)
-    TextView mPrimaryTextView;
-    @Bind(R.id.secondary_textview)
-    TextView mSecondaryTextView;
-    @Bind(R.id.tertiary_textview)
-    TextView mTertiaryTextView;
-    @Bind(R.id.background_imageview)
-    ImageView mBackgroundImageView;
-    @Bind(R.id.startexternal_button)
-    Button mStartExternalButton;
+    @Bind(R.id.progress_indicator) ProgressBar mProgressIndicator;
+    @Bind(R.id.primary_textview) TextView mPrimaryTextView;
+    @Bind(R.id.secondary_textview) TextView mSecondaryTextView;
+    @Bind(R.id.tertiary_textview) TextView mTertiaryTextView;
+    @Bind(R.id.background_imageview) ImageView mBackgroundImageView;
+    @Bind(R.id.startexternal_button) Button mStartExternalButton;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
