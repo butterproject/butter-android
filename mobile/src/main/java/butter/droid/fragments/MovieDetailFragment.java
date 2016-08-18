@@ -235,7 +235,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
 
             if (sMovie.torrents.size() > 0) {
-                final String[] qualities = sMovie.torrents.keySet().toArray(new String[sMovie.torrents.size()]);
+                final String[] qualities = sMovie.torrents.get("en").keySet().toArray(new String[sMovie.torrents.size()]);
                 SortUtils.sortQualities(qualities);
 
                 mQuality.setData(qualities);
@@ -285,15 +285,15 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mHealth.setVisibility(View.VISIBLE);
         }
 
-        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get(mSelectedQuality).seeds, sMovie.torrents.get(mSelectedQuality).peers);
+        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get("en").get(mSelectedQuality).seeds, sMovie.torrents.get("en").get(mSelectedQuality).peers);
         mHealth.setImageResource(health.getImageResource());
     }
 
     private void updateMagnet() {
         if(mMagnet == null) {
-            mMagnet = new Magnet(mActivity, sMovie.torrents.get(mSelectedQuality).url);
+            mMagnet = new Magnet(mActivity, sMovie.torrents.get("en").get(mSelectedQuality).url);
         }
-        mMagnet.setUrl(sMovie.torrents.get(mSelectedQuality).url);
+        mMagnet.setUrl(sMovie.torrents.get("en").get(mSelectedQuality).url);
 
         if(!mMagnet.canOpen()) {
             mOpenMagnet.setVisibility(View.GONE);
@@ -324,7 +324,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.play_button)
     public void play() {
-        String streamUrl = sMovie.torrents.get(mSelectedQuality).url;
+        String streamUrl = sMovie.torrents.get("en").get(mSelectedQuality).url;
         StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
     }
@@ -336,8 +336,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.health)
     public void clickHealth() {
-        int seeds = sMovie.torrents.get(mSelectedQuality).seeds;
-        int peers = sMovie.torrents.get(mSelectedQuality).peers;
+        int seeds = sMovie.torrents.get("en").get(mSelectedQuality).seeds;
+        int peers = sMovie.torrents.get("en").get(mSelectedQuality).peers;
         TorrentHealth health = TorrentHealth.calculate(seeds, peers);
 
         final Snackbar snackbar = Snackbar.make(mRoot, getString(R.string.health_info, getString(health.getStringResource()), seeds, peers), Snackbar.LENGTH_LONG);
