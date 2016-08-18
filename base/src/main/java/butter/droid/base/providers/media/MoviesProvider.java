@@ -26,8 +26,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,6 +99,9 @@ public class MoviesProvider extends MediaProvider {
         String sort;
         switch (filters.sort) {
             default:
+            case POPULARITY:
+                sort = "popularity";
+                break;
             case YEAR:
                 sort = "year";
                 break;
@@ -275,7 +276,7 @@ public class MoviesProvider extends MediaProvider {
 
                 movie.title = (String) item.get("title");
                 movie.year = (String) item.get("year");
-                movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
+                movie.genre = ((ArrayList<String>) item.get("genres")).size() > 0 ? ((ArrayList<String>) item.get("genres")).get(0) : "Unknown";
                 movie.rating = Double.toString(((LinkedTreeMap<String, Double>) item.get("rating")).get("percentage") / 10);
                 movie.trailer = (String) item.get("trailer");
                 movie.runtime = (String) item.get("runtime");

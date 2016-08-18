@@ -235,7 +235,7 @@ public class TVProvider extends MediaProvider {
         tabs.add(new NavInfo(R.id.tvshow_filter_top_rated,Filters.Sort.RATING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.top_rated),R.drawable.tvshow_filter_top_rated));
         tabs.add(new NavInfo(R.id.tvshow_filter_last_updated,Filters.Sort.DATE, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.last_updated),R.drawable.tvshow_filter_last_updated));
         tabs.add(new NavInfo(R.id.tvshow_filter_year,Filters.Sort.YEAR, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.year),R.drawable.tvshow_filter_year));
-        tabs.add(new NavInfo(R.id.tvshow_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.ASC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.tvshow_filter_a_to_z));
+        tabs.add(new NavInfo(R.id.tvshow_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.tvshow_filter_a_to_z));
         return tabs;
     }
 

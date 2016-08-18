@@ -235,7 +235,7 @@ public class AnimeProvider extends MediaProvider {
         List<NavInfo> tabs = new ArrayList<>();
         tabs.add(new NavInfo(R.id.anime_filter_popular,Filters.Sort.POPULARITY, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.popular),R.drawable.anime_filter_popular));
         tabs.add(new NavInfo(R.id.anime_filter_year,Filters.Sort.YEAR, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.year),R.drawable.anime_filter_year));
-        tabs.add(new NavInfo(R.id.anime_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.ASC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.anime_filter_a_to_z));
+        tabs.add(new NavInfo(R.id.anime_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.anime_filter_a_to_z));
         return tabs;
     }
 
