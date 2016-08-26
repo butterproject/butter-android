@@ -38,6 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butter.droid.fragments.dialog.NumberDialogFragment;
 import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
@@ -237,6 +238,22 @@ public class PreferencesActivity extends ButterBaseActivity
                 }
             });
             dialogFragment.show(getSupportFragmentManager(), "pref_fragment");
+        } else if(mode == SelectionMode.PRECISE_NUMBER) {
+            Bundle args = new Bundle();
+            args.putString(NumberDialogFragment.TITLE, title);
+            args.putInt(NumberDialogFragment.MAX_VALUE, high);
+            args.putInt(NumberDialogFragment.MIN_VALUE, low);
+            args.putInt(NumberDialogFragment.DEFAULT_VALUE, (int) value);
+
+            NumberDialogFragment dialogFragment = new NumberDialogFragment();
+            dialogFragment.setArguments(args);
+            dialogFragment.setOnResultListener(new NumberDialogFragment.ResultListener() {
+                @Override
+                public void onNewValue(int value) {
+                    onSelectionListener.onSelection(0, value);
+                }
+            });
+            dialogFragment.show(getFragmentManager(), "pref_fragment");
         }
     }
 
