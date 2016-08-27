@@ -474,6 +474,27 @@ public interface PreferencesHandler {
 
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_dht)
+                    .setTitleResource(R.string.automatic_port)
+                    .setPreferenceKey(Prefs.LIBTORRENT_AUTOMATIC_PORT)
+                    .hasNext(true)
+                    .setDefaultValue(true)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            item.saveValue(!(boolean) item.getValue());
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            boolean enabled = (boolean) item.getValue();
+                            return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_dht)
                     .setTitleResource(R.string.listening_port)
                     .setPreferenceKey(Prefs.LIBTORRENT_LISTENING_PORT)
                     .hasNext(true)
