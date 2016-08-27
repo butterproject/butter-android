@@ -102,6 +102,7 @@
     <string name="download_speed">Maximum download speed</string>
     <string name="upload_speed">Maximum upload speed</string>
     <string name="max_connections">Maximum total connections</string>
+    <string name="networking">Networking</string>
     <string name="automatic_port">Use random port</string>
     <string name="listening_port">Listening port</string>
     <string name="dht_limit">DHT limit</string>
