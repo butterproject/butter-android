@@ -473,7 +473,7 @@ public interface PreferencesHandler {
                     .build());
 
             prefItems.add(PrefItem.newBuilder(context)
-                    .setIconResource(R.drawable.ic_prefs_dht)
+                    .setIconResource(R.drawable.ic_prefs_random)
                     .setTitleResource(R.string.automatic_port)
                     .setPreferenceKey(Prefs.LIBTORRENT_AUTOMATIC_PORT)
                     .hasNext(true)
@@ -482,6 +482,7 @@ public interface PreferencesHandler {
                         @Override
                         public void onClick(final PrefItem item) {
                             item.saveValue(!(boolean) item.getValue());
+
                         }
                     })
                     .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
@@ -494,7 +495,7 @@ public interface PreferencesHandler {
                     .build());
 
             prefItems.add(PrefItem.newBuilder(context)
-                    .setIconResource(R.drawable.ic_prefs_dht)
+                    .setIconResource(R.drawable.ic_prefs_router)
                     .setTitleResource(R.string.listening_port)
                     .setPreferenceKey(Prefs.LIBTORRENT_LISTENING_PORT)
                     .hasNext(true)
@@ -514,8 +515,8 @@ public interface PreferencesHandler {
                         @Override
                         public String get(PrefItem item) {
                             int port = (Integer) item.getValue();
-                            if (port == -1) {
-                                return "Not listening on any port";
+                            if (port == -1 || PrefUtils.get(context, Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
+                                return "Listening on random port";
                             } else {
                                 return "Listening on port " + port;
                             }
