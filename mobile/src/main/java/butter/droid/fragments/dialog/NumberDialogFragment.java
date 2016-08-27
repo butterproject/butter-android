@@ -46,9 +46,9 @@ public class NumberDialogFragment extends DialogFragment {
         }
 
 
-        int defaultValue =  getArguments().getInt(DEFAULT_VALUE, getArguments().getInt(MAX_VALUE)/2);
+        final int defaultValue =  getArguments().getInt(DEFAULT_VALUE, getArguments().getInt(MAX_VALUE)/2);
 
-        LinearLayout layout = new LinearLayout(getActivity());
+        final LinearLayout layout = new LinearLayout(getActivity());
         layout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(params);
@@ -85,7 +85,12 @@ public class NumberDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int output = Integer.parseInt(editText.getText().toString());
+                                int output;
+                                if (editText.getText().toString().isEmpty()) {
+                                    output = defaultValue;
+                                } else {
+                                    output = Integer.parseInt(editText.getText().toString());
+                                }
                                 mOnResultListener.onNewValue(output < min ? min : output);
                                 dialog.dismiss();
                             }
