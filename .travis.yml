@@ -1,9 +1,13 @@
 language: android
 sudo: false
+jdk: oraclejdk8
+env:
+  - ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a
 android:
   components:
-    - build-tools-22.0.1
-    - android-23
+    - tools
+    - build-tools-24.0.0
+    - android-24
     - android-22
     - extra-google-m2repository
     - extra-android-m2repository
@@ -11,7 +15,7 @@ android:
     - extra-android-support
     - extra-android-m2repository
     - extra-google-m2repository
-    - sys-img-armeabi-v7a-android-22
+    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 before_install:
   - chmod +x gradlew
   
