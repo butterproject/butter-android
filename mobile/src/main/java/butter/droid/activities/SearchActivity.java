@@ -25,6 +25,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import butter.droid.MobileButterApplication;
 import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
@@ -54,6 +55,10 @@ public class SearchActivity extends ButterBaseActivity {
 
     @SuppressLint("MissingSuperCall") @Override
     public void onCreate(Bundle savedInstanceState) {
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

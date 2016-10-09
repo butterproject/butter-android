@@ -36,15 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
-import butterknife.ButterKnife;
-import butterknife.BindView;
-import hugo.weaving.DebugLog;
 import butter.droid.R;
 import butter.droid.activities.MediaDetailActivity;
 import butter.droid.adapters.MediaGridAdapter;
@@ -58,6 +56,7 @@ import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
@@ -87,6 +86,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public static final int LOADING_DIALOG_FRAGMENT = 1;
 
     @Inject ProviderManager providerManager;
+    @Inject OkHttpClient client;
 
     private Context mContext;
     private MediaGridAdapter mAdapter;
@@ -148,7 +148,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void changeGenre(String genre) {
         if (!(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
             if(mCurrentCall != null)
-                ButterApplication.getAppContext().getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
+                client.getDispatcher().getExecutorService().execute(new Runnable() {
                     @Override
                     public void run() {
                         mCurrentCall.cancel();
@@ -310,7 +310,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         }
 
         if(mCurrentCall != null)
-            ButterApplication.getAppContext().getHttpClient().getDispatcher().getExecutorService().execute(new Runnable() {
+            client.getDispatcher().getExecutorService().execute(new Runnable() {
                 @Override
                 public void run() {
                     mCurrentCall.cancel();

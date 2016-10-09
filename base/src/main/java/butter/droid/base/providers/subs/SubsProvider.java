@@ -50,6 +50,7 @@ import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StorageUtils;
 
 public abstract class SubsProvider extends BaseProvider {
+
     public static final String SUBS_CALL = "subs_http_call";
     public static final String SUBTITLE_LANGUAGE_NONE = "no-subs";
 

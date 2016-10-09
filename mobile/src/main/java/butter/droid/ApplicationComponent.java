@@ -19,7 +19,16 @@ package butter.droid;
 
 import javax.inject.Singleton;
 
+import butter.droid.activities.AboutActivity;
+import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.MainActivity;
+import butter.droid.activities.MediaDetailActivity;
+import butter.droid.activities.PreferencesActivity;
+import butter.droid.activities.SearchActivity;
+import butter.droid.activities.StreamLoadingActivity;
+import butter.droid.activities.TermsActivity;
+import butter.droid.activities.TrailerPlayerActivity;
+import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.MediaListFragment;
@@ -38,6 +47,15 @@ public interface ApplicationComponent {
     void inject(MobileButterApplication application);
 
     void inject(MainActivity activity);
+    void inject(TrailerPlayerActivity activity);
+    void inject(PreferencesActivity activity);
+    void inject(AboutActivity activity);
+    void inject(BeamPlayerActivity activity);
+    void inject(MediaDetailActivity activity);
+    void inject(SearchActivity activity);
+    void inject(StreamLoadingActivity activity);
+    void inject(TermsActivity activity);
+    void inject(VideoPlayerActivity activity);
 
     void inject(NavigationDrawerFragment fragment);
     void inject(MediaContainerFragment fragment);

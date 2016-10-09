@@ -39,7 +39,7 @@ import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
-import butter.droid.base.youtube.YouTubeData;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVTrailerPlayerActivity;
@@ -49,6 +49,7 @@ import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
 	@Inject ProviderManager providerManager;
+	@Inject YouTubeManager youTubeManager;
 
 	public static Fragment newInstance(Media media) {
 		TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
@@ -127,7 +128,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
             }
         } else if(a instanceof TrailerAction) {
             Movie movie = getMovieItem();
-            if (!YouTubeData.isYouTubeUrl(movie.trailer)) {
+            if (!youTubeManager.isYouTubeUrl(movie.trailer)) {
                 TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(movie, null, null, null, null, movie.trailer));
             } else {
                 TVTrailerPlayerActivity.startActivity(getActivity(), movie.trailer, movie);

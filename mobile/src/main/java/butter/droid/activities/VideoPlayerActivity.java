@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
@@ -74,6 +75,10 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
         mFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);

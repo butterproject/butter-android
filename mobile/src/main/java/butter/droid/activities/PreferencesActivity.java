@@ -17,7 +17,6 @@
 
 package butter.droid.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +38,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.adapters.PreferencesListAdapter;
@@ -46,6 +48,7 @@ import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ResourceUtils;
 import butter.droid.fragments.dialog.ColorPickerDialogFragment;
@@ -60,12 +63,18 @@ public class PreferencesActivity extends ButterBaseActivity
     private List<PrefItem> mPrefItems = new ArrayList<>();
     private LinearLayoutManager mLayoutManager;
 
+    @Inject ButterUpdateManager updateManager;
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.rootLayout) ViewGroup rootLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_preferences);
         setSupportActionBar(toolbar);
 
@@ -90,7 +99,7 @@ public class PreferencesActivity extends ButterBaseActivity
     }
 
     private void refreshItems() {
-        mPrefItems = ItemsGenerator.generate(this, false);
+        mPrefItems = ItemsGenerator.generate(this, updateManager, false);
 
         if (recyclerView.getAdapter() != null && mLayoutManager != null) {
             int position = mLayoutManager.findFirstVisibleItemPosition();

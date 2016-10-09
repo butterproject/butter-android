@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.beaming.BeamManager;
@@ -68,6 +69,11 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
 
         setShowCasting(true);

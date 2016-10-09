@@ -35,12 +35,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 
-import butter.droid.base.ButterApplication;
+import javax.inject.Inject;
 
 public class RecommendationContentProvider extends ContentProvider {
 
 	public static String AUTHORITY = "pct.droid.tv.RecommendationContentProvider";
 	public static String CONTENT_URI = "content://" + AUTHORITY + "/";
+
+	@Inject OkHttpClient client;
 
 	@Override
 	public boolean onCreate() {
@@ -59,8 +61,7 @@ public class RecommendationContentProvider extends ContentProvider {
 					"UTF-8");
 			pipe = ParcelFileDescriptor.createPipe();
 
-			OkHttpClient httpClient = ButterApplication.getAppContext().getHttpClient();
-			OkUrlFactory factory = new OkUrlFactory(httpClient);
+			OkUrlFactory factory = new OkUrlFactory(client);
 			HttpURLConnection connection = factory.open(new URL(decodedUrl));
 
 			new TransferThread(connection.getInputStream(),

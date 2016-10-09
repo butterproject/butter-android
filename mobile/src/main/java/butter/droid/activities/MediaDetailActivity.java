@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import butter.droid.MobileButterApplication;
 import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
@@ -70,6 +71,11 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_mediadetail);
         setSupportActionBar(mToolbar);
         setShowCasting(true);

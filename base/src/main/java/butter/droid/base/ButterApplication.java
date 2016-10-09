@@ -42,7 +42,7 @@ import javax.inject.Inject;
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.updater.ButterUpdater;
+import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
@@ -50,13 +50,14 @@ import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.VersionUtils;
 import timber.log.Timber;
 
-public class ButterApplication extends Application implements ButterUpdater.Listener {
+public class ButterApplication extends Application implements ButterUpdateManager.Listener {
 
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
 
     @Inject OkHttpClient okHttpClient;
     @Inject Picasso picasso;
+    @Inject ButterUpdateManager updateManager;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -91,7 +92,8 @@ public class ButterApplication extends Application implements ButterUpdater.List
             Timber.plant(new Timber.DebugTree());
         }
 
-        ButterUpdater.getInstance(this, this).checkUpdates(false);
+        updateManager.setListener(this);
+        updateManager.checkUpdates(false);
 
         if(VersionUtils.isUsingCorrectBuild()) {
             TorrentService.start(this);
@@ -153,11 +155,11 @@ public class ButterApplication extends Application implements ButterUpdater.List
                     .setDefaults(NotificationCompat.DEFAULT_ALL);
 
             Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-            notificationIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdater.ANDROID_PACKAGE);
+            notificationIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
 
             notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0));
 
-            nm.notify(ButterUpdater.NOTIFICATION_ID, notificationBuilder.build());
+            nm.notify(ButterUpdateManager.NOTIFICATION_ID, notificationBuilder.build());
         }
     }
 

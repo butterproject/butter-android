@@ -48,7 +48,7 @@ import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.base.youtube.YouTubeData;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.widget.OptionSelector;
@@ -56,6 +56,7 @@ import butter.droid.widget.OptionSelector;
 public class MovieDetailFragment extends BaseDetailFragment {
 
     @Inject ProviderManager providerManager;
+    @Inject YouTubeManager youTubeManager;
 
     private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
@@ -312,7 +313,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
-        if (!YouTubeData.isYouTubeUrl(sMovie.trailer)) {
+        if (!youTubeManager.isYouTubeUrl(sMovie.trailer)) {
             VideoPlayerActivity.startActivity(mActivity, new StreamInfo(sMovie, null, null, null, null, sMovie.trailer));
         } else {
             TrailerPlayerActivity.startActivity(mActivity, sMovie.trailer, sMovie);

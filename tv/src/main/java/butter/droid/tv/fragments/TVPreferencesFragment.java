@@ -29,14 +29,18 @@ import android.widget.Toast;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.updater.ButterUpdater;
+import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVUpdateActivity;
 
 public class TVPreferencesFragment extends GuidedStepFragment implements PreferencesHandler {
+
+    @Inject ButterUpdateManager butterUpdateManager;
 
     private List<GuidedAction> mActions;
     private List<PrefItem> mPrefs;
@@ -50,7 +54,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements Prefere
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ButterUpdater.getInstance(getActivity().getApplicationContext()).setListener(new ButterUpdater.Listener() {
+        butterUpdateManager.setListener(new ButterUpdateManager.Listener() {
             @Override
             public void updateAvailable(String filePath) {
                 TVUpdateActivity.startActivity(getActivity());
@@ -68,7 +72,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements Prefere
     public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
 
         int index = 0;
-        mPrefs = PreferencesHandler.ItemsGenerator.generate(getActivity(), this, true);
+        mPrefs = PreferencesHandler.ItemsGenerator.generate(getActivity(), this, butterUpdateManager, true);
 
         for(PrefItem item : mPrefs) {
             actions.add(generateAction(index, item));

@@ -67,7 +67,7 @@ import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ProviderUtils;
-import butter.droid.base.youtube.YouTubeData;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.utils.ToolbarUtils;
@@ -89,15 +89,16 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
     NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Inject ProviderManager providerManager;
+    @Inject YouTubeManager youTubeManager;
 
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_main);
-
         MobileButterApplication.getAppContext()
                 .getComponent()
                 .inject(this);
+
+        super.onCreate(savedInstanceState, R.layout.activity_main);
 
         if (!PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
             startActivity(new Intent(this, TermsActivity.class));
@@ -311,7 +312,7 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
                                 }
                             });
                     builder.show();
-                } else if (YouTubeData.isYouTubeUrl(location)) {
+                } else if (youTubeManager.isYouTubeUrl(location)) {
                     Intent i = new Intent(MainActivity.this, TrailerPlayerActivity.class);
                     Movie media = new Movie();
                     media.title = file_types[index];
