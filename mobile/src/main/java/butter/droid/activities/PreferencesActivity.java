@@ -17,7 +17,7 @@
 
 package butter.droid.activities;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,19 +38,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.adapters.PreferencesListAdapter;
-import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
-import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
+import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ResourceUtils;
 import butter.droid.fragments.dialog.ColorPickerDialogFragment;
 import butter.droid.fragments.dialog.SeekBarDialogFragment;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.Bind;
 
 public class PreferencesActivity extends ButterBaseActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener, PreferencesHandler {
@@ -58,18 +58,9 @@ public class PreferencesActivity extends ButterBaseActivity
     private List<PrefItem> mPrefItems = new ArrayList<>();
     private LinearLayoutManager mLayoutManager;
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @Bind(R.id.rootLayout)
-    ViewGroup rootLayout;
-
-    public static Intent startActivity(Activity activity) {
-        Intent intent = new Intent(activity, PreferencesActivity.class);
-        activity.startActivity(intent);
-        return intent;
-    }
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.recyclerView) RecyclerView recyclerView;
+    @Bind(R.id.rootLayout) ViewGroup rootLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -247,5 +238,9 @@ public class PreferencesActivity extends ButterBaseActivity
             return;
         }
         Snackbar.make(rootLayout, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public static Intent getIntent(Context context) {
+        return new Intent(context, PreferencesActivity.class);
     }
 }

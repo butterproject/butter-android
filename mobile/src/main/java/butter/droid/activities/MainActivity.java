@@ -29,7 +29,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -61,10 +60,13 @@ import butter.droid.base.beaming.BeamPlayerNotificationService;
 import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.provider.ProviderManager.OnProiderChangeListener;
+import butter.droid.base.manager.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.utils.ProviderUtils;
 import butter.droid.base.youtube.YouTubeData;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
@@ -75,10 +77,9 @@ import butterknife.Bind;
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
  */
-public class MainActivity extends ButterBaseActivity implements NavigationDrawerFragment.Callbacks {
+public class MainActivity extends ButterBaseActivity implements OnProiderChangeListener {
 
     private static final int PERMISSIONS_REQUEST = 123;
-    private Fragment mCurrentFragment;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
@@ -139,25 +140,28 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
 
         mNavigationDrawerFragment.initialise(mNavigationDrawerContainer, drawerLayout);
 
-        if (null != savedInstanceState) return;
-        int providerId = PrefUtils.get(this, Prefs.DEFAULT_VIEW, 0);
-        mNavigationDrawerFragment.selectItem(providerId);
+        if (null != savedInstanceState) {
+            return;
+        }
+
+        @ProviderType int provider = PrefUtils.get(this, Prefs.DEFAULT_PROVIDER, ProviderManager.PROVIDER_TYPE_MOVIE);
+        mNavigationDrawerFragment.selectItem(provider);
+        showProvider(provider);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        String title = mNavigationDrawerFragment.getCurrentItem().getTitle();
-        setTitle(null != title ? title : getString(R.string.app_name));
+
+        setTitle(ProviderUtils.getProviderTitle(providerManager.getCurrentMediaProviderType()));
         supportInvalidateOptionsMenu();
-        if (mNavigationDrawerFragment.getCurrentItem() != null && mNavigationDrawerFragment.getCurrentItem().getTitle() != null) {
-            setTitle(mNavigationDrawerFragment.getCurrentItem().getTitle());
-        }
 
         mNavigationDrawerFragment.initItems();
 
-        if (BeamServerService.getServer() != null)
+        if (BeamServerService.getServer() != null) {
             BeamServerService.getServer().stop();
+        }
+
         BeamPlayerNotificationService.cancelNotification();
     }
 
@@ -170,6 +174,18 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         playerTestMenuItem.setVisible(Constants.DEBUG_ENABLED);
 
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+            @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                if (grantResults.length < 1 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    finish();
+                }
+            }
+        }
     }
 
     @Override
@@ -189,35 +205,14 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onNavigationDrawerItemSelected(NavigationDrawerFragment.NavDrawerItem item, String title) {
-        setTitle(null != title ? title : getString(R.string.app_name));
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        String tag = title + "_tag";
-        // Fragment fragment = mFragmentCache.get(position);
-        mCurrentFragment = fragmentManager.findFragmentByTag(tag);
-        if (null == mCurrentFragment && item.hasProvider()) {
-//            providerManager.setMediaProvider(item.getMediaProvider());
-            mCurrentFragment = MediaContainerFragment.newInstance();
-        }
-
-        if (mTabs.getTabCount() > 0)
-            mTabs.getTabAt(0).select();
-
-        fragmentManager.beginTransaction().replace(R.id.container, mCurrentFragment, tag).commit();
-
-        if (mCurrentFragment instanceof MediaContainerFragment) {
-            updateTabs((MediaContainerFragment) mCurrentFragment,
-                    ((MediaContainerFragment) mCurrentFragment).getCurrentSelection());
-        }
+    @Override public void onProviderChanged(@ProviderType int provider) {
+        showProvider(provider);
     }
 
     public void updateTabs(MediaContainerFragment containerFragment, final int position) {
-        if (mTabs == null)
+        if (mTabs == null) {
             return;
+        }
 
         if (containerFragment != null) {
             ViewPager viewPager = containerFragment.getViewPager();
@@ -246,6 +241,21 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         } else {
             mTabs.setVisibility(View.GONE);
         }
+    }
+
+    private void showProvider(@ProviderType int provider) {
+        setTitle(ProviderUtils.getProviderTitle(provider));
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        MediaContainerFragment mediaFragment = MediaContainerFragment.newInstance();
+
+        if (mTabs.getTabCount() > 0) {
+            mTabs.getTabAt(0).select();
+        }
+
+        fragmentManager.beginTransaction().replace(R.id.container, mediaFragment).commit();
+        updateTabs(mediaFragment, mediaFragment.getCurrentSelection());
     }
 
     private void openPlayerTestDialog() {
@@ -337,18 +347,6 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         });
 
         builder.show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-            @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST: {
-                if (grantResults.length < 1 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    finish();
-                }
-            }
-        }
     }
 
 }

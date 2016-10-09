@@ -50,23 +50,14 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
 
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
     TextView mToolbarTitle;
-    @Bind(R.id.scrollview)
-    ObservableParallaxScrollView mScrollView;
-    @Nullable
-    @Bind(R.id.parallax)
-    RelativeLayout mParallaxLayout;
-    @Nullable
-    @Bind(R.id.parallax_color)
-    View mParallaxColor;
-    @Bind(R.id.content)
-    FrameLayout mContent;
-    @Bind(R.id.logo)
-    ImageView mLogo;
-    @Bind(R.id.bg_image)
-    ImageView mBgImage;
+    @Bind(R.id.scrollview) ObservableParallaxScrollView mScrollView;
+    @Nullable @Bind(R.id.parallax) RelativeLayout mParallaxLayout;
+    @Nullable @Bind(R.id.parallax_color) View mParallaxColor;
+    @Bind(R.id.content) FrameLayout mContent;
+    @Bind(R.id.logo) ImageView mLogo;
+    @Bind(R.id.bg_image) ImageView mBgImage;
 
     public static void startActivity(Context context, Media media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);

@@ -31,7 +31,7 @@ public class Movie extends Media implements Parcelable {
     public String runtime = "";
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
-    public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
+    public Map<String, Torrent> torrents = new HashMap<>();
 
     public Movie() {
         isMovie = true;

@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.updater.ButterUpdater;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
@@ -68,12 +68,13 @@ public interface PreferencesHandler {
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_default_view)
                     .setTitleResource(R.string.default_view)
-                    .setPreferenceKey(Prefs.DEFAULT_VIEW)
-                    .setDefaultValue(0)
+                    .setPreferenceKey(Prefs.DEFAULT_PROVIDER)
+                    .setDefaultValue(ProviderManager.PROVIDER_TYPE_MOVIE)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.SIMPLE_CHOICE, (int) item.getValue(), 0, 0, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.SIMPLE_CHOICE,
+                                    item.getValue(), 0, 0, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(position);

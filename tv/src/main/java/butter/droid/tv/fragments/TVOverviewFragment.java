@@ -368,10 +368,11 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                             .setPositiveButton("Start", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Movie media = new Movie(
-                                            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE),
-                                            providerManager.getSubsProvider());
+//                                    Movie media = new Movie(
+//                                            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE),
+//                                            providerManager.getSubsProvider());
 
+                                    Movie media = new Movie();
                                     media.videoId = "dialogtestvideo";
                                     media.title = "User input test video";
 
@@ -381,8 +382,9 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                     builder.show();
                 }
 
-                final Movie media = new Movie(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE),
-                        providerManager.getSubsProvider());
+                final Movie media = new Movie();
+//                final Movie media = new Movie(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE),
+//                        providerManager.getSubsProvider());
                 media.videoId = "bigbucksbunny";
                 media.title = file_types[index];
                 media.subtitles = new HashMap<>();

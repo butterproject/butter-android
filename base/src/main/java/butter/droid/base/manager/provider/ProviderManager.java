@@ -62,9 +62,13 @@ public class ProviderManager {
         }
     }
 
+    @ProviderType public int getCurrentMediaProviderType() {
+        return currentProviderType;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @NonNull public MediaProvider getCurrentMediaProvider() {
-        return getMediaProvider(currentProviderType);
+        return getMediaProvider(getCurrentMediaProviderType());
     }
 
     public SubsProvider getSubsProvider() {
@@ -93,6 +97,10 @@ public class ProviderManager {
 
     public boolean hasProvider(@ProviderType int providerType) {
         return getMediaProvider(providerType) != null;
+    }
+
+    public interface OnProiderChangeListener {
+        public void onProviderChanged(@ProviderType int provider);
     }
 
 }
