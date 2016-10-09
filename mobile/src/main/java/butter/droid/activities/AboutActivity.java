@@ -22,15 +22,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.fragments.AboutFragment;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.BindView;
 
 public class AboutActivity extends ButterBaseActivity implements AboutFragment.OnFragmentInteractionListener {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     public static Intent startActivity(Activity activity) {
         Intent intent = new Intent(activity, AboutActivity.class);

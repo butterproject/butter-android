@@ -39,6 +39,8 @@ public class Prefs {
     public static final String LIBTORRENT_CONNECTION_LIMIT = "libtorrent_connectionlimit";
     public static final String LIBTORRENT_DOWNLOAD_LIMIT = "libtorrent_downloadlimit";
     public static final String LIBTORRENT_UPLOAD_LIMIT = "libtorrent_uploadlimit";
+    public static final String LIBTORRENT_LISTENING_PORT = "libtorrent_listeningport";
+    public static final String LIBTORRENT_AUTOMATIC_PORT = "libtorrent_automaticport";
     public static final String SHOW_VPN = "show_vpn";
     public static final String PIXEL_FORMAT = "pixel_format";
     public static final String QUALITY_DEFAULT = "quality_default";

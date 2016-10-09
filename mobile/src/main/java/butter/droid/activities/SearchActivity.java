@@ -25,7 +25,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.providers.media.MediaProvider;
@@ -40,8 +40,8 @@ import butter.droid.utils.ToolbarUtils;
  */
 public class SearchActivity extends ButterBaseActivity {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.searchview) SearchView mSearchview;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.searchview) SearchView mSearchview;
 
     private MediaListFragment mFragment;
 

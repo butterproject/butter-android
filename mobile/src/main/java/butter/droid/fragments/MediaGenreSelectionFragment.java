@@ -39,7 +39,7 @@ import butter.droid.adapters.GenreAdapter;
 import butter.droid.adapters.decorators.DividerItemDecoration;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.models.Genre;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MediaGenreSelectionFragment extends Fragment {
@@ -52,10 +52,10 @@ public class MediaGenreSelectionFragment extends Fragment {
     private Listener mListener;
     private int mSelectedPos = 0;
 
-    @Bind(R.id.progressOverlay) LinearLayout mProgressOverlay;
-    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
-    @Bind(R.id.emptyView) TextView mEmptyView;
-    @Bind(R.id.progress_textview) TextView mProgressTextView;
+    @BindView(R.id.progressOverlay) LinearLayout mProgressOverlay;
+    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.emptyView) TextView mEmptyView;
+    @BindView(R.id.progress_textview) TextView mProgressTextView;
 
     public static MediaGenreSelectionFragment newInstance(Listener listener) {
         MediaGenreSelectionFragment frag = new MediaGenreSelectionFragment();

@@ -27,7 +27,8 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.base.manager.provider.ProviderManager;
-import butterknife.Bind;
+import butterknife.BindView;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butter.droid.R;
@@ -61,18 +62,18 @@ public class MovieDetailFragment extends BaseDetailFragment {
     private Boolean mAttached = false;
     private Magnet mMagnet;
 
-    @Bind(R.id.play_button) ImageButton mPlayButton;
-    @Bind(R.id.title) TextView mTitle;
-    @Bind(R.id.health) ImageView mHealth;
-    @Bind(R.id.meta) TextView mMeta;
-    @Bind(R.id.synopsis) TextView mSynopsis;
-    @Bind(R.id.read_more) Button mReadMore;
-    @Bind(R.id.watch_trailer) Button mWatchTrailer;
-    @Bind(R.id.magnet) ImageButton mOpenMagnet;
-    @Bind(R.id.rating) RatingBar mRating;
-    @Bind(R.id.subtitles) OptionSelector mSubtitles;
-    @Bind(R.id.quality) OptionSelector mQuality;
-    @Nullable @Bind(R.id.cover_image) ImageView mCoverImage;
+    @BindView(R.id.play_button) ImageButton mPlayButton;
+    @BindView(R.id.title) TextView mTitle;
+    @BindView(R.id.health) ImageView mHealth;
+    @BindView(R.id.meta) TextView mMeta;
+    @BindView(R.id.synopsis) TextView mSynopsis;
+    @BindView(R.id.read_more) Button mReadMore;
+    @BindView(R.id.watch_trailer) Button mWatchTrailer;
+    @BindView(R.id.magnet) ImageButton mOpenMagnet;
+    @BindView(R.id.rating) RatingBar mRating;
+    @BindView(R.id.subtitles) OptionSelector mSubtitles;
+    @BindView(R.id.quality) OptionSelector mQuality;
+    @Nullable @BindView(R.id.cover_image) ImageView mCoverImage;
 
     public static MovieDetailFragment newInstance(Movie movie) {
         sMovie = movie;
@@ -128,8 +129,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
             mMeta.setText(metaDataStr);
 
-            if (!TextUtils.isEmpty(sMovie.synopsis)) {
-                mSynopsis.setText(sMovie.synopsis);
+            if (!TextUtils.isEmpty(sMovie.synopsis)) {mSynopsis.setText(sMovie.synopsis);
                 mSynopsis.post(new Runnable() {
                     @Override
                     public void run() {

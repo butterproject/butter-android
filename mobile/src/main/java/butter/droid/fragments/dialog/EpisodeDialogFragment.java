@@ -70,7 +70,7 @@ import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.widget.BottomSheetScrollView;
 import butter.droid.widget.OptionSelector;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -92,17 +92,17 @@ public class EpisodeDialogFragment extends DialogFragment {
     private Show mShow;
     private Magnet mMagnet;
 
-    @Bind(R.id.scrollview) BottomSheetScrollView mScrollView;
-    @Bind(R.id.placeholder) View mPlaceholder;
-    @Bind(R.id.play_button) ImageButton mPlayButton;
-    @Bind(R.id.header_image) ImageView mHeaderImage;
-    @Bind(R.id.info) TextView mInfo;
-    @Bind(R.id.title) TextView mTitle;
-    @Bind(R.id.aired) TextView mAired;
-    @Bind(R.id.synopsis) TextView mSynopsis;
-    @Bind(R.id.subtitles) OptionSelector mSubtitles;
-    @Bind(R.id.quality) OptionSelector mQuality;
-    @Bind(R.id.magnet) @Nullable ImageButton mOpenMagnet;
+    @BindView(R.id.scrollview) BottomSheetScrollView mScrollView;
+    @BindView(R.id.placeholder) View mPlaceholder;
+    @BindView(R.id.play_button) ImageButton mPlayButton;
+    @BindView(R.id.header_image) ImageView mHeaderImage;
+    @BindView(R.id.info) TextView mInfo;
+    @BindView(R.id.title) TextView mTitle;
+    @BindView(R.id.aired) TextView mAired;
+    @BindView(R.id.synopsis) TextView mSynopsis;
+    @BindView(R.id.subtitles) OptionSelector mSubtitles;
+    @BindView(R.id.quality) OptionSelector mQuality;
+    @BindView(R.id.magnet) @Nullable ImageButton mOpenMagnet;
 
     public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();

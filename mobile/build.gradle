@@ -91,19 +91,18 @@ dependencies {
     compile "com.android.support:support-annotations:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:design:${rootProject.ext.daggerVersion}"
 
-    compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.nirhart:parallaxscroll:1.0'
     compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'com.gu:option:1.3'
-    compile 'net.rdrei.android.dirchooser:library:3.0@aar'
-    compile 'com.github.johnkil.android-robototextview:robototextview:2.4.3'
-
-    compile 'com.sothree.slidinguppanel:library:3.2.0'
+    compile 'net.rdrei.android.dirchooser:library:3.2@aar'
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.5.0'
+    compile 'com.sothree.slidinguppanel:library:3.3.0'
 
     compile project(':base')
 
     apt "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
+    apt "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }

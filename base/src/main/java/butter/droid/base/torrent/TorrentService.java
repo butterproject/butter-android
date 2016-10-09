@@ -88,6 +88,9 @@ public class TorrentService extends Service implements TorrentListener {
         options.setMaxConnections(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
         options.setMaxDownloadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
         options.setMaxUploadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
+        if (!PrefUtils.get(this, Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
+            options.setListeningPort(PrefUtils.get(this, Prefs.LIBTORRENT_LISTENING_PORT, 59718));
+        }
         options.setSaveLocation(PrefUtils.get(this, Prefs.STORAGE_LOCATION, ButterApplication.getStreamDir()));
         mTorrentStream = TorrentStream.init(options);
     }
@@ -147,7 +150,7 @@ public class TorrentService extends Service implements TorrentListener {
         Intent stopIntent = new Intent();
         stopIntent.setAction(TorrentBroadcastReceiver.STOP);
         PendingIntent pendingStopIntent = PendingIntent.getBroadcast(this, TorrentBroadcastReceiver.REQUEST_CODE, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action stopAction = new NotificationCompat.Action.Builder(R.drawable.abc_ic_clear_mtrl_alpha, getString(R.string.stop), pendingStopIntent).build();
+        NotificationCompat.Action stopAction = new NotificationCompat.Action.Builder(R.drawable.abc_ic_clear_material, getString(R.string.stop), pendingStopIntent).build();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
@@ -215,6 +218,9 @@ public class TorrentService extends Service implements TorrentListener {
         options.setMaxConnections(PrefUtils.get(this, Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
         options.setMaxDownloadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
         options.setMaxUploadSpeed(PrefUtils.get(this, Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
+        if (!PrefUtils.get(this, Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
+            options.setListeningPort(PrefUtils.get(this, Prefs.LIBTORRENT_LISTENING_PORT, 59718));
+        }
         options.setSaveLocation(PrefUtils.get(this, Prefs.STORAGE_LOCATION, ButterApplication.getStreamDir()));
         mTorrentStream.setOptions(options);
 

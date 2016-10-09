@@ -72,7 +72,7 @@ import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
@@ -81,10 +81,11 @@ public class MainActivity extends ButterBaseActivity implements OnProiderChangeL
 
     private static final int PERMISSIONS_REQUEST = 123;
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
-    @Nullable @Bind(R.id.tabs)
-    TabLayout mTabs;
+
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
+    @Nullable @BindView(R.id.tabs) TabLayout mTabs;
+
     NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Inject ProviderManager providerManager;

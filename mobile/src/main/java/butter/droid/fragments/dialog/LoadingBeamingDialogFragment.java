@@ -44,14 +44,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 import butter.droid.R;
 
 public class LoadingBeamingDialogFragment extends DialogFragment {
 
     private DialogInterface.OnCancelListener mOnCancelListener;
 
-    @Bind(R.id.progress_textview)
+    @BindView(R.id.progress_textview)
     TextView mTextView;
 
     public static LoadingBeamingDialogFragment newInstance() {

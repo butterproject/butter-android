@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butter.droid.R;
@@ -45,33 +45,33 @@ public class ShowDetailFragment extends BaseDetailFragment {
     private static Show sShow;
     private Boolean mIsTablet = false;
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     WrappingViewPager mViewPager;
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabs;
     @Nullable
-    @Bind(R.id.background)
+    @BindView(R.id.background)
     View mBackground;
     @Nullable
-    @Bind(R.id.top)
+    @BindView(R.id.top)
     View mShadow;
     @Nullable
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
     @Nullable
-    @Bind(R.id.aired)
+    @BindView(R.id.aired)
     TextView mMeta;
     @Nullable
-    @Bind(R.id.synopsis)
+    @BindView(R.id.synopsis)
     TextView mSynopsis;
     @Nullable
-    @Bind(R.id.read_more)
+    @BindView(R.id.read_more)
     TextView mReadMore;
     @Nullable
-    @Bind(R.id.rating)
+    @BindView(R.id.rating)
     RatingBar mRating;
     @Nullable
-    @Bind(R.id.cover_image)
+    @BindView(R.id.cover_image)
     ImageView mCoverImage;
 
     public static ShowDetailFragment newInstance(Show show) {

@@ -16,7 +16,7 @@ import butter.droid.activities.MainActivity;
 import butter.droid.adapters.MediaPagerAdapter;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -28,7 +28,7 @@ public class MediaContainerFragment extends Fragment {
     private MediaPagerAdapter mAdapter;
     private Integer mSelection = 0;
 
-    @Bind(R.id.pager) ViewPager mViewPager;
+    @BindView(R.id.pager) ViewPager mViewPager;
 
     public static MediaContainerFragment newInstance() {
         return new MediaContainerFragment();

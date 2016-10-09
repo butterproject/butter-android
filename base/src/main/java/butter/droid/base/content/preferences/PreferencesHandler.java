@@ -33,7 +33,7 @@ public interface PreferencesHandler {
     String ABOUT = "about";
 
     enum SelectionMode {
-        NORMAL, ADVANCED_CHOICE, SIMPLE_CHOICE, COLOR, NUMBER, DIRECTORY
+        NORMAL, ADVANCED_CHOICE, SIMPLE_CHOICE, COLOR, NUMBER, PRECISE_NUMBER, DIRECTORY
     }
 
     void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, int lowLimit, int highLimit, OnSelectionListener onClickListener);
@@ -473,6 +473,7 @@ public interface PreferencesHandler {
                     })
                     .build());
 
+
             if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_storage_location)
@@ -522,6 +523,61 @@ public interface PreferencesHandler {
                         }
                     })
                     .build());
+
+            prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.networking).build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_random)
+                    .setTitleResource(R.string.automatic_port)
+                    .setPreferenceKey(Prefs.LIBTORRENT_AUTOMATIC_PORT)
+                    .hasNext(true)
+                    .setDefaultValue(true)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            item.saveValue(!(boolean) item.getValue());
+
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            boolean enabled = (boolean) item.getValue();
+                            return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_router)
+                    .setTitleResource(R.string.listening_port)
+                    .setPreferenceKey(Prefs.LIBTORRENT_LISTENING_PORT)
+                    .hasNext(true)
+                    .setDefaultValue(59718)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.PRECISE_NUMBER, (Integer) item.getValue(), 1024, 65534, new OnSelectionListener() {
+                                @Override
+                                public void onSelection(int position, Object value) {
+                                    item.saveValue(value);
+                                }
+                            });
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            int port = (Integer) item.getValue();
+                            if (port == -1 || PrefUtils.get(context, Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
+                                return "Listening on random port";
+                            } else {
+                                return "Listening on port " + port;
+                            }
+                        }
+                    })
+                    .build());
+
 
             prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.advanced).build());
 

@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.beaming.BeamPlayerNotificationService;
@@ -50,14 +50,14 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     TextView mToolbarTitle;
-    @Bind(R.id.scrollview) ObservableParallaxScrollView mScrollView;
-    @Nullable @Bind(R.id.parallax) RelativeLayout mParallaxLayout;
-    @Nullable @Bind(R.id.parallax_color) View mParallaxColor;
-    @Bind(R.id.content) FrameLayout mContent;
-    @Bind(R.id.logo) ImageView mLogo;
-    @Bind(R.id.bg_image) ImageView mBgImage;
+    @BindView(R.id.scrollview) ObservableParallaxScrollView mScrollView;
+    @Nullable @BindView(R.id.parallax) RelativeLayout mParallaxLayout;
+    @Nullable @BindView(R.id.parallax_color) View mParallaxColor;
+    @BindView(R.id.content) FrameLayout mContent;
+    @BindView(R.id.logo) ImageView mLogo;
+    @BindView(R.id.bg_image) ImageView mBgImage;
 
     public static void startActivity(Context context, Media media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);
