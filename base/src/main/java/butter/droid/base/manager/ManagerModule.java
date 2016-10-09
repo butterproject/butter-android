@@ -17,6 +17,8 @@
 
 package butter.droid.base.manager;
 
+import android.content.Context;
+
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
@@ -36,8 +38,8 @@ public class ManagerModule {
         return new ProviderManager(moviesProvider, null, subsProvider);
     }
 
-    @Provides @Singleton public SubsProvider provideSubsProvider(OkHttpClient client) {
-        return new YSubsProvider(client);
+    @Provides @Singleton public SubsProvider provideSubsProvider(Context context, OkHttpClient client) {
+        return new YSubsProvider(context, client);
     }
 
     @Provides @Singleton public VodoProvider provideVodoProvider(OkHttpClient client) {

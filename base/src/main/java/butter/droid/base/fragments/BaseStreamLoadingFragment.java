@@ -354,7 +354,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment
             mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
             mSubsStatus = SubsStatus.DOWNLOADING;
             mHasSubs = true;
-            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(getActivity(), mStreamInfo, mSubtitleLanguage);
+            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getSubsProvider(),
+                    getActivity(), mStreamInfo, mSubtitleLanguage);
             subtitleDownloader.setSubtitleDownloaderListener(this);
             subtitleDownloader.downloadSubtitle();
         }

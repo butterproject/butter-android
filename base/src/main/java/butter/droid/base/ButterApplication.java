@@ -32,7 +32,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -41,8 +40,8 @@ import javax.inject.Inject;
 
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
@@ -55,7 +54,6 @@ public class ButterApplication extends Application implements ButterUpdateManage
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
 
-    @Inject OkHttpClient okHttpClient;
     @Inject Picasso picasso;
     @Inject ButterUpdateManager updateManager;
 
@@ -130,10 +128,6 @@ public class ButterApplication extends Application implements ButterUpdateManage
 
     public static String getSystemLanguage() {
         return sDefSystemLanguage;
-    }
-
-    public OkHttpClient getHttpClient() {
-        return okHttpClient;
     }
 
     public static String getStreamDir() {

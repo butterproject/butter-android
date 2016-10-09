@@ -51,7 +51,6 @@ import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.BuildConfig;
@@ -390,7 +389,7 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 media.subtitles = new HashMap<>();
                 media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
-                SubsProvider.download(getActivity(), media, "en", new Callback() {
+                providerManager.getSubsProvider().download(media, "en", new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
                         TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));

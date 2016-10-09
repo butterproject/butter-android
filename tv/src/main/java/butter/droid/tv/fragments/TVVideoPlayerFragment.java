@@ -76,12 +76,10 @@ import butter.droid.tv.events.ToggleSubtitleEvent;
 import butter.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
-    @BindView(R.id.video_surface)
-    SurfaceView mVideoSurface;
-    @BindView(R.id.subtitle_text)
-    StrokedTextView mSubtitleText;
-    @BindView(R.id.progress_indicator)
-    ProgressBar mProgressIndicator;
+
+    @BindView(R.id.video_surface) SurfaceView mVideoSurface;
+    @BindView(R.id.subtitle_text) StrokedTextView mSubtitleText;
+    @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
 
     private boolean mIsSubtitleEnabled = false;
     private boolean mMediaSessionMetadataApplied = false;

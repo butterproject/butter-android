@@ -62,12 +62,11 @@ import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.provider.ProviderManager.OnProviderChangeListener;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ProviderUtils;
-import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.utils.ToolbarUtils;
@@ -326,7 +325,7 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
                     media.subtitles = new HashMap<>();
                     media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
-                    SubsProvider.download(MainActivity.this, media, "en", new Callback() {
+                    providerManager.getSubsProvider().download(media, "en", new Callback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
                             BeamManager bm = BeamManager.getInstance(MainActivity.this);

@@ -17,6 +17,8 @@
 
 package butter.droid.base.providers.subs;
 
+import android.content.Context;
+
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -80,8 +82,8 @@ public class YSubsProvider extends SubsProvider {
         LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
-    public YSubsProvider(OkHttpClient client) {
-        super(client);
+    public YSubsProvider(Context context, OkHttpClient client) {
+        super(context, client);
     }
 
     @Override
