@@ -60,7 +60,7 @@ import butter.droid.base.beaming.BeamPlayerNotificationService;
 import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.provider.ProviderManager.OnProiderChangeListener;
+import butter.droid.base.manager.provider.ProviderManager.OnProviderChangeListener;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -77,7 +77,7 @@ import butterknife.BindView;
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
  */
-public class MainActivity extends ButterBaseActivity implements OnProiderChangeListener {
+public class MainActivity extends ButterBaseActivity implements OnProviderChangeListener {
 
     private static final int PERMISSIONS_REQUEST = 123;
 
@@ -164,6 +164,14 @@ public class MainActivity extends ButterBaseActivity implements OnProiderChangeL
         }
 
         BeamPlayerNotificationService.cancelNotification();
+
+        providerManager.addProviderListener(this);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+
+        providerManager.removeProviderListener(this);
     }
 
     @Override

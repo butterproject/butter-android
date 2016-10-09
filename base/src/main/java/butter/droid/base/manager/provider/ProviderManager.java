@@ -18,11 +18,14 @@
 package butter.droid.base.manager.provider;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.List;
 
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -46,6 +49,8 @@ public class ProviderManager {
     @Nullable private final SubsProvider subsProvider;
 
     @ProviderType private int currentProviderType;
+
+    private final List<OnProviderChangeListener> listeners = new ArrayList<>();
 
     public ProviderManager(@Nullable MediaProvider movieProvider, @Nullable MediaProvider showProvider,
             @Nullable SubsProvider subsProvider) {
@@ -79,9 +84,14 @@ public class ProviderManager {
         return subsProvider != null;
     }
 
-    public void setCurrentProviderType(@ProviderType int providerType) {
-        if (getMediaProvider(providerType) != null) {
+    @MainThread public void setCurrentProviderType(@ProviderType int providerType) {
+        if (getMediaProvider(providerType) != null && this.currentProviderType != providerType) {
             this.currentProviderType = providerType;
+            if (listeners.size() > 0) {
+                for (OnProviderChangeListener listener : listeners) {
+                    listener.onProviderChanged(providerType);
+                }
+            }
         } else {
             throw new IllegalStateException("Provider for type no provided");
         }
@@ -99,8 +109,21 @@ public class ProviderManager {
         return getMediaProvider(providerType) != null;
     }
 
-    public interface OnProiderChangeListener {
-        public void onProviderChanged(@ProviderType int provider);
+    public void addProviderListener(@NonNull OnProviderChangeListener listener) {
+        //noinspection ConstantConditions
+        if (listener != null && !listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeProviderListener(@NonNull OnProviderChangeListener listener) {
+        if (listener != null && listeners.size() > 0) {
+            listeners.remove(listener);
+        }
+    }
+
+    public interface OnProviderChangeListener {
+        @MainThread void onProviderChanged(@ProviderType int provider);
     }
 
 }
