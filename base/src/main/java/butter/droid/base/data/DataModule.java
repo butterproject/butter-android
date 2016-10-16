@@ -19,6 +19,7 @@ package butter.droid.base.data;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -67,6 +68,10 @@ public class DataModule {
         Picasso.Builder builder = new Picasso.Builder(context);
         builder.downloader(okHttpDownloader);
         return builder.build();
+    }
+
+    @Provides @Singleton public Gson provideGson() {
+        return new Gson();
     }
 
 }

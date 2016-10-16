@@ -41,11 +41,12 @@ import butter.droid.base.providers.subs.SubsProvider;
 public abstract class BaseProvider {
 
     private final OkHttpClient client;
-    protected Gson mGson = new Gson();
+    protected Gson mGson;
     protected Call mCurrentCall;
 
-    public BaseProvider(OkHttpClient client) {
+    public BaseProvider(OkHttpClient client, Gson gson) {
         this.client = client;
+        this.mGson = gson;
     }
 
     protected OkHttpClient getClient() {

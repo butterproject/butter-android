@@ -19,6 +19,7 @@ package butter.droid.base.providers.subs;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -58,8 +59,8 @@ public abstract class SubsProvider extends BaseProvider {
     private final Context context;
     private final OkHttpClient client;
 
-    public SubsProvider(Context context, OkHttpClient client) {
-        super(client);
+    public SubsProvider(Context context, OkHttpClient client, Gson gson) {
+        super(client, gson);
 
         this.context = context;
         this.client = client;

@@ -101,7 +101,7 @@ public class ButterUpdateManager extends Observable {
     private static final String SHA1_KEY = "sha1_update";
 
     private final OkHttpClient mHttpClient;
-    private final Gson mGson = new Gson();
+    private final Gson mGson;
     private final Handler mUpdateHandler = new Handler();
 
     private Context mContext = null;
@@ -114,7 +114,7 @@ public class ButterUpdateManager extends Observable {
 
     private Listener mListener;
 
-    @Inject public ButterUpdateManager(Context context, OkHttpClient okHttpClient) {
+    @Inject public ButterUpdateManager(Context context, OkHttpClient okHttpClient, Gson gson) {
         if (Constants.DEBUG_ENABLED) {
             UPDATE_INTERVAL = 3 * HOURS;
         } else {
@@ -123,6 +123,7 @@ public class ButterUpdateManager extends Observable {
 
         mContext = context;
         mHttpClient = okHttpClient;
+        mGson = gson;
         mPackageName = context.getPackageName();
 
         try {

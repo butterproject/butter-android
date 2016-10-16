@@ -23,6 +23,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
@@ -53,8 +54,8 @@ public class VodoProvider extends MediaProvider {
 
     private static Filters sFilters = new Filters();
 
-    public VodoProvider(OkHttpClient client) {
-        super(client);
+    public VodoProvider(OkHttpClient client, Gson gson) {
+        super(client, gson);
     }
 
     @Override

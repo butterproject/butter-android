@@ -19,6 +19,7 @@ package butter.droid.base.providers.meta;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.uwetrottmann.trakt.v2.TraktV2;
 import com.uwetrottmann.trakt.v2.entities.Episode;
@@ -42,8 +43,8 @@ public class TraktProvider extends MetaProvider {
         EPISODES = TRAKT.episodes();
     }
 
-    public TraktProvider(OkHttpClient client) {
-        super(client);
+    public TraktProvider(OkHttpClient client, Gson gson) {
+        super(client, gson);
     }
 
     /**

@@ -20,6 +20,7 @@ package butter.droid.base.providers.media;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -38,8 +39,8 @@ import butter.droid.base.providers.media.models.Media;
 public abstract class MediaProvider extends BaseProvider {
     public static final String MEDIA_CALL = "media_http_call";
 
-    public MediaProvider(OkHttpClient client) {
-        super(client);
+    public MediaProvider(OkHttpClient client, Gson gson) {
+        super(client, gson);
     }
 
     /**
