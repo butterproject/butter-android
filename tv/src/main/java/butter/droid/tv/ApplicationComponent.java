@@ -19,6 +19,25 @@ package butter.droid.tv;
 
 import javax.inject.Singleton;
 
+import butter.droid.tv.activities.TVMainActivity;
+import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.activities.TVMediaGridActivity;
+import butter.droid.tv.activities.TVPreferencesActivity;
+import butter.droid.tv.activities.TVSearchActivity;
+import butter.droid.tv.activities.TVStreamLoadingActivity;
+import butter.droid.tv.activities.TVTrailerPlayerActivity;
+import butter.droid.tv.activities.TVUpdateActivity;
+import butter.droid.tv.activities.TVVideoPlayerActivity;
+import butter.droid.tv.activities.TVWelcomeActivity;
+import butter.droid.tv.fragments.TVMediaGridFragment;
+import butter.droid.tv.fragments.TVMovieDetailsFragment;
+import butter.droid.tv.fragments.TVOverviewFragment;
+import butter.droid.tv.fragments.TVPreferencesFragment;
+import butter.droid.tv.fragments.TVSearchFragment;
+import butter.droid.tv.fragments.TVStreamLoadingFragment;
+import butter.droid.tv.fragments.TVVideoPlayerFragment;
+import butter.droid.tv.service.RecommendationService;
+import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import dagger.Component;
 
 @Singleton @Component(
@@ -27,5 +46,28 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(TVButterApplication application);
+
+    void inject(TVMainActivity activity);
+    void inject(TVTrailerPlayerActivity activity);
+    void inject(TVMediaDetailActivity activity);
+    void inject(TVMediaGridActivity activity);
+    void inject(TVPreferencesActivity activity);
+    void inject(TVSearchActivity activity);
+    void inject(TVStreamLoadingActivity activity);
+    void inject(TVUpdateActivity activity);
+    void inject(TVVideoPlayerActivity activity);
+    void inject(TVWelcomeActivity activity);
+
+    void inject(RecommendationService service);
+
+    void inject(TVOverviewFragment fragment);
+    void inject(TVMovieDetailsFragment fragment);
+    void inject(TVMediaGridFragment fragment);
+    void inject(TVStreamLoadingFragment fragment);
+    void inject(TVPreferencesFragment fragment);
+    void inject(TVSearchFragment fragment);
+    void inject(TVVideoPlayerFragment fragment);
+
+    void inject(RecommendationContentProvider contentProvider);
 
 }

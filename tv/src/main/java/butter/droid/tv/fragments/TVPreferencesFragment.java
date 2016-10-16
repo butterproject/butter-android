@@ -36,6 +36,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVUpdateActivity;
 
 public class TVPreferencesFragment extends GuidedStepFragment implements PreferencesHandler {
@@ -44,6 +45,14 @@ public class TVPreferencesFragment extends GuidedStepFragment implements Prefere
 
     private List<GuidedAction> mActions;
     private List<PrefItem> mPrefs;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

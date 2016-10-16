@@ -55,6 +55,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
@@ -82,6 +83,14 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
     // private XProvider mShowsProvider = x
 
     private BackgroundUpdater mBackgroundUpdater;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

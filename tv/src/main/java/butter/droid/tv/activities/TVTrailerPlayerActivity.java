@@ -33,11 +33,12 @@ import java.net.URLDecoder;
 
 import javax.inject.Inject;
 
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
@@ -65,6 +66,10 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
         mMedia = getIntent().getParcelableExtra(DATA);

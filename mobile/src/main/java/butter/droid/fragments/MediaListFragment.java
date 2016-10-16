@@ -121,14 +121,10 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private String mGenre;
 
     View mRootView;
-    @BindView(R.id.progressOverlay)
-    LinearLayout mProgressOverlay;
-    @BindView(R.id.recyclerView)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.emptyView)
-    TextView mEmptyView;
-    @BindView(R.id.progress_textview)
-    TextView mProgressTextView;
+    @BindView(R.id.progressOverlay) LinearLayout mProgressOverlay;
+    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.emptyView) TextView mEmptyView;
+    @BindView(R.id.progress_textview) TextView mProgressTextView;
 
     public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
         return newInstance(mode, filter, defOrder, null);

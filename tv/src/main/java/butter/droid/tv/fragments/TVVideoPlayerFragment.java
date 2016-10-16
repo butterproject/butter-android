@@ -52,6 +52,7 @@ import com.squareup.picasso.Target;
 
 import java.lang.ref.WeakReference;
 
+import butter.droid.tv.TVButterApplication;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -90,6 +91,11 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         mStreamInfo = ((TVVideoPlayerFragment.Callback) getActivity()).getInfo();
     }
 

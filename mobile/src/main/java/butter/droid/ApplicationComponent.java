@@ -35,6 +35,7 @@ import butter.droid.fragments.MediaListFragment;
 import butter.droid.fragments.MovieDetailFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.fragments.StreamLoadingFragment;
+import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import dagger.Component;
@@ -65,5 +66,6 @@ public interface ApplicationComponent {
     void inject(StreamLoadingFragment fragment);
     void inject(EpisodeDialogFragment fragment);
     void inject(MovieDetailFragment fragment);
+    void inject(VideoPlayerFragment fragment);
 
 }

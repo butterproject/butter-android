@@ -38,6 +38,7 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.service.recommendation.RecommendationBuilder;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
@@ -60,6 +61,13 @@ public class RecommendationService extends IntentService {
     private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
     private int TOTAL_COUNT=0;
 
+    @Override public void onCreate() {
+        super.onCreate();
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @Override
     protected void onHandleIntent(Intent intent) {

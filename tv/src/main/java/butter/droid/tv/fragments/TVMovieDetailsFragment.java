@@ -41,6 +41,7 @@ import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
@@ -63,6 +64,14 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 
 	private Movie getMovieItem() {
 		return (Movie) getMediaItem();
+	}
+
+	@Override public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		TVButterApplication.getAppContext()
+				.getComponent()
+				.inject(this);
 	}
 
 	@Override
@@ -90,7 +99,10 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 
 			List<String> qualities = new ArrayList<>(movie.torrents.keySet());
 
-            addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch), getResources().getString(R.string.trailer)));
+            if (movie.trailer != null) {
+                addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch),
+                        getResources().getString(R.string.trailer)));
+            }
 
 			for (String quality : qualities) {
 

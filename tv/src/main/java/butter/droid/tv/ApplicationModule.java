@@ -17,12 +17,10 @@
 
 package butter.droid.tv;
 
-import javax.inject.Singleton;
-
 import butter.droid.base.BaseApplicationModule;
 import dagger.Module;
 
-@Singleton @Module(
+@Module(
         includes = BaseApplicationModule.class
 )
 public class ApplicationModule {

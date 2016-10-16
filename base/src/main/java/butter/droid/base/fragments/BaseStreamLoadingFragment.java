@@ -68,10 +68,8 @@ import hugo.weaving.DebugLog;
  * <p/>
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
-public abstract class BaseStreamLoadingFragment extends Fragment
-        implements TorrentListener,
-        SubtitleDownloader.ISubtitleDownloaderListener,
-        SubsProvider.Callback {
+public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentListener,
+        SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback {
 
     @Inject ProviderManager providerManager;
 

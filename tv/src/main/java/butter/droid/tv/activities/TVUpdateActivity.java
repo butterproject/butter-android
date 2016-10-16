@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 
 public class TVUpdateActivity extends TVBaseActivity {
@@ -35,6 +36,10 @@ public class TVUpdateActivity extends TVBaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		TVButterApplication.getAppContext()
+				.getComponent()
+				.inject(this);
+
 		super.onCreate(savedInstanceState,R.layout.activity_update);
 	}
 

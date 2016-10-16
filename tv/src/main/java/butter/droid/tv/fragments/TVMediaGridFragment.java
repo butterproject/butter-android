@@ -45,6 +45,7 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.utils.BackgroundUpdater;
@@ -80,6 +81,11 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         setupFragment();
    }
 
@@ -125,13 +131,17 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
                 mCurrentPage = filters.page;
-                List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
+                final List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 
                 mItems.addAll(list);
 
-                int previousSize = mAdapter.size();
-                mAdapter.addAll(previousSize,list);
-                mAdapter.notifyArrayItemRangeChanged(previousSize,list.size());
+                final int previousSize = mAdapter.size();
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.addAll(previousSize,list);
+                        mAdapter.notifyArrayItemRangeChanged(previousSize,list.size());
+                    }
+                });
             }
 
             @DebugLog

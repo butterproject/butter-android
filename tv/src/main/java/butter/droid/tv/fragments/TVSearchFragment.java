@@ -40,6 +40,7 @@ import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.utils.BackgroundUpdater;
@@ -59,6 +60,14 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 	private ListRowPresenter mListRowPresenter;
 	private ListRow mLoadingRow;
 	private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
+
+	@Override public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		TVButterApplication.getAppContext()
+				.getComponent()
+				.inject(this);
+	}
 
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);

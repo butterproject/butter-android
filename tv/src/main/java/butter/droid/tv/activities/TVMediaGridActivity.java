@@ -24,6 +24,7 @@ import android.os.Bundle;
 
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
 
@@ -52,6 +53,10 @@ public class TVMediaGridActivity extends TVBaseActivity implements TVMediaGridFr
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_movie_media_grid);
 
         mSort = (MediaProvider.Filters.Sort) getIntent().getExtras().getSerializable(EXTRA_SORT);

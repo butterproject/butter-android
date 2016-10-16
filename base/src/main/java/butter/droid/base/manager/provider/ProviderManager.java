@@ -85,11 +85,13 @@ public class ProviderManager {
     }
 
     @MainThread public void setCurrentProviderType(@ProviderType int providerType) {
-        if (getMediaProvider(providerType) != null && this.currentProviderType != providerType) {
-            this.currentProviderType = providerType;
-            if (listeners.size() > 0) {
-                for (OnProviderChangeListener listener : listeners) {
-                    listener.onProviderChanged(providerType);
+        if (getMediaProvider(providerType) != null) {
+            if (this.currentProviderType != providerType) {
+                this.currentProviderType = providerType;
+                if (listeners.size() > 0) {
+                    for (OnProviderChangeListener listener : listeners) {
+                        listener.onProviderChanged(providerType);
+                    }
                 }
             }
         } else {
