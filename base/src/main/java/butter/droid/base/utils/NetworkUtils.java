@@ -50,7 +50,16 @@ public class NetworkUtils {
     public static boolean isEthernetConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) return false;
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET).isConnected();
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

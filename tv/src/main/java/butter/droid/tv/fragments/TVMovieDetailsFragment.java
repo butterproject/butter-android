@@ -85,13 +85,13 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 		if (item instanceof Movie) {
 			Movie movie = (Movie) item;
 
-			List<String> qualities = new ArrayList(movie.torrents.keySet());
+			List<String> qualities = new ArrayList(movie.torrents.get("en").keySet());
 
             addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch), getResources().getString(R.string.trailer)));
 
 			for (String quality : qualities) {
 
-				Media.Torrent torrent = movie.torrents.get(quality);
+				Media.Torrent torrent = movie.torrents.get("en").get(quality);
 
 				//add action
 				addAction(new WatchAction((long) qualities.indexOf(quality), getResources().getString(

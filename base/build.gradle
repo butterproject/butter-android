@@ -10,8 +10,9 @@ android {
     def gitBranch = (System.getenv('GIT_BRANCH') == null ? 'local' : System.getenv('GIT_BRANCH').replace('origin/', ''))
     def releaseType = (System.getenv('RELEASE_TYPE') == null ? 'NONE' : System.getenv('RELEASE_TYPE'))
     def updateUrls = (System.getenv('UPDATE_URLS') == null ? '"http://localhost/android-update.json"' : System.getenv('UPDATE_URLS'))
+    def animeUrls = (System.getenv('ANIME_URLS') == null ? '"https://anime.api-fetch.website/"' : System.getenv('ANIME_URLS'))
     def movieUrls = (System.getenv('MOVIE_URLS') == null ? '"https://movies-v2.api-fetch.website/"' : System.getenv('MOVIE_URLS'))
-    def tvUrls = (System.getenv('TV_URLS') == null ? '"http://api-fetch.website/tv/"' : System.getenv('TV_URLS'))
+    def tvUrls = (System.getenv('TV_URLS') == null ? '"http://tv-v2.api-fetch.website/"' : System.getenv('TV_URLS'))
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
@@ -20,6 +21,7 @@ android {
         buildConfigField 'String', 'GIT_BRANCH', '\"' + gitBranch + '\"'
         buildConfigField 'String', 'RELEASE_TYPE', '\"' + releaseType + '\"'
         buildConfigField 'String[]', 'UPDATE_URLS', '{' + updateUrls + '}'
+        buildConfigField 'String[]', 'ANIME_URLS', '{' + animeUrls + '}'
         buildConfigField 'String[]', 'MOVIE_URLS', '{' + movieUrls + '}'
         buildConfigField 'String[]', 'TV_URLS', '{' + tvUrls + '}'
         versionCode buildNumber
