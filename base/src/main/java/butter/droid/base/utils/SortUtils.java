@@ -27,8 +27,8 @@ public class SortUtils {
             @Override
             public int compare(String lhs, String rhs) {
                 if (lhs.contains("p") && rhs.contains("p")) {
-                    int q1 = Integer.parseInt(lhs.substring(0, lhs.indexOf('p')));
-                    int q2 = Integer.parseInt(rhs.substring(0, rhs.indexOf('p')));
+                    int q1 = Integer.parseInt(lhs.substring(lhs.contains("-") ? lhs.indexOf("- ") + 2 : 0, lhs.indexOf('p')));
+                    int q2 = Integer.parseInt(rhs.substring(rhs.contains("-") ? rhs.indexOf("- ") + 2 : 0, rhs.indexOf('p')));
                     if (q1 < q2) {
                         return 1;
                     } else if (q1 < q2) {

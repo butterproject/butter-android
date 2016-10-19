@@ -250,6 +250,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
                 String quality = DefaultQuality.get(mActivity, Arrays.asList(qualities));
                 int qualityIndex = Arrays.asList(qualities).indexOf(quality);
+                if (qualityIndex == -1) {
+                    qualityIndex = 0;
+                    quality = qualities[0];
+                }
                 mSelectedQuality = quality;
                 mQuality.setText(mSelectedQuality);
                 mQuality.setDefault(qualityIndex);
