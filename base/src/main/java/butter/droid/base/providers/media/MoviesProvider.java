@@ -18,16 +18,14 @@
 package butter.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
-import android.util.Log;
 
+import butter.droid.base.utils.LocaleUtils;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,63 +203,6 @@ public class MoviesProvider extends MediaProvider {
         returnList.add(currentList.get(index));
         callback.onSuccess(null, returnList, true);
         return null;
-    }
-
-    private class MovieResponse {
-        ArrayList<LinkedTreeMap<String, Object>> moviesList;
-
-        public MovieResponse(ArrayList<LinkedTreeMap<String, Object>> moviesList) {
-            this.moviesList = moviesList;
-        }
-
-        public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList) {
-            for (LinkedTreeMap<String, Object> item : moviesList) {
-                Movie movie = new Movie(sMediaProvider, sSubsProvider);
-
-                movie.videoId = (String) item.get("imdb_id");
-                movie.imdbId = movie.videoId;
-
-                movie.title = (String) item.get("title");
-                movie.year = (String) item.get("year");
-                movie.genre = ((ArrayList<String>) item.get("genres")).get(0);
-                movie.rating = Double.toString(((LinkedTreeMap<String, Double>) item.get("rating")).get("percentage") / 10);
-                movie.trailer = (String) item.get("trailer");
-                movie.runtime = (String) item.get("runtime");
-                movie.synopsis = (String) item.get("synopsis");
-                movie.certification = (String) item.get("certification");
-
-                LinkedTreeMap<String, String> images = (LinkedTreeMap<String, String>) item.get("images");
-                if(!images.get("poster").contains("images/posterholder.png")) {
-                    movie.image = images.get("poster").replace("/original/", "/medium/");
-                    movie.fullImage = images.get("poster");
-                }
-                if(!images.get("poster").contains("images/posterholder.png"))
-                    movie.headerImage = images.get("fanart").replace("/original/", "/medium/");
-
-                LinkedTreeMap<String, LinkedTreeMap<String, LinkedTreeMap<String, Object>>> torrents = (LinkedTreeMap<String, LinkedTreeMap<String, LinkedTreeMap<String, Object>>>) item.get("torrents");
-                if (torrents != null) {
-                    for (Map.Entry<String, LinkedTreeMap<String, LinkedTreeMap<String, Object>>> langTorrentObj : torrents.entrySet()) {
-                        String langCode = langTorrentObj.getKey();
-                        for (Map.Entry<String, LinkedTreeMap<String, Object>> torrentEntry : langTorrentObj.getValue().entrySet()) {
-                            LinkedTreeMap<String, Object> torrentObj = torrentEntry.getValue();
-                            String quality = torrentEntry.getKey();
-                            if (quality == null) continue;
-
-                            Media.Torrent torrent = new Media.Torrent();
-
-                            torrent.seeds = ((Double) torrentObj.get("seed")).intValue();
-                            torrent.peers = ((Double) torrentObj.get("peer")).intValue();
-                            torrent.url = (String) torrentObj.get("url");
-
-                            movie.torrents.put(LocaleUtils.toLocale(langCode).getDisplayLanguage() + " - " + quality, torrent);
-                        }
-                    }
-                }
-
-                existingList.add(movie);
-            }
-            return existingList;
-        }
     }
 
     @Override
