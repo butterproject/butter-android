@@ -43,6 +43,7 @@ import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.OpenSubsProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import timber.log.Timber;
 
 public class TVProvider extends MediaProvider {
 
@@ -120,7 +121,7 @@ public class TVProvider extends MediaProvider {
         requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
 
-        Log.d("TVProvider", "Making request to: " + url);
+        Timber.d("TVProvider", "Making request to: " + url);
 
         return fetchList(currentList, requestBuilder, filters, callback);
     }
@@ -189,7 +190,7 @@ public class TVProvider extends MediaProvider {
         requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
 
-        Log.d("TVProvider", "Making request to: " + url);
+        Timber.d("TVProvider", "Making request to: " + url);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override

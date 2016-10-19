@@ -51,6 +51,7 @@ import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.OpenSubsProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import timber.log.Timber;
 
 @SuppressLint("ParcelCreator")
 public class AnimeProvider extends MediaProvider {
@@ -124,7 +125,7 @@ public class AnimeProvider extends MediaProvider {
         requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
 
-        Log.d("AnimeProvider", "Making request to: " + url);
+        Timber.d("AnimeProvider", "Making request to: " + url);
 
         return fetchList(currentList, requestBuilder, filters, callback);
     }
@@ -193,7 +194,7 @@ public class AnimeProvider extends MediaProvider {
         requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
 
-        Log.d("AnimeProvider", "Making request to: " + url);
+        Timber.d("AnimeProvider", "Making request to: " + url);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override

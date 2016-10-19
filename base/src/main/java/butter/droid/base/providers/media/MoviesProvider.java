@@ -39,6 +39,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
+import timber.log.Timber;
 
 public class MoviesProvider extends MediaProvider {
 
@@ -134,7 +135,7 @@ public class MoviesProvider extends MediaProvider {
         requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
 
-        Log.d("MoviesProvider", "Making request to: " + url);
+        Timber.d("MoviesProvider", "Making request to: " + url);
 
         return fetchList(currentList, requestBuilder, filters, callback);
     }
