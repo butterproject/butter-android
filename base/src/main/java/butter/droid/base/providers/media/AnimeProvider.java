@@ -319,8 +319,7 @@ public class AnimeProvider extends MediaProvider {
                 } else if (detailData.get("type").toString().equalsIgnoreCase("show")) {
                     Show show = new Show(sMediaProvider, null);
 
-                    // show.seasons = ((Double) detailData.get("num_seasons")).intValue();
-                    show.seasons = 1; // TODO: Add num_seasons property to the API.
+                    show.seasons = ((Double) detailData.get("num_seasons")).intValue();
                     show.runtime = (String) detailData.get("runtime");
                     show.synopsis = (String) detailData.get("synopsis");
                     if (detailData.get("status") != null) {
