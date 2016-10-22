@@ -146,7 +146,7 @@ public class FormatVTT extends TimedTextFileFormat {
                 current.end.mseconds += tto.offset;
             }
             //time is written
-            file.add(index++, current.start.getTime("hh:mm:ss.ms") + " --> " + current.end.getTime("hh:mm:ss.ms"));
+            file.add(index++, current.start.getTime("hh:mm:ss.ms") + " --> " + current.end.getTime("hh:mm:ss.ms") + " line:90%");
             //offset is undone
             if (tto.offset != 0) {
                 current.start.mseconds -= tto.offset;

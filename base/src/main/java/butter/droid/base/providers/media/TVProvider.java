@@ -42,6 +42,7 @@ import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.OpenSubsProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import timber.log.Timber;
 
 public class TVProvider extends MediaProvider {
 
@@ -115,8 +116,11 @@ public class TVProvider extends MediaProvider {
 
         Request.Builder requestBuilder = new Request.Builder();
         String query = buildQuery(params);
-        requestBuilder.url(url + "?" + query);
+        url = url + "?" + query;
+        requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
+
+        Timber.d("TVProvider", "Making request to: " + url);
 
         return fetchList(currentList, requestBuilder, filters, callback);
     }
@@ -173,7 +177,7 @@ public class TVProvider extends MediaProvider {
                 } catch (Exception e) {
                     callback.onFailure(e);
                 }
-                callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to TVAPI"));
             }
         });
     }
@@ -181,8 +185,11 @@ public class TVProvider extends MediaProvider {
     @Override
     public Call getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URLS[CURRENT_API] + "show/" + currentList.get(index).videoId);
+        String url = API_URLS[CURRENT_API] + "show/" + currentList.get(index).videoId;
+        requestBuilder.url(url);
         requestBuilder.tag(MEDIA_CALL);
+
+        Timber.d("TVProvider", "Making request to: " + url);
 
         return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
             @Override
@@ -209,9 +216,65 @@ public class TVProvider extends MediaProvider {
                         return;
                     }
                 }
-                callback.onFailure(new NetworkErrorException("Couldn't connect to EZTVAPI"));
+                callback.onFailure(new NetworkErrorException("Couldn't connect to TVAPI"));
             }
         });
+    }
+
+    @Override
+    public int getLoadingMessage() {
+        return R.string.loading_shows;
+    }
+
+    @Override
+    public List<NavInfo> getNavigation() {
+        List<NavInfo> tabs = new ArrayList<>();
+
+        tabs.add(new NavInfo(R.id.tvshow_filter_trending,Filters.Sort.TRENDING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.trending),R.drawable.tvshow_filter_trending));
+        tabs.add(new NavInfo(R.id.tvshow_filter_popular_now,Filters.Sort.POPULARITY, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.popular),R.drawable.tvshow_filter_popular_now));
+        tabs.add(new NavInfo(R.id.tvshow_filter_top_rated,Filters.Sort.RATING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.top_rated),R.drawable.tvshow_filter_top_rated));
+        tabs.add(new NavInfo(R.id.tvshow_filter_last_updated,Filters.Sort.DATE, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.last_updated),R.drawable.tvshow_filter_last_updated));
+        tabs.add(new NavInfo(R.id.tvshow_filter_year,Filters.Sort.YEAR, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.year),R.drawable.tvshow_filter_year));
+        tabs.add(new NavInfo(R.id.tvshow_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.tvshow_filter_a_to_z));
+        return tabs;
+    }
+
+    @Override
+    public List<Genre> getGenres() {
+        List<Genre> returnList = new ArrayList<>();
+        returnList.add(new Genre("all", R.string.genre_all));
+        returnList.add(new Genre("action", R.string.genre_action));
+        returnList.add(new Genre("adventure", R.string.genre_adventure));
+        returnList.add(new Genre("animation", R.string.genre_animation));
+        // returnList.add(new Genre("biography", R.string.genre_biography));
+        returnList.add(new Genre("comedy", R.string.genre_comedy));
+        returnList.add(new Genre("crime", R.string.genre_crime));
+        returnList.add(new Genre("disaster", R.string.genre_disaster));
+        returnList.add(new Genre("documentary", R.string.genre_documentary));
+        returnList.add(new Genre("drama", R.string.genre_drama));
+        returnList.add(new Genre("eastern", R.string.genre_eastern));
+        returnList.add(new Genre("family", R.string.genre_family));
+        returnList.add(new Genre("fantasy", R.string.genre_fantasy));
+        returnList.add(new Genre("fan-film", R.string.genre_fan_film));
+        returnList.add(new Genre("film-noir", R.string.genre_film_noir));
+        returnList.add(new Genre("history", R.string.genre_history));
+        returnList.add(new Genre("holiday", R.string.genre_holiday));
+        returnList.add(new Genre("horror", R.string.genre_horror));
+        returnList.add(new Genre("indie", R.string.genre_indie));
+        returnList.add(new Genre("music", R.string.genre_music));
+        // returnList.add(new Genre("musical", R.string.genre_musical));
+        returnList.add(new Genre("mystery", R.string.genre_mystery));
+        returnList.add(new Genre("road", R.string.genre_road));
+        returnList.add(new Genre("romance", R.string.genre_romance));
+        returnList.add(new Genre("science-fiction", R.string.genre_sci_fi));
+        returnList.add(new Genre("short", R.string.genre_short));
+        returnList.add(new Genre("sports", R.string.genre_sport));
+        returnList.add(new Genre("suspense", R.string.genre_suspense));
+        returnList.add(new Genre("thriller", R.string.genre_thriller));
+        returnList.add(new Genre("tv-movie", R.string.genre_tv_movie));
+        returnList.add(new Genre("war", R.string.genre_war));
+        returnList.add(new Genre("western", R.string.genre_western));
+        return returnList;
     }
 
     private class TVReponse {
@@ -336,54 +399,4 @@ public class TVProvider extends MediaProvider {
         }
     }
 
-    @Override
-    public int getLoadingMessage() {
-        return R.string.loading_shows;
-    }
-
-    @Override
-    public List<NavInfo> getNavigation() {
-        List<NavInfo> tabs = new ArrayList<>();
-
-        tabs.add(new NavInfo(R.id.eztv_filter_trending,Filters.Sort.TRENDING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.trending),R.drawable.eztv_filter_trending));
-        tabs.add(new NavInfo(R.id.eztv_filter_popular_now,Filters.Sort.POPULARITY, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.popular),R.drawable.eztv_filter_popular_now));
-        tabs.add(new NavInfo(R.id.eztv_filter_top_rated,Filters.Sort.RATING, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.top_rated),R.drawable.eztv_filter_top_rated));
-        tabs.add(new NavInfo(R.id.eztv_filter_last_updated,Filters.Sort.DATE, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.last_updated),R.drawable.eztv_filter_last_updated));
-        tabs.add(new NavInfo(R.id.eztv_filter_year,Filters.Sort.YEAR, Filters.Order.DESC, ButterApplication.getAppContext().getString(R.string.year),R.drawable.eztv_filter_year));
-        tabs.add(new NavInfo(R.id.eztv_filter_a_to_z,Filters.Sort.ALPHABET, Filters.Order.ASC, ButterApplication.getAppContext().getString(R.string.a_to_z),R.drawable.eztv_filter_a_to_z));
-        return tabs;
-    }
-
-    @Override
-    public List<Genre> getGenres() {
-        List<Genre> returnList = new ArrayList<>();
-        returnList.add(new Genre(null, R.string.genre_all));
-        returnList.add(new Genre("Action", R.string.genre_action));
-        returnList.add(new Genre("Adventure", R.string.genre_adventure));
-        returnList.add(new Genre("Animation", R.string.genre_animation));
-        returnList.add(new Genre("Children", R.string.genre_children));
-        returnList.add(new Genre("Comedy", R.string.genre_comedy));
-        returnList.add(new Genre("Crime", R.string.genre_crime));
-        returnList.add(new Genre("Documentary", R.string.genre_documentary));
-        returnList.add(new Genre("Drama", R.string.genre_drama));
-        returnList.add(new Genre("Family", R.string.genre_family));
-        returnList.add(new Genre("Fantasy", R.string.genre_fantasy));
-        returnList.add(new Genre("Game Show", R.string.genre_game_show));
-        returnList.add(new Genre("Home and Garden", R.string.genre_home_garden));
-        returnList.add(new Genre("Horror", R.string.genre_horror));
-        returnList.add(new Genre("Mini Series", R.string.genre_mini_series));
-        returnList.add(new Genre("Mystery", R.string.genre_mystery));
-        returnList.add(new Genre("News", R.string.genre_news));
-        returnList.add(new Genre("Reality", R.string.genre_reality));
-        returnList.add(new Genre("Romance", R.string.genre_romance));
-        returnList.add(new Genre("Science Fiction", R.string.genre_sci_fi));
-        returnList.add(new Genre("Soap", R.string.genre_soap));
-        returnList.add(new Genre("Special Interest", R.string.genre_special_interest));
-        returnList.add(new Genre("Sport", R.string.genre_sport));
-        returnList.add(new Genre("Suspense", R.string.genre_suspense));
-        returnList.add(new Genre("Talk Show", R.string.genre_talk_show));
-        returnList.add(new Genre("Thriller", R.string.genre_thriller));
-        returnList.add(new Genre("Western", R.string.genre_western));
-        return returnList;
-    }
 }

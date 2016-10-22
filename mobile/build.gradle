@@ -1,4 +1,3 @@
-apply plugin: 'android-sdk-manager'
 apply plugin: 'org.moallemi.advanced-build-version'
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'//for method logging (only in debug builds)

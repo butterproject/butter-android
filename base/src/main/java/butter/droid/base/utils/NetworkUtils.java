@@ -27,22 +27,15 @@ import butter.droid.base.ButterApplication;
 
 public class NetworkUtils {
 
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     * is wifi connected
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
     /**
      * Get whether or not a wifi connection is currently connected.
      */
     public static boolean isWifiConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) return false;
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
     }
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     * is ethernet connected
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     /**
      * Get whether or not an ethernet connection is currently connected.
@@ -50,12 +43,9 @@ public class NetworkUtils {
     public static boolean isEthernetConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) return false;
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET).isConnected();
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_ETHERNET;
     }
-
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	 * is network connected
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     /**
      * Get whether or not any network connection is present (eg. wifi, 3G, etc.).
@@ -81,6 +71,5 @@ public class NetworkUtils {
         int ip = wifiInfo.getIpAddress();
         return String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
     }
-
 
 }

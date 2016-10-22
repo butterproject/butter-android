@@ -290,7 +290,9 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
         Media mediaItem = media.getMedia();
-        mediaItem.color = view.getCustomSelectedSwatch().getRgb();
+        if (view.getCustomSelectedSwatch() != null) {
+            mediaItem.color = view.getCustomSelectedSwatch().getRgb();
+        }
 
         TVMediaDetailActivity.startActivity(
                 getActivity(),
@@ -306,23 +308,23 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
             case R.id.more_item_settings:
                 TVPreferencesActivity.startActivity(getActivity());
                 break;
-            case R.id.yts_filter_a_to_z:
-            case R.id.yts_filter_trending:
-            case R.id.yts_filter_release_date:
-            case R.id.yts_filter_popular_now:
-            case R.id.yts_filter_year:
-            case R.id.yts_filter_top_rated:
+            case R.id.movie_filter_a_to_z:
+            case R.id.movie_filter_trending:
+            case R.id.movie_filter_release_date:
+            case R.id.movie_filter_popular_now:
+            case R.id.movie_filter_year:
+            case R.id.movie_filter_top_rated:
                 TVMediaGridActivity.startActivity(getActivity(), moreItem.getNavInfo().getLabel(), TVMediaGridActivity.ProviderType.MOVIE, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
                 break;
-            case R.id.eztv_filter_a_to_z:
-            case R.id.eztv_filter_trending:
-            case R.id.eztv_filter_last_updated:
-            case R.id.eztv_filter_popular_now:
-            case R.id.eztv_filter_year:
-            case R.id.eztv_filter_top_rated:
+            case R.id.tvshow_filter_a_to_z:
+            case R.id.tvshow_filter_trending:
+            case R.id.tvshow_filter_last_updated:
+            case R.id.tvshow_filter_popular_now:
+            case R.id.tvshow_filter_year:
+            case R.id.tvshow_filter_top_rated:
                 TVMediaGridActivity.startActivity(getActivity(), moreItem.getNavInfo().getLabel(), TVMediaGridActivity.ProviderType.SHOW, moreItem.getNavInfo().getFilter(), moreItem.getNavInfo().getOrder(), null);
                 break;
-            case R.id.yts_filter_genres:
+            case R.id.movie_filter_genres:
                 Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_LONG).show();
                 break;
         }
