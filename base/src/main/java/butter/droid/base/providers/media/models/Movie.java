@@ -32,7 +32,7 @@ public class Movie extends Media implements Parcelable {
     public String runtime = "";
     public String synopsis = "No synopsis available";
     public String certification = "n/a";
-    public Map<String, Torrent> torrents = new HashMap<String, Torrent>();
+    public Map<String, Map<String, Torrent>> torrents = new HashMap<>();
 
     public Movie(MediaProvider mediaProvider, SubsProvider subsProvider) {
         super(mediaProvider, subsProvider);
@@ -48,8 +48,14 @@ public class Movie extends Media implements Parcelable {
         int size = in.readInt();
         for (int i = 0; i < size; i++) {
             String key = in.readString();
-            Torrent torrent = in.readParcelable(Torrent.class.getClassLoader());
-            torrents.put(key, torrent);
+            int mapSize = in.readInt();
+            Map<String, Torrent> torrentMap = new HashMap<>();
+            for (int j = 0; j < mapSize; j++) {
+                String torrentKey = in.readString();
+                Torrent torrent = in.readParcelable(Torrent.class.getClassLoader());
+                torrentMap.put(torrentKey, torrent);
+            }
+            torrents.put(key, torrentMap);
         }
     }
 
@@ -67,9 +73,18 @@ public class Movie extends Media implements Parcelable {
         dest.writeString(certification);
         if (torrents != null) {
             dest.writeInt(torrents.size());
-            for (String s : torrents.keySet()) {
-                dest.writeString(s);
-                dest.writeParcelable(torrents.get(s), flags);
+            for (Map.Entry<String, Map<String, Torrent>> entry : torrents.entrySet()) {
+                dest.writeString(entry.getKey());
+                Map<String, Torrent> torrentMap = entry.getValue();
+                if (torrentMap != null) {
+                    dest.writeInt(torrentMap.size());
+                    for (String s : torrentMap.keySet()) {
+                        dest.writeString(s);
+                        dest.writeParcelable(torrentMap.get(s), flags);
+                    }
+                } else {
+                    dest.writeInt(0);
+                }
             }
         } else {
             dest.writeInt(0);
