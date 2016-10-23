@@ -6,15 +6,10 @@ env:
 android:
   components:
     - tools
-    - build-tools-24.0.0
-    - android-24
-    - android-22
     - extra-google-m2repository
     - extra-android-m2repository
     - extra-google-google_play_services
     - extra-android-support
-    - extra-android-m2repository
-    - extra-google-m2repository
     - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 before_install:
   - chmod +x gradlew
@@ -25,9 +20,9 @@ before_script:
   - emulator -avd test -no-skin -no-audio -no-window &
 
 script:
-  - ./gradlew check -PdisablePreDex --continue --stacktrace
+  - ./gradlew check -PdisablePreDex --stacktrace
   - android-wait-for-emulator
   - adb devices
   - adb shell input keyevent 82 &
-  - ./gradlew test
+  - ./gradlew connectedCheck -PdisablePreDex --stacktrace
   
