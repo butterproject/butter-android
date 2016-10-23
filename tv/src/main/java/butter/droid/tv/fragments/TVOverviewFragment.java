@@ -79,9 +79,6 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
     private ArrayObjectAdapter mShowAdapter;
     private ArrayObjectAdapter mMoviesAdapter;
 
-//    private VodoProvider mMoviesProvider = new VodoProvider();
-    // private XProvider mShowsProvider = x
-
     private BackgroundUpdater mBackgroundUpdater;
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -376,10 +373,6 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                             .setPositiveButton("Start", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-//                                    Movie media = new Movie(
-//                                            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE),
-//                                            providerManager.getSubsProvider());
-
                                     Movie media = new Movie();
                                     media.videoId = "dialogtestvideo";
                                     media.title = "User input test video";
@@ -391,8 +384,6 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 }
 
                 final Movie media = new Movie();
-//                final Movie media = new Movie(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE),
-//                        providerManager.getSubsProvider());
                 media.videoId = "bigbucksbunny";
                 media.title = file_types[index];
                 media.subtitles = new HashMap<>();

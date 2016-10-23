@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.1'
+        classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
@@ -26,7 +26,7 @@ ext {
     minSdk = 15
     butterknifeVersion = "8.1.0"
     okHttpVersion = "2.7.5"
-    daggerVersion = "2.5"
+    daggerVersion = "2.7"
     javaxAnnotationVersion = "1.2"
 }
 

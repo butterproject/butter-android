@@ -80,15 +80,14 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
 
     private static final int PERMISSIONS_REQUEST = 123;
 
+    @Inject ProviderManager providerManager;
+    @Inject YouTubeManager youTubeManager;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
     @Nullable @BindView(R.id.tabs) TabLayout mTabs;
 
-    NavigationDrawerFragment mNavigationDrawerFragment;
-
-    @Inject ProviderManager providerManager;
-    @Inject YouTubeManager youTubeManager;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -141,7 +140,7 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
 
         mNavigationDrawerFragment.initialise(mNavigationDrawerContainer, drawerLayout);
 
-        if (null != savedInstanceState) {
+        if (savedInstanceState != null) {
             return;
         }
 

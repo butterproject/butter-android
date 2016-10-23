@@ -37,6 +37,7 @@ import butter.droid.base.providers.media.models.Media;
  * Base class for all media providers. Any media providers has to extend this class and use the callback defined here.
  */
 public abstract class MediaProvider extends BaseProvider {
+
     public static final String MEDIA_CALL = "media_http_call";
 
     public MediaProvider(OkHttpClient client, Gson gson) {
