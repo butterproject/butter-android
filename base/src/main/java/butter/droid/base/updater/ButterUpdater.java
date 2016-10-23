@@ -96,7 +96,7 @@ public class ButterUpdater extends Observable {
     private Listener mListener;
 
     private ButterUpdater(Context context) {
-        if (Constants.DEBUG_ENABLED) {
+        if (BuildConfig.DEBUG) {
             UPDATE_INTERVAL = 3 * HOURS;
         } else {
             UPDATE_INTERVAL = 2 * DAYS;
@@ -173,7 +173,7 @@ public class ButterUpdater extends Observable {
             lastUpdate = System.currentTimeMillis();
             PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
 
-            if (!forced && BuildConfig.GIT_BRANCH.contains("local")) return;
+            if (!forced) return;
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 mAbi = Build.CPU_ABI.toLowerCase(Locale.US);
@@ -211,7 +211,7 @@ public class ButterUpdater extends Observable {
         }
     }
 
-    Callback mCallback = new Callback() {
+    private Callback mCallback = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
             if(mCurrentUrl < DATA_URLS.length - 1) {

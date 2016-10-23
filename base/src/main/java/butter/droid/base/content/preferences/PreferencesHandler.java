@@ -671,7 +671,7 @@ public interface PreferencesHandler {
 
             prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.about_app).build());
 
-            if (!Constants.DEBUG_ENABLED && !isTV) {
+            if (!BuildConfig.DEBUG && !isTV) {
                 prefItems.add(PrefItem.newBuilder(context)
                         .setIconResource(R.drawable.ic_prefs_report_bug)
                         .setTitleResource(R.string.report_a_bug)

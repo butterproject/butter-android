@@ -162,7 +162,7 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         getMenuInflater().inflate(R.menu.activity_overview, menu);
 
         MenuItem playerTestMenuItem = menu.findItem(R.id.action_playertests);
-        playerTestMenuItem.setVisible(Constants.DEBUG_ENABLED);
+        playerTestMenuItem.setVisible(BuildConfig.DEBUG);
 
         return true;
     }

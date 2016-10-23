@@ -25,6 +25,7 @@ import android.content.Context;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.util.VLCUtil;
 
+import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.utils.PrefUtils;
@@ -43,7 +44,7 @@ public class VLCInstance {
             }
 
             String chroma = PrefUtils.get(context, Prefs.PIXEL_FORMAT, "");
-            sLibVLC = new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, Constants.DEBUG_ENABLED));
+            sLibVLC = new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, BuildConfig.DEBUG));
         }
         return sLibVLC;
     }
@@ -52,7 +53,7 @@ public class VLCInstance {
         if (sLibVLC != null) {
             sLibVLC.release();
             String chroma = PrefUtils.get(context, Prefs.PIXEL_FORMAT, "");
-            sLibVLC = new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, Constants.DEBUG_ENABLED));
+            sLibVLC = new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, BuildConfig.DEBUG));
         }
     }
 

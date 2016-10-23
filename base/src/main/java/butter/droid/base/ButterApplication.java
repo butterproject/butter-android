@@ -72,20 +72,8 @@ public class ButterApplication extends Application implements ButterUpdater.List
         LeakCanary.install(this);
         Foreground.init(this);
 
-        Constants.DEBUG_ENABLED = false;
-        int versionCode = 0;
-        try {
-            String packageName = getPackageName();
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, 0);
-            int flags = packageInfo.applicationInfo.flags;
-            versionCode = packageInfo.versionCode;
-            Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
         //initialise logging
-        if (Constants.DEBUG_ENABLED) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
 
