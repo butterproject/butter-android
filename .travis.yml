@@ -6,6 +6,7 @@ env:
 android:
   components:
     - tools
+    - android-25
     - extra-google-m2repository
     - extra-android-m2repository
     - extra-google-google_play_services
