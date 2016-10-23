@@ -26,8 +26,8 @@ import butter.droid.base.utils.PrefUtils;
 public class DefaultQuality {
 
     public static String get(Context context, List<String> availableQualities) {
-        String quality = "en - " + PrefUtils.get(context, Prefs.QUALITY_DEFAULT, "720p");
-        String[] fallbackOrder = new String[] {"en - 720p", "en - 480p", "en - 1080p"};
+        String quality = PrefUtils.get(context, Prefs.QUALITY_DEFAULT, "720p");
+        String[] fallbackOrder = new String[] {"720p", "480p", "1080p"};
 
         if(availableQualities.indexOf(quality) == -1) {
             for (String fallbackQuality : fallbackOrder) {
