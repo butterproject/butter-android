@@ -18,6 +18,7 @@ android:
     - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 before_install:
   - chmod +x gradlew
+  - cp -r config/ci/licenses $ANDROID_HOME/
   
 before_script:
   - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
