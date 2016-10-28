@@ -39,6 +39,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
+import butter.droid.base.utils.StringUtils;
 import timber.log.Timber;
 
 public class MoviesProvider extends MediaProvider {
@@ -47,21 +48,6 @@ public class MoviesProvider extends MediaProvider {
     private static final String[] API_URLS = BuildConfig.MOVIE_URLS;
     private static final MoviesProvider sMediaProvider = new MoviesProvider();
     private static final SubsProvider sSubsProvider = new YSubsProvider();
-
-//    @Override
-//    protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-//        Context context = ButterApplication.getAppContext();
-//        PackageInfo pInfo;
-//        String versionName = "0.0.0";
-//        try {
-//            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-//            versionName = pInfo.versionName;
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        request = request.newBuilder().removeHeader("User-Agent").addHeader("User-Agent", String.format("Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s", Build.VERSION.RELEASE, LocaleUtils.getCurrentAsString(), Build.MODEL, Build.DISPLAY, versionName)).build();
-//        return super.enqueue(request, requestCallback);
-//    }
 
     @Override
     public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
@@ -229,7 +215,6 @@ public class MoviesProvider extends MediaProvider {
         returnList.add(new Genre("action", R.string.genre_action));
         returnList.add(new Genre("adventure", R.string.genre_adventure));
         returnList.add(new Genre("animation", R.string.genre_animation));
-        // returnList.add(new Genre("biography", R.string.genre_biography));
         returnList.add(new Genre("comedy", R.string.genre_comedy));
         returnList.add(new Genre("crime", R.string.genre_crime));
         returnList.add(new Genre("disaster", R.string.genre_disaster));
@@ -245,7 +230,6 @@ public class MoviesProvider extends MediaProvider {
         returnList.add(new Genre("horror", R.string.genre_horror));
         returnList.add(new Genre("indie", R.string.genre_indie));
         returnList.add(new Genre("music", R.string.genre_music));
-        // returnList.add(new Genre("musical", R.string.genre_musical));
         returnList.add(new Genre("mystery", R.string.genre_mystery));
         returnList.add(new Genre("road", R.string.genre_road));
         returnList.add(new Genre("romance", R.string.genre_romance));
@@ -277,7 +261,21 @@ public class MoviesProvider extends MediaProvider {
 
                 movie.title = (String) item.get("title");
                 movie.year = (String) item.get("year");
-                movie.genre = ((ArrayList<String>) item.get("genres")).size() > 0 ? ((ArrayList<String>) item.get("genres")).get(0) : "Unknown";
+
+                List<String> genres = (ArrayList<String>) item.get("genres");
+
+                movie.genre = "";
+                if (genres.size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (String genre : genres) {
+                        if (stringBuilder.length() > 0) {
+                            stringBuilder.append(", ");
+                        }
+                        stringBuilder.append(StringUtils.capWords(genre));
+                    }
+                    movie.genre = stringBuilder.toString();
+                }
+
                 movie.rating = Double.toString(((LinkedTreeMap<String, Double>) item.get("rating")).get("percentage") / 10);
                 movie.trailer = (String) item.get("trailer");
                 movie.runtime = (String) item.get("runtime");
@@ -307,14 +305,6 @@ public class MoviesProvider extends MediaProvider {
                             torrent.seeds = ((Double) torrentObj.get("seed")).intValue();
                             torrent.peers = ((Double) torrentObj.get("peer")).intValue();
                             torrent.url = (String) torrentObj.get("url");
-
-//                            torrent.hash = (String) torrentObj.get("hash");
-//                            try {
-//                                torrent.url = "magnet:?xt=urn:btih:" + torrent.hash + "&amp;dn=" + URLEncoder.encode(item.get("title").toString(), "utf-8") + "&amp;tr=http://exodus.desync.com:6969/announce&amp;tr=udp://tracker.openbittorrent.com:80/announce&amp;tr=udp://open.demonii.com:1337/announce&amp;tr=udp://exodus.desync.com:6969/announce&amp;tr=udp://tracker.yify-torrents.com/announce";
-//                            } catch (UnsupportedEncodingException e) {
-//                                e.printStackTrace();
-//                                torrent.url = (String) torrentObj.get("url");
-//                            }
 
                             torrentMap.put(quality, torrent);
                         }

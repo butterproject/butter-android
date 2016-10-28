@@ -42,6 +42,7 @@ import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.OpenSubsProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.utils.StringUtils;
 import timber.log.Timber;
 
 public class TVProvider extends MediaProvider {
@@ -246,7 +247,6 @@ public class TVProvider extends MediaProvider {
         returnList.add(new Genre("action", R.string.genre_action));
         returnList.add(new Genre("adventure", R.string.genre_adventure));
         returnList.add(new Genre("animation", R.string.genre_animation));
-        // returnList.add(new Genre("biography", R.string.genre_biography));
         returnList.add(new Genre("comedy", R.string.genre_comedy));
         returnList.add(new Genre("crime", R.string.genre_crime));
         returnList.add(new Genre("disaster", R.string.genre_disaster));
@@ -262,7 +262,6 @@ public class TVProvider extends MediaProvider {
         returnList.add(new Genre("horror", R.string.genre_horror));
         returnList.add(new Genre("indie", R.string.genre_indie));
         returnList.add(new Genre("music", R.string.genre_music));
-        // returnList.add(new Genre("musical", R.string.genre_musical));
         returnList.add(new Genre("mystery", R.string.genre_mystery));
         returnList.add(new Genre("road", R.string.genre_road));
         returnList.add(new Genre("romance", R.string.genre_romance));
@@ -323,8 +322,21 @@ public class TVProvider extends MediaProvider {
                 show.runtime = (String) showData.get("runtime");
                 show.airDay = (String) showData.get("air_day");
                 show.airTime = (String) showData.get("air_time");
-                show.genre = ((ArrayList<String>) showData.get("genres")).get(0);
                 show.rating = Double.toString(((LinkedTreeMap<String, Double>) showData.get("rating")).get("percentage") / 10);
+
+                List<String> genres = (ArrayList<String>) showData.get("genres");
+
+                show.genre = "";
+                if (genres.size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (String genre : genres) {
+                        if (stringBuilder.length() > 0) {
+                            stringBuilder.append(", ");
+                        }
+                        stringBuilder.append(StringUtils.capWords(genre));
+                    }
+                    show.genre = stringBuilder.toString();
+                }
 
                 ArrayList<LinkedTreeMap<String, Object>> episodes = (ArrayList<LinkedTreeMap<String, Object>>) showData.get("episodes");
                 Set<String> episodeSet = new HashSet<>();

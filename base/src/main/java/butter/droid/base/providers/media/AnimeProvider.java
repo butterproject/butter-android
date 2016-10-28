@@ -99,9 +99,6 @@ public class AnimeProvider extends MediaProvider {
             case YEAR:
                 sort = "year";
                 break;
-//            case DATE:
-//                sort = "updated";
-//                break;
             case RATING:
                 sort = "rating";
                 break;
@@ -259,7 +256,6 @@ public class AnimeProvider extends MediaProvider {
         returnList.add(new Genre("Harem", R.string.genre_harem));
         returnList.add(new Genre("Historical", R.string.genre_history));
         returnList.add(new Genre("Horror", R.string.genre_horror));
-        // returnList.add(new Genre("Josei", R.string.genre_josei));
         returnList.add(new Genre("Kids", R.string.genre_kids));
         returnList.add(new Genre("Magic", R.string.genre_magic));
         returnList.add(new Genre("Mahou Shoujo", R.string.mahou_shoujo));
@@ -276,10 +272,7 @@ public class AnimeProvider extends MediaProvider {
         returnList.add(new Genre("Samurai", R.string.genre_samurai));
         returnList.add(new Genre("School", R.string.genre_school));
         returnList.add(new Genre("Sci-Fi", R.string.genre_sci_fi));
-        // returnList.add(new Genre("Seinen", R.string.genre_seinen));
-        // returnList.add(new Genre("Shoujo", R.string.genre_shoujo));
         returnList.add(new Genre("Shoujo Ai", R.string.genre_shoujo_ai));
-        // returnList.add(new Genre("Shounen", R.string.genre_shounen));
         returnList.add(new Genre("Shounen Ai", R.string.genre_shounen_ai));
         returnList.add(new Genre("Slice of Life", R.string.genre_slice_of_life));
         returnList.add(new Genre("Space", R.string.genre_space));

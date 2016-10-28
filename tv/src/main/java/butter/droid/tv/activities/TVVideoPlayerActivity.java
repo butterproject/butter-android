@@ -80,11 +80,14 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+        ButterKnife.bind(this);
+
         createStreamInfo();
 
         mPlayerFragment = (TVVideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         mPlaybackOverlayFragment = (TVPlaybackOverlayFragment) getSupportFragmentManager().findFragmentById(R.id.playback_overlay_fragment);
-        ButterKnife.bind(this);
+
+        mPlayerFragment.onMediaReady();
     }
 
     @Override

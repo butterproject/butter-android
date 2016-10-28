@@ -258,7 +258,7 @@ public abstract class BaseVideoPlayerFragment
         }
     }
 
-    public void onMediaReady(){
+    public void onMediaReady() {
         if(!mMediaReady) {
             mMediaReady = true;
         }
