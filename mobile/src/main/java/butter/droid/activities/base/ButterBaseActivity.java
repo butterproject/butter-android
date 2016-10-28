@@ -34,12 +34,13 @@ import butter.droid.base.updater.ButterUpdater;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.VersionUtils;
+import butter.droid.base.vpn.VPNManager;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 
-public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
+public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener, VPNManager.Listener {
 
     protected Boolean mShowCasting = false;
-
+    protected VPNManager mVPNManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
@@ -76,7 +77,12 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
         super.onPause();
         BeamManager.getInstance(this).removeListener(this);
     }
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mVPNManager != null)
+            mVPNManager.stop();
+    }
     protected void onHomePressed() {
         Intent upIntent = NavUtils.getParentActivityIntent(this);
         if (upIntent != null && NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -127,6 +133,17 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     public void setShowCasting(boolean b) {
         mShowCasting = b;
+    }
+
+    @Override
+    public void onVPNServiceReady() {
+
+    }
+
+    @Override
+    public void onVPNStatusUpdate(VPNManager.State state, String message) {
+
+
     }
 
 }

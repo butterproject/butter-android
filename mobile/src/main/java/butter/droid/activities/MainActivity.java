@@ -71,6 +71,8 @@ import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
+import butter.droid.base.vpn.VPNManager;
+
 import timber.log.Timber;
 
 /**
@@ -98,6 +100,7 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
         if (!PrefUtils.contains(this, TermsActivity.TERMS_ACCEPTED)) {
             startActivity(new Intent(this, TermsActivity.class));
         }
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
@@ -140,6 +143,11 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mVPNManager = VPNManager.start(this);
+    }
+    @Override
     protected void onResume() {
         super.onResume();
         String title = mNavigationDrawerFragment.getCurrentItem().getTitle();
@@ -155,6 +163,31 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
             BeamServerService.getServer().stop();
         BeamPlayerNotificationService.cancelNotification();
     }
+
+    @Override
+    public void onVPNServiceReady() {
+        super.onVPNServiceReady();
+        mNavigationDrawerFragment.initItems();
+    }
+
+    @Override
+        public void onVPNStatusUpdate(VPNManager.State state, String message) {
+        super.onVPNStatusUpdate(state, message);
+        Timber.d("New state: %s", state);
+        NavigationDrawerFragment.NavDrawerItem vpnItem = mNavigationDrawerFragment.getVPNItem();
+        if(vpnItem != null) {
+            if (state.equals(VPNManager.State.DISCONNECTED)) {
+                vpnItem.setSwitchValue(false);
+                vpnItem.showProgress(false);
+            } else if(state.equals(VPNManager.State.CONNECTING)) {
+                vpnItem.showProgress(true);
+            } else if(state.equals(VPNManager.State.CONNECTED)) {
+                vpnItem.setSwitchValue(true);
+                vpnItem.showProgress(false);
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
