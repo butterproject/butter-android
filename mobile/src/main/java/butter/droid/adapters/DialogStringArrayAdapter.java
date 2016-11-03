@@ -32,7 +32,7 @@ public class DialogStringArrayAdapter extends BaseAdapter {
     private String[] mData;
     private LayoutInflater mInflater;
 
-    class ViewHolder {
+    static class ViewHolder {
         public ViewHolder(View v) {
             ButterKnife.bind(this, v);
         }
@@ -42,7 +42,7 @@ public class DialogStringArrayAdapter extends BaseAdapter {
     }
 
     public DialogStringArrayAdapter(Context context, String[] data) {
-        mData = data;
+        mData = data.clone();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

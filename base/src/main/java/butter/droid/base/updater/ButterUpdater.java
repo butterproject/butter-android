@@ -62,13 +62,13 @@ public class ButterUpdater extends Observable {
     private static ButterUpdater sThis;
 
     public static int NOTIFICATION_ID = 0x808C049;
-    public final String STATUS_NO_UPDATE = "no_updates";
-    public final String STATUS_GOT_UPDATE = "got_update";
+    public static final String STATUS_NO_UPDATE = "no_updates";
+    public static final String STATUS_GOT_UPDATE = "got_update";
 
-    private final long MINUTES = 60 * 1000;
-    private final long HOURS = 60 * MINUTES;
-    private final long DAYS = 24 * HOURS;
-    private final long WAKEUP_INTERVAL = 15 * MINUTES;
+    private static final long MINUTES = 60 * 1000;
+    private static final long HOURS = 60 * MINUTES;
+    private static final long DAYS = 24 * HOURS;
+    private static final long WAKEUP_INTERVAL = 15 * MINUTES;
     private long UPDATE_INTERVAL = 3 * HOURS;
 
     public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
@@ -322,9 +322,9 @@ public class ButterUpdater extends Observable {
         final int BUFFER_SIZE = 8192;
         byte[] buf = new byte[BUFFER_SIZE];
         int length;
+        BufferedInputStream bis = null;
         try {
-            FileInputStream fis = new FileInputStream(filename);
-            BufferedInputStream bis = new BufferedInputStream(fis);
+            bis = new BufferedInputStream(new FileInputStream(filename));
             MessageDigest md = MessageDigest.getInstance("SHA1");
             while ((length = bis.read(buf)) != -1) {
                 md.update(buf, 0, length);
@@ -338,6 +338,12 @@ public class ButterUpdater extends Observable {
             return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (bis != null) try {
+                bis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return "sha1bad";
