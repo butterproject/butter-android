@@ -324,7 +324,7 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
                     media.subtitles = new HashMap<>();
                     media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
-                    providerManager.getSubsProvider().download(media, "en", new Callback() {
+                    providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
                             BeamManager bm = BeamManager.getInstance(MainActivity.this);

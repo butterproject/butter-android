@@ -389,7 +389,7 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 media.subtitles = new HashMap<>();
                 media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
-                providerManager.getSubsProvider().download(media, "en", new Callback() {
+                providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
                         TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));

@@ -162,8 +162,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mSubtitles.setText(R.string.loading_subs);
             mSubtitles.setClickable(false);
 
-            if (providerManager.hasSubsProvider()) {
-                providerManager.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
+            if (providerManager.hasCurrentSubsProvider()) {
+                providerManager.getCurrentSubsProvider().getList(sMovie, new SubsProvider.Callback() {
                     @Override
                     public void onSuccess(Map<String, String> subtitles) {
                         if (!mAttached) return;

@@ -46,17 +46,14 @@ public class ProviderManager {
 
     @Nullable private final MediaProvider movieProvider;
     @Nullable private final MediaProvider showProvider;
-    @Nullable private final SubsProvider subsProvider;
 
     @ProviderType private int currentProviderType;
 
     private final List<OnProviderChangeListener> listeners = new ArrayList<>();
 
-    public ProviderManager(@Nullable MediaProvider movieProvider, @Nullable MediaProvider showProvider,
-            @Nullable SubsProvider subsProvider) {
+    public ProviderManager(@Nullable MediaProvider movieProvider, @Nullable MediaProvider showProvider) {
         this.movieProvider = movieProvider;
         this.showProvider = showProvider;
-        this.subsProvider = subsProvider;
 
         if (movieProvider != null) {
             currentProviderType = PROVIDER_TYPE_MOVIE;
@@ -74,14 +71,6 @@ public class ProviderManager {
     @SuppressWarnings("ConstantConditions")
     @NonNull public MediaProvider getCurrentMediaProvider() {
         return getMediaProvider(getCurrentMediaProviderType());
-    }
-
-    public SubsProvider getSubsProvider() {
-        return subsProvider;
-    }
-
-    public boolean hasSubsProvider() {
-        return subsProvider != null;
     }
 
     @MainThread public void setCurrentProviderType(@ProviderType int providerType) {
@@ -122,6 +111,14 @@ public class ProviderManager {
         if (listener != null && listeners.size() > 0) {
             listeners.remove(listener);
         }
+    }
+
+    public SubsProvider getCurrentSubsProvider() {
+        return getCurrentMediaProvider().getSubsProvider();
+    }
+
+    public boolean hasCurrentSubsProvider() {
+        return getCurrentMediaProvider().hasSubsProvider();
     }
 
     public interface OnProviderChangeListener {

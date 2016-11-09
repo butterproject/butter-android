@@ -605,8 +605,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         if (mMedia == null) throw new NullPointerException("Media is not available");
         if (mCurrentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) return;
 
-        SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getSubsProvider(), getActivity(),
-                mCallback.getInfo(), mCurrentSubsLang);
+        SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
+                getActivity(), mCallback.getInfo(), mCurrentSubsLang);
         subtitleDownloader.setSubtitleDownloaderListener(this);
 
         try {

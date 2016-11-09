@@ -319,7 +319,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         Media media = mStreamInfo.getMedia();
         if (media == null) return;
 
-        SubsProvider subsProvider = providerManager.getSubsProvider();
+        SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
         if (subsProvider == null) return;
 
         if (mStreamInfo.isShow()) {
@@ -352,7 +352,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
             mSubsStatus = SubsStatus.DOWNLOADING;
             mHasSubs = true;
-            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getSubsProvider(),
+            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
                     getActivity(), mStreamInfo, mSubtitleLanguage);
             subtitleDownloader.setSubtitleDownloaderListener(this);
             subtitleDownloader.downloadSubtitle();

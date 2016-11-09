@@ -191,7 +191,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         if (null != mMetaProvider) mMetaProvider.cancel();
-        if (providerManager.hasSubsProvider()) providerManager.getSubsProvider().cancel();
+        if (providerManager.hasCurrentSubsProvider()) providerManager.getCurrentSubsProvider().cancel();
     }
 
     @Override
@@ -270,8 +270,8 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mSubtitles.setText(R.string.loading_subs);
         mSubtitles.setClickable(false);
-        if (providerManager.hasSubsProvider()) {
-            providerManager.getSubsProvider().getList(mEpisode, new SubsProvider.Callback() {
+        if (providerManager.hasCurrentSubsProvider()) {
+            providerManager.getCurrentSubsProvider().getList(mEpisode, new SubsProvider.Callback() {
                 @Override
                 public void onSuccess(Map<String, String> subtitles) {
                     if (!FragmentUtil.isAdded(EpisodeDialogFragment.this)) return;

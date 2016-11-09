@@ -36,15 +36,16 @@ public class ManagerModule {
 
     @Provides @Singleton public ProviderManager provideProviderManager(VodoProvider moviesProvider,
             SubsProvider subsProvider) {
-        return new ProviderManager(moviesProvider, null, subsProvider);
+        return new ProviderManager(moviesProvider, null);
     }
 
     @Provides @Singleton public SubsProvider provideSubsProvider(Context context, OkHttpClient client, Gson gson) {
         return new YSubsProvider(context, client, gson);
     }
 
-    @Provides @Singleton public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson) {
-        return new VodoProvider(client, gson);
+    @Provides @Singleton public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson,
+            SubsProvider subsProvider) {
+        return new VodoProvider(client, gson, subsProvider);
     }
 
 }

@@ -30,6 +30,7 @@ import java.util.List;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.providers.subs.SubsProvider;
 
 /**
  * MediaProvider.java
@@ -40,8 +41,11 @@ public abstract class MediaProvider extends BaseProvider {
 
     public static final String MEDIA_CALL = "media_http_call";
 
-    public MediaProvider(OkHttpClient client, Gson gson) {
+    @Nullable private final SubsProvider subsProvider;
+
+    public MediaProvider(OkHttpClient client, Gson gson, @Nullable SubsProvider subsProvider) {
         super(client, gson);
+        this.subsProvider = subsProvider;
     }
 
     /**
@@ -76,6 +80,14 @@ public abstract class MediaProvider extends BaseProvider {
 
     public List<Genre> getGenres() {
         return new ArrayList<>();
+    }
+
+    public SubsProvider getSubsProvider() {
+        return subsProvider;
+    }
+
+    public boolean hasSubsProvider() {
+        return subsProvider != null;
     }
 
     public interface Callback {

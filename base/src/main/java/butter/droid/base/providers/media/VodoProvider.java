@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -41,6 +42,7 @@ import butter.droid.base.R;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
+import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
 
@@ -54,8 +56,8 @@ public class VodoProvider extends MediaProvider {
 
     private static Filters sFilters = new Filters();
 
-    public VodoProvider(OkHttpClient client, Gson gson) {
-        super(client, gson);
+    public VodoProvider(OkHttpClient client, Gson gson, @Nullable SubsProvider subsProvider) {
+        super(client, gson, subsProvider);
     }
 
     @Override
