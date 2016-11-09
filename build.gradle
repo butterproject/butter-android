@@ -68,9 +68,7 @@ def renameOutputFiles(Project project, variant) {
         def abi = output.getFilter(com.android.build.OutputFile.ABI);
         output.versionCodeOverride = project.ext.versionCodes.get(abi, 0) * 10000000 + output.versionCode
 
-        def alignedOutputFile = output.outputFile
-        def unalignedOutputFile = output.packageApplication.outputFile
-        def outputFileName = alignedOutputFile.name
+        def outputFileName = output.outputFile.name
 
         // Customise APK filenames
         if (outputFileName.contains("debug")) {
@@ -79,11 +77,7 @@ def renameOutputFiles(Project project, variant) {
             outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
         }
 
-        if (variant.buildType.zipAlignEnabled) {
-            // normal APK
-            output.outputFile = new File(alignedOutputFile.parent, outputFileName)
-        }
-        // 'unaligned' APK
-        output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
+        // normal APK (already aligned)
+        output.outputFile = new File(output.outputFile.parent, outputFileName)
     }
 }
