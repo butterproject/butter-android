@@ -18,7 +18,6 @@ apply plugin: 'org.moallemi.advanced-build-version'
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
 apply plugin: 'com.github.ben-manes.versions'
-apply plugin: 'com.neenbedankt.android-apt'
 
 
 repositories {
@@ -99,8 +98,8 @@ dependencies {
 
     compile project(':base')
 
-    apt "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
-    apt "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }

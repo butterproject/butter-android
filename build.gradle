@@ -12,14 +12,13 @@ buildscript {
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
         classpath 'org.moallemi.gradle.advanced-build-version:gradle-plugin:1.5.3'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 ext {
-    appCompatVersion = "24.0.0"
+    appCompatVersion = "25.0.0"
     buildToolsVersion = "25.0.0"
     targetSdk = 25
     compileSdk = 25
@@ -60,8 +59,7 @@ allprojects {
                 }
 
                 dexOptions {
-                    jumboMode = true
-                    javaMaxHeapSize "2048M"
+//                    javaMaxHeapSize "2048M"
                 }
             }
         }
