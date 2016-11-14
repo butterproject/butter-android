@@ -62,10 +62,6 @@ android {
         exclude 'META-INF/DEPENDENCIES.txt'
     }
 
-    dexOptions {
-        
-    }
-
     splits {
         abi {
             enable true
