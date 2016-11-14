@@ -27,5 +27,5 @@ script:
 #  - adb devices
 #  - adb shell input keyevent 82 &
 #  - ./gradlew connectedCheck -PdisablePreDex --stacktrace
-  - ./gradlew :mobile:connectedCheck -PdisablePreDex --debug --stacktrace
+  - ./gradlew :mobile:connectedCheck -PdisablePreDex --stacktrace
 
