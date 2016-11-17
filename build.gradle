@@ -58,9 +58,9 @@ allprojects {
                     renameOutputFiles(project, variant)
                 }
 
-                dexOptions {
-                    javaMaxHeapSize "2560M"
-                }
+//                dexOptions {
+//                    javaMaxHeapSize "2560M"
+//                }
             }
         }
     }
