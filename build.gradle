@@ -58,9 +58,13 @@ allprojects {
                     renameOutputFiles(project, variant)
                 }
 
-//                dexOptions {
-//                    javaMaxHeapSize "2560M"
-//                }
+                adbOptions {
+                    timeOutInMs 10 * 60 * 1000  // 10 minutes
+                }
+
+                dexOptions {
+                    javaMaxHeapSize "2560M"
+                }
             }
         }
     }
