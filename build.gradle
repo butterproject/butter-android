@@ -63,7 +63,7 @@ allprojects {
                 }
 
                 dexOptions {
-                    javaMaxHeapSize "2560M"
+                    javaMaxHeapSize "4g"
                 }
             }
         }
