@@ -12,10 +12,6 @@ android:
     - tools
     - android-22
     - android-25
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - extra-google-google_play_services
-    - extra-android-support
     - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 before_install:
   - chmod +x gradlew
