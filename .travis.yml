@@ -10,6 +10,7 @@ env:
 android:
   components:
     - tools
+    - tools
     - android-22
     - android-25
     - sys-img-$ANDROID_ABI-$ANDROID_TARGET
