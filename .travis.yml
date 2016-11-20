@@ -1,5 +1,5 @@
 language: android
-sudo: false
+sudo: required
 jdk: oraclejdk8
 env:
   matrix:
@@ -12,7 +12,7 @@ android:
     - tools
     - tools
     - android-22
-    - android-
+    - android-25
     - extra-google-m2repository
     - extra-android-m2repository
     - extra-google-google_play_services
