@@ -26,11 +26,13 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.updater.ButterUpdater;
+import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.VersionUtils;
@@ -38,8 +40,9 @@ import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 
 public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
 
-    protected Boolean mShowCasting = false;
+    @Inject ButterUpdateManager updateManager;
 
+    protected Boolean mShowCasting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
@@ -51,15 +54,16 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
                     .setCancelable(false)
                     .show();
 
-            ButterUpdater.getInstance(this, new ButterUpdater.Listener() {
+            updateManager.setListener(new ButterUpdateManager.Listener() {
                 @Override
                 public void updateAvailable(String updateFile) {
                     Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdater.ANDROID_PACKAGE);
+                    installIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
                     installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(installIntent);
                 }
-            }).checkUpdatesManually();
+            });
+            updateManager.checkUpdatesManually();
         }
     }
 

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.youtube;
+package butter.droid.base.manager.youtube.model;
 
 import java.util.HashMap;
 import java.util.Map;

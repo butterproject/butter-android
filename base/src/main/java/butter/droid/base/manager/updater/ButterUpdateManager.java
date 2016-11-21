@@ -15,7 +15,24 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.updater;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.base.manager.updater;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -47,19 +64,21 @@ import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import okio.BufferedSink;
-import okio.Okio;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
-import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.updater.model.UpdaterData;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.VersionUtils;
+import okio.BufferedSink;
+import okio.Okio;
 
-public class ButterUpdater extends Observable {
-
-    private static ButterUpdater sThis;
+@Singleton
+public class ButterUpdateManager extends Observable {
 
     public static int NOTIFICATION_ID = 0x808C049;
     public final String STATUS_NO_UPDATE = "no_updates";
@@ -81,8 +100,8 @@ public class ButterUpdater extends Observable {
     private static final String SHA1_TIME = "sha1_update_time";
     private static final String SHA1_KEY = "sha1_update";
 
-    private final OkHttpClient mHttpClient = ButterApplication.getHttpClient();
-    private final Gson mGson = new Gson();
+    private final OkHttpClient mHttpClient;
+    private final Gson mGson;
     private final Handler mUpdateHandler = new Handler();
 
     private Context mContext = null;
@@ -95,7 +114,7 @@ public class ButterUpdater extends Observable {
 
     private Listener mListener;
 
-    private ButterUpdater(Context context) {
+    @Inject public ButterUpdateManager(Context context, OkHttpClient okHttpClient, Gson gson) {
         if (Constants.DEBUG_ENABLED) {
             UPDATE_INTERVAL = 3 * HOURS;
         } else {
@@ -103,6 +122,8 @@ public class ButterUpdater extends Observable {
         }
 
         mContext = context;
+        mHttpClient = okHttpClient;
+        mGson = gson;
         mPackageName = context.getPackageName();
 
         try {
@@ -130,20 +151,6 @@ public class ButterUpdater extends Observable {
         }
 
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    }
-
-    public static ButterUpdater getInstance(Context context) {
-        if (sThis == null) {
-            sThis = new ButterUpdater(context);
-        }
-        sThis.mContext = context;
-        return sThis;
-    }
-
-    public static ButterUpdater getInstance(Context context, Listener listener) {
-        ButterUpdater instance = getInstance(context);
-        instance.setListener(listener);
-        return instance;
     }
 
     public void setListener(Listener  listener) {

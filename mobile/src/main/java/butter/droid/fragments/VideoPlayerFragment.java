@@ -57,6 +57,7 @@ import android.widget.TextView;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 
+import butter.droid.MobileButterApplication;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,32 +77,19 @@ import butter.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.progress_indicator)
-    ProgressBar mProgressIndicator;
-    @BindView(R.id.video_surface)
-    SurfaceView videoSurface;
-    @BindView(R.id.subtitle_text)
-    StrokedRobotoTextView mSubtitleText;
-    @BindView(R.id.control_layout)
-    RelativeLayout mControlLayout;
-    @BindView(R.id.player_info)
-    TextView mPlayerInfo;
-    @BindView(R.id.control_bar)
-    butter.droid.widget.SeekBar mControlBar;
-    @BindView(R.id.play_button)
-    ImageButton mPlayButton;
-    @BindView(R.id.forward_button)
-    ImageButton mForwardButton;
-    @BindView(R.id.rewind_button)
-    ImageButton mRewindButton;
-    @BindView(R.id.subs_button)
-    ImageButton mSubsButton;
-    @BindView(R.id.current_time)
-    TextView mCurrentTimeTextView;
-    @BindView(R.id.length_time)
-    TextView lengthTime;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
+    @BindView(R.id.video_surface) SurfaceView videoSurface;
+    @BindView(R.id.subtitle_text) StrokedRobotoTextView mSubtitleText;
+    @BindView(R.id.control_layout) RelativeLayout mControlLayout;
+    @BindView(R.id.player_info) TextView mPlayerInfo;
+    @BindView(R.id.control_bar) butter.droid.widget.SeekBar mControlBar;
+    @BindView(R.id.play_button) ImageButton mPlayButton;
+    @BindView(R.id.forward_button) ImageButton mForwardButton;
+    @BindView(R.id.rewind_button) ImageButton mRewindButton;
+    @BindView(R.id.subs_button) ImageButton mSubsButton;
+    @BindView(R.id.current_time) TextView mCurrentTimeTextView;
+    @BindView(R.id.length_time) TextView lengthTime;
     View mDecorView;
 
     private AudioManager mAudioManager;
@@ -133,6 +121,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         mShowReload = true;
     }
 

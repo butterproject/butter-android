@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
-import butter.droid.base.updater.ButterUpdater;
+import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StorageUtils;
@@ -46,15 +46,17 @@ public interface PreferencesHandler {
 
     class ItemsGenerator {
 
-        public static List<PrefItem> generate(final PreferencesHandler handler, boolean isTV) {
+        public static List<PrefItem> generate(final PreferencesHandler handler, ButterUpdateManager updateManager,
+                boolean isTV) {
             if(!(handler instanceof Context)) {
                 return new ArrayList<>();
             }
 
-            return generate((Context) handler, handler, isTV);
+            return generate((Context) handler, handler, updateManager, isTV);
         }
 
-        public static List<PrefItem> generate(final Context context, final PreferencesHandler handler, boolean isTV) {
+        public static List<PrefItem> generate(final Context context, final PreferencesHandler handler,
+                final ButterUpdateManager updateManager, boolean isTV) {
             List<PrefItem> prefItems = new ArrayList<>();
 
             prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.general).build());
@@ -68,12 +70,13 @@ public interface PreferencesHandler {
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_default_view)
                     .setTitleResource(R.string.default_view)
-                    .setPreferenceKey(Prefs.DEFAULT_VIEW)
-                    .setDefaultValue(0)
+                    .setPreferenceKey(Prefs.DEFAULT_PROVIDER)
+                    .setDefaultValue(ProviderManager.PROVIDER_TYPE_MOVIE)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.SIMPLE_CHOICE, (int) item.getValue(), 0, 0, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.SIMPLE_CHOICE,
+                                    item.getValue(), 0, 0, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(position);
@@ -704,18 +707,18 @@ public interface PreferencesHandler {
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_check_update)
                     .setTitleResource(R.string.check_for_updates)
-                    .setPreferenceKey(ButterUpdater.LAST_UPDATE_CHECK)
+                    .setPreferenceKey(ButterUpdateManager.LAST_UPDATE_CHECK)
                     .setDefaultValue(1)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            ButterUpdater.getInstance(context).checkUpdatesManually();
+                            updateManager.checkUpdatesManually();
                         }
                     })
                     .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
                         @Override
                         public String get(PrefItem item) {
-                            long timeStamp = Long.parseLong(PrefUtils.get(context, ButterUpdater.LAST_UPDATE_CHECK, "0"));
+                            long timeStamp = Long.parseLong(PrefUtils.get(context, ButterUpdateManager.LAST_UPDATE_CHECK, "0"));
                             Calendar cal = Calendar.getInstance(Locale.getDefault());
                             cal.setTimeInMillis(timeStamp);
                             String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM, Locale.getDefault()).format(timeStamp);

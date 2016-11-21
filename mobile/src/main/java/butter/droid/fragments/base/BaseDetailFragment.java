@@ -21,7 +21,7 @@ public abstract class BaseDetailFragment extends Fragment {
     }
 
     public interface FragmentListener {
-        public void playStream(StreamInfo streamInfo);
+        void playStream(StreamInfo streamInfo);
     }
 
 }

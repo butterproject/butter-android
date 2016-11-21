@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -33,6 +32,7 @@ android {
     packagingOptions {
         exclude 'META-INF/beans.xml'
         exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
     }
 
     lintOptions {
@@ -67,9 +67,13 @@ dependencies {
     compile 'com.github.sv244:torrentstream-android:1.1.1'
 
     compile 'de.timroes:aXMLRPC:1.8.1'
+    compile "com.google.dagger:dagger:${rootProject.ext.daggerVersion}"
 
     compile project(':vlc')
     compile project(':connectsdk')
 
-    apt "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
+
+    provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }

@@ -35,12 +35,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 
-import butter.droid.base.ButterApplication;
+import javax.inject.Inject;
+
+import butter.droid.tv.TVButterApplication;
 
 public class RecommendationContentProvider extends ContentProvider {
 
 	public static String AUTHORITY = "pct.droid.tv.RecommendationContentProvider";
 	public static String CONTENT_URI = "content://" + AUTHORITY + "/";
+
+	@Inject OkHttpClient client;
+
+	private boolean initialized;
 
 	@Override
 	public boolean onCreate() {
@@ -59,8 +65,7 @@ public class RecommendationContentProvider extends ContentProvider {
 					"UTF-8");
 			pipe = ParcelFileDescriptor.createPipe();
 
-			OkHttpClient httpClient = ButterApplication.getHttpClient();
-			OkUrlFactory factory = new OkUrlFactory(httpClient);
+			OkUrlFactory factory = new OkUrlFactory(getOkHttpClient());
 			HttpURLConnection connection = factory.open(new URL(decodedUrl));
 
 			new TransferThread(connection.getInputStream(),
@@ -128,6 +133,19 @@ public class RecommendationContentProvider extends ContentProvider {
 				Log.e(getClass().getSimpleName(),
 						"Exception transferring file", e);
 			}
+		}
+	}
+
+	private OkHttpClient getOkHttpClient() {
+		init();
+		return client;
+	}
+
+	private void init() {
+		if (!initialized) {
+			TVButterApplication.getAppContext()
+					.getComponent()
+					.inject(this);
 		}
 	}
 

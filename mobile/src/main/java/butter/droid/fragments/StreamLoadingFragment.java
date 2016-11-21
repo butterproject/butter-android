@@ -39,7 +39,10 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
+
+import butter.droid.MobileButterApplication;
 import butterknife.BindView;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
@@ -62,18 +65,21 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     private Torrent mCurrentTorrent;
 
     View mRoot;
-    @BindView(R.id.progress_indicator)
-    ProgressBar mProgressIndicator;
-    @BindView(R.id.primary_textview)
-    TextView mPrimaryTextView;
-    @BindView(R.id.secondary_textview)
-    TextView mSecondaryTextView;
-    @BindView(R.id.tertiary_textview)
-    TextView mTertiaryTextView;
-    @BindView(R.id.background_imageview)
-    ImageView mBackgroundImageView;
-    @BindView(R.id.startexternal_button)
-    Button mStartExternalButton;
+
+    @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
+    @BindView(R.id.primary_textview) TextView mPrimaryTextView;
+    @BindView(R.id.secondary_textview) TextView mSecondaryTextView;
+    @BindView(R.id.tertiary_textview) TextView mTertiaryTextView;
+    @BindView(R.id.background_imageview) ImageView mBackgroundImageView;
+    @BindView(R.id.startexternal_button) Button mStartExternalButton;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override

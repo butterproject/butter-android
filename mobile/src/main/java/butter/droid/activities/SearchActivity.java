@@ -17,6 +17,7 @@
 
 package butter.droid.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import butter.droid.MobileButterApplication;
 import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
@@ -39,33 +41,30 @@ import butter.droid.utils.ToolbarUtils;
  */
 public class SearchActivity extends ButterBaseActivity {
 
-    public static final String EXTRA_PROVIDER = "extra_provider";
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.searchview)
-    SearchView mSearchview;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.searchview) SearchView mSearchview;
 
     private MediaListFragment mFragment;
 
-    public static Intent startActivity(Activity activity, MediaProvider provider) {
+    public static Intent startActivity(Activity activity) {
         Intent intent = new Intent(activity, SearchActivity.class);
-        intent.putExtra(EXTRA_PROVIDER, provider);
         activity.startActivity(intent);
 //		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out,);
         return intent;
     }
 
-    @Override
+    @SuppressLint("MissingSuperCall") @Override
     public void onCreate(Bundle savedInstanceState) {
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setShowCasting(true);
 
         ToolbarUtils.updateToolbarHeight(this, toolbar);
-        MediaProvider provider = getIntent().getExtras().getParcelable(EXTRA_PROVIDER);
 
         mSearchview.onActionViewExpanded();
         mSearchview.setOnQueryTextListener(mSearchListener);
@@ -77,8 +76,8 @@ public class SearchActivity extends ButterBaseActivity {
         }
 
         //create and add the media fragment
-        mFragment =
-                MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, provider, MediaProvider.Filters.Sort.POPULARITY, MediaProvider.Filters.Order.DESC);
+        mFragment = MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, MediaProvider.Filters.Sort.POPULARITY,
+                MediaProvider.Filters.Order.DESC);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
     }

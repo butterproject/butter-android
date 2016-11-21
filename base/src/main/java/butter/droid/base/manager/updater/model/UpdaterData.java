@@ -15,11 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.updater;
+package butter.droid.base.manager.updater.model;
 
 import java.util.Map;
 
 public class UpdaterData {
+
     public Map<String, Map<String, Arch>> mobile;
     public Map<String, Map<String, Arch>> tv;
 

@@ -17,13 +17,27 @@
 
 package butter.droid.tv;
 
+import android.content.Context;
+
+import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.utils.VersionUtils;
 
 public class TVButterApplication extends ButterApplication {
 
+    private ApplicationComponent component;
+
+    @Override protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+    }
+
     @Override
     public void onCreate() {
+        component = DaggerApplicationComponent.builder()
+                .baseApplicationModule(new BaseApplicationModule(this))
+                .build();
+        component.inject(this);
+
         super.onCreate();
     }
 
@@ -33,4 +47,13 @@ public class TVButterApplication extends ButterApplication {
             super.updateAvailable(filePath);
         }
     }
+
+    public ApplicationComponent getComponent() {
+        return component;
+    }
+
+    public static TVButterApplication getAppContext() {
+        return (TVButterApplication) ButterApplication.getAppContext();
+    }
+
 }

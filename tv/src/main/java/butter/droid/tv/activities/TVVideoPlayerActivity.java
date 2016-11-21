@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import butter.droid.tv.TVButterApplication;
 import butterknife.ButterKnife;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Show;
@@ -79,6 +80,10 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
     @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
         createStreamInfo();
 

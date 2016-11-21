@@ -28,12 +28,14 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 
 import java.util.Map;
 
-import hugo.weaving.DebugLog;
+import javax.inject.Inject;
+
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.beaming.server.BeamServer;
 import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -44,6 +46,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
+import hugo.weaving.DebugLog;
 
 
 /**
@@ -65,13 +68,12 @@ import butter.droid.base.utils.ThreadUtils;
  * <p/>
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
-public abstract class BaseStreamLoadingFragment extends Fragment
-        implements TorrentListener,
-        SubtitleDownloader.ISubtitleDownloaderListener,
-        SubsProvider.Callback {
+public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentListener,
+        SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback {
+
+    @Inject ProviderManager providerManager;
 
     protected FragmentListener mCallback;
-    private SubsProvider mSubsProvider;
     protected boolean mPlayingExternal = false;
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
@@ -317,14 +319,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment
         Media media = mStreamInfo.getMedia();
         if (media == null) return;
 
-        mSubsProvider = media.getSubsProvider();
-        if (mSubsProvider == null) return;
+        SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
+        if (subsProvider == null) return;
 
         if (mStreamInfo.isShow()) {
-            mSubsProvider.getList((Episode) media, this);
-        }
-        else {
-            mSubsProvider.getList((Movie) media, this);
+            subsProvider.getList((Episode) media, this);
+        } else {
+            subsProvider.getList((Movie) media, this);
         }
     }
 
@@ -351,7 +352,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment
             mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
             mSubsStatus = SubsStatus.DOWNLOADING;
             mHasSubs = true;
-            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(getActivity(), mStreamInfo, mSubtitleLanguage);
+            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
+                    getActivity(), mStreamInfo, mSubtitleLanguage);
             subtitleDownloader.setSubtitleDownloaderListener(this);
             subtitleDownloader.downloadSubtitle();
         }

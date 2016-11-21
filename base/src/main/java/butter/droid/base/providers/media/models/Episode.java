@@ -23,9 +23,8 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
-import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.meta.MetaProvider;
-import butter.droid.base.providers.subs.SubsProvider;
 
 public class Episode extends Media implements Parcelable {
     public String showName;
@@ -39,8 +38,8 @@ public class Episode extends Media implements Parcelable {
 
     protected MetaProvider mMetaProvider;
 
-    public Episode(MediaProvider mediaProvider, SubsProvider subsProvider, MetaProvider metaProvider) {
-        super(mediaProvider, subsProvider);
+    public Episode(MetaProvider metaProvider) {
+        super();
         mMetaProvider = metaProvider;
     }
 
@@ -74,6 +73,10 @@ public class Episode extends Media implements Parcelable {
             Torrent torrent = in.readParcelable(Torrent.class.getClassLoader());
             torrents.put(key, torrent);
         }
+    }
+
+    @Override public int getProviderType() {
+        return ProviderManager.PROVIDER_TYPE_SHOW;
     }
 
     @Override

@@ -28,17 +28,20 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
-import butter.droid.base.youtube.YouTubeData;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
@@ -46,7 +49,8 @@ import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
-	VodoProvider mMovieProvider = new VodoProvider();
+	@Inject ProviderManager providerManager;
+	@Inject YouTubeManager youTubeManager;
 
 	public static Fragment newInstance(Media media) {
 		TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
@@ -62,12 +66,20 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 		return (Movie) getMediaItem();
 	}
 
+	@Override public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		TVButterApplication.getAppContext()
+				.getComponent()
+				.inject(this);
+	}
+
 	@Override
 	void loadDetails() {
 		ArrayList<Media> mediaList = new ArrayList<>();
 		mediaList.add(getMovieItem());
 
-		mMovieProvider.getDetail(mediaList, 0, this);
+		providerManager.getCurrentMediaProvider().getDetail(mediaList, 0, this);
 	}
 
 	@Override
@@ -85,9 +97,12 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 		if (item instanceof Movie) {
 			Movie movie = (Movie) item;
 
-			List<String> qualities = new ArrayList(movie.torrents.keySet());
+			List<String> qualities = new ArrayList<>(movie.torrents.keySet());
 
-            addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch), getResources().getString(R.string.trailer)));
+            if (movie.trailer != null) {
+                addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch),
+                        getResources().getString(R.string.trailer)));
+            }
 
 			for (String quality : qualities) {
 
@@ -125,7 +140,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
             }
         } else if(a instanceof TrailerAction) {
             Movie movie = getMovieItem();
-            if (!YouTubeData.isYouTubeUrl(movie.trailer)) {
+            if (!youTubeManager.isYouTubeUrl(movie.trailer)) {
                 TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(movie, null, null, null, null, movie.trailer));
             } else {
                 TVTrailerPlayerActivity.startActivity(getActivity(), movie.trailer, movie);

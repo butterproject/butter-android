@@ -22,16 +22,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import butterknife.BindView;
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.fragments.AboutFragment;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.BindView;
 
 public class AboutActivity extends ButterBaseActivity implements AboutFragment.OnFragmentInteractionListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     public static Intent startActivity(Activity activity) {
         Intent intent = new Intent(activity, AboutActivity.class);
@@ -41,7 +41,12 @@ public class AboutActivity extends ButterBaseActivity implements AboutFragment.O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_about);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

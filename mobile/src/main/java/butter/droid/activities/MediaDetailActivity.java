@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import butter.droid.MobileButterApplication;
 import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
@@ -50,23 +51,14 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     TextView mToolbarTitle;
-    @BindView(R.id.scrollview)
-    ObservableParallaxScrollView mScrollView;
-    @Nullable
-    @BindView(R.id.parallax)
-    RelativeLayout mParallaxLayout;
-    @Nullable
-    @BindView(R.id.parallax_color)
-    View mParallaxColor;
-    @BindView(R.id.content)
-    FrameLayout mContent;
-    @BindView(R.id.logo)
-    ImageView mLogo;
-    @BindView(R.id.bg_image)
-    ImageView mBgImage;
+    @BindView(R.id.scrollview) ObservableParallaxScrollView mScrollView;
+    @Nullable @BindView(R.id.parallax) RelativeLayout mParallaxLayout;
+    @Nullable @BindView(R.id.parallax_color) View mParallaxColor;
+    @BindView(R.id.content) FrameLayout mContent;
+    @BindView(R.id.logo) ImageView mLogo;
+    @BindView(R.id.bg_image) ImageView mBgImage;
 
     public static void startActivity(Context context, Media media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);
@@ -79,6 +71,11 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, R.layout.activity_mediadetail);
         setSupportActionBar(mToolbar);
         setShowCasting(true);

@@ -23,7 +23,12 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import butter.droid.MobileButterApplication;
+import butter.droid.base.manager.provider.ProviderManager;
 import butterknife.BindView;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butter.droid.R;
@@ -43,43 +48,33 @@ import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.base.youtube.YouTubeData;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.widget.OptionSelector;
 
 public class MovieDetailFragment extends BaseDetailFragment {
 
+    @Inject ProviderManager providerManager;
+    @Inject YouTubeManager youTubeManager;
+
     private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Boolean mAttached = false;
     private Magnet mMagnet;
 
-    @BindView(R.id.play_button)
-    ImageButton mPlayButton;
-    @BindView(R.id.title)
-    TextView mTitle;
-    @BindView(R.id.health)
-    ImageView mHealth;
-    @BindView(R.id.meta)
-    TextView mMeta;
-    @BindView(R.id.synopsis)
-    TextView mSynopsis;
-    @BindView(R.id.read_more)
-    Button mReadMore;
-    @BindView(R.id.watch_trailer)
-    Button mWatchTrailer;
-    @BindView(R.id.magnet)
-    ImageButton mOpenMagnet;
-    @BindView(R.id.rating)
-    RatingBar mRating;
-    @BindView(R.id.subtitles)
-    OptionSelector mSubtitles;
-    @BindView(R.id.quality)
-    OptionSelector mQuality;
-    @Nullable
-    @BindView(R.id.cover_image)
-    ImageView mCoverImage;
+    @BindView(R.id.play_button) ImageButton mPlayButton;
+    @BindView(R.id.title) TextView mTitle;
+    @BindView(R.id.health) ImageView mHealth;
+    @BindView(R.id.meta) TextView mMeta;
+    @BindView(R.id.synopsis) TextView mSynopsis;
+    @BindView(R.id.read_more) Button mReadMore;
+    @BindView(R.id.watch_trailer) Button mWatchTrailer;
+    @BindView(R.id.magnet) ImageButton mOpenMagnet;
+    @BindView(R.id.rating) RatingBar mRating;
+    @BindView(R.id.subtitles) OptionSelector mSubtitles;
+    @BindView(R.id.quality) OptionSelector mQuality;
+    @Nullable @BindView(R.id.cover_image) ImageView mCoverImage;
 
     public static MovieDetailFragment newInstance(Movie movie) {
         sMovie = movie;
@@ -89,6 +84,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -131,8 +130,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
             mMeta.setText(metaDataStr);
 
-            if (!TextUtils.isEmpty(sMovie.synopsis)) {
-                mSynopsis.setText(sMovie.synopsis);
+            if (!TextUtils.isEmpty(sMovie.synopsis)) {mSynopsis.setText(sMovie.synopsis);
                 mSynopsis.post(new Runnable() {
                     @Override
                     public void run() {
@@ -164,8 +162,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mSubtitles.setText(R.string.loading_subs);
             mSubtitles.setClickable(false);
 
-            if (sMovie.getSubsProvider() != null) {
-                sMovie.getSubsProvider().getList(sMovie, new SubsProvider.Callback() {
+            if (providerManager.hasCurrentSubsProvider()) {
+                providerManager.getCurrentSubsProvider().getList(sMovie, new SubsProvider.Callback() {
                     @Override
                     public void onSuccess(Map<String, String> subtitles) {
                         if (!mAttached) return;
@@ -315,7 +313,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
-        if (!YouTubeData.isYouTubeUrl(sMovie.trailer)) {
+        if (!youTubeManager.isYouTubeUrl(sMovie.trailer)) {
             VideoPlayerActivity.startActivity(mActivity, new StreamInfo(sMovie, null, null, null, null, sMovie.trailer));
         } else {
             TrailerPlayerActivity.startActivity(mActivity, sMovie.trailer, sMovie);
