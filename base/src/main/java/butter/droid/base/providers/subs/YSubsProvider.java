@@ -20,17 +20,19 @@ package butter.droid.base.providers.subs;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class YSubsProvider extends SubsProvider {
 
@@ -83,15 +85,16 @@ public class YSubsProvider extends SubsProvider {
         LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
+    private final List<Call> ongoingCalls = new ArrayList<>();
+
     public YSubsProvider(Context context, OkHttpClient client, Gson gson) {
         super(context, client, gson);
     }
 
     @Override
     public void getList(final Movie media, final Callback callback) {
-        final Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + media.imdbId);
-        requestBuilder.tag(SUBS_CALL);
+        final Request.Builder requestBuilder = new Request.Builder()
+                .url(API_URL + media.imdbId);
 
         fetch(requestBuilder, media, new Callback() {
             @Override
@@ -115,21 +118,40 @@ public class YSubsProvider extends SubsProvider {
     }
 
     private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
-        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
+        Call call = enqueue(requestBuilder.build(), new okhttp3.Callback() {
+            @Override public void onFailure(Call call, IOException e) {
                 callback.onFailure(e);
+                finishCall(call);
             }
 
-            @Override
-            public void onResponse(Response response) throws IOException {
+            @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
                     callback.onSuccess(result.formatForPopcorn(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
+                finishCall(call);
             }
         });
+
+        synchronized (ongoingCalls) {
+            ongoingCalls.add(call);
+        }
+    }
+
+    @Override public void cancel() {
+        synchronized (ongoingCalls) {
+            for (Call call : ongoingCalls) {
+                call.cancel();
+            }
+            ongoingCalls.clear();
+        }
+    }
+
+    private void finishCall(Call call) {
+        synchronized (ongoingCalls) {
+            ongoingCalls.remove(call);
+        }
     }
 
     private class YSubsResponse {

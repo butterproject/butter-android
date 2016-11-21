@@ -23,13 +23,15 @@ import javax.inject.Singleton;
 
 import butter.droid.base.data.DataModule;
 import butter.droid.base.manager.ManagerModule;
+import butter.droid.base.providers.ProviderModule;
 import dagger.Module;
 import dagger.Provides;
 
 @Module(
         includes = {
                 DataModule.class,
-                ManagerModule.class
+                ManagerModule.class,
+                ProviderModule.class
         }
 )
 public class BaseApplicationModule {

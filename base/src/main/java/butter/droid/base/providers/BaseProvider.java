@@ -17,21 +17,16 @@
 
 package butter.droid.base.providers;
 
-import android.os.AsyncTask;
-
 import com.google.gson.Gson;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.meta.MetaProvider;
-import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * BaseProvider.java
@@ -42,7 +37,6 @@ public abstract class BaseProvider {
 
     private final OkHttpClient client;
     protected Gson mGson;
-    protected Call mCurrentCall;
 
     public BaseProvider(OkHttpClient client, Gson gson) {
         this.client = client;
@@ -70,30 +64,19 @@ public abstract class BaseProvider {
      * @param requestCallback Callback
      * @return Call
      */
-    protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        mCurrentCall = getClient().newCall(request);
-        if (requestCallback != null) mCurrentCall.enqueue(requestCallback);
-        return mCurrentCall;
+    protected Call enqueue(Request request, Callback requestCallback) {
+        Call call = getClient().newCall(request);
+        if (requestCallback != null) {
+            call.enqueue(requestCallback);
+        }
+        return call;
     }
 
-    public void cancel() {
-        // Cancel in asynctask to prevent networkOnMainThreadException but make it blocking to prevent network calls to be made and then immediately cancelled.
-        try {
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    getClient().cancel(MediaProvider.MEDIA_CALL);
-                    getClient().cancel(MetaProvider.META_CALL);
-                    getClient().cancel(SubsProvider.SUBS_CALL);
-                    return null;
-                }
-            }.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
+    /**
+     * This method will be called when user is done with data that he required. Provider should at this point
+     * clean after itself. For example cancel all ongoing network request.
+     */
+    public abstract void cancel();
 
     /**
      * Build URL encoded query

@@ -15,22 +15,31 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager;
+package butter.droid.base.providers;
+
+import android.content.Context;
+
+import com.google.gson.Gson;
 
 import javax.inject.Singleton;
 
-import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.subs.YSubsProvider;
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 
 @Module
-public class ManagerModule {
+public class ProviderModule {
 
-    @Provides @Singleton public ProviderManager provideProviderManager(VodoProvider moviesProvider,
+    @Provides @Singleton public SubsProvider provideSubsProvider(Context context, OkHttpClient client, Gson gson) {
+        return new YSubsProvider(context, client, gson);
+    }
+
+    @Provides @Singleton public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson,
             SubsProvider subsProvider) {
-        return new ProviderManager(moviesProvider, null);
+        return new VodoProvider(client, gson, subsProvider);
     }
 
 }

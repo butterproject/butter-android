@@ -21,8 +21,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +29,8 @@ import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 /**
  * MediaProvider.java
@@ -38,8 +38,6 @@ import butter.droid.base.providers.subs.SubsProvider;
  * Base class for all media providers. Any media providers has to extend this class and use the callback defined here.
  */
 public abstract class MediaProvider extends BaseProvider {
-
-    public static final String MEDIA_CALL = "media_http_call";
 
     @Nullable private final SubsProvider subsProvider;
 

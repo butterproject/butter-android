@@ -18,15 +18,13 @@
 package butter.droid.base.providers.meta;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.joda.time.DateTime;
 
 import butter.droid.base.providers.BaseProvider;
+import okhttp3.OkHttpClient;
 
 public abstract class MetaProvider extends BaseProvider {
-
-    public static final String META_CALL = "meta_http_call";
 
     public MetaProvider(OkHttpClient client, Gson gson) {
         super(client, gson);

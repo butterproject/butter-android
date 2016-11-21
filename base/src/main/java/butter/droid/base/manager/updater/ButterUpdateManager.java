@@ -48,10 +48,6 @@ import android.os.Environment;
 import android.os.Handler;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -74,6 +70,11 @@ import butter.droid.base.manager.updater.model.UpdaterData;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.VersionUtils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
 
@@ -219,8 +220,7 @@ public class ButterUpdateManager extends Observable {
     }
 
     Callback mCallback = new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
+        @Override public void onFailure(Call call, IOException e) {
             if(mCurrentUrl < DATA_URLS.length - 1) {
                 mCurrentUrl++;
                 Request newRequest = new Request.Builder()
@@ -234,8 +234,7 @@ public class ButterUpdateManager extends Observable {
             }
         }
 
-        @Override
-        public void onResponse(Response response) {
+        @Override public void onResponse(Call call, Response response) throws IOException {
             try {
                 if (response.isSuccessful()) {
                     UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
@@ -276,13 +275,11 @@ public class ButterUpdateManager extends Observable {
                 .build();
 
         mHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
+            @Override public void onFailure(Call call, IOException e) {
                 // uhoh
             }
 
-            @Override
-            public void onResponse(Response response) throws IOException {
+            @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
                     File downloadedFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
@@ -302,6 +299,7 @@ public class ButterUpdateManager extends Observable {
                         mListener.updateAvailable(updateFilePath);
                     }
                 }
+
             }
         });
     }

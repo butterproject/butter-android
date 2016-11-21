@@ -35,9 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -59,6 +56,8 @@ import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
 /**
@@ -144,7 +143,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void changeGenre(String genre) {
         if (!(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
             if(mCurrentCall != null)
-                client.getDispatcher().getExecutorService().execute(new Runnable() {
+                client.dispatcher().executorService().execute(new Runnable() {
                     @Override
                     public void run() {
                         mCurrentCall.cancel();
@@ -306,7 +305,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         }
 
         if(mCurrentCall != null)
-            client.getDispatcher().getExecutorService().execute(new Runnable() {
+            client.dispatcher().executorService().execute(new Runnable() {
                 @Override
                 public void run() {
                     mCurrentCall.cancel();

@@ -36,10 +36,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +61,9 @@ import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MorePresenter;
 import butter.droid.tv.utils.BackgroundUpdater;
 import hugo.weaving.DebugLog;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /*
  * Main class to show BrowseFragment with header and rows of videos
@@ -390,13 +389,11 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
                 providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
+                    @Override public void onFailure(Call call, IOException e) {
                         TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
                     }
 
-                    @Override
-                    public void onResponse(Response response) throws IOException {
+                    @Override public void onResponse(Call call, Response response) throws IOException {
                         TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
                     }
                 });
