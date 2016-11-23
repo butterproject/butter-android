@@ -54,6 +54,8 @@ public class TraktProvider extends MetaProvider {
     }
 
     @Override public void cancel() {
+        super.cancel();
+
         for (TraktTask ongoingCall : ongoingCalls) {
             ongoingCall.cancel(true);
         }

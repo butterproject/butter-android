@@ -24,7 +24,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butter.droid.base.providers.media.models.Episode;
@@ -39,7 +38,7 @@ public class YSubsProvider extends SubsProvider {
     private static final String API_URL = "http://api.yifysubtitles.com/subs/";
     private static final String MIRROR_URL = "http://api.ysubs.com/subs/";
     private static final String PREFIX = "http://www.yifysubtitles.com/";
-    private static final HashMap<String, String> LANGUAGE_MAPPING = new HashMap<String, String>();
+    private static final HashMap<String, String> LANGUAGE_MAPPING = new HashMap<>();
 
     static {
         LANGUAGE_MAPPING.put("albanian", "sq");
@@ -85,8 +84,6 @@ public class YSubsProvider extends SubsProvider {
         LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
-    private final List<Call> ongoingCalls = new ArrayList<>();
-
     public YSubsProvider(Context context, OkHttpClient client, Gson gson) {
         super(context, client, gson);
     }
@@ -118,10 +115,9 @@ public class YSubsProvider extends SubsProvider {
     }
 
     private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
-        Call call = enqueue(requestBuilder.build(), new okhttp3.Callback() {
+        enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override public void onFailure(Call call, IOException e) {
                 callback.onFailure(e);
-                finishCall(call);
             }
 
             @Override public void onResponse(Call call, Response response) throws IOException {
@@ -130,28 +126,8 @@ public class YSubsProvider extends SubsProvider {
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
                     callback.onSuccess(result.formatForPopcorn(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
-                finishCall(call);
             }
         });
-
-        synchronized (ongoingCalls) {
-            ongoingCalls.add(call);
-        }
-    }
-
-    @Override public void cancel() {
-        synchronized (ongoingCalls) {
-            for (Call call : ongoingCalls) {
-                call.cancel();
-            }
-            ongoingCalls.clear();
-        }
-    }
-
-    private void finishCall(Call call) {
-        synchronized (ongoingCalls) {
-            ongoingCalls.remove(call);
-        }
     }
 
     private class YSubsResponse {

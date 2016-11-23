@@ -153,6 +153,8 @@ public class OpenSubsProvider extends SubsProvider {
     }
 
     @Override public void cancel() {
+        super.cancel();
+
         synchronized (ongoingCalls) {
             for (Long ongoingCall : ongoingCalls) {
                 client.cancel(ongoingCall);

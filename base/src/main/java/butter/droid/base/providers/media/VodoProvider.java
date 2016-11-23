@@ -56,8 +56,6 @@ public class VodoProvider extends MediaProvider {
 
     private static Filters sFilters = new Filters();
 
-    private final List<Call> ongoingCalls = new ArrayList<>();
-
     public VodoProvider(OkHttpClient client, Gson gson, @Nullable SubsProvider subsProvider) {
         super(client, gson, subsProvider);
     }
@@ -79,22 +77,7 @@ public class VodoProvider extends MediaProvider {
                         "Mozilla/5.0 (Linux; U; Android %s; %s; %s Build/%s) AppleWebkit/534.30 (KHTML, like Gecko) PT/%s",
                         Build.VERSION.RELEASE, LocaleUtils.getCurrentAsString(), Build.MODEL, Build.DISPLAY,
                         versionName)).build();
-        Call call = super.enqueue(request, requestCallback);
-
-        synchronized (ongoingCalls) {
-            ongoingCalls.add(call);
-        }
-
-        return call;
-    }
-
-    @Override public void cancel() {
-        synchronized (ongoingCalls) {
-            for (Call ongoingCall : ongoingCalls) {
-                ongoingCall.cancel();
-            }
-            ongoingCalls.clear();
-        }
+        return super.enqueue(request, requestCallback);
     }
 
     @Override
@@ -198,7 +181,6 @@ public class VodoProvider extends MediaProvider {
                     requestBuilder.url(url);
                     fetchList(currentList, requestBuilder, filters, callback);
                 }
-                finishCall(call);
             }
 
             @Override public void onResponse(Call call, Response response) throws IOException {
@@ -233,7 +215,6 @@ public class VodoProvider extends MediaProvider {
                     }
                 }
                 onFailure(call, new IOException("Couldn't connect to Vodo"));
-                finishCall(call);
             }
         });
     }
@@ -333,12 +314,6 @@ public class VodoProvider extends MediaProvider {
     @Override
     public List<Genre> getGenres() {
         return null;
-    }
-
-    private void finishCall(Call call) {
-        synchronized (ongoingCalls) {
-            ongoingCalls.remove(call);
-        }
     }
 
 }

@@ -65,6 +65,7 @@ public class DataModule {
     @Provides @Singleton public Picasso providePicasso(Context context, OkHttp3Downloader okHttpDownloader) {
         return new Picasso.Builder(context)
                 .downloader(okHttpDownloader)
+                .indicatorsEnabled(true)
                 .build();
     }
 

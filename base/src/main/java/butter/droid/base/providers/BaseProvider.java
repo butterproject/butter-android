@@ -17,6 +17,8 @@
 
 package butter.droid.base.providers;
 
+import android.support.annotation.CallSuper;
+
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -65,6 +68,10 @@ public abstract class BaseProvider {
      * @return Call
      */
     protected Call enqueue(Request request, Callback requestCallback) {
+        request = request.newBuilder()
+                .tag(getClass())
+                .build();
+
         Call call = getClient().newCall(request);
         if (requestCallback != null) {
             call.enqueue(requestCallback);
@@ -76,7 +83,29 @@ public abstract class BaseProvider {
      * This method will be called when user is done with data that he required. Provider should at this point
      * clean after itself. For example cancel all ongoing network request.
      */
-    public abstract void cancel();
+    @CallSuper public void cancel() {
+        final Dispatcher dispatcher = client.dispatcher();
+
+        dispatcher.executorService().execute(new Runnable() {
+            @Override public void run() {
+                if (dispatcher.queuedCallsCount() > 0) {
+                    for (Call call : dispatcher.queuedCalls()) {
+                        if (getClass().equals(call.request().tag())) {
+                            call.cancel();
+                        }
+                    }
+                }
+
+                if (dispatcher.runningCallsCount() > 0) {
+                    for (Call call : dispatcher.runningCalls()) {
+                        if (getClass().equals(call.request().tag())) {
+                            call.cancel();
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     /**
      * Build URL encoded query
