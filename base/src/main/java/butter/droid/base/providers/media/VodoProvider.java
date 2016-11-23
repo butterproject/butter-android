@@ -50,7 +50,7 @@ public class VodoProvider extends MediaProvider {
 
     private static Integer CURRENT_API = 0;
     private static final String[] API_URLS = {
-            "http://vodo.net/popcorn"
+            "http://butter.vodo.net/popcorn"
     };
     public static String CURRENT_URL = API_URLS[CURRENT_API];
 
