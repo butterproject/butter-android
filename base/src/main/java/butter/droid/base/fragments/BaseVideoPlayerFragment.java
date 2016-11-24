@@ -85,12 +85,12 @@ public abstract class BaseVideoPlayerFragment
     SubtitleDownloader.ISubtitleDownloaderListener {
 
     public static final String RESUME_POSITION = "resume_position";
-    public static final int SUBTITLE_MINIMUM_SIZE = 10;
+    private static final int SUBTITLE_MINIMUM_SIZE = 10;
 
     private LibVLC mLibVLC;
     private MediaPlayer mMediaPlayer;
-    private Long mResumePosition = 0l;
-    private Long mDuration = 0l;
+    private Long mResumePosition = 1L;
+    private Long mDuration = 1L;
 
     private static final int SURFACE_BEST_FIT = 0;
     private static final int SURFACE_FIT_HORIZONTAL = 1;
@@ -362,7 +362,7 @@ public abstract class BaseVideoPlayerFragment
         }
     }
 
-    public void play() {
+    private void play() {
         mMediaPlayer.play();
     }
 
@@ -571,7 +571,7 @@ public abstract class BaseVideoPlayerFragment
         }
     }
 
-    protected void onSubtitleLanguageSelected(String language) {
+    private void onSubtitleLanguageSelected(String language) {
         if (mCurrentSubsLang != null && (language == null || mCurrentSubsLang.equals(language))) {
             return;
         }
@@ -890,13 +890,13 @@ public abstract class BaseVideoPlayerFragment
         mSubs = subtitleFile;
     }
 
-    BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
+    private BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
 
         @Override
         public void onDeviceReady(ConnectableDevice device) {
             super.onDeviceReady(device);
 
-            if (!FragmentUtil.isAdded(BaseVideoPlayerFragment.this)){
+            if (FragmentUtil.isNotAdded(BaseVideoPlayerFragment.this)){
                 return;
             }
             

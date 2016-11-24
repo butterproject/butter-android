@@ -24,12 +24,12 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.fragments.MediaListFragment;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.BindView;
 
 
 /**
@@ -41,10 +41,10 @@ public class SearchActivity extends ButterBaseActivity {
 
     public static final String EXTRA_PROVIDER = "extra_provider";
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.searchview)
+    @BindView(R.id.searchview)
     SearchView mSearchview;
 
     private MediaListFragment mFragment;

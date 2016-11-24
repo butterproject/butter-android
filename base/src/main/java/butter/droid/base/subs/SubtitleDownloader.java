@@ -162,12 +162,11 @@ public class SubtitleDownloader {
         private TimedTextObject parseAsTimedTextObject(File file) throws IOException {
             FileInputStream fileInputStream = new FileInputStream(file);
             FormatSRT formatSRT = new FormatSRT();
-            TimedTextObject result = formatSRT.parseFile(
+            return formatSRT.parseFile(
                     file.toString(),
                     FileUtils.inputstreamToCharsetString(
                             fileInputStream,
                             subtitleLanguage).split("\n"));
-            return result;
         }
     }
 

@@ -18,6 +18,7 @@
 package butter.droid.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -91,10 +92,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
 	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mCallbacks = (Callbacks) activity;
+            mCallbacks = (Callbacks) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }

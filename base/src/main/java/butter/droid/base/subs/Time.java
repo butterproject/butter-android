@@ -25,7 +25,7 @@ public class Time {
      * @param format supported formats: "hh:mm:ss,ms", "h:mm:ss.cs" and "h:m:s:f/fps"
      * @param value  string in the correct format
      */
-    protected Time(String format, String value) {
+    Time(String format, String value) {
         if (format.equalsIgnoreCase("hh:mm:ss,ms")) {
             // this type of format:  01:02:22,501 (used in .SRT)
             int h, m, s, ms;
@@ -70,7 +70,7 @@ public class Time {
     }
 
     // in an integer we can store 24 days worth of milliseconds, no need for a long
-    protected int mseconds;
+    int mseconds;
 
 	
 	/* METHODS */
@@ -81,7 +81,7 @@ public class Time {
      * @param format supported formats: "hh:mm:ss,ms", "h:mm:ss.cs" and "hhmmssff/fps"
      * @return formatted time in a string
      */
-    protected String getTime(String format) {
+    String getTime(String format) {
         //we use string builder for efficiency
         StringBuilder time = new StringBuilder();
         String aux;

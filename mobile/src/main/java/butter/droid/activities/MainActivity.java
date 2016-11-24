@@ -49,7 +49,6 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 
 import butter.droid.base.providers.media.MoviesProvider;
-import butterknife.Bind;
 import android.support.annotation.Nullable;
 import butter.droid.BuildConfig;
 import butter.droid.R;
@@ -73,6 +72,8 @@ import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butter.droid.base.vpn.VPNManager;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
@@ -83,12 +84,12 @@ public class MainActivity extends ButterBaseActivity implements NavigationDrawer
     private static final int PERMISSIONS_REQUEST = 123;
     private Fragment mCurrentFragment;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.navigation_drawer_container)
+    @BindView(R.id.navigation_drawer_container)
     ScrimInsetsFrameLayout mNavigationDrawerContainer;
     @Nullable
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabs;
     NavigationDrawerFragment mNavigationDrawerFragment;
 

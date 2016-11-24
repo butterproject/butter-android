@@ -33,29 +33,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
-import hugo.weaving.DebugLog;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import hugo.weaving.DebugLog;
 
 
 public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final int NORMAL = 0, LOADING = 1;
     private int mItemWidth, mItemHeight, mMargin, mColumns;
     private ArrayList<OverviewItem> mItems = new ArrayList<>();
     //	private ArrayList<Media> mData = new ArrayList<>();
     private MediaGridAdapter.OnItemClickListener mItemClickListener;
-    final int NORMAL = 0, LOADING = 1;
 
     public MediaGridAdapter(Context context, ArrayList<Media> items, Integer columns) {
         mColumns = columns;
@@ -109,9 +108,12 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             videoViewHolder.year.setText(item.year);
 
             if (item.image != null && !item.image.equals("")) {
-                Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
-                        .resize(mItemWidth, mItemHeight)
-                        .transform(DrawGradient.INSTANCE)
+                Picasso.with(videoViewHolder.coverImage.getContext()).cancelRequest(videoViewHolder.coverImage);
+                Picasso.with(videoViewHolder.coverImage.getContext())
+                        .load(item.image)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .fit()
+                        .centerCrop()
                         .into(videoViewHolder.coverImage);
             }
         }
@@ -164,8 +166,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @DebugLog
     public boolean isLoading() {
-        if (getItemCount() <= 0) return false;
-        return getItemViewType(getItemCount() - 1) == LOADING;
+        return getItemCount() > 0 && getItemViewType(getItemCount() - 1) == LOADING;
     }
 
     @DebugLog
@@ -190,63 +191,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void onItemClick(View v, Media item, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        View itemView;
-        @Bind(R.id.focus_overlay)
-        View focusOverlay;
-        @Bind(R.id.cover_image)
-        ImageView coverImage;
-        @Bind(R.id.title)
-        TextView title;
-        @Bind(R.id.year)
-        TextView year;
-
-        private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-            }
-        };
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            this.itemView = itemView;
-            itemView.setOnClickListener(this);
-            coverImage.setMinimumHeight(mItemHeight);
-
-            itemView.setOnFocusChangeListener(mOnFocusChangeListener);
-        }
-
-        public ImageView getCoverImage() {
-            return coverImage;
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mItemClickListener != null) {
-                int position = getPosition();
-                Media item = getItem(position).media;
-                mItemClickListener.onItemClick(view, item, position);
-            }
-        }
-
-    }
-
-    class LoadingHolder extends RecyclerView.ViewHolder {
-
-        View itemView;
-
-        public LoadingHolder(View itemView) {
-            super(itemView);
-            this.itemView = itemView;
-            itemView.setMinimumHeight(mItemHeight);
-        }
-
-    }
-
-    static class OverviewItem {
+    private static class OverviewItem {
         Media media;
         boolean isLoadingItem = false;
 
@@ -286,5 +231,61 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public String key() {
             return "gradient()";
         }
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        View itemView;
+        @BindView(R.id.focus_overlay)
+        View focusOverlay;
+        @BindView(R.id.cover_image)
+        ImageView coverImage;
+        @BindView(R.id.title)
+        TextView title;
+        @BindView(R.id.year)
+        TextView year;
+
+        private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
+            }
+        };
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            this.itemView = itemView;
+            itemView.setOnClickListener(this);
+            coverImage.setMinimumHeight(mItemHeight);
+
+            itemView.setOnFocusChangeListener(mOnFocusChangeListener);
+        }
+
+        public ImageView getCoverImage() {
+            return coverImage;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mItemClickListener != null) {
+                int position = getLayoutPosition();
+                Media item = getItem(position).media;
+                mItemClickListener.onItemClick(view, item, position);
+            }
+        }
+
+    }
+
+    private class LoadingHolder extends RecyclerView.ViewHolder {
+
+        View itemView;
+
+        LoadingHolder(View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+            itemView.setMinimumHeight(mItemHeight);
+        }
+
     }
 }

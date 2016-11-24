@@ -59,8 +59,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Foreground implements Application.ActivityLifecycleCallbacks {
 
-    public static final String TAG = Foreground.class.getName();
-    public static final long CHECK_DELAY = 2000;
+    private static final String TAG = Foreground.class.getName();
+    private static final long CHECK_DELAY = 2000;
 
     public interface Listener {
         void onBecameForeground();
@@ -127,12 +127,11 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
     private Handler handler = new Handler();
     private Runnable check;
 
-    public static Foreground init(Application application) {
+    public static void init(Application application) {
         if (instance == null) {
             instance = new Foreground();
             application.registerActivityLifecycleCallbacks(instance);
         }
-        return instance;
     }
 
     public static Foreground get(Application application) {
@@ -158,8 +157,8 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
         return !foreground;
     }
 
-    public Binding addListener(Listener listener) {
-        return listeners.add(listener);
+    public void addListener(Listener listener) {
+        listeners.add(listener);
     }
 
     @Override

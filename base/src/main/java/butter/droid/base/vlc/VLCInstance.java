@@ -26,7 +26,6 @@ import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.util.VLCUtil;
 
 import butter.droid.base.BuildConfig;
-import butter.droid.base.Constants;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.utils.PrefUtils;
 import timber.log.Timber;
@@ -58,10 +57,7 @@ public class VLCInstance {
     }
 
     public static synchronized boolean hasCompatibleCPU(Context context) {
-        if (sLibVLC == null && !VLCUtil.hasCompatibleCPU(context)) {
-            return false;
-        } else
-            return true;
+        return !(sLibVLC == null && !VLCUtil.hasCompatibleCPU(context));
     }
 
 }

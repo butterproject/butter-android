@@ -8,13 +8,13 @@
   <string name="update_available">Nueva actualización disponible</string>
   <string name="wrong_abi">¡Uh! Estás usando la versión equivocado de Popcorn Time para Android. La correcta se está instalando ahora mismo, si es posible. Si el instalador no inicia dentro de un minuto, tu dispositivo no soporta Popcorn Time o la conexión a internet es mala, lo que significa que deberás intentar más tarde. Si el instalador da error, instalá la versión manualmente.</string>
   <string name="press_install">Presioná para instalar</string>
-  <string name="loading_data">Cargando datos...</string>
-  <string name="loading_details">Cargando detalles...</string>
-  <string name="loading_shows">Cargando shows...</string>
-  <string name="loading_movies">Cargando películas...</string>
-  <string name="loading_subs">Cargando subtítulos...</string>
+  <string name="loading_data">Cargando datos…</string>
+  <string name="loading_details">Cargando detalles…</string>
+  <string name="loading_shows">Cargando shows…</string>
+  <string name="loading_movies">Cargando películas…</string>
+  <string name="loading_subs">Cargando subtítulos…</string>
   <string name="error_files">Error: No se pudieron escribir los archivos</string>
-  <string name="overview_not_available">Perdón! Aca no hay una descripción general disponible.</string>
+  <string name="overview_not_available">Perdón! Acá no hay una descripción general disponible.</string>
   <string name="unknown_error">Algo salió mal</string>
   <string name="torrent_failed">Fallo la recuperación de torrent</string>
   <string name="running">Corriendo en el fondo</string>
@@ -25,13 +25,13 @@
   <string name="search_hint">Titulo, año, actores</string>
   <string name="genres">Género</string>
   <string name="search">Buscar</string>
-  <string name="searching">Buscando...</string>
+  <string name="searching">Buscando…</string>
   <string name="no_data_found">No se encontraron los datos</string>
   <string name="title_shows">Shows</string>
   <string name="title_movies">Películas</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">App firma no valida</string>
-  <string name="possibly_dangerous">Popcorn Time fué manipulado, Por favor, descarga un nuevo archivo de instalación de: http://butterproject.org/</string>
+  <string name="possibly_dangerous">Popcorn Time fue manipulado, Por favor, descarga un nuevo archivo de instalación de: http://butterproject.org/</string>
   <string name="subtitles">Subtítulos</string>
   <string name="now_playing">Ahora reproduciendo</string>
   <!--SettingsActivity strings-->
@@ -67,7 +67,7 @@
   <string name="auto_updates">Actualizaciones automáticas</string>
   <string name="check_for_updates">Verificar actualizaciones</string>
   <string name="last_check">Última verificación</string>
-  <string name="about_app">Acerca de...</string>
+  <string name="about_app">Acerca de…</string>
   <string name="version">Versión</string>
   <string name="changelog">Changelog</string>
   <string name="tap_to_open">Pulsá para abrir</string>
@@ -108,7 +108,7 @@
   <string name="magnet">Imán</string>
   <string name="scale">Escala</string>
   <!--About as in 'About serie X'-->
-  <string name="about_series">Acerca de...</string>
+  <string name="about_series">Acerca de…</string>
   <!--VideoPlayerActivity strings-->
   <string name="volume">Volúmen</string>
   <string name="brightness">Brillo</string>

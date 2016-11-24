@@ -17,7 +17,6 @@
 
 package butter.droid.base.subs;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -47,7 +46,7 @@ import java.util.ArrayList;
  */
 public class FormatASS extends TimedTextFileFormat {
 
-    public TimedTextObject parseFile(String fileName, String[] inputString) throws IOException {
+    public TimedTextObject parseFile(String fileName, String[] inputString) {
 
         TimedTextObject tto = new TimedTextObject();
         tto.fileName = fileName;
@@ -214,7 +213,7 @@ public class FormatASS extends TimedTextFileFormat {
         //we will write the lines in an ArrayList 
         int index = 0;
         //the minimum size of the file is the number of captions and styles + lines for sections and formats and the script info, so we'll take some extra space.
-        ArrayList<String> file = new ArrayList<String>(30 + tto.styling.size() + tto.captions.size());
+        ArrayList<String> file = new ArrayList<>(30 + tto.styling.size() + tto.captions.size());
 
         //header is placed
         file.add(index++, "[Script Info]");

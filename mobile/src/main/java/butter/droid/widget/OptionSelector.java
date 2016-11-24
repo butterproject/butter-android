@@ -12,17 +12,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class OptionSelector extends LinearLayout {
 
     View mView;
-    @Bind(android.R.id.text1)
+    @BindView(android.R.id.text1)
     TextView mText;
-    @Bind(android.R.id.icon)
+    @BindView(android.R.id.icon)
     ImageView mIcon;
 
     private FragmentManager mFragmentManager;

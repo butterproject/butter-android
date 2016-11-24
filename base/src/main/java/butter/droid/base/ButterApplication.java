@@ -23,8 +23,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.multidex.MultiDex;
@@ -55,6 +53,7 @@ public class ButterApplication extends Application implements ButterUpdater.List
     private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
     private static Application sThis;
+    private static boolean debugable;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -67,13 +66,18 @@ public class ButterApplication extends Application implements ButterUpdater.List
         super.onCreate();
         sThis = this;
 
+        debugable = ( 0 != ( getAppContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
         LeakCanary.install(this);
         Foreground.init(this);
 
         //initialise logging
-        if (BuildConfig.DEBUG) {
+        if (debugable || BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
 
@@ -90,16 +94,17 @@ public class ButterApplication extends Application implements ButterUpdater.List
             FileUtils.recursiveDelete(new File(path + "/subs"));
         } else {
             File statusFile = new File(directory, "status.json");
-            statusFile.delete();
+            if(!statusFile.delete()){
+                Timber.w("Could not delete file: " + statusFile.getAbsolutePath());
+            }
         }
 
         Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         Timber.i("Chosen cache location: " + directory);
 
-        Picasso.Builder builder = new Picasso.Builder(getAppContext());
-        OkHttpDownloader downloader = new OkHttpDownloader(getHttpClient());
-        builder.downloader(downloader);
-        Picasso.setSingletonInstance(builder.build());
+        Picasso.setSingletonInstance(new Picasso.Builder(getAppContext()).build());
+        Picasso.with(getAppContext()).setIndicatorsEnabled(debugable || BuildConfig.DEBUG);
+        Picasso.with(getAppContext()).setLoggingEnabled(debugable || BuildConfig.DEBUG);
     }
 
     @Override
@@ -126,9 +131,11 @@ public class ButterApplication extends Application implements ButterUpdater.List
             sHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
             sHttpClient.setRetryOnConnectionFailure(true);
 
-            int cacheSize = 10 * 1024 * 1024;
+            long cacheSize = 10 * 1024 * 1024;
             File cacheLocation = new File(PrefUtils.get(ButterApplication.getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(ButterApplication.getAppContext()).toString()));
-            cacheLocation.mkdirs();
+            if (!cacheLocation.mkdirs()){
+                Timber.w("Could not create directory: " + cacheLocation.getAbsolutePath());
+            }
             com.squareup.okhttp.Cache cache = null;
             try {
                 cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
@@ -169,5 +176,9 @@ public class ButterApplication extends Application implements ButterUpdater.List
 
     public static Context getAppContext() {
         return sThis;
+    }
+
+    public static boolean isDebugable() {
+        return debugable;
     }
 }

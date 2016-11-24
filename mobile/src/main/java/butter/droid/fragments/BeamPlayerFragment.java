@@ -41,6 +41,9 @@ import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -49,12 +52,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
-import butterknife.OnClick;
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
@@ -69,6 +66,9 @@ import butter.droid.base.utils.VersionUtils;
 import butter.droid.fragments.dialog.LoadingBeamingDialogFragment;
 import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.widget.ButterSeekBar;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class BeamPlayerFragment extends Fragment implements TorrentListener {
@@ -90,17 +90,17 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     private ScheduledFuture mTask;
 
     View mRootView;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.sliding_layout)
+    @BindView(R.id.sliding_layout)
     SlidingUpPanelLayout mPanel;
-    @Bind(R.id.play_button)
+    @BindView(R.id.play_button)
     ImageButton mPlayButton;
-    @Bind(R.id.cover_image)
+    @BindView(R.id.cover_image)
     ImageView mCoverImage;
-    @Bind(R.id.seekbar)
+    @BindView(R.id.seekbar)
     ButterSeekBar mButterSeekBar;
-    @Bind(R.id.volumebar)
+    @BindView(R.id.volumebar)
     ButterSeekBar mVolumeBar;
 
     @Override
@@ -374,7 +374,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     private MediaControl.PlayStateListener mPlayStateListener = new MediaControl.PlayStateListener() {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
-            if(!FragmentUtil.isAdded(BeamPlayerFragment.this)) {
+            if(FragmentUtil.isNotAdded(BeamPlayerFragment.this)) {
                 return;
             }
 
@@ -393,7 +393,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
 
         @Override
         public void onError(ServiceCommandError error) {
-            if(!FragmentUtil.isAdded(BeamPlayerFragment.this)) {
+            if(FragmentUtil.isNotAdded(BeamPlayerFragment.this)) {
                 return;
             }
 

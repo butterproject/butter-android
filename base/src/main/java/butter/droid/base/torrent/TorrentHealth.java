@@ -21,6 +21,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import butter.droid.base.R;
 import butter.droid.base.utils.VersionUtils;
@@ -96,6 +97,6 @@ public enum TorrentHealth {
         if(VersionUtils.isLollipop()) {
             return context.getResources().getDrawable(getImageResource(), null);
         }
-        return context.getResources().getDrawable(getImageResource());
+        return ContextCompat.getDrawable(context, getImageResource());
     }
 }

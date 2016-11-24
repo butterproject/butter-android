@@ -8,11 +8,11 @@
   <string name="update_available">Nuovo aggiornamento disponibile</string>
   <string name="wrong_abi">Ehi! Stai usando la versione sbagliata di Popcorn Time per Android. La versione corretta la stiamo scaricando proprio ora, se possibile. Se l\'installazione non parte entro un minuto allora il tuo dispositivo non è supportato o ci sono dei problemi con la connesione ad internet, ciò significa che dovresti riprovare più tardi. Se l\'installazione non va a buon fine allora devi installare l\'applicazione manualmente</string>
   <string name="press_install">Premi per installare</string>
-  <string name="loading_data">Caricamento dati...</string>
-  <string name="loading_details">Caricamento dettagli...</string>
-  <string name="loading_shows">Caricamento spettacolo...</string>
-  <string name="loading_movies">Caricamento film...</string>
-  <string name="loading_subs">Caricamento sottotitoli...</string>
+  <string name="loading_data">Caricamento dati…</string>
+  <string name="loading_details">Caricamento dettagli…</string>
+  <string name="loading_shows">Caricamento spettacolo…</string>
+  <string name="loading_movies">Caricamento film…</string>
+  <string name="loading_subs">Caricamento sottotitoli…</string>
   <string name="error_files">Errore: impossibile scrivere i file</string>
   <string name="overview_not_available">Mi dispiace! Nessuna anteprima disponibile.</string>
   <string name="unknown_error">Qualcosa è andato storto</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Titolo, anno, attori</string>
   <string name="genres">Generi</string>
   <string name="search">Cerca</string>
-  <string name="searching">Cercando...</string>
+  <string name="searching">Cercando…</string>
   <string name="no_data_found">Nessun dato trovato</string>
   <string name="title_shows">Serie</string>
   <string name="title_movies">Film</string>
@@ -210,7 +210,7 @@
   <string name="waiting_torrent">Aspettando il torrent</string>
   <string name="starting_buffering">Inizio buffering</string>
   <string name="streaming_started">Streraming avviato</string>
-  <string name="waiting_for_subtitles">Aspettando i sottotitoli...</string>
+  <string name="waiting_for_subtitles">Aspettando i sottotitoli…</string>
   <string name="seeds">Fonti</string>
   <string name="start_external">Avvia lettore esterno</string>
   <!--VideoPlayerActivity strings-->
@@ -243,7 +243,7 @@
   <string name="connected_to">Connesso a</string>
   <string name="disconnect">Disconnetti</string>
   <string name="select_beaming">Seleziona il dispositivo per la trasmissione</string>
-  <string name="starting_beam">Inizializzazione della trasmissione del video...</string>
+  <string name="starting_beam">Inizializzazione della trasmissione del video…</string>
   <string name="beaming_failed">C\'è stato un errore, il video non è stato riprodotto sul tuo dispositivo. Prova di nuovo, l\'applicazione potrebbe dover scaricare parti aggiuntive prima che il dispositivo possa riprodurre il video.</string>
   <string name="the_video">Il video</string>
   <!--Android TV below-->
@@ -260,7 +260,7 @@
   <string name="play">Riproduci</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Bottone Play Pause</string>
-  <string name="loading">Caricamento...</string>
+  <string name="loading">Caricamento…</string>
   <string name="no_video_found">Nessun video è stato trovato</string>
   <string name="popular_header">Video Popolari</string>
   <string name="grid_view">Visualizzazione a Griglia</string>

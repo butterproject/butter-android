@@ -28,23 +28,34 @@ import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 
 public class Episode extends Media implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Episode> CREATOR = new Parcelable.Creator<Episode>() {
+        @Override
+        public Episode createFromParcel(Parcel in) {
+            return new Episode(in);
+        }
+
+        @Override
+        public Episode[] newArray(int size) {
+            return new Episode[size];
+        }
+    };
     public String showName;
     public int aired;
     public int episode;
     public int season;
     public String overview;
-    public String tvdbId;
     public boolean dateBased;
     public Map<String, Torrent> torrents = new HashMap<>();
-
-    protected MetaProvider mMetaProvider;
+    private String tvdbId;
+    private MetaProvider mMetaProvider;
 
     public Episode(MediaProvider mediaProvider, SubsProvider subsProvider, MetaProvider metaProvider) {
         super(mediaProvider, subsProvider);
         mMetaProvider = metaProvider;
     }
 
-    protected Episode(Parcel in) {
+    private Episode(Parcel in) {
         super(in);
         aired = in.readInt();
         episode = in.readInt();
@@ -60,11 +71,7 @@ public class Episode extends Media implements Parcelable {
         try {
             Class<?> clazz = Class.forName(className);
             mMetaProvider = (MetaProvider) clazz.newInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -95,7 +102,7 @@ public class Episode extends Media implements Parcelable {
         dest.writeString(mMetaProvider != null ? mMetaProvider.getClass().getCanonicalName() : "");
         if (torrents != null) {
             dest.writeInt(torrents.size());
-            for (Map.Entry<String, Torrent> entry : torrents.entrySet()){
+            for (Map.Entry<String, Torrent> entry : torrents.entrySet()) {
                 dest.writeString(entry.getKey());
                 dest.writeParcelable(entry.getValue(), flags);
             }
@@ -103,19 +110,6 @@ public class Episode extends Media implements Parcelable {
             dest.writeInt(0);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Episode> CREATOR = new Parcelable.Creator<Episode>() {
-        @Override
-        public Episode createFromParcel(Parcel in) {
-            return new Episode(in);
-        }
-
-        @Override
-        public Episode[] newArray(int size) {
-            return new Episode[size];
-        }
-    };
 
     public MetaProvider getMetaProvider() {
         return mMetaProvider;

@@ -47,6 +47,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
         ButterKnife.bind(this);
+        ButterKnife.setDebug(true);
         mHandler = new Handler(getMainLooper());
     }
 

@@ -8,11 +8,11 @@
   <string name="update_available">Има нова версия</string>
   <string name="wrong_abi">Опа! Използвате грешната версия на Popcorn Time за Андроид. Правилната версия се тегли сега, ако е възможно. Ако инсталаторът не се стартира до мината, тогава вашето устройство не се поддържа или интернет връзката ви е развалена, което означава, че ще трябва да опитате отново по-късно. Ако инсталаторът се провали, ще трябва да инсталирате правилната версия ръчно.</string>
   <string name="press_install">Цъкни, за да инсталираш</string>
-  <string name="loading_data">Зареждане на данни...</string>
-  <string name="loading_details">Зареждани на детайли...</string>
-  <string name="loading_shows">Зареждане на сериали...</string>
-  <string name="loading_movies">Зареждане на филми...</string>
-  <string name="loading_subs">Зареждане на субтитри...</string>
+  <string name="loading_data">Зареждане на данни…</string>
+  <string name="loading_details">Зареждани на детайли…</string>
+  <string name="loading_shows">Зареждане на сериали…</string>
+  <string name="loading_movies">Зареждане на филми…</string>
+  <string name="loading_subs">Зареждане на субтитри…</string>
   <string name="error_files">Грешка: Файловете не можаха да бъдат записани</string>
   <string name="overview_not_available">Съжаляваме! Няма наличен обзорен изглед.</string>
   <string name="unknown_error">Нещо се обърка</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Заглавие, година, актьори</string>
   <string name="genres">Жанрове</string>
   <string name="search">Търси</string>
-  <string name="searching">Търсене...</string>
+  <string name="searching">Търсене…</string>
   <string name="no_data_found">Не са открити данни</string>
   <string name="title_shows">Сериали</string>
   <string name="title_movies">Филми</string>
@@ -242,7 +242,7 @@
   <string name="connected_to">Свързан към</string>
   <string name="disconnect">Изключи</string>
   <string name="select_beaming">Изберете устройство за излъчване</string>
-  <string name="starting_beam">Начало на излъчване на видеото...</string>
+  <string name="starting_beam">Начало на излъчване на видеото…</string>
   <string name="beaming_failed">Видеото не може да се възпроизведе на устройството, на което се излъчва. Желаете ли да опитате отново? Приложението може да трябва да изтегли още части преди вашето устройство да има възможност да възпроизведе видеото.</string>
   <string name="the_video">Видеото</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">Възпроизвеждане</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Възпроизведи Сложи на пауза бутон</string>
-  <string name="loading">Зареждане...</string>
+  <string name="loading">Зареждане…</string>
   <string name="no_video_found">Не бе открито видео</string>
   <string name="popular_header">Популярни видеа</string>
   <string name="grid_view">Табличен изглед</string>

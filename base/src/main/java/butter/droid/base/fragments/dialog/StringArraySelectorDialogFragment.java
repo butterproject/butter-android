@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 
@@ -31,8 +32,12 @@ import butter.droid.base.R;
 
 public class StringArraySelectorDialogFragment extends DialogFragment {
 
-    public static final String ARRAY = "array", TITLE = "title", MODE = "mode", POSITION = "position";
-    public static final int NORMAL = 0, SINGLE_CHOICE = 1;
+    private static final String ARRAY = "array";
+    private static final String TITLE = "title";
+    private static final String MODE = "mode";
+    private static final String POSITION = "position";
+    private static final int NORMAL = 0;
+    private static final int SINGLE_CHOICE = 1;
 
     private DialogInterface.OnClickListener mOnClickListener;
 
@@ -41,6 +46,7 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -83,7 +89,7 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public void setDialogClickListener(DialogInterface.OnClickListener dialogClickListener) {
+    private void setDialogClickListener(DialogInterface.OnClickListener dialogClickListener) {
         mOnClickListener = dialogClickListener;
     }
 
@@ -95,7 +101,7 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
         show(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
     }
 
-    public static void show(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+    private static void show(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
         String[] itemsArray = items.toArray(new String[items.size()]);
         show(fm, title, itemsArray, defaultPosition, dialogClickListener);
     }
@@ -112,7 +118,7 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
         showSingleChoice(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
     }
 
-    public static void showSingleChoice(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+    private static void showSingleChoice(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
         String[] itemsArray = items.toArray(new String[items.size()]);
         showSingleChoice(fm, title, itemsArray, defaultPosition, dialogClickListener);
     }

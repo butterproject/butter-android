@@ -1,0 +1,101 @@
+package butter.droid.base.providers.media.response.models.common;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+
+public class Rating {
+
+    @JsonProperty("percentage")
+    private int percentage;
+    @JsonProperty("watching")
+    private int watching;
+    @JsonProperty("votes")
+    private int votes;
+    @JsonProperty("loved")
+    private int loved;
+    @JsonProperty("hated")
+    private int hated;
+
+    /**
+     * @return The percentage
+     */
+    @JsonProperty("percentage")
+    public int getPercentage() {
+        return percentage;
+    }
+
+    /**
+     * @param percentage The percentage
+     */
+    @JsonProperty("percentage")
+    public void setPercentage(int percentage) {
+        this.percentage = percentage;
+    }
+
+    /**
+     * @return The watching
+     */
+    @JsonProperty("watching")
+    public int getWatching() {
+        return watching;
+    }
+
+    /**
+     * @param watching The watching
+     */
+    @JsonProperty("watching")
+    public void setWatching(int watching) {
+        this.watching = watching;
+    }
+
+    /**
+     * @return The votes
+     */
+    @JsonProperty("votes")
+    public int getVotes() {
+        return votes;
+    }
+
+    /**
+     * @param votes The votes
+     */
+    @JsonProperty("votes")
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
+    /**
+     * @return The loved
+     */
+    @JsonProperty("loved")
+    public int getLoved() {
+        return loved;
+    }
+
+    /**
+     * @param loved The loved
+     */
+    @JsonProperty("loved")
+    public void setLoved(int loved) {
+        this.loved = loved;
+    }
+
+    /**
+     * @return The hated
+     */
+    @JsonProperty("hated")
+    public int getHated() {
+        return hated;
+    }
+
+    /**
+     * @param hated The hated
+     */
+    @JsonProperty("hated")
+    public void setHated(int hated) {
+        this.hated = hated;
+    }
+
+}

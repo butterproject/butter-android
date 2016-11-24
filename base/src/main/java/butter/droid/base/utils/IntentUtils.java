@@ -27,8 +27,9 @@ public class IntentUtils {
     /**
      * Creates an intent for viewing a url in a browser
      *
-     * @param context
-     * @return
+     * @param context The context
+     * @param url The url to view
+     * @return The browser Intent
      */
     public static Intent getBrowserIntent(Context context, String url) {
         if (TextUtils.isEmpty(url))

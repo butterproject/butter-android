@@ -8,11 +8,11 @@
   <string name="update_available">Ny uppdatering tillgänglig</string>
   <string name="wrong_abi">Hoppsan! Du använder fel version av Popcorn \"Time\" för Android. Rätt version laddas ned just nu, om det är möjligt. Om installationsprogrammet inte startas inom en minut så stöds inte enheten eller har din Internet-anslutning bryts, vilket innebär att du bör försöka igen senare. Om installern misslyckas då måste du installera rätt version manuellt.</string>
   <string name="press_install">Tryck för att installera</string>
-  <string name="loading_data">Laddar data...</string>
-  <string name="loading_details">Laddar information...</string>
-  <string name="loading_shows">Laddar serier...</string>
-  <string name="loading_movies">Laddar filmer...</string>
-  <string name="loading_subs">Laddar undertexter...</string>
+  <string name="loading_data">Laddar data…</string>
+  <string name="loading_details">Laddar information…</string>
+  <string name="loading_shows">Laddar serier…</string>
+  <string name="loading_movies">Laddar filmer…</string>
+  <string name="loading_subs">Laddar undertexter…</string>
   <string name="error_files">Fel: Kunde inte skriva filer</string>
   <string name="overview_not_available">Tyvärr! Det finns ingen översikt tillgänglig.</string>
   <string name="unknown_error">Något gick fel</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Titel, år, skådespelare</string>
   <string name="genres">Genrer</string>
   <string name="search">Sök</string>
-  <string name="searching">Söker...</string>
+  <string name="searching">Söker…</string>
   <string name="no_data_found">Ingen data hittades</string>
   <string name="title_shows">Serier</string>
   <string name="title_movies">Filmer</string>
@@ -258,7 +258,7 @@
   <string name="play">Spela</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Spela Pausa Knapp</string>
-  <string name="loading">Laddar...</string>
+  <string name="loading">Laddar…</string>
   <string name="no_video_found">Ingen video hittades</string>
   <string name="popular_header">Populära videor</string>
   <string name="grid_view">Rutnätsvy</string>

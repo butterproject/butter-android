@@ -8,11 +8,11 @@
   <string name="update_available">Na voljo je nova posodobitev</string>
   <string name="wrong_abi">O joj! Uporabljate napačno različico programa Popcorn Time za Android. Prava različica se prenaša sedaj, če je to mogoče. Če se namestitveni program ne zažene v minuti, vaša naprava ni podprta ali pa je vaša internetna povezava prekinjena, kar pomeni, da poskusite ponovno kasneje. Če namestitvenemu programu takrat spodleti, boste morali pravo različico namestiti ročno.</string>
   <string name="press_install">Pritisni za namestitev</string>
-  <string name="loading_data">Nalaganje podatkov...</string>
-  <string name="loading_details">Nalaganje podrobnosti...</string>
-  <string name="loading_shows">Nalaganje TV Oddaj...</string>
-  <string name="loading_movies">Nalaganje Filmov...</string>
-  <string name="loading_subs">Nalaganje podnapisov...</string>
+  <string name="loading_data">Nalaganje podatkov…</string>
+  <string name="loading_details">Nalaganje podrobnosti…</string>
+  <string name="loading_shows">Nalaganje TV Oddaj…</string>
+  <string name="loading_movies">Nalaganje Filmov…</string>
+  <string name="loading_subs">Nalaganje podnapisov…</string>
   <string name="error_files">Napaka: Nemorem zapisati datotek</string>
   <string name="overview_not_available">Žal! Večnamenski pogled ni na voljo.</string>
   <string name="unknown_error">Nekaj ​​je šlo narobe</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Naslov, leto, igralci</string>
   <string name="genres">Zvrsti</string>
   <string name="search">Iskanje</string>
-  <string name="searching">Iskanje ...</string>
+  <string name="searching">Iskanje …</string>
   <string name="no_data_found">Ni najdenih podatkov</string>
   <string name="title_shows">Oddaje</string>
   <string name="title_movies">Filmi</string>
@@ -258,7 +258,7 @@
   <string name="play">Predvajaj</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Gumb za predvajanje/premor</string>
-  <string name="loading">Nalaganje ...</string>
+  <string name="loading">Nalaganje …</string>
   <string name="no_video_found">Ni najdenih videov</string>
   <string name="popular_header">Popularni videi</string>
   <string name="grid_view">Mrežni pogled</string>

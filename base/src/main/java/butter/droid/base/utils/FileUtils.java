@@ -41,6 +41,7 @@ import java.nio.charset.CharsetDecoder;
 import java.util.HashMap;
 
 import butter.droid.base.content.UnicodeBOMInputStream;
+import timber.log.Timber;
 
 public class FileUtils {
 
@@ -92,16 +93,15 @@ public class FileUtils {
      *
      * @param file Location
      */
-    public static boolean recursiveDelete(File file) {
+    public static void recursiveDelete(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
-            if (children == null) return false;
-            for (String child : children) {
-                recursiveDelete(new File(file, child));
+            if (children != null){
+                for (String child : children) {
+                    recursiveDelete(new File(file, child));
+                }
             }
         }
-
-        return file.delete();
     }
 
     /**
@@ -172,7 +172,7 @@ public class FileUtils {
      * @param path        Path of the file
      * @throws IOException
      */
-    public static void saveStringFile(InputStream inputStream, File path) throws IOException {
+    private static void saveStringFile(InputStream inputStream, File path) throws IOException {
         String outputString = inputstreamToCharsetString(inputStream, null);
         saveStringToFile(outputString, path, "UTF-8");
     }
@@ -184,7 +184,7 @@ public class FileUtils {
      * @param path     Path of the file
      * @throws IOException
      */
-    public static void saveStringFile(String inputStr, File path) throws IOException {
+    private static void saveStringFile(String inputStr, File path) throws IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(inputStr.getBytes());
         saveStringFile(inputStream, path);
     }
@@ -209,12 +209,14 @@ public class FileUtils {
      *
      * @param string {@link String}
      * @param path   Path of the file
-     * @param string Encoding
+     * @param encoding Encoding
      * @throws IOException
      */
-    public static void saveStringToFile(String string, File path, String encoding) throws IOException {
+    private static void saveStringToFile(String string, File path, String encoding) throws IOException {
         if (path.exists()) {
-            path.delete();
+            if (!path.delete()){
+                Timber.w("Could not delete file: " + path.getAbsolutePath());
+            }
         }
 
         if ((path.getParentFile().mkdirs() || path.getParentFile().exists()) && (path.exists() || path.createNewFile())) {
@@ -270,7 +272,7 @@ public class FileUtils {
      * @param bom BOM of the file
      * @return Charset
      */
-    public static String getCharsetFromBOM(UnicodeBOMInputStream.BOM bom) {
+    private static String getCharsetFromBOM(UnicodeBOMInputStream.BOM bom) {
         if (UnicodeBOMInputStream.BOM.UTF_32_BE.equals(bom)) {
             return Constants.CHARSET_UTF_32BE;
         } else if (UnicodeBOMInputStream.BOM.UTF_32_LE.equals(bom)) {

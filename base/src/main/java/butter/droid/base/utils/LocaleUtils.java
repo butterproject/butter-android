@@ -17,30 +17,40 @@
 
 package butter.droid.base.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 
 import java.util.Locale;
 
-public class LocaleUtils {
+import butter.droid.base.compat.Compatibility;
+
+public class LocaleUtils extends Compatibility{
 
     public static String getCurrentAsString() {
         return getLanguageCode(getCurrent());
     }
 
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void setCurrent(Context context, Locale locale) {
         Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-
+        Configuration config = context.getResources().getConfiguration();
+        if (hasApi(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            config.setLocale(locale);
+        } else {
+            config.locale = locale;
+        }
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+
     }
 
     public static Locale getCurrent() {
         return Locale.getDefault();
     }
 
-    public static String getLanguageCode(Locale locale) {
+    private static String getLanguageCode(Locale locale) {
         String languageCode = locale.getLanguage();
         if (!locale.getCountry().isEmpty()) {
             languageCode += "-" + locale.getCountry();

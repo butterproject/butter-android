@@ -7,11 +7,11 @@
   <string name="disabled">Ei käytössä</string>
   <string name="update_available">Uusi päivitys saatavissa</string>
   <string name="press_install">Paina asentaaksesi</string>
-  <string name="loading_data">Ladataan...</string>
-  <string name="loading_details">Ladataan yksityiskohtia...</string>
-  <string name="loading_shows">Ladataan esityksiä...</string>
-  <string name="loading_movies">Ladataan elokuvia...</string>
-  <string name="loading_subs">Ladataan tekstityksiä...</string>
+  <string name="loading_data">Ladataan…</string>
+  <string name="loading_details">Ladataan yksityiskohtia…</string>
+  <string name="loading_shows">Ladataan esityksiä…</string>
+  <string name="loading_movies">Ladataan elokuvia…</string>
+  <string name="loading_subs">Ladataan tekstityksiä…</string>
   <string name="error_files">Virhe: tiedostoja ei voitu kirjoittaa</string>
   <string name="overview_not_available">Pahoittelut! Yleisnäkymä ei ole saatavilla.</string>
   <string name="unknown_error">Jotain meni pieleen</string>
@@ -24,7 +24,7 @@
   <string name="search_hint">Nimi, vuosi, näyttelijät</string>
   <string name="genres">Lajit</string>
   <string name="search">Etsi</string>
-  <string name="searching">Haetaan...</string>
+  <string name="searching">Haetaan…</string>
   <string name="no_data_found">Tietoja ei löytynyt</string>
   <string name="title_shows">TV-ohjelmat</string>
   <string name="title_movies">Elokuvat</string>
@@ -252,7 +252,7 @@
   <string name="play">Toista</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Toista/Tauko -näppäin</string>
-  <string name="loading">Lataa...</string>
+  <string name="loading">Lataa…</string>
   <string name="no_video_found">Videota ei löytynyt</string>
   <string name="popular_header">Suosituimmat videot</string>
   <string name="grid_view">Ruutunäkymä</string>

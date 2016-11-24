@@ -27,9 +27,9 @@ import android.os.Parcelable;
 
 public class APIVpnProfile implements Parcelable {
 
-    public final String mUUID;
-    public final String mName;
-    public final boolean mUserEditable;
+    private final String mUUID;
+    private final String mName;
+    private final boolean mUserEditable;
     //public final String mProfileCreator;
 
     public APIVpnProfile(Parcel in) {

@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,9 +40,6 @@ import com.squareup.okhttp.Call;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
-import hugo.weaving.DebugLog;
 import butter.droid.R;
 import butter.droid.activities.MediaDetailActivity;
 import butter.droid.adapters.MediaGridAdapter;
@@ -54,6 +52,9 @@ import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 /**
@@ -90,9 +91,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private int mLoadingMessage = R.string.loading_data;
 
     private State mState = State.UNINITIALISED;
-    private Mode mMode;
-    private MediaProvider.Filters.Sort mSort;
-    private MediaProvider.Filters.Order mDefOrder;
 
     public enum Mode {
         NORMAL, SEARCH
@@ -106,7 +104,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     private boolean mEndOfListReached = false;
 
-    private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
+    private int mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
 
     private MediaProvider mProvider;
     private Call mCurrentCall;
@@ -115,13 +113,13 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private String mGenre;
 
     View mRootView;
-    @Bind(R.id.progressOverlay)
+    @BindView(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    @Bind(R.id.emptyView)
+    @BindView(R.id.emptyView)
     TextView mEmptyView;
-    @Bind(R.id.progress_textview)
+    @BindView(R.id.progress_textview)
     TextView mProgressTextView;
 
     public static MediaListFragment newInstance(Mode mode, MediaProvider provider, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
@@ -149,11 +147,14 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         mCurrentCall.cancel();
                     }
                 });
+
+            mItems.clear();
             mAdapter.clearItems();
+
+            setState(State.LOADING);
             mGenre = mFilters.genre = genre;
             mFilters.page = 1;
             mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);
-            setState(State.LOADING);
         }
     }
 
@@ -202,21 +203,21 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         //get the provider type and create a provider
         mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
-        mSort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
-        mDefOrder = (MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER);
-        mFilters.sort = mSort;
+        MediaProvider.Filters.Sort sort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
+        MediaProvider.Filters.Order defOrder = (MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER);
+        mFilters.sort = sort;
         // if not changed use default order
-        mFilters.order = mDefOrder;
+        mFilters.order = defOrder;
         mFilters.genre = getArguments().getString(EXTRA_GENRE);
 
         String language = PrefUtils.get(getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
         mFilters.langCode = LocaleUtils.toLocale(language).getLanguage();
 
-        mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
-        if (mMode == Mode.SEARCH) mEmptyView.setText(getString(R.string.no_search_results));
+        Mode mode = (Mode) getArguments().getSerializable(EXTRA_MODE);
+        if (mode == Mode.SEARCH) mEmptyView.setText(getString(R.string.no_search_results));
 
         //don't load initial data in search mode
-        if (mMode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
+        if (mode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
             mCurrentCall = mProvider.getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
             setState(State.LOADING);
         } else updateUI();
@@ -256,7 +257,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                         if (mAdapter.isLoading()) mAdapter.removeLoading();
                         //show the progress bar
                         mRecyclerView.setVisibility(View.VISIBLE);
-                        //				mRecyclerView.animate().alpha(0.5f).setDuration(500).start();
+                        mRecyclerView.animate().alpha(0.5f).setDuration(500).start();
                         mEmptyView.setVisibility(View.GONE);
                         mProgressOverlay.setVisibility(View.VISIBLE);
                         break;
@@ -328,8 +329,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         @Override
         @DebugLog
         public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
-            if (!(mGenre == null ? "" : mGenre).equals(filters.genre == null ? "" : filters.genre)) return; // nothing changed according to the provider, so don't do anything
-
             items.removeAll(mItems);
             if(items.size() == 0) {
                 mEndOfListReached = true;
@@ -429,13 +428,13 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 }
 
                 Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
-                Palette.generateAsync(cover, 5, new Palette.PaletteAsyncListener() {
+                new Palette.Builder(cover).generate(new Palette.PaletteAsyncListener() {
                     @Override
                     public void onGenerated(Palette palette) {
                         int vibrantColor = palette.getVibrantColor(-1);
                         int paletteColor;
                         if (vibrantColor == -1) {
-                            paletteColor = palette.getMutedColor(getResources().getColor(R.color.primary));
+                            paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
                         } else {
                             paletteColor = vibrantColor;
                         }
@@ -460,9 +459,9 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            mVisibleItemCount = mLayoutManager.getChildCount();
+            int visibleItemCount = mLayoutManager.getChildCount();
             mTotalItemCount = mLayoutManager.getItemCount() - (mAdapter.isLoading() ? 1 : 0);
-            mFirstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+            int firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
 
             if (mState == State.LOADING_PAGE) {
                 if (mTotalItemCount > mPreviousTotal) {
@@ -472,7 +471,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
                 }
             }
 
-            if (!mEndOfListReached && mState != State.SEARCHING && mState != State.LOADING_PAGE && mState != State.LOADING && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem +
+            if (!mEndOfListReached && mState != State.SEARCHING && mState != State.LOADING_PAGE && mState != State.LOADING && (mTotalItemCount - visibleItemCount) <= (firstVisibleItem +
                     mLoadingTreshold)) {
 
                 mFilters.page = mPage;
@@ -496,7 +495,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     /**
      * Called when media details have been loaded. This should be called on a background thread.
      *
-     * @param item
+     * @param item The media item
      */
     @Override
     public void onDetailLoadSuccess(final Media item) {

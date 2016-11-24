@@ -17,7 +17,6 @@
 
 package butter.droid.base.subs;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,7 +27,7 @@ import java.util.Iterator;
 public class FormatVTT extends TimedTextFileFormat {
 
     @Override
-    public TimedTextObject parseFile(String fileName, String[] inputString) throws IOException, FatalParsingException {
+    public TimedTextObject parseFile(String fileName, String[] inputString) throws FatalParsingException {
         TimedTextObject tto = new TimedTextObject();
         Caption caption = new Caption();
         int captionNumber = 1;

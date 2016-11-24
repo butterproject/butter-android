@@ -7,11 +7,11 @@
   <string name="disabled">معطل</string>
   <string name="update_available">تحديث جديد متوفر</string>
   <string name="press_install">إضغط للتثبيت</string>
-  <string name="loading_data">تحميل البيانات...</string>
-  <string name="loading_details">تحميل التفاصيل...</string>
-  <string name="loading_shows">تحميل المسلسلات...</string>
-  <string name="loading_movies">تحميل الأفلام...</string>
-  <string name="loading_subs">تحميل الترجمة...</string>
+  <string name="loading_data">تحميل البيانات…</string>
+  <string name="loading_details">تحميل التفاصيل…</string>
+  <string name="loading_shows">تحميل المسلسلات…</string>
+  <string name="loading_movies">تحميل الأفلام…</string>
+  <string name="loading_subs">تحميل الترجمة…</string>
   <string name="error_files">خطأ في كتابة الملفات</string>
   <string name="overview_not_available">عذرا ! لا تتوفر معاينة</string>
   <string name="unknown_error">حدث خطأ ما</string>
@@ -24,7 +24,7 @@
   <string name="search_hint">العنوان, السنة, الممثلون</string>
   <string name="genres">الانواع</string>
   <string name="search">بحث</string>
-  <string name="searching">جاري البحث...</string>
+  <string name="searching">جاري البحث…</string>
   <string name="no_data_found">لم يتم العثور على بيانات</string>
   <string name="title_shows">مسلسلات</string>
   <string name="title_movies">أفلام</string>
@@ -246,7 +246,7 @@
   <string name="play">تشغيل</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">زر إيقاف/تشغيل</string>
-  <string name="loading">يتم التحميل...</string>
+  <string name="loading">يتم التحميل…</string>
   <string name="no_video_found">لم يعثر على أي فيديو</string>
   <string name="popular_header">أشهر الفيديوهات</string>
   <string name="settings">الإعدادات</string>

@@ -38,8 +38,8 @@ import butter.droid.base.utils.PrefUtils;
 public class VLCOptions {
     private static final String TAG = "VLCConfig";
 
-    public static final int AOUT_AUDIOTRACK = 0;
-    public static final int AOUT_OPENSLES = 1;
+    private static final int AOUT_AUDIOTRACK = 0;
+    private static final int AOUT_OPENSLES = 1;
 
     @SuppressWarnings("unused")
     public static final int HW_ACCELERATION_AUTOMATIC = -1;
@@ -49,13 +49,13 @@ public class VLCOptions {
 
     public final static int MEDIA_VIDEO = 0x01;
     public final static int MEDIA_NO_HWACCEL = 0x02;
-    public final static int MEDIA_PAUSED = 0x4;
+    private final static int MEDIA_PAUSED = 0x4;
     public final static int MEDIA_FORCE_AUDIO = 0x8;
 
     public static ArrayList<String> getLibOptions(Context context, boolean timeStreching, String subtitlesEncoding, boolean frameSkip, String chroma, boolean verboseMode) {
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        ArrayList<String> options = new ArrayList<String>(50);
+        ArrayList<String> options = new ArrayList<>(50);
 
         int deblocking = getDeblocking(-1);
 

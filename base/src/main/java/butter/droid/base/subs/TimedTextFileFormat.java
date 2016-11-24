@@ -17,8 +17,6 @@
 
 package butter.droid.base.subs;
 
-import java.io.IOException;
-
 /**
  * This class specifies the interface for any format supported by the converter, these formats must
  * create a {@link butter.droid.base.subs.TimedTextObject} from an {@link java.io.InputStream} (so it can process files form standard In or uploads)
@@ -52,11 +50,10 @@ public abstract class TimedTextFileFormat {
      *
      * @param fileName String that contains the path to the file
      * @return TimedTextObject representing the parsed file
-     * @throws java.io.IOException when having trouble reading the file from the given path
      */
-    public abstract TimedTextObject parseFile(String fileName, String[] inputString) throws IOException, FatalParsingException;
+    protected abstract TimedTextObject parseFile(String fileName, String[] inputString) throws FatalParsingException;
 
-    public TimedTextObject parseFile(String fileName, String inputString) throws IOException, FatalParsingException {
+    public TimedTextObject parseFile(String fileName, String inputString) throws FatalParsingException {
         return parseFile(fileName, inputString.split("\n|\r\n"));
     }
 
@@ -70,14 +67,14 @@ public abstract class TimedTextFileFormat {
      */
     public abstract Object toFile(TimedTextObject tto);
 
-    protected String getLine(String[] strArray, int index) {
+    String getLine(String[] strArray, int index) {
         if (index < strArray.length) {
             return strArray[index];
         }
         return null;
     }
 
-    protected String join(String[] s, String glue) {
+    String join(String[] s, String glue) {
         if (s.length == 0)
             return null;
         StringBuilder sb = new StringBuilder();

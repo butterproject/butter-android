@@ -15,9 +15,9 @@ public class SignUtils {
     private static final String SIGNATURE = "00phZ568ikxfwglO+VVC1qLQCq3DjA7/K970qP00i0Q=";
     private static final String SIGNATURE_DEV = "RjdMyRUrPzkCPaFHCZ9c4Ip40JHCkw3LpMG3p97+zcA=";
 
-    public static final int VALID = 0;
+    private static final int VALID = 0;
 
-    public static final int INVALID = 1;
+    private static final int INVALID = 1;
 
     public static int checkAppSignature(Context context) {
         try {

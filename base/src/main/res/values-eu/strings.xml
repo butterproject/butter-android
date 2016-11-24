@@ -7,11 +7,11 @@
   <string name="disabled">Ezgaituta</string>
   <string name="update_available">Eguneraketa berria eskuragarri</string>
   <string name="press_install">Egin klik instalatzeko</string>
-  <string name="loading_data">Datuak gertzen...</string>
-  <string name="loading_details">Xehetasunak gertatzen...</string>
-  <string name="loading_shows">Ikuskizunak gertatzen...</string>
-  <string name="loading_movies">Filmak gertatzen...</string>
-  <string name="loading_subs">Azpidatziak gertatzen...</string>
+  <string name="loading_data">Datuak gertzen…</string>
+  <string name="loading_details">Xehetasunak gertatzen…</string>
+  <string name="loading_shows">Ikuskizunak gertatzen…</string>
+  <string name="loading_movies">Filmak gertatzen…</string>
+  <string name="loading_subs">Azpidatziak gertatzen…</string>
   <string name="error_files">Akatsa: Ezinezkoa agiriak idaztea</string>
   <string name="overview_not_available">Barkatu! Ez dago gainkuspenik eskuragarri.</string>
   <string name="unknown_error">Zerbait gaizki joan da</string>
@@ -24,7 +24,7 @@
   <string name="search_hint">Izenburua, urtea, antzezleak</string>
   <string name="genres">Motak</string>
   <string name="search">Bilatu</string>
-  <string name="searching">Bilatzen...</string>
+  <string name="searching">Bilatzen…</string>
   <string name="no_data_found">Ez da daturik aurkitu</string>
   <string name="title_shows">Ikuskizunak</string>
   <string name="title_movies">Filmak</string>

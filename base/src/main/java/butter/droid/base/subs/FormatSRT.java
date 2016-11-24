@@ -17,7 +17,6 @@
 
 package butter.droid.base.subs;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,7 +49,7 @@ import java.util.Iterator;
 public class FormatSRT extends TimedTextFileFormat {
 
 
-    public TimedTextObject parseFile(String fileName, String[] inputString) throws IOException {
+    public TimedTextObject parseFile(String fileName, String[] inputString) {
 
         TimedTextObject tto = new TimedTextObject();
         Caption caption = new Caption();

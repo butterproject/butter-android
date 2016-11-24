@@ -43,15 +43,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
 import butter.droid.R;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class LoadingBeamingDialogFragment extends DialogFragment {
 
     private DialogInterface.OnCancelListener mOnCancelListener;
 
-    @Bind(R.id.progress_textview)
+    @BindView(R.id.progress_textview)
     TextView mTextView;
 
     public static LoadingBeamingDialogFragment newInstance() {

@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.activities.MainActivity;
 import butter.droid.adapters.MediaPagerAdapter;
 import butter.droid.base.providers.media.MediaProvider;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Fragment that contains a viewpager tabs for {@link butter.droid.fragments.MediaListFragment}
@@ -22,11 +22,9 @@ public class MediaContainerFragment extends Fragment {
 
     public static final String EXTRA_PROVIDER = "provider";
 
-    private MediaPagerAdapter mAdapter;
-    private MediaProvider mProvider;
     private Integer mSelection = 0;
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     ViewPager mViewPager;
 
     public static MediaContainerFragment newInstance(MediaProvider provider) {
@@ -47,8 +45,8 @@ public class MediaContainerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
-        mAdapter = new MediaPagerAdapter(mProvider, getChildFragmentManager(), mProvider.getNavigation());
+        MediaProvider mProvider = getArguments().getParcelable(EXTRA_PROVIDER);
+        MediaPagerAdapter mAdapter = new MediaPagerAdapter(mProvider, getChildFragmentManager(), mProvider.getNavigation());
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

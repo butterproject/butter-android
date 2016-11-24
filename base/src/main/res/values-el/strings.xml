@@ -8,11 +8,11 @@
   <string name="update_available">Διαθέσιμη νέα ενημέρωση</string>
   <string name="wrong_abi">Ωχ! Χρησιμοποιείτε τη λάθος έκδοση του Popcorn Time για Android. Η σωστή έκδοση λαμβάνεται αυτή τη στιγμή, εάν είναι δυνατόν. Αν το πρόγραμμα εγκατάστασης δεν εκκινήσει μέσα σε ένα λεπτό τότε η συσκευή σας δεν υποστηρίζεται ή η σύνδεση σας στο ίντερνετ έχει κάποιο πρόβλημα, το οποίο σημαίνει ότι θα πρέπει να δοκιμάσετε ξανά αργότερα. Αν το πρόγραμμα εγκατάστασης αποτύχει τότε πρέπει να εγκαταστήσετε τη σωστή έκδοση χειροκίνητα.</string>
   <string name="press_install">Πατήστε για εγκατάσταση</string>
-  <string name="loading_data">Φόρτωση δεδομένων...</string>
-  <string name="loading_details">Φόρτωση λεπτομερειών...</string>
-  <string name="loading_shows">Φόρτωση σειρών...</string>
-  <string name="loading_movies">Φόρτωση ταινιών...</string>
-  <string name="loading_subs">Φόρτωση υποτίτλων...</string>
+  <string name="loading_data">Φόρτωση δεδομένων…</string>
+  <string name="loading_details">Φόρτωση λεπτομερειών…</string>
+  <string name="loading_shows">Φόρτωση σειρών…</string>
+  <string name="loading_movies">Φόρτωση ταινιών…</string>
+  <string name="loading_subs">Φόρτωση υποτίτλων…</string>
   <string name="error_files">Σφάλμα: Απέτυχε η εγγραφή αρχείων</string>
   <string name="overview_not_available">Συγνώμη! Δεν υπάρχει διαθέσιμη προεπισκόπηση.</string>
   <string name="unknown_error">Κάτι πήγε στραβά</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Τίτλος, έτος, ηθοποιοί</string>
   <string name="genres">Είδη</string>
   <string name="search">Αναζήτηση</string>
-  <string name="searching">Γίνεται αναζήτηση...</string>
+  <string name="searching">Γίνεται αναζήτηση…</string>
   <string name="no_data_found">Δεν βρέθηκαν δεδομένα</string>
   <string name="title_shows">Σειρές</string>
   <string name="title_movies">Ταινίες</string>
@@ -242,7 +242,7 @@
   <string name="connected_to">Συνδεδεμένο με</string>
   <string name="disconnect">Αποσύνδεση</string>
   <string name="select_beaming">Επιλέξτε συσκευή για beaming</string>
-  <string name="starting_beam">Γίνεται εκκίνηση της εκπομπής του βίντεο...</string>
+  <string name="starting_beam">Γίνεται εκκίνηση της εκπομπής του βίντεο…</string>
   <string name="beaming_failed">Δεν ήταν δυνατή η αναπαραγωγή του βίντεο στην beaming συσκευή σας. Θέλετε να δοκιμάσετε ξανά; Η εφαρμογή μπορεί να χρειάζεται να κάνει λήψη περισσότερων κομματιών για να μπορέσει η συσκευή σας να παίξει το βίντεο.</string>
   <string name="the_video">Το βίντεο</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">Αναπαραγωγή</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Κουμπί αναπαραγωγής/παύσης</string>
-  <string name="loading">Γίνεται φόρτωση...</string>
+  <string name="loading">Γίνεται φόρτωση…</string>
   <string name="no_video_found">Δεν βρέθηκαν βίντεο</string>
   <string name="popular_header">Δημοφιλή βίντεο</string>
   <string name="grid_view">Προβολή πλέγματος</string>

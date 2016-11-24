@@ -22,17 +22,17 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.BindView;
 
 public class TermsActivity extends ButterBaseActivity {
 
     public static final String TERMS_ACCEPTED = "terms_accepted";
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override

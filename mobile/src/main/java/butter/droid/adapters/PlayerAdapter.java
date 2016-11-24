@@ -28,8 +28,8 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 
 public class PlayerAdapter extends BaseAdapter {
 
@@ -41,7 +41,7 @@ public class PlayerAdapter extends BaseAdapter {
             ButterKnife.bind(this, v);
         }
 
-        @Bind(android.R.id.text1)
+        @BindView(android.R.id.text1)
         TextView text1;
     }
 

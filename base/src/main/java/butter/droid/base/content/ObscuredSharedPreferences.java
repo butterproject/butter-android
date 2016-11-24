@@ -41,15 +41,15 @@ import javax.crypto.spec.PBEParameterSpec;
  * publicity.
  */
 public class ObscuredSharedPreferences implements SharedPreferences {
-    protected static final String UTF8 = "utf-8";
+    private static final String UTF8 = "utf-8";
     private static final char[] SEKRIT = new char[]{0x9D, 0xD9, 0x01, 0xAF, 0xBB, 0x23, 0x12, 0xED}; // INSERT A RANDOM PASSWORD HERE.
     // Don't use anything you wouldn't want to
     // get out there if someone decompiled
     // your app.
 
 
-    protected SharedPreferences delegate;
-    protected Context context;
+    private SharedPreferences delegate;
+    private Context context;
 
     public ObscuredSharedPreferences(Context context, SharedPreferences delegate) {
         this.delegate = delegate;
@@ -57,7 +57,7 @@ public class ObscuredSharedPreferences implements SharedPreferences {
     }
 
     public class Editor implements SharedPreferences.Editor {
-        protected SharedPreferences.Editor delegate;
+        SharedPreferences.Editor delegate;
 
         public Editor() {
             this.delegate = ObscuredSharedPreferences.this.delegate.edit();
@@ -185,14 +185,14 @@ public class ObscuredSharedPreferences implements SharedPreferences {
     }
 
 
-    protected String encrypt(String value) {
+    private String encrypt(String value) {
 
         try {
             final byte[] bytes = value != null ? value.getBytes(UTF8) : new byte[0];
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
             SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
             Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-            pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID).getBytes(UTF8), 20));
+            pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID).getBytes(UTF8), 20));
             return new String(Base64.encode(pbeCipher.doFinal(bytes), Base64.NO_WRAP), UTF8);
 
         } catch (Exception e) {
@@ -201,13 +201,13 @@ public class ObscuredSharedPreferences implements SharedPreferences {
 
     }
 
-    protected String decrypt(String value) {
+    private String decrypt(String value) {
         try {
             final byte[] bytes = value != null ? Base64.decode(value, Base64.DEFAULT) : new byte[0];
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
             SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
             Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-            pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID).getBytes(UTF8), 20));
+            pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID).getBytes(UTF8), 20));
             return new String(pbeCipher.doFinal(bytes), UTF8);
         } catch (Exception e) {
             delegate.edit().clear().apply();

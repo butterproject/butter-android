@@ -21,14 +21,16 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 
-import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 import butter.droid.base.R;
+import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 
 public class ChangeLogDialogFragment extends DialogFragment {
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ChangeLogRecyclerView chgList = (ChangeLogRecyclerView) View.inflate(getActivity(), R.layout.fragment_dialog_changelog, null);

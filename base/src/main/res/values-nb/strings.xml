@@ -6,10 +6,10 @@
   <string name="enabled">Aktivert</string>
   <string name="disabled">Deaktivert</string>
   <string name="update_available">Ny oppdatering tilgjengelig</string>
-  <string name="wrong_abi">Oi! Du bruker feil versjon av Popcorn Time for Android. Den riktige versjonen lastes ned nå hvis det er mulig. Hvis installasjonsprogrammet ikke starter i løpet av et minutt er ikke enheten støttet, eller så er forbindelsen til internett brutt og det betyr at du bør prøve igjen senere. Hvis installasjonen feiler må du installere den riktige versjonen manuelt.</string>
+  <string name="wrong_abi">Oi! Du bruker feil versjon av Popcorn Time for Android. Den riktige versjonen lastes ned nå hvis det er mulig. Hvis installasjonsprogrammet ikke starter i løpet av et minutt er ikke enheten støttet, eller så er forbindelsen til Internett brutt og det betyr at du bør prøve igjen senere. Hvis installasjonen feiler må du installere den riktige versjonen manuelt.</string>
   <string name="press_install">Trykk for å installere</string>
-  <string name="loading_data">Laster inn...</string>
-  <string name="loading_details">Laster detaljer...</string>
+  <string name="loading_data">Laster inn…</string>
+  <string name="loading_details">Laster detaljer…</string>
   <string name="loading_shows">Laster programmer…</string>
   <string name="loading_movies">Laster filmer…</string>
   <string name="loading_subs">Laster undertekster…</string>
@@ -243,7 +243,7 @@ elsker filmene våre. Og gjett om vi elsker popcorn.</string>
   <string name="connected_to">Koblet til</string>
   <string name="disconnect">Koble fra</string>
   <string name="select_beaming">Velg enhet for stråling</string>
-  <string name="starting_beam">Iverksetter videostråling...</string>
+  <string name="starting_beam">Iverksetter videostråling…</string>
   <string name="beaming_failed">Videoen kunne ikke spilles på din enhet for stråling. Har du lyst til å prøve igjen? Appen må kanskje laste ned flere deler før enheten er i stand til å spille av videoen.</string>
   <string name="the_video">Videoen</string>
   <!--Android TV below-->

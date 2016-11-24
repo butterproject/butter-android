@@ -19,13 +19,14 @@ package butter.droid.base.providers;
 
 import android.os.AsyncTask;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -41,21 +42,10 @@ import butter.droid.base.providers.subs.SubsProvider;
  */
 public abstract class BaseProvider {
 
-    protected Gson mGson = new Gson();
-    protected Call mCurrentCall;
+    protected ObjectMapper mapper = new ObjectMapper();
 
-    protected OkHttpClient getClient() {
+    private OkHttpClient getClient() {
         return ButterApplication.getHttpClient();
-    }
-
-    /**
-     * Enqueue request without callback
-     *
-     * @param request Request
-     * @return Call
-     */
-    protected Call enqueue(Request request) {
-        return enqueue(request, null);
     }
 
     /**
@@ -66,28 +56,30 @@ public abstract class BaseProvider {
      * @return Call
      */
     protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        mCurrentCall = getClient().newCall(request);
+        Call mCurrentCall = getClient().newCall(request);
         if (requestCallback != null) mCurrentCall.enqueue(requestCallback);
         return mCurrentCall;
     }
 
-    public void cancel() {
+    public void cancel(final String tag) {
         // Cancel in asynctask to prevent networkOnMainThreadException but make it blocking to prevent network calls to be made and then immediately cancelled.
         try {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    getClient().cancel(MediaProvider.MEDIA_CALL);
+                    getClient().cancel(tag);
                     getClient().cancel(MetaProvider.META_CALL);
                     getClient().cancel(SubsProvider.SUBS_CALL);
                     return null;
                 }
             }.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void cancel() {
+        cancel(MediaProvider.MEDIA_CALL_TAG);
     }
 
     /**
@@ -96,13 +88,13 @@ public abstract class BaseProvider {
      * @param valuePairs List with key-value items
      * @return Query string
      */
-    protected String buildQuery(List<NameValuePair> valuePairs) {
+    protected String buildQuery(List<AbstractMap.SimpleEntry<String, String>> valuePairs) {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
             for (int i = 0; i < valuePairs.size(); i++) {
-                NameValuePair pair = valuePairs.get(i);
-                stringBuilder.append(URLEncoder.encode(pair.getName(), "utf-8"));
+                AbstractMap.SimpleEntry<String, String> pair = valuePairs.get(i);
+                stringBuilder.append(URLEncoder.encode(pair.getKey(), "utf-8"));
                 stringBuilder.append("=");
                 stringBuilder.append(URLEncoder.encode(pair.getValue(), "utf-8"));
                 if (i + 1 != valuePairs.size()) stringBuilder.append("&");
@@ -114,23 +106,4 @@ public abstract class BaseProvider {
 
         return stringBuilder.toString();
     }
-
-    static public class NameValuePair {
-        private String mName;
-        private String mValue;
-
-        public NameValuePair(String name, String value) {
-            mName = name;
-            mValue = value;
-        }
-
-        public String getName() {
-            return mName;
-        }
-
-        public String getValue() {
-            return mValue;
-        }
-    }
-
 }

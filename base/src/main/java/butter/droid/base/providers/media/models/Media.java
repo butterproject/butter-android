@@ -28,6 +28,18 @@ import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 
 public class Media implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Creator<Media> CREATOR = new Creator<Media>() {
+        @Override
+        public Media createFromParcel(Parcel in) {
+            return new Media(in);
+        }
+
+        @Override
+        public Media[] newArray(int size) {
+            return new Media[size];
+        }
+    };
     public String videoId;
     public String imdbId;
     public String title;
@@ -40,8 +52,8 @@ public class Media implements Parcelable {
     public String headerImage;
     public Map<String, String> subtitles;
     public int color = Color.parseColor("#3F51B5");
-    protected SubsProvider mSubsProvider = null;
-    protected MediaProvider mMediaProvider = null;
+    private SubsProvider mSubsProvider = null;
+    private MediaProvider mMediaProvider = null;
 
     public Media(MediaProvider provider, SubsProvider subsProvider) {
         mMediaProvider = provider;
@@ -66,11 +78,7 @@ public class Media implements Parcelable {
         try {
             Class<?> clazz = Class.forName(className);
             mSubsProvider = (SubsProvider) clazz.newInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         className = in.readString();
@@ -78,11 +86,7 @@ public class Media implements Parcelable {
         try {
             Class<?> clazz = Class.forName(className);
             mMediaProvider = (MediaProvider) clazz.newInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -115,7 +119,7 @@ public class Media implements Parcelable {
         dest.writeString(mMediaProvider != null ? mMediaProvider.getClass().getCanonicalName() : "");
         if (subtitles != null) {
             dest.writeInt(subtitles.size());
-            for (Map.Entry<String, String> entry : subtitles.entrySet()){
+            for (Map.Entry<String, String> entry : subtitles.entrySet()) {
                 dest.writeString(entry.getKey());
                 dest.writeString(entry.getValue());
             }
@@ -124,27 +128,33 @@ public class Media implements Parcelable {
         }
     }
 
-    @SuppressWarnings("unused")
-    public static final Creator<Media> CREATOR = new Creator<Media>() {
-        @Override
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
-        }
+    public SubsProvider getSubsProvider() {
+        return mSubsProvider;
+    }
 
-        @Override
-        public Media[] newArray(int size) {
-            return new Media[size];
-        }
-    };
+    public MediaProvider getMediaProvider() {
+        return mMediaProvider;
+    }
 
     public static class Torrent implements Parcelable {
-        public String url;
-        public Integer seeds;
-        public Integer peers;
-        public String hash;
+        @SuppressWarnings("unused")
+        public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
+            @Override
+            public Torrent createFromParcel(Parcel in) {
+                return new Torrent(in);
+            }
+
+            @Override
+            public Torrent[] newArray(int size) {
+                return new Torrent[size];
+            }
+        };
+        private String url;
+        private Integer seeds;
+        private Integer peers;
+        private String hash;
 
         public Torrent() {
-
         }
 
         public Torrent(String url, Integer seeds, Integer peers, String hash) {
@@ -154,11 +164,51 @@ public class Media implements Parcelable {
             this.hash = hash;
         }
 
+        public Torrent(String url, Integer seeds, Integer peers) {
+            this.url = url;
+            this.seeds = seeds;
+            this.peers = peers;
+            this.hash = "";
+        }
+
+
         public Torrent(Parcel in) {
             url = in.readString();
             seeds = in.readInt();
             peers = in.readInt();
             hash = in.readString();
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public Integer getSeeds() {
+            return seeds;
+        }
+
+        public void setSeeds(Integer seeds) {
+            this.seeds = seeds;
+        }
+
+        public Integer getPeers() {
+            return peers;
+        }
+
+        public void setPeers(Integer peers) {
+            this.peers = peers;
+        }
+
+        public String getHash() {
+            return hash;
+        }
+
+        public void setHash(String hash) {
+            this.hash = hash;
         }
 
         @Override
@@ -173,27 +223,6 @@ public class Media implements Parcelable {
             dest.writeInt(peers);
             dest.writeString(hash);
         }
-
-        @SuppressWarnings("unused")
-        public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
-            @Override
-            public Torrent createFromParcel(Parcel in) {
-                return new Torrent(in);
-            }
-
-            @Override
-            public Torrent[] newArray(int size) {
-                return new Torrent[size];
-            }
-        };
-    }
-
-    public SubsProvider getSubsProvider() {
-        return mSubsProvider;
-    }
-
-    public MediaProvider getMediaProvider() {
-        return mMediaProvider;
     }
 
 }

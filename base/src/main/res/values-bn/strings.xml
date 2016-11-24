@@ -8,11 +8,11 @@
   <string name="update_available">নতুন হালনাগাদ উপলব্ধ</string>
   <string name="wrong_abi">উহ ওহ! আপনি অ্যান্ড্রয়েডের জন্য পপকর্ন টাইমের ভুল সংস্করণ ব্যবহার করছেন। সঠিক সংস্করণ এই মুহূর্তে ডাউনলোড হচ্ছে (যদি সম্ভব হয়)। ইনস্টলকারী যদি এক মিনিটের মধ্যে শুরু না হয়, তাহলে আপনার ডিভাইস সমর্থিত নয় অথবা আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন, যার অর্থ আপনার আবার পরে চেষ্টা করা উচিত। ইনস্টলকারী ব্যর্থ হলে আপনাকে ম্যানুয়ালি সঠিক সংস্করণ ইনস্টল করতে হবে।</string>
   <string name="press_install">ইনস্টল করতে টিপুন</string>
-  <string name="loading_data">উপাত্ত লোড হচ্ছে...</string>
-  <string name="loading_details">বিস্তারিত লোড হচ্ছে...</string>
-  <string name="loading_shows">অনুষ্ঠান লোড হচ্ছে...</string>
-  <string name="loading_movies">চলচ্চিত্র লোড হচ্ছে...</string>
-  <string name="loading_subs">সাব লোড হচ্ছে...</string>
+  <string name="loading_data">উপাত্ত লোড হচ্ছে…</string>
+  <string name="loading_details">বিস্তারিত লোড হচ্ছে…</string>
+  <string name="loading_shows">অনুষ্ঠান লোড হচ্ছে…</string>
+  <string name="loading_movies">চলচ্চিত্র লোড হচ্ছে…</string>
+  <string name="loading_subs">সাব লোড হচ্ছে…</string>
   <string name="error_files">ত্রুটি: ফাইল লেখা যাচ্ছে না</string>
   <string name="overview_not_available">দুঃখিত! এখানে কোন আলোকপাত উপলব্ধ নেই।</string>
   <string name="unknown_error">কিছু একটায় ত্রুটি হয়েছে</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">শিরোনাম, বছর, অভিনেতা</string>
   <string name="genres">ধরন</string>
   <string name="search">অনুসন্ধান</string>
-  <string name="searching">অনুসন্ধান হচ্ছে...</string>
+  <string name="searching">অনুসন্ধান হচ্ছে…</string>
   <string name="no_data_found">কোন উপাত্ত পাওয়া যায়নি</string>
   <string name="title_shows">অনুষ্ঠান</string>
   <string name="title_movies">চলচ্চিত্র</string>
@@ -242,7 +242,7 @@
   <string name="connected_to">এতে সংযুক্ত</string>
   <string name="disconnect">বিচ্ছিন্ন করুন</string>
   <string name="select_beaming">বীমিং করার জন্য ডিভাইস নির্বাচন করুন</string>
-  <string name="starting_beam">ভিডিও বীমিং শুরু হচ্ছে...</string>
+  <string name="starting_beam">ভিডিও বীমিং শুরু হচ্ছে…</string>
   <string name="beaming_failed">এই ভিডিও আপনার বীমিং ডিভাইসে চালু হবে না। আপনি কি আবার চেষ্টা করতে চান? আপনার ডিভাইসে ভিডিও চালানোর পূর্বে অ্যাপ্লিকেশনটির ভিডিওর আরো অংশ ডাউনলোড করার প্রয়োজন হতে পারে।</string>
   <string name="the_video">ভিডিও</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">চালান</string>
   <string name="init_text">০০:০০</string>
   <string name="play_pause_description">বিরতি বোতাম চালান</string>
-  <string name="loading">লোড হচ্ছে...</string>
+  <string name="loading">লোড হচ্ছে…</string>
   <string name="no_video_found">কোন ভিডিও পাওয়া যায়নি</string>
   <string name="popular_header">জনপ্রিয় ভিডিও</string>
   <string name="grid_view">গ্রিড দৃশ্য</string>

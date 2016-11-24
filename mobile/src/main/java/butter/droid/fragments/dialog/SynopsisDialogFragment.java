@@ -25,13 +25,13 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import butter.droid.R;
 
 public class SynopsisDialogFragment extends DialogFragment {
 
-    @Bind(R.id.synopsis)
+    @BindView(R.id.synopsis)
     TextView synopsisText;
 
     @Override

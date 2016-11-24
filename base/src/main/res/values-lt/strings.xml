@@ -8,11 +8,11 @@
   <string name="update_available">Prienamas atnaaujinimas</string>
   <string name="wrong_abi">Ojoj! Jūs naudojate neteisingą Popcorn Time versiją, skirtą Android. Teisinga versija atsiunčiama šiuos metu, jei tik tai įmanoma. Jei diegimas neprasidės per minutę, jūsų įrenginys nepalaikomas arba neveikia interneto ryšys, todėl galite pamėginti vėliau. Jei diegimas nepavyksta, jums reikia teisingą versiją įdiegti rankiniu būdu.</string>
   <string name="press_install">Paspauskite, norėdami įdiegti</string>
-  <string name="loading_data">Įkeliami duomenys...</string>
-  <string name="loading_details">Įkeliama informacija...</string>
-  <string name="loading_shows">Įkeliamos laidos...</string>
-  <string name="loading_movies">Įkeliami filmai...</string>
-  <string name="loading_subs">Įkeliami subtitrai...</string>
+  <string name="loading_data">Įkeliami duomenys…</string>
+  <string name="loading_details">Įkeliama informacija…</string>
+  <string name="loading_shows">Įkeliamos laidos…</string>
+  <string name="loading_movies">Įkeliami filmai…</string>
+  <string name="loading_subs">Įkeliami subtitrai…</string>
   <string name="error_files">Klaida: neįmanoma įrašyti failų</string>
   <string name="overview_not_available">Atsiprašome! Nėra prieinamos apžvalgos.</string>
   <string name="unknown_error">Kažkas negerai</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Pavadinimas, metai, aktoriai</string>
   <string name="genres">Žanrai</string>
   <string name="search">Ieškoti</string>
-  <string name="searching">Ieškoma...</string>
+  <string name="searching">Ieškoma…</string>
   <string name="no_data_found">Duomenų nerasta</string>
   <string name="title_shows">Laidos</string>
   <string name="title_movies">Filmai</string>
@@ -242,7 +242,7 @@
   <string name="connected_to">Prisijungta prie</string>
   <string name="disconnect">Atsijungti</string>
   <string name="select_beaming">Pasirinkite įrenginį projektavimui</string>
-  <string name="starting_beam">Inicijuojamas vaizdo projektavimas...</string>
+  <string name="starting_beam">Inicijuojamas vaizdo projektavimas…</string>
   <string name="beaming_failed">Vaizdo įrašas negali būti atkurtas projektavimo įrenginyje. Ar norite pamėginti dar kartą? Programai gali reikėti atsisiųsti daugiau dalių, kad įrenginys galėtų atkurti vaizdo įrašą.</string>
   <string name="the_video">Vaizdo įrašas</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">Atkurti</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Atkurti pristabdyti mygtukas</string>
-  <string name="loading">Įkeliama...</string>
+  <string name="loading">Įkeliama…</string>
   <string name="no_video_found">Nerasta jokių vaizdo įrašų</string>
   <string name="popular_header">Populiarūs vaizdo įrašai</string>
   <string name="grid_view">Tinklelio rodinys</string>

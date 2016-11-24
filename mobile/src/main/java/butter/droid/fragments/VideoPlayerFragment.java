@@ -57,9 +57,6 @@ import android.widget.TextView;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.base.content.preferences.Prefs;
@@ -73,34 +70,37 @@ import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.widget.StrokedRobotoTextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.progress_indicator)
+    @BindView(R.id.progress_indicator)
     ProgressBar mProgressIndicator;
-    @Bind(R.id.video_surface)
+    @BindView(R.id.video_surface)
     SurfaceView videoSurface;
-    @Bind(R.id.subtitle_text)
+    @BindView(R.id.subtitle_text)
     StrokedRobotoTextView mSubtitleText;
-    @Bind(R.id.control_layout)
+    @BindView(R.id.control_layout)
     RelativeLayout mControlLayout;
-    @Bind(R.id.player_info)
+    @BindView(R.id.player_info)
     TextView mPlayerInfo;
-    @Bind(R.id.control_bar)
+    @BindView(R.id.control_bar)
     butter.droid.widget.ButterSeekBar mControlBar;
-    @Bind(R.id.play_button)
+    @BindView(R.id.play_button)
     ImageButton mPlayButton;
-    @Bind(R.id.forward_button)
+    @BindView(R.id.forward_button)
     ImageButton mForwardButton;
-    @Bind(R.id.rewind_button)
+    @BindView(R.id.rewind_button)
     ImageButton mRewindButton;
-    @Bind(R.id.subs_button)
+    @BindView(R.id.subs_button)
     ImageButton mSubsButton;
-    @Bind(R.id.current_time)
+    @BindView(R.id.current_time)
     TextView mCurrentTimeTextView;
-    @Bind(R.id.length_time)
+    @BindView(R.id.length_time)
     TextView lengthTime;
     View mDecorView;
 
@@ -541,7 +541,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     }
 
     public void updatePlayPauseState() {
-        if(!FragmentUtil.isAdded(this))
+        if(FragmentUtil.isNotAdded(this))
             return;
 
         if (isPlaying()) {

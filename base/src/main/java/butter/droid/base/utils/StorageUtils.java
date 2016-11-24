@@ -17,7 +17,9 @@
 
 package butter.droid.base.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
@@ -28,30 +30,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class StorageUtils {
+import butter.droid.base.compat.Compatibility;
 
-    public static final String SD_CARD = "sdCard";
-    public static final String EXTERNAL_SD_CARD = "externalSdCard";
+public class StorageUtils extends Compatibility {
+
+    private static final String SD_CARD = "sdCard";
+    private static final String EXTERNAL_SD_CARD = "externalSdCard";
 
     /**
      * @return {@code true} if external storage is available and writable. {@code false} otherwise.
      */
-    public static boolean isExternalStorageAvailable() {
+    private static boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /**
      * @return A map of all storage locations available
      */
     public static Map<String, File> getAllStorageLocations() {
-        Map<String, File> map = new HashMap<String, File>(10);
+        Map<String, File> map = new HashMap<>(10);
 
-        List<String> mMounts = new ArrayList<String>(10);
-        List<String> mVold = new ArrayList<String>(10);
+        List<String> mMounts = new ArrayList<>(10);
+        List<String> mVold = new ArrayList<>(10);
         mMounts.add("/mnt/sdcard");
         mVold.add("/mnt/sdcard");
 
@@ -105,7 +106,7 @@ public class StorageUtils {
         }
         mVold.clear();
 
-        List<String> mountHash = new ArrayList<String>(10);
+        List<String> mountHash = new ArrayList<>(10);
 
         for (String mount : mMounts) {
             File root = new File(mount);
@@ -139,38 +140,48 @@ public class StorageUtils {
         return map;
     }
 
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private static long getAvailable(final File dir) {
+        final StatFs statFs = new StatFs(dir.getAbsolutePath());
+        if (hasApi(Build.VERSION_CODES.JELLY_BEAN_MR2)) {
+            return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
+        }
+        return ((long) statFs.getAvailableBlocks()) * statFs.getBlockSize();
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private static long getTotal(final File dir) {
+        final StatFs statFs = new StatFs(dir.getAbsolutePath());
+        if (hasApi(Build.VERSION_CODES.JELLY_BEAN_MR2)) {
+            return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
+        }
+        return ((long) statFs.getBlockCount()) * statFs.getBlockSize();
+
+    }
+
     /**
      * @return Available internal memory
      */
-    public static int getAvailableInternalMemorySize() {
-        File path = Environment.getDataDirectory();
-        StatFs stat = new StatFs(path.getPath());
-        int blockSize = stat.getBlockSize();
-        int availableBlocks = stat.getAvailableBlocks();
-        return availableBlocks * blockSize;
+    public static long getAvailableInternalMemorySize() {
+        return getAvailable(Environment.getDataDirectory());
     }
 
     /**
      * @return Total internal memory
      */
-    public static int getTotalInternalMemorySize() {
-        File path = Environment.getDataDirectory();
-        StatFs stat = new StatFs(path.getPath());
-        int blockSize = stat.getBlockSize();
-        int totalBlocks = stat.getBlockCount();
-        return totalBlocks * blockSize;
+    private static long getTotalInternalMemorySize() {
+        return getTotal(Environment.getDataDirectory());
     }
 
     /**
      * @return Available external memory
      */
-    public static int getAvailableExternalMemorySize() {
+    public static long getAvailableExternalMemorySize() {
         if (isExternalStorageAvailable()) {
-            File path = Environment.getExternalStorageDirectory();
-            StatFs stat = new StatFs(path.getPath());
-            int blockSize = stat.getBlockSize();
-            int availableBlocks = stat.getAvailableBlocks();
-            return availableBlocks * blockSize;
+              return getAvailable(Environment.getExternalStorageDirectory());
         } else {
             return 0;
         }
@@ -179,13 +190,9 @@ public class StorageUtils {
     /**
      * @return Total external memory
      */
-    public static int getTotalExternalMemorySize() {
+    private static long getTotalExternalMemorySize() {
         if (isExternalStorageAvailable()) {
-            File path = Environment.getExternalStorageDirectory();
-            StatFs stat = new StatFs(path.getPath());
-            int blockSize = stat.getBlockSize();
-            int totalBlocks = stat.getBlockCount();
-            return totalBlocks * blockSize;
+            return getTotal(Environment.getExternalStorageDirectory());
         } else {
             return 0;
         }

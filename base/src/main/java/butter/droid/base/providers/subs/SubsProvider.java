@@ -26,7 +26,6 @@ import com.squareup.okhttp.Response;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -41,29 +40,19 @@ import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.subs.FatalParsingException;
 import butter.droid.base.subs.FormatASS;
 import butter.droid.base.subs.FormatSRT;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StorageUtils;
+import timber.log.Timber;
 
 public abstract class SubsProvider extends BaseProvider {
     public static final String SUBS_CALL = "subs_http_call";
     public static final String SUBTITLE_LANGUAGE_NONE = "no-subs";
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
-
-    public abstract void getList(Movie movie, Callback callback);
-
-    public abstract void getList(Episode episode, Callback callback);
-
-    public interface Callback {
-        void onSuccess(Map<String, String> items);
-
-        void onFailure(Exception e);
-    }
 
     public static File getStorageLocation(Context context) {
         return new File(PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()) + "/subs/");
@@ -104,13 +93,17 @@ public abstract class SubsProvider extends BaseProvider {
                             InputStream inputStream = null;
                             boolean failure = false;
                             try {
-
-
-                                subsDirectory.mkdirs();
+                                if (!subsDirectory.mkdirs()) {
+                                    Timber.w("Could not create directory: " + subsDirectory.getAbsolutePath());
+                                }
                                 if (srtPath.exists()) {
                                     File to = new File(subsDirectory, "temp" + System.currentTimeMillis());
-                                    srtPath.renameTo(to);
-                                    to.delete();
+                                    if (!srtPath.renameTo(to)) {
+                                        Timber.w("Could not rename file: " + srtPath.getAbsolutePath());
+                                    }
+                                    if (!to.delete()) {
+                                        Timber.w("Could not delete file: " + to.getAbsolutePath());
+                                    }
                                 }
 
                                 inputStream = response.body().byteStream();
@@ -124,14 +117,6 @@ public abstract class SubsProvider extends BaseProvider {
                                     callback.onFailure(response.request(), new IOException("FatalParsingException"));
                                     failure = true;
                                 }
-                            } catch (FatalParsingException e) {
-                                e.printStackTrace();
-                                callback.onFailure(response.request(), new IOException("FatalParsingException"));
-                                failure = true;
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                                callback.onFailure(response.request(), e);
-                                failure = true;
                             } catch (IOException e) {
                                 e.printStackTrace();
                                 callback.onFailure(response.request(), e);
@@ -149,9 +134,7 @@ public abstract class SubsProvider extends BaseProvider {
                 });
 
                 return call;
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (RuntimeException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -166,9 +149,8 @@ public abstract class SubsProvider extends BaseProvider {
      * @param srtPath      Path where SRT should be saved
      * @param languageCode The language code
      * @throws IOException
-     * @throws FatalParsingException
      */
-    private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException, FatalParsingException {
+    private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException {
         String filename;
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         ZipEntry ze;
@@ -231,5 +213,15 @@ public abstract class SubsProvider extends BaseProvider {
         if (subtitleObject != null) {
             FileUtils.saveStringFile(subtitleObject.toSRT(), srtPath);
         }
+    }
+
+    public abstract void getList(Movie movie, Callback callback);
+
+    public abstract void getList(Episode episode, Callback callback);
+
+    public interface Callback {
+        void onSuccess(Map<String, String> items);
+
+        void onFailure(Exception e);
     }
 }

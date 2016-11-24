@@ -21,9 +21,9 @@ package butter.droid.base.youtube;
  * Represents a format in the "fmt_list" parameter
  * Currently, only id is used
  */
-public class Format {
+class Format {
 
-    protected int mId;
+    private int mId;
 
     /**
      * Construct this object from one of the strings in the "fmt_list" parameter
@@ -63,10 +63,7 @@ public class Format {
          */
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof Format)) {
-            return false;
-        }
-        return ((Format) object).mId == mId;
+        return object instanceof Format && ((Format) object).mId == mId;
     }
 
 }

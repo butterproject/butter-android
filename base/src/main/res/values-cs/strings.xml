@@ -8,11 +8,11 @@
   <string name="update_available">K dispozici je nová aktualizace</string>
   <string name="wrong_abi">Jejda! Používáte špatnou verzi Butter pro Android. Pokud možno, správná verze by se měla právě teď stahovat. Pokud do minuty nezapočne instalace tak je vaše zařízení nepodporované nebo je problém s připojením na internet, což znamená že by jste to měli zkusit později. Pokud instalace neproběhne správně, budete muset nainstalovat správnou verzi manuálně.</string>
   <string name="press_install">Pro instalaci stiskněte</string>
-  <string name="loading_data">Načítání dat...</string>
-  <string name="loading_details">Načítání...</string>
+  <string name="loading_data">Načítání dat…</string>
+  <string name="loading_details">Načítání…</string>
   <string name="loading_shows">Načítání dat..</string>
-  <string name="loading_movies">Načítání filmů...</string>
-  <string name="loading_subs">Načítání titulků...</string>
+  <string name="loading_movies">Načítání filmů…</string>
+  <string name="loading_subs">Načítání titulků…</string>
   <string name="error_files">Chyba: nelze přepsat</string>
   <string name="overview_not_available">Omlouváme se! K dispozici není žádný přehled.</string>
   <string name="unknown_error">Něco se nepovedlo</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Titul, rok, herci</string>
   <string name="genres">Žánry</string>
   <string name="search">Vyhledat</string>
-  <string name="searching">Vyhledávání...</string>
+  <string name="searching">Vyhledávání…</string>
   <string name="no_data_found">Nenalezena žádná data</string>
   <string name="title_shows">Seriály</string>
   <string name="title_movies">Filmy</string>
@@ -259,7 +259,7 @@
   <string name="play">Přehrát</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Spustit Zastavit Tlačítko</string>
-  <string name="loading">Načítání...</string>
+  <string name="loading">Načítání…</string>
   <string name="no_video_found">Nenalezeno žádné video</string>
   <string name="popular_header">Populární Videa</string>
   <string name="grid_view">Dlaždicové Zobrazení</string>

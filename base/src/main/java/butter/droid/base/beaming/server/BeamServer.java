@@ -42,26 +42,21 @@ import timber.log.Timber;
 
 public class BeamServer {
 
-    public static final FileType
-            MP4 = new FileType("mp4", "video/mp4", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            AVI = new FileType("avi", "video/x-msvideo", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            MKV = new FileType("mkv", "video/x-matroska", "DLNA.ORG_PN=AVC_MKV_MP_HD_AC3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            SRT = new FileType("srt", "application/x-subrip", "*", ""),
-            VTT = new FileType("vtt", "text/vtt", "*", "");
+    public static final FileType SRT = new FileType("srt", "application/x-subrip", "*", "");
+    public static final FileType VTT = new FileType("vtt", "text/vtt", "*", "");
+    private static final FileType
+            MP4 = new FileType("mp4", "video/mp4", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming");
+    private static final FileType AVI = new FileType("avi", "video/x-msvideo", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming");
+    private static final FileType MKV = new FileType("mkv", "video/x-matroska", "DLNA.ORG_PN=AVC_MKV_MP_HD_AC3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming");
     private static FileType[] FILE_TYPES = {MP4, AVI, MKV};
     private static FileType[] SUB_TYPES = {SRT, VTT};
-    private static HashMap<String, FileType> EXTENSIONS, CONTENT_TYPES;
     private static String sHost;
     private static Integer sPort;
     private static File sCurrentVideo = null, sCurrentSubs = null;
-    private AsyncServer mAsyncServer = new AsyncServer();
-    private AsyncHttpServer mHttpServer;
-    private PowerManager.WakeLock mWakeLock;
-    private WifiManager.WifiLock mWifiLock;
 
     static {
-        EXTENSIONS = new HashMap<>();
-        CONTENT_TYPES = new HashMap<>();
+        HashMap<String, FileType> EXTENSIONS = new HashMap<>();
+        HashMap<String, FileType> CONTENT_TYPES = new HashMap<>();
         for (FileType localFileType : FILE_TYPES) {
             EXTENSIONS.put(localFileType.extension, localFileType);
             CONTENT_TYPES.put(localFileType.mimeType, localFileType);
@@ -71,7 +66,12 @@ public class BeamServer {
         EXTENSIONS.put("mov", MP4);
     }
 
-    public BeamServer(String host, int port) {
+    private AsyncServer mAsyncServer = new AsyncServer();
+    private AsyncHttpServer mHttpServer;
+    private PowerManager.WakeLock mWakeLock;
+    private WifiManager.WifiLock mWifiLock;
+
+    BeamServer(String host, int port) {
         mHttpServer = new AsyncHttpServer() {
             protected boolean onRequest(AsyncHttpServerRequest httpServerRequest, AsyncHttpServerResponse httpServerResponse) {
                 Timber.d(httpServerRequest.toString());
@@ -89,7 +89,7 @@ public class BeamServer {
             mHttpServer.addAction("HEAD", "/video." + localFileType.extension, localVideoFileReponse);
         }
 
-        for(FileType localSubsFileType : SUB_TYPES) {
+        for (FileType localSubsFileType : SUB_TYPES) {
             SubtitleFileResponse localSubsFileReponse = new SubtitleFileResponse(localSubsFileType);
             mHttpServer.get("/video." + localSubsFileType.extension, localSubsFileReponse);
             mHttpServer.addAction("HEAD", "/video." + localSubsFileType.extension, localSubsFileReponse);
@@ -104,12 +104,12 @@ public class BeamServer {
         });
     }
 
-    public static void setCurrentVideo(File file) {
+    private static void setCurrentVideo(File file) {
         sCurrentVideo = file;
     }
 
     public static void setCurrentSubs(File file) {
-        if(file == null) {
+        if (file == null) {
             sCurrentSubs = null;
             return;
         }
@@ -139,16 +139,8 @@ public class BeamServer {
         setCurrentVideo(new File(file));
     }
 
-    public static void setCurrentSubs(String file) {
-        setCurrentSubs(new File(file));
-    }
-
     public static void removeSubs() {
         sCurrentSubs = null;
-    }
-
-    public static String getHost() {
-        return "http://" + sHost + ":" + sPort;
     }
 
     public static String getVideoURL() {
@@ -175,25 +167,25 @@ public class BeamServer {
     }
 
     public void stop() {
-        if(mHttpServer != null)
+        if (mHttpServer != null)
             mHttpServer.stop();
         AsyncServer.getDefault().stop();
-        if(mAsyncServer != null)
+        if (mAsyncServer != null)
             mAsyncServer.stop();
 
-        if(mWifiLock != null && mWifiLock.isHeld())
-        mWifiLock.release();
-        if(mWakeLock != null && mWakeLock.isHeld())
-        mWakeLock.release();
+        if (mWifiLock != null && mWifiLock.isHeld())
+            mWifiLock.release();
+        if (mWakeLock != null && mWakeLock.isHeld())
+            mWakeLock.release();
     }
 
-    public static class FileType {
-        public final String dlnaContentFeatures;
-        public final String dlnaTransferMode;
-        public final String extension;
-        public final String mimeType;
+    private static class FileType {
+        final String dlnaContentFeatures;
+        final String dlnaTransferMode;
+        final String extension;
+        final String mimeType;
 
-        public FileType(String extension, String mimeType, String dlnaContentFeatures, String dlnaTransferMode) {
+        FileType(String extension, String mimeType, String dlnaContentFeatures, String dlnaTransferMode) {
             this.extension = extension;
             this.mimeType = mimeType;
             this.dlnaContentFeatures = dlnaContentFeatures;
@@ -208,7 +200,7 @@ public class BeamServer {
             return this.mimeType.startsWith("video/");
         }
 
-        public void setHeaders(Headers paramHeaders) {
+        void setHeaders(Headers paramHeaders) {
             paramHeaders.set("contentFeatures.dlna.org", this.dlnaContentFeatures);
             paramHeaders.set("TransferMode.DLNA.ORG", this.dlnaTransferMode);
             paramHeaders.set("DAAP-Server", "iTunes/11.0.5 (OS X)");
@@ -218,15 +210,15 @@ public class BeamServer {
             paramHeaders.set("CaptionInfo.sec", getSubsURL(SRT));
         }
 
-        public void setHeaders(AsyncHttpServerResponse httpServerResponse) {
+        void setHeaders(AsyncHttpServerResponse httpServerResponse) {
             setHeaders(httpServerResponse.getHeaders());
         }
     }
 
-    static class VideoFileReponse implements HttpServerRequestCallback {
+    private static class VideoFileReponse implements HttpServerRequestCallback {
         FileType mFileType;
 
-        public VideoFileReponse(FileType fileType) {
+        VideoFileReponse(FileType fileType) {
             mFileType = fileType;
         }
 
@@ -243,10 +235,10 @@ public class BeamServer {
         }
     }
 
-    static class SubtitleFileResponse implements HttpServerRequestCallback {
+    private static class SubtitleFileResponse implements HttpServerRequestCallback {
         FileType mFileType;
 
-        public SubtitleFileResponse(FileType fileType) {
+        SubtitleFileResponse(FileType fileType) {
             mFileType = fileType;
         }
 

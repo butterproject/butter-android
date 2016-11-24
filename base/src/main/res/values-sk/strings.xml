@@ -8,11 +8,11 @@
   <string name="update_available">K dispozícii je nová aktualizácia</string>
   <string name="wrong_abi">Uhoh! Používate nesprávnu verziu aplikácie Butter pre Android. Správna verzia sa, ak je to možné, preberá práve teraz. Pokiaľ sa do minúty nespustí inštalátor, potom vaše zariadenie nie je podporované alebo je vaše pripojenie k internetu nefunkčné, čo znamená, že by ste to mali skúsiť opäť neskôr. Pokiaľ inštalátor zlyhá, musíte nainštalovať správnu verziu ručne.</string>
   <string name="press_install">Stlačením spustíte inštaláciu</string>
-  <string name="loading_data">Načítavanie dát...</string>
-  <string name="loading_details">Načítavanie detailov...</string>
-  <string name="loading_shows">Načítajú sa relácie...</string>
-  <string name="loading_movies">Načítajú sa filmy...</string>
-  <string name="loading_subs">Načítajú sa titulky...</string>
+  <string name="loading_data">Načítavanie dát…</string>
+  <string name="loading_details">Načítavanie detailov…</string>
+  <string name="loading_shows">Načítajú sa relácie…</string>
+  <string name="loading_movies">Načítajú sa filmy…</string>
+  <string name="loading_subs">Načítajú sa titulky…</string>
   <string name="error_files">Chyba: Nie je možné zapisovať súbory</string>
   <string name="overview_not_available">Prepáčte! Prehľad nie je k dispozícii.</string>
   <string name="unknown_error">Niečo sa pokazilo</string>

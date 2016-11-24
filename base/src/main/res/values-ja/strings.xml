@@ -8,11 +8,11 @@
   <string name="update_available">新しいアップデートが利用可能です</string>
   <string name="wrong_abi">間違ったバージョンの Butter for Android を使用しています。可能な場合は、今、正しいバージョンをダウンロードしています。数分以内にインストーラが開始されない場合は、お使いのデバイスがサポートされていないか、インターネット接続が壊れています。その場合は、後でもう一度試してみてください。インストーラが失敗した場合は、手動で正しいバージョンをインストールする必要があります。</string>
   <string name="press_install">押してインストール</string>
-  <string name="loading_data">データの読み込み中...</string>
-  <string name="loading_details">詳細の読み込み中...</string>
-  <string name="loading_shows">テレビ番組の読み込み中...</string>
-  <string name="loading_movies">映画の読み込み中...</string>
-  <string name="loading_subs">字幕の読み込み中...</string>
+  <string name="loading_data">データの読み込み中…</string>
+  <string name="loading_details">詳細の読み込み中…</string>
+  <string name="loading_shows">テレビ番組の読み込み中…</string>
+  <string name="loading_movies">映画の読み込み中…</string>
+  <string name="loading_subs">字幕の読み込み中…</string>
   <string name="error_files">エラー:ファイルの保存ができません</string>
   <string name="overview_not_available">ごめんなさい！利用可能な概要はありません。</string>
   <string name="unknown_error">何か不具合がありました</string>
@@ -193,7 +193,7 @@
   <string name="confirm_tv">テレビとの接続をご確認ください</string>
   <string name="enter_pairing_code">テレビでペアリングコードを入力してください</string>
   <!--TermsActivity strings-->
-  <string name="open_with">開く...</string>
+  <string name="open_with">開く…</string>
   <string name="select_file">ファイルを選択</string>
   <string name="accept">受付</string>
   <string name="leave">離れる</string>

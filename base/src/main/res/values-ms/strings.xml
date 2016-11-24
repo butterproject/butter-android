@@ -8,11 +8,11 @@
   <string name="update_available">Kemaskini baharu tersedia</string>
   <string name="wrong_abi">Alamak! Anda telah guna versi Popcorn Time untuk Android yang salah. Versi sepatutnya sedang dimuat turun, jika boleh. Jika pemasang tidak dimulakan dalam tempoh seminit maka peranti anda tidak disokong atau sambungan internet anda bermasalah, iaitu anda perlu mula sekali lagi kemudian. Jika pemasang gagal maka anda mesti pasang versi yang betul secara manual.</string>
   <string name="press_install">Tekan untuk pasang</string>
-  <string name="loading_data">Memuatkan data...</string>
-  <string name="loading_details">Memuatkan perincian...</string>
-  <string name="loading_shows">Memuatkan rancangan...</string>
-  <string name="loading_movies">Memuatkan cereka...</string>
-  <string name="loading_subs">Memuatkan sarikata...</string>
+  <string name="loading_data">Memuatkan data…</string>
+  <string name="loading_details">Memuatkan perincian…</string>
+  <string name="loading_shows">Memuatkan rancangan…</string>
+  <string name="loading_movies">Memuatkan cereka…</string>
+  <string name="loading_subs">Memuatkan sarikata…</string>
   <string name="error_files">Ralat: Tidak dapat tulis fail</string>
   <string name="overview_not_available">Maaf! Tiada selayang pandang tersedia.</string>
   <string name="unknown_error">Ada masalah berlaku</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Tajuk, tahun, pelakon</string>
   <string name="genres">Genre</string>
   <string name="search">Gelintar</string>
-  <string name="searching">Menggelintar...</string>
+  <string name="searching">Menggelintar…</string>
   <string name="no_data_found">Tiada data ditemui</string>
   <string name="title_shows">Rancangan</string>
   <string name="title_movies">Cereka</string>
@@ -242,7 +242,7 @@
   <string name="connected_to">Bersambung dengan</string>
   <string name="disconnect">Terputus</string>
   <string name="select_beaming">Pilih peranti untuk pemancaran</string>
-  <string name="starting_beam">Mengawalkan pemancaran video...</string>
+  <string name="starting_beam">Mengawalkan pemancaran video…</string>
   <string name="beaming_failed">Video tidak dapat dimainkan dengan peranti pemancaran anda. Anda mahu cuba lagi sekali? Apl mungkin perlu memuat turun lagi komponen sebelum peranti anda dapat memainkan video.</string>
   <string name="the_video">Video</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">Main</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Main Butang Jeda</string>
-  <string name="loading">Memuatkan...</string>
+  <string name="loading">Memuatkan…</string>
   <string name="no_video_found">Tiada video ditemui</string>
   <string name="popular_header">Video Popular</string>
   <string name="grid_view">Paparan Grid</string>

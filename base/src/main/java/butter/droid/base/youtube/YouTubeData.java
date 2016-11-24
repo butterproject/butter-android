@@ -28,6 +28,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +39,10 @@ import butter.droid.base.ButterApplication;
 
 public class YouTubeData {
 
-    static final String YOUTUBE_VIDEO_INFORMATION_URL = "http://www.youtube.com/get_video_info?&video_id=";
+    private static final String YOUTUBE_VIDEO_INFORMATION_URL = "http://www.youtube.com/get_video_info?&video_id=";
 
     public static boolean isYouTubeUrl(String youtubeUrl) {
-        String expression = "^.*((youtu.be\\/)|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+        String expression = "^.*((youtu.be/)|(v/)|(/u/w/)|(embed/)|(watch\\?))\\??v?=?([^#&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(youtubeUrl);
         return matcher.matches();
@@ -50,7 +51,7 @@ public class YouTubeData {
     public static String getYouTubeVideoId(String youtubeUrl) {
         String videoId = "";
         if (youtubeUrl != null && youtubeUrl.trim().length() > 0 && youtubeUrl.startsWith("http")) {
-            String expression = "^.*((youtu.be\\/)|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+            String expression = "^.*((youtu.be/)|(v/)|(/u/w/)|(embed/)|(watch\\?))\\??v?=?([^#&\\?]*).*"; // var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
             Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(youtubeUrl);
             if (matcher.matches()) {
@@ -85,11 +86,11 @@ public class YouTubeData {
         String infoStr = response.body().string();
 
         String[] args = infoStr.split("&");
-        Map<String, String> argMap = new HashMap<String, String>();
+        Map<String, String> argMap = new HashMap<>();
         for (String arg : args) {
             String[] valStrArr = arg.split("=");
             if (valStrArr.length >= 2) {
-                argMap.put(valStrArr[0], URLDecoder.decode(valStrArr[1]));
+                argMap.put(valStrArr[0], URLDecoder.decode(valStrArr[1], Charset.defaultCharset().toString()));
             }
         }
 
@@ -97,7 +98,7 @@ public class YouTubeData {
 
         //Populate the list of formats for the video
         String fmtList = URLDecoder.decode(argMap.get("fmt_list"), "utf-8");
-        ArrayList<Format> formats = new ArrayList<Format>();
+        ArrayList<Format> formats = new ArrayList<>();
         if (null != fmtList) {
             String formatStrs[] = fmtList.split(",");
 
@@ -111,7 +112,7 @@ public class YouTubeData {
         String streamList = argMap.get("url_encoded_fmt_stream_map");
         if (null != streamList) {
             String streamStrs[] = streamList.split(",");
-            ArrayList<VideoStream> streams = new ArrayList<VideoStream>();
+            ArrayList<VideoStream> streams = new ArrayList<>();
             for (String streamStr : streamStrs) {
                 VideoStream lStream = new VideoStream(streamStr);
                 streams.add(lStream);
@@ -145,7 +146,7 @@ public class YouTubeData {
         return uriStr;
     }
 
-    public static int getSupportedFallbackId(int oldId) {
+    private static int getSupportedFallbackId(int oldId) {
         final int supportedFormatIds[] = {13,  //3GPP (MPEG-4 encoded) Low quality
                 17,  //3GPP (MPEG-4 encoded) Medium quality
                 18,  //MP4  (H.264 encoded) Normal quality

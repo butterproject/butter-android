@@ -30,7 +30,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -42,28 +43,27 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import okio.BufferedSink;
-import okio.Okio;
 import butter.droid.base.BuildConfig;
-import butter.droid.base.Constants;
 import butter.droid.base.ButterApplication;
+import butter.droid.base.compat.SupportedArchitectures;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.VersionUtils;
+import okio.BufferedSink;
+import okio.Okio;
 
 public class ButterUpdater extends Observable {
 
     private static ButterUpdater sThis;
 
     public static int NOTIFICATION_ID = 0x808C049;
-    public static final String STATUS_NO_UPDATE = "no_updates";
-    public static final String STATUS_GOT_UPDATE = "got_update";
+    private static final String STATUS_NO_UPDATE = "no_updates";
+    private static final String STATUS_GOT_UPDATE = "got_update";
 
     private static final long MINUTES = 60 * 1000;
     private static final long HOURS = 60 * MINUTES;
@@ -82,7 +82,6 @@ public class ButterUpdater extends Observable {
     private static final String SHA1_KEY = "sha1_update";
 
     private final OkHttpClient mHttpClient = ButterApplication.getHttpClient();
-    private final Gson mGson = new Gson();
     private final Handler mUpdateHandler = new Handler();
 
     private Context mContext = null;
@@ -112,12 +111,12 @@ public class ButterUpdater extends Observable {
             e.printStackTrace();
         }
 
-        lastUpdate = PrefUtils.get(mContext, LAST_UPDATE_KEY, 0l);
+        lastUpdate = PrefUtils.get(mContext, LAST_UPDATE_KEY, 1L);
         NOTIFICATION_ID += crc32(mPackageName);
 
         ApplicationInfo appinfo = context.getApplicationInfo();
 
-        if (new File(appinfo.sourceDir).lastModified() > PrefUtils.get(mContext, SHA1_TIME, 0l)) {
+        if (new File(appinfo.sourceDir).lastModified() > PrefUtils.get(mContext, SHA1_TIME, 1L)) {
             PrefUtils.save(mContext, SHA1_KEY, SHA1(appinfo.sourceDir));
             PrefUtils.save(mContext, SHA1_TIME, System.currentTimeMillis());
 
@@ -129,6 +128,20 @@ public class ButterUpdater extends Observable {
             }
         }
 
+        BroadcastReceiver mConnectivityReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // do application-specific task(s) based on the current network state, such
+                // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
+                if (NetworkUtils.isWifiConnected(context)) {
+                    checkUpdates(false);
+                    mUpdateHandler.postDelayed(periodicUpdate, UPDATE_INTERVAL);
+                } else {
+                    mUpdateHandler.removeCallbacks(periodicUpdate);    // no network anyway
+                }
+            }
+        };
         context.registerReceiver(mConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
@@ -175,11 +188,7 @@ public class ButterUpdater extends Observable {
 
             if (!forced) return;
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                mAbi = Build.CPU_ABI.toLowerCase(Locale.US);
-            } else {
-                mAbi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
-            }
+            mAbi = SupportedArchitectures.getAbi();
 
             if (mPackageName.contains("tv")) {
                 mVariantStr = "tv";
@@ -229,34 +238,31 @@ public class ButterUpdater extends Observable {
 
         @Override
         public void onResponse(Response response) {
+            String status = STATUS_NO_UPDATE;
             try {
                 if (response.isSuccessful()) {
-                    UpdaterData data = mGson.fromJson(response.body().string(), UpdaterData.class);
-                    Map<String, Map<String, UpdaterData.Arch>> variant;
-                    if (mVariantStr.equals("tv")) {
-                        variant = data.tv;
-                    } else {
-                        variant = data.mobile;
-                    }
+                    ObjectMapper mapper = new ObjectMapper();
+                    JsonNode data = mapper.readTree(response.body().string());
+                    JsonNode variant = data.get(mVariantStr);
 
-                    UpdaterData.Arch channel = null;
-                    if (variant.containsKey(mChannelStr) && variant.get(mChannelStr).containsKey(mAbi)) {
-                        channel = variant.get(mChannelStr).get(mAbi);
+                    JsonNode arch = null;
+                    JsonNode channel = variant.get(mChannelStr);
+                    if (channel != null) {
+                        arch = channel.get(mAbi);
                     }
 
                     ApplicationInfo appinfo = mContext.getApplicationInfo();
-                    if ((channel == null || channel.checksum.equals(SHA1(appinfo.sourceDir)) || channel.versionCode <= mVersionCode) && VersionUtils.isUsingCorrectBuild()) {
-                        setChanged();
-                        notifyObservers(STATUS_NO_UPDATE);
-                    } else {
-                        downloadFile(channel.updateUrl);
-                        setChanged();
-                        notifyObservers(STATUS_GOT_UPDATE);
+                    if (arch != null) {
+                        if ((!arch.get("checksum").asText().equals(SHA1(appinfo.sourceDir)) || arch.get("versionCode").asInt() <= mVersionCode) || !VersionUtils.isUsingCorrectBuild()){
+                            status = STATUS_GOT_UPDATE;
+                            downloadFile(arch.get("updateUrl").asText());
+                        }
                     }
-                } else {
-                    setChanged();
-                    notifyObservers(STATUS_NO_UPDATE);
                 }
+
+                setChanged();
+                notifyObservers(status);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -302,21 +308,6 @@ public class ButterUpdater extends Observable {
     public void checkUpdatesManually() {
         checkUpdates(true);
     }
-
-    private BroadcastReceiver mConnectivityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            // do application-specific task(s) based on the current network state, such
-            // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
-            if (NetworkUtils.isWifiConnected(context)) {
-                checkUpdates(false);
-                mUpdateHandler.postDelayed(periodicUpdate, UPDATE_INTERVAL);
-            } else {
-                mUpdateHandler.removeCallbacks(periodicUpdate);    // no network anyway
-            }
-        }
-    };
 
     private String SHA1(String filename) {
         final int BUFFER_SIZE = 8192;

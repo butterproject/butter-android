@@ -38,7 +38,7 @@ public class PrefItem {
         return new Builder(context);
     }
 
-    protected PrefItem() {
+    private PrefItem() {
 
     }
 

@@ -144,7 +144,12 @@
 
         <activity
             android:name="butter.droid.activities.PreferencesActivity"
-            android:parentActivityName="butter.droid.activities.MainActivity" />
+            android:parentActivityName="butter.droid.activities.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="butter.droid.activities.MainActivity" />
+        </activity>
 
 		<activity
             android:launchMode="singleTask"
@@ -159,7 +164,6 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="" />
                 <data android:scheme="file"/>
                 <data android:scheme="ftp"/>
                 <data android:scheme="content"/>
@@ -195,7 +199,6 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme=""/>
                 <data android:scheme="file"/>
                 <data android:scheme="ftp"/>
                 <data android:scheme="content"/>

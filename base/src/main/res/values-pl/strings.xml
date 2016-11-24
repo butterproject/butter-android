@@ -8,11 +8,11 @@
   <string name="update_available">Dostępna aktualizacja</string>
   <string name="wrong_abi">Używasz złej wersji Popcorn Time dla Androida. Prawidłowa wersja właśnie jest pobierana, jeżeli to możliwe. Jeżeli w ciągu minuty nie rozpocznie się pobieranie, może to oznaczać, że twoje urządzenie jest niekompatybilne z aplikacją albo połączenie z Internetem zostało przerwane. Jeżeli wystąpią problemy z pobieraniem instalatora, przeprowadź ręczną instalację poprawnej wersji aplikacji.</string>
   <string name="press_install">Naciśnij aby zainstalować</string>
-  <string name="loading_data">Ładowanie danych...</string>
-  <string name="loading_details">Ładowanie szczegółów...</string>
-  <string name="loading_shows">Ładowanie seriali...</string>
-  <string name="loading_movies">Ładowanie filmów...</string>
-  <string name="loading_subs">Ładowanie napisów...</string>
+  <string name="loading_data">Ładowanie danych…</string>
+  <string name="loading_details">Ładowanie szczegółów…</string>
+  <string name="loading_shows">Ładowanie seriali…</string>
+  <string name="loading_movies">Ładowanie filmów…</string>
+  <string name="loading_subs">Ładowanie napisów…</string>
   <string name="error_files">Błąd: brak uprawnień do zapisu</string>
   <string name="overview_not_available">Przepraszamy! Podgląd niedostępny.</string>
   <string name="unknown_error">Coś poszło nie tak</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Tytuł, rok, aktorzy</string>
   <string name="genres">Gatunki</string>
   <string name="search">Szukaj</string>
-  <string name="searching">Wyszukiwanie... </string>
+  <string name="searching">Wyszukiwanie… </string>
   <string name="no_data_found">Nie znaleziono</string>
   <string name="title_shows">Widowiska</string>
   <string name="title_movies">Filmy</string>
@@ -207,7 +207,7 @@
   <string name="health_unknown">Nieznany stan</string>
   <!--StreamLoadingActivity strings-->
   <string name="waiting_torrent">Oczekiwanie na torrent</string>
-  <string name="starting_buffering">Buforowanie...</string>
+  <string name="starting_buffering">Buforowanie…</string>
   <string name="streaming_started">Rozpoczęto streamowanie</string>
   <string name="waiting_for_subtitles">Oczekiwanie na napisy</string>
   <string name="seeds">seedów</string>
@@ -277,7 +277,7 @@
   <string name="video_error_media_load_timeout">Przekroczono czas ładowania źródeł</string>
   <string name="video_error_server_unaccessible">Serwer mediów nie osiągalny</string>
   <string name="video_error_unknown_error">Nie udało się załadować wideo</string>
-  <string name="oops">Uups...</string>
+  <string name="oops">Uups…</string>
   <!--PTVUpdateFragment-->
   <string name="now">Tak</string>
   <string name="later">Nie, później</string>

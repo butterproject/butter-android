@@ -8,11 +8,11 @@
   <string name="update_available">Доступно ново ажурирање</string>
   <string name="wrong_abi">Ојој! Користите погрешно издање Попкорна за Андроид. Право издање се управо преузима, ако је то могуће. Ако се инсталер не покрене за који минут онда ваш уређај није подржан или је нисте повезани, што значи да покушате поново касније. Ако инсталер не успе да инсталира, мораћете да инсталирате право издање ручно.</string>
   <string name="press_install">Инсталирај</string>
-  <string name="loading_data">Учитавам податке...</string>
-  <string name="loading_details">Учитавам детаље...</string>
-  <string name="loading_shows">Учитавам серије...</string>
-  <string name="loading_movies">Учитавам филмове...</string>
-  <string name="loading_subs">Учитавам титлове...</string>
+  <string name="loading_data">Учитавам податке…</string>
+  <string name="loading_details">Учитавам детаље…</string>
+  <string name="loading_shows">Учитавам серије…</string>
+  <string name="loading_movies">Учитавам филмове…</string>
+  <string name="loading_subs">Учитавам титлове…</string>
   <string name="error_files">Грешка: не могу да вршим упис</string>
   <string name="overview_not_available">Извините! Преглед није доступан.</string>
   <string name="unknown_error">Нешто није у реду</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Наслов, година, глумци</string>
   <string name="genres">Жанрови</string>
   <string name="search">Претрага</string>
-  <string name="searching">Претражујем...</string>
+  <string name="searching">Претражујем…</string>
   <string name="no_data_found">Нема података</string>
   <string name="title_shows">Серије</string>
   <string name="title_movies">Филмови</string>

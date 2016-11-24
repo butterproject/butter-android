@@ -26,8 +26,18 @@ import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 
 public class Show extends Media implements Parcelable {
-    public enum Status {CONTINUING, ENDED, CANCELED, NOT_AIRED_YET, UNKNOWN}
+    @SuppressWarnings("unused")
+    public static final Creator<Show> CREATOR = new Creator<Show>() {
+        @Override
+        public Show createFromParcel(Parcel in) {
+            return new Show(in);
+        }
 
+        @Override
+        public Show[] newArray(int size) {
+            return new Show[size];
+        }
+    };
     public String airDay = "";
     public String airTime = "";
     public Status status = Status.UNKNOWN;
@@ -36,15 +46,15 @@ public class Show extends Media implements Parcelable {
     public String country = "";
     public String tvdbId = "";
     public String synopsis = "No synopsis available";
-    public String certification = "n/a";
     public Integer seasons = 0;
     public LinkedList<Episode> episodes = new LinkedList<>();
+    private String certification = "n/a";
 
     public Show(MediaProvider mediaProvider, SubsProvider subsProvider) {
         super(mediaProvider, subsProvider);
     }
 
-    protected Show(Parcel in) {
+    private Show(Parcel in) {
         super(in);
         airDay = in.readString();
         airTime = in.readString();
@@ -84,7 +94,7 @@ public class Show extends Media implements Parcelable {
         dest.writeString(airDay);
         dest.writeString(airTime);
         dest.writeString(runtime);
-        dest.writeInt(null!=status?status.ordinal():Status.UNKNOWN.ordinal());
+        dest.writeInt(null != status ? status.ordinal() : Status.UNKNOWN.ordinal());
         dest.writeString(network);
         dest.writeString(country);
         dest.writeString(tvdbId);
@@ -98,16 +108,5 @@ public class Show extends Media implements Parcelable {
         }
     }
 
-    @SuppressWarnings("unused")
-    public static final Creator<Show> CREATOR = new Creator<Show>() {
-        @Override
-        public Show createFromParcel(Parcel in) {
-            return new Show(in);
-        }
-
-        @Override
-        public Show[] newArray(int size) {
-            return new Show[size];
-        }
-    };
+    public enum Status {CONTINUING, ENDED, CANCELED, NOT_AIRED_YET, UNKNOWN}
 }

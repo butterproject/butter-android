@@ -24,6 +24,19 @@ import butter.droid.base.providers.BaseProvider;
 public abstract class MetaProvider extends BaseProvider {
     public static final String META_CALL = "meta_http_call";
 
+    public void getMovieMeta(String imdbId, Callback callback) {
+    }
+
+    public void getEpisodeMeta(String imdbId, int season, int episode, Callback callback) {
+    }
+
+    public void getShowMeta(String imdbId, Callback callback) {
+    }
+
+    public interface Callback {
+        void onResult(MetaData metaData, Exception e);
+    }
+
     public static class MetaData {
         public String title;
         public Integer year;
@@ -51,19 +64,6 @@ public abstract class MetaProvider extends BaseProvider {
                 this.poster = this.backdrop = poster;
             }
         }
-    }
-
-    public interface Callback {
-        public void onResult(MetaData metaData, Exception e);
-    }
-
-    public void getMovieMeta(String imdbId, Callback callback) {
-    }
-
-    public void getEpisodeMeta(String imdbId, int season, int episode, Callback callback) {
-    }
-
-    public void getShowMeta(String imdbId, Callback callback) {
     }
 
 }

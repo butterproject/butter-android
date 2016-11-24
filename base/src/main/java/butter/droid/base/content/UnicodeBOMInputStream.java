@@ -27,6 +27,8 @@
  */
 package butter.droid.base.content;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
@@ -220,16 +222,14 @@ public class UnicodeBOMInputStream extends InputStream {
      * Skips the <code>BOM</code> that was found in the wrapped
      * <code>InputStream</code> object.
      *
-     * @return this <code>UnicodeBOMInputStream</code>.
      * @throws IOException when trying to skip the BOM from the wrapped
      *                     <code>InputStream</code> object.
      */
-    public final synchronized UnicodeBOMInputStream skipBOM() throws IOException {
+    public final synchronized void skipBOM() throws IOException {
         if (!skipped) {
             in.skip(bom.bytes.length);
             skipped = true;
         }
-        return this;
     }
 
     /**
@@ -242,7 +242,7 @@ public class UnicodeBOMInputStream extends InputStream {
     /**
      * {@inheritDoc}
      */
-    public int read(final byte b[]) throws IOException,
+    public int read(@NonNull final byte b[]) throws IOException,
             NullPointerException {
         return in.read(b, 0, b.length);
     }
@@ -250,7 +250,7 @@ public class UnicodeBOMInputStream extends InputStream {
     /**
      * {@inheritDoc}
      */
-    public int read(final byte b[],
+    public int read(@NonNull final byte b[],
                     final int off,
                     final int len) throws IOException,
             NullPointerException {

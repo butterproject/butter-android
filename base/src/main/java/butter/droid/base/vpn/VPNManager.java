@@ -30,10 +30,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import ht.vpn.android.api.IOpenVPNAPIService;
-import ht.vpn.android.api.IOpenVPNStatusCallback;
+
 import butter.droid.base.utils.PackageUtils;
 import butter.droid.base.utils.ThreadUtils;
+import ht.vpn.android.api.IOpenVPNAPIService;
+import ht.vpn.android.api.IOpenVPNStatusCallback;
 
 public class VPNManager {
 
@@ -62,7 +63,7 @@ public class VPNManager {
         throw new UnsupportedOperationException("Activity does not implement VPNManager.Listener");
     }
 
-    public VPNManager(Activity activity) {
+    private VPNManager(Activity activity) {
         mActivity = activity;
         mListener = (Listener) mActivity;
     }
@@ -164,7 +165,7 @@ public class VPNManager {
         return mIsInstalled;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Bundle data) {
+    private void onActivityResult(int requestCode, int resultCode, Bundle data) {
         if (resultCode == Activity.RESULT_OK) {
             if(requestCode == START_PROFILE_EMBEDDED) {
                 startEmbeddedProfile();
@@ -237,8 +238,8 @@ public class VPNManager {
     }
 
     public interface Listener {
-        public void onVPNServiceReady();
-        public void onVPNStatusUpdate(State state, String message);
+        void onVPNServiceReady();
+        void onVPNStatusUpdate(State state, String message);
     }
 
 }

@@ -46,7 +46,7 @@ public class DefaultPlayer {
      *
      * @return Map with options
      */
-    public static Map<String, String> getVideoPlayerApps() {
+    static Map<String, String> getVideoPlayerApps() {
         Intent playerIntent = new Intent(Intent.ACTION_VIEW);
         playerIntent.setDataAndType(Uri.parse("http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4"), "video/*");
 
@@ -101,8 +101,8 @@ public class DefaultPlayer {
             if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
                 BeamServer.setCurrentSubs(subsLocation);
-                intent.putExtra("subs", new Uri[] { Uri.parse(BeamServer.getSubsURL()) });
-                intent.putExtra("subs.name", new String[] { LocaleUtils.toLocale(subLanguage).getDisplayLanguage() });
+                intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
+                intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
             }
 
             BeamServer.setCurrentVideo(location);
@@ -112,12 +112,12 @@ public class DefaultPlayer {
             intent.setAction(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
 
-            if(media != null) {
-                if(media.isMovie) {
+            if (media != null) {
+                if (media.isMovie) {
                     intent.putExtra("title", media.title);
                 } else {
                     Episode episode = (Episode) media;
-                    intent.putExtra("title", String.format("%s S%dE%d - %s", episode.showName, episode.season, episode.episode, episode.title));
+                    intent.putExtra("title", String.format(LocaleUtils.getCurrent(), "%s S%dE%d - %s", episode.showName, episode.season, episode.episode, episode.title));
                 }
             }
 

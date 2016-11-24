@@ -28,7 +28,6 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 
 import java.util.Map;
 
-import hugo.weaving.DebugLog;
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.beaming.server.BeamServer;
@@ -44,6 +43,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
+import hugo.weaving.DebugLog;
 
 
 /**
@@ -71,7 +71,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment
         SubsProvider.Callback {
 
     protected FragmentListener mCallback;
-    private SubsProvider mSubsProvider;
     protected boolean mPlayingExternal = false;
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
@@ -83,10 +82,10 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
 
     private SubsStatus mSubsStatus = SubsStatus.DOWNLOADING;
-    private String mSubtitleLanguage = null, mVideoLocation = "";
+    private String mVideoLocation = "";
 
     public enum State {
-        UNINITIALISED, WAITING_TORRENT, WAITING_SUBTITLES, BUFFERING, STREAMING, ERROR;
+        UNINITIALISED, WAITING_TORRENT, WAITING_SUBTITLES, BUFFERING, STREAMING, ERROR
     }
 
     @Override
@@ -150,7 +149,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     /**
      * Update the view based on a state.
      *
-     * @param state
+     * @param state View state
      * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
      */
     protected abstract void updateView(State state, Object extra);
@@ -158,8 +157,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     /**
      * Start the internal player for a streaming torrent
      *
-     * @param location
-     * @param resumePosition
+     * @param location Location
+     * @param resumePosition Resume position
      */
     protected abstract void startPlayerActivity(String location, int resumePosition);
 
@@ -169,7 +168,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     }
 
     @DebugLog
-    protected void setState(final State state, final Object extra) {
+    private void setState(final State state, final Object extra) {
         mState = state;
 
         ThreadUtils.runOnUiThread(new Runnable() {
@@ -277,7 +276,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     /**
      * Called when torrent buffering has reached 100%
      *
-     * @param torrent
+     * @param torrent The torrent file
      */
     @Override
     @DebugLog
@@ -289,7 +288,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     /**
      * Called when the torrent buffering status has been updated
      *
-     * @param status
+     * @param torrent The torrent
+     * @param status Stream status
      */
     @Override
     @DebugLog
@@ -317,7 +317,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
         Media media = mStreamInfo.getMedia();
         if (media == null) return;
 
-        mSubsProvider = media.getSubsProvider();
+        SubsProvider mSubsProvider = media.getSubsProvider();
         if (mSubsProvider == null) return;
 
         if (mStreamInfo.isShow()) {
@@ -348,7 +348,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
         }
 
         if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-            mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
+            String mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
             mSubsStatus = SubsStatus.DOWNLOADING;
             mHasSubs = true;
             SubtitleDownloader subtitleDownloader = new SubtitleDownloader(getActivity(), mStreamInfo, mSubtitleLanguage);

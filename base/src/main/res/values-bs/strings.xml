@@ -8,11 +8,11 @@
   <string name="update_available">Nova nadopuna dostupna</string>
   <string name="wrong_abi">Uh! Koristite krivu verziju Butter-a za Android. Prava verzija se upravo preuzima, ako je moguće. Ako instalacije ne počne kroz minutu onda vaš uređaj nije podržan ili je vaša internet veza prekinuta stoga pokušajte kasnije ponovno. Ako instalacije ne uspije, onda morate instalirati pravu verziju ručno.</string>
   <string name="press_install">Pritisnite za instalaciju</string>
-  <string name="loading_data">Učitavanje podataka...</string>
-  <string name="loading_details">Učitavanje pojedinosti...</string>
-  <string name="loading_shows">Učitavanje serija...</string>
-  <string name="loading_movies">Učitavanje filmova...</string>
-  <string name="loading_subs">Učitavanje podnaslova...</string>
+  <string name="loading_data">Učitavanje podataka…</string>
+  <string name="loading_details">Učitavanje pojedinosti…</string>
+  <string name="loading_shows">Učitavanje serija…</string>
+  <string name="loading_movies">Učitavanje filmova…</string>
+  <string name="loading_subs">Učitavanje podnaslova…</string>
   <string name="error_files">Greška: nemoguće zapisivanje datoteka</string>
   <string name="overview_not_available">Nažalost, pregled nije dostupan.</string>
   <string name="unknown_error">Nešto je pošlo po krivu</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Naslov, godina, glumci</string>
   <string name="genres">Žanrovi</string>
   <string name="search">Traži</string>
-  <string name="searching">Pretraživanje...</string>
+  <string name="searching">Pretraživanje…</string>
   <string name="no_data_found">Nema pronađenih podataka</string>
   <string name="title_shows">TV serije</string>
   <string name="title_movies">Filmovi</string>
@@ -242,7 +242,7 @@
   <string name="connected_to">Povezano s</string>
   <string name="disconnect">Odspoji</string>
   <string name="select_beaming">Odaberi uređaj za prijem</string>
-  <string name="starting_beam">Pokretanje odašiljanja videa...</string>
+  <string name="starting_beam">Pokretanje odašiljanja videa…</string>
   <string name="beaming_failed">Video snimka se ne može reproducirati na vašem uređaju prijema. Želite li ponovno pokušati? Aplikacija možda treba preuzeti dodatne komponente kako bi vaš uređaj mogao reproducirati video snimku.</string>
   <string name="the_video">Video</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">Reprodukcija</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Tipka izvođenja i pauziranja</string>
-  <string name="loading">Učitavanje...</string>
+  <string name="loading">Učitavanje…</string>
   <string name="no_video_found">Video nije pronađen</string>
   <string name="popular_header">Popularni video</string>
   <string name="grid_view">Mrežni prikaz</string>

@@ -8,11 +8,11 @@
   <string name="update_available">Доступно новое обновление</string>
   <string name="wrong_abi">Аха! Вы используете не ту версию Popcorn Time для Android. Правильная версия загружается прямо сейчас, если это возможно. Если программа установки не запускается в течение минуты, значит ваше устройство не поддерживается, или ваше интернет-соединение разорвано, что означает, что вы должны попробовать еще раз. Если программа установки не работает, то нужно установить правильную версию вручную.</string>
   <string name="press_install">Нажмите для установки</string>
-  <string name="loading_data">Загрузка данных...</string>
-  <string name="loading_details">Загрузка данных...</string>
-  <string name="loading_shows">Загрузка шоу...</string>
-  <string name="loading_movies">Загрузка фильмов...</string>
-  <string name="loading_subs">Загрузка субтитров...</string>
+  <string name="loading_data">Загрузка данных…</string>
+  <string name="loading_details">Загрузка данных…</string>
+  <string name="loading_shows">Загрузка шоу…</string>
+  <string name="loading_movies">Загрузка фильмов…</string>
+  <string name="loading_subs">Загрузка субтитров…</string>
   <string name="error_files">Ошибка: не удалось записать файлы</string>
   <string name="overview_not_available">Извините!
 Обзор не доступен.</string>
@@ -26,7 +26,7 @@
   <string name="search_hint">Название, год, актеры</string>
   <string name="genres">Жанры</string>
   <string name="search">Поиск</string>
-  <string name="searching">Поиск...</string>
+  <string name="searching">Поиск…</string>
   <string name="no_data_found">Данные не найдены</string>
   <string name="title_shows">Сериалы</string>
   <string name="title_movies">Фильмы</string>
@@ -245,7 +245,7 @@
   <string name="connected_to">Соединён с</string>
   <string name="disconnect">Разъединить</string>
   <string name="select_beaming">Выберите устройство для трансляции</string>
-  <string name="starting_beam">Подготовка к трансляции видео...</string>
+  <string name="starting_beam">Подготовка к трансляции видео…</string>
   <string name="beaming_failed">Не удалось запустить трансляцию видео на ваше устройство. Хотите попробовать ещё раз? Возможно, приложение должно загрузить больше частей, прежде чем ваше устройство сможет воспроизвести видео.</string>
   <string name="the_video">Видео</string>
   <!--Android TV below-->
@@ -262,7 +262,7 @@
   <string name="play">Воспроизвести</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Кнопка Воспроизведение/Пауза</string>
-  <string name="loading">Загрузка...</string>
+  <string name="loading">Загрузка…</string>
   <string name="no_video_found">Видео не найдено</string>
   <string name="popular_header">Популярные видео</string>
   <string name="grid_view">Отображение сеткой</string>

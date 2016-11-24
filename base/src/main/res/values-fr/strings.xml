@@ -8,11 +8,11 @@
   <string name="update_available">Nouvelle mise à jour disponible</string>
   <string name="wrong_abi">Oups ! Vous utilisez une mauvaise version de Popcorn Time pour Android. La version correcte est en train d\'être téléchargée. Si l\'installation ne commence pas d\'ici une minute, votre appareil n\'est alors pas supporté ou votre accès Internet fonctionne mal. Vous devrez réessayer plus tard. Si l\'installation automatique échoue, veuillez installer la version correcte manuellement.</string>
   <string name="press_install">Appuyez pour installer</string>
-  <string name="loading_data">Chargement des données...</string>
-  <string name="loading_details">Chargement de la fiche...</string>
-  <string name="loading_shows">Chargement des séries...</string>
-  <string name="loading_movies">Chargement des films...</string>
-  <string name="loading_subs">Chargement des sous-titres...</string>
+  <string name="loading_data">Chargement des données…</string>
+  <string name="loading_details">Chargement de la fiche…</string>
+  <string name="loading_shows">Chargement des séries…</string>
+  <string name="loading_movies">Chargement des films…</string>
+  <string name="loading_subs">Chargement des sous-titres…</string>
   <string name="error_files">Erreur lors de la création des fichiers</string>
   <string name="overview_not_available">Désolé, aucune information disponible.</string>
   <string name="unknown_error">Quelque chose n\'a pas fonctionné</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Titre, année, acteurs</string>
   <string name="genres">Genres</string>
   <string name="search">Recherche</string>
-  <string name="searching">Recherche...</string>
+  <string name="searching">Recherche…</string>
   <string name="no_data_found">Aucune donnée trouvée</string>
   <string name="title_shows">Séries</string>
   <string name="title_movies">Films</string>
@@ -91,7 +91,7 @@
   <string name="original_size">Original</string>
   <!--DetailActivity strings-->
   <string name="minutes">min</string>
-  <string name="read_more">Plus...</string>
+  <string name="read_more">Plus…</string>
   <string name="watch_trailer">Visionner la bande-annonce</string>
   <string name="no_subs">Aucun sous-titre</string>
   <string name="no_subs_available">Aucun sous-titre disponible</string>
@@ -241,7 +241,7 @@ l\'expérience du streaming via torrent la plus simple possible. Nous construiso
   <string name="connected_to">Connecté à</string>
   <string name="disconnect">Déconnexion</string>
   <string name="select_beaming">Sélectionnez un appareil de diffusion</string>
-  <string name="starting_beam">Initialisation du transfert vidéo...</string>
+  <string name="starting_beam">Initialisation du transfert vidéo…</string>
   <string name="beaming_failed">Cette vidéo n\'a pas pu être jouée sur l\'appareil de diffusion. Voulez-vous réessayer ? L\'application pourrait télécharger d\'avantage de données avant que votre appareil ne puisse jouer la vidéo.</string>
   <string name="the_video">La vidéo</string>
   <!--Android TV below-->
@@ -258,7 +258,7 @@ l\'expérience du streaming via torrent la plus simple possible. Nous construiso
   <string name="play">Lire</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Bouton Lecture / Pause</string>
-  <string name="loading">Chargement...</string>
+  <string name="loading">Chargement…</string>
   <string name="no_video_found">Aucune vidéo trouvée</string>
   <string name="popular_header">Vidéos populaires</string>
   <string name="grid_view">Vue en grille</string>

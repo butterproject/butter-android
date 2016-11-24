@@ -44,8 +44,8 @@ public class TraktProvider extends MetaProvider {
     /**
      * Get metadata from Trakt for a movie
      *
-     * @param imdbId IMDb id to get metadata for
-     * @return MetaData
+     * @param imdbId   IMDb id to get metadata for
+     * @param callback Callback
      */
     @Override
     public void getMovieMeta(final String imdbId, Callback callback) {
@@ -81,8 +81,10 @@ public class TraktProvider extends MetaProvider {
     /**
      * Get metadata from Trakt for episode
      *
-     * @param imdbId IMDb id to get metadata for
-     * @return MetaData
+     * @param imdbId   IMDb id to get metadata for
+     * @param season   Season
+     * @param episode  Episode
+     * @param callback Callback
      */
     @Override
     public void getEpisodeMeta(final String imdbId, final int season, final int episode, Callback callback) {
@@ -110,7 +112,7 @@ public class TraktProvider extends MetaProvider {
 
     abstract class TraktTask extends AsyncTask<Void, Void, MetaData> {
 
-        protected Exception mException;
+        Exception mException;
         private Callback mCallback;
 
         public TraktTask(Callback callback) {

@@ -8,11 +8,11 @@
   <string name="update_available">Ny opdatering tilgængelig</string>
   <string name="wrong_abi">Uh oh! Du bruger en forældet version af Popcorn Time til Android. Den nyeste version bliver hentet nu, såfremt det er muligt. Hvis installeringen ikke starter inden for et minut, så er det enten fordi din enhed ikke er understøttet eller fordi din internetforbindelse er i stykker, hvilket betyder at du bør prøve igen senere. Hvis installeringen fejler så skal du installere den nyeste version manuelt.</string>
   <string name="press_install">Tryk for at installere</string>
-  <string name="loading_data">Indlæser data...</string>
-  <string name="loading_details">Indlæser detaljer...</string>
-  <string name="loading_shows">Indlæser TV-serier...</string>
-  <string name="loading_movies">Indlæser film...</string>
-  <string name="loading_subs">Indlæser undertekster...</string>
+  <string name="loading_data">Indlæser data…</string>
+  <string name="loading_details">Indlæser detaljer…</string>
+  <string name="loading_shows">Indlæser TV-serier…</string>
+  <string name="loading_movies">Indlæser film…</string>
+  <string name="loading_subs">Indlæser undertekster…</string>
   <string name="error_files">Fejl: Kunne ikke oprette filer</string>
   <string name="overview_not_available">Beklager! Der er ingen oversigt tilgængelig.</string>
   <string name="unknown_error">Noget gik galt</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Titel, år, skuespillere</string>
   <string name="genres">Genrer</string>
   <string name="search">Søg</string>
-  <string name="searching">Søger...</string>
+  <string name="searching">Søger…</string>
   <string name="no_data_found">Ingen data fundet</string>
   <string name="title_shows">Serier</string>
   <string name="title_movies">Film</string>
@@ -240,7 +240,7 @@
   <string name="connected_to">Forbundet til</string>
   <string name="disconnect">Afbryd</string>
   <string name="select_beaming">Vælg enhed til beaming</string>
-  <string name="starting_beam">Starter beaming af video...</string>
+  <string name="starting_beam">Starter beaming af video…</string>
   <string name="beaming_failed">Videoen kunne ikke afspilles på din beaming-enhed. Vil du prøve igen? Appen skal måske downloade flere dele før din enhed er i stand til at afspille videoen.</string>
   <string name="the_video">Videoen</string>
   <!--Android TV below-->
@@ -257,7 +257,7 @@
   <string name="play">Afspil</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Afspil/Pause Knap</string>
-  <string name="loading">Indlæser...</string>
+  <string name="loading">Indlæser…</string>
   <string name="no_video_found">Ingen film fundet</string>
   <string name="popular_header">Populære Videoer</string>
   <string name="grid_view">Gittervisning</string>

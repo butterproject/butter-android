@@ -1,6 +1,7 @@
 package butter.droid.fragments.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -14,10 +15,10 @@ public abstract class BaseDetailFragment extends Fragment {
     protected View mRoot;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof MediaDetailActivity)
-            mActivity = (MediaDetailActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MediaDetailActivity)
+            mActivity = (MediaDetailActivity) context;
     }
 
     public interface FragmentListener {

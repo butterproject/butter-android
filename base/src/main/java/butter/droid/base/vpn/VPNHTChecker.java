@@ -31,7 +31,7 @@ import butter.droid.base.utils.PrefUtils;
 
 public class VPNHTChecker {
 
-    public static final String VPN_AVAILABLE = "vpn_available";
+    private static final String VPN_AVAILABLE = "vpn_available";
     private static Request sCheckingRequest;
 
     public static boolean isDownloadAvailable(final Context context) {

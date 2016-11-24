@@ -33,7 +33,7 @@ public class YSubsProvider extends SubsProvider {
     private static final String API_URL = "http://api.yifysubtitles.com/subs/";
     private static final String MIRROR_URL = "http://api.ysubs.com/subs/";
     private static final String PREFIX = "http://www.yifysubtitles.com/";
-    private static final HashMap<String, String> LANGUAGE_MAPPING = new HashMap<String, String>();
+    private static final HashMap<String, String> LANGUAGE_MAPPING = new HashMap<>();
 
     static {
         LANGUAGE_MAPPING.put("albanian", "sq");
@@ -117,13 +117,14 @@ public class YSubsProvider extends SubsProvider {
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
+                    YSubsResponse result = mapper.readValue(responseStr, YSubsResponse.class);
                     callback.onSuccess(result.formatForPopcorn(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
             }
         });
     }
 
+    // TODO move to responses equals to other providers
     private class YSubsResponse {
         public boolean success;
         public int subtitles;

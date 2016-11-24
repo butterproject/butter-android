@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 
@@ -21,6 +20,7 @@ import java.util.Map;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
+import butter.droid.base.compat.SupportedArchitectures;
 import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
 import butter.droid.base.updater.ButterUpdater;
 import butter.droid.base.utils.LocaleUtils;
@@ -270,7 +270,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, (Integer) item.getValue(), 10, 60, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 10, 60, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -295,7 +295,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), null, SelectionMode.COLOR, (Integer) item.getValue(), 0, 0, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), null, SelectionMode.COLOR, item.getValue(), 0, 0, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -320,7 +320,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, (Integer) item.getValue(), 0, 5, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 5, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -395,7 +395,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, (Integer) item.getValue(), 0, 200, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 200, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -421,7 +421,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, (Integer) item.getValue(), 0, 3000, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 3000, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -451,7 +451,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, (Integer) item.getValue(), 0, 3000, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 3000, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -745,7 +745,7 @@ public interface PreferencesHandler {
                         public String get(PrefItem item) {
                             try {
                                 PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-                                return packageInfo.versionName + " - " + Build.CPU_ABI;
+                                return packageInfo.versionName + " - " + SupportedArchitectures.getAbi();
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }

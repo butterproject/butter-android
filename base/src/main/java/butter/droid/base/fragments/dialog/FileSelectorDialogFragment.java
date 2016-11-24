@@ -72,7 +72,7 @@ public class FileSelectorDialogFragment extends DialogFragment {
         return view;
     }
 
-    public void setListener(Listener listener) {
+    private void setListener(Listener listener) {
         mListener = listener;
     }
 
@@ -82,18 +82,14 @@ public class FileSelectorDialogFragment extends DialogFragment {
         final List<Option> dir = new ArrayList<>();
         List<Option> files = new ArrayList<>();
 
-        try {
-            if (dirs != null){
-                for (File file : dirs) {
-                    if (file.isDirectory()) {
-                        dir.add(new Option(file.getName(), "Folder", file.getAbsolutePath()));
-                    } else {
-                        files.add(new Option(file.getName(), "File Size: " + file.length(), file.getAbsolutePath()));
-                    }
+        if (dirs != null){
+            for (File file : dirs) {
+                if (file.isDirectory()) {
+                    dir.add(new Option(file.getName(), "Folder", file.getAbsolutePath()));
+                } else {
+                    files.add(new Option(file.getName(), "File Size: " + file.length(), file.getAbsolutePath()));
                 }
             }
-        } catch (Exception e) {
-
         }
 
         Collections.sort(dir);
@@ -111,7 +107,7 @@ public class FileSelectorDialogFragment extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Option o = adapter.getItem(position);
 
-                if (o.getPath() == null) {
+                if ((o != null ? o.getPath() : null) == null) {
                     Toast.makeText(getActivity(), "Not accessible", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -128,6 +124,6 @@ public class FileSelectorDialogFragment extends DialogFragment {
     }
 
     public interface Listener {
-        public void onFileSelected(File f);
+        void onFileSelected(File f);
     }
 }

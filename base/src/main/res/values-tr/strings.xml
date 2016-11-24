@@ -8,11 +8,11 @@
   <string name="update_available">Yeni güncelleme bulundu</string>
   <string name="wrong_abi">Popcorn Time for Android\'in yanlış sürümünü kullanıyorsunuz.  Doğru sürüm şu anda indiriliyor. Eğer kurulum bir dakika içinde başlamazsa, cihazınız desteklenmiyor olabilir veya internet bağlantınızda problem olabilir. Bu durumda daha sonra tekrar denemelisiniz. Eğer kurulum başarısız olursa, doğru sürümü elle yüklemelisiniz.</string>
   <string name="press_install">Yüklemek için tıklayın</string>
-  <string name="loading_data">Veri yükleniyor...</string>
-  <string name="loading_details">Detaylar yükleniyor...</string>
-  <string name="loading_shows">Videolar yükleniyor...</string>
-  <string name="loading_movies">Filmler yükleniyor...</string>
-  <string name="loading_subs">Altyazılar yükleniyor...</string>
+  <string name="loading_data">Veri yükleniyor…</string>
+  <string name="loading_details">Detaylar yükleniyor…</string>
+  <string name="loading_shows">Videolar yükleniyor…</string>
+  <string name="loading_movies">Filmler yükleniyor…</string>
+  <string name="loading_subs">Altyazılar yükleniyor…</string>
   <string name="error_files">Hata: Dosyalar yazılamadı</string>
   <string name="overview_not_available">Üzgünüz! Hiç gözden geçirme bilgisi yok.</string>
   <string name="unknown_error">Bir şeyler ters gitti</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Başlık, yıl, oyuncular</string>
   <string name="genres">Türler</string>
   <string name="search">Ara</string>
-  <string name="searching">Aranıyor...</string>
+  <string name="searching">Aranıyor…</string>
   <string name="no_data_found">Veri bulunamadı</string>
   <string name="title_shows">Diziler</string>
   <string name="title_movies">Filmler</string>
@@ -240,7 +240,7 @@
   <string name="connected_to">Bağlanıldı: </string>
   <string name="disconnect">Bağlantıyı Kes</string>
   <string name="select_beaming">Işınlamak için bir cihaz seçin.</string>
-  <string name="starting_beam">Video ışınlaması başlıyor...</string>
+  <string name="starting_beam">Video ışınlaması başlıyor…</string>
   <string name="beaming_failed">Video ışınlanan cihazda oynatılamadı. Tekrar denemek ister misiniz? Cihazınızın videoyu oynatabilmesi için uygulamanın daha fazla parça indirmesi gerekebilir.</string>
   <string name="the_video">Video</string>
   <!--Android TV below-->
@@ -257,7 +257,7 @@
   <string name="play">Oynat</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Oynat Duraklat Butonu</string>
-  <string name="loading">Yükleniyor...</string>
+  <string name="loading">Yükleniyor…</string>
   <string name="no_video_found">Hiçbir video bulunamadı</string>
   <string name="popular_header">Popüler Videolar</string>
   <string name="grid_view">Tablo Görünümü</string>

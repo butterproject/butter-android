@@ -15,32 +15,32 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
-import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
+import butter.droid.fragments.dialog.SynopsisDialogFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ShowDetailAboutFragment extends BaseDetailFragment {
 
     private static Show sShow;
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
-    @Bind(R.id.meta)
+    @BindView(R.id.meta)
     TextView mMeta;
-    @Bind(R.id.synopsis)
+    @BindView(R.id.synopsis)
     TextView mSynopsis;
-    @Bind(R.id.rating)
+    @BindView(R.id.rating)
     RatingBar mRating;
-    @Bind(R.id.read_more)
+    @BindView(R.id.read_more)
     Button mReadMore;
-    @Bind(R.id.info_buttons)
+    @BindView(R.id.info_buttons)
     LinearLayout mInfoButtons;
-    @Bind(R.id.magnet)
+    @BindView(R.id.magnet)
     ImageButton mOpenMagnet;
 
     public static ShowDetailAboutFragment newInstance(Show show) {

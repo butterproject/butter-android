@@ -84,11 +84,11 @@ public class StringUtils {
 
     public static String capWords(String givenString) {
         String[] arr = givenString.split(" ");
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(Character.toUpperCase(arr[i].charAt(0)))
-                    .append(arr[i].substring(1)).append(" ");
+        for (String anArr : arr) {
+            sb.append(Character.toUpperCase(anArr.charAt(0)))
+                    .append(anArr.substring(1)).append(" ");
         }
         return sb.toString().trim();
     }

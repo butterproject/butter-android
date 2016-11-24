@@ -55,25 +55,31 @@ dependencies {
     compile "com.android.support:appcompat-v7:${rootProject.ext.appCompatVersion}"
     compile "com.android.support:design:${rootProject.ext.appCompatVersion}"
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     compile 'com.jakewharton.timber:timber:3.1.0'
     compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.code.gson:gson:2.5'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.jakewharton:butterknife-compiler:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
     compile ('com.uwetrottmann:trakt-java:4.5.2'){
         exclude group: 'org.json', module: 'json'
     }
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
-    compile 'com.koushikdutta.async:androidasync:2.1.6'
+    compile 'com.koushikdutta.async:androidasync:2.1.9'
 
-    compile 'com.github.sv244:torrentstream-android:1.1.0'
+    compile 'com.github.sv244:torrentstream-android:1.1.1'
 
     compile 'de.timroes:aXMLRPC:1.8.1'
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.2'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
 
     compile project(':vlc')
     compile project(':connectsdk')

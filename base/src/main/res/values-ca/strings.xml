@@ -8,11 +8,11 @@
   <string name="update_available">Actualitzacions disponibles</string>
   <string name="wrong_abi">Oh oh! Esteu utilitzant la versió incorrecta de Popcorn Time per a Android. En cas que hagi estat possible, es deu estar descarregant la versió correcta. Si l\'instal·lador no s\'inicia en un minut significa que el vostre dispositiu no és compatible o que la connexió a Internet no funciona. Si és així, torneu-ho a provar més tard. En cas que falli l\'instal·lador haureu d\'instal·lar la versió correcta de forma manual.</string>
   <string name="press_install">Premeu per instal·lar</string>
-  <string name="loading_data">S\'estan carregant les dades...</string>
-  <string name="loading_details">S\'estan carregant els detalls...</string>
-  <string name="loading_shows">S\'estan carregant les sèries...</string>
-  <string name="loading_movies">S\'estan carregant les pelis...</string>
-  <string name="loading_subs">S\'estan carregant els subtítols...</string>
+  <string name="loading_data">S\'estan carregant les dades…</string>
+  <string name="loading_details">S\'estan carregant els detalls…</string>
+  <string name="loading_shows">S\'estan carregant les sèries…</string>
+  <string name="loading_movies">S\'estan carregant les pelis…</string>
+  <string name="loading_subs">S\'estan carregant els subtítols…</string>
   <string name="error_files">Error: No s\'han pogut crear els fitxer</string>
   <string name="overview_not_available">La vista prèvia no està disponible.</string>
   <string name="unknown_error">Alguna cosa ha fallat</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Títol, any, actors</string>
   <string name="genres">Gèneres</string>
   <string name="search">Cerca</string>
-  <string name="searching">S\'està cercant... </string>
+  <string name="searching">S\'està cercant… </string>
   <string name="no_data_found">No s\'han trobat dades</string>
   <string name="title_shows">Programes</string>
   <string name="title_movies">Pel·lícules</string>
@@ -242,7 +242,7 @@ les nostres pelis. I noi, ens encanten les crispetes.</string>
   <string name="connected_to">Connectat a</string>
   <string name="disconnect">Desconnecta</string>
   <string name="select_beaming">Selecciona un dispositiu pel beaming</string>
-  <string name="starting_beam">Inicialitzant el beaming del vídeo...</string>
+  <string name="starting_beam">Inicialitzant el beaming del vídeo…</string>
   <string name="beaming_failed">El vídeo no s\'ha pogut reproduir al teu dispositiu beaming. T\'agradaria intentar-ho de nou? L\'aplicació podria necessitar descarregar més parts abans que el teu dispositiu pugui reproduir el vídeo.</string>
   <string name="the_video">El vídeo</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@ les nostres pelis. I noi, ens encanten les crispetes.</string>
   <string name="play">Reprodueix</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Botó de Reprodueix Pausa</string>
-  <string name="loading">S\'esta carregant...</string>
+  <string name="loading">S\'esta carregant…</string>
   <string name="no_video_found">No s\'han trobat vídeos</string>
   <string name="popular_header">Vídeos populars</string>
   <string name="grid_view">Vista de quadrícula</string>

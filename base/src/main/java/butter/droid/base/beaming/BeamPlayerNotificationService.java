@@ -23,13 +23,13 @@ import butter.droid.base.R;
 
 public class BeamPlayerNotificationService extends Service {
 
-    public static final Integer NOTIFICATION_ID = 6991;
+    private static final Integer NOTIFICATION_ID = 6991;
 
     public static final String ACTION_PLAY = "action_play";
     public static final String ACTION_PAUSE = "action_pause";
-    public static final String ACTION_REWIND = "action_rewind";
-    public static final String ACTION_FAST_FORWARD = "action_fast_foward";
-    public static final String ACTION_STOP = "action_stop";
+    private static final String ACTION_REWIND = "action_rewind";
+    private static final String ACTION_FAST_FORWARD = "action_fast_foward";
+    private static final String ACTION_STOP = "action_stop";
 
     private BeamManager mManager;
     private MediaControl mMediaControl;
@@ -132,7 +132,7 @@ public class BeamPlayerNotificationService extends Service {
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         builder.addAction(generateAction(R.drawable.ic_av_rewind, "Rewind", ACTION_REWIND));

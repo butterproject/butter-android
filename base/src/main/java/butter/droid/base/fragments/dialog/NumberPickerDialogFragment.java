@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
@@ -46,6 +47,7 @@ public class NumberPickerDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -109,7 +111,7 @@ public class NumberPickerDialogFragment extends DialogFragment {
     }
 
     public interface ResultListener {
-        public void onNewValue(int value);
+        void onNewValue(int value);
     }
 
 }

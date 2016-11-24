@@ -258,7 +258,7 @@ Projektünk nyílt forráskódú. A világ minden pontjáról vannak közreműk�
   <string name="play">Lejátszás</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Lejátszás Szünet gomb</string>
-  <string name="loading">Betöltés...</string>
+  <string name="loading">Betöltés…</string>
   <string name="no_video_found">Nem található videó</string>
   <string name="popular_header">Népszerű videók</string>
   <string name="grid_view">Rács Nézet</string>

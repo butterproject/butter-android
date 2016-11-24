@@ -6,13 +6,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import timber.log.Timber;
 
 
 /**
@@ -42,7 +42,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class FormatTTML extends TimedTextFileFormat {
 
 
-    public TimedTextObject parseFile(String fileName, String[] inputString) throws IOException, FatalParsingException {
+    public TimedTextObject parseFile(String fileName, String[] inputString) throws FatalParsingException {
 
         TimedTextObject tto = new TimedTextObject();
         tto.fileName = fileName;
@@ -252,7 +252,7 @@ public class FormatTTML extends TimedTextFileFormat {
         //we will write the lines in an ArrayList
         int index = 0;
         //the minimum size of the file is the number of captions and styles + lines for sections and formats and the metadata, so we'll take some extra space.
-        ArrayList<String> file = new ArrayList<String>(30 + tto.styling.size() + tto.captions.size());
+        ArrayList<String> file = new ArrayList<>(30 + tto.styling.size() + tto.captions.size());
 
         //identification line is placed
         file.add(index++, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -286,9 +286,7 @@ public class FormatTTML extends TimedTextFileFormat {
 
         String line;
         //Next we iterate over the styles
-        Iterator<Style> itrS = tto.styling.values().iterator();
-        while (itrS.hasNext()) {
-            Style style = itrS.next();
+        for (Style style : tto.styling.values()) {
             //we add the attributes
             line = "\t\t\t<style xml:id=\"" + style.iD + "\"";
             if (style.color != null)
@@ -328,9 +326,7 @@ public class FormatTTML extends TimedTextFileFormat {
         file.add(index++, "\t\t<div>");
 
         //Next we iterate over the captions
-        Iterator<Caption> itrC = tto.captions.values().iterator();
-        while (itrC.hasNext()) {
-            Caption caption = itrC.next();
+        for (Caption caption : tto.captions.values()) {
             //we open the subtitle line
             line = "\t\t\t<p begin=\"" + caption.start.getTime("hh:mm:ss,ms").replace(',', '.') + "\"";
             line += " end=\"" + caption.end.getTime("hh:mm:ss,ms").replace(',', '.') + "\"";
@@ -365,8 +361,9 @@ public class FormatTTML extends TimedTextFileFormat {
     /**
      * Identifies the color expression and obtains the RGBA equivalent value.
      *
-     * @param color
-     * @return
+     * @param color The color to parse
+     * @param tto The timed text object
+     * @return The color
      */
     private String parseColor(String color, TimedTextObject tto) {
         String value = "";
@@ -427,11 +424,13 @@ public class FormatTTML extends TimedTextFileFormat {
     }
 
 
-    /**
+     /**
      * returns the number of milliseconds equivalent to this time expression
      *
-     * @param timeExpression
-     * @return
+     * @param timeExpression The time expression
+     * @param tto The timed text object
+     * @param doc The document
+     * @return Parsed time expression
      */
     private int parseTimeExpression(String timeExpression, TimedTextObject tto, Document doc) {
         int mSeconds = 0;
@@ -468,7 +467,7 @@ public class FormatTTML extends TimedTextFileFormat {
                 f = Float.parseFloat(parts[3]);
                 mSeconds = h * 3600000 + m * 60000 + s * 1000 + (int) (f * 1000 / frameRate);
             } else {
-                //unrecognized  clock time format
+                Timber.w("Unrecognized clock time format");
             }
 
         } else {
@@ -511,11 +510,8 @@ public class FormatTTML extends TimedTextFileFormat {
                         tickRate = Integer.parseInt(s);
                         mSeconds = (int) (time * 1000 / tickRate);
                     }
-
-
                 } else {
-                    //invalid metric
-
+                    Timber.w("Imvalid metric");
                 }
             } catch (NumberFormatException e) {
                 //incorrect format for offset time

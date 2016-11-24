@@ -24,6 +24,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -51,7 +52,7 @@ public class PixelUtils {
     }
 
     public static Drawable changeDrawableColor(Context context, Integer resId, Integer color) {
-        Drawable drawable = context.getResources().getDrawable(resId).mutate();
+        Drawable drawable = ContextCompat.getDrawable(context, resId).mutate();
         drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         return drawable;
     }
@@ -97,7 +98,7 @@ public class PixelUtils {
         return size.y;
     }
 
-    public static float getScreenDensity(Context context) {
+    private static float getScreenDensity(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -119,6 +120,6 @@ public class PixelUtils {
     }
 
 
-    public static final int TABLET_MIN_DP_WEIGHT = 800;
+    private static final int TABLET_MIN_DP_WEIGHT = 800;
 
 }

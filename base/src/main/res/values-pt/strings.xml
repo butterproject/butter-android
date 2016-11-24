@@ -242,7 +242,7 @@
   <string name="connected_to">Ligado a</string>
   <string name="disconnect">Desligar</string>
   <string name="select_beaming">Escolhe o dispositivo para transmitir</string>
-  <string name="starting_beam">A iniciar transmissão de video...</string>
+  <string name="starting_beam">A iniciar transmissão de video…</string>
   <string name="beaming_failed">O vídeo não pôde ser reproduzido no teu dispositivo de transmissão. Queres tentar novamente? A aplicação pode precisar de receber mais dados até que o teu dispositivo seja capaz de reproduzir o vídeo.</string>
   <string name="the_video">O vídeo</string>
   <!--Android TV below-->
@@ -259,7 +259,7 @@
   <string name="play">Reproduzir</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Botão Reproduzir Parar</string>
-  <string name="loading">A carregar...</string>
+  <string name="loading">A carregar…</string>
   <string name="no_video_found">Nenhum vídeo encontrado</string>
   <string name="popular_header">Vídeos Populares</string>
   <string name="grid_view">Vista em grelha</string>

@@ -31,13 +31,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.adapters.GenreAdapter;
 import butter.droid.adapters.decorators.DividerItemDecoration;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Genre;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MediaGenreSelectionFragment extends Fragment {
 
@@ -50,13 +50,13 @@ public class MediaGenreSelectionFragment extends Fragment {
     private Listener mListener;
     private int mSelectedPos = 0;
 
-    @Bind(R.id.progressOverlay)
+    @BindView(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    @Bind(R.id.emptyView)
+    @BindView(R.id.emptyView)
     TextView mEmptyView;
-    @Bind(R.id.progress_textview)
+    @BindView(R.id.progress_textview)
     TextView mProgressTextView;
 
     public static MediaGenreSelectionFragment newInstance(MediaProvider provider, Listener listener) {

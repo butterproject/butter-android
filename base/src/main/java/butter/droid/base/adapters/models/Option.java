@@ -17,6 +17,8 @@
 
 package butter.droid.base.adapters.models;
 
+import android.support.annotation.NonNull;
+
 import butter.droid.base.utils.LocaleUtils;
 
 public class Option implements Comparable<Option> {
@@ -49,9 +51,9 @@ public class Option implements Comparable<Option> {
 
         Option option = (Option) o;
 
-        if (name != null ? !name.equals(option.name) : option.name != null) return false;
-        if (data != null ? !data.equals(option.data) : option.data != null) return false;
-        return path != null ? path.equals(option.path) : option.path == null;
+        return name != null ? name.equals(option.name) : option.name == null
+                && (data != null ? data.equals(option.data) : option.data == null
+                && (path != null ? path.equals(option.path) : option.path == null));
 
     }
 
@@ -64,7 +66,7 @@ public class Option implements Comparable<Option> {
     }
 
     @Override
-    public int compareTo(Option o) {
+    public int compareTo(@NonNull Option o) {
         if (this.name != null)
             return this.name.toLowerCase(LocaleUtils.getCurrent()).compareTo(o.getName().toLowerCase(LocaleUtils.getCurrent()));
         else

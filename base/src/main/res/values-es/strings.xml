@@ -8,11 +8,11 @@
   <string name="update_available">Nueva actualización disponible</string>
   <string name="wrong_abi">Uhoh! Usted esta usando una versión incorrecta de Popcorn Time para Android. La versión correcta se esta descargando en este momento. Si la instalación no ha comenzado dentro de un minuto, entonces puede que su dispositivo no sea compatible o su conexión se haya caído, inténtelo de nuevo mas tarde. Si el instalador falla usted debe instalar la versión correcta manualmente.</string>
   <string name="press_install">Presiona para instalar</string>
-  <string name="loading_data">Cargando datos...</string>
-  <string name="loading_details">Cargando ficha...</string>
-  <string name="loading_shows">Cargando series...</string>
-  <string name="loading_movies">Cargando películas...</string>
-  <string name="loading_subs">Cargando subtítulos...</string>
+  <string name="loading_data">Cargando datos…</string>
+  <string name="loading_details">Cargando ficha…</string>
+  <string name="loading_shows">Cargando series…</string>
+  <string name="loading_movies">Cargando películas…</string>
+  <string name="loading_subs">Cargando subtítulos…</string>
   <string name="error_files">Error: No se pudo escribir archivos</string>
   <string name="overview_not_available">¡Lo siento! No hay información disponible.</string>
   <string name="unknown_error">Algo ha salido mal</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Titulo, año, actores</string>
   <string name="genres">Géneros</string>
   <string name="search">Buscar</string>
-  <string name="searching">Buscando...</string>
+  <string name="searching">Buscando…</string>
   <string name="no_data_found">Información no encontrada</string>
   <string name="title_shows">Shows</string>
   <string name="title_movies">Películas</string>
@@ -241,7 +241,7 @@
   <string name="connected_to">Conectado a</string>
   <string name="disconnect">Desconectar</string>
   <string name="select_beaming">Seleccionar dispositivo para transmitir</string>
-  <string name="starting_beam">Iniciando transmisión de vídeo...</string>
+  <string name="starting_beam">Iniciando transmisión de vídeo…</string>
   <string name="beaming_failed">El vídeo no pudo reproducirse en tu dispositivo de transmisión. ¿Quieres intentarlo de nuevo? La aplicación puede necesitar descargar más partes antes de que tu dispositivo sea capaz de reproducir el vídeo.</string>
   <string name="the_video">El vídeo</string>
   <!--Android TV below-->
@@ -258,7 +258,7 @@
   <string name="play">Reproducir</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Botón de Reproducir/Pausar</string>
-  <string name="loading">Cargando...</string>
+  <string name="loading">Cargando…</string>
   <string name="no_video_found">No se ha encontrado ningún video</string>
   <string name="popular_header">Videos Populares</string>
   <string name="grid_view">Vista de Cuadrícula</string>

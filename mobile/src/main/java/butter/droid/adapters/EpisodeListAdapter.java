@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Episode;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class EpisodeListAdapter extends BaseAdapter {
 
@@ -25,9 +25,9 @@ public class EpisodeListAdapter extends BaseAdapter {
             ButterKnife.bind(this, v);
         }
 
-        @Bind(R.id.info)
+        @BindView(R.id.info)
         TextView number;
-        @Bind(R.id.title)
+        @BindView(R.id.title)
         TextView title;
     }
 

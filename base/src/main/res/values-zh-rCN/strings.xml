@@ -8,11 +8,11 @@
   <string name="update_available">更新可用</string>
   <string name="wrong_abi">抱歉！您的 Android 设备未运行合适版本的 Popcorn Time。条件允许的话，将会为您下载合适的版本。若一分钟之内安装包还未开始下载，说明您的设备不支持或您的网络连接有问题，请您稍后重试。若自动安装失败，请您用其他方式手动安装合适版本。</string>
   <string name="press_install">点击安装</string>
-  <string name="loading_data">数据载入中...</string>
-  <string name="loading_details">详情载入中...</string>
-  <string name="loading_shows">电视剧载入中...</string>
-  <string name="loading_movies">电影载入中...</string>
-  <string name="loading_subs">字幕载入中...</string>
+  <string name="loading_data">数据载入中…</string>
+  <string name="loading_details">详情载入中…</string>
+  <string name="loading_shows">电视剧载入中…</string>
+  <string name="loading_movies">电影载入中…</string>
+  <string name="loading_subs">字幕载入中…</string>
   <string name="error_files">错误：无法写入文件</string>
   <string name="overview_not_available">抱歉，无预览可用。</string>
   <string name="unknown_error">出现未知问题</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">名称, 年份, 艺人</string>
   <string name="genres">流派</string>
   <string name="search">搜索</string>
-  <string name="searching">搜索中...</string>
+  <string name="searching">搜索中…</string>
   <string name="no_data_found">未找到数据</string>
   <string name="title_shows">电视剧</string>
   <string name="title_movies">电影</string>
@@ -243,7 +243,7 @@
   <string name="connected_to">连接到</string>
   <string name="disconnect">断开连接</string>
   <string name="select_beaming">选择要传输到的设备</string>
-  <string name="starting_beam">初始化映射中...</string>
+  <string name="starting_beam">初始化映射中…</string>
   <string name="beaming_failed">该视频无法在您的设备中播放，要重试吗？您的设备可能需要下载更多数据才能播放此视频。</string>
   <string name="the_video">视频</string>
   <!--Android TV below-->
@@ -260,7 +260,7 @@
   <string name="play">播放</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">播放暂停按钮</string>
-  <string name="loading">载入中...</string>
+  <string name="loading">载入中…</string>
   <string name="no_video_found">未找到视频</string>
   <string name="popular_header">热门视屏</string>
   <string name="grid_view">网格视图</string>

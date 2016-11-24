@@ -27,6 +27,18 @@ import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 
 public class Movie extends Media implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
     public String trailer = "";
     public String runtime = "";
     public String synopsis = "No synopsis available";
@@ -38,7 +50,7 @@ public class Movie extends Media implements Parcelable {
         isMovie = true;
     }
 
-    protected Movie(Parcel in) {
+    private Movie(Parcel in) {
         super(in);
         trailer = in.readString();
         runtime = in.readString();
@@ -77,7 +89,7 @@ public class Movie extends Media implements Parcelable {
                 Map<String, Torrent> torrentMap = entry.getValue();
                 if (torrentMap != null) {
                     dest.writeInt(torrentMap.size());
-                    for (Map.Entry<String, Torrent> tmapEntry : torrentMap.entrySet()){
+                    for (Map.Entry<String, Torrent> tmapEntry : torrentMap.entrySet()) {
                         dest.writeString(tmapEntry.getKey());
                         dest.writeParcelable(tmapEntry.getValue(), flags);
                     }
@@ -89,18 +101,5 @@ public class Movie extends Media implements Parcelable {
             dest.writeInt(0);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
 
 }

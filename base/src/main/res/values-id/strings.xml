@@ -8,8 +8,8 @@
   <string name="update_available">Pembaruan telah tersedia</string>
   <string name="wrong_abi">Gawat! Anda menggunakan Popcorn Time versi yang salah untuk Android. Versi yang tepat sedang diunduh sekarang, jika memungkinkan. Jika pemasangan tidak dimulai dalam waktu satu menit mungkin perangkat Anda tidak didukung atau koneksi internet Anda mati, yang berarti Anda harus mencoba lagi nanti. Jika pemasangan gagal maka Anda harus memasang versi yang tepat secara manual.</string>
   <string name="press_install">Mohon di pasang</string>
-  <string name="loading_data">Memuat data...</string>
-  <string name="loading_details">Memuat detil...</string>
+  <string name="loading_data">Memuat data…</string>
+  <string name="loading_details">Memuat detil…</string>
   <string name="loading_shows">Tampilan pemuatan</string>
   <string name="loading_movies">Memuat film</string>
   <string name="loading_subs">Memuat subjudul</string>
@@ -25,7 +25,7 @@
   <string name="search_hint">Judul, tahun, aktor</string>
   <string name="genres">Genre</string>
   <string name="search">Cari</string>
-  <string name="searching">Mencari...</string>
+  <string name="searching">Mencari…</string>
   <string name="no_data_found">Tidak ada data yang ditemukan</string>
   <string name="title_shows">Show</string>
   <string name="title_movies">Film</string>
@@ -258,7 +258,7 @@
   <string name="play">Putar</string>
   <string name="init_text">00:00</string>
   <string name="play_pause_description">Putar Jeda Tombol</string>
-  <string name="loading">Memuat...</string>
+  <string name="loading">Memuat…</string>
   <string name="no_video_found">Tidak menemukan video</string>
   <string name="popular_header">Video Populer</string>
   <string name="grid_view">Tampilan bergaris</string>

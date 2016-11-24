@@ -23,9 +23,9 @@ import java.util.Map;
 /**
  * Represents a video stream
  */
-public class VideoStream {
+class VideoStream {
 
-    protected String mUrl;
+    private String mUrl;
 
     /**
      * Construct a video stream from one of the strings obtained
@@ -35,13 +35,11 @@ public class VideoStream {
      */
     public VideoStream(String streamStr) {
         String[] args = streamStr.split("&");
-        Map<String, String> argMap = new HashMap<String, String>();
+        Map<String, String> argMap = new HashMap<>();
         for (String arg : args) {
             String[] argsValues = arg.split("=");
-            if (argsValues != null) {
-                if (argsValues.length >= 2) {
-                    argMap.put(argsValues[0], argsValues[1]);
-                }
+            if (argsValues.length >= 2) {
+                argMap.put(argsValues[0], argsValues[1]);
             }
         }
         mUrl = argMap.get("url");

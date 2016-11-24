@@ -26,17 +26,17 @@ public class Style {
      *
      * @param styleName = identifier of this style
      */
-    protected Style(String styleName) {
+    Style(String styleName) {
         this.iD = styleName;
     }
 
     /**
      * Constructor that receives a String with the new styleName and a style to copy
      *
-     * @param styleName
-     * @param style
+     * @param styleName Style name
+     * @param style Style object
      */
-    protected Style(String styleName, Style style) {
+    Style(String styleName, Style style) {
         this.iD = styleName;
         this.font = style.font;
         this.fontSize = style.fontSize;
@@ -50,19 +50,19 @@ public class Style {
     }
 
     /* ATTRIBUTES */
-    protected String iD;
-    protected String font;
-    protected String fontSize;
+    String iD;
+    String font;
+    String fontSize;
     /**
      * colors are stored as 8 chars long RGBA
      */
-    protected String color;
-    protected String backgroundColor;
-    protected String textAlign = "";
+    String color;
+    String backgroundColor;
+    String textAlign = "";
 
-    protected boolean italic;
-    protected boolean bold;
-    protected boolean underline;
+    boolean italic;
+    boolean bold;
+    boolean underline;
 
 	/* METHODS */
 
@@ -71,66 +71,82 @@ public class Style {
      *
      * @param format supported: "name", "&HBBGGRR", "&HAABBGGRR", "decimalCodedBBGGRR", "decimalCodedAABBGGRR"
      * @param value  RRGGBBAA string
-     * @return
      */
-    protected static String getRGBValue(String format, String value) {
+    static String getRGBValue(String format, String value) {
         String color = null;
         if (format.equalsIgnoreCase("name")) {
             //standard color format from W3C
-            if (value.equals("transparent"))
-                color = "00000000";
-            else if (value.equals("black"))
-                color = "000000ff";
-            else if (value.equals("silver"))
-                color = "c0c0c0ff";
-            else if (value.equals("gray"))
-                color = "808080ff";
-            else if (value.equals("white"))
-                color = "ffffffff";
-            else if (value.equals("maroon"))
-                color = "800000ff";
-            else if (value.equals("red"))
-                color = "ff0000ff";
-            else if (value.equals("purple"))
-                color = "800080ff";
-            else if (value.equals("fuchsia"))
-                color = "ff00ffff";
-            else if (value.equals("magenta"))
-                color = "ff00ffff ";
-            else if (value.equals("green"))
-                color = "008000ff";
-            else if (value.equals("lime"))
-                color = "00ff00ff";
-            else if (value.equals("olive"))
-                color = "808000ff";
-            else if (value.equals("yellow"))
-                color = "ffff00ff";
-            else if (value.equals("navy"))
-                color = "000080ff";
-            else if (value.equals("blue"))
-                color = "0000ffff";
-            else if (value.equals("teal"))
-                color = "008080ff";
-            else if (value.equals("aqua"))
-                color = "00ffffff";
-            else if (value.equals("cyan"))
-                color = "00ffffff ";
+            switch (value) {
+                case "transparent":
+                    color = "00000000";
+                    break;
+                case "black":
+                    color = "000000ff";
+                    break;
+                case "silver":
+                    color = "c0c0c0ff";
+                    break;
+                case "gray":
+                    color = "808080ff";
+                    break;
+                case "white":
+                    color = "ffffffff";
+                    break;
+                case "maroon":
+                    color = "800000ff";
+                    break;
+                case "red":
+                    color = "ff0000ff";
+                    break;
+                case "purple":
+                    color = "800080ff";
+                    break;
+                case "fuchsia":
+                    color = "ff00ffff";
+                    break;
+                case "magenta":
+                    color = "ff00ffff ";
+                    break;
+                case "green":
+                    color = "008000ff";
+                    break;
+                case "lime":
+                    color = "00ff00ff";
+                    break;
+                case "olive":
+                    color = "808000ff";
+                    break;
+                case "yellow":
+                    color = "ffff00ff";
+                    break;
+                case "navy":
+                    color = "000080ff";
+                    break;
+                case "blue":
+                    color = "0000ffff";
+                    break;
+                case "teal":
+                    color = "008080ff";
+                    break;
+                case "aqua":
+                    color = "00ffffff";
+                    break;
+                case "cyan":
+                    color = "00ffffff ";
+                    break;
+            }
         } else if (format.equalsIgnoreCase("&HBBGGRR")) {
             //hex format from SSA
-            StringBuilder sb = new StringBuilder();
-            sb.append(value.substring(6));
-            sb.append(value.substring(4, 5));
-            sb.append(value.substring(2, 3));
-            sb.append("ff");
-            color = sb.toString();
+            color = value.substring(6) +
+                    value.substring(4, 5) +
+                    value.substring(2, 3) +
+                    "ff";
         } else if (format.equalsIgnoreCase("&HAABBGGRR")) {
             //hex format from ASS
-            StringBuilder sb = new StringBuilder();
-            sb.append(value.substring(8));
-            sb.append(value.substring(6, 7));
-            sb.append(value.substring(4, 5));
-            sb.append(value.substring(2, 3));
-            color = sb.toString();
+            color = value.substring(8) +
+                    value.substring(6, 7) +
+                    value.substring(4, 5) +
+                    value.substring(2, 3);
         } else if (format.equalsIgnoreCase("decimalCodedBBGGRR")) {
             //normal format from SSA
             color = Integer.toHexString(Integer.parseInt(value));
@@ -149,7 +165,7 @@ public class Style {
         return color;
     }
 
-    protected static String defaultID() {
+    static String defaultID() {
         return "default" + styleCounter++;
     }
 

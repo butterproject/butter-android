@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.adapters.ShowDetailPagerAdapter;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
@@ -35,43 +32,47 @@ import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
+import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.widget.ObservableParallaxScrollView;
 import butter.droid.widget.WrappingViewPager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
     private static Show sShow;
     private Boolean mIsTablet = false;
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     WrappingViewPager mViewPager;
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabs;
     @Nullable
-    @Bind(R.id.background)
+    @BindView(R.id.background)
     View mBackground;
     @Nullable
-    @Bind(R.id.top)
+    @BindView(R.id.top)
     View mShadow;
     @Nullable
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
     @Nullable
-    @Bind(R.id.aired)
+    @BindView(R.id.aired)
     TextView mMeta;
     @Nullable
-    @Bind(R.id.synopsis)
+    @BindView(R.id.synopsis)
     TextView mSynopsis;
     @Nullable
-    @Bind(R.id.read_more)
+    @BindView(R.id.read_more)
     TextView mReadMore;
     @Nullable
-    @Bind(R.id.rating)
+    @BindView(R.id.rating)
     RatingBar mRating;
     @Nullable
-    @Bind(R.id.cover_image)
+    @BindView(R.id.cover_image)
     ImageView mCoverImage;
 
     public static ShowDetailFragment newInstance(Show show) {
@@ -222,7 +223,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
         mActivity.setSubScrollListener(null);
     }
 
-    @Nullable
+    @Optional
     @OnClick(R.id.read_more)
     public void openReadMore(View v) {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
