@@ -184,7 +184,8 @@
         </receiver>
 
         <provider android:authorities="butter.droid.tv.RecommendationContentProvider"
-            android:name="butter.droid.tv.service.recommendation.RecommendationContentProvider" android:exported="true" />
+            android:name="butter.droid.tv.service.recommendation.RecommendationContentProvider"
+            android:exported="true" />
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
     </application>

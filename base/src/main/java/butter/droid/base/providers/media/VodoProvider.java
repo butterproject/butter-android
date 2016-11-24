@@ -27,10 +27,6 @@ import android.support.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -45,12 +41,16 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class VodoProvider extends MediaProvider {
 
     private static Integer CURRENT_API = 0;
     private static final String[] API_URLS = {
-            "http://vodo.net/popcorn"
+            "http://butter.vodo.net/popcorn"
     };
     public static String CURRENT_URL = API_URLS[CURRENT_API];
 
@@ -61,7 +61,7 @@ public class VodoProvider extends MediaProvider {
     }
 
     @Override
-    protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
+    protected Call enqueue(Request request, okhttp3.Callback requestCallback) {
         Context context = ButterApplication.getAppContext();
         PackageInfo pInfo;
         String versionName = "0.0.0";
@@ -145,11 +145,11 @@ public class VodoProvider extends MediaProvider {
             params.add(new NameValuePair("page", Integer.toString(filters.page)));
         }
 
-        Request.Builder requestBuilder = new Request.Builder();
-        String query = "?" + buildQuery(params);
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(CURRENT_URL);
+
         // query not used, but still here as example
-        requestBuilder.url(CURRENT_URL);
-        requestBuilder.tag(MEDIA_CALL);
+//        String query = "?" + buildQuery(params);
 
         return fetchList(currentList, requestBuilder, filters, callback);
     }
@@ -164,10 +164,9 @@ public class VodoProvider extends MediaProvider {
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder,
             final Filters filters, final Callback callback) {
-        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                String url = requestBuilder.build().urlString();
+        return enqueue(requestBuilder.build(), new okhttp3.Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                String url = requestBuilder.build().url().toString();
                 if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
                 } else {
@@ -184,14 +183,13 @@ public class VodoProvider extends MediaProvider {
                 }
             }
 
-            @Override
-            public void onResponse(Response response) throws IOException {
+            @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseStr;
                     try {
                         responseStr = response.body().string();
                     } catch (SocketException e) {
-                        onFailure(response.request(), new IOException("Socket failed"));
+                        onFailure(call, new IOException("Socket failed"));
                         return;
                     }
 
@@ -199,10 +197,10 @@ public class VodoProvider extends MediaProvider {
                     try {
                         result = mGson.fromJson(responseStr, VodoResponse.class);
                     } catch (IllegalStateException e) {
-                        onFailure(response.request(), new IOException("JSON Failed"));
+                        onFailure(call, new IOException("JSON Failed"));
                         return;
                     } catch (JsonSyntaxException e) {
-                        onFailure(response.request(), new IOException("JSON Failed"));
+                        onFailure(call, new IOException("JSON Failed"));
                         return;
                     }
 
@@ -216,7 +214,7 @@ public class VodoProvider extends MediaProvider {
                         return;
                     }
                 }
-                onFailure(response.request(), new IOException("Couldn't connect to Vodo"));
+                onFailure(call, new IOException("Couldn't connect to Vodo"));
             }
         });
     }

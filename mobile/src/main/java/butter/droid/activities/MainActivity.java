@@ -39,10 +39,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -72,6 +68,9 @@ import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butterknife.BindView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
@@ -325,8 +324,7 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
                     media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
                     providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                        @Override
-                        public void onFailure(Request request, IOException e) {
+                        @Override public void onFailure(Call call, IOException e) {
                             BeamManager bm = BeamManager.getInstance(MainActivity.this);
 
                             if (bm.isConnected()) {
@@ -338,8 +336,7 @@ public class MainActivity extends ButterBaseActivity implements OnProviderChange
                             }
                         }
 
-                        @Override
-                        public void onResponse(Response response) throws IOException {
+                        @Override public void onResponse(Call call, Response response) throws IOException {
                             BeamManager bm = BeamManager.getInstance(MainActivity.this);
                             if (bm.isConnected()) {
                                 BeamPlayerActivity.startActivity(MainActivity.this,
