@@ -197,7 +197,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment
         StreamInfo info = new StreamInfo(
                 episode,
                 show,
-                torrent.getValue().url,
+                torrent.getValue().getUrl(),
                 subtitleLanguage,
                 torrent.getKey());
 
