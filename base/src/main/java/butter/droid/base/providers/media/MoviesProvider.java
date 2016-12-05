@@ -43,11 +43,6 @@ public class MoviesProvider extends MediaProvider {
     }
 
     @Override
-    public String getMediaCallTag() {
-        return "movies_http_call";
-    }
-
-    @Override
     public ArrayList<Media> getResponseFormattedList(String responseStr, ArrayList<Media> currentList) throws IOException {
         ArrayList<Media> formattedData = currentList;
         List<Movie> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, Movie.class));

@@ -44,11 +44,6 @@ public class AnimeProvider extends MediaProvider {
     }
 
     @Override
-    public String getMediaCallTag() {
-        return "anime_http_call";
-    }
-
-    @Override
     public ArrayList<Media> getResponseFormattedList(String responseStr, ArrayList<Media> currentList) throws IOException {
         ArrayList<Media> formattedData = currentList;
         List<Anime> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, Anime.class));

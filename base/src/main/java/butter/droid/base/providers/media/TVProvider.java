@@ -49,11 +49,6 @@ public class TVProvider extends MediaProvider {
     }
 
     @Override
-    public String getMediaCallTag() {
-        return "tv_http_call";
-    }
-
-    @Override
     public ArrayList<Media> getResponseFormattedList(String responseStr, ArrayList<Media> currentList) throws IOException {
         ArrayList<Media> formattedData = currentList;
         List<butter.droid.base.providers.media.response.models.shows.Show> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, butter.droid.base.providers.media.response.models.shows.Show.class));

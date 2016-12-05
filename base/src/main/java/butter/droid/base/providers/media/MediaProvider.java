@@ -151,7 +151,6 @@ public abstract class MediaProvider extends BaseProvider {
         String query = buildQuery(params);
         url = url + "?" + query;
         requestBuilder.url(url);
-        requestBuilder.tag(getMediaCallTag());
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
 
@@ -208,7 +207,6 @@ public abstract class MediaProvider extends BaseProvider {
         Request.Builder requestBuilder = new Request.Builder();
         String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId;
         requestBuilder.url(url);
-        requestBuilder.tag(getMediaCallTag());
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
 
@@ -269,8 +267,7 @@ public abstract class MediaProvider extends BaseProvider {
         return new ArrayList<>();
     }
 
-    public abstract String getMediaCallTag();
-
+    @Nullable
     public SubsProvider getSubsProvider() {
         return subsProvider;
     }

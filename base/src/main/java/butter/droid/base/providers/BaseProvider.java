@@ -89,7 +89,6 @@ public abstract class BaseProvider {
                     }
                 }
 
-
                 if (dispatcher.runningCallsCount() > 0) {
                     for (Call call : dispatcher.runningCalls()) {
                         if (getClass().equals(call.request().tag())) {
