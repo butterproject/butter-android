@@ -17,19 +17,12 @@
 
 package butter.droid.base.manager;
 
-import android.content.Context;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
-
 import javax.inject.Singleton;
 
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.AnimeProvider;
 import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.TVProvider;
-import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.providers.subs.YSubsProvider;
 import dagger.Module;
 import dagger.Provides;
 
@@ -43,31 +36,6 @@ public class ManagerModule {
         return new ProviderManager(moviesProvider, tvProvider, animeProvider);
     }
 
-    @Provides
-    @Singleton
-    public SubsProvider provideSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper) {
-        return new YSubsProvider(context, client, mapper);
-    }
 
-    @Provides
-    @Singleton
-    public MoviesProvider provideMoviesProvider(OkHttpClient client, ObjectMapper mapper,
-                                              SubsProvider subsProvider) {
-        return new MoviesProvider(client, mapper, subsProvider);
-    }
-
-    @Provides
-    @Singleton
-    public TVProvider provideTVProvider(OkHttpClient client, ObjectMapper mapper,
-                                              SubsProvider subsProvider) {
-        return new TVProvider(client, mapper, subsProvider);
-    }
-
-    @Provides
-    @Singleton
-    public AnimeProvider provideAnimeProvider(OkHttpClient client, ObjectMapper mapper,
-                                               SubsProvider subsProvider) {
-        return new AnimeProvider(client, mapper, subsProvider);
-    }
 
 }

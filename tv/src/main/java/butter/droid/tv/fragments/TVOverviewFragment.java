@@ -36,9 +36,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -389,12 +389,12 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
 
                 providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
                     @Override
-                    public void onFailure(Request request, IOException e) {
+                    public void onFailure(Call call, IOException e) {
                         TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
                     }
 
                     @Override
-                    public void onResponse(Response response) throws IOException {
+                    public void onResponse(Call call, Response response) throws IOException {
                         TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
                     }
                 });

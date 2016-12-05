@@ -20,7 +20,6 @@ package butter.droid.base.providers.media;
 import android.support.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +35,7 @@ import butter.droid.base.providers.media.response.AnimeResponse;
 import butter.droid.base.providers.media.response.models.anime.Anime;
 import butter.droid.base.providers.media.response.models.anime.AnimeDetails;
 import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.OkHttpClient;
 
 public class AnimeProvider extends MediaProvider {
 

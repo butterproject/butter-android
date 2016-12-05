@@ -20,8 +20,6 @@ package butter.droid.base.providers.media;
 import android.support.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +33,8 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.response.MovieResponse;
 import butter.droid.base.providers.media.response.models.movies.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 public class MoviesProvider extends MediaProvider {
 

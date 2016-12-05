@@ -20,9 +20,6 @@ package butter.droid.base.providers.subs;
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +28,10 @@ import java.util.Map;
 
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class YSubsProvider extends SubsProvider {
 
@@ -89,9 +90,8 @@ public class YSubsProvider extends SubsProvider {
 
     @Override
     public void getList(final Movie media, final Callback callback) {
-        final Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(API_URL + media.imdbId);
-        requestBuilder.tag(SUBS_CALL);
+        final Request.Builder requestBuilder = new Request.Builder()
+                .url(API_URL + media.imdbId);
 
         fetch(requestBuilder, media, new Callback() {
             @Override
@@ -115,14 +115,14 @@ public class YSubsProvider extends SubsProvider {
     }
 
     private void fetch(Request.Builder requestBuilder, final Movie media, final Callback callback) {
-        enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 callback.onFailure(e);
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mapper.readValue(responseStr, YSubsResponse.class);

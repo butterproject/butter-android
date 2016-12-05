@@ -15,37 +15,26 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base;
+package butter.droid.base.providers.subs.open;
 
-import android.content.Context;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Singleton;
 
-import butter.droid.base.data.DataModule;
-import butter.droid.base.manager.ManagerModule;
-import butter.droid.base.providers.ProviderModule;
 import dagger.Module;
 import dagger.Provides;
+import de.timroes.axmlrpc.XMLRPCClient;
 
-@Module(
-        includes = {
-                DataModule.class,
-                ManagerModule.class,
-                ProviderModule.class
+@Module
+public class OpenSubsModule {
+
+    @Provides @Singleton public XMLRPCClient provideXmlrpcClient() {
+        try {
+            return new XMLRPCClient(new URL(OpenSubsProvider.API_URL), OpenSubsProvider.USER_AGENT);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Invalid url " + OpenSubsProvider.API_URL, e);
         }
-)
-public class BaseApplicationModule {
-
-    private final ButterApplication application;
-
-    public BaseApplicationModule(ButterApplication application) {
-        this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    public Context provideContext() {
-        return application;
     }
 
 }

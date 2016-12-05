@@ -17,22 +17,20 @@
 
 package butter.droid.base.providers;
 
-import android.os.AsyncTask;
+import android.support.annotation.CallSuper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.AbstractMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.meta.MetaProvider;
-import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Dispatcher;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * BaseProvider.java
@@ -43,7 +41,6 @@ public abstract class BaseProvider {
 
     private final OkHttpClient client;
     protected ObjectMapper mapper;
-    protected Call mCurrentCall;
 
     public BaseProvider(OkHttpClient client, ObjectMapper mapper) {
         this.client = client;
@@ -61,32 +58,49 @@ public abstract class BaseProvider {
      * @param requestCallback Callback
      * @return Call
      */
-    protected Call enqueue(Request request, com.squareup.okhttp.Callback requestCallback) {
-        Call mCurrentCall = getClient().newCall(request);
-        if (requestCallback != null) mCurrentCall.enqueue(requestCallback);
-        return mCurrentCall;
-    }
+    protected Call enqueue(Request request, Callback requestCallback) {
+        request = request.newBuilder()
+                .tag(getClass())
+                .build();
 
-    public void cancel(final String tag) {
-        // Cancel in asynctask to prevent networkOnMainThreadException but make it blocking to prevent network calls to be made and then immediately cancelled.
-        try {
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    getClient().cancel(tag);
-                    getClient().cancel(MetaProvider.META_CALL);
-                    getClient().cancel(SubsProvider.SUBS_CALL);
-                    return null;
-                }
-            }.execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        Call call = getClient().newCall(request);
+        if (requestCallback != null) {
+            call.enqueue(requestCallback);
         }
+        return call;
     }
 
+    /**
+     * This method will be called when user is done with data that he required. Provider should at this point
+     * clean after itself. For example cancel all ongoing network request.
+     */
+    @CallSuper
     public void cancel() {
-        cancel(MediaProvider.MEDIA_CALL_TAG);
+        final Dispatcher dispatcher = client.dispatcher();
+
+        dispatcher.executorService().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (dispatcher.queuedCallsCount() > 0) {
+                    for (Call call : dispatcher.queuedCalls()) {
+                        if (getClass().equals(call.request().tag())) {
+                            call.cancel();
+                        }
+                    }
+                }
+
+
+                if (dispatcher.runningCallsCount() > 0) {
+                    for (Call call : dispatcher.runningCalls()) {
+                        if (getClass().equals(call.request().tag())) {
+                            call.cancel();
+                        }
+                    }
+                }
+            }
+        });
     }
+
 
     /**
      * Build URL encoded query

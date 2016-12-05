@@ -19,10 +19,11 @@ package butter.droid.base.vpn;
 
 import android.content.Context;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -56,13 +57,13 @@ public class VPNHTChecker {
             sCheckingRequest = new Request.Builder().head().url("https://play.google.com/store/apps/details?id=ht.vpn.android").build();
             mHttpClient.newCall(sCheckingRequest).enqueue(new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
                     sCheckingRequest = null;
                     PrefUtils.save(mContext, VPN_AVAILABLE, false);
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     sCheckingRequest = null;
                     if (response.isSuccessful()) {
                         PrefUtils.save(mContext, VPN_AVAILABLE, true);

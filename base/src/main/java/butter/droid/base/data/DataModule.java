@@ -20,8 +20,7 @@ package butter.droid.base.data;
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -34,46 +33,46 @@ import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StorageUtils;
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
 
 @Module
 public class DataModule {
 
     @Provides
     @Singleton
-    public OkHttpClient provideOkHttpClient(Context context) {
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(30, TimeUnit.SECONDS);
-        client.setReadTimeout(60, TimeUnit.SECONDS);
-        client.setRetryOnConnectionFailure(true);
-
+    public Cache provideCache(Context context) {
         int cacheSize = 10 * 1024 * 1024;
         File cacheLocation = new File(
                 PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context)
                         .toString()));
         cacheLocation.mkdirs();
-        com.squareup.okhttp.Cache cache = null;
-        try {
-            cache = new com.squareup.okhttp.Cache(cacheLocation, cacheSize);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        client.setCache(cache);
 
-        return client;
+        return new Cache(cacheLocation, cacheSize);
     }
 
     @Provides
     @Singleton
-    public OkHttpDownloader provideOkHttpDownloader(Context context) {
-        return new OkHttpDownloader(context);
+    public OkHttpClient provideOkHttpClient(Cache cache) {
+        return new Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .cache(cache)
+                .build();
     }
 
     @Provides
     @Singleton
-    public Picasso providePicasso(Context context, OkHttpDownloader okHttpDownloader) {
-        Picasso.Builder builder = new Picasso.Builder(context);
-        builder.downloader(okHttpDownloader);
-        return builder.build();
+    public OkHttp3Downloader provideOkHttpDownloader(OkHttpClient client) {
+        return new OkHttp3Downloader(client);
+    }
+
+    @Provides
+    @Singleton
+    public Picasso providePicasso(Context context, OkHttp3Downloader okHttpDownloader) {
+        return new Picasso.Builder(context).downloader(okHttpDownloader).build();
     }
 
     @Provides

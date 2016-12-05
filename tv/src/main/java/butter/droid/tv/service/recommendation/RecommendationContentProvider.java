@@ -24,16 +24,18 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Request.Builder;
+import okhttp3.Response;
 
 import javax.inject.Inject;
 
@@ -65,11 +67,14 @@ public class RecommendationContentProvider extends ContentProvider {
 			String decodedUrl = URLDecoder.decode(url.replaceFirst("/", ""),
 					"UTF-8");
 			pipe = ParcelFileDescriptor.createPipe();
+						Request request = new Builder()
+										.url(new URL(decodedUrl))
+										.build();
 
-			OkUrlFactory factory = new OkUrlFactory(getOkHttpClient());
-			HttpURLConnection connection = factory.open(new URL(decodedUrl));
+								Response response = getOkHttpClient().newCall(request)
+										.execute();
 
-			new TransferThread(connection.getInputStream(),
+			new TransferThread(response.body().byteStream(),
 					new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]))
 					.start();
 		} catch (IOException e) {

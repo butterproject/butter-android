@@ -22,10 +22,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.AbstractMap;
@@ -37,6 +33,10 @@ import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -45,8 +45,6 @@ import timber.log.Timber;
  * Base class for all media providers. Any media providers has to extend this class and use the callback defined here.
  */
 public abstract class MediaProvider extends BaseProvider {
-
-    public static final String MEDIA_CALL_TAG = "media_http_call";
 
     @Nullable
     private final SubsProvider subsProvider;
@@ -74,11 +72,6 @@ public abstract class MediaProvider extends BaseProvider {
      */
     public Call getList(Filters filters, Callback callback) {
         return getList(null, filters, callback);
-    }
-
-    @Override
-    public void cancel() {
-        super.cancel(getMediaCallTag());
     }
 
     /**
@@ -174,10 +167,10 @@ public abstract class MediaProvider extends BaseProvider {
      * @return Call
      */
     private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
-        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        return enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
-                String url = requestBuilder.build().urlString();
+            public void onFailure(Call call, IOException e) {
+                String url = requestBuilder.build().url().toString();
                 if (currentApi >= apiUrls.length - 1) {
                     callback.onFailure(e);
                 } else {
@@ -193,24 +186,20 @@ public abstract class MediaProvider extends BaseProvider {
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    if (response.isSuccessful()) {
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
 
-                        String responseStr = response.body().string();
+                    String responseStr = response.body().string();
 
-                        if (responseStr.isEmpty()) {
-                            callback.onFailure(new NetworkErrorException("Empty response"));
-                        }
-                        int actualSize = currentList.size();
-                        ArrayList<Media> responseItems = getResponseFormattedList(responseStr, currentList);
-                        callback.onSuccess(filters, responseItems, responseItems.size() > actualSize);
-                        return;
+                    if (responseStr.isEmpty()) {
+                        onFailure(call, new IOException("Empty response"));
                     }
-                } catch (Exception e) {
-                    callback.onFailure(e);
+                    int actualSize = currentList.size();
+                    ArrayList<Media> responseItems = getResponseFormattedList(responseStr, currentList);
+                    callback.onSuccess(filters, responseItems, responseItems.size() > actualSize);
+                    return;
                 }
-                callback.onFailure(new NetworkErrorException("Couldn't connect to API"));
+                onFailure(call, new IOException("Couldn't connect to API"));
             }
         });
     }
@@ -223,14 +212,14 @@ public abstract class MediaProvider extends BaseProvider {
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
 
-        return enqueue(requestBuilder.build(), new com.squareup.okhttp.Callback() {
+        return enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 callback.onFailure(e);
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 try {
                     if (response.isSuccessful()) {
 

@@ -4,10 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,6 +14,9 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.FileUtils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class SubtitleDownloader {
 
@@ -44,12 +43,12 @@ public class SubtitleDownloader {
         if (contextReference.get() == null) return;
         subsProvider.download(media, subtitleLanguage, new Callback() {
             @Override
-            public void onFailure(Request request, IOException exception) {
+            public void onFailure(Call call, IOException e) {
                 onSubtitleDownloadFailed();
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 onSubtitleDownloadSuccess();
             }
         });

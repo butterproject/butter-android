@@ -49,10 +49,11 @@ import android.os.Handler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -114,7 +115,7 @@ public class ButterUpdateManager extends Observable {
     private Listener mListener;
     Callback mCallback = new Callback() {
         @Override
-        public void onFailure(Request request, IOException e) {
+        public void onFailure(Call call, IOException e) {
             if (mCurrentUrl < DATA_URLS.length - 1) {
                 mCurrentUrl++;
                 Request newRequest = new Request.Builder()
@@ -129,7 +130,7 @@ public class ButterUpdateManager extends Observable {
         }
 
         @Override
-        public void onResponse(Response response) {
+        public void onResponse(Call call, Response response) throws IOException {
             String status = STATUS_NO_UPDATE;
             try {
                 if (response.isSuccessful()) {
@@ -233,12 +234,12 @@ public class ButterUpdateManager extends Observable {
 
         mHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 // uhoh
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String fileName = location.substring(location.lastIndexOf('/') + 1);
                     File downloadedFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
