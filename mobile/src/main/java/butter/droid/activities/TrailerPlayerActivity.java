@@ -39,9 +39,11 @@ import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.fragments.VideoPlayerFragment;
+import butter.droid.ui.main.MainActivity;
 
 public class TrailerPlayerActivity extends ButterBaseActivity implements VideoPlayerFragment.Callback {
 
@@ -218,6 +220,13 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements VideoPl
             super.onProgressUpdate(pValues);
         }
 
+    }
+
+    public static Intent getIntent(Context context, Movie movie, String url) {
+        Intent i = new Intent(context, TrailerPlayerActivity.class);
+        i.putExtra(TrailerPlayerActivity.DATA, movie);
+        i.putExtra(TrailerPlayerActivity.LOCATION, url);
+        return i;
     }
 
 }

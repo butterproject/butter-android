@@ -38,24 +38,26 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import butter.droid.base.beaming.BeamManager;
+import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.VersionUtils;
 import timber.log.Timber;
 
-public class ButterApplication extends Application implements ButterUpdateManager.Listener {
+public abstract class ButterApplication extends Application implements ButterUpdateManager.Listener {
 
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
 
     @Inject Picasso picasso;
     @Inject ButterUpdateManager updateManager;
+    @Inject BeamManager beamManager;
+    @Inject PrefManager prefManager;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -93,13 +95,14 @@ public class ButterApplication extends Application implements ButterUpdateManage
         updateManager.setListener(this);
         updateManager.checkUpdates(false);
 
-        if(VersionUtils.isUsingCorrectBuild()) {
+        if (VersionUtils.isUsingCorrectBuild()) {
             TorrentService.start(this);
         }
 
-        File path = new File(PrefUtils.get(this, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
+        File path = new File(
+                prefManager.get(Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
         File directory = new File(path, "/torrents/");
-        if (PrefUtils.get(this, Prefs.REMOVE_CACHE, true)) {
+        if (prefManager.get(Prefs.REMOVE_CACHE, true)) {
             FileUtils.recursiveDelete(directory);
             FileUtils.recursiveDelete(new File(path + "/subs"));
         } else {
@@ -122,18 +125,12 @@ public class ButterApplication extends Application implements ButterUpdateManage
     @Override
     public void onTerminate() {
         // Just, so that it exists. Cause it is not executed in production, the whole application is closed anyways on OS level.
-        BeamManager.getInstance(getAppContext()).onDestroy();
+        beamManager.onDestroy();
         super.onTerminate();
     }
 
     public static String getSystemLanguage() {
         return sDefSystemLanguage;
-    }
-
-    public static String getStreamDir() {
-        File path = new File(PrefUtils.get(getAppContext(), Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(getAppContext()).toString()));
-        File directory = new File(path, "/torrents/");
-        return directory.toString();
     }
 
     @Override
@@ -156,6 +153,8 @@ public class ButterApplication extends Application implements ButterUpdateManage
             nm.notify(ButterUpdateManager.NOTIFICATION_ID, notificationBuilder.build());
         }
     }
+
+    public abstract BaseApplicationComponent getComponent();
 
     public static ButterApplication getAppContext() {
         return sThis;

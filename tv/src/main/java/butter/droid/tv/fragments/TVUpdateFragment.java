@@ -28,7 +28,7 @@ import android.support.v17.leanback.widget.GuidedAction;
 import java.util.List;
 
 import butter.droid.base.manager.updater.ButterUpdateManager;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 
 public class TVUpdateFragment extends GuidedStepFragment {
@@ -57,7 +57,7 @@ public class TVUpdateFragment extends GuidedStepFragment {
     public void onGuidedActionClicked(GuidedAction action) {
         switch ((int) action.getId()) {
             case R.id.action_update_now:
-                String updateFile = PrefUtils.get(getActivity(), ButterUpdateManager.UPDATE_FILE, "");
+                String updateFile = PrefManager.get(getActivity(), ButterUpdateManager.UPDATE_FILE, "");
                 Intent updateIntent = new Intent(Intent.ACTION_VIEW);
                 updateIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
 

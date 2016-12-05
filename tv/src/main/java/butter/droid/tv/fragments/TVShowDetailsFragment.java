@@ -45,7 +45,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
@@ -186,7 +186,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment
     }
 
     private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-        String subtitleLanguage = PrefUtils.get(
+        String subtitleLanguage = PrefManager.get(
             getActivity(),
             Prefs.SUBTITLE_DEFAULT,
             SubsProvider.SUBTITLE_LANGUAGE_NONE);

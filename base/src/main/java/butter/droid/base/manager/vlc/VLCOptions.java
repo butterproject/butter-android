@@ -1,24 +1,21 @@
-/*****************************************************************************
- * VLCOptions.java
- *****************************************************************************
- * Copyright Â© 2015 VLC authors and VideoLAN
+/*
+ * This file is part of Butter.
  *
- * This program is free software; you can redistribute it and/or modify
+ * Butter is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * Butter is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
- *****************************************************************************/
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-package butter.droid.base.vlc;
+package butter.droid.base.manager.vlc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,9 +27,6 @@ import org.videolan.libvlc.util.HWDecoderUtil;
 import org.videolan.libvlc.util.VLCUtil;
 
 import java.util.ArrayList;
-
-import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.utils.PrefUtils;
 
 
 public class VLCOptions {
@@ -133,9 +127,9 @@ public class VLCOptions {
         int hardwareAcceleration = HW_ACCELERATION_DISABLED;
 
         if (!noHardwareAcceleration) {
-            try {
-                hardwareAcceleration = PrefUtils.get(context, Prefs.HW_ACCELERATION, HW_ACCELERATION_AUTOMATIC);
-            } catch (NumberFormatException ignored) {}
+//            try {
+//                hardwareAcceleration = PrefManager.get(context, Prefs.HW_ACCELERATION, HW_ACCELERATION_AUTOMATIC);
+//            } catch (NumberFormatException ignored) {}
         }
         if (hardwareAcceleration == HW_ACCELERATION_DISABLED)
             media.setHWDecoderEnabled(false, false);

@@ -20,11 +20,11 @@
 
 package com.connectsdk.device;
 
-import java.util.List;
-
 import com.connectsdk.service.DeviceService;
 import com.connectsdk.service.DeviceService.PairingType;
 import com.connectsdk.service.command.ServiceCommandError;
+
+import java.util.List;
 
 /**
  * ConnectableDeviceListener allows for a class to receive messages about ConnectableDevice connection, disconnect, and update events.
@@ -40,14 +40,14 @@ public interface ConnectableDeviceListener {
      *
      * @param device ConnectableDevice that is ready for commands.
      */
-    public void onDeviceReady(ConnectableDevice device);
+    void onDeviceReady(ConnectableDevice device);
 
     /**
      * When all of a ConnectableDevice's DeviceServices have become disconnected, the disconnected message is sent.
      *
      * @param device ConnectableDevice that has been disconnected.
      */
-    public void onDeviceDisconnected(ConnectableDevice device);
+    void onDeviceDisconnected(ConnectableDevice device);
 
     /**
      * DeviceService listener proxy method.
@@ -58,7 +58,7 @@ public interface ConnectableDeviceListener {
      * @param service DeviceService that requires pairing
      * @param pairingType DeviceServicePairingType that the DeviceService requires
      */
-    public void onPairingRequired(ConnectableDevice device, DeviceService service, PairingType pairingType);
+    void onPairingRequired(ConnectableDevice device, DeviceService service, PairingType pairingType);
 
     /**
      * When a ConnectableDevice finds & loses DeviceServices, that ConnectableDevice will experience a change in its collective capabilities list. When such a change occurs, this message will be sent with arrays of capabilities that were added & removed.
@@ -69,7 +69,7 @@ public interface ConnectableDeviceListener {
      * @param added List<String> of capabilities that are new to the ConnectableDevice
      * @param removed List<String> of capabilities that the ConnectableDevice has lost
      */
-    public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed);
+    void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed);
 
     /**
      * This method is called when the connection to the ConnectableDevice has failed.
@@ -77,5 +77,5 @@ public interface ConnectableDeviceListener {
      * @param device ConnectableDevice that has failed to connect
      * @param error ServiceCommandError with a description of the failure
      */
-    public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error);
+    void onConnectionFailed(ConnectableDevice device, ServiceCommandError error);
 }

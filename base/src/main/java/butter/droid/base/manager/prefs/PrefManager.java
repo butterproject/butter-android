@@ -15,145 +15,145 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.utils;
+package butter.droid.base.manager.prefs;
 
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
-import butter.droid.base.Constants;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import butter.droid.base.content.ObscuredSharedPreferences;
 
-public class PrefUtils {
+@Singleton
+public class PrefManager {
+
+    private final SharedPreferences preferences;
+
+    @Inject
+    public PrefManager(SharedPreferences preferences) {
+        this.preferences = preferences;
+    }
 
     /**
      * Clear the central {@link ObscuredSharedPreferences}
-     *
-     * @param context Context
      */
-    public static void clear(Context context) {
-        getPrefs(context).edit().clear().apply();
+    public void clear() {
+        preferences.edit().clear().apply();
     }
 
     /**
      * Save a string to the central {@link ObscuredSharedPreferences}
      *
-     * @param context Context
      * @param key     Key of the preference
      * @param value   Value of the preference
      */
-    public static void save(Context context, String key, String value) {
-        getPrefs(context).edit().putString(key, value).apply();
+    public void save(String key, String value) {
+        preferences.edit().putString(key, value).apply();
     }
 
     /**
      * Get a saved string from the central {@link ObscuredSharedPreferences}
      *
-     * @param context      Context
      * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved String
      */
-    public static String get(Context context, String key, String defaultValue) {
-        return getPrefs(context).getString(key, defaultValue);
+    public String get(String key, String defaultValue) {
+        return preferences.getString(key, defaultValue);
     }
 
     /**
      * Save a boolean to the central {@link ObscuredSharedPreferences}
      *
-     * @param context Context
      * @param key     Key of the preference
      * @param value   Value of the preference
      */
-    public static void save(Context context, String key, boolean value) {
-        getPrefs(context).edit().putBoolean(key, value).apply();
+    public void save(String key, boolean value) {
+        preferences.edit().putBoolean(key, value).apply();
     }
 
     /**
      * Get a saved boolean from the central {@link ObscuredSharedPreferences}
      *
-     * @param context      Context
      * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved bool
      */
-    public static Boolean get(Context context, String key, boolean defaultValue) {
-        return getPrefs(context).getBoolean(key, defaultValue);
+    public Boolean get(String key, boolean defaultValue) {
+        return preferences.getBoolean(key, defaultValue);
     }
 
     /**
      * Save a long to the central {@link ObscuredSharedPreferences}
      *
-     * @param context Context
      * @param key     Key of the preference
      * @param value   Value of the preference
      */
-    public static void save(Context context, String key, long value) {
-        getPrefs(context).edit().putLong(key, value).apply();
+    public void save(String key, long value) {
+        preferences.edit().putLong(key, value).apply();
     }
 
     /**
      * Get a saved long from the central {@link ObscuredSharedPreferences}
      *
-     * @param context      Context
      * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved long
      */
-    public static long get(Context context, String key, long defaultValue) {
-        return getPrefs(context).getLong(key, defaultValue);
+    public long get(String key, long defaultValue) {
+        return preferences.getLong(key, defaultValue);
     }
 
     /**
      * Save a int to the central {@link ObscuredSharedPreferences}
      *
-     * @param context Context
      * @param key     Key of the preference
      * @param value   Value of the preference
      */
-    public static void save(Context context, String key, int value) {
-        getPrefs(context).edit().putInt(key, value).apply();
+    public void save(String key, int value) {
+        preferences.edit().putInt(key, value).apply();
     }
 
     /**
      * Get a saved integer from the central {@link ObscuredSharedPreferences}
      *
-     * @param context      Context
      * @param key          Key of the preference
      * @param defaultValue Default
      * @return The saved integer
      */
-    public static int get(Context context, String key, int defaultValue) {
-        return getPrefs(context).getInt(key, defaultValue);
+    public int get(String key, int defaultValue) {
+        return preferences.getInt(key, defaultValue);
     }
 
     /**
      * Check if the central {@link ObscuredSharedPreferences} contains a preference that uses that key
      *
-     * @param context Context
      * @param key     Key
      * @return {@code true} if there exists a preference
      */
-    public static Boolean contains(Context context, String key) {
-        return getPrefs(context).contains(key);
+    public boolean contains(String key) {
+        return preferences.contains(key);
     }
 
     /**
      * Remove item from the central {@link ObscuredSharedPreferences} if it exists
      *
-     * @param context Context
      * @param key     Key
      */
-    public static void remove(Context context, String key) {
-        getPrefs(context).edit().remove(key).apply();
+    public void remove(String key) {
+        preferences.edit().remove(key).apply();
     }
 
-    /**
-     * Get the central {@link ObscuredSharedPreferences}
-     *
-     * @param context Context
-     * @return {@link ObscuredSharedPreferences}
-     */
-    public static ObscuredSharedPreferences getPrefs(Context context) {
-        return new ObscuredSharedPreferences(context, context.getSharedPreferences(Constants.PREFS_FILE, Context.MODE_PRIVATE));
+    public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+        preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
+    public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+        preferences.unregisterOnSharedPreferenceChangeListener(listener);
+    }
+
+    public SharedPreferences getPrefs() {
+        return preferences;
+    }
 }

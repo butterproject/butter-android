@@ -18,8 +18,10 @@
 package butter.droid.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import butter.droid.MobileButterApplication;
@@ -51,6 +53,10 @@ public class AboutActivity extends ButterBaseActivity implements AboutFragment.O
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ToolbarUtils.updateToolbarHeight(this, toolbar);
+    }
+
+    public static Intent getIntent(@NonNull Context context) {
+        return new Intent(context, AboutActivity.class);
     }
 
 }

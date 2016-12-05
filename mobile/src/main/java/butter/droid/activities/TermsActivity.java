@@ -22,16 +22,21 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import javax.inject.Inject;
+
 import butter.droid.MobileButterApplication;
+import butter.droid.ui.main.MainActivity;
 import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.utils.ToolbarUtils;
 
 public class TermsActivity extends ButterBaseActivity {
 
     public static String TERMS_ACCEPTED = "terms_accepted";
+
+    @Inject PrefManager prefManager;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -48,7 +53,7 @@ public class TermsActivity extends ButterBaseActivity {
     }
 
     public void acceptClick(View v) {
-        PrefUtils.save(this, TERMS_ACCEPTED, true);
+        prefManager.save(TERMS_ACCEPTED, true);
         Intent overviewIntent = new Intent(this, MainActivity.class);
         startActivity(overviewIntent);
         finish();

@@ -15,7 +15,24 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.beaming;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.base.manager.beaming;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -61,11 +78,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butter.droid.base.ButterApplication;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import butter.droid.base.R;
-import butter.droid.base.beaming.server.BeamServer;
-import butter.droid.base.beaming.server.BeamServerService;
-import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.manager.beaming.server.BeamServer;
+import butter.droid.base.manager.beaming.server.BeamServerService;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.torrent.StreamInfo;
 import timber.log.Timber;
 
@@ -74,11 +93,12 @@ import timber.log.Timber;
  * <p/>
  * Wrapper for ConnectSDK
  */
+@Singleton
 public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerListener {
 
-    private static BeamManager sInstance;
+    private final Context context;
+    private final PlayerManager playerManager;
 
-    private Context mContext;
     private DiscoveryManager mDiscoveryManager;
     private ConnectableDevice mCurrentDevice;
     private LaunchSession mLaunchSession;
@@ -91,10 +111,12 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     private AlertDialog mPairingCodeDialog;
     private StreamInfo mStreamInfo;
 
-    private BeamManager(Context context) {
-        mContext = context;
+    @Inject
+    public BeamManager(Context context, PlayerManager playerManager) {
+        this.context = context;
 
         mInput = new EditText(context);
+        this.playerManager = playerManager;
         mInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         mInputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -135,7 +157,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                         .create();
 
         // CastService.setApplicationID(Constants.CAST_ID); Do not use since suspended by Google
-        DiscoveryManager.init(ButterApplication.getAppContext());
+        DiscoveryManager.init(context);
         mDiscoveryManager = DiscoveryManager.getInstance();
 
         mDiscoveryManager.registerDeviceService(CastService.class, CastDiscoveryProvider.class);
@@ -159,20 +181,12 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         context.startService(castServerService);
     }
 
-    public static BeamManager getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new BeamManager(context);
-        }
-
-        return sInstance;
-    }
-
     public void onDestroy() {
         mDiscoveryManager.removeListener(this);
         mDiscoveryManager.stop();
         mDiscoveryManager.onDestroy();
-        Intent castServerService = new Intent(mContext, BeamServerService.class);
-        mContext.stopService(castServerService);
+        Intent castServerService = new Intent(context, BeamServerService.class);
+        context.stopService(castServerService);
     }
 
     public Map<String, ConnectableDevice> getDevices() {
@@ -237,7 +251,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         String subsLocation = null;
         if(info.getSubtitleLanguage() != null && !info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
-            File srtFile = new File(SubsProvider.getStorageLocation(mContext), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
+            File srtFile = new File(playerManager.getStorageLocation(context), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
             BeamServer.setCurrentSubs(srtFile);
             if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
                 subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
@@ -258,9 +272,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(), subsUrl.getPort(), subsUrl.getPath(), subsUrl.getQuery(), subsUrl.getRef());
                 subsLocation = subsUri.toString();
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             e.printStackTrace();
         }
 
@@ -400,7 +412,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     @Override
     public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) {
-        Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_SHORT).show();
         for(ConnectableDeviceListener listener : mDeviceListeners)
             listener.onConnectionFailed(device, error);
     }

@@ -68,7 +68,7 @@ import butter.droid.base.Constants;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.updater.model.UpdaterData;
 import butter.droid.base.utils.NetworkUtils;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.VersionUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -103,6 +103,7 @@ public class ButterUpdateManager extends Observable {
 
     private final OkHttpClient mHttpClient;
     private final Gson mGson;
+    private final PrefManager prefManager;
     private final Handler mUpdateHandler = new Handler();
 
     private Context mContext = null;
@@ -115,7 +116,8 @@ public class ButterUpdateManager extends Observable {
 
     private Listener mListener;
 
-    @Inject public ButterUpdateManager(Context context, OkHttpClient okHttpClient, Gson gson) {
+    @Inject public ButterUpdateManager(Context context, OkHttpClient okHttpClient, Gson gson, PrefManager prefManager) {
+        this.prefManager = prefManager;
         if (Constants.DEBUG_ENABLED) {
             UPDATE_INTERVAL = 3 * HOURS;
         } else {
@@ -134,19 +136,19 @@ public class ButterUpdateManager extends Observable {
             e.printStackTrace();
         }
 
-        lastUpdate = PrefUtils.get(mContext, LAST_UPDATE_KEY, 0l);
+        lastUpdate = prefManager.get(LAST_UPDATE_KEY, 0l);
         NOTIFICATION_ID += crc32(mPackageName);
 
         ApplicationInfo appinfo = context.getApplicationInfo();
 
-        if (new File(appinfo.sourceDir).lastModified() > PrefUtils.get(mContext, SHA1_TIME, 0l)) {
-            PrefUtils.save(mContext, SHA1_KEY, SHA1(appinfo.sourceDir));
-            PrefUtils.save(mContext, SHA1_TIME, System.currentTimeMillis());
+        if (new File(appinfo.sourceDir).lastModified() > prefManager.get(SHA1_TIME, 0l)) {
+            prefManager.save(SHA1_KEY, SHA1(appinfo.sourceDir));
+            prefManager.save(SHA1_TIME, System.currentTimeMillis());
 
-            String updateFile = PrefUtils.get(mContext, UPDATE_FILE, "");
+            String updateFile = prefManager.get(UPDATE_FILE, "");
             if (updateFile.length() > 0) {
                 if (new File(updateFile).delete()) {
-                    PrefUtils.remove(mContext, UPDATE_FILE);
+                    prefManager.remove(UPDATE_FILE);
                 }
             }
         }
@@ -171,15 +173,16 @@ public class ButterUpdateManager extends Observable {
     public void checkUpdates(boolean forced) {
         long now = System.currentTimeMillis();
 
-        if ((!PrefUtils.get(mContext, Prefs.AUTOMATIC_UPDATES, true) || (PrefUtils.get(mContext, Prefs.WIFI_ONLY, true) && !NetworkUtils.isWifiConnected(mContext))) && !forced) {
+        if ((!prefManager.get(Prefs.AUTOMATIC_UPDATES, true) || (prefManager.get(Prefs.WIFI_ONLY, true)
+                && !NetworkUtils.isWifiConnected(mContext))) && !forced) {
             return;
         }
 
-        PrefUtils.save(mContext, LAST_UPDATE_CHECK, now);
+        prefManager.save(LAST_UPDATE_CHECK, now);
 
         if (forced || (lastUpdate + UPDATE_INTERVAL) < now) {
             lastUpdate = System.currentTimeMillis();
-            PrefUtils.save(mContext, LAST_UPDATE_KEY, lastUpdate);
+            prefManager.save(LAST_UPDATE_KEY, lastUpdate);
 
             if (!forced && BuildConfig.GIT_BRANCH.contains("local")) return;
 
@@ -206,11 +209,11 @@ public class ButterUpdateManager extends Observable {
                     .build();
 
             mHttpClient.newCall(request).enqueue(mCallback);
-        } else if(PrefUtils.contains(mContext, UPDATE_FILE)) {
-            String fileName = PrefUtils.get(mContext, UPDATE_FILE, "");
+        } else if(prefManager.contains(UPDATE_FILE)) {
+            String fileName = prefManager.get(UPDATE_FILE, "");
             if (fileName.length() > 0) {
                 if (!new File(fileName).exists()) {
-                    PrefUtils.remove(mContext, UPDATE_FILE);
+                    prefManager.remove(UPDATE_FILE);
                 } else {
                     if(mListener != null)
                         mListener.updateAvailable(fileName);
@@ -289,7 +292,7 @@ public class ButterUpdateManager extends Observable {
 
                     String updateFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
 
-                    PrefUtils.getPrefs(mContext).edit()
+                    prefManager.getPrefs().edit()
                             .putString(SHA1_KEY, SHA1(updateFilePath))
                             .putString(UPDATE_FILE, updateFilePath)
                             .putLong(SHA1_TIME, System.currentTimeMillis())

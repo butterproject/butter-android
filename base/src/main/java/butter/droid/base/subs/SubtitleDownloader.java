@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
@@ -23,16 +24,19 @@ public class SubtitleDownloader {
     private final SubsProvider subsProvider;
     private final Media media;
     private final WeakReference<Context> contextReference;
+    private final PlayerManager playerManager;
 
     private String subtitleLanguage;
     private WeakReference<ISubtitleDownloaderListener> listenerReference;
 
-    public SubtitleDownloader(@NonNull SubsProvider subsProvider, @NonNull Context context, @NonNull StreamInfo streamInfo, @NonNull String language) {
+    public SubtitleDownloader(@NonNull SubsProvider subsProvider, @NonNull Context context,
+            @NonNull StreamInfo streamInfo, PlayerManager playerManager, @NonNull String language) {
         if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) throw new IllegalArgumentException("language must be specified");
 
         this.subsProvider = subsProvider;
         contextReference = new WeakReference<>(context);
         subtitleLanguage = language;
+        this.playerManager = playerManager;
 
         media = streamInfo.getMedia();
         if (media == null) throw new IllegalArgumentException("media from StreamInfo must not null");
@@ -65,20 +69,6 @@ public class SubtitleDownloader {
         listenerReference = new WeakReference<>(listener);
     }
 
-    public static File getDownloadedSubtitleFile(
-            @NonNull Context context,
-            @NonNull Media media,
-            @NonNull String language) throws FileNotFoundException {
-        if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) throw new IllegalArgumentException("language must be specified");
-
-        File subtitleFile = new File(
-                SubsProvider.getStorageLocation(context),
-                media.videoId + "-" + language + ".srt");
-
-        if (subtitleFile.exists()) return subtitleFile;
-        throw new FileNotFoundException("Subtitle file does not exists");
-    }
-
     /**
      * Invoked when subtitle download finished successfully.
      */
@@ -90,7 +80,7 @@ public class SubtitleDownloader {
         ISubtitleDownloaderListener listener = listenerReference.get();
 
         try {
-            File subtitleFile = getDownloadedSubtitleFile(context, media, subtitleLanguage);
+            File subtitleFile = playerManager.getDownloadedSubtitleFile(context, media, subtitleLanguage);
             SubtitleParseTask task = new SubtitleParseTask(subtitleLanguage, listener);
             task.execute(subtitleFile);
         } catch (FileNotFoundException e) {

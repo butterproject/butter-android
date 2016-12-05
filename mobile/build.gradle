@@ -55,9 +55,9 @@ android {
     packagingOptions {
         exclude 'META-INF/beans.xml'
         exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/DEPENDENCIES.txt'
     }
@@ -99,4 +99,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.2.26'
 }

@@ -30,18 +30,27 @@ import android.support.v4.content.ContextCompat;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import javax.inject.Inject;
+
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
 
 public class TVLaunchActivity extends Activity {
 
 	private static final int PERMISSIONS_REQUEST = 1232;
 
+	@Inject PrefManager prefManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		TVButterApplication.getAppContext()
+				.getComponent()
+				.inject(this);
 
 		Intent recommendationIntent = new Intent(this, RecommendationService.class);
 		startService(recommendationIntent);
@@ -55,7 +64,7 @@ public class TVLaunchActivity extends Activity {
 	}
 
 	private void proceedCreate() {
-		Boolean firstRun = PrefUtils.get(this, Prefs.FIRST_RUN, true);
+		Boolean firstRun = prefManager.get(Prefs.FIRST_RUN, true);
 
 		if (firstRun) {
 			//run the welcome wizard

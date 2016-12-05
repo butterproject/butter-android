@@ -20,7 +20,7 @@ package butter.droid.fragments;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -39,32 +39,33 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
+import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
-import butterknife.BindView;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import hugo.weaving.DebugLog;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.fragments.BaseStreamLoadingFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
-import butter.droid.base.content.preferences.DefaultPlayer;
+import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     private Context mContext;
     private Torrent mCurrentTorrent;
 
-    View mRoot;
+    @Inject BeamManager beamManager;
+    @Inject PlayerManager playerManager;
 
     @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
     @BindView(R.id.primary_textview) TextView mPrimaryTextView;
@@ -81,33 +82,38 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 .inject(this);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRoot = inflater.inflate(R.layout.fragment_streamloading, container, false);
-        ButterKnife.bind(this, mRoot);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_streamloading, container, false);
+    }
+
+    @TargetApi(VERSION_CODES.LOLLIPOP)
+    @Override public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ButterKnife.bind(this, view);
 
         if (VersionUtils.isLollipop()) {
             //postpone the transitions until after the view is layed out.
             getActivity().postponeEnterTransition();
 
-            mRoot.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 public boolean onPreDraw() {
-                    mRoot.getViewTreeObserver().removeOnPreDrawListener(this);
+                    view.getViewTreeObserver().removeOnPreDrawListener(this);
                     getActivity().startPostponedEnterTransition();
                     return true;
                 }
             });
         }
-
-        return mRoot;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mPlayingExternal)
+        if (mPlayingExternal) {
             setState(State.STREAMING);
+        }
     }
 
     @Override
@@ -121,14 +127,15 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     public void onStreamPrepared(Torrent torrent) {
         mCurrentTorrent = torrent;
 
-        if(TextUtils.isEmpty(mStreamInfo.getTitle())) {
-            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, mCurrentTorrent.getFileNames(), -1, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int position) {
-                    mCurrentTorrent.setSelectedFile(position);
-                    StreamLoadingFragment.super.onStreamPrepared(mCurrentTorrent);
-                }
-            });
+        if (TextUtils.isEmpty(mStreamInfo.getTitle())) {
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file,
+                    mCurrentTorrent.getFileNames(), -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position) {
+                            mCurrentTorrent.setSelectedFile(position);
+                            StreamLoadingFragment.super.onStreamPrepared(mCurrentTorrent);
+                        }
+                    });
             return;
         }
 
@@ -144,20 +151,23 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 url = info.getHeaderImageUrl();
             }
 
-            if (!TextUtils.isEmpty(url))
+            if (!TextUtils.isEmpty(url)) {
                 Picasso.with(mContext).load(url).error(R.color.bg).into(mBackgroundImageView);
+            }
         }
     }
 
     private void updateStatus(final StreamStatus status) {
-        if (!FragmentUtil.isAdded(this)) return;
+        if (!FragmentUtil.isAdded(this)) {
+            return;
+        }
 
         final DecimalFormat df = new DecimalFormat("#############0.00");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mProgressIndicator.setIndeterminate(false);
-                if(!mPlayingExternal) {
+                if (!mPlayingExternal) {
                     mProgressIndicator.setProgress(status.bufferProgress);
                     mPrimaryTextView.setText(status.bufferProgress + "%");
                 } else {
@@ -188,8 +198,9 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mProgressIndicator.setProgress(0);
                 break;
             case ERROR:
-                if (null != extra && extra instanceof String)
+                if (null != extra && extra instanceof String) {
                     mPrimaryTextView.setText((String) extra);
+                }
                 mSecondaryTextView.setText(null);
                 mTertiaryTextView.setText(null);
                 mProgressIndicator.setIndeterminate(true);
@@ -203,8 +214,9 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
                 mProgressIndicator.setProgress(0);
                 break;
             case STREAMING:
-                if (null != extra && extra instanceof StreamStatus)
+                if (null != extra && extra instanceof StreamStatus) {
                     updateStatus((StreamStatus) extra);
+                }
                 break;
             case WAITING_SUBTITLES:
                 mPrimaryTextView.setText(R.string.waiting_for_subtitles);
@@ -229,10 +241,11 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     protected void startPlayerActivity(String location, int resumePosition) {
         if (FragmentUtil.isAdded(this) && !mPlayerStarted) {
             mStreamInfo.setVideoLocation(location);
-            if (BeamManager.getInstance(mContext).isConnected()) {
+            if (beamManager.isConnected()) {
                 BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
             } else {
-                mPlayingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+                mPlayingExternal = playerManager.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(),
+                        location);
                 if (!mPlayingExternal) {
                     VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
                 }
@@ -248,6 +261,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     @OnClick(R.id.startexternal_button)
     public void externalClick(View v) {
-        DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), mStreamInfo.getVideoLocation());
+        playerManager.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), mStreamInfo.getVideoLocation());
     }
 }

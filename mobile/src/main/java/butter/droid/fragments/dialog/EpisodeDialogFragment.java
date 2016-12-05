@@ -50,9 +50,10 @@ import javax.inject.Inject;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.MediaDetailActivity;
-import butter.droid.base.content.preferences.DefaultQuality;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
@@ -63,7 +64,6 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
@@ -77,6 +77,8 @@ import butterknife.OnClick;
 public class EpisodeDialogFragment extends DialogFragment {
 
     @Inject ProviderManager providerManager;
+    @Inject PrefManager prefManager;
+    @Inject PlayerManager playerManager;
 
     public static final String EXTRA_EPISODE = "episode";
     public static final String EXTRA_SHOW = "show";
@@ -252,7 +254,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
 
-        String quality = DefaultQuality.get(mActivity, Arrays.asList(qualities));
+        String quality = playerManager.getDefaultQuality(mActivity, Arrays.asList(qualities));
         int qualityIndex = Arrays.asList(qualities).indexOf(quality);
         mSelectedQuality = quality;
         mQuality.setText(mSelectedQuality);
@@ -309,7 +311,7 @@ public class EpisodeDialogFragment extends DialogFragment {
                         }
                     });
 
-                    String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
+                    String defaultSubtitle = prefManager.get(Prefs.SUBTITLE_DEFAULT, null);
                     if (subtitles.containsKey(defaultSubtitle)) {
                         onSubtitleLanguageSelected(defaultSubtitle);
                         mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));

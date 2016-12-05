@@ -15,7 +15,24 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.beaming;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.base.manager.beaming;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -48,46 +65,43 @@ import butter.droid.base.utils.ThreadUtils;
 
 public class BeamDeviceAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private BeamManager mBeamManager;
-    private Map<String, ConnectableDevice> mDevices = new HashMap<>();
-    private ArrayList<String> mKeys = new ArrayList<>();
+    private final Context context;
+    private final BeamManager beamManager;
+    private Map<String, ConnectableDevice> devices = new HashMap<>();
+    private ArrayList<String> keys = new ArrayList<>();
 
     class ViewHolder {
-        @BindView(android.R.id.icon)
-        ImageView icon;
-        @BindView(android.R.id.text1)
-        TextView text1;
-        @BindView(android.R.id.text2)
-        TextView text2;
+        @BindView(android.R.id.icon) ImageView icon;
+        @BindView(android.R.id.text1) TextView text1;
+        @BindView(android.R.id.text2) TextView text2;
 
         public ViewHolder(View v) {
             ButterKnife.bind(this, v);
         }
     }
 
-    public BeamDeviceAdapter(Context context) {
-        mContext = context;
-        mBeamManager = BeamManager.getInstance(context);
+    public BeamDeviceAdapter(Context context, BeamManager beamManager) {
+        this.context = context;
+        this.beamManager = beamManager;
 
-        mDevices = mBeamManager.getDevices();
-        mKeys = new ArrayList<>(mDevices.keySet());
+        devices = beamManager.getDevices();
+        keys = new ArrayList<>(devices.keySet());
 
-        mBeamManager.addDiscoveryListener(mListener);
+        beamManager.addDiscoveryListener(mListener);
     }
 
     public void destroy() {
-        mBeamManager.removeDiscoveryListener(mListener);
+        beamManager.removeDiscoveryListener(mListener);
     }
 
     @Override
     public int getCount() {
-        return mDevices.size();
+        return devices.size();
     }
 
     @Override
     public ConnectableDevice getItem(int position) {
-        return mDevices.get(mKeys.get(position));
+        return devices.get(keys.get(position));
     }
 
     @Override
@@ -99,7 +113,7 @@ public class BeamDeviceAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.casting_dialog_listitem, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.casting_dialog_listitem, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -155,8 +169,8 @@ public class BeamDeviceAdapter extends BaseAdapter {
     DiscoveryManagerListener mListener = new DiscoveryManagerListener() {
         @Override
         public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
-            mDevices = mBeamManager.getDevices();
-            mKeys = new ArrayList<>(mDevices.keySet());
+            devices = beamManager.getDevices();
+            keys = new ArrayList<>(devices.keySet());
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -167,8 +181,8 @@ public class BeamDeviceAdapter extends BaseAdapter {
 
         @Override
         public void onDeviceUpdated(DiscoveryManager manager, ConnectableDevice device) {
-            mDevices = mBeamManager.getDevices();
-            mKeys = new ArrayList<>(mDevices.keySet());
+            devices = beamManager.getDevices();
+            keys = new ArrayList<>(devices.keySet());
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -179,8 +193,8 @@ public class BeamDeviceAdapter extends BaseAdapter {
 
         @Override
         public void onDeviceRemoved(DiscoveryManager manager, ConnectableDevice device) {
-            mDevices = mBeamManager.getDevices();
-            mKeys = new ArrayList<>(mDevices.keySet());
+            devices = beamManager.getDevices();
+            keys = new ArrayList<>(devices.keySet());
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

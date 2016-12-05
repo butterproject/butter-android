@@ -3,26 +3,20 @@ package butter.droid.fragments.dialog;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
-import android.text.Editable;
+import android.support.v4.app.DialogFragment;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import butter.droid.R;
 
-public class NumberDialogFragment extends DialogFragment {
+public class NumberDialogFragment extends DialogFragment{
 
     public static final String TITLE = "title";
     public static final String MAX_VALUE = "max_val";

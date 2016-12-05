@@ -46,14 +46,14 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.PreferencesActivity;
+import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.adapters.NavigationAdapter;
 import butter.droid.adapters.NavigationAdapter.ItemRowHolder;
 import butter.droid.adapters.decorators.OneShotDividerDecorator;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.ProviderUtils;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationAdapter.Callback,
@@ -83,6 +83,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
     private NavigationAdapter mAdapter;
 
     @Inject ProviderManager providerManager;
+    @Inject PrefManager prefManager;
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 * life cycle methods
@@ -96,7 +97,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
                 .getComponent()
                 .inject(this);
 
-        mUserLearnedDrawer = PrefUtils.get(getActivity(), Prefs.DRAWER_LEARNED, false);
+        mUserLearnedDrawer = prefManager.get(Prefs.DRAWER_LEARNED, false);
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
@@ -198,7 +199,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationAdap
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
                     mUserLearnedDrawer = true;
-                    PrefUtils.save(getActivity(), Prefs.DRAWER_LEARNED, true);
+                    prefManager.save(Prefs.DRAWER_LEARNED, true);
                 }
             }
 

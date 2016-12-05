@@ -56,6 +56,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import butter.droid.tv.TVButterApplication;
 import de.greenrobot.event.EventBus;
 import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.content.preferences.Prefs;
@@ -64,7 +67,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
@@ -91,6 +94,8 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private static final int MODE_NOTHING = 0;
     private static final int MODE_FAST_FORWARD = 1;
     private static final int MODE_REWIND = 2;
+
+    @Inject PrefManager prefManager;
 
     private ArrayObjectAdapter mRowsAdapter;
     private ArrayObjectAdapter mPrimaryActionsAdapter;
@@ -126,6 +131,10 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
 
         setFadeCompleteListener(new OnFadeCompleteListener() {
             @Override
@@ -612,10 +621,7 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             torrentActivity.getTorrentService().stopStreaming();
         }
 
-        String subtitleLanguage = PrefUtils.get(
-            getActivity(),
-            Prefs.SUBTITLE_DEFAULT,
-            SubsProvider.SUBTITLE_LANGUAGE_NONE);
+        String subtitleLanguage = prefManager.get(Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
 
         StreamInfo info = new StreamInfo(
             episode,

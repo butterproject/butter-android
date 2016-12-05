@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.MainActivity;
+import butter.droid.ui.main.MainActivity;
 import butter.droid.adapters.MediaPagerAdapter;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;

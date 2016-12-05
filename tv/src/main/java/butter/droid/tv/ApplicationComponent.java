@@ -19,6 +19,8 @@ package butter.droid.tv;
 
 import javax.inject.Singleton;
 
+import butter.droid.base.BaseApplicationComponent;
+import butter.droid.tv.activities.TVLaunchActivity;
 import butter.droid.tv.activities.TVMainActivity;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
@@ -32,6 +34,7 @@ import butter.droid.tv.activities.TVWelcomeActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
 import butter.droid.tv.fragments.TVMovieDetailsFragment;
 import butter.droid.tv.fragments.TVOverviewFragment;
+import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
 import butter.droid.tv.fragments.TVPreferencesFragment;
 import butter.droid.tv.fragments.TVSearchFragment;
 import butter.droid.tv.fragments.TVStreamLoadingFragment;
@@ -43,7 +46,7 @@ import dagger.Component;
 @Singleton @Component(
         modules = ApplicationModule.class
 )
-public interface ApplicationComponent {
+public interface ApplicationComponent extends BaseApplicationComponent {
 
     void inject(TVButterApplication application);
 
@@ -57,6 +60,7 @@ public interface ApplicationComponent {
     void inject(TVUpdateActivity activity);
     void inject(TVVideoPlayerActivity activity);
     void inject(TVWelcomeActivity activity);
+    void inject(TVLaunchActivity activity);
 
     void inject(RecommendationService service);
 
@@ -67,6 +71,7 @@ public interface ApplicationComponent {
     void inject(TVPreferencesFragment fragment);
     void inject(TVSearchFragment fragment);
     void inject(TVVideoPlayerFragment fragment);
+    void inject(TVPlaybackOverlayFragment fragment);
 
     void inject(RecommendationContentProvider contentProvider);
 

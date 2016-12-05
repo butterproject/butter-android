@@ -52,6 +52,8 @@ import com.squareup.picasso.Target;
 
 import java.lang.ref.WeakReference;
 
+import javax.inject.Inject;
+
 import butter.droid.tv.TVButterApplication;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,7 +63,7 @@ import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.widget.StrokedTextView;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVMediaDetailActivity;
@@ -77,6 +79,8 @@ import butter.droid.tv.events.ToggleSubtitleEvent;
 import butter.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
+
+    @Inject PrefManager prefManager;
 
     @BindView(R.id.video_surface) SurfaceView mVideoSurface;
     @BindView(R.id.subtitle_text) StrokedTextView mSubtitleText;
@@ -119,9 +123,9 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
         mSubtitleText.setVisibility(View.INVISIBLE);
 
         mSubtitleText.setText("");
-        mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
-        mSubtitleText.setStrokeColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
-        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_WIDTH, 2));
+        mSubtitleText.setTextColor(prefManager.get(Prefs.SUBTITLE_COLOR, Color.WHITE));
+        mSubtitleText.setStrokeColor(prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
+        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, prefManager.get(Prefs.SUBTITLE_STROKE_WIDTH, 2));
     }
 
     @Override

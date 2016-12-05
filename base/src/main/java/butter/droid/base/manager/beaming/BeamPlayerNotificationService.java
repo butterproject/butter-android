@@ -1,4 +1,21 @@
-package butter.droid.base.beaming;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.base.manager.beaming;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,8 +35,12 @@ import com.connectsdk.service.command.ServiceCommandError;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import javax.inject.Inject;
+
 import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
+
+import static butter.droid.base.ButterApplication.getAppContext;
 
 public class BeamPlayerNotificationService extends Service {
 
@@ -31,10 +52,18 @@ public class BeamPlayerNotificationService extends Service {
     public static final String ACTION_FAST_FORWARD = "action_fast_foward";
     public static final String ACTION_STOP = "action_stop";
 
-    private BeamManager mManager;
-    private MediaControl mMediaControl;
-    private Boolean mIsPlaying = false;
-    private Bitmap mImage;
+    @Inject BeamManager manager;
+    private MediaControl mediaControl;
+    private Boolean isPlaying = false;
+    private Bitmap image;
+
+    @Override public void onCreate() {
+        super.onCreate();
+
+        ButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -47,7 +76,7 @@ public class BeamPlayerNotificationService extends Service {
 
         String action = intent.getAction();
 
-        if(mMediaControl == null) {
+        if(mediaControl == null) {
             Intent stopIntent = new Intent( getApplicationContext(), BeamPlayerNotificationService.class );
             stopService(stopIntent);
             return;
@@ -57,31 +86,31 @@ public class BeamPlayerNotificationService extends Service {
             ResponseListener<Object> responseListener = new ResponseListener<Object>() {
                 @Override
                 public void onSuccess(Object object) {
-                    mMediaControl.getPlayState(mPlayStateListener);
+                    mediaControl.getPlayState(mPlayStateListener);
                 }
 
                 @Override
                 public void onError(ServiceCommandError error) {
-                    mMediaControl.getPlayState(mPlayStateListener);
+                    mediaControl.getPlayState(mPlayStateListener);
                 }
             };
 
-            if(mIsPlaying) {
-                mIsPlaying = false;
-                mMediaControl.pause(responseListener);
+            if(isPlaying) {
+                isPlaying = false;
+                mediaControl.pause(responseListener);
                 buildNotification(generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY));
             } else {
-                mIsPlaying = true;
-                mMediaControl.play(responseListener);
+                isPlaying = true;
+                mediaControl.play(responseListener);
                 buildNotification(generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE));
             }
-            mMediaControl.getPlayState(mPlayStateListener);
+            mediaControl.getPlayState(mPlayStateListener);
         } else if( action.equalsIgnoreCase( ACTION_FAST_FORWARD ) ) {
-            mMediaControl.getPosition(new MediaControl.PositionListener() {
+            mediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long object) {
                     long seek = object + 10000;
-                    mMediaControl.seek(seek, null);
+                    mediaControl.seek(seek, null);
                 }
 
                 @Override
@@ -90,11 +119,11 @@ public class BeamPlayerNotificationService extends Service {
                 }
             });
         } else if( action.equalsIgnoreCase( ACTION_REWIND ) ) {
-            mMediaControl.getPosition(new MediaControl.PositionListener() {
+            mediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long object) {
                     long seek = object - 10000;
-                    mMediaControl.seek(seek, null);
+                    mediaControl.seek(seek, null);
                 }
 
                 @Override
@@ -103,7 +132,7 @@ public class BeamPlayerNotificationService extends Service {
                 }
             });
         } else if( action.equalsIgnoreCase( ACTION_STOP ) ) {
-            mManager.stopVideo();
+            manager.stopVideo();
         }
     }
 
@@ -115,7 +144,7 @@ public class BeamPlayerNotificationService extends Service {
     }
 
     private void buildNotification( NotificationCompat.Action action ) {
-        if(mManager.getStreamInfo() == null)
+        if(manager.getStreamInfo() == null)
             return;
 
         NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
@@ -125,7 +154,7 @@ public class BeamPlayerNotificationService extends Service {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
         NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
-                .setContentTitle(mManager.getStreamInfo().getTitle() == null ? "Video" : mManager.getStreamInfo().getTitle())
+                .setContentTitle(manager.getStreamInfo().getTitle() == null ? "Video" : manager.getStreamInfo().getTitle())
                 .setContentText(getResources().getString(R.string.app_name))
                 .setDeleteIntent(pendingIntent)
                 .setStyle(style)
@@ -140,8 +169,8 @@ public class BeamPlayerNotificationService extends Service {
         builder.addAction(generateAction(R.drawable.ic_av_forward, "Fast Foward", ACTION_FAST_FORWARD));
         style.setShowActionsInCompactView(0,1,2);
 
-        if(mImage != null) {
-            builder.setLargeIcon(mImage);
+        if(image != null) {
+            builder.setLargeIcon(image);
         }
 
         Notification notification = builder.build();
@@ -151,13 +180,13 @@ public class BeamPlayerNotificationService extends Service {
 
     public static void cancelNotification() {
         // Remove beamplayer notification if still available
-        NotificationManager notificationManager = (NotificationManager) ButterApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(BeamPlayerNotificationService.NOTIFICATION_ID);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if( mManager == null ) {
+        if(manager == null ) {
             initMediaSessions();
         } else {
             handleIntent(intent);
@@ -167,22 +196,21 @@ public class BeamPlayerNotificationService extends Service {
     }
 
     private void initMediaSessions() {
-        mManager = BeamManager.getInstance(this);
-        if(mManager.getConnectedDevice() != null) {
+        if(manager.getConnectedDevice() != null) {
 
-            mMediaControl = mManager.getMediaControl();
-            mMediaControl.subscribePlayState(mPlayStateListener);
-            mManager.addDeviceListener(mDeviceListener);
+            mediaControl = manager.getMediaControl();
+            mediaControl.subscribePlayState(mPlayStateListener);
+            manager.addDeviceListener(mDeviceListener);
 
-            mMediaControl.getPlayState(mPlayStateListener);
+            mediaControl.getPlayState(mPlayStateListener);
 
-            if(mManager.getStreamInfo().getImageUrl() != null)
-                Picasso.with(this).load(mManager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
+            if(manager.getStreamInfo().getImageUrl() != null)
+                Picasso.with(this).load(manager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        mImage = bitmap;
+                        image = bitmap;
 
-                        if(!mIsPlaying) {
+                        if(!isPlaying) {
                             buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );
                         } else {
                             buildNotification( generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE ) );
@@ -216,7 +244,7 @@ public class BeamPlayerNotificationService extends Service {
     private MediaControl.PlayStateListener mPlayStateListener = new MediaControl.PlayStateListener() {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
-            mIsPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
+            isPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
 
             if(state.equals(MediaControl.PlayStateStatus.Paused)) {
                 buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );

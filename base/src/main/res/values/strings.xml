@@ -119,6 +119,25 @@
 	<string name="fit_vertical">Fit vertical</string>
 	<string name="original_size">Original</string>
 
+    <string-array name="prefs_providers">
+        <item>@string/title_movies</item>
+        <item>@string/title_shows</item>
+        <item>@string/title_anime</item>
+    </string-array>
+
+    <string-array name="prefs_hw">
+        <item>@string/hw_automatic</item>
+        <item>@string/disabled</item>
+        <item>@string/hw_decoding</item>
+        <item>@string/hw_full</item>
+    </string-array>
+
+    <string-array name="prefs_pixel_format">
+        <item>@string/rgb16</item>
+        <item>@string/rgb32</item>
+        <item>@string/yuv</item>
+    </string-array>
+
     <!-- DetailActivity strings -->
     <string name="minutes">min</string>
     <string name="read_more">Read more</string>

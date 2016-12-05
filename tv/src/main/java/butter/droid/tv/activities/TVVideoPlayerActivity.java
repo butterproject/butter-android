@@ -23,19 +23,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
 import butter.droid.tv.TVButterApplication;
 import butterknife.ButterKnife;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
 
 public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback {
+
+    @Inject PrefManager prefManager;
 
     private TVVideoPlayerFragment mPlayerFragment;
     private TVPlaybackOverlayFragment mPlaybackOverlayFragment;
@@ -111,7 +115,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
         }
         else {
             mPlaybackOverlayFragment.setKeepEventBusRegistration(false);
-            PrefUtils.save(this, BaseVideoPlayerFragment.RESUME_POSITION, 0);
+            prefManager.save(BaseVideoPlayerFragment.RESUME_POSITION, 0);
         }
     }
 

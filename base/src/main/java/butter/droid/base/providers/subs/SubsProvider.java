@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
@@ -42,8 +42,6 @@ import butter.droid.base.subs.FormatASS;
 import butter.droid.base.subs.FormatSRT;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.utils.FileUtils;
-import butter.droid.base.utils.PrefUtils;
-import butter.droid.base.utils.StorageUtils;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -57,12 +55,14 @@ public abstract class SubsProvider extends BaseProvider {
 
     private final Context context;
     private final OkHttpClient client;
+    private final PlayerManager playerManager;
 
-    public SubsProvider(Context context, OkHttpClient client, Gson gson) {
+    public SubsProvider(Context context, OkHttpClient client, Gson gson, PlayerManager playerManager) {
         super(client, gson);
 
         this.context = context;
         this.client = client;
+        this.playerManager = playerManager;
     }
 
     public abstract void getList(Movie movie, Callback callback);
@@ -73,10 +73,6 @@ public abstract class SubsProvider extends BaseProvider {
         void onSuccess(Map<String, String> items);
 
         void onFailure(Exception e);
-    }
-
-    public static File getStorageLocation(Context context) {
-        return new File(PrefUtils.get(context, Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()) + "/subs/");
     }
 
     /**
@@ -91,7 +87,7 @@ public abstract class SubsProvider extends BaseProvider {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
 
-                final File subsDirectory = getStorageLocation(context);
+                final File subsDirectory = playerManager.getStorageLocation(context);
                 final String fileName = media.videoId + "-" + languageCode;
                 final File srtPath = new File(subsDirectory, fileName + ".srt");
 

@@ -17,13 +17,24 @@
 
 package butter.droid.base.manager;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.util.VLCUtil;
+
 import javax.inject.Singleton;
 
+import butter.droid.base.Constants;
+import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.manager.vlc.VLCOptions;
 import dagger.Module;
 import dagger.Provides;
+import timber.log.Timber;
 
 @Module
 public class ManagerModule {
@@ -31,6 +42,16 @@ public class ManagerModule {
     @Provides @Singleton public ProviderManager provideProviderManager(VodoProvider moviesProvider,
             SubsProvider subsProvider) {
         return new ProviderManager(moviesProvider, null);
+    }
+
+    @Provides @Singleton @Nullable LibVLC provideLibVLC(Context context, PrefManager prefManager) {
+        if(!VLCUtil.hasCompatibleCPU(context)) {
+            Timber.e(VLCUtil.getErrorMsg());
+            return null;
+        } else {
+            String chroma = prefManager.get(Prefs.PIXEL_FORMAT, null);
+            return new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, Constants.DEBUG_ENABLED));
+        }
     }
 
 }

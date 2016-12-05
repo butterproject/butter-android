@@ -26,21 +26,28 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.Map;
 
-import butterknife.ButterKnife;
-import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PrefItem;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<PrefItem> mItems;
+    private String[] keys;
+    private Map<String, PrefItem> items;
+
     final int NORMAL = 0, HEADER = 1;
 
-    public PreferencesListAdapter(List<PrefItem> items) {
-        mItems = items;
+    public PreferencesAdapter() {
+    }
+
+    public void setItems(String[] keys, Map<String, PrefItem> items) {
+        this.keys = keys;
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -49,11 +56,11 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         switch (viewType) {
             case HEADER:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_subheader, parent, false);
-                return new PreferencesListAdapter.HeaderHolder(v);
+                return new PreferencesAdapter.HeaderHolder(v);
             case NORMAL:
             default:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_icon_twoline_item, parent, false);
-                return new PreferencesListAdapter.ViewHolder(v);
+                return new PreferencesAdapter.ViewHolder(v);
         }
     }
 
@@ -61,14 +68,14 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (getItemViewType(position) == NORMAL) {
             ViewHolder itemViewHolder = (ViewHolder) viewHolder;
-            PrefItem item = mItems.get(position);
+            PrefItem item = items.get(keys[position]);
             itemViewHolder.itemView.setClickable(item.isClickable());
             itemViewHolder.icon.setImageResource(item.getIconResource());
             itemViewHolder.icon.setColorFilter(ButterApplication.getAppContext().getResources().getColor(R.color.text_color), PorterDuff.Mode.SRC_IN);
-            itemViewHolder.text1.setText(item.getTitle());
+            itemViewHolder.text1.setText(item.getTitleRes());
             itemViewHolder.text2.setText(item.getSubtitle());
 
-            if (item.getDefaultValue() instanceof Boolean) {
+            if (item.getValue() instanceof Boolean) {
                 itemViewHolder.checkBox.setVisibility(View.VISIBLE);
                 itemViewHolder.checkBox.setChecked((boolean) item.getValue());
             } else {
@@ -76,47 +83,43 @@ public class PreferencesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         } else if (getItemViewType(position) == HEADER) {
             HeaderHolder headerViewHolder = (HeaderHolder) viewHolder;
-            headerViewHolder.itemView.setText(mItems.get(position).getTitle());
+            headerViewHolder.itemView.setText(items.get(keys[position]).getTitleRes());
         }
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return items.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (mItems.get(position).isTitle()) {
+        if (items.get(keys[position]).isTitle()) {
             return HEADER;
+        } else {
+            return NORMAL;
         }
-        return NORMAL;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public PrefItem getItem(int position) {
+        return items.get(keys[position]);
+    }
 
-        View itemView;
-        @BindView(android.R.id.icon)
-        ImageView icon;
-        @BindView(android.R.id.text1)
-        TextView text1;
-        @BindView(android.R.id.text2)
-        TextView text2;
-        @BindView(android.R.id.checkbox)
-        CheckBox checkBox;
+    public void updateItem(int position, PrefItem item) {
+        items.put(keys[position], item);
+        notifyItemChanged(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(android.R.id.icon) ImageView icon;
+        @BindView(android.R.id.text1) TextView text1;
+        @BindView(android.R.id.text2) TextView text2;
+        @BindView(android.R.id.checkbox) CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.itemView = itemView;
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            int position = getPosition();
-            PrefItem item = (PrefItem) mItems.get(position);
-            item.onClick();
         }
 
     }

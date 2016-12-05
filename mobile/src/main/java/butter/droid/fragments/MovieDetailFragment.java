@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butterknife.BindView;
 
 import butterknife.ButterKnife;
@@ -34,7 +35,6 @@ import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.content.preferences.DefaultQuality;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -43,7 +43,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
@@ -57,6 +57,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @Inject ProviderManager providerManager;
     @Inject YouTubeManager youTubeManager;
+    @Inject PrefManager prefManager;
+    @Inject PlayerManager playerManager;
 
     private static Movie sMovie;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
@@ -211,7 +213,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
                             }
                         });
 
-                        String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
+                        String defaultSubtitle = prefManager.get(Prefs.SUBTITLE_DEFAULT, null);
                         if (subtitles.containsKey(defaultSubtitle)) {
                             onSubtitleLanguageSelected(defaultSubtitle);
                             mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
@@ -246,7 +248,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
                     }
                 });
 
-                String quality = DefaultQuality.get(mActivity, Arrays.asList(qualities));
+                String quality = playerManager.getDefaultQuality(mActivity, Arrays.asList(qualities));
                 int qualityIndex = Arrays.asList(qualities).indexOf(quality);
                 mSelectedQuality = quality;
                 mQuality.setText(mSelectedQuality);

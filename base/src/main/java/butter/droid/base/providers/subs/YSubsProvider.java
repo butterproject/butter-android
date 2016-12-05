@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
 import okhttp3.Call;
@@ -84,8 +85,8 @@ public class YSubsProvider extends SubsProvider {
         LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
-    public YSubsProvider(Context context, OkHttpClient client, Gson gson) {
-        super(context, client, gson);
+    public YSubsProvider(Context context, OkHttpClient client, Gson gson, PlayerManager playerManager) {
+        super(context, client, gson, playerManager);
     }
 
     @Override

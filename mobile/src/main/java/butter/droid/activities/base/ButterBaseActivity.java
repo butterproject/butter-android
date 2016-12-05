@@ -30,19 +30,21 @@ import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
-import butter.droid.base.beaming.BeamManager;
+import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 
 public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
 
     @Inject ButterUpdateManager updateManager;
+    @Inject BeamManager beamManager;
+    @Inject PrefManager prefManager;
 
-    protected Boolean mShowCasting = false;
+    protected Boolean showCasting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
@@ -69,16 +71,18 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     @Override
     protected void onResume() {
-        String language = PrefUtils.get(this, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = prefManager.get(Prefs.LOCALE, ButterApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
-        BeamManager.getInstance(this).addListener(this);
+
+        beamManager.addListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        BeamManager.getInstance(this).removeListener(this);
+
+        beamManager.removeListener(this);
     }
 
     protected void onHomePressed() {
@@ -98,16 +102,15 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.activity_base, menu);
+        return true;
+    }
 
-        BeamManager beamManager = BeamManager.getInstance(this);
-        Boolean castingVisible = mShowCasting && beamManager.hasCastDevices();
+    @Override public boolean onPrepareOptionsMenu(Menu menu) {
+        Boolean castingVisible = showCasting && beamManager.hasCastDevices();
         MenuItem item = menu.findItem(R.id.action_casting);
         item.setVisible(castingVisible);
         item.setIcon(beamManager.isConnected() ? R.drawable.ic_av_beam_connected : R.drawable.ic_av_beam_disconnected);
-
         return true;
     }
 
@@ -129,8 +132,11 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
         supportInvalidateOptionsMenu();
     }
 
-    public void setShowCasting(boolean b) {
-        mShowCasting = b;
+    public void setShowCasting(boolean show) {
+        if (show != showCasting) {
+            showCasting = show;
+            supportInvalidateOptionsMenu();
+        }
     }
 
 }

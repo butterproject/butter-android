@@ -24,25 +24,29 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
-import butterknife.ButterKnife;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 
+import javax.inject.Inject;
+
 import butter.droid.base.ButterApplication;
 import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.PrefUtils;
+import butterknife.ButterKnife;
 
 public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
+
+    @Inject PrefManager prefManager;
 
     protected Handler mHandler;
     protected TorrentService mService;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        String language = PrefUtils.get(this, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = prefManager.get(Prefs.LOCALE, ButterApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
@@ -67,7 +71,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
 
     @Override
     public void setContentView(int layoutResID) {
-        String language = PrefUtils.get(this, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = prefManager.get(Prefs.LOCALE, ButterApplication.getSystemLanguage());
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.setContentView(layoutResID);
     }
