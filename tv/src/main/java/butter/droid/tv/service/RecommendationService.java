@@ -46,21 +46,17 @@ import timber.log.Timber;
 
 public class RecommendationService extends IntentService {
 
+    private static final int MAX_MOVIE_RECOMMENDATIONS = 3;
+    private static final int MAX_SHOW_RECOMMENDATIONS = 3;
     @Inject
     ProviderManager providerManager;
-
     private ArrayList<Media> mMovies = new ArrayList<>();
     private ArrayList<Media> mShows = new ArrayList<>();
-
+    private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
+    private int TOTAL_COUNT = 0;
     public RecommendationService() {
         super("RecommendationService");
     }
-
-    private static final int MAX_MOVIE_RECOMMENDATIONS = 3;
-    private static final int MAX_SHOW_RECOMMENDATIONS = 3;
-
-    private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
-    private int TOTAL_COUNT=0;
 
     @Override
     public void onCreate() {
@@ -74,7 +70,7 @@ public class RecommendationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if(!VersionUtils.isAndroidTV()) {
+        if (!VersionUtils.isAndroidTV()) {
             return;
         }
 
