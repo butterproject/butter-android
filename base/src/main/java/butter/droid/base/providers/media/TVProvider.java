@@ -20,7 +20,6 @@ package butter.droid.base.providers.media;
 import android.support.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import butter.droid.base.providers.media.response.models.shows.ShowDetails;
 import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import okhttp3.OkHttpClient;
 
 public class TVProvider extends MediaProvider {
 
@@ -46,11 +46,6 @@ public class TVProvider extends MediaProvider {
     public TVProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
         super(client, mapper, subsProvider, BuildConfig.TV_URLS, "shows/", "show/", 0);
         metaProvider = new TraktProvider(client, mapper);
-    }
-
-    @Override
-    public String getMediaCallTag() {
-        return "tv_http_call";
     }
 
     @Override

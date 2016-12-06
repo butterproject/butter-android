@@ -36,8 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 import java.util.ArrayList;
 
@@ -293,7 +293,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public void changeGenre(String genre) {
         if (!(mFilters.genre == null ? "" : mFilters.genre).equals(genre == null ? "" : genre)) {
             if (mCurrentCall != null)
-                client.getDispatcher().getExecutorService().execute(new Runnable() {
+                client.dispatcher().executorService().execute(new Runnable() {
                     @Override
                     public void run() {
                         mCurrentCall.cancel();
@@ -467,7 +467,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         }
 
         if (mCurrentCall != null)
-            client.getDispatcher().getExecutorService().execute(new Runnable() {
+            client.dispatcher().executorService().execute(new Runnable() {
                 @Override
                 public void run() {
                     mCurrentCall.cancel();

@@ -24,7 +24,7 @@ ext {
     compileSdk = 25
     minSdk = 15
     butterknifeVersion = "8.4.0"
-    okHttpVersion = "2.7.5"
+    okHttpVersion = "3.4.2"
     picassoVersion = "2.5.2"
     daggerVersion = "2.7"
     javaxAnnotationVersion = "1.2"

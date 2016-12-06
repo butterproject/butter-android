@@ -22,7 +22,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.multidex.MultiDex;
@@ -30,7 +29,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -50,10 +48,8 @@ import timber.log.Timber;
 
 public class ButterApplication extends Application implements ButterUpdateManager.Listener {
 
-    private static OkHttpClient sHttpClient;
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
-    private static boolean debugable;
 
     @Inject
     Picasso picasso;
@@ -98,8 +94,6 @@ public class ButterApplication extends Application implements ButterUpdateManage
         super.onCreate();
         sThis = this;
 
-        debugable = ( 0 != ( getAppContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
-
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -109,7 +103,7 @@ public class ButterApplication extends Application implements ButterUpdateManage
         Foreground.init(this);
 
         //initialise logging
-        if (debugable || BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
 
@@ -157,9 +151,5 @@ public class ButterApplication extends Application implements ButterUpdateManage
 
             nm.notify(ButterUpdateManager.NOTIFICATION_ID, notificationBuilder.build());
         }
-    }
-
-    public static boolean isDebugable() {
-        return debugable;
     }
 }

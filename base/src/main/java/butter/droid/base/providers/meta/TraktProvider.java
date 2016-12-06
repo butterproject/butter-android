@@ -20,7 +20,6 @@ package butter.droid.base.providers.meta;
 import android.os.AsyncTask;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
 import com.uwetrottmann.trakt.v2.TraktV2;
 import com.uwetrottmann.trakt.v2.entities.Episode;
 import com.uwetrottmann.trakt.v2.entities.Movie;
@@ -28,6 +27,11 @@ import com.uwetrottmann.trakt.v2.enums.Extended;
 import com.uwetrottmann.trakt.v2.services.Episodes;
 import com.uwetrottmann.trakt.v2.services.Movies;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butter.droid.base.providers.meta.MetaProvider.MetaData.Images;
+import okhttp3.OkHttpClient;
 import retrofit.RetrofitError;
 
 public class TraktProvider extends MetaProvider {
@@ -36,6 +40,8 @@ public class TraktProvider extends MetaProvider {
     private static TraktV2 TRAKT = new TraktV2();
     private static Movies MOVIES;
     private static Episodes EPISODES;
+
+    private final List<TraktTask> ongoingCalls = new ArrayList<>();
 
     static {
         TRAKT.setApiKey(API_KEY);
@@ -56,7 +62,7 @@ public class TraktProvider extends MetaProvider {
      */
     @Override
     public void getMovieMeta(final String imdbId, Callback callback) {
-        new TraktTask(callback) {
+        TraktTask traktTask = new TraktTask(callback) {
             @Override
             protected MetaData doInBackground(Void... params) {
                 try {
@@ -74,7 +80,7 @@ public class TraktProvider extends MetaProvider {
                     metaData.trailer = m.trailer;
                     metaData.tagline = m.tagline;
                     metaData.title = m.title;
-                    metaData.images = new MetaData.Images(m.images.poster.full, m.images.fanart.full);
+                    metaData.images = new Images(m.images.poster.full, m.images.fanart.full);
 
                     return metaData;
                 } catch (RetrofitError e) {
@@ -82,7 +88,9 @@ public class TraktProvider extends MetaProvider {
                 }
                 return null;
             }
-        }.execute();
+        };
+        traktTask.execute();
+        ongoingCalls.add(traktTask);
     }
 
     /**
@@ -95,7 +103,7 @@ public class TraktProvider extends MetaProvider {
      */
     @Override
     public void getEpisodeMeta(final String imdbId, final int season, final int episode, Callback callback) {
-        new TraktTask(callback) {
+        TraktTask traktTask = new TraktTask(callback) {
             @Override
             protected MetaData doInBackground(Void... params) {
                 try {
@@ -114,7 +122,20 @@ public class TraktProvider extends MetaProvider {
                 }
                 return null;
             }
-        }.execute();
+        };
+        traktTask.execute();
+        ongoingCalls.add(traktTask);
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+
+        for (TraktTask ongoingCall : ongoingCalls) {
+            ongoingCall.cancel(true);
+        }
+        ongoingCalls.clear();
+
     }
 
     abstract class TraktTask extends AsyncTask<Void, Void, MetaData> {
@@ -130,6 +151,7 @@ public class TraktProvider extends MetaProvider {
         protected void onPostExecute(MetaData metaData) {
             super.onPostExecute(metaData);
             mCallback.onResult(metaData, mException);
+            ongoingCalls.remove(this);
         }
     }
 }

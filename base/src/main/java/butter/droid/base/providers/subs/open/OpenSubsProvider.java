@@ -15,33 +15,38 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.providers.subs;
+package butter.droid.base.providers.subs.open;
 
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
+import butter.droid.base.providers.subs.SubsProvider;
 import de.timroes.axmlrpc.XMLRPCCallback;
 import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
 import de.timroes.axmlrpc.XMLRPCServerException;
+import okhttp3.OkHttpClient;
 
 public class OpenSubsProvider extends SubsProvider {
 
-    private String mApiUrl = "http://api.opensubtitles.org/xml-rpc";
-    private String mUserAgent = "Popcorn Time v1";//"Popcorn Time Android v1";
+    static final String API_URL = "http://api.opensubtitles.org/xml-rpc";
+    static final String USER_AGENT = "Popcorn Time v1";//"Popcorn Time Android v1";
 
-    public OpenSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper) {
+    private final XMLRPCClient client;
+
+    private final ArrayList<Long> ongoingCalls = new ArrayList<>();
+
+    public OpenSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper, XMLRPCClient xmlClient) {
         super(context, client, mapper);
+        this.client = xmlClient;
     }
 
     @Override
@@ -111,17 +116,20 @@ public class OpenSubsProvider extends SubsProvider {
                                 callback.onSuccess(returnMap.get(episode.videoId));
                             } else {
                                 callback.onFailure(new XMLRPCException("No subs found"));
+                                removeCall(id);
                             }
                         }
 
                         @Override
                         public void onError(long id, XMLRPCException error) {
                             callback.onFailure(error);
+                            removeCall(id);
                         }
 
                         @Override
                         public void onServerError(long id, XMLRPCServerException error) {
                             callback.onFailure(error);
+                            removeCall(id);
                         }
                     });
                 } else {
@@ -132,13 +140,33 @@ public class OpenSubsProvider extends SubsProvider {
             @Override
             public void onError(long id, XMLRPCException error) {
                 callback.onFailure(error);
+                removeCall(id);
             }
 
             @Override
             public void onServerError(long id, XMLRPCServerException error) {
                 callback.onFailure(error);
+                removeCall(id);
             }
         });
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+
+        synchronized (ongoingCalls) {
+            for (Long ongoingCall : ongoingCalls) {
+                client.cancel(ongoingCall);
+            }
+            ongoingCalls.clear();
+        }
+    }
+
+    private void removeCall(long callId) {
+        synchronized (ongoingCalls) {
+            ongoingCalls.remove(callId);
+        }
     }
 
     /**
@@ -147,12 +175,9 @@ public class OpenSubsProvider extends SubsProvider {
      * @param callback XML RPC callback
      */
     private void login(XMLRPCCallback callback) {
-        try {
-            XMLRPCClient client = new XMLRPCClient(new URL(mApiUrl.replace("http://", "https://")), mUserAgent);
-            client.callAsync(callback, "LogIn", "", "", "en", mUserAgent);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            // Just catch and fail
+        long callId = client.callAsync(callback, "LogIn", "", "", "en", USER_AGENT);
+        synchronized (ongoingCalls) {
+            ongoingCalls.add(callId);
         }
     }
 
@@ -162,16 +187,14 @@ public class OpenSubsProvider extends SubsProvider {
      * @param callback XML RPC callback callback
      */
     private void search(Episode episode, String token, XMLRPCCallback callback) {
-        try {
-            XMLRPCClient client = new XMLRPCClient(new URL(mApiUrl), mUserAgent);
-            Map<String, String> option = new HashMap<>();
-            option.put("imdbid", episode.imdbId.replace("tt", ""));
-            option.put("season", String.format(Locale.US, "%d", episode.season));
-            option.put("episode", String.format(Locale.US, "%d", episode.episode));
-            option.put("sublanguageid", "all");
-            client.callAsync(callback, "SearchSubtitles", token, new Object[]{option});
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        Map<String, String> option = new HashMap<>();
+        option.put("imdbid", episode.imdbId.replace("tt", ""));
+        option.put("season", String.format(Locale.US, "%d", episode.season));
+        option.put("episode", String.format(Locale.US, "%d", episode.episode));
+        option.put("sublanguageid", "all");
+        long callId = client.callAsync(callback, "SearchSubtitles", token, new Object[]{option});
+        synchronized (ongoingCalls) {
+            ongoingCalls.add(callId);
         }
     }
 
