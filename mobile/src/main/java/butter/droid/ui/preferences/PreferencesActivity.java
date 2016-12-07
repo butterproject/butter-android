@@ -29,12 +29,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -185,14 +183,8 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
                             new DirectoryChooserFragment.OnFragmentInteractionListener() {
                                 @Override
                                 public void onSelectDirectory(String s) {
-                                    File f = new File(s);
-                                    if (f.canWrite()) {
-//                                                onSelectionListener.onSelection(0, s);
-                                        directoryChooserFragment.dismiss();
-                                    } else {
-                                        Toast.makeText(PreferencesActivity.this, R.string.not_writable,
-                                                Toast.LENGTH_SHORT).show();
-                                    }
+                                    presenter.onFolderSelected(key, s);
+                                    directoryChooserFragment.dismiss();
                                 }
 
                                 @Override

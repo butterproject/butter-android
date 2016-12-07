@@ -34,4 +34,6 @@ public interface PreferencesPresenter {
     void onNumberSelected(@PrefKey String key, int value);
 
     void clearPreference(@PrefKey String key);
+
+    void onFolderSelected(@PrefKey final String key, String folder);
 }

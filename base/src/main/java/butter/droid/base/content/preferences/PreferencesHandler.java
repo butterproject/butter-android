@@ -412,6 +412,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.listening_port)
                         .setPreferenceKey(Prefs.LIBTORRENT_LISTENING_PORT)
                         .hasNext(true)
+                        .setClickable(!prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true))
                         .setValue(prefManager.get(Prefs.LIBTORRENT_LISTENING_PORT, 59718))
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override

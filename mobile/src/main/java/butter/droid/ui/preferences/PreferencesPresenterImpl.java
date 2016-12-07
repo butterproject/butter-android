@@ -23,6 +23,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
@@ -52,7 +53,8 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
     private String[] keys;
     private String[] providers;
     private String[] qualities;
-    private String[] languages;
+    private String[] appLanguages;
+    private String[] subsLanguages;
 
     public PreferencesPresenterImpl(PreferencesView view, PrefManager prefManager,
             PreferencesHandler preferencesHandler, Resources resources, PlayerManager playerManager,
@@ -71,7 +73,10 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
         Map<String, PrefItem> items = preferencesHandler.getPreferenceItems(keys);
         view.displayItems(keys, items);
         qualities = resources.getStringArray(R.array.video_qualities);
-        languages = resources.getStringArray(R.array.subtitle_languages);
+        subsLanguages = resources.getStringArray(R.array.subtitle_languages);
+
+        appLanguages = resources.getStringArray(R.array.translation_languages);
+        Arrays.sort(appLanguages);
 
         prefManager.registerOnSharedPreferenceChangeListener(this);
     }
@@ -106,12 +111,30 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
                 if (position == 0) {
                     prefManager.remove(key);
                 } else {
-                    prefManager.save(key, languages[position - 1]);
+                    prefManager.save(key, appLanguages[position - 1]);
                 }
                 view.showMessage(R.string.restart_effect);
                 break;
             case Prefs.HW_ACCELERATION:
                 prefManager.save(key, position - 1);
+                break;
+            case Prefs.PIXEL_FORMAT:
+                String format;
+                if (position == 2) {
+                    format = "YV12";
+                } else if (position == 0) {
+                    format = "RV16";
+                } else {
+                    format = "RV32";
+                }
+                prefManager.save(key, format);
+                break;
+            case Prefs.SUBTITLE_DEFAULT:
+                if (position == 0) {
+                    prefManager.remove(key);
+                } else {
+                    prefManager.save(key, subsLanguages[position - 1]);
+                }
                 break;
         }
     }
@@ -142,11 +165,31 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
         prefManager.remove(key);
     }
 
+    @Override public void onFolderSelected(@PrefKey String key, String folder) {
+        switch (key) {
+            case Prefs.STORAGE_LOCATION:
+                File f = new File(folder);
+                if (f.canWrite()) {
+                    prefManager.save(key, folder);
+                } else {
+                    view.showMessage(R.string.not_writable);
+                }
+                break;
+
+        }
+    }
+
     @Override public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         int keyPosition = getKeyPosition(key);
         if (keyPosition > -1) {
             view.updateItem(keyPosition, preferencesHandler.getPreferenceItem(key));
+
+            if (Prefs.LIBTORRENT_AUTOMATIC_PORT.equals(key)) {
+                keyPosition = getKeyPosition(Prefs.LIBTORRENT_LISTENING_PORT);
+                view.updateItem(keyPosition, preferencesHandler.getPreferenceItem(Prefs.LIBTORRENT_LISTENING_PORT));
+            }
         }
+
     }
 
     private int getKeyPosition(String key) {
@@ -212,11 +255,6 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
                 break;
             case Prefs.STORAGE_LOCATION:
                 view.openDirectorySelector(Prefs.STORAGE_LOCATION, item.getTitleRes(), (String) item.getValue());
-//                if (value != null) {
-//                    item.saveValue(value);
-//                } else {
-//                    item.clearValue();
-//                }
                 break;
             case Prefs.LIBTORRENT_LISTENING_PORT:
                 view.openPreciseNumberSelector(Prefs.LIBTORRENT_LISTENING_PORT, item.getTitleRes(),
@@ -280,53 +318,35 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
         int currentPosition = 0;
         String currentValue = item.getValue().toString();
 
-        final String[] languages = resources.getStringArray(R.array.translation_languages);
-        Arrays.sort(languages);
-
-        String[] items = new String[languages.length + 1];
+        String[] items = new String[appLanguages.length + 1];
         items[0] = resources.getString(R.string.device_language);
-        for (int i = 0; i < languages.length; i++) {
-            Locale locale = LocaleUtils.toLocale(languages[i]);
+        for (int i = 0; i < appLanguages.length; i++) {
+            Locale locale = LocaleUtils.toLocale(appLanguages[i]);
             items[i + 1] = locale.getDisplayName(locale);
-            if (languages[i].equals(currentValue)) {
+            if (appLanguages[i].equals(currentValue)) {
                 currentPosition = i + 1;
             }
         }
 
         view.openSimpleChoiceSelector(Prefs.LOCALE, item.getTitleRes(), items, currentPosition);
-
-//        if (position == 0) {
-//            item.clearValue();
-//        } else {
-//            item.saveValue(languages[position - 1]);
-//        }
-
     }
 
     private void updateSubtitleDefault(@NonNull PrefItem item) {
         int currentPosition = 0;
         String currentValue = (String) item.getValue();
 
-        String[] items = new String[languages.length + 1];
+        String[] items = new String[subsLanguages.length + 1];
         items[0] = resources.getString(R.string.no_default_set);
 
-        if (currentValue != null) {
-            for (int i = 0; i < languages.length; i++) {
-                Locale locale = LocaleUtils.toLocale(languages[i]);
-                items[i + 1] = locale.getDisplayName(locale);
-                if (languages[i].equals(currentValue)) {
-                    currentPosition = i + 1;
-                }
+        for (int i = 0; i < subsLanguages.length; i++) {
+            Locale locale = LocaleUtils.toLocale(subsLanguages[i]);
+            items[i + 1] = locale.getDisplayLanguage();
+            if (subsLanguages[i].equals(currentValue)) {
+                currentPosition = i + 1;
             }
         }
 
         view.openSimpleChoiceSelector(Prefs.SUBTITLE_DEFAULT, item.getTitleRes(), items, currentPosition);
-
-//        if (position == 0) {
-//            item.clearValue();
-//        } else {
-//            item.saveValue(languages[position - 1]);
-//        }
     }
 
     private void updatePixelFormat(@NonNull PrefItem item) {
@@ -341,13 +361,6 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
         }
 
         view.openSimpleChoiceSelector(Prefs.PIXEL_FORMAT, item.getTitleRes(), pixelFormats, current);
-//        if (position == 2) {
-//            item.saveValue("YV12");
-//        } else if (position == 0) {
-//            item.saveValue("RV16");
-//        } else {
-//            item.saveValue("RV32");
-//        }
     }
 
 }
