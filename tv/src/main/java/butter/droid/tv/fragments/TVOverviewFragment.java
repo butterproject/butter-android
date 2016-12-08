@@ -36,10 +36,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +61,9 @@ import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MorePresenter;
 import butter.droid.tv.utils.BackgroundUpdater;
 import hugo.weaving.DebugLog;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /*
  * Main class to show BrowseFragment with header and rows of videos
@@ -151,14 +150,14 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
 
     private void loadData() {
         final MediaProvider.Filters showsFilter = new MediaProvider.Filters();
-        showsFilter.sort = MediaProvider.Filters.Sort.DATE;
-        showsFilter.order = MediaProvider.Filters.Order.DESC;
+        showsFilter.setSort(MediaProvider.Filters.Sort.DATE);
+        showsFilter.setOrder(MediaProvider.Filters.Order.DESC);
 
         providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW)
                 .getList(null, showsFilter, new MediaProvider.Callback() {
             @DebugLog
             @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
                 List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
                 mShowAdapter.clear();
                 mShowAdapter.addAll(0, list);
@@ -181,14 +180,14 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
         });
 
         final MediaProvider.Filters movieFilters = new MediaProvider.Filters();
-        movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
-        movieFilters.order = MediaProvider.Filters.Order.DESC;
+        movieFilters.setSort(MediaProvider.Filters.Sort.POPULARITY);
+        movieFilters.setOrder(MediaProvider.Filters.Order.DESC);
 
         providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                 .getList(null, movieFilters, new MediaProvider.Callback() {
             @DebugLog
             @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
                 List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
                 mMoviesAdapter.clear();
                 mMoviesAdapter.addAll(0, list);
