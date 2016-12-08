@@ -57,13 +57,13 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import butter.droid.base.R;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.manager.beaming.BeamDeviceListener;
 import butter.droid.base.manager.beaming.BeamManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.manager.vlc.VLCOptions;
@@ -87,7 +87,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     @Inject ProviderManager providerManager;
     @Inject BeamManager beamManager;
     @Inject @Nullable LibVLC libVLC;
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
     @Inject PlayerManager playerManager;
 
     private MediaPlayer mMediaPlayer;
@@ -199,7 +199,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
         if (null == streamInfo.getSubtitleLanguage()) {
             // Get selected default subtitle
-            String defaultSubtitle = prefManager.get(Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
             streamInfo.setSubtitleLanguage(defaultSubtitle);
             mCurrentSubsLang = defaultSubtitle;
             Timber.d("Using default subtitle: " + mCurrentSubsLang);
@@ -211,7 +211,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
             loadOrDownloadSubtitle();
         }
 
-        updateSubtitleSize(prefManager.get(Prefs.SUBTITLE_SIZE, getResources().getInteger(R.integer.player_subtitles_default_text_size)));
+        updateSubtitleSize(preferencesHandler.getSubtitleSize());
 
         prepareVlcVout();
         if (mMediaReady) {
@@ -472,7 +472,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
             visibleWidth = mVideoVisibleWidth;
             aspectRatio = (double) mVideoVisibleWidth / (double) mVideoVisibleHeight;
         } else {
-			/* Use the specified aspect ratio */
+            /* Use the specified aspect ratio */
             visibleWidth = mVideoVisibleWidth * (double) mSarNum / mSarDen;
             aspectRatio = visibleWidth / mVideoVisibleHeight;
         }

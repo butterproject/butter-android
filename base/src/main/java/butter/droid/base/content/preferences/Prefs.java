@@ -26,7 +26,7 @@ public final class Prefs {
 
     // region StringDef
 
-    @StringDef({SUBTITLE_COLOR, SUBTITLE_SIZE, SUBTITLE_STROKE_WIDTH, SUBTITLE_STROKE_COLOR, SUBTITLE_DEFAULT,
+    @StringDef({SUBTITLE_COLOR, SUBTITLE_SIZE, SUBTITLE_STROKE_WIDTH, SUBTITLE_STROKE_COLOR, SUBTITLE_DEFAULT_LANGUAGE,
             STORAGE_LOCATION, REMOVE_CACHE, HW_ACCELERATION, AUTOMATIC_UPDATES, DEFAULT_PROVIDER, DEFAULT_PLAYER,
             DEFAULT_PLAYER_NAME, WIFI_ONLY, LOCALE, DRAWER_LEARNED, FIRST_RUN, LIBTORRENT_CONNECTION_LIMIT,
             LIBTORRENT_DOWNLOAD_LIMIT, LIBTORRENT_UPLOAD_LIMIT, LIBTORRENT_LISTENING_PORT, LIBTORRENT_AUTOMATIC_PORT,
@@ -39,7 +39,7 @@ public final class Prefs {
     public static final String SUBTITLE_SIZE = "subtitle_size";
     public static final String SUBTITLE_STROKE_WIDTH = "subtitle_stroke_width";
     public static final String SUBTITLE_STROKE_COLOR = "subtitle_stroke_color";
-    public static final String SUBTITLE_DEFAULT = "subtitle_default_language";
+    public static final String SUBTITLE_DEFAULT_LANGUAGE = "subtitle_default_language";
     public static final String STORAGE_LOCATION = "storage_location";
     public static final String REMOVE_CACHE = "remove_cache";
     public static final String HW_ACCELERATION = "hw_acceleration";

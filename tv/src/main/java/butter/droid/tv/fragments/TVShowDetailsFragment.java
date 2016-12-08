@@ -38,23 +38,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import butter.droid.base.content.preferences.Prefs;
+import javax.inject.Inject;
+
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import butter.droid.tv.presenters.showdetail.EpisodeCardPresenter;
 
-public class TVShowDetailsFragment extends TVBaseDetailsFragment
-        implements MediaProvider.Callback,
-        OnActionClickedListener,
-        EpisodeCardPresenter.Listener {
+public class TVShowDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback,
+        OnActionClickedListener, EpisodeCardPresenter.Listener {
+
+    @Inject PreferencesHandler preferencesHandler;
 
     private MediaProvider mTvProvider;// = new X();
 
@@ -66,6 +67,14 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment
 
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
     }
 
     @Override
@@ -186,10 +195,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment
     }
 
     private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-        String subtitleLanguage = PrefManager.get(
-            getActivity(),
-            Prefs.SUBTITLE_DEFAULT,
-            SubsProvider.SUBTITLE_LANGUAGE_NONE);
+        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
         Show show = getShowItem();
 

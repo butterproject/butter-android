@@ -32,6 +32,7 @@ import javax.inject.Inject;
 
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.server.BeamServer;
 import butter.droid.base.manager.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
@@ -73,7 +74,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback {
 
     @Inject ProviderManager providerManager;
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler:
     @Inject PlayerManager playerManager;
 
     protected FragmentListener mCallback;
@@ -355,10 +356,9 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         }
 
         if (mStreamInfo.getSubtitleLanguage() == null) {
-            if (media.subtitles.containsKey(
-                    prefManager.get(Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE))) {
-                mStreamInfo.setSubtitleLanguage(
-                        prefManager.get(Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE));
+            String language = preferencesHandler.getSubtitleDefaultLanguage();
+            if (media.subtitles.containsKey(language)) {
+                mStreamInfo.setSubtitleLanguage(language);
             } else {
                 mStreamInfo.setSubtitleLanguage(SubsProvider.SUBTITLE_LANGUAGE_NONE);
             }

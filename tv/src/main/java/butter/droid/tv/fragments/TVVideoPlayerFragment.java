@@ -54,6 +54,7 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.tv.TVButterApplication;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +81,7 @@ import butter.droid.tv.events.UpdatePlaybackStateEvent;
 
 public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     @BindView(R.id.video_surface) SurfaceView mVideoSurface;
     @BindView(R.id.subtitle_text) StrokedTextView mSubtitleText;
@@ -123,9 +124,9 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
         mSubtitleText.setVisibility(View.INVISIBLE);
 
         mSubtitleText.setText("");
-        mSubtitleText.setTextColor(prefManager.get(Prefs.SUBTITLE_COLOR, Color.WHITE));
+        mSubtitleText.setTextColor(preferencesHandler.getSubtitleColor());
         mSubtitleText.setStrokeColor(prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
-        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, prefManager.get(Prefs.SUBTITLE_STROKE_WIDTH, 2));
+        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleStrokeWidth());
     }
 
     @Override

@@ -26,16 +26,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.PlayerManager;
-import butterknife.BindView;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.Magnet;
@@ -43,21 +40,22 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.base.manager.youtube.YouTubeManager;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
+import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionSelector;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MovieDetailFragment extends BaseDetailFragment {
 
     @Inject ProviderManager providerManager;
     @Inject YouTubeManager youTubeManager;
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
     @Inject PlayerManager playerManager;
 
     private static Movie sMovie;
@@ -94,19 +92,24 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_moviedetail, container, false);
         if (VersionUtils.isJellyBean() && container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
         ButterKnife.bind(this, mRoot);
 
-        if(sMovie != null) {
+        if (sMovie != null) {
 
             if (!VersionUtils.isJellyBean()) {
-                mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
+                mPlayButton.setBackgroundDrawable(
+                        PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle,
+                                sMovie.color));
             } else {
-                mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, sMovie.color));
+                mPlayButton.setBackground(
+                        PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle,
+                                sMovie.color));
             }
 
             mTitle.setText(sMovie.title);
@@ -132,13 +135,16 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
             mMeta.setText(metaDataStr);
 
-            if (!TextUtils.isEmpty(sMovie.synopsis)) {mSynopsis.setText(sMovie.synopsis);
+            if (!TextUtils.isEmpty(sMovie.synopsis)) {
+                mSynopsis.setText(sMovie.synopsis);
                 mSynopsis.post(new Runnable() {
                     @Override
                     public void run() {
                         boolean ellipsized = false;
                         Layout layout = mSynopsis.getLayout();
-                        if (layout == null) return;
+                        if (layout == null) {
+                            return;
+                        }
                         int lines = layout.getLineCount();
                         if (lines > 0) {
                             int ellipsisCount = layout.getEllipsisCount(lines - 1);
@@ -168,7 +174,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 providerManager.getCurrentSubsProvider().getList(sMovie, new SubsProvider.Callback() {
                     @Override
                     public void onSuccess(Map<String, String> subtitles) {
-                        if (!mAttached) return;
+                        if (!mAttached) {
+                            return;
+                        }
 
                         if (subtitles == null) {
                             ThreadUtils.runOnUiThread(new Runnable() {
@@ -213,13 +221,14 @@ public class MovieDetailFragment extends BaseDetailFragment {
                             }
                         });
 
-                        String defaultSubtitle = prefManager.get(Prefs.SUBTITLE_DEFAULT, null);
+                        String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                         if (subtitles.containsKey(defaultSubtitle)) {
                             onSubtitleLanguageSelected(defaultSubtitle);
                             mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
                         } else {
-                            onSubtitleLanguageSelected("no-subs");
-                            mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf("no-subs"));
+                            onSubtitleLanguageSelected(SubsProvider.SUBTITLE_LANGUAGE_NONE);
+                            mSubtitles.setDefault(
+                                    Arrays.asList(adapterLanguages).indexOf(SubsProvider.SUBTITLE_LANGUAGE_NONE));
                         }
                     }
 
@@ -270,8 +279,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mAttached = true;
-        if (activity instanceof FragmentListener)
+        if (activity instanceof FragmentListener) {
             mCallback = (FragmentListener) activity;
+        }
     }
 
     @Override
@@ -281,21 +291,22 @@ public class MovieDetailFragment extends BaseDetailFragment {
     }
 
     private void renderHealth() {
-        if(mHealth.getVisibility() == View.GONE) {
+        if (mHealth.getVisibility() == View.GONE) {
             mHealth.setVisibility(View.VISIBLE);
         }
 
-        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get(mSelectedQuality).seeds, sMovie.torrents.get(mSelectedQuality).peers);
+        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get(mSelectedQuality).seeds,
+                sMovie.torrents.get(mSelectedQuality).peers);
         mHealth.setImageResource(health.getImageResource());
     }
 
     private void updateMagnet() {
-        if(mMagnet == null) {
+        if (mMagnet == null) {
             mMagnet = new Magnet(mActivity, sMovie.torrents.get(mSelectedQuality).url);
         }
         mMagnet.setUrl(sMovie.torrents.get(mSelectedQuality).url);
 
-        if(!mMagnet.canOpen()) {
+        if (!mMagnet.canOpen()) {
             mOpenMagnet.setVisibility(View.GONE);
         } else {
             mOpenMagnet.setVisibility(View.VISIBLE);
@@ -304,8 +315,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.read_more)
     public void openReadMore(View v) {
-        if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
+        if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) {
             return;
+        }
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle b = new Bundle();
         b.putString("text", sMovie.synopsis);
@@ -316,7 +328,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     @OnClick(R.id.watch_trailer)
     public void openTrailer(View v) {
         if (!youTubeManager.isYouTubeUrl(sMovie.trailer)) {
-            VideoPlayerActivity.startActivity(mActivity, new StreamInfo(sMovie, null, null, null, null, sMovie.trailer));
+            VideoPlayerActivity.startActivity(mActivity,
+                    new StreamInfo(sMovie, null, null, null, null, sMovie.trailer));
         } else {
             TrailerPlayerActivity.startActivity(mActivity, sMovie.trailer, sMovie);
         }
@@ -340,7 +353,9 @@ public class MovieDetailFragment extends BaseDetailFragment {
         int peers = sMovie.torrents.get(mSelectedQuality).peers;
         TorrentHealth health = TorrentHealth.calculate(seeds, peers);
 
-        final Snackbar snackbar = Snackbar.make(mRoot, getString(R.string.health_info, getString(health.getStringResource()), seeds, peers), Snackbar.LENGTH_LONG);
+        final Snackbar snackbar = Snackbar.make(mRoot,
+                getString(R.string.health_info, getString(health.getStringResource()), seeds, peers),
+                Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.close, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

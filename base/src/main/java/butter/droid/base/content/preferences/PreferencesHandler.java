@@ -27,6 +27,7 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.manager.vlc.VLCOptions;
+import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
 import dagger.Reusable;
@@ -74,7 +75,7 @@ public class PreferencesHandler {
         keys.add(Prefs.SUBTITLE_SIZE);
         keys.add(Prefs.SUBTITLE_STROKE_COLOR);
         keys.add(Prefs.SUBTITLE_STROKE_WIDTH);
-        keys.add(Prefs.SUBTITLE_DEFAULT);
+        keys.add(Prefs.SUBTITLE_DEFAULT_LANGUAGE);
 
         // torrents
         keys.add(Prefs.LIBTORRENT_CONNECTION_LIMIT);
@@ -238,7 +239,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.subtitle_color)
                         .setPreferenceKey(Prefs.SUBTITLE_COLOR)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.SUBTITLE_COLOR, Color.WHITE))
+                        .setValue(getSubtitleColor())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -252,8 +253,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.subtitle_size)
                         .setPreferenceKey(Prefs.SUBTITLE_SIZE)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.SUBTITLE_SIZE,
-                                resources.getInteger(R.integer.player_subtitles_default_text_size)))
+                        .setValue(getSubtitleSize())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -281,7 +281,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.subtitle_stroke_width)
                         .setPreferenceKey(Prefs.SUBTITLE_STROKE_WIDTH)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.SUBTITLE_STROKE_WIDTH, 2))
+                        .setValue(getSubtitleStrokeWidth())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -289,19 +289,19 @@ public class PreferencesHandler {
                             }
                         })
                         .build();
-            case Prefs.SUBTITLE_DEFAULT:
+            case Prefs.SUBTITLE_DEFAULT_LANGUAGE:
                 return PrefItem.newBuilder()
                         .setIconResource(R.drawable.ic_prefs_subtitle_lang)
                         .setTitleResource(R.string.default_subtitle_language)
-                        .setPreferenceKey(Prefs.SUBTITLE_DEFAULT)
+                        .setPreferenceKey(Prefs.SUBTITLE_DEFAULT_LANGUAGE)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.SUBTITLE_DEFAULT, null))
+                        .setValue(getSubtitleDefaultLanguage())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
                                 String langCode = (String) item.getValue();
 
-                                if (langCode == null) {
+                                if (SubsProvider.SUBTITLE_LANGUAGE_NONE.equals(langCode)) {
                                     return resources.getString(R.string.no_default_set);
                                 } else {
                                     Locale locale = LocaleUtils.toLocale(langCode);
@@ -591,4 +591,19 @@ public class PreferencesHandler {
         }
     }
 
+    public int getSubtitleColor() {
+        return prefManager.get(Prefs.SUBTITLE_COLOR, Color.WHITE);
+    }
+
+    public int getSubtitleSize() {
+        return prefManager.get(Prefs.SUBTITLE_SIZE, 16);
+    }
+
+    public int getSubtitleStrokeWidth() {
+        return prefManager.get(Prefs.SUBTITLE_STROKE_WIDTH, 2);
+    }
+
+    public String getSubtitleDefaultLanguage() {
+        return prefManager.get(Prefs.SUBTITLE_DEFAULT_LANGUAGE, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+    }
 }

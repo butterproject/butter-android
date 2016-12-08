@@ -129,7 +129,7 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
                 }
                 prefManager.save(key, format);
                 break;
-            case Prefs.SUBTITLE_DEFAULT:
+            case Prefs.SUBTITLE_DEFAULT_LANGUAGE:
                 if (position == 0) {
                     prefManager.remove(key);
                 } else {
@@ -238,7 +238,7 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
                 view.openPreciseSmallNumberSelector(Prefs.SUBTITLE_STROKE_WIDTH, item.getTitleRes(),
                         (Integer) item.getValue(), 0, 5);
                 break;
-            case Prefs.SUBTITLE_DEFAULT:
+            case Prefs.SUBTITLE_DEFAULT_LANGUAGE:
                 updateSubtitleDefault(item);
                 break;
             case Prefs.LIBTORRENT_CONNECTION_LIMIT:
@@ -346,7 +346,7 @@ public class PreferencesPresenterImpl implements PreferencesPresenter,
             }
         }
 
-        view.openSimpleChoiceSelector(Prefs.SUBTITLE_DEFAULT, item.getTitleRes(), items, currentPosition);
+        view.openSimpleChoiceSelector(Prefs.SUBTITLE_DEFAULT_LANGUAGE, item.getTitleRes(), items, currentPosition);
     }
 
     private void updatePixelFormat(@NonNull PrefItem item) {

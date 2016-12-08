@@ -60,6 +60,7 @@ import com.github.sv244.torrentstream.Torrent;
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -79,7 +80,7 @@ import butter.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
@@ -234,10 +235,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         }
 
 
-        mSubtitleText.setTextColor(prefManager.get(Prefs.SUBTITLE_COLOR, Color.WHITE));
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, prefManager.get(Prefs.SUBTITLE_SIZE, 16));
+        mSubtitleText.setTextColor(preferencesHandler.getSubtitleColor());
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleSize());
         mSubtitleText.setStrokeColor(prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
-        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, prefManager.get(Prefs.SUBTITLE_STROKE_WIDTH, 2));
+        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleStrokeWidth());
 
         mControlBar.setOnSeekBarChangeListener(mOnControlBarListener);
 
