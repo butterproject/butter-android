@@ -58,7 +58,6 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 	private ArrayObjectAdapter mRowsAdapter;
 	private Handler mHandler = new Handler();
 	private SearchRunnable mDelayedLoad;
-	private ListRowPresenter mListRowPresenter;
 	private ListRow mLoadingRow;
 	private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
 
@@ -75,7 +74,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mBackgroundUpdater.initialise(getActivity(), R.color.black);
-		mListRowPresenter = new ListRowPresenter();
+		ListRowPresenter mListRowPresenter = new ListRowPresenter();
 		mListRowPresenter.setShadowEnabled(false);
 		mRowsAdapter = new ArrayObjectAdapter(mListRowPresenter);
 		setSearchResultProvider(this);
@@ -127,15 +126,15 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 		mRowsAdapter.clear();
 		addLoadingRow();
 
-		mSearchFilter.keywords = query;
-		mSearchFilter.page = 1;
+		mSearchFilter.setKeywords(query);
+		mSearchFilter.setPage(1);
 		if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
 			MediaProvider mediaProvider = providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW);
 			//noinspection ConstantConditions
 			mediaProvider.cancel();
 			mediaProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 				@Override
-				public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+				public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
 					List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 					addRow(getString(R.string.show_results), list);
 				}
@@ -155,7 +154,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 			mediaProvider.cancel();
 			mediaProvider.getList(mSearchFilter, new MediaProvider.Callback() {
 				@Override
-				public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+				public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
 					List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 					addRow(getString(R.string.movie_results), list);
 				}

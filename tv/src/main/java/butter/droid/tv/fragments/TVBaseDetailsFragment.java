@@ -156,7 +156,7 @@ public abstract class TVBaseDetailsFragment extends DetailsFragment
 	abstract void addActions(Media item);
 
 	@Override
-	public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+	public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
 		if (!isAdded()) return;
 
 		if (null == items || items.size() == 0) return;

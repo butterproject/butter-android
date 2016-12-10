@@ -119,7 +119,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
 
     private MediaProvider.Filters getFilters() {
         MediaProvider.Filters filters = new MediaProvider.Filters(mCallback.getFilters());
-        filters.page = mCurrentPage;
+        filters.setPage(mCurrentPage);
         return filters;
     }
 
@@ -128,8 +128,8 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
         providerManager.getCurrentMediaProvider().getList(null, getFilters(), new MediaProvider.Callback() {
             @DebugLog
             @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                mCurrentPage = filters.page;
+            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
+                mCurrentPage = filters.getPage();
                 final List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 
                 mItems.addAll(list);

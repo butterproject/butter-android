@@ -33,7 +33,6 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.response.MovieResponse;
 import butter.droid.base.providers.media.response.models.movies.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
 public class MoviesProvider extends MediaProvider {
@@ -53,11 +52,10 @@ public class MoviesProvider extends MediaProvider {
     }
 
     @Override
-    public Call getDetail(ArrayList<Media> currentList, Integer index, Callback callback) {
+    public void getDetail(ArrayList<Media> currentList, Integer index, Callback callback) {
         ArrayList<Media> returnList = new ArrayList<>();
         returnList.add(currentList.get(index));
-        callback.onSuccess(null, returnList, true);
-        return null;
+        callback.onSuccess(null, returnList);
     }
 
     @Override

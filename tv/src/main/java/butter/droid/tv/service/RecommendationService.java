@@ -81,8 +81,8 @@ public class RecommendationService extends IntentService {
         }
 
         MediaProvider.Filters movieFilter = new MediaProvider.Filters();
-        movieFilter.order = MediaProvider.Filters.Order.DESC;
-        movieFilter.sort = MediaProvider.Filters.Sort.POPULARITY;
+        movieFilter.setOrder(MediaProvider.Filters.Order.DESC);
+        movieFilter.setSort(MediaProvider.Filters.Sort.POPULARITY);
 
         /*
         Disabled, since no shows provider
@@ -103,7 +103,7 @@ public class RecommendationService extends IntentService {
             providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                     .getList(movieFilter, new MediaProvider.Callback() {
                         @Override
-                        public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                        public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
                             Timber.d(String.format("loaded %s movies", items.size()));
                             mMovies.addAll(items);
                             mMoviesCallFinished.set(true);

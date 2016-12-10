@@ -17,7 +17,7 @@
 
 package butter.droid.fragments.dialog;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -82,7 +82,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         if (null == getTargetFragment())
             throw new IllegalArgumentException("target fragment must be set");
@@ -99,7 +99,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
         final Media media = currentList.get(position);
         providerManager.getCurrentMediaProvider().getDetail(currentList, position, new MediaProvider.Callback() {
                     @Override
-                    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
                         if (!isAdded()) return;
                         if (items.size() <= 0) return;
 

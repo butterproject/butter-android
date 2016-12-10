@@ -70,8 +70,8 @@ public abstract class MediaProvider extends BaseProvider {
      * @param filters  Filters the provider can use to sort or search
      * @param callback MediaProvider callback
      */
-    public Call getList(Filters filters, Callback callback) {
-        return getList(null, filters, callback);
+    public void getList(Filters filters, Callback callback) {
+        getList(null, filters, callback);
     }
 
     /**
@@ -80,9 +80,8 @@ public abstract class MediaProvider extends BaseProvider {
      * @param existingList Input the current list so it can be extended
      * @param filters      Filters the provider can use to sort or search
      * @param callback     MediaProvider callback
-     * @return Call
      */
-    public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
+    public void getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
         final ArrayList<Media> currentList;
         if (existingList == null) {
             currentList = new ArrayList<>();
@@ -154,7 +153,7 @@ public abstract class MediaProvider extends BaseProvider {
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
 
-        return fetchList(currentList, requestBuilder, filters, callback);
+        fetchList(currentList, requestBuilder, filters, callback);
     }
 
     /**
@@ -163,10 +162,9 @@ public abstract class MediaProvider extends BaseProvider {
      * @param currentList    Current shown list to be extended
      * @param requestBuilder Request to be executed
      * @param callback       Network callback
-     * @return Call
      */
-    private Call fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
-        return enqueue(requestBuilder.build(), new okhttp3.Callback() {
+    private void fetchList(final ArrayList<Media> currentList, final Request.Builder requestBuilder, final Filters filters, final Callback callback) {
+        enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 String url = requestBuilder.build().url().toString();
@@ -195,7 +193,7 @@ public abstract class MediaProvider extends BaseProvider {
                     }
                     int actualSize = currentList.size();
                     ArrayList<Media> responseItems = getResponseFormattedList(responseStr, currentList);
-                    callback.onSuccess(filters, responseItems, responseItems.size() > actualSize);
+                    callback.onSuccess(filters, responseItems);
                     return;
                 }
                 onFailure(call, new IOException("Couldn't connect to API"));
@@ -203,14 +201,14 @@ public abstract class MediaProvider extends BaseProvider {
         });
     }
 
-    public Call getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
+    public void getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
         String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId;
         requestBuilder.url(url);
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
 
-        return enqueue(requestBuilder.build(), new okhttp3.Callback() {
+        enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 callback.onFailure(e);
@@ -229,7 +227,7 @@ public abstract class MediaProvider extends BaseProvider {
 
                         ArrayList<Media> formattedData = getResponseDetailsFormattedList(responseStr);
                         if (formattedData.size() > 0) {
-                            callback.onSuccess(null, formattedData, true);
+                            callback.onSuccess(null, formattedData);
                             return;
                         }
                         callback.onFailure(new IllegalStateException("Empty list"));
@@ -278,18 +276,18 @@ public abstract class MediaProvider extends BaseProvider {
 
 
     public interface Callback {
-        void onSuccess(Filters filters, ArrayList<Media> items, boolean changed);
+        void onSuccess(Filters filters, ArrayList<Media> items);
 
         void onFailure(Exception e);
     }
 
     public static class Filters {
-        public String keywords = null;
-        public String genre = null;
-        public Order order = Order.DESC;
-        public Sort sort = Sort.POPULARITY;
-        public Integer page = null;
-        public String langCode = "en";
+        String keywords = null;
+        String genre = null;
+        Order order = Order.DESC;
+        Sort sort = Sort.POPULARITY;
+        Integer page = null;
+        String langCode = "en";
 
         public Filters() {
         }
@@ -301,6 +299,54 @@ public abstract class MediaProvider extends BaseProvider {
             sort = filters.sort;
             page = filters.page;
             langCode = filters.langCode;
+        }
+
+        public String getKeywords() {
+            return keywords;
+        }
+
+        public void setKeywords(String keywords) {
+            this.keywords = keywords;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public Order getOrder() {
+            return order;
+        }
+
+        public void setOrder(Order order) {
+            this.order = order;
+        }
+
+        public Sort getSort() {
+            return sort;
+        }
+
+        public void setSort(Sort sort) {
+            this.sort = sort;
+        }
+
+        public Integer getPage() {
+            return page;
+        }
+
+        public void setPage(Integer page) {
+            this.page = page;
+        }
+
+        public String getLangCode() {
+            return langCode;
+        }
+
+        public void setLangCode(String langCode) {
+            this.langCode = langCode;
         }
 
         public enum Order {ASC, DESC}

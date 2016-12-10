@@ -65,9 +65,9 @@ public class TVMediaGridActivity extends TVBaseActivity implements TVMediaGridFr
         String title = getIntent().getExtras().getString(EXTRA_TITLE);
         setTitle(title);
 
-        mFilter.sort = mSort;
-        mFilter.order = mDefOrder;
-        mFilter.genre = mGenre;
+        mFilter.setSort(mSort);
+        mFilter.setOrder(mDefOrder);
+        mFilter.setGenre(mGenre);
 
         //add media fragment
         getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance()).commit();
