@@ -80,41 +80,11 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     public static final String EXTRA_GENRE = "extra_genre";
     public static final String EXTRA_MODE = "extra_mode";
     public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
-
     public static final int LOADING_DIALOG_FRAGMENT = 1;
-
     @Inject
     ProviderManager providerManager;
     @Inject
     OkHttpClient client;
-
-    private Context mContext;
-    private MediaGridAdapter mAdapter;
-    private GridLayoutManager mLayoutManager;
-    private Integer mColumns = 2, mRetries = 0;
-
-    //overrides the default loading message
-    private int mLoadingMessage = R.string.loading_data;
-
-    private State mState = State.UNINITIALISED;
-
-    public enum Mode {
-        NORMAL, SEARCH
-    }
-
-    private enum State {
-        UNINITIALISED, LOADING, SEARCHING, LOADING_PAGE, LOADED, LOADING_DETAIL
-    }
-
-    private ArrayList<Media> mItems = new ArrayList<>();
-
-    private boolean mEndOfListReached = false;
-
-    private int mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
-
-    private int mPage = 1;
-    private MediaProvider.Filters mFilters = new MediaProvider.Filters();
-
     View mRootView;
     @BindView(R.id.progressOverlay)
     LinearLayout mProgressOverlay;
@@ -124,7 +94,19 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     TextView mEmptyView;
     @BindView(R.id.progress_textview)
     TextView mProgressTextView;
-
+    private Context mContext;
+    private MediaGridAdapter mAdapter;
+    private GridLayoutManager mLayoutManager;
+    private Integer mColumns = 2;
+    //overrides the default loading message
+    private int mLoadingMessage = R.string.loading_data;
+    private State mState = State.UNINITIALISED;
+    private Mode mMode = Mode.NORMAL;
+    private ArrayList<Media> mItems = new ArrayList<>();
+    private boolean mEndOfListReached = false;
+    private int mTotalItemCount = 0, mLoadingTreshold = mColumns * 3, mPreviousTotal = 0;
+    private int mPage = 1;
+    private MediaProvider.Filters mFilters = new MediaProvider.Filters();
     private MediaProvider.Callback mCallback = new MediaProvider.Callback() {
         @Override
         @DebugLog
@@ -152,17 +134,12 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         public void onFailure(Exception e) {
             if (!isDetached() || !e.getMessage().equals("Canceled")) {
                 e.printStackTrace();
-                if (mRetries > 1) {
-                    ThreadUtils.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    providerManager.getCurrentMediaProvider().getList(mItems, new MediaProvider.Filters(mFilters), this);
-                }
-                mRetries++;
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
             }
             mEndOfListReached = true;
             if (mAdapter != null) {
@@ -197,17 +174,54 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             }
         }
     };
+    private MediaGridAdapter.OnItemClickListener mOnItemClickListener = new MediaGridAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(final View view, final Media item, final int position) {
+            /**
+             * We shouldn't really be doing the palette loading here without any ui feedback,
+             * but it should be really quick
+             */
+            RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);
+            if (holder instanceof MediaGridAdapter.ViewHolder) {
+                ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
+
+                if (coverImage.getDrawable() == null) {
+                    showLoadingDialog(position);
+                    return;
+                }
+
+                Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
+                new Palette.Builder(cover).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        int vibrantColor = palette.getVibrantColor(-1);
+                        int paletteColor;
+                        if (vibrantColor == -1) {
+                            paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
+                        } else {
+                            paletteColor = vibrantColor;
+                        }
+                        item.color = paletteColor;
+                        showLoadingDialog(position);
+                    }
+                });
+            } else {
+                showLoadingDialog(position);
+            }
+
+        }
+    };
 
     public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
         return newInstance(mode, filter, defOrder, null);
     }
 
-    public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder, String genre) {
+    public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort sort, MediaProvider.Filters.Order order, String genre) {
         MediaListFragment frag = new MediaListFragment();
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_MODE, mode);
-        args.putSerializable(EXTRA_SORT, filter);
-        args.putSerializable(EXTRA_ORDER, defOrder);
+        args.putSerializable(EXTRA_SORT, sort);
+        args.putSerializable(EXTRA_ORDER, order);
         args.putString(EXTRA_GENRE, genre);
         frag.setArguments(args);
         return frag;
@@ -253,9 +267,10 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             mItems.clear();
             mAdapter.clearItems();
 
-            setState(State.LOADING);
             mFilters.setGenre(genre);
             mFilters.setPage(1);
+
+            setState(State.LOADING);
             providerManager.getCurrentMediaProvider()
                     .getList(new MediaProvider.Filters(mFilters), mCallback);
         }
@@ -267,6 +282,16 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         MobileButterApplication.getAppContext()
                 .getComponent()
                 .inject(this);
+
+        if (getArguments() != null) {
+            String language = PrefUtils.get(getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+            mFilters.setSort((MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT));
+            mFilters.setOrder((MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER));
+            mFilters.setGenre(getArguments().getString(EXTRA_GENRE));
+            mFilters.setLangCode(LocaleUtils.toLocale(language).getLanguage());
+
+            mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
+        }
     }
 
     private void updateLoadingMessage() {
@@ -275,34 +300,23 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     @DebugLog
     private void setState(State state) {
-        if (mState == state) return;//do nothing
-        mState = state;
-        updateUI();
+        if (mState != state) {
+            mState = state;
+            updateUI();
+        }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        //get the provider type and create a provider
-        MediaProvider.Filters.Sort sort = (MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT);
-        MediaProvider.Filters.Order defOrder = (MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER);
-        mFilters.setSort(sort);
-        // if not changed use default order
-        mFilters.setOrder(defOrder);
-        mFilters.setGenre(getArguments().getString(EXTRA_GENRE));
-
-        String language = PrefUtils.get(getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
-        mFilters.setLangCode(LocaleUtils.toLocale(language).getLanguage());
-
-        Mode mode = (Mode) getArguments().getSerializable(EXTRA_MODE);
-        if (mode == Mode.SEARCH) mEmptyView.setText(getString(R.string.no_search_results));
-
-        //don't load initial data in search mode
-        if (mode != Mode.SEARCH && mAdapter.getItemCount() == 0) {
-            providerManager.getCurrentMediaProvider().getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
+        if (mMode == Mode.SEARCH) {
+            mEmptyView.setText(getString(R.string.no_search_results));
+        } else if (mAdapter.getItemCount() == 0) { //don't load initial data in search mode
             setState(State.LOADING);
-        } else updateUI();
+            providerManager.getCurrentMediaProvider().getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
+        } else {
+            updateUI();
+        }
     }
 
     /**
@@ -354,44 +368,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         });
     }
 
-    private MediaGridAdapter.OnItemClickListener mOnItemClickListener = new MediaGridAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(final View view, final Media item, final int position) {
-            /**
-             * We shouldn't really be doing the palette loading here without any ui feedback,
-             * but it should be really quick
-             */
-            RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);
-            if (holder instanceof MediaGridAdapter.ViewHolder) {
-                ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
-
-                if (coverImage.getDrawable() == null) {
-                    showLoadingDialog(position);
-                    return;
-                }
-
-                Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
-                new Palette.Builder(cover).generate(new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(Palette palette) {
-                        int vibrantColor = palette.getVibrantColor(-1);
-                        int paletteColor;
-                        if (vibrantColor == -1) {
-                            paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
-                        } else {
-                            paletteColor = vibrantColor;
-                        }
-                        item.color = paletteColor;
-                        showLoadingDialog(position);
-                    }
-                });
-            } else {
-                showLoadingDialog(position);
-            }
-
-        }
-    };
-
     private void showLoadingDialog(Integer position) {
         LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(position);
         loadingFragment.setTargetFragment(MediaListFragment.this, LOADING_DIALOG_FRAGMENT);
@@ -413,7 +389,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mItems.clear();
         mAdapter.clearItems();//clear out adapter
 
-        if (searchQuery.equals("")) {
+        if (searchQuery.equalsIgnoreCase("")) {
             setState(State.LOADED);
             return; //don't do a search for empty queries
         }
@@ -425,7 +401,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         providerManager.getCurrentMediaProvider().getList(new MediaProvider.Filters(mFilters), mCallback);
     }
-
 
     /**
      * Called when loading media details fails
@@ -447,10 +422,19 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     /**
      * Called when loading media details
+     *
      * @return mItems
      */
     @Override
     public ArrayList<Media> getCurrentList() {
         return mItems;
+    }
+
+    public enum Mode {
+        NORMAL, SEARCH
+    }
+
+    private enum State {
+        UNINITIALISED, LOADING, SEARCHING, LOADING_PAGE, LOADED, LOADING_DETAIL
     }
 }
