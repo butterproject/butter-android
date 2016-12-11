@@ -42,10 +42,9 @@ public class TVProvider extends MediaProvider {
 
     private MetaProvider metaProvider;
 
-
-    public TVProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
+    public TVProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, MetaProvider metaProvider) {
         super(client, mapper, subsProvider, BuildConfig.TV_URLS, "shows/", "show/", 0);
-        metaProvider = new TraktProvider(client, mapper);
+        this.metaProvider = new TraktProvider(client, mapper);
     }
 
     @Override

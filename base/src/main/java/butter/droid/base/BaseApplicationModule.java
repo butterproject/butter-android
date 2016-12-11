@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 import butter.droid.base.data.DataModule;
 import butter.droid.base.manager.ManagerModule;
 import butter.droid.base.providers.ProviderModule;
+import butter.droid.base.providers.subs.open.OpenSubsModule;
 import dagger.Module;
 import dagger.Provides;
 
@@ -31,7 +32,8 @@ import dagger.Provides;
         includes = {
                 DataModule.class,
                 ManagerModule.class,
-                ProviderModule.class
+                ProviderModule.class,
+                OpenSubsModule.class
         }
 )
 public class BaseApplicationModule {
