@@ -40,9 +40,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.connectsdk.device.ConnectableDevice;
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
@@ -82,10 +82,10 @@ import timber.log.Timber;
 public abstract class BaseVideoPlayerFragment
     extends Fragment
     implements IVLCVout.Callback,
-    TorrentListener,
-    MediaPlayer.EventListener,
-    LibVLC.HardwareAccelerationError,
-    SubtitleDownloader.ISubtitleDownloaderListener {
+        TorrentListener,
+        MediaPlayer.EventListener,
+        LibVLC.HardwareAccelerationError,
+        SubtitleDownloader.ISubtitleDownloaderListener {
 
     @Inject
     ProviderManager providerManager;
