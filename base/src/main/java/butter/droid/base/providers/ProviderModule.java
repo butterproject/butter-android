@@ -26,10 +26,12 @@ import javax.inject.Singleton;
 import butter.droid.base.providers.media.AnimeProvider;
 import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.TVProvider;
-import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.meta.TraktProvider;
+import butter.droid.base.providers.subs.open.OpenSubsProvider;
 import butter.droid.base.providers.subs.ysubs.YSubsProvider;
 import dagger.Module;
 import dagger.Provides;
+import de.timroes.axmlrpc.XMLRPCClient;
 import okhttp3.OkHttpClient;
 
 @Module
@@ -37,29 +39,41 @@ public class ProviderModule {
 
     @Provides
     @Singleton
-    public SubsProvider provideSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper) {
+    public YSubsProvider provideYSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper) {
         return new YSubsProvider(context, client, mapper);
     }
 
     @Provides
     @Singleton
+    public OpenSubsProvider provideOpenSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper, XMLRPCClient xmlrpcClient) {
+        return new OpenSubsProvider(context, client, mapper, xmlrpcClient);
+    }
+
+    @Provides
+    @Singleton
+    public TraktProvider provideTraktProvider(OkHttpClient client, ObjectMapper mapper) {
+        return new TraktProvider(client, mapper);
+    }
+
+    @Provides
+    @Singleton
     public MoviesProvider provideMoviesProvider(OkHttpClient client, ObjectMapper mapper,
-                                                SubsProvider subsProvider) {
-        return new MoviesProvider(client, mapper, subsProvider);
+                                                YSubsProvider ySubsProvider) {
+        return new MoviesProvider(client, mapper, ySubsProvider);
     }
 
     @Provides
     @Singleton
     public TVProvider provideTVProvider(OkHttpClient client, ObjectMapper mapper,
-                                        SubsProvider subsProvider) {
-        return new TVProvider(client, mapper, subsProvider);
+                                        OpenSubsProvider subsProvider, TraktProvider traktProvider) {
+        return new TVProvider(client, mapper, subsProvider, traktProvider);
     }
 
     @Provides
     @Singleton
     public AnimeProvider provideAnimeProvider(OkHttpClient client, ObjectMapper mapper,
-                                              SubsProvider subsProvider) {
-        return new AnimeProvider(client, mapper, subsProvider);
+                                              YSubsProvider ySubsProvider) {
+        return new AnimeProvider(client, mapper, ySubsProvider);
     }
 
 }
