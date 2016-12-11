@@ -33,8 +33,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -129,7 +129,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, mCurrentTorrent.getFileNames(), -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int position) {
-                    mCurrentTorrent.setSelectedFile(position);
+                    mCurrentTorrent.setSelectedFileIndex(position);
                     StreamLoadingFragment.super.onStreamPrepared(mCurrentTorrent);
                 }
             });

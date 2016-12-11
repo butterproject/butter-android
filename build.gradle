@@ -26,6 +26,7 @@ ext {
     butterknifeVersion = "8.4.0"
     okHttpVersion = "3.4.2"
     picassoVersion = "2.5.2"
+    torrentstreamVersion = "583a27bbf"
     daggerVersion = "2.7"
     javaxAnnotationVersion = "1.2"
 }
@@ -36,6 +37,7 @@ allprojects {
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
+        maven { url 'https://jitpack.io' }
     }
 
     //let project evaluate its script first

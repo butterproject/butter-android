@@ -54,8 +54,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
@@ -324,8 +324,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                         doVolumeTouch(y_changed);
                     }
                     if ((int) mTouchX < (screen.widthPixels / 2)) {
-                        if(VersionUtils.isMarshmallow() && Settings.System.canWrite(getContext())) {
-                            doVolumeTouch(y_changed);
+                        if (VersionUtils.isMarshmallow()) {
+                            if (Settings.System.canWrite(getContext())) {
+                                doVolumeTouch(y_changed);
+                            }
                         } else {
                             doBrightnessTouch(y_changed);
                         }
