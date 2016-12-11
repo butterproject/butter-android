@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Torrents {
 
-    public Map<String, Quality> qualities = new HashMap<>();
+    private Map<String, Quality> qualities = new HashMap<>();
 
     @JsonAnyGetter
     public Map<String, Quality> getQualities() {
@@ -19,7 +19,7 @@ public class Torrents {
     }
 
     @JsonAnySetter
-    public void setLanguages(String name, Quality value) {
+    public void setQualities(String name, Quality value) {
         qualities.put(name, value);
     }
 }
