@@ -19,7 +19,7 @@ package butter.droid.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -31,14 +31,26 @@ import butter.droid.base.utils.LocaleUtils;
 import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.MediaListFragment;
 
-public class MediaPagerAdapter extends FragmentPagerAdapter {
+public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
-    private FragmentManager mFragmentManager;
     private final List<MediaProvider.NavInfo> mTabs;
+    private FragmentManager mFragmentManager;
     private MediaProvider mProvider;
     private String mGenre;
     private int mHasGenreTabs = 0;
     private Fragment mGenreFragment;
+    private MediaGenreSelectionFragment.Listener mMediaGenreSelectionFragment = new MediaGenreSelectionFragment.Listener() {
+        @Override
+        public void onGenreSelected(String genre) {
+            mGenre = genre;
+            mProvider.cancel();
+            for (Fragment frag : mFragmentManager.getFragments()) {
+                if (frag instanceof MediaListFragment) {
+                    ((MediaListFragment) frag).changeGenre(genre);
+                }
+            }
+        }
+    };
 
     public MediaPagerAdapter(MediaProvider provider, FragmentManager fm, List<MediaProvider.NavInfo> tabs) {
         super(fm);
@@ -79,18 +91,5 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         return super.instantiateItem(container, position);
     }
-
-    private MediaGenreSelectionFragment.Listener mMediaGenreSelectionFragment = new MediaGenreSelectionFragment.Listener() {
-        @Override
-        public void onGenreSelected(String genre) {
-            mGenre = genre;
-            mProvider.cancel();
-            for (Fragment frag : mFragmentManager.getFragments()) {
-                if (frag instanceof MediaListFragment) {
-                    ((MediaListFragment) frag).changeGenre(genre);
-                }
-            }
-        }
-    };
 
 }
