@@ -10,7 +10,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Torrents {
 
-    public Map<String, Language> languages = new HashMap<>();
+    private Map<String, Language> languages = new HashMap<>();
 
     @JsonAnyGetter
     public Map<String, Language> getLanguages() {

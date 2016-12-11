@@ -10,7 +10,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Language {
 
-    public Map<String, Quality> qualities = new HashMap<>();
+    private Map<String, Quality> qualities = new HashMap<>();
 
     @JsonAnyGetter
     public Map<String, Quality> getQualities() {

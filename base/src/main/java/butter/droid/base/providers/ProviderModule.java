@@ -27,7 +27,7 @@ import butter.droid.base.providers.media.AnimeProvider;
 import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.TVProvider;
 import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.providers.subs.YSubsProvider;
+import butter.droid.base.providers.subs.ysubs.YSubsProvider;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
