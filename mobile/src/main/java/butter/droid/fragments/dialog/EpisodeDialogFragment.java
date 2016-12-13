@@ -20,6 +20,7 @@ package butter.droid.fragments.dialog;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,7 +57,6 @@ import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.StreamInfo;
@@ -86,7 +86,6 @@ public class EpisodeDialogFragment extends DialogFragment {
 
     private Integer mThreshold = 0, mBottom = 0;
     private Activity mActivity;
-    private MetaProvider mMetaProvider;
     private boolean mTouching = false, mOpened = false;
     private String mSelectedSubtitleLanguage, mSelectedQuality;
     private Episode mEpisode;
@@ -133,7 +132,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         ButterKnife.bind(this, v);
 
         if (!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
+            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
         } else {
             mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
         }
@@ -161,7 +160,6 @@ public class EpisodeDialogFragment extends DialogFragment {
         mBottom = PixelUtils.getPixelsFromDp(mActivity, 33);
         mShow = getArguments().getParcelable(EXTRA_SHOW);
         mEpisode = getArguments().getParcelable(EXTRA_EPISODE);
-        mMetaProvider = mEpisode.getMetaProvider();
     }
 
     @NonNull
@@ -195,6 +193,7 @@ public class EpisodeDialogFragment extends DialogFragment {
                 try {
                     dismiss();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }, ANIM_SPEED);
@@ -203,7 +202,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (null != mMetaProvider) mMetaProvider.cancel();
         if (providerManager.hasCurrentSubsProvider())
             providerManager.getCurrentSubsProvider().cancel();
     }
@@ -369,24 +367,11 @@ public class EpisodeDialogFragment extends DialogFragment {
             }
         });
 
-        if (mMetaProvider != null) {
-            mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode, new MetaProvider.Callback() {
-                @Override
-                public void onResult(MetaProvider.MetaData metaData, Exception e) {
-                    String imageUrl = mEpisode.headerImage;
-                    if (e == null) {
-                        imageUrl = metaData.images.poster;
-                    }
-                    Picasso.with(mHeaderImage.getContext()).load(imageUrl).into(mHeaderImage);
-                }
-            });
-        } else {
-            Picasso.with(mHeaderImage.getContext()).load(mEpisode.headerImage).into(mHeaderImage);
-        }
+        Picasso.with(mHeaderImage.getContext()).load(mEpisode.headerImage).into(mHeaderImage);
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
     }
 

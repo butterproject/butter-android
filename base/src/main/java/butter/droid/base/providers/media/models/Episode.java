@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.providers.meta.MetaProvider;
 
 public class Episode extends Media implements Parcelable {
     @SuppressWarnings("unused")
@@ -47,11 +46,9 @@ public class Episode extends Media implements Parcelable {
     public boolean dateBased;
     public Map<String, Torrent> torrents = new HashMap<>();
     private String tvdbId;
-    private MetaProvider mMetaProvider;
 
-    public Episode(MetaProvider metaProvider) {
+    public Episode() {
         super();
-        mMetaProvider = metaProvider;
     }
 
     @Override
@@ -68,15 +65,6 @@ public class Episode extends Media implements Parcelable {
         tvdbId = in.readString();
         showName = in.readString();
         dateBased = in.readInt() == 1;
-
-        String className = in.readString();
-        mMetaProvider = null;
-        try {
-            Class<?> clazz = Class.forName(className);
-            mMetaProvider = (MetaProvider) clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         int size = in.readInt();
         for (int i = 0; i < size; i++) {
@@ -102,7 +90,6 @@ public class Episode extends Media implements Parcelable {
         dest.writeString(tvdbId);
         dest.writeString(showName);
         dest.writeInt(dateBased ? 1 : 0);
-        dest.writeString(mMetaProvider != null ? mMetaProvider.getClass().getCanonicalName() : "");
         if (torrents != null) {
             dest.writeInt(torrents.size());
             for (Map.Entry<String, Torrent> entry : torrents.entrySet()) {
@@ -113,9 +100,4 @@ public class Episode extends Media implements Parcelable {
             dest.writeInt(0);
         }
     }
-
-    public MetaProvider getMetaProvider() {
-        return mMetaProvider;
-    }
-
 }

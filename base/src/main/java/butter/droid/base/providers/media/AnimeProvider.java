@@ -56,7 +56,7 @@ public class AnimeProvider extends MediaProvider {
     @Override
     public ArrayList<Media> getResponseDetailsFormattedList(String responseStr) throws IOException {
         AnimeDetails detail = mapper.readValue(responseStr, AnimeDetails.class);
-        return new AnimeDetailsReponse().formatDetailForPopcorn(detail, this, null, null);
+        return new AnimeDetailsReponse().formatDetailForPopcorn(detail, this, null);
     }
 
     @Override

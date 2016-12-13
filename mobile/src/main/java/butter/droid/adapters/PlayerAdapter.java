@@ -24,16 +24,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.gson.internal.LinkedTreeMap;
-
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PlayerAdapter extends BaseAdapter {
 
-    private ArrayList<LinkedTreeMap<String, String>> mData;
+    private ArrayList<LinkedHashMap<String, String>> mData;
     private LayoutInflater mInflater;
 
     static class ViewHolder {
@@ -45,7 +44,7 @@ public class PlayerAdapter extends BaseAdapter {
         TextView text1;
     }
 
-    public PlayerAdapter(Context context, ArrayList<LinkedTreeMap<String, String>> data) {
+    public PlayerAdapter(Context context, ArrayList<LinkedHashMap<String, String>> data) {
         mData = data;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

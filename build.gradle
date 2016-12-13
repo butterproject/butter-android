@@ -18,8 +18,8 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "25.0.0"
-    buildToolsVersion = "25.0.0"
+    appCompatVersion = "25.0.1"
+    buildToolsVersion = "25.0.1"
     targetSdk = 25
     compileSdk = 25
     minSdk = 15

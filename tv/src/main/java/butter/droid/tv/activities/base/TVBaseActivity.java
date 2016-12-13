@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.github.sv244.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.Torrent;
 
 import javax.inject.Inject;
 

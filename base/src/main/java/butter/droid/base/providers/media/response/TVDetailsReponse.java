@@ -9,7 +9,6 @@ import butter.droid.base.providers.media.response.models.DetailsResponse;
 import butter.droid.base.providers.media.response.models.common.Quality;
 import butter.droid.base.providers.media.response.models.shows.Episode;
 import butter.droid.base.providers.media.response.models.shows.ShowDetails;
-import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.StringUtils;
 
@@ -18,7 +17,7 @@ public class TVDetailsReponse extends DetailsResponse<ShowDetails> {
     public TVDetailsReponse() {
     }
 
-    public ArrayList<Media> formatDetailForPopcorn(ShowDetails item, MediaProvider mediaProvider, SubsProvider subsProvider, MetaProvider metaProvider) {
+    public ArrayList<Media> formatDetailForPopcorn(ShowDetails item, MediaProvider mediaProvider, SubsProvider subsProvider) {
         ArrayList<Media> list = new ArrayList<>();
         try {
             butter.droid.base.providers.media.models.Show show = new butter.droid.base.providers.media.models.Show();
@@ -71,7 +70,7 @@ public class TVDetailsReponse extends DetailsResponse<ShowDetails> {
 
             for (Episode episode : item.getEpisodes()) {
                 try {
-                    butter.droid.base.providers.media.models.Episode episodeObject = new butter.droid.base.providers.media.models.Episode(metaProvider);
+                    butter.droid.base.providers.media.models.Episode episodeObject = new butter.droid.base.providers.media.models.Episode();
 
                     if (episode.getTorrents() != null) {
                         for (Map.Entry<String, Quality> entry : episode.getTorrents().getQualities().entrySet()) {
