@@ -26,7 +26,6 @@ import javax.inject.Singleton;
 import butter.droid.base.providers.media.AnimeProvider;
 import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.TVProvider;
-import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.open.OpenSubsProvider;
 import butter.droid.base.providers.subs.ysubs.YSubsProvider;
 import dagger.Module;
@@ -51,12 +50,6 @@ public class ProviderModule {
 
     @Provides
     @Singleton
-    public TraktProvider provideTraktProvider(OkHttpClient client, ObjectMapper mapper) {
-        return new TraktProvider(client, mapper);
-    }
-
-    @Provides
-    @Singleton
     public MoviesProvider provideMoviesProvider(OkHttpClient client, ObjectMapper mapper,
                                                 YSubsProvider ySubsProvider) {
         return new MoviesProvider(client, mapper, ySubsProvider);
@@ -65,8 +58,8 @@ public class ProviderModule {
     @Provides
     @Singleton
     public TVProvider provideTVProvider(OkHttpClient client, ObjectMapper mapper,
-                                        OpenSubsProvider subsProvider, TraktProvider traktProvider) {
-        return new TVProvider(client, mapper, subsProvider, traktProvider);
+                                        OpenSubsProvider subsProvider) {
+        return new TVProvider(client, mapper, subsProvider);
     }
 
     @Provides

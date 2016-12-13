@@ -33,18 +33,13 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.response.TVDetailsReponse;
 import butter.droid.base.providers.media.response.TVResponse;
 import butter.droid.base.providers.media.response.models.shows.ShowDetails;
-import butter.droid.base.providers.meta.MetaProvider;
-import butter.droid.base.providers.meta.TraktProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import okhttp3.OkHttpClient;
 
 public class TVProvider extends MediaProvider {
 
-    private MetaProvider metaProvider;
-
-    public TVProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, MetaProvider metaProvider) {
+    public TVProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
         super(client, mapper, subsProvider, BuildConfig.TV_URLS, "shows/", "show/", 0);
-        this.metaProvider = new TraktProvider(client, mapper);
     }
 
     @Override
@@ -60,7 +55,7 @@ public class TVProvider extends MediaProvider {
     @Override
     public ArrayList<Media> getResponseDetailsFormattedList(String responseStr) throws IOException {
         ShowDetails detail = mapper.readValue(responseStr, ShowDetails.class);
-        return new TVDetailsReponse().formatDetailForPopcorn(detail, this, getSubsProvider(), metaProvider);
+        return new TVDetailsReponse().formatDetailForPopcorn(detail, this, getSubsProvider());
     }
 
     @Override

@@ -45,8 +45,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -222,7 +222,6 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
                     }
                     return;
                 }
-
                 SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
                 ForegroundColorSpan[] toRemoveSpans = styledString.getSpans(0, styledString.length(), ForegroundColorSpan.class);
 

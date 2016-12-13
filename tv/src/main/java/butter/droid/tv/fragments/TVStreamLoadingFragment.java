@@ -44,7 +44,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.sv244.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
 
 import java.text.DecimalFormat;
 
@@ -106,14 +106,14 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 			public void run() {
 				progressIndicator.setIndeterminate(false);
 				progressIndicator.setProgress(status.bufferProgress);
-				mPrimaryTextView.setText(status.bufferProgress + "%");
+                mPrimaryTextView.setText(getString(R.string.buffer_progress_percent, status.bufferProgress));
 
 				if (status.downloadSpeed / 1024 < 1000) {
-					mSecondaryTextView.setText(df.format(status.downloadSpeed / 1024) + " KB/s");
-				} else {
-					mSecondaryTextView.setText(df.format(status.downloadSpeed / 1048576) + " MB/s");
-				}
-				mTertiaryTextView.setText(status.seeds + " " + getString(R.string.seeds));
+                    mSecondaryTextView.setText(getString(R.string.download_speed_kb, df.format(status.downloadSpeed / 1024)));
+                } else {
+                    mSecondaryTextView.setText(getString(R.string.download_speed_mb, df.format(status.downloadSpeed / 1048576)));
+                }
+                mTertiaryTextView.setText(status.seeds + " " + getString(R.string.seeds));
 			}
 		});
 	}
