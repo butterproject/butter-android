@@ -52,6 +52,7 @@ import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ResourceUtils;
+import butter.droid.base.utils.StorageUtils;
 import butter.droid.fragments.dialog.ColorPickerDialogFragment;
 import butter.droid.fragments.dialog.SeekBarDialogFragment;
 import butter.droid.utils.ToolbarUtils;
@@ -194,6 +195,9 @@ public class PreferencesActivity extends ButterBaseActivity
                         onSelectionListener.onSelection(0, null);
                     } else {
                         DirectoryChooserConfig config = DirectoryChooserConfig.builder()
+                                .initialDirectory(StorageUtils.getInternalSdCardPath())
+                                .allowReadOnlyDirectory(true)
+                                .allowNewDirectoryNameModification(true)
                                 .newDirectoryName(getString(R.string.app_name))
                                 .build();
 
