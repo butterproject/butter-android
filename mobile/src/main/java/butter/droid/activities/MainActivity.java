@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -108,8 +109,8 @@ public class MainActivity extends ButterBaseActivity implements ProviderManager.
             startActivity(new Intent(this, TermsActivity.class));
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
+        if(!isFullAccessStorageAllowed()){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
         }
 
         String action = getIntent().getAction();
@@ -379,11 +380,22 @@ public class MainActivity extends ButterBaseActivity implements ProviderManager.
         builder.show();
     }
 
+    private boolean isFullAccessStorageAllowed() {
+        int read = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int write = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED)
+            return true;
+
+        return false;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST: {
                 if (grantResults.length < 1 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this,"Permissions granted, now you can read and write the storage",Toast.LENGTH_LONG).show();
                     finish();
                 }
             }

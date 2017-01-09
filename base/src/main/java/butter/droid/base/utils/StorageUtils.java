@@ -211,6 +211,14 @@ public class StorageUtils extends Compatibility {
         return externalCacheDir;
     }
 
+    public static String getInternalSdCardPath(){
+        return System.getenv("EXTERNAL_STORAGE");
+    }
+
+    public static String getExternalSdCardPath(){
+        return System.getenv("SECONDARY_STORAGE");
+    }
+
     /**
      * Format size in string form
      *
