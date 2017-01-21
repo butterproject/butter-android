@@ -28,7 +28,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.ui.main.MainActivity;
 import butterknife.BindView;
 import butter.droid.R;
-import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.utils.ToolbarUtils;
 

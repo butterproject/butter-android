@@ -118,10 +118,9 @@
     </style>
 
     <style name="Theme.Butter.AboutButton" parent="android:Widget.Button">
-        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_marginTop">16dp</item>
         <item name="android:drawablePadding">16dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:padding">16dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:gravity">center</item>

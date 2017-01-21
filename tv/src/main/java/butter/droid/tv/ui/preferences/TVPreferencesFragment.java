@@ -41,6 +41,7 @@ import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.fragments.TVPreferencesListFragment;
 import butter.droid.tv.fragments.TVPreferencesListFragment.SelectionListener;
+import butter.droid.tv.ui.about.TvAboutFragment;
 
 public class TVPreferencesFragment extends GuidedStepFragment implements TVPreferencesView {
 
@@ -210,7 +211,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     }
 
     @Override public void showAboutScreen() {
-        // TODO: 1/21/17 Show about screen
+        GuidedStepFragment.add(getFragmentManager(), new TvAboutFragment());
     }
 
 }

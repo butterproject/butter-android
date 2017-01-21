@@ -30,7 +30,7 @@ import android.view.WindowManager;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.fragments.StreamLoadingFragment;
 
