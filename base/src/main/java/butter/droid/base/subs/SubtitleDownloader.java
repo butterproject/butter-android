@@ -76,11 +76,10 @@ public class SubtitleDownloader {
         if (contextReference.get() == null) return;
         if (listenerReference.get() == null) return;
 
-        Context context = contextReference.get();
         ISubtitleDownloaderListener listener = listenerReference.get();
 
         try {
-            File subtitleFile = playerManager.getDownloadedSubtitleFile(context, media, subtitleLanguage);
+            File subtitleFile = playerManager.getDownloadedSubtitleFile(media, subtitleLanguage);
             SubtitleParseTask task = new SubtitleParseTask(subtitleLanguage, listener);
             task.execute(subtitleFile);
         } catch (FileNotFoundException e) {

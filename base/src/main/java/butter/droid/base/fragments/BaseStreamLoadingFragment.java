@@ -35,7 +35,6 @@ import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.server.BeamServer;
 import butter.droid.base.manager.beaming.server.BeamServerService;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
@@ -46,7 +45,6 @@ import butter.droid.base.subs.SubtitleDownloader;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.ThreadUtils;
 import hugo.weaving.DebugLog;
 
@@ -74,7 +72,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback {
 
     @Inject ProviderManager providerManager;
-    @Inject PreferencesHandler preferencesHandler:
+    @Inject PreferencesHandler preferencesHandler;
     @Inject PlayerManager playerManager;
 
     protected FragmentListener mCallback;

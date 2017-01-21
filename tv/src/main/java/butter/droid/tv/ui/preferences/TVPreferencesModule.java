@@ -15,37 +15,37 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main;
+package butter.droid.tv.ui.preferences;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
-import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class MainModule {
+public class TVPreferencesModule {
 
-    private final MainView view;
+    private final TVPreferencesView view;
 
-    public MainModule(MainView view) {
+    public TVPreferencesModule(TVPreferencesView view) {
         this.view = view;
     }
 
-    @Provides @ActivityScope MainView provideView() {
+    @FragmentScope @Provides TVPreferencesView provideView() {
         return view;
     }
 
-    @Provides @ActivityScope MainPresenter providePresenter(MainView view, YouTubeManager youTubeManager,
-            ProviderManager providerManager, BeamManager beamManager, Context context,
-            PreferencesHandler preferencesHandler, PrefManager prefManager) {
-        return new MainPresenterImpl(view, youTubeManager, providerManager, beamManager, context, preferencesHandler,
-                prefManager);
+    @FragmentScope @Provides TVPreferencesPresenter providePresenter(TVPreferencesView view, Context context,
+            PreferencesHandler preferencesHandler, Resources resources, PrefManager prefManager,
+            PlayerManager playerManager, ButterUpdateManager updateManager) {
+        return new TVPreferencesPresenterImpl(view, context, preferencesHandler, resources, prefManager,
+                playerManager, updateManager);
     }
-}
 
+}

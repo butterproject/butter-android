@@ -26,8 +26,7 @@ import org.videolan.libvlc.util.VLCUtil;
 import javax.inject.Singleton;
 
 import butter.droid.base.Constants;
-import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -44,12 +43,12 @@ public class ManagerModule {
         return new ProviderManager(moviesProvider, null);
     }
 
-    @Provides @Singleton @Nullable LibVLC provideLibVLC(Context context, PrefManager prefManager) {
+    @Provides @Singleton @Nullable LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {
         if(!VLCUtil.hasCompatibleCPU(context)) {
             Timber.e(VLCUtil.getErrorMsg());
             return null;
         } else {
-            String chroma = prefManager.get(Prefs.PIXEL_FORMAT, null);
+            String chroma = preferencesHandler.getPixelFormat();
             return new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, Constants.DEBUG_ENABLED));
         }
     }

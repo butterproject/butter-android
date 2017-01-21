@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 import butter.droid.activities.TermsActivity;
 import butter.droid.base.PlayerTestConstants;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
@@ -46,21 +46,23 @@ public class MainPresenterImpl implements MainPresenter {
     private final ProviderManager providerManager;
     private final BeamManager beamManager;
     private final Context context;
+    private final PreferencesHandler preferencesHandler;
     private final PrefManager prefManager;
 
     public MainPresenterImpl(MainView view, YouTubeManager youTubeManager, ProviderManager providerManager,
-            BeamManager beamManager, Context context, PrefManager prefManager) {
+            BeamManager beamManager, Context context, PreferencesHandler preferencesHandler, PrefManager prefManager) {
         this.view = view;
         this.youTubeManager = youTubeManager;
         this.providerManager = providerManager;
         this.beamManager = beamManager;
         this.context = context;
+        this.preferencesHandler = preferencesHandler;
         this.prefManager = prefManager;
     }
 
     @Override public void onCreate(boolean isInitial) {
         if (isInitial) {
-            @ProviderType int provider = prefManager.get(Prefs.DEFAULT_PROVIDER, ProviderManager.PROVIDER_TYPE_MOVIE);
+            @ProviderType int provider = preferencesHandler.getDefaultProvider();
             view.initProviders(provider);
         }
     }

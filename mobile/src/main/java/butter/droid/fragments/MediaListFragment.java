@@ -44,13 +44,12 @@ import butter.droid.R;
 import butter.droid.activities.MediaDetailActivity;
 import butter.droid.adapters.MediaGridAdapter;
 import butter.droid.base.ButterApplication;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.NetworkUtils;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import butterknife.BindView;
@@ -86,7 +85,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
     @Inject ProviderManager providerManager;
     @Inject OkHttpClient client;
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     private Context mContext;
     private MediaGridAdapter mAdapter;
@@ -214,7 +213,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         mFilters.order = mDefOrder;
         mFilters.genre = getArguments().getString(EXTRA_GENRE);
 
-        String language = prefManager.get(Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = preferencesHandler.getLocale();
         mFilters.langCode = LocaleUtils.toLocale(language).getLanguage();
 
         mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);

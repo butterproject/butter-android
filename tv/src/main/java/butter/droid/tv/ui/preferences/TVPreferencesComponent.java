@@ -15,11 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.preferences;
+package butter.droid.tv.ui.preferences;
 
-import butter.droid.base.content.preferences.PrefItem;
-import butter.droid.base.ui.preferences.BasePreferencesPresenter;
+import butter.droid.base.ui.FragmentScope;
+import dagger.Subcomponent;
 
-public interface PreferencesPresenter extends BasePreferencesPresenter {
-    void itemSelected(PrefItem item);
+@Subcomponent(
+        modules = TVPreferencesModule.class
+)
+@FragmentScope
+public interface TVPreferencesComponent {
+
+    void inject(TVPreferencesFragment fragment);
+
+    @Subcomponent.Builder interface Builder {
+        Builder preferencesModule(TVPreferencesModule module);
+
+        TVPreferencesComponent build();
+    }
+
 }

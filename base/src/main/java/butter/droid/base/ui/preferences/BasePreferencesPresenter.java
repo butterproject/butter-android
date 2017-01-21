@@ -15,11 +15,22 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.preferences;
+package butter.droid.base.ui.preferences;
 
-import butter.droid.base.content.preferences.PrefItem;
-import butter.droid.base.ui.preferences.BasePreferencesPresenter;
+import butter.droid.base.content.preferences.Prefs.PrefKey;
 
-public interface PreferencesPresenter extends BasePreferencesPresenter {
-    void itemSelected(PrefItem item);
+public interface BasePreferencesPresenter {
+    void onCreate();
+
+    void onDestroy();
+
+    void onSimpleChaiseItemSelected(@PrefKey String key, int position);
+
+    void onColorSelected(@PrefKey String key, int color);
+
+    void onNumberSelected(@PrefKey String key, int value);
+
+    void clearPreference(@PrefKey String key);
+
+    void onFolderSelected(@PrefKey final String key, String folder);
 }

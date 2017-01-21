@@ -24,16 +24,9 @@ import android.support.v17.leanback.app.GuidedStepFragment;
 
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.fragments.TVPreferencesFragment;
+import butter.droid.tv.ui.preferences.TVPreferencesFragment;
 
 public class TVPreferencesActivity extends TVBaseActivity {
-
-    public static Intent startActivity(Activity activity) {
-        Intent intent = new Intent(activity, TVPreferencesActivity.class);
-        activity.startActivity(intent);
-        return intent;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +35,12 @@ public class TVPreferencesActivity extends TVBaseActivity {
                 .inject(this);
 
         super.onCreate(savedInstanceState);
-        if (null == savedInstanceState) {
-            GuidedStepFragment.add(getFragmentManager(), new TVPreferencesFragment());
-        }
+        GuidedStepFragment.addAsRoot(this, new TVPreferencesFragment(), android.R.id.content);
     }
 
-    @Override
-    public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
+    public static Intent startActivity(Activity activity) {
+        Intent intent = new Intent(activity, TVPreferencesActivity.class);
+        activity.startActivity(intent);
+        return intent;
     }
 }

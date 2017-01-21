@@ -17,8 +17,6 @@
 
 package butter.droid.base.providers.subs.open;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -45,9 +43,9 @@ public class OpenSubsProvider extends SubsProvider {
 
     private final ArrayList<Long> ongoingCalls = new ArrayList<>();
 
-    public OpenSubsProvider(Context context, OkHttpClient client, Gson gson, XMLRPCClient xmlClient,
+    public OpenSubsProvider(OkHttpClient client, Gson gson, XMLRPCClient xmlClient,
             PlayerManager playerManager) {
-        super(context, client, gson, playerManager);
+        super(client, gson, playerManager);
         this.client = xmlClient;
     }
 

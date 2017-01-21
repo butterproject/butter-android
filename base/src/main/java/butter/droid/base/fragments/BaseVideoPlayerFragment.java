@@ -58,12 +58,12 @@ import javax.inject.Inject;
 
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.manager.beaming.BeamDeviceListener;
 import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.manager.vlc.VLCOptions;
@@ -88,6 +88,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     @Inject BeamManager beamManager;
     @Inject @Nullable LibVLC libVLC;
     @Inject PreferencesHandler preferencesHandler;
+    @Inject PrefManager prefManager;
     @Inject PlayerManager playerManager;
 
     private MediaPlayer mMediaPlayer;
@@ -635,7 +636,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         subtitleDownloader.setSubtitleDownloaderListener(this);
 
         try {
-            mSubsFile = playerManager.getDownloadedSubtitleFile(getActivity(), mMedia, mCurrentSubsLang);
+            mSubsFile = playerManager.getDownloadedSubtitleFile(mMedia, mCurrentSubsLang);
             if (mSubsFile != null && mSubsFile.exists()) {
                 subtitleDownloader.parseSubtitle(mSubsFile);
             }
@@ -887,8 +888,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_size));
         args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
         args.putInt(NumberPickerDialogFragment.MIN_VALUE, SUBTITLE_MINIMUM_SIZE);
-        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE,
-                getResources().getInteger(R.integer.player_subtitles_default_text_size));
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, 16);
 
         NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
         dialogFragment.setArguments(args);

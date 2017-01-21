@@ -35,6 +35,14 @@ public final class Prefs {
     public @interface PrefKey {
     }
 
+    public static final String TITLE_GENERAL = "title_general";
+    public static final String TITLE_SUBTITLES = "title_subtitles";
+    public static final String TITLE_TORRENTS = "title_torrents";
+    public static final String TITLE_NETWORKING = "title_networking";
+    public static final String TITLE_ADVANCED = "title_advanced";
+    public static final String TITLE_UPDATES = "title_updates";
+    public static final String TITLE_ABOUT = "title_about";
+
     public static final String SUBTITLE_COLOR = "subtitle_color";
     public static final String SUBTITLE_SIZE = "subtitle_size";
     public static final String SUBTITLE_STROKE_WIDTH = "subtitle_stroke_width";
@@ -42,21 +50,21 @@ public final class Prefs {
     public static final String SUBTITLE_DEFAULT_LANGUAGE = "subtitle_default_language";
     public static final String STORAGE_LOCATION = "storage_location";
     public static final String REMOVE_CACHE = "remove_cache";
-    public static final String HW_ACCELERATION = "hw_acceleration";
+    public static final String HW_ACCELERATION = "hw_acceleration"; // TODO: 12/9/16 This is never used
     public static final String AUTOMATIC_UPDATES = "auto_updates";
     public static final String DEFAULT_PROVIDER = "default_provider";
     public static final String DEFAULT_PLAYER = "default_player";
     public static final String DEFAULT_PLAYER_NAME = "default_player_name";
     public static final String WIFI_ONLY = "wifi_only";
     public static final String LOCALE = "app_locale";
-    public static final String DRAWER_LEARNED = "drawer_learned";
-    public static final String FIRST_RUN = "first_run";
+    public static final String DRAWER_LEARNED = "drawer_learned"; // TODO: 12/9/16 Do something about this
+    public static final String FIRST_RUN = "first_run"; // TODO: 12/9/16 Do something about this
     public static final String LIBTORRENT_CONNECTION_LIMIT = "libtorrent_connectionlimit";
     public static final String LIBTORRENT_DOWNLOAD_LIMIT = "libtorrent_downloadlimit";
     public static final String LIBTORRENT_UPLOAD_LIMIT = "libtorrent_uploadlimit";
     public static final String LIBTORRENT_LISTENING_PORT = "libtorrent_listeningport";
     public static final String LIBTORRENT_AUTOMATIC_PORT = "libtorrent_automaticport";
-    public static final String SHOW_VPN = "show_vpn";
+    public static final String SHOW_VPN = "show_vpn"; // TODO: 12/9/16 This is never used
     public static final String PIXEL_FORMAT = "pixel_format";
     public static final String QUALITY_DEFAULT = "quality_default";
     public static final String CHECK_UPDATE = "check_update";

@@ -24,12 +24,11 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
-import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.beaming.server.BeamServerService;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
@@ -37,14 +36,14 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.MessageDialogFragment;
 import butter.droid.fragments.MovieDetailFragment;
 import butter.droid.fragments.ShowDetailFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
+import butter.droid.fragments.dialog.MessageDialogFragment;
 import butter.droid.utils.ActionBarBackground;
 import butter.droid.widget.ObservableParallaxScrollView;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class MediaDetailActivity extends ButterBaseActivity implements BaseDetailFragment.FragmentListener {
@@ -53,7 +52,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     private Integer mHeaderHeight = 0, mToolbarHeight = 0, mTopHeight;
     private Boolean mTransparentBar = true, mIsTablet = false;
 
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     TextView mToolbarTitle;
@@ -178,7 +177,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void playStream(StreamInfo streamInfo) {
-        if (prefManager.get(Prefs.WIFI_ONLY, true) &&
+        if (preferencesHandler.wifiOnly() &&
                 !NetworkUtils.isWifiConnected(this) &&
                 !NetworkUtils.isEthernetConnected(this) &&
                 NetworkUtils.isNetworkConnected(this)) {

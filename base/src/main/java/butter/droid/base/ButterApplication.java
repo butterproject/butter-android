@@ -38,13 +38,12 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.VersionUtils;
 import timber.log.Timber;
@@ -57,7 +56,7 @@ public abstract class ButterApplication extends Application implements ButterUpd
     @Inject Picasso picasso;
     @Inject ButterUpdateManager updateManager;
     @Inject BeamManager beamManager;
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -99,10 +98,9 @@ public abstract class ButterApplication extends Application implements ButterUpd
             TorrentService.start(this);
         }
 
-        File path = new File(
-                prefManager.get(Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(this).toString()));
+        File path = new File(preferencesHandler.getStorageLocation());
         File directory = new File(path, "/torrents/");
-        if (prefManager.get(Prefs.REMOVE_CACHE, true)) {
+        if (preferencesHandler.removeCache()) {
             FileUtils.recursiveDelete(directory);
             FileUtils.recursiveDelete(new File(path + "/subs"));
         } else {

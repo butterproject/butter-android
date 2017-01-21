@@ -48,9 +48,7 @@ import javax.inject.Inject;
 
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
-import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.utils.StorageUtils;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import timber.log.Timber;
 
 import static butter.droid.base.ButterApplication.getAppContext;
@@ -63,7 +61,7 @@ public class TorrentService extends Service implements TorrentListener {
 
     private static TorrentService sThis;
 
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     private TorrentStream mTorrentStream;
     private Torrent mCurrentTorrent;
@@ -97,13 +95,13 @@ public class TorrentService extends Service implements TorrentListener {
 
         TorrentOptions options = new TorrentOptions();
         options.setRemoveFilesAfterStop(true);
-        options.setMaxConnections(prefManager.get(Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
-        options.setMaxDownloadSpeed(prefManager.get(Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
-        options.setMaxUploadSpeed(prefManager.get(Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
-        if (!prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
-            options.setListeningPort(prefManager.get(Prefs.LIBTORRENT_LISTENING_PORT, 59718));
+        options.setMaxConnections(preferencesHandler.getTorrentConnectionLimit());
+        options.setMaxDownloadSpeed(preferencesHandler.getTorrentDownloadLimit());
+        options.setMaxUploadSpeed(preferencesHandler.getTorrentUploadLimit());
+        if (!preferencesHandler.torrentAutomaticPort()) {
+            options.setListeningPort(preferencesHandler.getTorrentListeningPort());
         }
-        options.setSaveLocation(prefManager.get(Prefs.STORAGE_LOCATION, getStreamDir()));
+        options.setSaveLocation(getStreamDir());
         mTorrentStream = TorrentStream.init(options);
     }
 
@@ -236,13 +234,13 @@ public class TorrentService extends Service implements TorrentListener {
 
         TorrentOptions options = mTorrentStream.getOptions();
         options.setRemoveFilesAfterStop(true);
-        options.setMaxConnections(prefManager.get(Prefs.LIBTORRENT_CONNECTION_LIMIT, 200));
-        options.setMaxDownloadSpeed(prefManager.get(Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0));
-        options.setMaxUploadSpeed(prefManager.get(Prefs.LIBTORRENT_UPLOAD_LIMIT, 0));
-        if (!prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
-            options.setListeningPort(prefManager.get(Prefs.LIBTORRENT_LISTENING_PORT, 59718));
+        options.setMaxConnections(preferencesHandler.getTorrentConnectionLimit());
+        options.setMaxDownloadSpeed(preferencesHandler.getTorrentDownloadLimit());
+        options.setMaxUploadSpeed(preferencesHandler.getTorrentUploadLimit());
+        if (!preferencesHandler.torrentAutomaticPort()) {
+            options.setListeningPort(preferencesHandler.getTorrentListeningPort());
         }
-        options.setSaveLocation(prefManager.get(Prefs.STORAGE_LOCATION, getStreamDir()));
+        options.setSaveLocation(getStreamDir());
         mTorrentStream.setOptions(options);
 
         mIsReady = false;
@@ -394,8 +392,7 @@ public class TorrentService extends Service implements TorrentListener {
     }
 
     private String getStreamDir() {
-        File path = new File(prefManager.get(Prefs.STORAGE_LOCATION,
-                StorageUtils.getIdealCacheDirectory(getAppContext()).toString()));
+        File path = new File(preferencesHandler.getStorageLocation());
         File directory = new File(path, "/torrents/");
         return directory.toString();
     }

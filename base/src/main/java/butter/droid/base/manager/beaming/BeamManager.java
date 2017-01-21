@@ -251,7 +251,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         String subsLocation = null;
         if(info.getSubtitleLanguage() != null && !info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
-            File srtFile = new File(playerManager.getStorageLocation(context), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
+            File srtFile = new File(playerManager.getStorageLocation(), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
             BeamServer.setCurrentSubs(srtFile);
             if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
                 subsLocation = BeamServer.getSubsURL(BeamServer.VTT);

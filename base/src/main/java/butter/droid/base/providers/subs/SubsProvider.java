@@ -17,8 +17,6 @@
 
 package butter.droid.base.providers.subs;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 
 import java.io.BufferedInputStream;
@@ -53,14 +51,12 @@ public abstract class SubsProvider extends BaseProvider {
 
     private static List<String> SUB_EXTENSIONS = Arrays.asList("srt", "ssa", "ass");
 
-    private final Context context;
     private final OkHttpClient client;
     private final PlayerManager playerManager;
 
-    public SubsProvider(Context context, OkHttpClient client, Gson gson, PlayerManager playerManager) {
+    public SubsProvider(OkHttpClient client, Gson gson, PlayerManager playerManager) {
         super(client, gson);
 
-        this.context = context;
         this.client = client;
         this.playerManager = playerManager;
     }
@@ -87,7 +83,7 @@ public abstract class SubsProvider extends BaseProvider {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
 
-                final File subsDirectory = playerManager.getStorageLocation(context);
+                final File subsDirectory = playerManager.getStorageLocation();
                 final String fileName = media.videoId + "-" + languageCode;
                 final File srtPath = new File(subsDirectory, fileName + ".srt");
 

@@ -237,7 +237,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
         mSubtitleText.setTextColor(preferencesHandler.getSubtitleColor());
         mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleSize());
-        mSubtitleText.setStrokeColor(prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
+        mSubtitleText.setStrokeColor(preferencesHandler.getSubtitleStrokeColor());
         mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleStrokeWidth());
 
         mControlBar.setOnSeekBarChangeListener(mOnControlBarListener);

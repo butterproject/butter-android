@@ -35,13 +35,15 @@ import butter.droid.tv.fragments.TVMediaGridFragment;
 import butter.droid.tv.fragments.TVMovieDetailsFragment;
 import butter.droid.tv.fragments.TVOverviewFragment;
 import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
-import butter.droid.tv.fragments.TVPreferencesFragment;
 import butter.droid.tv.fragments.TVSearchFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
 import butter.droid.tv.fragments.TVStreamLoadingFragment;
+import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
+import butter.droid.tv.fragments.TVWelcomeFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
+import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import dagger.Component;
 
 @Singleton @Component(
@@ -69,12 +71,15 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVMovieDetailsFragment fragment);
     void inject(TVMediaGridFragment fragment);
     void inject(TVStreamLoadingFragment fragment);
-    void inject(TVPreferencesFragment fragment);
     void inject(TVSearchFragment fragment);
     void inject(TVVideoPlayerFragment fragment);
     void inject(TVPlaybackOverlayFragment fragment);
     void inject(TVShowDetailsFragment fragment);
+    void inject(TVUpdateFragment fragment);
+    void inject(TVWelcomeFragment fragment);
 
     void inject(RecommendationContentProvider contentProvider);
+
+    TVPreferencesComponent.Builder preferencesComponentBuilder();
 
 }

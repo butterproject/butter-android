@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
@@ -55,18 +54,13 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.tv.TVButterApplication;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.widget.StrokedTextView;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.events.ConfigureSubtitleEvent;
 import butter.droid.tv.events.PausePlaybackEvent;
@@ -78,6 +72,9 @@ import butter.droid.tv.events.StartPlaybackEvent;
 import butter.droid.tv.events.StreamProgressChangedEvent;
 import butter.droid.tv.events.ToggleSubtitleEvent;
 import butter.droid.tv.events.UpdatePlaybackStateEvent;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
@@ -125,7 +122,7 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
 
         mSubtitleText.setText("");
         mSubtitleText.setTextColor(preferencesHandler.getSubtitleColor());
-        mSubtitleText.setStrokeColor(prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
+        mSubtitleText.setStrokeColor(preferencesHandler.getSubtitleStrokeColor());
         mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleStrokeWidth());
     }
 

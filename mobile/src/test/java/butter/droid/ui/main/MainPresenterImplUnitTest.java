@@ -23,8 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
@@ -40,13 +41,15 @@ public class MainPresenterImplUnitTest {
     @Mock ProviderManager providerManager;
     @Mock BeamManager beamManager;
     @Mock Context context;
+    @Mock PreferencesHandler preferencesHandler;
     @Mock PrefManager prefManager;
 
     MainPresenterImpl presenter;
 
     @Before
     public void setUp() throws Exception {
-        presenter = new MainPresenterImpl(view, youTubeManager, providerManager, beamManager, context, prefManager);
+        presenter = new MainPresenterImpl(view, youTubeManager, providerManager, beamManager, context,
+                preferencesHandler, prefManager);
     }
 
     @Test

@@ -66,7 +66,7 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
-    @BindView(R.id.rootLayout) ViewGroup rootLayout;
+    @BindView(R.id.root_layout) ViewGroup rootLayout;
 
     private PreferencesAdapter adapter;
 

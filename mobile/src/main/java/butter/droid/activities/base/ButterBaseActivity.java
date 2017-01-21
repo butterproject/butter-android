@@ -30,11 +30,11 @@ import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 
@@ -42,7 +42,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     @Inject ButterUpdateManager updateManager;
     @Inject BeamManager beamManager;
-    @Inject PrefManager prefManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     protected Boolean showCasting = false;
 
@@ -71,7 +71,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     @Override
     protected void onResume() {
-        String language = prefManager.get(Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
 

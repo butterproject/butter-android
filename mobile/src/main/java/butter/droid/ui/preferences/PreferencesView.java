@@ -17,36 +17,13 @@
 
 package butter.droid.ui.preferences;
 
-import android.content.Intent;
-import android.support.annotation.StringRes;
-
 import java.util.Map;
 
 import butter.droid.base.content.preferences.PrefItem;
-import butter.droid.base.content.preferences.Prefs.PrefKey;
+import butter.droid.base.ui.preferences.BasePreferencesView;
 
-public interface PreferencesView {
+public interface PreferencesView extends BasePreferencesView {
     void displayItems(String[] keys, Map<String, PrefItem> items);
 
-    void openSimpleChoiceSelector(@PrefKey final String key, @StringRes int title, String[] items, int value);
-
-    void openColorSelector(@PrefKey final String key, @StringRes int title, int value);
-
-    void openNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max);
-
-    void openDirectorySelector(@PrefKey final String key, @StringRes int title, String value);
-
-    void openPreciseNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max);
-
-    void openPreciseSmallNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max);
-
-    void openActivity(Intent intent);
-
-    void openChangelog();
-
     void updateItem(int position, PrefItem preferenceItem);
-
-    void showMessage(@StringRes int message);
-
-    void showAboutScreen();
 }

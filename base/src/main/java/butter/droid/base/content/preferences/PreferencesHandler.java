@@ -6,7 +6,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.text.format.DateFormat;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +22,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PrefItem.SubtitleGenerator;
@@ -55,6 +59,7 @@ public class PreferencesHandler {
         List<String> keys = new ArrayList<>();
 
         // general
+        keys.add(Prefs.TITLE_GENERAL);
         if (isTV) {
             keys.add(Prefs.DEFAULT_PROVIDER);
         }
@@ -71,6 +76,7 @@ public class PreferencesHandler {
         }
 
         // subtitles
+        keys.add(Prefs.TITLE_SUBTITLES);
         keys.add(Prefs.SUBTITLE_COLOR);
         keys.add(Prefs.SUBTITLE_SIZE);
         keys.add(Prefs.SUBTITLE_STROKE_COLOR);
@@ -78,6 +84,7 @@ public class PreferencesHandler {
         keys.add(Prefs.SUBTITLE_DEFAULT_LANGUAGE);
 
         // torrents
+        keys.add(Prefs.TITLE_TORRENTS);
         keys.add(Prefs.LIBTORRENT_CONNECTION_LIMIT);
         keys.add(Prefs.LIBTORRENT_DOWNLOAD_LIMIT);
         keys.add(Prefs.LIBTORRENT_UPLOAD_LIMIT);
@@ -88,19 +95,23 @@ public class PreferencesHandler {
         keys.add(Prefs.REMOVE_CACHE);
 
         // networking
+        keys.add(Prefs.TITLE_NETWORKING);
         keys.add(Prefs.LIBTORRENT_AUTOMATIC_PORT);
         keys.add(Prefs.LIBTORRENT_LISTENING_PORT);
 
         // advanced
+        keys.add(Prefs.TITLE_ADVANCED);
         keys.add(Prefs.HW_ACCELERATION);
         keys.add(Prefs.PIXEL_FORMAT);
         keys.add(Prefs.SHOW_VPN);
 
         // updates
+        keys.add(Prefs.TITLE_UPDATES);
         keys.add(Prefs.AUTOMATIC_UPDATES);
         keys.add(Prefs.CHECK_UPDATE);
 
         // about
+        keys.add(Prefs.TITLE_ABOUT);
         if (!Constants.DEBUG_ENABLED && !isTV) {
             keys.add(Prefs.REPORT_BUG);
         }
@@ -116,44 +127,9 @@ public class PreferencesHandler {
 
         Map<String, PrefItem> prefItems = new HashMap<>();
 
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.general)
-//                .setClickable(false)
-//                .build());
-
         for (String key : keys) {
             prefItems.put(key, getPreferenceItem(key));
         }
-
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.subtitles)
-//                .setClickable(false)
-//                .build());
-
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.torrents)
-//                .setClickable(false)
-//                .build());
-
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.networking)
-//                .setClickable(false)
-//                .build());
-
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.advanced)
-//                .setClickable(false)
-//                .build());
-
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.updates)
-//                .setClickable(false)
-//                .build());
-
-//        prefItems.add(PrefItem.newBuilder()
-//                .setTitleResource(R.string.about_app)
-//                .setClickable(false)
-//                .build());
 
         return prefItems;
 
@@ -166,7 +142,7 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_prefs_default_view)
                         .setTitleResource(R.string.default_view)
                         .setPreferenceKey(DEFAULT_PROVIDER)
-                        .setValue(prefManager.get(DEFAULT_PROVIDER, ProviderManager.PROVIDER_TYPE_MOVIE))
+                        .setValue(getDefaultProvider())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -180,9 +156,9 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_prefs_default_player)
                         .setTitleResource(R.string.default_player)
                         .setPreferenceKey(Prefs.DEFAULT_PLAYER)
-                        .setValue(
-                                prefManager.get(Prefs.DEFAULT_PLAYER_NAME, context.getString(R.string.internal_player)))
-                        .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        // TODO: 12/9/16 default and stuff
+                        .setValue(prefManager.get(Prefs.DEFAULT_PLAYER_NAME, context.getString(R.string.internal_player)))
+                        .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
                                 return (String) item.getValue();
@@ -195,7 +171,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.quality)
                         .setPreferenceKey(Prefs.QUALITY_DEFAULT)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.QUALITY_DEFAULT, "720p"))
+                        .setValue(getDefaultQuality())
                         .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -209,8 +185,9 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.i18n_language)
                         .setPreferenceKey(Prefs.LOCALE)
                         .hasNext(true)
+                        // TODO: 12/9/16 Default value
                         .setValue(prefManager.get(Prefs.LOCALE, resources.getString(R.string.device_language)))
-                        .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
                                 Locale locale = LocaleUtils.toLocale((String) item.getValue());
@@ -223,7 +200,7 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_prefs_wifi_only)
                         .setTitleResource(R.string.stream_over_wifi_only)
                         .setPreferenceKey(Prefs.WIFI_ONLY)
-                        .setValue(prefManager.get(Prefs.WIFI_ONLY, true))
+                        .setValue(wifiOnly())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -267,7 +244,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.subtitle_stroke_color)
                         .setPreferenceKey(Prefs.SUBTITLE_STROKE_COLOR)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK))
+                        .setValue(getSubtitleStrokeColor())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -316,7 +293,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.max_connections)
                         .setPreferenceKey(Prefs.LIBTORRENT_CONNECTION_LIMIT)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.LIBTORRENT_CONNECTION_LIMIT, 200))
+                        .setValue(getTorrentConnectionLimit())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -330,7 +307,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.download_speed)
                         .setPreferenceKey(Prefs.LIBTORRENT_DOWNLOAD_LIMIT)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0))
+                        .setValue(getTorrentDownloadLimit())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -349,7 +326,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.upload_speed)
                         .setPreferenceKey(Prefs.LIBTORRENT_UPLOAD_LIMIT)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.LIBTORRENT_UPLOAD_LIMIT, 0))
+                        .setValue(getTorrentUploadLimit())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -368,8 +345,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.storage_location)
                         .setPreferenceKey(Prefs.STORAGE_LOCATION)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context)
-                                .getAbsolutePath()))
+                        .setValue(getStorageLocation())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -382,7 +358,7 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_prefs_remove_cache)
                         .setTitleResource(R.string.remove_cache)
                         .setPreferenceKey(Prefs.REMOVE_CACHE)
-                        .setValue(prefManager.get(Prefs.REMOVE_CACHE, true))
+                        .setValue(removeCache())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -397,7 +373,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.automatic_port)
                         .setPreferenceKey(Prefs.LIBTORRENT_AUTOMATIC_PORT)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true))
+                        .setValue(torrentAutomaticPort())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -412,13 +388,13 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.listening_port)
                         .setPreferenceKey(Prefs.LIBTORRENT_LISTENING_PORT)
                         .hasNext(true)
-                        .setClickable(!prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true))
-                        .setValue(prefManager.get(Prefs.LIBTORRENT_LISTENING_PORT, 59718))
+                        .setClickable(!torrentAutomaticPort())
+                        .setValue(getTorrentListeningPort())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
                                 int port = (int) item.getValue();
-                                if (port == -1 || prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true)) {
+                                if (port == -1 || torrentAutomaticPort()) {
                                     return "Listening on random port";
                                 } else {
                                     return "Listening on port " + port;
@@ -432,7 +408,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.hw_acceleration)
                         .setPreferenceKey(Prefs.HW_ACCELERATION)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.HW_ACCELERATION, VLCOptions.HW_ACCELERATION_AUTOMATIC))
+                        .setValue(getHwAcceleration())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -457,7 +433,7 @@ public class PreferencesHandler {
                         .setTitleResource(R.string.pixel_format)
                         .setPreferenceKey(Prefs.PIXEL_FORMAT)
                         .hasNext(true)
-                        .setValue(prefManager.get(Prefs.PIXEL_FORMAT, "RV32"))
+                        .setValue(getPixelFormat())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -477,7 +453,7 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_nav_vpn)
                         .setTitleResource(R.string.show_vpn)
                         .setPreferenceKey(Prefs.SHOW_VPN)
-                        .setValue(prefManager.get(Prefs.SHOW_VPN, true))
+                        .setValue(showVpn())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -491,7 +467,7 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_prefs_auto_update)
                         .setTitleResource(R.string.auto_updates)
                         .setPreferenceKey(Prefs.AUTOMATIC_UPDATES)
-                        .setValue(prefManager.get(Prefs.AUTOMATIC_UPDATES, true))
+                        .setValue(automaticUpdates())
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {
@@ -586,12 +562,33 @@ public class PreferencesHandler {
                             }
                         })
                         .build();
+            case Prefs.TITLE_GENERAL:
+                return buildTitlePrefItem(R.string.general);
+            case Prefs.TITLE_SUBTITLES:
+                return buildTitlePrefItem(R.string.subtitles);
+            case Prefs.TITLE_TORRENTS:
+                return buildTitlePrefItem(R.string.torrents);
+            case Prefs.TITLE_NETWORKING:
+                return buildTitlePrefItem(R.string.networking);
+            case Prefs.TITLE_ADVANCED:
+                return buildTitlePrefItem(R.string.advanced);
+            case Prefs.TITLE_UPDATES:
+                return buildTitlePrefItem(R.string.updates);
+            case Prefs.TITLE_ABOUT:
+                return buildTitlePrefItem(R.string.about_app);
             default:
                 throw new IllegalArgumentException("Unknown preference key:" + key);
         }
     }
 
-    public int getSubtitleColor() {
+    private PrefItem buildTitlePrefItem(@StringRes int title) {
+        return PrefItem.newBuilder()
+                .setTitleResource(title)
+                .setClickable(false)
+                .build();
+    }
+
+    @ColorInt public int getSubtitleColor() {
         return prefManager.get(Prefs.SUBTITLE_COLOR, Color.WHITE);
     }
 
@@ -605,5 +602,74 @@ public class PreferencesHandler {
 
     public String getSubtitleDefaultLanguage() {
         return prefManager.get(Prefs.SUBTITLE_DEFAULT_LANGUAGE, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+    }
+
+    public String getStorageLocation() {
+        return prefManager.get(Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString());
+    }
+
+    public boolean removeCache() {
+        return prefManager.get(Prefs.REMOVE_CACHE, true);
+    }
+
+    private int getHwAcceleration() {
+        return prefManager.get(Prefs.HW_ACCELERATION, VLCOptions.HW_ACCELERATION_AUTOMATIC);
+    }
+
+    public boolean automaticUpdates() {
+        return prefManager.get(Prefs.AUTOMATIC_UPDATES, true);
+    }
+
+    public int getDefaultProvider() {
+        return prefManager.get(Prefs.DEFAULT_PROVIDER, ProviderManager.PROVIDER_TYPE_MOVIE);
+    }
+
+    @Nullable public String getDefaultPlayer() {
+        return prefManager.get(Prefs.DEFAULT_PLAYER, null);
+    }
+
+    public boolean wifiOnly() {
+        return prefManager.get(Prefs.WIFI_ONLY, true);
+    }
+
+
+    public String getLocale() {
+        return prefManager.get(Prefs.LOCALE, ButterApplication.getSystemLanguage());
+    }
+
+    public int getTorrentConnectionLimit() {
+        return prefManager.get(Prefs.LIBTORRENT_CONNECTION_LIMIT, 200);
+    }
+
+    public int getTorrentDownloadLimit() {
+        return prefManager.get(Prefs.LIBTORRENT_DOWNLOAD_LIMIT, 0);
+    }
+
+    public int getTorrentUploadLimit() {
+        return prefManager.get(Prefs.LIBTORRENT_UPLOAD_LIMIT, 0);
+    }
+
+    public int getTorrentListeningPort() {
+        return prefManager.get(Prefs.LIBTORRENT_LISTENING_PORT, 59718); // should default value be random?
+    }
+
+    public boolean torrentAutomaticPort() {
+        return prefManager.get(Prefs.LIBTORRENT_AUTOMATIC_PORT, true);
+    }
+
+    private boolean showVpn() {
+        return prefManager.get(Prefs.SHOW_VPN, true);
+    }
+
+    public String getPixelFormat() {
+        return prefManager.get(Prefs.PIXEL_FORMAT, null);
+    }
+
+    public String getDefaultQuality() {
+        return prefManager.get(Prefs.QUALITY_DEFAULT, "720p");
+    }
+
+    @ColorInt public int getSubtitleStrokeColor() {
+        return prefManager.get(Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK);
     }
 }

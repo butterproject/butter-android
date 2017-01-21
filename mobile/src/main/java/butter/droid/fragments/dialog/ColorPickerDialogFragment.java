@@ -94,6 +94,6 @@ public class ColorPickerDialogFragment extends DialogFragment {
     }
 
     public interface ResultListener {
-        public void onNewValue(int value);
+        void onNewValue(int value);
     }
 }

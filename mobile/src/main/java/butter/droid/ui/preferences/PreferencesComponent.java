@@ -17,7 +17,7 @@
 
 package butter.droid.ui.preferences;
 
-import butter.droid.ui.ActivityScope;
+import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
 @Subcomponent(

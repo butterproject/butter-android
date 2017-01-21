@@ -28,9 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
-import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.utils.StorageUtils;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -40,10 +38,9 @@ import okhttp3.OkHttpClient.Builder;
 @Module
 public class DataModule {
 
-    @Provides @Singleton public Cache provideCache(Context context, PrefManager prefManager) {
+    @Provides @Singleton public Cache provideCache(PreferencesHandler preferencesHandler) {
         int cacheSize = 10 * 1024 * 1024;
-        File cacheLocation = new File(
-                prefManager.get(Prefs.STORAGE_LOCATION, StorageUtils.getIdealCacheDirectory(context).toString()));
+        File cacheLocation = new File(preferencesHandler.getStorageLocation());
         cacheLocation.mkdirs();
         return new Cache(cacheLocation, cacheSize);
     }

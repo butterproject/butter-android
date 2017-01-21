@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.beaming.server.BeamServer;
 import butter.droid.base.manager.beaming.server.BeamServerService;
@@ -42,17 +43,18 @@ import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.StringUtils;
 
 public class PlayerManager {
 
     private static final String DELIMITER = "/-/";
 
+    private final PreferencesHandler preferencesHandler;
     private final PrefManager prefManager;
 
     @Inject
-    public PlayerManager(PrefManager prefManager) {
+    public PlayerManager(PreferencesHandler preferencesHandler, PrefManager prefManager) {
+        this.preferencesHandler = preferencesHandler;
         this.prefManager = prefManager;
     }
 
@@ -112,7 +114,7 @@ public class PlayerManager {
      */
     public boolean start(Media media, String subLanguage, String location) {
         Context context = ButterApplication.getAppContext();
-        String defaultPlayer = prefManager.get(Prefs.DEFAULT_PLAYER, null);
+        String defaultPlayer = preferencesHandler.getDefaultPlayer();
 
         if (!StringUtils.isEmpty(defaultPlayer)) {
             String[] playerData = defaultPlayer.split(DELIMITER);
@@ -120,8 +122,7 @@ public class PlayerManager {
                 Intent intent = new Intent();
                 if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
                         "no-subs")) {
-                    File subsLocation = new File(getStorageLocation(context),
-                            media.videoId + "-" + subLanguage + ".srt");
+                    File subsLocation = new File(getStorageLocation(), media.videoId + "-" + subLanguage + ".srt");
                     BeamServer.setCurrentSubs(subsLocation);
                     intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
                     intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
@@ -153,8 +154,8 @@ public class PlayerManager {
         return false;
     }
 
-    public String getDefaultQuality(Context context, List<String> availableQualities) {
-        String quality = prefManager.get(Prefs.QUALITY_DEFAULT, "720p");
+    public String getDefaultQuality(List<String> availableQualities) {
+        String quality = preferencesHandler.getDefaultQuality();
         String[] fallbackOrder = new String[]{"720p", "480p", "1080p"};
 
         if (availableQualities.indexOf(quality) == -1) {
@@ -169,18 +170,16 @@ public class PlayerManager {
         return quality;
     }
 
-    public File getStorageLocation(Context context) {
-        return new File(prefManager.get(Prefs.STORAGE_LOCATION,
-                StorageUtils.getIdealCacheDirectory(context).toString()) + "/subs/");
+    public File getStorageLocation() {
+        return new File(preferencesHandler.getStorageLocation() + "/subs/");
     }
 
-    public File getDownloadedSubtitleFile(@NonNull Context context, @NonNull Media media,
-            @NonNull String language) throws FileNotFoundException {
+    public File getDownloadedSubtitleFile(@NonNull Media media, @NonNull String language) throws FileNotFoundException {
         if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
             throw new IllegalArgumentException("language must be specified");
         }
 
-        File subtitleFile = new File(getStorageLocation(context), media.videoId + "-" + language + ".srt");
+        File subtitleFile = new File(getStorageLocation(), media.videoId + "-" + language + ".srt");
 
         if (subtitleFile.exists()) {
             return subtitleFile;

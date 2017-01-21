@@ -15,11 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.preferences;
+package butter.droid.tv.ui.preferences;
 
-import butter.droid.base.content.preferences.PrefItem;
-import butter.droid.base.ui.preferences.BasePreferencesPresenter;
+import android.support.annotation.StringRes;
+import android.support.v17.leanback.widget.GuidedAction;
 
-public interface PreferencesPresenter extends BasePreferencesPresenter {
-    void itemSelected(PrefItem item);
+import butter.droid.base.content.preferences.Prefs.PrefKey;
+import butter.droid.base.ui.preferences.BasePreferencesView;
+
+public interface TVPreferencesView extends BasePreferencesView {
+    void openSimpleChoiceSelector(@PrefKey final String key, @StringRes int title, String[] items, int value);
+
+    void showMessage(@StringRes int message);
+
+    void updateAction(int position, GuidedAction action);
 }

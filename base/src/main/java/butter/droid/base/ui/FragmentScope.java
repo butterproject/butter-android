@@ -15,11 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.preferences;
+package butter.droid.base.ui;
 
-import butter.droid.base.content.preferences.PrefItem;
-import butter.droid.base.ui.preferences.BasePreferencesPresenter;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface PreferencesPresenter extends BasePreferencesPresenter {
-    void itemSelected(PrefItem item);
+import javax.inject.Scope;
+
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface FragmentScope {
 }

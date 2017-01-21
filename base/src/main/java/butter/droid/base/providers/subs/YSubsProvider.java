@@ -17,8 +17,6 @@
 
 package butter.droid.base.providers.subs;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -85,8 +83,8 @@ public class YSubsProvider extends SubsProvider {
         LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
-    public YSubsProvider(Context context, OkHttpClient client, Gson gson, PlayerManager playerManager) {
-        super(context, client, gson, playerManager);
+    public YSubsProvider(OkHttpClient client, Gson gson, PlayerManager playerManager) {
+        super(client, gson, playerManager);
     }
 
     @Override

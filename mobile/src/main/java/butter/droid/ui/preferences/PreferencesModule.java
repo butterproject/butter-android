@@ -23,7 +23,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.manager.vlc.PlayerManager;
-import butter.droid.ui.ActivityScope;
+import butter.droid.base.ui.ActivityScope;
 import dagger.Module;
 import dagger.Provides;
 

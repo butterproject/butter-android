@@ -257,7 +257,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
                     }
                 });
 
-                String quality = playerManager.getDefaultQuality(mActivity, Arrays.asList(qualities));
+                String quality = playerManager.getDefaultQuality(Arrays.asList(qualities));
                 int qualityIndex = Arrays.asList(qualities).indexOf(quality);
                 mSelectedQuality = quality;
                 mQuality.setText(mSelectedQuality);
