@@ -49,13 +49,12 @@ import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.StreamLoadingActivity;
-import butter.droid.activities.TermsActivity;
+import butter.droid.ui.terms.TermsActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.beaming.server.BeamServerService;
 import butter.droid.base.manager.provider.ProviderManager;
@@ -63,7 +62,6 @@ import butter.droid.base.manager.provider.ProviderManager.OnProviderChangeListen
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
@@ -77,6 +75,7 @@ import timber.log.Timber;
  */
 public class MainActivity extends ButterBaseActivity implements MainView, OnProviderChangeListener {
 
+    private static final int REQUEST_CODE_TERMS = 1;
     private static final int PERMISSIONS_REQUEST_STORAGE = 1;
 
     @Inject MainPresenter presenter;
@@ -180,6 +179,19 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
         showProvider(provider);
     }
 
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_TERMS:
+                if (resultCode == RESULT_CANCELED) {
+                    finish();
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
     public void updateTabs(MediaContainerFragment containerFragment, final int position) {
         if (mTabs == null) {
             return;
@@ -217,7 +229,7 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
     }
 
     @Override public void showTermsScreen() {
-        startActivity(new Intent(this, TermsActivity.class));
+        startActivityForResult(TermsActivity.getIntent(this), REQUEST_CODE_TERMS);
     }
 
     @Override public void showYoutubeVideo(Movie movie, String url) {

@@ -32,12 +32,6 @@ public class TVMainActivity extends TVBaseActivity {
 
     @Inject ButterUpdateManager butterUpdateManager;
 
-    public static Intent startActivity(Activity activity) {
-        Intent intent = new Intent(activity, TVMainActivity.class);
-        activity.startActivity(intent);
-        return intent;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
@@ -58,5 +52,11 @@ public class TVMainActivity extends TVBaseActivity {
             }
         });
         butterUpdateManager.checkUpdates(false);
+    }
+
+    public static Intent startActivity(Activity activity) {
+        Intent intent = new Intent(activity, TVMainActivity.class);
+        activity.startActivity(intent);
+        return intent;
     }
 }

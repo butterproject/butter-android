@@ -32,14 +32,16 @@ import java.net.URLDecoder;
 
 import javax.inject.Inject;
 
-import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
+import butter.droid.tv.ui.terms.TVTermsActivity;
+import butter.droid.tv.ui.terms.TVTermsPresenterImpl;
 
 public class TVLaunchActivity extends Activity {
 
+	private static final int REQUEST_CODE_TERMS = 1;
 	private static final int PERMISSIONS_REQUEST = 1232;
 
 	@Inject PrefManager prefManager;
@@ -63,12 +65,23 @@ public class TVLaunchActivity extends Activity {
 		proceedCreate();
 	}
 
-	private void proceedCreate() {
-		Boolean firstRun = prefManager.get(Prefs.FIRST_RUN, true);
+	@Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_CODE_TERMS:
+				if (resultCode == RESULT_CANCELED) {
+					finish();
+				} else {
+					proceedCreate();
+				}
+				break;
+			default:
+				super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
 
-		if (firstRun) {
-			//run the welcome wizard
-			TVWelcomeActivity.startActivity(this);
+	private void proceedCreate() {
+		if (!prefManager.get(TVTermsPresenterImpl.TERMS_ACCEPTED, false)) {
+			startActivityForResult(TVTermsActivity.getIntent(this), REQUEST_CODE_TERMS);
 		} else {
 			String action = getIntent().getAction();
 			Uri data = getIntent().getData();
@@ -84,6 +97,7 @@ public class TVLaunchActivity extends Activity {
 				}
 			}
 			TVMainActivity.startActivity(this);
+			finish();
 		}
 	}
 

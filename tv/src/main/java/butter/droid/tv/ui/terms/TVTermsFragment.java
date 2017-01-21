@@ -15,8 +15,9 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.terms;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
@@ -27,14 +28,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVMainActivity;
 
-public class TVWelcomeFragment extends GuidedStepFragment {
+public class TVTermsFragment extends GuidedStepFragment implements TVTermsView {
 
+    @Inject TVTermsPresenter presenter;
     @Inject PrefManager prefManager;
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -42,13 +42,17 @@ public class TVWelcomeFragment extends GuidedStepFragment {
 
         TVButterApplication.getAppContext()
                 .getComponent()
+                .termsComponentBuilder()
+                .termsModule(new TVTermsModule(this))
+                .build()
                 .inject(this);
     }
 
     @NonNull
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(Bundle savedInstanceState) {
-        return new GuidanceStylist.Guidance(getString(R.string.terms_and_conditions), getString(R.string.terms), getString(R.string.app_name), null);
+        return new GuidanceStylist.Guidance(getString(R.string.terms_and_conditions), getString(R.string.terms),
+                getString(R.string.app_name), null);
     }
 
     @Override
@@ -58,29 +62,39 @@ public class TVWelcomeFragment extends GuidedStepFragment {
 
     @Override
     public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-        GuidedAction acceptAction = new GuidedAction.Builder().id(R.id.action_accept).hasNext(true).title(getString(R.string.accept)).build();
-        GuidedAction declineAction = new GuidedAction.Builder().id(R.id.action_decline).hasNext(true).title(getString(R.string.leave)).build();
-        actions.add(acceptAction);
-        actions.add(declineAction);
-        super.onCreateActions(actions, savedInstanceState);
+        actions.add(new GuidedAction.Builder(getActivity())
+                .id(R.id.action_accept)
+                .hasNext(true)
+                .title(getString(R.string.accept))
+                .build());
+        actions.add(new GuidedAction.Builder(getActivity())
+                .id(R.id.action_decline)
+                .hasNext(false)
+                .title(getString(R.string.leave))
+                .build());
     }
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         switch ((int) action.getId()) {
             case R.id.action_accept:
-                //set first run flag to false, don't show welcome again
-                prefManager.save(Prefs.FIRST_RUN, false);
-                //start main activity
-
-                TVMainActivity.startActivity(getActivity());
-                getActivity().finish();
-                return;
+                presenter.accept();
+                break;
             case R.id.action_decline:
-                getActivity().finish();
-                return;
+                presenter.leave();
+                break;
+            default:
+                super.onGuidedActionClicked(action);
         }
-        super.onGuidedActionClicked(action);
+    }
+
+    @Override public void closeSuccess() {
+        getActivity().setResult(Activity.RESULT_OK);
+        closeSelf();
+    }
+
+    @Override public void closeSelf() {
+        getActivity().finish();
     }
 
     public static class TermsGuidanceStylist extends GuidanceStylist {

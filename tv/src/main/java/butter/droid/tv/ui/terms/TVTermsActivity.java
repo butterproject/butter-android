@@ -15,9 +15,9 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities;
+package butter.droid.tv.ui.terms;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -25,13 +25,7 @@ import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 
-public class TVWelcomeActivity extends TVBaseActivity {
-
-	public static Intent startActivity(Activity activity) {
-		Intent intent = new Intent(activity, TVWelcomeActivity.class);
-		activity.startActivity(intent);
-		return intent;
-	}
+public class TVTermsActivity extends TVBaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +33,11 @@ public class TVWelcomeActivity extends TVBaseActivity {
 				.getComponent()
 				.inject(this);
 
-		super.onCreate(savedInstanceState,R.layout.activity_welcome);
+		super.onCreate(savedInstanceState,R.layout.activity_terms);
+	}
+
+	public static Intent getIntent(Context context) {
+		return new Intent(context, TVTermsActivity.class);
 	}
 
 }
