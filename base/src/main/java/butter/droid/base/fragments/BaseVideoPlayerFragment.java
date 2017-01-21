@@ -297,7 +297,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         flags = flags | VLCOptions.MEDIA_VIDEO;
 
         org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(libVLC, Uri.parse(videoLocation));
-        VLCOptions.setMediaOptions(media, getActivity(), flags);
+        VLCOptions.setMediaOptions(media, preferencesHandler, flags);
 
         mMediaPlayer.setMedia(media);
 

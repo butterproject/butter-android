@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
@@ -31,7 +31,10 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainPresenterImplUnitTest {
@@ -54,9 +57,12 @@ public class MainPresenterImplUnitTest {
 
     @Test
     public void onCreateInitial() throws Exception {
+        when(preferencesHandler.getDefaultProvider()).thenReturn(ProviderManager.PROVIDER_TYPE_MOVIE);
+
         presenter.onCreate(true);
 
-//        verify(view).initProviders();
+        //noinspection WrongConstant
+        verify(view).initProviders(eq(ProviderManager.PROVIDER_TYPE_MOVIE));
         verifyNoMoreInteractions(view);
     }
 

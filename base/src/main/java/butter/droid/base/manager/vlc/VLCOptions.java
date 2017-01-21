@@ -28,6 +28,8 @@ import org.videolan.libvlc.util.VLCUtil;
 
 import java.util.ArrayList;
 
+import butter.droid.base.content.preferences.PreferencesHandler;
+
 
 public class VLCOptions {
     private static final String TAG = "VLCConfig";
@@ -120,17 +122,16 @@ public class VLCOptions {
         return ret;
     }
 
-    public static void setMediaOptions(Media media, Context context, int flags) {
+    public static void setMediaOptions(Media media, PreferencesHandler preferencesHandler, int flags) {
         boolean noHardwareAcceleration = (flags & MEDIA_NO_HWACCEL) != 0;
         boolean noVideo = (flags & MEDIA_VIDEO) == 0;
         final boolean paused = (flags & MEDIA_PAUSED) != 0;
         int hardwareAcceleration = HW_ACCELERATION_DISABLED;
 
         if (!noHardwareAcceleration) {
-//            try {
-//                hardwareAcceleration = PrefManager.get(context, Prefs.HW_ACCELERATION, HW_ACCELERATION_AUTOMATIC);
-//            } catch (NumberFormatException ignored) {}
+            hardwareAcceleration = preferencesHandler.getHwAcceleration();
         }
+
         if (hardwareAcceleration == HW_ACCELERATION_DISABLED)
             media.setHWDecoderEnabled(false, false);
         else if (hardwareAcceleration == HW_ACCELERATION_FULL || hardwareAcceleration == HW_ACCELERATION_DECODING) {

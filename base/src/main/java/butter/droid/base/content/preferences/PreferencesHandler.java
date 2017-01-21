@@ -612,7 +612,7 @@ public class PreferencesHandler {
         return prefManager.get(Prefs.REMOVE_CACHE, true);
     }
 
-    private int getHwAcceleration() {
+    public int getHwAcceleration() {
         return prefManager.get(Prefs.HW_ACCELERATION, VLCOptions.HW_ACCELERATION_AUTOMATIC);
     }
 
