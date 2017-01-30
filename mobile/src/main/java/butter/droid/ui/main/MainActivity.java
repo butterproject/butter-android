@@ -213,7 +213,7 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
             if (mTabs.getTabCount() > 0) {
                 mTabs.getTabAt(0).select();
-                mHandler.postDelayed(new Runnable() {
+                torrentHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (mTabs.getTabCount() > position) {

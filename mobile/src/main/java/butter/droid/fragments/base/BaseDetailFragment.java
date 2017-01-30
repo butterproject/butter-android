@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import butter.droid.activities.MediaDetailActivity;
+import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.base.torrent.StreamInfo;
 
 public abstract class BaseDetailFragment extends Fragment {

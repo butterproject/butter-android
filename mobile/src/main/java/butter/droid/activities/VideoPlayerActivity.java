@@ -186,14 +186,14 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     @Override
     protected void onResume() {
         super.onResume();
-        if(null != mService && mService.checkStopped())
+        if(null != torrentStream && torrentStream.checkStopped())
             finish();
     }
 
     @Override
     protected void onPause() {
-        if(mService != null)
-            mService.removeListener(mFragment);
+        if(torrentStream != null)
+            torrentStream.removeListener(mFragment);
         super.onPause();
     }
 
@@ -216,8 +216,8 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
         OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title), String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes), getString(android.R.string.no), new OptionDialogFragment.Listener() {
             @Override
             public void onSelectionPositive() {
-                if (mService != null)
-                    mService.stopStreaming();
+                if (torrentStream != null)
+                    torrentStream.stopStreaming();
                 finish();
             }
 
@@ -239,13 +239,13 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Override
     public TorrentService getService() {
-        return mService;
+        return torrentStream;
     }
 
     @Override
     public void onTorrentServiceDisconnected() {
         if (null!=mFragment){
-            mService.removeListener(mFragment);
+            torrentStream.removeListener(mFragment);
         }
         super.onTorrentServiceDisconnected();
     }
@@ -254,12 +254,12 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
 
-        if(mService.checkStopped()) {
+        if(torrentStream.checkStopped()) {
             finish();
             return;
         }
 
-        mService.addListener(mFragment);
+        torrentStream.addListener(mFragment);
     }
 
     public static Intent getIntent(Context context, @NonNull StreamInfo info) {

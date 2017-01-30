@@ -1,75 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <butter.droid.widget.ObservableParallaxScrollView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+
+        <butter.droid.widget.BurtterCollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <ImageView
+                android:id="@+id/bg_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:transitionName="background" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/parallax_header_height"
+                android:src="@drawable/ab_gradient"
+                android:importantForAccessibility="no"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom"
+                android:importantForAccessibility="no"
+                android:src="@drawable/base_gradient"
+                app:layout_collapseMode="pin" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin" />
+
+        </butter.droid.widget.BurtterCollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fadingEdgeLength="0dp"
-        app:parallax_factor="1.5">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:transitionName="content" />
 
-            <RelativeLayout
-                android:id="@+id/parallax"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/parallax_header_height"
-                android:background="@color/overlay">
 
-                <ImageView
-                    android:id="@+id/logo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginRight="32dp"
-                    android:layout_centerInParent="true"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/butter_logo"
-                    android:alpha="0.6" />
+    </android.support.v4.widget.NestedScrollView>
 
-                <ImageView
-                    android:id="@+id/bg_image"
-                    android:transitionName="background"
-                    android:visibility="invisible"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@drawable/ab_gradient" />
-
-                <View
-                    android:id="@+id/parallax_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </RelativeLayout>
-
-            <FrameLayout
-                android:id="@+id/content"
-                android:transitionName="content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" />
-
-        </LinearLayout>
-
-    </butter.droid.widget.ObservableParallaxScrollView>
-
-    <include
-        layout="@layout/toolbar"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|right|end"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:fitsSystemWindows="true" />
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_av_play_button"/>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

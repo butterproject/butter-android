@@ -1,84 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="@dimen/detail_card_margin"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/butter_logo"
-        android:alpha="0.6" />
-
-    <ProgressBar
-        android:id="@+id/header_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/logo"
-        android:alpha="0.6"
-        android:paddingTop="20dp"
-        style="?android:attr/progressBarStyle" />
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/bg_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ab_gradient"
+        android:scaleType="centerCrop"
         android:transitionName="background"
-        android:visibility="invisible"
+        android:importantForAccessibility="no"
+        android:fitsSystemWindows="true"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/parallax_header_height"
+        android:src="@drawable/ab_gradient"
+        android:importantForAccessibility="no"
+        android:fitsSystemWindows="true"/>
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"
-        android:alpha="0.18"
-        />
+        <butter.droid.widget.BurtterCollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@id/toolbar">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@drawable/ab_gradient" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <butter.droid.widget.ObservableParallaxScrollView
+        </butter.droid.widget.BurtterCollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fadingEdgeLength="0dp">
+        app:behavior_overlapTop="64dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <!-- Placeholder view for parallax -->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp" />
+            android:layout_marginLeft="@dimen/detail_card_margin"
+            android:layout_marginRight="@dimen/detail_card_margin"
+            android:background="@color/bg"
+            android:elevation="4dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:transitionName="content" />
 
-            <FrameLayout
-                android:id="@+id/content"
-                android:transitionName="content"
-                android:layout_marginLeft="@dimen/detail_card_margin"
-                android:layout_marginRight="@dimen/detail_card_margin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:background="@color/bg"
-                android:elevation="4dp" />
-        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-    </butter.droid.widget.ObservableParallaxScrollView>
-
-    <include
-        layout="@layout/toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-         />
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

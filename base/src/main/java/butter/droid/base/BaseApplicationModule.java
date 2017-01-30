@@ -34,7 +34,8 @@ import dagger.Provides;
         includes = {
                 DataModule.class,
                 ManagerModule.class,
-                ProviderModule.class
+                ProviderModule.class,
+                AndroidModule.class,
         }
 )
 public class BaseApplicationModule {

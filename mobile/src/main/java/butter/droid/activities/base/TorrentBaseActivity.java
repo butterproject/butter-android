@@ -41,8 +41,8 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
 
     @Inject PreferencesHandler preferencesHandler;
 
-    protected Handler mHandler;
-    protected TorrentService mService;
+    protected Handler torrentHandler;
+    protected TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         String language = preferencesHandler.getLocale();
@@ -50,7 +50,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
         ButterKnife.bind(this);
-        mHandler = new Handler(getMainLooper());
+        torrentHandler = new Handler(getMainLooper());
     }
 
     @Override
@@ -62,9 +62,9 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     @Override
     protected void onStop() {
         super.onStop();
-        if (null != mService) {
+        if (null != torrentStream) {
             unbindService(mServiceConnection);
-            mService = null;
+            torrentStream = null;
         }
     }
 
@@ -80,7 +80,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     }
 
     public TorrentService getTorrentService() {
-        return mService;
+        return torrentStream;
     }
 
     public void onTorrentServiceConnected() {
@@ -94,16 +94,16 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((TorrentService.ServiceBinder) service).getService();
-            mService.addListener(TorrentBaseActivity.this);
-            mService.setCurrentActivity(TorrentBaseActivity.this);
+            torrentStream = ((TorrentService.ServiceBinder) service).getService();
+            torrentStream.addListener(TorrentBaseActivity.this);
+            torrentStream.setCurrentActivity(TorrentBaseActivity.this);
             onTorrentServiceConnected();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mService.removeListener(TorrentBaseActivity.this);
-            mService = null;
+            torrentStream.removeListener(TorrentBaseActivity.this);
+            torrentStream = null;
             onTorrentServiceDisconnected();
         }
     };

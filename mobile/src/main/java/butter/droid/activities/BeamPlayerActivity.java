@@ -83,14 +83,14 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
     @Override
     protected void onResume() {
         super.onResume();
-        if(null != mService && mService.checkStopped())
+        if(null != torrentStream && torrentStream.checkStopped())
             finish();
     }
 
     @Override
     protected void onStop() {
-        if(null != mService)
-            mService.removeListener(mFragment);
+        if(null != torrentStream)
+            torrentStream.removeListener(mFragment);
         super.onStop();
     }
 
@@ -115,8 +115,8 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
                 BeamServerService.getServer().stop();
-                if (mService != null)
-                    mService.stopStreaming();
+                if (torrentStream != null)
+                    torrentStream.stopStreaming();
                 finish();
             }
 
@@ -133,7 +133,7 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
 
     @Override
     public TorrentService getService() {
-        return mService;
+        return torrentStream;
     }
 
     public Long getResumePosition() {
@@ -144,12 +144,12 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
     public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
 
-        if(mService.checkStopped()) {
+        if(torrentStream.checkStopped()) {
             finish();
             return;
         }
 
-        mService.addListener(mFragment);
+        torrentStream.addListener(mFragment);
     }
 
     public static Intent getIntent(Context context, @NonNull StreamInfo info) {

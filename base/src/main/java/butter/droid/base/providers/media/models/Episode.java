@@ -76,7 +76,7 @@ public class Episode extends Media implements Parcelable {
     }
 
     @Override public int getProviderType() {
-        return ProviderManager.PROVIDER_TYPE_SHOW;
+            return ProviderManager.PROVIDER_TYPE_SHOW;
     }
 
     @Override

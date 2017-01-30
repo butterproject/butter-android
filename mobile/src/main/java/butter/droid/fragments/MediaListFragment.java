@@ -41,7 +41,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.MediaDetailActivity;
+import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.adapters.MediaGridAdapter;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -508,7 +508,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
      */
     @Override
     public void onDetailLoadSuccess(final Media item) {
-        MediaDetailActivity.startActivity(mContext, item);
+        startActivity(MediaDetailActivity.getIntent(getActivity(), item));
     }
 
     /**

@@ -53,6 +53,7 @@ android {
     }
 
     packagingOptions {
+        pickFirst '**/libjlibtorrent.so'
         exclude 'META-INF/beans.xml'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
