@@ -17,8 +17,6 @@
 
 package butter.droid.base.providers.subs.open;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -26,6 +24,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -44,8 +43,9 @@ public class OpenSubsProvider extends SubsProvider {
 
     private final ArrayList<Long> ongoingCalls = new ArrayList<>();
 
-    public OpenSubsProvider(Context context, OkHttpClient client, Gson gson, XMLRPCClient xmlClient) {
-        super(context, client, gson);
+    public OpenSubsProvider(OkHttpClient client, Gson gson, XMLRPCClient xmlClient,
+            PlayerManager playerManager) {
+        super(client, gson, playerManager);
         this.client = xmlClient;
     }
 

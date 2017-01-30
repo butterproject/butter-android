@@ -32,10 +32,11 @@ import javax.inject.Inject;
 
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
-import butter.droid.base.beaming.server.BeamServer;
-import butter.droid.base.beaming.server.BeamServerService;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.beaming.server.BeamServer;
+import butter.droid.base.manager.beaming.server.BeamServerService;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -44,7 +45,6 @@ import butter.droid.base.subs.SubtitleDownloader;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import hugo.weaving.DebugLog;
 
@@ -72,6 +72,8 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback {
 
     @Inject ProviderManager providerManager;
+    @Inject PreferencesHandler preferencesHandler;
+    @Inject PlayerManager playerManager;
 
     protected FragmentListener mCallback;
     protected boolean mPlayingExternal = false;
@@ -121,22 +123,25 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentListener) mCallback = (FragmentListener) context;
+        if (context instanceof FragmentListener) {
+            mCallback = (FragmentListener) context;
+        }
     }
 
     public void onTorrentServiceConnected() {
-        if(getActivity() == null)
+        if (getActivity() == null) {
             return;
+        }
 
-        mService = ((TorrentActivity)getActivity()).getTorrentService();
-        if(mService != null) {
+        mService = ((TorrentActivity) getActivity()).getTorrentService();
+        if (mService != null) {
             mService.addListener(this);
             startStream();
         }
     }
 
     public void onTorrentServiceDisconnected() {
-        if(mService != null) {
+        if (mService != null) {
             mService.removeListener(this);
         }
     }
@@ -215,15 +220,16 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             if (beamService != null) {
                 beamService.stop();
             }
-            if(!mPlayingExternal)
+            if (!mPlayingExternal) {
                 getActivity().onBackPressed();
+            }
         }
 
-        if(mService != null && mService.isStreaming() && mService.isReady()) {
+        if (mService != null && mService.isStreaming() && mService.isReady()) {
             onStreamReady(mService.getCurrentTorrent());
         }
 
-        if(mState == null) {
+        if (mState == null) {
             setState(State.WAITING_TORRENT);
         } else {
             setState(mState);
@@ -234,13 +240,15 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      * Starts the torrent service streaming a torrent url
      */
     private void startStream() {
-        if (null == mService) throw new IllegalStateException("Torrent service must be bound");
+        if (null == mService) {
+            throw new IllegalStateException("Torrent service must be bound");
+        }
         String torrentUrl = mStreamInfo.getTorrentUrl();
 
         //if the torrent service is currently streaming another file, stop it.
         if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
             mService.stopStreaming();
-        } else if(mService.isReady()) {
+        } else if (mService.isReady()) {
             onStreamReady(mService.getCurrentTorrent());
         }
 
@@ -317,10 +325,14 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      */
     private void loadSubtitles() {
         Media media = mStreamInfo.getMedia();
-        if (media == null) return;
+        if (media == null) {
+            return;
+        }
 
         SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
-        if (subsProvider == null) return;
+        if (subsProvider == null) {
+            return;
+        }
 
         if (mStreamInfo.isShow()) {
             subsProvider.getList((Episode) media, this);
@@ -337,24 +349,26 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         mSubsStatus = SubsStatus.SUCCESS;
         mHasSubs = false;
 
-        if (media.subtitles == null || media.subtitles.size() == 0) return;
+        if (media.subtitles == null || media.subtitles.size() == 0) {
+            return;
+        }
 
         if (mStreamInfo.getSubtitleLanguage() == null) {
-            if (media.subtitles.containsKey(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE))) {
-                mStreamInfo.setSubtitleLanguage(PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE));
-            }
-            else {
+            String language = preferencesHandler.getSubtitleDefaultLanguage();
+            if (media.subtitles.containsKey(language)) {
+                mStreamInfo.setSubtitleLanguage(language);
+            } else {
                 mStreamInfo.setSubtitleLanguage(SubsProvider.SUBTITLE_LANGUAGE_NONE);
             }
         }
 
-        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(
+                SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
             mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
             mSubsStatus = SubsStatus.DOWNLOADING;
             mHasSubs = true;
             SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
-                    getActivity(), mStreamInfo, mSubtitleLanguage);
-            subtitleDownloader.setSubtitleDownloaderListener(this);
+                    getActivity(), mStreamInfo, playerManager, mSubtitleLanguage);
             subtitleDownloader.downloadSubtitle();
         }
     }

@@ -17,8 +17,6 @@
 
 package butter.droid.base.providers.subs;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
 import okhttp3.Call;
@@ -84,8 +83,8 @@ public class YSubsProvider extends SubsProvider {
         LANGUAGE_MAPPING.put("vietnamese", "vi");
     }
 
-    public YSubsProvider(Context context, OkHttpClient client, Gson gson) {
-        super(context, client, gson);
+    public YSubsProvider(OkHttpClient client, Gson gson, PlayerManager playerManager) {
+        super(client, gson, playerManager);
     }
 
     @Override

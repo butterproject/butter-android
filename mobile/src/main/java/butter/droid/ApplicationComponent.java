@@ -21,14 +21,14 @@ import javax.inject.Singleton;
 
 import butter.droid.activities.AboutActivity;
 import butter.droid.activities.BeamPlayerActivity;
-import butter.droid.activities.MainActivity;
 import butter.droid.activities.MediaDetailActivity;
-import butter.droid.activities.PreferencesActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.StreamLoadingActivity;
 import butter.droid.activities.TermsActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
+import butter.droid.base.BaseApplicationComponent;
+import butter.droid.fragments.BeamPlayerFragment;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.MediaListFragment;
@@ -36,20 +36,21 @@ import butter.droid.fragments.MovieDetailFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.fragments.StreamLoadingFragment;
 import butter.droid.fragments.VideoPlayerFragment;
+import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butter.droid.ui.main.MainComponent;
+import butter.droid.ui.preferences.PreferencesComponent;
 import dagger.Component;
 
 @Singleton @Component(
         modules = ApplicationModule.class
 )
-public interface ApplicationComponent {
+public interface ApplicationComponent extends BaseApplicationComponent {
 
     void inject(MobileButterApplication application);
 
-    void inject(MainActivity activity);
     void inject(TrailerPlayerActivity activity);
-    void inject(PreferencesActivity activity);
     void inject(AboutActivity activity);
     void inject(BeamPlayerActivity activity);
     void inject(MediaDetailActivity activity);
@@ -67,5 +68,10 @@ public interface ApplicationComponent {
     void inject(EpisodeDialogFragment fragment);
     void inject(MovieDetailFragment fragment);
     void inject(VideoPlayerFragment fragment);
+    void inject(BeamPlayerFragment fragment);
+    void inject(BeamDeviceSelectorDialogFragment fragment);
+
+    MainComponent.Builder mainComponentBuilder();
+    PreferencesComponent.Builder preferencesComponentBuilder();
 
 }

@@ -19,19 +19,19 @@ package butter.droid.fragments.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
-import butterknife.ButterKnife;
-import butterknife.BindView;
 import butter.droid.R;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ColorPickerDialogFragment extends DialogFragment {
 
@@ -40,12 +40,9 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
     private ResultListener mOnResultListener;
 
-    @BindView(R.id.picker)
-    ColorPicker colorPicker;
-    @BindView(R.id.svbar)
-    SVBar svBar;
-    @BindView(R.id.opacitybar)
-    OpacityBar opacityBar;
+    @BindView(R.id.picker) ColorPicker colorPicker;
+    @BindView(R.id.svbar) SVBar svBar;
+    @BindView(R.id.opacitybar) OpacityBar opacityBar;
 
     @NonNull
     @Override
@@ -97,6 +94,6 @@ public class ColorPickerDialogFragment extends DialogFragment {
     }
 
     public interface ResultListener {
-        public void onNewValue(int value);
+        void onNewValue(int value);
     }
 }

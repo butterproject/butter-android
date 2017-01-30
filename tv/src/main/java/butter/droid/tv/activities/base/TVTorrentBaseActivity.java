@@ -28,23 +28,25 @@ import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 
-import butterknife.ButterKnife;
+import javax.inject.Inject;
+
 import butter.droid.base.ButterApplication;
 import butter.droid.base.activities.TorrentActivity;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.PrefUtils;
+import butterknife.ButterKnife;
 
-public abstract class TVTorrentBaseActivity
-    extends FragmentActivity
+public abstract class TVTorrentBaseActivity extends FragmentActivity
     implements TorrentListener, TorrentActivity, ServiceConnection {
+
+    @Inject PreferencesHandler preferencesHandler;
 
     protected Handler mHandler;
     protected TorrentService mService;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        String language = PrefUtils.get(this, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
@@ -69,7 +71,7 @@ public abstract class TVTorrentBaseActivity
 
     @Override
     public void setContentView(int layoutResID) {
-        String language = PrefUtils.get(this, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.setContentView(layoutResID);
     }

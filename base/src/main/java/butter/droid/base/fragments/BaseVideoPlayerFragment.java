@@ -56,15 +56,17 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
-import butter.droid.base.beaming.BeamDeviceListener;
-import butter.droid.base.beaming.BeamManager;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butter.droid.base.manager.beaming.BeamDeviceListener;
+import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.vlc.VLCOptions;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.subs.Caption;
@@ -74,23 +76,24 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.PrefUtils;
-import butter.droid.base.vlc.VLCInstance;
-import butter.droid.base.vlc.VLCOptions;
 import timber.log.Timber;
 
 public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVout.Callback, TorrentListener,
-    MediaPlayer.EventListener, LibVLC.HardwareAccelerationError, SubtitleDownloader.ISubtitleDownloaderListener {
+        MediaPlayer.EventListener, LibVLC.HardwareAccelerationError, SubtitleDownloader.ISubtitleDownloaderListener {
 
     public static final String RESUME_POSITION = "resume_position";
     public static final int SUBTITLE_MINIMUM_SIZE = 10;
 
     @Inject ProviderManager providerManager;
+    @Inject BeamManager beamManager;
+    @Inject @Nullable LibVLC libVLC;
+    @Inject PreferencesHandler preferencesHandler;
+    @Inject PrefManager prefManager;
+    @Inject PlayerManager playerManager;
 
-    private LibVLC mLibVLC;
     private MediaPlayer mMediaPlayer;
-    private Long mResumePosition = 0l;
-    private Long mDuration = 0l;
+    private Long mResumePosition = 0L;
+    private Long mDuration = 0L;
 
     private static final int SURFACE_BEST_FIT = 0;
     private static final int SURFACE_FIT_HORIZONTAL = 1;
@@ -131,14 +134,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     private View mRootView;
 
-    private static LibVLC LibVLC() {
-        return VLCInstance.get(ButterApplication.getAppContext());
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Callback) mCallback = (Callback) context;
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        }
     }
 
     @Override
@@ -150,7 +151,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -169,26 +171,25 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         }
 
         mResumePosition = mCallback.getResumePosition();
-        PrefUtils.save(getActivity(), RESUME_POSITION, mResumePosition);
+        prefManager.save(RESUME_POSITION, mResumePosition);
 
-        if (!VLCInstance.hasCompatibleCPU(getContext())) {
+        if (libVLC == null) {
             getActivity().finish();
             return;
         }
 
         StreamInfo streamInfo = mCallback.getInfo();
 
-        if (streamInfo == null){
+        if (streamInfo == null) {
             getActivity().finish();
             return;
         }
 
         mMedia = streamInfo.getMedia();
 
-        mLibVLC = LibVLC();
-        mLibVLC.setOnHardwareAccelerationError(this);
+        libVLC.setOnHardwareAccelerationError(this);
 
-        mMediaPlayer = new MediaPlayer(mLibVLC);
+        mMediaPlayer = new MediaPlayer(libVLC);
         mMediaPlayer.setEventListener(this);
 
         if (mCallback.getService() != null) {
@@ -199,10 +200,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
         if (null == streamInfo.getSubtitleLanguage()) {
             // Get selected default subtitle
-            String defaultSubtitle = PrefUtils.get(
-                    getActivity(),
-                    Prefs.SUBTITLE_DEFAULT,
-                    SubsProvider.SUBTITLE_LANGUAGE_NONE);
+            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
             streamInfo.setSubtitleLanguage(defaultSubtitle);
             mCurrentSubsLang = defaultSubtitle;
             Timber.d("Using default subtitle: " + mCurrentSubsLang);
@@ -214,11 +212,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
             loadOrDownloadSubtitle();
         }
 
-        updateSubtitleSize(PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, getResources().getInteger(R.integer.player_subtitles_default_text_size)));
+        updateSubtitleSize(preferencesHandler.getSubtitleSize());
 
         prepareVlcVout();
-        if(mMediaReady)
+        if (mMediaReady) {
             loadMedia();
+        }
     }
 
     @Override
@@ -226,8 +225,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         super.onResume();
 
         prepareVlcVout();
-        BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
-        onProgressChanged(PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition), mDuration);
+        beamManager.addDeviceListener(mDeviceListener);
+        onProgressChanged(prefManager.get(RESUME_POSITION, mResumePosition), mDuration);
     }
 
     @Override
@@ -241,28 +240,30 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         vlcout.removeCallback(this);
         vlcout.detachViews();
 
-        BeamManager.getInstance(getActivity()).removeDeviceListener(mDeviceListener);
+        beamManager.removeDeviceListener(mDeviceListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        PrefUtils.save(getActivity(), RESUME_POSITION, 0);
+        prefManager.save(RESUME_POSITION, 0);
 
         mMediaPlayer.release();
-        mLibVLC.release();
+        if (libVLC != null) {
+            libVLC.release();
+        }
 
         if (mCallback.getService() != null) {
             mCallback.getService().removeListener(this);
         }
     }
 
-    public void onMediaReady(){
-        if(!mMediaReady) {
+    public void onMediaReady() {
+        if (!mMediaReady) {
             mMediaReady = true;
         }
-        if(mLibVLC != null) {
+        if (libVLC != null) {
             loadMedia();
         }
     }
@@ -284,10 +285,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
             Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
             getActivity().finish();
             return;
-        }
-        else {
+        } else {
             videoLocation = streamInfo.getVideoLocation();
-            if (!videoLocation.startsWith("file://") && !videoLocation.startsWith("http://") && !videoLocation.startsWith("https://")) {
+            if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
+                    "http://") && !videoLocation.startsWith("https://")) {
                 videoLocation = "file://" + videoLocation;
             }
         }
@@ -295,12 +296,12 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         int flags = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
         flags = flags | VLCOptions.MEDIA_VIDEO;
 
-        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(mLibVLC, Uri.parse(videoLocation));
-        VLCOptions.setMediaOptions(media, getActivity(), flags);
+        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(libVLC, Uri.parse(videoLocation));
+        VLCOptions.setMediaOptions(media, preferencesHandler, flags);
 
         mMediaPlayer.setMedia(media);
 
-        long resumeFrom = PrefUtils.get(getActivity(), RESUME_POSITION, mResumePosition);
+        long resumeFrom = prefManager.get(RESUME_POSITION, mResumePosition);
         if (resumeFrom > 0) {
             mMediaPlayer.setTime(resumeFrom);
         }
@@ -348,16 +349,16 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     private void saveVideoCurrentTime() {
         long currentTime = mMediaPlayer.getTime();
-        PrefUtils.save(getActivity(), RESUME_POSITION, currentTime);
+        prefManager.save(RESUME_POSITION, currentTime);
     }
 
     private void resumeVideo() {
         if (getActivity() != null) {
-            long resumePosition = PrefUtils.get(getActivity(), RESUME_POSITION, 0);
+            long resumePosition = prefManager.get(RESUME_POSITION, 0);
             mDuration = mMediaPlayer.getLength();
             if (mDuration > resumePosition && resumePosition > 0) {
                 setCurrentTime(resumePosition);
-                PrefUtils.save(getActivity(), RESUME_POSITION, 0);
+                prefManager.save(RESUME_POSITION, 0);
             }
         }
     }
@@ -468,11 +469,11 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         // compute the aspect ratio
         double aspectRatio, visibleWidth;
         if (mSarDen == mSarNum) {
-			/* No indication about the density, assuming 1:1 */
+            /* No indication about the density, assuming 1:1 */
             visibleWidth = mVideoVisibleWidth;
             aspectRatio = (double) mVideoVisibleWidth / (double) mVideoVisibleHeight;
         } else {
-			/* Use the specified aspect ratio */
+            /* Use the specified aspect ratio */
             visibleWidth = mVideoVisibleWidth * (double) mSarNum / mSarDen;
             aspectRatio = visibleWidth / mVideoVisibleHeight;
         }
@@ -482,41 +483,58 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
-                if (message) showPlayerInfo(getString(R.string.best_fit));
-                if (displayAspectRatio < aspectRatio)
+                if (message) {
+                    showPlayerInfo(getString(R.string.best_fit));
+                }
+                if (displayAspectRatio < aspectRatio) {
                     displayHeight = displayWidth / aspectRatio;
-                else
+                } else {
                     displayWidth = displayHeight * aspectRatio;
+                }
                 break;
             case SURFACE_FIT_HORIZONTAL:
                 displayHeight = displayWidth / aspectRatio;
-                if (message) showPlayerInfo(getString(R.string.fit_horizontal));
+                if (message) {
+                    showPlayerInfo(getString(R.string.fit_horizontal));
+                }
                 break;
             case SURFACE_FIT_VERTICAL:
                 displayWidth = displayHeight * aspectRatio;
-                if (message) showPlayerInfo(getString(R.string.fit_vertical));
+                if (message) {
+                    showPlayerInfo(getString(R.string.fit_vertical));
+                }
                 break;
             case SURFACE_FILL:
-                if (message) showPlayerInfo(getString(R.string.fill));
+                if (message) {
+                    showPlayerInfo(getString(R.string.fill));
+                }
                 break;
             case SURFACE_16_9:
-                if (message) showPlayerInfo("16:9");
+                if (message) {
+                    showPlayerInfo("16:9");
+                }
                 aspectRatio = 16.0 / 9.0;
-                if (displayAspectRatio < aspectRatio)
+                if (displayAspectRatio < aspectRatio) {
                     displayHeight = displayWidth / aspectRatio;
-                else
+                } else {
                     displayWidth = displayHeight * aspectRatio;
+                }
                 break;
             case SURFACE_4_3:
-                if (message) showPlayerInfo("4:3");
+                if (message) {
+                    showPlayerInfo("4:3");
+                }
                 aspectRatio = 4.0 / 3.0;
-                if (displayAspectRatio < aspectRatio)
+                if (displayAspectRatio < aspectRatio) {
                     displayHeight = displayWidth / aspectRatio;
-                else
+                } else {
                     displayWidth = displayHeight * aspectRatio;
+                }
                 break;
             case SURFACE_ORIGINAL:
-                if (message) showPlayerInfo(getString(R.string.original_size));
+                if (message) {
+                    showPlayerInfo(getString(R.string.original_size));
+                }
                 displayHeight = mVideoVisibleHeight;
                 displayWidth = visibleWidth;
                 break;
@@ -537,10 +555,14 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     }
 
     protected void seek(int delta) {
-        if (mMediaPlayer.getLength() <= 0 && !mSeeking) return;
+        if (mMediaPlayer.getLength() <= 0 && !mSeeking) {
+            return;
+        }
 
         long position = mMediaPlayer.getTime() + delta;
-        if (position < 0) position = 0;
+        if (position < 0) {
+            position = 0;
+        }
         setCurrentTime(position);
         showOverlay();
         onProgressChanged(getCurrentTime(), getDuration());
@@ -552,7 +574,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     }
 
     protected void progressSubtitleCaption() {
-        if (mLibVLC != null && mMediaPlayer != null && mMediaPlayer.isPlaying() && mSubs != null) {
+        if (libVLC != null && mMediaPlayer != null && mMediaPlayer.isPlaying() && mSubs != null) {
             Collection<Caption> subtitles = mSubs.captions.values();
             double currentTime = getCurrentTime() - mSubtitleOffset;
             if (mLastSub != null && currentTime >= mLastSub.start.getMilliseconds() && currentTime <= mLastSub.end.getMilliseconds()) {
@@ -602,20 +624,23 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     }
 
     private void loadOrDownloadSubtitle() {
-        if (mMedia == null) throw new NullPointerException("Media is not available");
-        if (mCurrentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) return;
+        if (mMedia == null) {
+            throw new NullPointerException("Media is not available");
+        }
+        if (mCurrentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+            return;
+        }
 
         SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
-                getActivity(), mCallback.getInfo(), mCurrentSubsLang);
+                getActivity(), mCallback.getInfo(), playerManager, mCurrentSubsLang);
         subtitleDownloader.setSubtitleDownloaderListener(this);
 
         try {
-            mSubsFile = SubtitleDownloader.getDownloadedSubtitleFile(getActivity(), mMedia, mCurrentSubsLang);
+            mSubsFile = playerManager.getDownloadedSubtitleFile(mMedia, mCurrentSubsLang);
             if (mSubsFile != null && mSubsFile.exists()) {
                 subtitleDownloader.parseSubtitle(mSubsFile);
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             subtitleDownloader.downloadSubtitle();
         }
     }
@@ -633,7 +658,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
      */
     @Override
     public void onNewLayout(
-        IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+            IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (width * height <= 0) {
             return;
         }
@@ -641,7 +666,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         // store video size
         mVideoWidth = width;
         mVideoHeight = height;
-        mVideoVisibleWidth  = visibleWidth;
+        mVideoVisibleWidth = visibleWidth;
         mVideoVisibleHeight = visibleHeight;
         mSarNum = sarNum;
         mSarDen = sarDen;
@@ -651,15 +676,19 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     /**
      * Called when subtitle for current media successfully loaded or disabled.
+     *
      * @param enabled Whether subtitle is loaded or disabled.
      */
-    protected void onSubtitleEnabledStateChanged(boolean enabled) {}
+    protected void onSubtitleEnabledStateChanged(boolean enabled) {
+    }
 
     @Override
-    public void onSurfacesCreated(IVLCVout ivlcVout) { }
+    public void onSurfacesCreated(IVLCVout ivlcVout) {
+    }
 
     @Override
-    public void onSurfacesDestroyed(IVLCVout ivlcVout) { }
+    public void onSurfacesDestroyed(IVLCVout ivlcVout) {
+    }
 
     @Override
     public void onEvent(MediaPlayer.Event event) {
@@ -712,19 +741,24 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     }
 
     @Override
-    public void onStreamPrepared(Torrent torrent) { }
+    public void onStreamPrepared(Torrent torrent) {
+    }
 
     @Override
-    public void onStreamStarted(Torrent torrent) { }
+    public void onStreamStarted(Torrent torrent) {
+    }
 
     @Override
-    public void onStreamStopped() { }
+    public void onStreamStopped() {
+    }
 
     @Override
-    public void onStreamError(Torrent torrent, Exception e) { }
+    public void onStreamError(Torrent torrent, Exception e) {
+    }
 
     @Override
-    public void onStreamReady(Torrent torrent) { }
+    public void onStreamReady(Torrent torrent) {
+    }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
@@ -736,7 +770,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     public interface Callback {
         Long getResumePosition();
+
         StreamInfo getInfo();
+
         TorrentService getService();
     }
 
@@ -763,7 +799,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
 
     protected void subsClick() {
         if (mMedia != null && mMedia.subtitles != null) {
-            if (getChildFragmentManager().findFragmentByTag("overlay_fragment") != null) return;
+            if (getChildFragmentManager().findFragmentByTag("overlay_fragment") != null) {
+                return;
+            }
 
             String[] subsOptions = {
                     getString(R.string.subtitle_language),
@@ -771,7 +809,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
                     getString(R.string.subtitle_timing)
             };
 
-            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.subtitle_settings, subsOptions, -1,
+            StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.subtitle_settings, subsOptions,
+                    -1,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
@@ -814,32 +853,34 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         readableNames[readableNames.length - 1] = "Custom..";
 
         StringArraySelectorDialogFragment.showSingleChoice(
-            getChildFragmentManager(),
-            R.string.subtitles,
-            readableNames,
-            Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang),
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(final DialogInterface dialog, int position) {
-                    if (position == adapterSubtitles.length - 1) {
-                        FileSelectorDialogFragment.show(getChildFragmentManager(), new FileSelectorDialogFragment.Listener() {
-                            @Override
-                            public void onFileSelected(File f) {
-                                if (!f.getPath().endsWith(".srt")) {
-                                    Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
-                                    return;
-                                }
-                                FileSelectorDialogFragment.hide();
-                                mSubsFile = f;
-                                dialog.dismiss();
-                            }
-                        });
-                        return;
+                getChildFragmentManager(),
+                R.string.subtitles,
+                readableNames,
+                Arrays.asList(adapterSubtitles).indexOf(mCurrentSubsLang),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int position) {
+                        if (position == adapterSubtitles.length - 1) {
+                            FileSelectorDialogFragment.show(getChildFragmentManager(),
+                                    new FileSelectorDialogFragment.Listener() {
+                                        @Override
+                                        public void onFileSelected(File f) {
+                                            if (!f.getPath().endsWith(".srt")) {
+                                                Snackbar.make(mRootView, R.string.unknown_error,
+                                                        Snackbar.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                            FileSelectorDialogFragment.hide();
+                                            mSubsFile = f;
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            return;
+                        }
+                        onSubtitleLanguageSelected(adapterSubtitles[position]);
+                        dialog.dismiss();
                     }
-                    onSubtitleLanguageSelected(adapterSubtitles[position]);
-                    dialog.dismiss();
-                }
-            });
+                });
     }
 
     private void subsSizeSettings() {
@@ -847,7 +888,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_size));
         args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
         args.putInt(NumberPickerDialogFragment.MIN_VALUE, SUBTITLE_MINIMUM_SIZE);
-        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, getResources().getInteger(R.integer.player_subtitles_default_text_size));
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, 16);
 
         NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
         dialogFragment.setArguments(args);
@@ -894,10 +935,10 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         public void onDeviceReady(ConnectableDevice device) {
             super.onDeviceReady(device);
 
-            if (!FragmentUtil.isAdded(BaseVideoPlayerFragment.this)){
+            if (!FragmentUtil.isAdded(BaseVideoPlayerFragment.this)) {
                 return;
             }
-            
+
             startBeamPlayerActivity();
 
             getActivity().finish();

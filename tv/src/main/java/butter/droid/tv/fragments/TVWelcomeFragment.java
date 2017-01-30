@@ -25,12 +25,25 @@ import android.support.v17.leanback.widget.GuidedAction;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMainActivity;
 
 public class TVWelcomeFragment extends GuidedStepFragment {
+
+    @Inject PrefManager prefManager;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @NonNull
     @Override
@@ -57,7 +70,7 @@ public class TVWelcomeFragment extends GuidedStepFragment {
         switch ((int) action.getId()) {
             case R.id.action_accept:
                 //set first run flag to false, don't show welcome again
-                PrefUtils.save(getActivity(), Prefs.FIRST_RUN, false);
+                prefManager.save(Prefs.FIRST_RUN, false);
                 //start main activity
 
                 TVMainActivity.startActivity(getActivity());

@@ -56,16 +56,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
+import javax.inject.Inject;
+
 import butter.droid.base.activities.TorrentActivity;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.PrefUtils;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.events.ConfigureSubtitleEvent;
@@ -78,6 +79,7 @@ import butter.droid.tv.events.StartPlaybackEvent;
 import butter.droid.tv.events.StreamProgressChangedEvent;
 import butter.droid.tv.events.ToggleSubtitleEvent;
 import butter.droid.tv.events.UpdatePlaybackStateEvent;
+import de.greenrobot.event.EventBus;
 
 /*
  * Class for video playback with media control
@@ -91,6 +93,8 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private static final int MODE_NOTHING = 0;
     private static final int MODE_FAST_FORWARD = 1;
     private static final int MODE_REWIND = 2;
+
+    @Inject PreferencesHandler preferencesHandler;
 
     private ArrayObjectAdapter mRowsAdapter;
     private ArrayObjectAdapter mPrimaryActionsAdapter;
@@ -126,6 +130,10 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
 
         setFadeCompleteListener(new OnFadeCompleteListener() {
             @Override
@@ -612,10 +620,7 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
             torrentActivity.getTorrentService().stopStreaming();
         }
 
-        String subtitleLanguage = PrefUtils.get(
-            getActivity(),
-            Prefs.SUBTITLE_DEFAULT,
-            SubsProvider.SUBTITLE_LANGUAGE_NONE);
+        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
         StreamInfo info = new StreamInfo(
             episode,

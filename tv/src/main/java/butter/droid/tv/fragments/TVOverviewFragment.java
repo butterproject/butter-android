@@ -43,6 +43,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
@@ -185,13 +186,18 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                 .getList(null, movieFilters, new MediaProvider.Callback() {
             @DebugLog
             @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-                mMoviesAdapter.clear();
-                mMoviesAdapter.addAll(0, list);
+            public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
+                        mMoviesAdapter.clear();
+                        mMoviesAdapter.addAll(0, list);
 
-                if(mSelectedRow == 0)
-                    mBackgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
+                        if (mSelectedRow == 0)
+                            mBackgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
+                    }
+                });
             }
 
             @DebugLog
@@ -351,8 +357,8 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
     private void openPlayerTestDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        final String[] file_types = getResources().getStringArray(R.array.file_types);
-        final String[] files = getResources().getStringArray(R.array.files);
+        final String[] file_types = PlayerTestConstants.FILE_TYPES;
+        final String[] files = PlayerTestConstants.FILES;
 
         builder.setTitle("Player Tests")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

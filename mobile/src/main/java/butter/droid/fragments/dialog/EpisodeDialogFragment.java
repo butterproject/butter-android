@@ -50,9 +50,9 @@ import javax.inject.Inject;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.MediaDetailActivity;
-import butter.droid.base.content.preferences.DefaultQuality;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Show;
@@ -63,7 +63,6 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
@@ -77,6 +76,8 @@ import butterknife.OnClick;
 public class EpisodeDialogFragment extends DialogFragment {
 
     @Inject ProviderManager providerManager;
+    @Inject PreferencesHandler preferencesHandler;
+    @Inject PlayerManager playerManager;
 
     public static final String EXTRA_EPISODE = "episode";
     public static final String EXTRA_SHOW = "show";
@@ -116,13 +117,18 @@ public class EpisodeDialogFragment extends DialogFragment {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_Butter)).inflate(R.layout.fragment_dialog_episode, container, false);
+        View v = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_Butter)).inflate(
+                R.layout.fragment_dialog_episode, container, false);
         ButterKnife.bind(this, v);
 
         if (!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
+            mPlayButton.setBackgroundDrawable(
+                    PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle,
+                            mShow.color));
         } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
+            mPlayButton.setBackground(
+                    PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle,
+                            mShow.color));
         }
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mPlaceholder.getLayoutParams();
@@ -190,8 +196,12 @@ public class EpisodeDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (null != mMetaProvider) mMetaProvider.cancel();
-        if (providerManager.hasCurrentSubsProvider()) providerManager.getCurrentSubsProvider().cancel();
+        if (null != mMetaProvider) {
+            mMetaProvider.cancel();
+        }
+        if (providerManager.hasCurrentSubsProvider()) {
+            providerManager.getCurrentSubsProvider().cancel();
+        }
     }
 
     @Override
@@ -229,17 +239,23 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         mAired.setVisibility(mEpisode.aired > 0 ? View.VISIBLE : View.GONE);
         Date airedDate = new Date((long) mEpisode.aired * 1000);
-        mAired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrent()).format(airedDate)));
+        mAired.setText(String.format(getString(R.string.aired),
+                new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrent()).format(airedDate)));
 
-        if (!TextUtils.isEmpty(mEpisode.overview))
+        if (!TextUtils.isEmpty(mEpisode.overview)) {
             mSynopsis.setText(mEpisode.overview);
-        else
+        } else {
             mSynopsis.setText(R.string.no_synopsis_available);
+        }
 
         String seasonStr = Integer.toString(mEpisode.season);
-        if (seasonStr.length() < 2) seasonStr = "0" + seasonStr;
+        if (seasonStr.length() < 2) {
+            seasonStr = "0" + seasonStr;
+        }
         String episodeStr = Integer.toString(mEpisode.episode);
-        if (episodeStr.length() < 2) episodeStr = "0" + episodeStr;
+        if (episodeStr.length() < 2) {
+            episodeStr = "0" + episodeStr;
+        }
 
         mInfo.setText("S" + seasonStr + "E" + episodeStr);
 
@@ -252,7 +268,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         SortUtils.sortQualities(qualities);
         mQuality.setData(qualities);
 
-        String quality = DefaultQuality.get(mActivity, Arrays.asList(qualities));
+        String quality = playerManager.getDefaultQuality(Arrays.asList(qualities));
         int qualityIndex = Arrays.asList(qualities).indexOf(quality);
         mSelectedQuality = quality;
         mQuality.setText(mSelectedQuality);
@@ -274,7 +290,9 @@ public class EpisodeDialogFragment extends DialogFragment {
             providerManager.getCurrentSubsProvider().getList(mEpisode, new SubsProvider.Callback() {
                 @Override
                 public void onSuccess(Map<String, String> subtitles) {
-                    if (!FragmentUtil.isAdded(EpisodeDialogFragment.this)) return;
+                    if (!FragmentUtil.isAdded(EpisodeDialogFragment.this)) {
+                        return;
+                    }
 
                     mEpisode.subtitles = subtitles;
 
@@ -309,13 +327,14 @@ public class EpisodeDialogFragment extends DialogFragment {
                         }
                     });
 
-                    String defaultSubtitle = PrefUtils.get(mSubtitles.getContext(), Prefs.SUBTITLE_DEFAULT, null);
+                    String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                     if (subtitles.containsKey(defaultSubtitle)) {
                         onSubtitleLanguageSelected(defaultSubtitle);
                         mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
                     } else {
-                        onSubtitleLanguageSelected("no-subs");
-                        mSubtitles.setDefault(Arrays.asList(adapterLanguages).indexOf("no-subs"));
+                        onSubtitleLanguageSelected(SubsProvider.SUBTITLE_LANGUAGE_NONE);
+                        mSubtitles.setDefault(
+                                Arrays.asList(adapterLanguages).indexOf(SubsProvider.SUBTITLE_LANGUAGE_NONE));
                     }
                 }
 
@@ -356,16 +375,17 @@ public class EpisodeDialogFragment extends DialogFragment {
         });
 
         if (mMetaProvider != null) {
-            mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode, new MetaProvider.Callback() {
-                @Override
-                public void onResult(MetaProvider.MetaData metaData, Exception e) {
-                    String imageUrl = mEpisode.headerImage;
-                    if (e == null) {
-                        imageUrl = metaData.images.poster;
-                    }
-                    Picasso.with(mHeaderImage.getContext()).load(imageUrl).into(mHeaderImage);
-                }
-            });
+            mMetaProvider.getEpisodeMeta(mEpisode.imdbId, mEpisode.season, mEpisode.episode,
+                    new MetaProvider.Callback() {
+                        @Override
+                        public void onResult(MetaProvider.MetaData metaData, Exception e) {
+                            String imageUrl = mEpisode.headerImage;
+                            if (e == null) {
+                                imageUrl = metaData.images.poster;
+                            }
+                            Picasso.with(mHeaderImage.getContext()).load(imageUrl).into(mHeaderImage);
+                        }
+                    });
         } else {
             Picasso.with(mHeaderImage.getContext()).load(mEpisode.headerImage).into(mHeaderImage);
         }
@@ -377,7 +397,9 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     private void updateMagnet() {
-        if (mOpenMagnet == null) return;
+        if (mOpenMagnet == null) {
+            return;
+        }
 
         if (mMagnet == null) {
             mMagnet = new Magnet(mActivity, mEpisode.torrents.get(mSelectedQuality).url);
@@ -393,8 +415,9 @@ public class EpisodeDialogFragment extends DialogFragment {
 
     @OnClick(R.id.synopsis)
     public void readMoreClick(View v) {
-        if (getFragmentManager().findFragmentByTag("overlay_fragment") != null)
+        if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) {
             return;
+        }
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle b = new Bundle();
         b.putString("text", mEpisode.overview);
@@ -406,7 +429,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void playClick() {
         smoothDismiss();
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
-        StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage, mSelectedQuality);
+        StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.url, mSelectedSubtitleLanguage,
+                mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 

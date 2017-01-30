@@ -19,6 +19,7 @@ package butter.droid.tv.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
@@ -36,9 +37,9 @@ public class TVPreferencesListFragment extends GuidedStepFragment {
     private SelectionListener mListener;
 
 
-    public static TVPreferencesListFragment newInstance(@NonNull String title, @NonNull String[] items, int currentPos, @NonNull SelectionListener listener) {
+    public static TVPreferencesListFragment newInstance(@StringRes int title, @NonNull String[] items, int currentPos, @NonNull SelectionListener listener) {
         Bundle args = new Bundle();
-        args.putString(TITLE_ARG, title);
+        args.putInt(TITLE_ARG, title);
         args.putStringArray(ITEMS_ARG, items);
         args.putInt(CURRENT_POS, currentPos);
 
@@ -57,7 +58,8 @@ public class TVPreferencesListFragment extends GuidedStepFragment {
     @NonNull
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(Bundle savedInstanceState) {
-        return new GuidanceStylist.Guidance(getArguments().getString(TITLE_ARG, "").toUpperCase(LocaleUtils.getCurrent()), null, getString(R.string.app_name), null);
+        String title = getString(getArguments().getInt(TITLE_ARG)).toUpperCase(LocaleUtils.getCurrent());
+        return new GuidanceStylist.Guidance(title, null, getString(R.string.app_name), null);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class TVPreferencesListFragment extends GuidedStepFragment {
         getFragmentManager().popBackStack();
     }
 
-    interface SelectionListener {
+    public interface SelectionListener {
         void onSelect(int position);
     }
 }

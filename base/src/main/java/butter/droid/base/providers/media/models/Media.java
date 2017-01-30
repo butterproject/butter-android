@@ -43,6 +43,10 @@ public abstract class Media implements Parcelable {
     public Media() {
     }
 
+    public Media(String title) {
+        this.title = title;
+    }
+
     public Media(Parcel in) {
         videoId = in.readString();
         imdbId = in.readString();

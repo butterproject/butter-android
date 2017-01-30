@@ -27,11 +27,24 @@ import android.support.v17.leanback.widget.GuidedAction;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.updater.ButterUpdateManager;
-import butter.droid.base.utils.PrefUtils;
 import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
 
 public class TVUpdateFragment extends GuidedStepFragment {
+
+    @Inject PrefManager prefManager;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+    }
 
     @NonNull
     @Override
@@ -57,7 +70,7 @@ public class TVUpdateFragment extends GuidedStepFragment {
     public void onGuidedActionClicked(GuidedAction action) {
         switch ((int) action.getId()) {
             case R.id.action_update_now:
-                String updateFile = PrefUtils.get(getActivity(), ButterUpdateManager.UPDATE_FILE, "");
+                String updateFile = prefManager.get(ButterUpdateManager.UPDATE_FILE, "");
                 Intent updateIntent = new Intent(Intent.ACTION_VIEW);
                 updateIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
 

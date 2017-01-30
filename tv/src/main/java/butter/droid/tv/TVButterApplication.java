@@ -48,7 +48,7 @@ public class TVButterApplication extends ButterApplication {
         }
     }
 
-    public ApplicationComponent getComponent() {
+    @Override public ApplicationComponent getComponent() {
         return component;
     }
 

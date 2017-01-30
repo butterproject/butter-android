@@ -17,7 +17,6 @@
 
 package butter.droid.fragments.dialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -27,31 +26,39 @@ import android.os.Bundle;
 
 import com.connectsdk.device.ConnectableDevice;
 
+import javax.inject.Inject;
+
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.base.beaming.BeamDeviceAdapter;
-import butter.droid.base.beaming.BeamManager;
+import butter.droid.base.manager.beaming.BeamDeviceAdapter;
+import butter.droid.base.manager.beaming.BeamManager;
 
 public class BeamDeviceSelectorDialogFragment extends DialogFragment {
+
+    @Inject BeamManager beamManager;
 
     private BeamDeviceAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder;
-        final BeamManager beamManager = BeamManager.getInstance(getActivity());
         if (!beamManager.isConnected()) {
-            mAdapter = new BeamDeviceAdapter(getActivity());
+            mAdapter = new BeamDeviceAdapter(getActivity(), beamManager);
             builder = new AlertDialog.Builder(getActivity())
                     .setSingleChoiceItems(mAdapter, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
                             ConnectableDevice device = mAdapter.getItem(position);
-                            BeamManager.getInstance(getActivity()).connect(device);
+                            beamManager.connect(device);
                             dismiss();
                         }
                     })
@@ -77,11 +84,6 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
             return builder.create();
         }
         return super.onCreateDialog(savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
     }
 
     @Override

@@ -57,7 +57,10 @@ import android.widget.TextView;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 
+import javax.inject.Inject;
+
 import butter.droid.MobileButterApplication;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -70,12 +73,14 @@ import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.widget.StrokedRobotoTextView;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
+
+    @Inject PreferencesHandler preferencesHandler;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
@@ -230,10 +235,10 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
         }
 
 
-        mSubtitleText.setTextColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_COLOR, Color.WHITE));
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_SIZE, 16));
-        mSubtitleText.setStrokeColor(PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_COLOR, Color.BLACK));
-        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, PrefUtils.get(getActivity(), Prefs.SUBTITLE_STROKE_WIDTH, 2));
+        mSubtitleText.setTextColor(preferencesHandler.getSubtitleColor());
+        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleSize());
+        mSubtitleText.setStrokeColor(preferencesHandler.getSubtitleStrokeColor());
+        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleStrokeWidth());
 
         mControlBar.setOnSeekBarChangeListener(mOnControlBarListener);
 

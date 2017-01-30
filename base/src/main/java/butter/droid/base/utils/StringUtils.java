@@ -37,6 +37,8 @@
 
 package butter.droid.base.utils;
 
+import android.support.annotation.Nullable;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -95,6 +97,10 @@ public class StringUtils {
 
     public static String colorToString(int color) {
         return String.format("#%06X", 0xFFFFFF & color);
+    }
+
+    public static boolean isEmpty(@Nullable CharSequence sequence) {
+        return sequence == null || sequence.length() == 0;
     }
 
 }

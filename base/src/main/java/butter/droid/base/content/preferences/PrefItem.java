@@ -17,98 +17,70 @@
 
 package butter.droid.base.content.preferences;
 
-import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 
-import butter.droid.base.utils.PrefUtils;
+import butter.droid.base.content.preferences.Prefs.PrefKey;
 
 public class PrefItem {
 
-    private Context mContext;
-    private int mIconRes;
-    private int mTitleRes;
-    private String mPrefKey;
-    private Object mDefaultValue;
-    private OnClickListener mOnClickListener;
-    private SubtitleGenerator mSubtitleGenerator;
-    private Boolean mHasNext = false;
+    @DrawableRes private final int iconRes;
+    @StringRes private final int titleRes;
+    @PrefKey private final String prefKey;
+    private final Object value;
+    private final SubtitleGenerator subtitleGenerator;
+    private final boolean hasNext;
+    private final boolean clickable;
 
-    public static Builder newBuilder(Context context) {
-        return new Builder(context);
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
-    protected PrefItem() {
-
-    }
-
-    public Object getValue() {
-        if (mDefaultValue instanceof Integer) {
-            return PrefUtils.get(mContext, mPrefKey, (Integer) mDefaultValue);
-        } else if (mDefaultValue instanceof Long) {
-            return PrefUtils.get(mContext, mPrefKey, (Long) mDefaultValue);
-        } else if (mDefaultValue instanceof Boolean) {
-            return PrefUtils.get(mContext, mPrefKey, (Boolean) mDefaultValue);
-        } else {
-            return PrefUtils.get(mContext, mPrefKey, mDefaultValue.toString());
-        }
-    }
-
-    public void saveValue(Object value) {
-        if (mDefaultValue instanceof Integer) {
-            PrefUtils.save(mContext, mPrefKey, (Integer) value);
-        } else if (mDefaultValue instanceof Long) {
-            PrefUtils.save(mContext, mPrefKey, (Long) value);
-        } else if (mDefaultValue instanceof Boolean) {
-            PrefUtils.save(mContext, mPrefKey, (Boolean) value);
-        } else {
-            PrefUtils.save(mContext, mPrefKey, value.toString());
-        }
-    }
-
-    public void clearValue() {
-        PrefUtils.remove(mContext, mPrefKey);
+    protected PrefItem(int iconRes, int titleRes, String prefKey, Object value, SubtitleGenerator subtitleGenerator,
+            boolean hasNext, boolean clickable) {
+        this.iconRes = iconRes;
+        this.titleRes = titleRes;
+        this.prefKey = prefKey;
+        this.value = value;
+        this.subtitleGenerator = subtitleGenerator;
+        this.hasNext = hasNext;
+        this.clickable = clickable;
     }
 
     public int getIconResource() {
-        return mIconRes;
+        return iconRes;
     }
 
-    public String getTitle() {
-        return mContext.getResources().getString(mTitleRes);
+    public int getTitleRes() {
+        return titleRes;
     }
 
     public String getPrefKey() {
-        return mPrefKey;
+        return prefKey;
     }
 
-    public Object getDefaultValue() {
-        return mDefaultValue;
+    public Object getValue() {
+        return value;
     }
 
     public String getSubtitle() {
-        if (mSubtitleGenerator != null) {
-            return mSubtitleGenerator.get(this);
+        if (subtitleGenerator != null) {
+            return subtitleGenerator.get(this);
+        } else {
+            return null;
         }
-        return "";
     }
-
-    public boolean isClickable() {
-        return mOnClickListener != null;
-    }
-
 
     public boolean hasNext() {
-        return mHasNext;
+        return hasNext;
     }
 
     public boolean isTitle() {
-        return mPrefKey == null;
+        return prefKey == null;
     }
 
-    public void onClick() {
-        if (mOnClickListener != null)
-            mOnClickListener.onClick(this);
+    public boolean isClickable() {
+        return clickable;
     }
 
     public interface OnClickListener {
@@ -121,50 +93,54 @@ public class PrefItem {
 
     public static class Builder {
 
-        private PrefItem mItem;
+        @DrawableRes private int iconRes;
+        @StringRes private int titleRes;
+        @PrefKey private String prefKey;
+        private Object value;
+        private SubtitleGenerator subtitleGenerator;
+        private boolean hasNext = false;
+        private boolean clickable = true;
 
-        public Builder(Context context) {
-            mItem = new PrefItem();
-            mItem.mContext = context;
+        public Builder() {
         }
 
         public Builder setIconResource(@DrawableRes int iconRes) {
-            mItem.mIconRes = iconRes;
+            this.iconRes = iconRes;
             return this;
         }
 
         public Builder setTitleResource(@StringRes int titleRes) {
-            mItem.mTitleRes = titleRes;
+            this.titleRes = titleRes;
             return this;
         }
 
-        public Builder setPreferenceKey(String prefKey) {
-            mItem.mPrefKey = prefKey;
+        public Builder setPreferenceKey(@PrefKey String prefKey) {
+            this.prefKey = prefKey;
             return this;
         }
 
-        public Builder setDefaultValue(Object defaultValue) {
-            mItem.mDefaultValue = defaultValue;
-            return this;
-        }
-
-        public Builder setOnClickListener(OnClickListener onClickListener) {
-            mItem.mOnClickListener = onClickListener;
+        public Builder setValue(Object value) {
+            this.value = value;
             return this;
         }
 
         public Builder setSubtitleGenerator(SubtitleGenerator subtitleGenerator) {
-            mItem.mSubtitleGenerator = subtitleGenerator;
+            this.subtitleGenerator = subtitleGenerator;
             return this;
         }
 
-        public Builder hasNext(Boolean hasNext) {
-            mItem.mHasNext = hasNext;
+        public Builder hasNext(boolean hasNext) {
+            this.hasNext = hasNext;
+            return this;
+        }
+
+        public Builder setClickable(boolean clickable) {
+            this.clickable = clickable;
             return this;
         }
 
         public PrefItem build() {
-            return mItem;
+            return new PrefItem(iconRes, titleRes, prefKey, value, subtitleGenerator, hasNext, clickable);
         }
 
     }

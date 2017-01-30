@@ -26,11 +26,13 @@ import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 
+import javax.inject.Inject;
+
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
-import butter.droid.base.beaming.BeamManager;
-import butter.droid.base.beaming.server.BeamServerService;
+import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.fragments.dialog.OptionDialogFragment;
@@ -39,28 +41,12 @@ import butter.droid.fragments.VideoPlayerFragment;
 
 public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlayerFragment.Callback {
 
+    @Inject BeamManager mBeamManager;
+
     private BeamPlayerFragment mFragment;
-    private BeamManager mBeamManager = BeamManager.getInstance(this);
     private StreamInfo mStreamInfo;
     private Long mResumePosition;
     private String mTitle;
-
-    public static Intent startActivity(Context context, @NonNull StreamInfo info) {
-        return startActivity(context, info, 0);
-    }
-
-    public static Intent startActivity(Context context, @NonNull StreamInfo info, long resumePosition) {
-        Intent i = new Intent(context, BeamPlayerActivity.class);
-
-        if (info == null){
-            throw new IllegalArgumentException("StreamInfo must not be null");
-        }
-
-        i.putExtra(INFO, info);
-        i.putExtra(RESUME_POSITION, resumePosition);
-        context.startActivity(i);
-        return i;
-    }
 
     public final static String INFO = "stream_info";
     public final static String RESUME_POSITION = "resume_position";
@@ -165,4 +151,30 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
 
         mService.addListener(mFragment);
     }
+
+    public static Intent getIntent(Context context, @NonNull StreamInfo info) {
+        return getIntent(context, info, 0);
+    }
+
+    public static Intent getIntent(Context context, @NonNull StreamInfo info, long resumePosition) {
+        if (info == null) {
+            throw new IllegalArgumentException("StreamInfo must not be null");
+        }
+
+        Intent i = new Intent(context, BeamPlayerActivity.class);
+        i.putExtra(INFO, info);
+        i.putExtra(RESUME_POSITION, resumePosition);
+        return i;
+    }
+
+    @Deprecated
+    public static void startActivity(Context context, @NonNull StreamInfo info) {
+        startActivity(context, info, 0);
+    }
+
+    @Deprecated
+    public static void startActivity(Context context, @NonNull StreamInfo info, long resumePosition) {
+        context.startActivity(getIntent(context, info, resumePosition));
+    }
+
 }

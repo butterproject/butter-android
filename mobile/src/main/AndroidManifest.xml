@@ -27,7 +27,7 @@
         android:supportsRtl="true">
 
 		<activity
-			android:name="butter.droid.activities.MainActivity"
+			android:name="butter.droid.ui.main.MainActivity"
             android:label="@null"
 			android:theme="@style/Theme.Butter.NavigationDrawer"
 			android:windowSoftInputMode="adjustPan">
@@ -125,11 +125,11 @@
 		<activity
 			android:name="butter.droid.activities.MediaDetailActivity"
 			android:theme="@style/Theme.Butter.Detail"
-			android:parentActivityName="butter.droid.activities.MainActivity">
+			android:parentActivityName="butter.droid.ui.main.MainActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
-				android:value="butter.droid.activities.MainActivity" />
+				android:value="butter.droid.ui.main.MainActivity" />
 		</activity>
 
         <activity
@@ -143,8 +143,8 @@
             android:label="@string/about_app" />
 
         <activity
-            android:name="butter.droid.activities.PreferencesActivity"
-            android:parentActivityName="butter.droid.activities.MainActivity" />
+            android:name="butter.droid.ui.preferences.PreferencesActivity"
+            android:parentActivityName="butter.droid.ui.main.MainActivity" />
 
 		<activity
             android:launchMode="singleTask"
@@ -440,8 +440,8 @@
 			android:screenOrientation="sensorLandscape" />
 
         <service android:name="butter.droid.base.torrent.TorrentService" />
-        <service android:name="butter.droid.base.beaming.server.BeamServerService" />
-        <service android:name="butter.droid.base.beaming.BeamPlayerNotificationService" />
+        <service android:name="butter.droid.base.manager.beaming.server.BeamServerService" />
+        <service android:name="butter.droid.base.manager.beaming.BeamPlayerNotificationService" />
 
         <receiver android:name="butter.droid.base.torrent.TorrentBroadcastReceiver" android:exported="false">
             <intent-filter>

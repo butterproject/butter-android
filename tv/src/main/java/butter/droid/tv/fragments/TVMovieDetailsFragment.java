@@ -30,16 +30,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.NetworkUtils;
-import butter.droid.base.utils.PrefUtils;
-import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
@@ -51,6 +49,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 
 	@Inject ProviderManager providerManager;
 	@Inject YouTubeManager youTubeManager;
+	@Inject PreferencesHandler preferencesHandler;
 
 	public static Fragment newInstance(Media media) {
 		TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
@@ -129,7 +128,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
             } else {
                 WatchAction action = (WatchAction) a;
                 Media.Torrent torrent = action.getTorrent();
-                String subtitleLanguage = PrefUtils.get(getActivity(), Prefs.SUBTITLE_DEFAULT, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+                String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
                 StreamInfo info = new StreamInfo(
                         getMovieItem(),
                         torrent.url,

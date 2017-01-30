@@ -43,8 +43,8 @@ import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.fragments.VideoPlayerFragment;
+import butter.droid.fragments.dialog.OptionDialogFragment;
 import timber.log.Timber;
 
 public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlayerFragment.Callback {
@@ -53,23 +53,6 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     private StreamInfo mStreamInfo;
     private String mTitle = "";
     private Long mResumePosition;
-
-    public static Intent startActivity(Context context, @NonNull StreamInfo info) {
-        return startActivity(context, info, 0);
-    }
-
-    public static Intent startActivity(Context context, @NonNull StreamInfo info, long resumePosition) {
-        Intent i = new Intent(context, VideoPlayerActivity.class);
-
-        if (info == null){
-            throw new IllegalArgumentException("StreamInfo must not be null");
-        }
-
-        i.putExtra(INFO, info);
-        i.putExtra(BaseVideoPlayerFragment.RESUME_POSITION, resumePosition);
-        context.startActivity(i);
-        return i;
-    }
 
     public final static String INFO = "stream_info";
 
@@ -277,6 +260,31 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
         }
 
         mService.addListener(mFragment);
+    }
+
+    public static Intent getIntent(Context context, @NonNull StreamInfo info) {
+        return getIntent(context, info, 0);
+    }
+
+    public static Intent getIntent(Context context, @NonNull StreamInfo info, long resumePosition) {
+        if (info == null){
+            throw new IllegalArgumentException("StreamInfo must not be null");
+        }
+
+        Intent i = new Intent(context, VideoPlayerActivity.class);
+        i.putExtra(INFO, info);
+        i.putExtra(BaseVideoPlayerFragment.RESUME_POSITION, resumePosition);
+        return i;
+    }
+
+    @Deprecated
+    public static void startActivity(Context context, @NonNull StreamInfo info) {
+        startActivity(context, info, 0);
+    }
+
+    @Deprecated
+    public static void startActivity(Context context, @NonNull StreamInfo info, long resumePosition) {
+        context.startActivity(getIntent(context, info, resumePosition));
     }
 
 }

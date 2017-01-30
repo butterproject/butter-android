@@ -52,12 +52,15 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
+import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.beaming.BeamDeviceListener;
-import butter.droid.base.beaming.BeamManager;
-import butter.droid.base.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.beaming.BeamDeviceListener;
+import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.FragmentUtil;
@@ -75,10 +78,11 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
 
     public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
 
+    @Inject BeamManager beamManager;
+
     private StreamInfo mStreamInfo;
     private Long mResumePosition;
     private BeamPlayerActivity mActivity;
-    private BeamManager mBeamManager = BeamManager.getInstance(getActivity());
     private MediaControl mMediaControl;
     private VolumeControl mVolumeControl;
     private boolean mHasVolumeControl = true, mHasSeekControl = true, mIsPlaying = false, mIsUserSeeking = false, mProcessingSeeking = false;
@@ -90,18 +94,12 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     private ScheduledFuture mTask;
 
     View mRootView;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.sliding_layout)
-    SlidingUpPanelLayout mPanel;
-    @BindView(R.id.play_button)
-    ImageButton mPlayButton;
-    @BindView(R.id.cover_image)
-    ImageView mCoverImage;
-    @BindView(R.id.seekbar)
-    SeekBar mSeekBar;
-    @BindView(R.id.volumebar)
-    SeekBar mVolumeBar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @BindView(R.id.play_button) ImageButton mPlayButton;
+    @BindView(R.id.cover_image) ImageView mCoverImage;
+    @BindView(R.id.seekbar) SeekBar mSeekBar;
+    @BindView(R.id.volumebar) SeekBar mVolumeBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,6 +110,10 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
         ButterKnife.bind(this, v);
+
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
 
         mToolbar.getBackground().setAlpha(0);
         mToolbar.setNavigationIcon(R.drawable.abc_ic_clear_material);
@@ -202,18 +204,22 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
         mActivity.getSupportActionBar().setTitle("");
 
         try {
-            if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Position) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Seek) || !mBeamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
+            if (!beamManager.getConnectedDevice().hasCapability(MediaControl.Position)
+                    || !beamManager.getConnectedDevice().hasCapability(MediaControl.Seek) ||
+                    !beamManager.getConnectedDevice().hasCapability(MediaControl.Duration)) {
                 mHasSeekControl = false;
                 mSeekBar.setVisibility(View.INVISIBLE);
             }
 
-            if (!mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) || !mBeamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
+            if (!beamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Get) ||
+                    !beamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Set) ||
+                    !beamManager.getConnectedDevice().hasCapability(VolumeControl.Volume_Subscribe)) {
                 mHasVolumeControl = false;
                 mPanel.setEnabled(false);
                 mPanel.setTouchEnabled(false);
             }
 
-            if (!mBeamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
+            if (!beamManager.getConnectedDevice().hasCapability(MediaControl.Pause)) {
                 mPlayButton.setEnabled(false);
             }
 
@@ -232,16 +238,14 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     public void onResume() {
         super.onResume();
 
-        BeamManager.getInstance(getActivity()).addDeviceListener(mDeviceListener);
+        beamManager.addDeviceListener(mDeviceListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        BeamManager manager = BeamManager.getInstance(getActivity());
-
-        manager.removeDeviceListener(mDeviceListener);
+        beamManager.removeDeviceListener(mDeviceListener);
     }
 
     @Override
@@ -253,7 +257,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     }
 
     private void startVideo() {
-        mBeamManager.playVideo(mStreamInfo, new MediaPlayer.LaunchListener() {
+        beamManager.playVideo(mStreamInfo, new MediaPlayer.LaunchListener() {
             @Override
             public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                 mMediaControl = object.mediaControl;
@@ -262,7 +266,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
                 mMediaControl.getPlayState(mPlayStateListener);
 
                 if (mHasVolumeControl) {
-                    mVolumeControl = BeamManager.getInstance(getActivity()).getVolumeControl();
+                    mVolumeControl = beamManager.getVolumeControl();
                     mVolumeControl.subscribeVolume(mVolumeListener);
                     mVolumeControl.getVolume(mVolumeListener);
                 }
@@ -367,7 +371,8 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
         if (mActivity != null && mActivity.getService() != null) {
             mActivity.getService().stopStreaming();
         }
-        mBeamManager.stopVideo();
+
+        beamManager.stopVideo();
         getActivity().finish();
     }
 

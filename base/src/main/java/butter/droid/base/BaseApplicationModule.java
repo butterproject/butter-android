@@ -18,9 +18,12 @@
 package butter.droid.base;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import javax.inject.Singleton;
 
+import butter.droid.base.content.ObscuredSharedPreferences;
 import butter.droid.base.data.DataModule;
 import butter.droid.base.manager.ManagerModule;
 import butter.droid.base.providers.ProviderModule;
@@ -44,6 +47,15 @@ public class BaseApplicationModule {
 
     @Provides @Singleton public Context provideContext() {
         return application;
+    }
+
+    @Provides @Singleton public SharedPreferences provideSharedPreferences(Context context) {
+        return new ObscuredSharedPreferences(context,
+                context.getSharedPreferences(Constants.PREFS_FILE, Context.MODE_PRIVATE));
+    }
+
+    @Provides @Singleton public Resources provideResources(Context context) {
+        return context.getResources();
     }
 
 }
