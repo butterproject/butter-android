@@ -27,6 +27,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
         android:id="@+id/aboutFragment"
-        class="butter.droid.fragments.AboutFragment" />
+        class="butter.droid.ui.about.AboutFragment" />
 
 </LinearLayout>

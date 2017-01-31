@@ -25,14 +25,13 @@ import android.text.TextUtils;
 public class IntentUtils {
 
     /**
-     * Creates an intent for viewing a url in a browser
-     *
-     * @param context
-     * @return
+     * Creates an intent for viewing a url in a browser.
      */
-    public static Intent getBrowserIntent(Context context, String url) {
-        if (TextUtils.isEmpty(url))
+    public static Intent getBrowserIntent(String url) {
+        if (TextUtils.isEmpty(url)) {
             throw new IllegalArgumentException("url cannot be empty or null");
+        }
+
         return new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url));
     }
 

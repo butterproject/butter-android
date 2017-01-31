@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.activities;
+package butter.droid.ui.about;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,12 +26,11 @@ import android.support.v7.widget.Toolbar;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.base.ButterBaseActivity;
-import butter.droid.fragments.AboutFragment;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
 
-public class AboutActivity extends ButterBaseActivity implements AboutFragment.OnFragmentInteractionListener {
+public class AboutActivity extends ButterBaseActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -50,6 +49,7 @@ public class AboutActivity extends ButterBaseActivity implements AboutFragment.O
         super.onCreate(savedInstanceState, R.layout.activity_about);
 
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ToolbarUtils.updateToolbarHeight(this, toolbar);

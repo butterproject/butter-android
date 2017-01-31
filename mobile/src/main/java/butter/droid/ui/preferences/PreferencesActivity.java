@@ -39,8 +39,8 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.AboutActivity;
-import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.ui.about.AboutActivity;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.adapters.PreferencesAdapter;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.Prefs.PrefKey;

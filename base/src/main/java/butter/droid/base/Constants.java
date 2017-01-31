@@ -23,7 +23,7 @@ public class Constants {
     public static final String PREFS_FILE = "butter_prefs";
     public static final Integer SERVER_PORT = 55723;
     public static final String GIT_URL = "https://github.com/butterproject/butter-android";
-    public static final String BUTTER_URL = "https://butterproject.org/";
+    public static final String BUTTER_URL = "http://butterproject.org/";
     public static final String FB_URL = "https://fb.com/ButterProjectOrg";
     public static final String BLOG_URL = "https://blog.butterproject.org";
     public static final String DISCUSS_URL = "https://www.reddit.com/r/ButterProject";

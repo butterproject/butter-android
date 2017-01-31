@@ -28,7 +28,7 @@ import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
 import butterknife.BindView;
 import butter.droid.R;
-import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.fragments.MediaListFragment;
 import butter.droid.utils.ToolbarUtils;

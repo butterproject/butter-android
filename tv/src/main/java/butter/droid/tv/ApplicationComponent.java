@@ -43,6 +43,7 @@ import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.fragments.TVWelcomeFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
+import butter.droid.tv.ui.about.TvAboutComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import dagger.Component;
 
@@ -81,5 +82,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(RecommendationContentProvider contentProvider);
 
     TVPreferencesComponent.Builder preferencesComponentBuilder();
+    TvAboutComponent.Builder aboutComponentBuilder();
 
 }
