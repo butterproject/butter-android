@@ -41,6 +41,7 @@ import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
+import butter.droid.tv.ui.about.TvAboutComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
@@ -81,5 +82,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
 
     TVPreferencesComponent.Builder preferencesComponentBuilder();
     TVTermsComponent.Builder termsComponentBuilder();
+    TvAboutComponent.Builder aboutComponentBuilder();
 
 }

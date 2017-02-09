@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.activities.base;
+package butter.droid.ui;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -29,9 +29,8 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import butter.droid.R;
-import butter.droid.base.ButterApplication;
+import butter.droid.activities.base.TorrentBaseActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
