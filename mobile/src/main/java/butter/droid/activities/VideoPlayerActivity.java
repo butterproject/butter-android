@@ -39,7 +39,7 @@ import java.io.OutputStream;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;

@@ -139,7 +139,7 @@
         <activity android:name="butter.droid.ui.terms.TermsActivity" />
 
         <activity
-            android:name="butter.droid.activities.AboutActivity"
+            android:name="butter.droid.ui.about.AboutActivity"
             android:label="@string/about_app" />
 
         <activity

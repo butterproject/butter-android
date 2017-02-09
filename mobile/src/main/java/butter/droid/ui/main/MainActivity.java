@@ -52,7 +52,7 @@ import butter.droid.activities.StreamLoadingActivity;
 import butter.droid.ui.terms.TermsActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.activities.base.ButterBaseActivity;
+import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
