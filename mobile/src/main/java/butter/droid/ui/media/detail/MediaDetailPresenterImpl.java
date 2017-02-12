@@ -26,6 +26,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.torrent.TorrentHealth;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
@@ -81,6 +82,20 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
     @Override public void openYouTube(String url) {
         view.openYouTube(media, url);
+    }
+
+    @Override public void selectSubtitle(String language) {
+        selectedSubtitleLanguage = language;
+    }
+
+    @Override public void healthClicked() {
+        Movie movie = (Movie) this.media;
+        int seeds = movie.torrents.get(selectedQuality).seeds;
+        int peers = movie.torrents.get(selectedQuality).peers;
+        TorrentHealth health = TorrentHealth.calculate(seeds, peers);
+
+        view.displayHealthInfo(health, seeds, peers);
+
     }
 
 }

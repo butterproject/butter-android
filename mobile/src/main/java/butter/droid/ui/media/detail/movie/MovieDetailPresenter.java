@@ -17,6 +17,8 @@
 
 package butter.droid.ui.media.detail.movie;
 
+import android.support.annotation.MainThread;
+
 import butter.droid.base.providers.media.models.Movie;
 
 public interface MovieDetailPresenter {
@@ -29,4 +31,8 @@ public interface MovieDetailPresenter {
     void openReadMore();
 
     void playMediaClicked();
+
+    @MainThread void subtitleSelected(int position);
+
+    void healthClicked();
 }

@@ -20,10 +20,8 @@ import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 public class OptionSelector extends LinearLayout {
 
     View mView;
-    @BindView(android.R.id.text1)
-    TextView mText;
-    @BindView(android.R.id.icon)
-    ImageView mIcon;
+    @BindView(android.R.id.text1) TextView mText;
+    @BindView(android.R.id.icon) ImageView mIcon;
 
     private FragmentManager mFragmentManager;
     private String[] mData = new String[0];

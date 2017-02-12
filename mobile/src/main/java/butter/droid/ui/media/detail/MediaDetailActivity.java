@@ -30,6 +30,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
@@ -55,6 +56,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.fragments.ShowDetailFragment;
@@ -195,6 +197,21 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
 
     @Override public void openYouTube(Media media, String url) {
         startActivity(TrailerPlayerActivity.getIntent(this, media, url));
+    }
+
+    @Override public void displayHealthInfo(TorrentHealth health, int seeds, int peers) {
+        final Snackbar snackbar = Snackbar.make(content,
+                getString(R.string.health_info, getString(health.getStringResource()), seeds, peers),
+                Snackbar.LENGTH_LONG);
+
+        snackbar.setAction(R.string.close, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
+
     }
 
     private void loadBackgroundImage(Media media) {

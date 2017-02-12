@@ -17,6 +17,11 @@
 
 package butter.droid.ui.media.detail.movie;
 
+import android.content.res.Resources;
+
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
@@ -36,9 +41,11 @@ public class MovieDetailModule {
         return view;
     }
 
-    @Provides @FragmentScope MovieDetailPresenter providepresenter(MovieDetailView view,
-            MediaDetailPresenter parentPresenter, YouTubeManager youTubeManager) {
-        return new MovieDetailPresenterImpl(view, parentPresenter, youTubeManager);
+    @Provides @FragmentScope MovieDetailPresenter providePresenter(MovieDetailView view,
+            MediaDetailPresenter parentPresenter, YouTubeManager youTubeManager, PreferencesHandler preferencesHandler,
+            ProviderManager providerManager, PlayerManager playerManager, Resources resources) {
+        return new MovieDetailPresenterImpl(view, parentPresenter, youTubeManager, preferencesHandler, providerManager,
+                playerManager, resources);
     }
 
 }

@@ -23,6 +23,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.torrent.TorrentHealth;
 
 public interface MediaDetailView {
     void initMediaLayout(Media media);
@@ -38,4 +39,6 @@ public interface MediaDetailView {
     void openVideoPlayer(StreamInfo streamInfo);
 
     void openYouTube(Media media, String url);
+
+    void displayHealthInfo(TorrentHealth health, int seeds, int peers);
 }

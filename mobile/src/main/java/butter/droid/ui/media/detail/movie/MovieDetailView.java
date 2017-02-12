@@ -17,6 +17,8 @@
 
 package butter.droid.ui.media.detail.movie;
 
+import android.support.annotation.StringRes;
+
 import butter.droid.base.providers.media.models.Movie;
 
 public interface MovieDetailView {
@@ -28,4 +30,23 @@ public interface MovieDetailView {
 
     void showReadMoreDialog(String synopsis);
 
+    void hideRating();
+
+    void displayRating(int rating);
+
+    void displayMetaData(CharSequence metaData);
+
+    void displaySynopsis(String synopsis);
+
+    void hideSynopsis();
+
+    void setSubtitleText(@StringRes int subtitleText);
+
+    void setSubtitleText(String subtitleText);
+
+    void setSubtitleEnabled(boolean enabled);
+
+    void setSubsData(String[] names, int defaultIndex);
+
+    void setQualities(String[] qualities, String quality);
 }

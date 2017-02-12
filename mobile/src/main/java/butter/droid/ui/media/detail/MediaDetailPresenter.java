@@ -32,4 +32,8 @@ public interface MediaDetailPresenter {
     void openVideoPlayer(StreamInfo streamInfo);
 
     void openYouTube(String url);
+
+    void selectSubtitle(String language);
+
+    void healthClicked();
 }
