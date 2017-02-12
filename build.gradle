@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.3.0-beta4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
@@ -16,14 +16,14 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "25.1.0"
+    appCompatVersion = "25.0.1"
     buildToolsVersion = "25.0.0"
     targetSdk = 25
     compileSdk = 25
     minSdk = 15
     butterknifeVersion = "8.1.0"
     okHttpVersion = "3.4.2"
-    daggerVersion = "2.7"
+    daggerVersion = "2.9"
     javaxAnnotationVersion = "1.2"
 }
 
@@ -42,6 +42,7 @@ allprojects {
             //global android setting
             project.android {
                 packagingOptions {
+                    pickFirst '**/libjlibtorrent.so'
                     exclude 'META-INF/beans.xml'
                     exclude 'META-INF/DEPENDENCIES'
                     exclude 'META-INF/LICENSE'
