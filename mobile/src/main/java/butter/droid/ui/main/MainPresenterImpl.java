@@ -25,16 +25,16 @@ import android.support.v4.content.ContextCompat;
 import java.io.IOException;
 import java.util.HashMap;
 
-import butter.droid.activities.TermsActivity;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
 import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.ui.terms.TermsPresenterImpl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -69,7 +69,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override public void onResume() {
 
-        if (!prefManager.contains(TermsActivity.TERMS_ACCEPTED)) {
+        if (!prefManager.contains(TermsPresenterImpl.TERMS_ACCEPTED)) {
             view.showTermsScreen();
         } else if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

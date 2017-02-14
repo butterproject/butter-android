@@ -22,7 +22,7 @@
     android:name="butter.droid.tv.fragments.TVOverviewFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".activities.TVMainActivity"
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame"
 />

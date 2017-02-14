@@ -15,28 +15,26 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.activities;
+package butter.droid.ui.terms;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
-import butter.droid.ui.main.MainActivity;
-import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.ui.ButterBaseActivity;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.BindView;
+import butterknife.OnClick;
 
-public class TermsActivity extends ButterBaseActivity {
+public class TermsActivity extends ButterBaseActivity implements TermsView {
 
-    public static String TERMS_ACCEPTED = "terms_accepted";
-
-    @Inject PrefManager prefManager;
+    @Inject TermsPresenter presenter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -44,6 +42,9 @@ public class TermsActivity extends ButterBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         MobileButterApplication.getAppContext()
                 .getComponent()
+                .termsComponentBuilder()
+                .termsModule(new TermsModule(this))
+                .build()
                 .inject(this);
 
         super.onCreate(savedInstanceState, R.layout.activity_terms);
@@ -52,15 +53,24 @@ public class TermsActivity extends ButterBaseActivity {
         ToolbarUtils.updateToolbarHeight(this, toolbar);
     }
 
-    public void acceptClick(View v) {
-        prefManager.save(TERMS_ACCEPTED, true);
-        Intent overviewIntent = new Intent(this, MainActivity.class);
-        startActivity(overviewIntent);
+    @OnClick(R.id.btn_accept) public void acceptClick() {
+        presenter.accept();
+    }
+
+    @OnClick(R.id.btn_leave) public void leaveClick() {
+        presenter.leave();
+    }
+
+    @Override public void closeSuccess() {
+        setResult(RESULT_OK);
+        closeSelf();
+    }
+
+    @Override public void closeSelf() {
         finish();
     }
 
-    public void leaveClick(View v) {
-        finish();
+    public static Intent getIntent(@NonNull Context context) {
+        return new Intent(context, TermsActivity.class);
     }
-
 }

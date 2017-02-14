@@ -54,7 +54,6 @@
         <activity
             android:name=".activities.TVLaunchActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
             android:theme="@style/Theme.HiddenActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -155,7 +154,7 @@
         <!-- Activities -->
         <activity android:name=".activities.TVMainActivity" />
         <activity
-            android:name=".activities.TVWelcomeActivity"
+            android:name=".ui.terms.TVTermsActivity"
             android:noHistory="true"
             android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".activities.TVMediaDetailActivity" />

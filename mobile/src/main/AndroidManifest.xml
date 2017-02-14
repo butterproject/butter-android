@@ -136,7 +136,7 @@
             android:name="butter.droid.activities.SearchActivity"
             android:theme="@style/Theme.Butter.Search" />
 
-        <activity android:name="butter.droid.activities.TermsActivity" />
+        <activity android:name="butter.droid.ui.terms.TermsActivity" />
 
         <activity
             android:name="butter.droid.ui.about.AboutActivity"
