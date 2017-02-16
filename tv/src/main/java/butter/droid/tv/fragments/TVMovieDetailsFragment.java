@@ -40,7 +40,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVStreamLoadingActivity;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;

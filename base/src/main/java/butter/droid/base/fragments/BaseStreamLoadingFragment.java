@@ -17,7 +17,6 @@
 
 package butter.droid.base.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -71,17 +70,18 @@ import hugo.weaving.DebugLog;
 public abstract class BaseStreamLoadingFragment extends Fragment implements TorrentListener,
         SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback {
 
+    protected static final String ARGS_STREAM_INFO = "butter.droid.fragments.StreamLoadingFragment.streamInfo";
+
     @Inject ProviderManager providerManager;
     @Inject PreferencesHandler preferencesHandler;
     @Inject PlayerManager playerManager;
 
-    protected FragmentListener mCallback;
     protected boolean mPlayingExternal = false;
     protected Boolean mPlayerStarted = false;
     private Boolean mHasSubs = false;
     private TorrentService mService;
 
-    protected StreamInfo mStreamInfo;
+    protected StreamInfo streamInfo;
     private State mState;
 
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
@@ -97,34 +97,22 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        streamInfo = getArguments().getParcelable(ARGS_STREAM_INFO);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mStreamInfo = mCallback.getStreamInformation();
-                if (mStreamInfo == null) {
-                    getActivity().finish();
-                    return;
-                }
-                loadSubtitles();
-            }
-        });
+        if (streamInfo == null) {
+            getActivity().finish();
+            return;
+        }
+        loadSubtitles();
 
         if (!(getActivity() instanceof TorrentActivity)) {
             throw new IllegalStateException("Parent activity is not a TorrentBaseActivity");
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FragmentListener) {
-            mCallback = (FragmentListener) context;
         }
     }
 
@@ -243,7 +231,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
         if (null == mService) {
             throw new IllegalStateException("Torrent service must be bound");
         }
-        String torrentUrl = mStreamInfo.getTorrentUrl();
+        String torrentUrl = streamInfo.getTorrentUrl();
 
         //if the torrent service is currently streaming another file, stop it.
         if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
@@ -324,7 +312,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
      * Downloads the subs file
      */
     private void loadSubtitles() {
-        Media media = mStreamInfo.getMedia();
+        Media media = streamInfo.getMedia();
         if (media == null) {
             return;
         }
@@ -334,7 +322,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             return;
         }
 
-        if (mStreamInfo.isShow()) {
+        if (streamInfo.isShow()) {
             subsProvider.getList((Episode) media, this);
         } else {
             subsProvider.getList((Movie) media, this);
@@ -343,7 +331,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
 
     @Override
     public void onSuccess(Map<String, String> items) {
-        Media media = mStreamInfo.getMedia();
+        Media media = streamInfo.getMedia();
         media.subtitles = items;
 
         mSubsStatus = SubsStatus.SUCCESS;
@@ -353,22 +341,22 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
             return;
         }
 
-        if (mStreamInfo.getSubtitleLanguage() == null) {
+        if (streamInfo.getSubtitleLanguage() == null) {
             String language = preferencesHandler.getSubtitleDefaultLanguage();
             if (media.subtitles.containsKey(language)) {
-                mStreamInfo.setSubtitleLanguage(language);
+                streamInfo.setSubtitleLanguage(language);
             } else {
-                mStreamInfo.setSubtitleLanguage(SubsProvider.SUBTITLE_LANGUAGE_NONE);
+                streamInfo.setSubtitleLanguage(SubsProvider.SUBTITLE_LANGUAGE_NONE);
             }
         }
 
-        if (mStreamInfo.getSubtitleLanguage() != null && !mStreamInfo.getSubtitleLanguage().equals(
+        if (streamInfo.getSubtitleLanguage() != null && !streamInfo.getSubtitleLanguage().equals(
                 SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-            mSubtitleLanguage = mStreamInfo.getSubtitleLanguage();
+            mSubtitleLanguage = streamInfo.getSubtitleLanguage();
             mSubsStatus = SubsStatus.DOWNLOADING;
             mHasSubs = true;
             SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
-                    getActivity(), mStreamInfo, playerManager, mSubtitleLanguage);
+                    getActivity(), streamInfo, playerManager, mSubtitleLanguage);
             subtitleDownloader.downloadSubtitle();
         }
     }
@@ -381,10 +369,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Torr
     @Override
     public void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile) {
         mSubsStatus = isSuccessful ? SubsStatus.SUCCESS : SubsStatus.FAILURE;
-    }
-
-    public interface FragmentListener {
-        StreamInfo getStreamInformation();
     }
 
 }

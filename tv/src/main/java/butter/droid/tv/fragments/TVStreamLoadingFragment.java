@@ -37,6 +37,7 @@ package butter.droid.tv.fragments;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,17 +49,17 @@ import com.github.sv244.torrentstream.StreamStatus;
 
 import java.text.DecimalFormat;
 
-import butter.droid.tv.TVButterApplication;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butter.droid.base.fragments.BaseStreamLoadingFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.R;
-import butter.droid.tv.activities.TVStreamLoadingActivity;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.utils.BackgroundUpdater;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 
@@ -165,23 +166,31 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 	@Override
 	protected void startPlayerActivity(String location, int resumePosition) {
 		if (getActivity() != null && !mPlayerStarted) {
-			mStreamInfo.setVideoLocation(location);
+			streamInfo.setVideoLocation(location);
 			if (getActivity().getIntent().hasExtra(TVStreamLoadingActivity.EXTRA_SHOW_INFO)) {
 				Show show = getActivity().getIntent().getParcelableExtra(TVStreamLoadingActivity.EXTRA_SHOW_INFO);
-				TVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, show);
+				TVVideoPlayerActivity.startActivity(getActivity(), streamInfo, show);
 			}
 			else {
-				TVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, resumePosition);
+				TVVideoPlayerActivity.startActivity(getActivity(), streamInfo, resumePosition);
 			}
 		}
 	}
 
 	protected void updateBackground() {
-		StreamInfo info = mCallback.getStreamInformation();
-		  /* attempt to load background image */
-		if (null != info) {
-			String url = info.getHeaderImageUrl();
+		if (null != streamInfo) {
+			String url = streamInfo.getHeaderImageUrl();
 			mBackgroundUpdater.updateBackgroundAsync(url);
 		}
+	}
+
+	public static TVStreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo) {
+		Bundle args = new Bundle();
+		args.putParcelable(ARGS_STREAM_INFO, streamInfo);
+
+		TVStreamLoadingFragment fragment = new TVStreamLoadingFragment();
+		fragment.setArguments(args);
+
+		return fragment;
 	}
 }

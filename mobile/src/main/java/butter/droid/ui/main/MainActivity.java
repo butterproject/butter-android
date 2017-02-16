@@ -48,7 +48,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.StreamLoadingActivity;
+import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.terms.TermsActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;

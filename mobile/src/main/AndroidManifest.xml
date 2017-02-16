@@ -148,7 +148,7 @@
 
 		<activity
             android:launchMode="singleTask"
-			android:name="butter.droid.activities.StreamLoadingActivity"
+			android:name="butter.droid.ui.loading.StreamLoadingActivity"
             android:theme="@style/Theme.Butter.Detail" />
 
 		<activity

@@ -19,11 +19,9 @@ package butter.droid;
 
 import javax.inject.Singleton;
 
-import butter.droid.ui.about.AboutActivity;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.MediaDetailActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.StreamLoadingActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.BaseApplicationComponent;
@@ -38,7 +36,9 @@ import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.about.AboutComponent;
+import butter.droid.ui.loading.StreamLoadingComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.terms.TermsComponent;
@@ -56,7 +56,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(BeamPlayerActivity activity);
     void inject(MediaDetailActivity activity);
     void inject(SearchActivity activity);
-    void inject(StreamLoadingActivity activity);
     void inject(VideoPlayerActivity activity);
 
     void inject(NavigationDrawerFragment fragment);
@@ -75,5 +74,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     PreferencesComponent.Builder preferencesComponentBuilder();
     TermsComponent.Builder termsComponentBuilder();
     AboutComponent.Builder aboutComponentBuilder();
+    StreamLoadingComponent.Builder streamLoadingComponentBuilder();
 
 }

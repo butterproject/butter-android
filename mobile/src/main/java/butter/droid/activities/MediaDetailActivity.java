@@ -41,6 +41,7 @@ import butter.droid.fragments.MovieDetailFragment;
 import butter.droid.fragments.ShowDetailFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.MessageDialogFragment;
+import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.utils.ActionBarBackground;
 import butter.droid.widget.ObservableParallaxScrollView;
 import butterknife.BindView;

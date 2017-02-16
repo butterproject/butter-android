@@ -26,7 +26,6 @@ import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
 import butter.droid.tv.activities.TVSearchActivity;
-import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
@@ -42,6 +41,7 @@ import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TvAboutComponent;
+import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
@@ -60,7 +60,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVMediaGridActivity activity);
     void inject(TVPreferencesActivity activity);
     void inject(TVSearchActivity activity);
-    void inject(TVStreamLoadingActivity activity);
     void inject(TVUpdateActivity activity);
     void inject(TVVideoPlayerActivity activity);
     void inject(TVTermsActivity activity);
@@ -83,5 +82,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     TVPreferencesComponent.Builder preferencesComponentBuilder();
     TVTermsComponent.Builder termsComponentBuilder();
     TvAboutComponent.Builder aboutComponentBuilder();
+    TVStreamLoadingComponent.Builder streamLoadingComponentBuilder();
 
 }

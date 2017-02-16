@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -127,7 +128,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     public void onStreamPrepared(Torrent torrent) {
         mCurrentTorrent = torrent;
 
-        if (TextUtils.isEmpty(mStreamInfo.getTitle())) {
+        if (TextUtils.isEmpty(this.streamInfo.getTitle())) {
             StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file,
                     mCurrentTorrent.getFileNames(), -1, new DialogInterface.OnClickListener() {
                         @Override
@@ -143,12 +144,10 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     }
 
     private void loadBackgroundImage() {
-        StreamInfo info = mCallback.getStreamInformation();
-          /* attempt to load background image */
-        if (null != info) {
-            String url = info.getImageUrl();
+        if (null != streamInfo) {
+            String url = streamInfo.getImageUrl();
             if (PixelUtils.isTablet(mContext)) {
-                url = info.getHeaderImageUrl();
+                url = streamInfo.getHeaderImageUrl();
             }
 
             if (!TextUtils.isEmpty(url)) {
@@ -240,14 +239,14 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
     @DebugLog
     protected void startPlayerActivity(String location, int resumePosition) {
         if (FragmentUtil.isAdded(this) && !mPlayerStarted) {
-            mStreamInfo.setVideoLocation(location);
+            this.streamInfo.setVideoLocation(location);
             if (beamManager.isConnected()) {
-                BeamPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+                BeamPlayerActivity.startActivity(mContext, this.streamInfo, resumePosition);
             } else {
-                mPlayingExternal = playerManager.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(),
+                mPlayingExternal = playerManager.start(this.streamInfo.getMedia(), this.streamInfo.getSubtitleLanguage(),
                         location);
                 if (!mPlayingExternal) {
-                    VideoPlayerActivity.startActivity(mContext, mStreamInfo, resumePosition);
+                    VideoPlayerActivity.startActivity(mContext, this.streamInfo, resumePosition);
                 }
             }
 
@@ -261,6 +260,16 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
 
     @OnClick(R.id.startexternal_button)
     public void externalClick(View v) {
-        playerManager.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), mStreamInfo.getVideoLocation());
+        playerManager.start(this.streamInfo.getMedia(), this.streamInfo.getSubtitleLanguage(), this.streamInfo.getVideoLocation());
+    }
+
+    public static StreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo) {
+        Bundle args = new Bundle();
+        args.putParcelable(ARGS_STREAM_INFO, streamInfo);
+
+        StreamLoadingFragment fragment = new StreamLoadingFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
 }

@@ -48,8 +48,12 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
-        setContentView(layoutId);
-        ButterKnife.bind(this);
+
+        if (layoutId != 0) {
+            setContentView(layoutId);
+            ButterKnife.bind(this);
+        }
+
         mHandler = new Handler(getMainLooper());
     }
 
