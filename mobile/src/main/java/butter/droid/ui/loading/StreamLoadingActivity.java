@@ -73,7 +73,7 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
     public void onTorrentServiceConnected() {
         super.onTorrentServiceConnected();
         if (null != fragment) {
-            fragment.onTorrentServiceConnected();
+            fragment.onTorrentServiceConnected(getTorrentService());
         }
     }
 

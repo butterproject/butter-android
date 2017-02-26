@@ -47,7 +47,7 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 
 import butter.droid.base.R;
-import butter.droid.base.activities.TorrentActivity;
+import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import timber.log.Timber;
 

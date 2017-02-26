@@ -30,7 +30,7 @@ import android.view.View;
 
 import javax.inject.Inject;
 
-import butter.droid.base.fragments.BaseStreamLoadingFragment;
+import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.TVButterApplication;

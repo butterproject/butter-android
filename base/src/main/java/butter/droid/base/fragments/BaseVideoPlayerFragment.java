@@ -632,7 +632,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         }
 
         SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(),
-                getActivity(), mCallback.getInfo(), playerManager, mCurrentSubsLang);
+                mCallback.getInfo(), playerManager, mCurrentSubsLang);
         subtitleDownloader.setSubtitleDownloaderListener(this);
 
         try {

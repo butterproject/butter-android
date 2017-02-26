@@ -49,7 +49,7 @@ import com.github.sv244.torrentstream.StreamStatus;
 
 import java.text.DecimalFormat;
 
-import butter.droid.base.fragments.BaseStreamLoadingFragment;
+import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ThreadUtils;
@@ -142,7 +142,7 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 				break;
 			case STREAMING:
 				mPrimaryTextView.setText(R.string.streaming_started);
-				if (null != extra && extra instanceof StreamStatus)
+						if (null != extra && extra instanceof StreamStatus)
 					updateStatus((StreamStatus) extra);
 				break;
 			case WAITING_SUBTITLES:

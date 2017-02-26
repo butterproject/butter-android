@@ -46,7 +46,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.fragments.BaseStreamLoadingFragment;
+import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.vlc.PlayerManager;

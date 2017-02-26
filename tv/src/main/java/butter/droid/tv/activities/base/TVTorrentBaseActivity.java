@@ -31,7 +31,7 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
 import butter.droid.base.ButterApplication;
-import butter.droid.base.activities.TorrentActivity;
+import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.LocaleUtils;
