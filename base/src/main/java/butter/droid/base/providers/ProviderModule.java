@@ -51,8 +51,8 @@ public class ProviderModule {
     @Provides
     @Singleton
     public MoviesProvider provideMoviesProvider(OkHttpClient client, ObjectMapper mapper,
-                                                YSubsProvider ySubsProvider) {
-        return new MoviesProvider(client, mapper, ySubsProvider);
+                                                OpenSubsProvider subsProvider) {
+        return new MoviesProvider(client, mapper, subsProvider);
     }
 
     @Provides
@@ -65,8 +65,8 @@ public class ProviderModule {
     @Provides
     @Singleton
     public AnimeProvider provideAnimeProvider(OkHttpClient client, ObjectMapper mapper,
-                                              YSubsProvider ySubsProvider) {
-        return new AnimeProvider(client, mapper, ySubsProvider);
+                                              OpenSubsProvider subsProvider) {
+        return new AnimeProvider(client, mapper, subsProvider);
     }
 
 }

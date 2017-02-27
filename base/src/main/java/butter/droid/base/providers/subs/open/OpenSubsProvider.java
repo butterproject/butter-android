@@ -50,9 +50,92 @@ public class OpenSubsProvider extends SubsProvider {
     }
 
     @Override
-    public void getList(Movie movie, Callback callback) {
-        // Movie subtitles not supported
-        callback.onFailure(new NoSuchMethodException("Movie subtitles not supported"));
+    public void getList(final Movie movie, final Callback callback) {
+        login(new XMLRPCCallback() {
+            @Override
+            public void onResponse(long id, Object result) {
+                Map<String, Object> response = (Map<String, Object>) result;
+                String token = (String) response.get("token");
+
+                if (token != null && !token.isEmpty()) {
+                    search(movie, token, new XMLRPCCallback() {
+                        @Override
+                        public void onResponse(long id, Object result) {
+                            Map<String, Integer[]> scoreMap = new HashMap<>();
+                            Map<String, String> subsMap = new HashMap<>();
+                            Map<String, Object> subData = (Map<String, Object>) result;
+                            if (subData != null && subData.get("data") != null && subData.get("data") instanceof Object[]) {
+                                Object[] dataList = (Object[]) subData.get("data");
+                                for (Object dataItem : dataList) {
+                                    Map<String, String> item = (Map<String, String>) dataItem;
+                                    if (!item.get("SubFormat").equals("srt")) {
+                                        continue;
+                                    }
+
+                                    // imdb & year check
+                                    if (Integer.parseInt(item.get("IDMovieImdb")) != Integer.parseInt(movie.imdbId.replace("tt", ""))) {
+                                        continue;
+                                    }
+                                    if (!item.get("MovieYear").equals(movie.year)) {
+                                        continue;
+                                    }
+
+                                    String url = item.get("SubDownloadLink").replace(".gz", ".srt");
+                                    String lang = item.get("ISO639").replace("pb", "pt-br");
+                                    int downloads = Integer.parseInt(item.get("SubDownloadsCnt"));
+                                    int score = 0;
+
+                                    if (item.get("MatchedBy").equals("tag")) {
+                                        score += 50;
+                                    }
+                                    if (item.get("UserRank").equals("trusted")) {
+                                        score += 100;
+                                    }
+                                    if (!subsMap.containsKey(lang)) {
+                                        subsMap.put(lang, url);
+                                        scoreMap.put(lang, new Integer[]{score, downloads});
+                                    } else if (score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
+                                        subsMap.put(lang, url);
+                                        scoreMap.put(lang, new Integer[]{score, downloads});
+                                    }
+                                }
+
+                                callback.onSuccess(subsMap);
+                            } else {
+                                callback.onFailure(new XMLRPCException("No subs found"));
+                                removeCall(id);
+                            }
+                        }
+
+                        @Override
+                        public void onError(long id, XMLRPCException error) {
+                            callback.onFailure(error);
+                            removeCall(id);
+                        }
+
+                        @Override
+                        public void onServerError(long id, XMLRPCServerException error) {
+                            callback.onFailure(error);
+                            removeCall(id);
+                        }
+                    });
+                } else {
+                    callback.onFailure(new XMLRPCException("Token not correct"));
+                }
+            }
+
+            @Override
+            public void onError(long id, XMLRPCException error) {
+                callback.onFailure(error);
+                removeCall(id);
+            }
+
+            @Override
+            public void onServerError(long id, XMLRPCServerException error) {
+                callback.onFailure(error);
+                removeCall(id);
+            }
+        });
     }
 
     @Override
@@ -66,7 +149,7 @@ public class OpenSubsProvider extends SubsProvider {
                 final String episodeStr = Integer.toString(episode.episode);
                 final String seasonStr = Integer.toString(episode.season);
 
-                if (!token.isEmpty()) {
+                if (token != null && !token.isEmpty()) {
                     search(episode, token, new XMLRPCCallback() {
                         @Override
                         public void onResponse(long id, Object result) {
@@ -191,6 +274,21 @@ public class OpenSubsProvider extends SubsProvider {
         option.put("imdbid", episode.imdbId.replace("tt", ""));
         option.put("season", String.format(Locale.US, "%d", episode.season));
         option.put("episode", String.format(Locale.US, "%d", episode.episode));
+        option.put("sublanguageid", "all");
+        long callId = client.callAsync(callback, "SearchSubtitles", token, new Object[]{option});
+        synchronized (ongoingCalls) {
+            ongoingCalls.add(callId);
+        }
+    }
+
+    /**
+     * @param movie  Movie
+     * @param token    Login token
+     * @param callback XML RPC callback callback
+     */
+    private void search(Movie movie, String token, XMLRPCCallback callback) {
+        Map<String, String> option = new HashMap<>();
+        option.put("imdbid", movie.imdbId.replace("tt", ""));
         option.put("sublanguageid", "all");
         long callId = client.callAsync(callback, "SearchSubtitles", token, new Object[]{option});
         synchronized (ongoingCalls) {
