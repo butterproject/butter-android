@@ -17,80 +17,72 @@
 
 package butter.droid.tv.ui.loading;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
-import javax.inject.Inject;
-
-import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.fragments.TVStreamLoadingFragment;
 
 public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamLoadingView {
 
 	private final static String EXTRA_STREAM_INFO = "butter.droid.ui.loading.StreamLoadingActivity.info";
 	public final static String EXTRA_SHOW_INFO = "butter.droid.ui.loading.StreamLoadingActivity.show_info";
 
-	@Inject TVStreamLoadingPresenter presenter;
-
-	@Nullable private BaseStreamLoadingFragment fragment;
-
-	@SuppressLint("MissingSuperCall")
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.streamLoadingComponentBuilder()
-				.streamLoadingModule(new TVStreamLoadingModule(this))
-				.build()
-				.inject(this);
-
-		super.onCreate(savedInstanceState, 0);
-
-		StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-		presenter.onCreate(streamInfo, savedInstanceState != null);
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		fragment.cancelStream();
-	}
-
-	@Override
-    public void onTorrentServiceDisconnected() {
-		if (null != fragment) {
-			fragment.onTorrentServiceDisconnected();
-		}
-	}
-
-	@Override
-	public void onTorrentServiceConnected() {
-		if (null != fragment) {
-			fragment.onTorrentServiceConnected();
-		}
-	}
-
+//	@Inject TVStreamLoadingPresenter presenter;
+//
+//	@Nullable private BaseStreamLoadingFragment fragment;
+//
+//	@SuppressLint("MissingSuperCall")
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		TVButterApplication.getAppContext()
+//				.getComponent()
+//				.streamLoadingComponentBuilder()
+//				.streamLoadingModule(new TVStreamLoadingModule(this))
+//				.build()
+//				.inject(this);
+//
+//		super.onCreate(savedInstanceState, 0);
+//
+//		StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
+//		presenter.onCreate(streamInfo, savedInstanceState != null);
+//	}
+//
+//	@Override
+//	public void onBackPressed() {
+//		super.onBackPressed();
+//		fragment.cancelStream();
+//	}
+//
+//	@Override
+//    public void onTorrentServiceDisconnected() {
+//		if (null != fragment) {
+//			fragment.onTorrentServiceDisconnected();
+//		}
+//	}
+//
+//	@Override
+//	public void onTorrentServiceConnected() {
+//		if (null != fragment) {
+//			fragment.onTorrentServiceConnected();
+//		}
+//	}
+//
 	@Override public void displayStreamLoadingFragment(@NonNull StreamInfo info) {
-		TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info);
-		getSupportFragmentManager()
-				.beginTransaction()
-				.add(android.R.id.content, fragment)
-				.commit();
-
-		this.fragment = fragment;
-
+//		TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info);
+//		getSupportFragmentManager()
+//				.beginTransaction()
+//				.add(android.R.id.content, fragment)
+//				.commit();
+//
+//		this.fragment = fragment;
+//
 	}
 
 	public static Intent startActivity(Activity activity, StreamInfo info) {

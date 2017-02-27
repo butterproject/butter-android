@@ -68,8 +68,6 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
 
     @Inject BaseStreamLoadingFragmentPresenter presenter;
 
-    protected boolean mPlayingExternal = false;
-    protected Boolean mPlayerStarted = false;
     private TorrentService service;
 
     public enum State {
@@ -94,11 +92,11 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
         if (service.isStreaming() && !service.getCurrentTorrentUrl().equals(torrentUrl)) {
             service.stopStreaming();
         } else if (service.isReady()) {
-            onStreamReady(service.getCurrentTorrent());
+            presenter.onStreamReady(service.getCurrentTorrent());
         }
 
         //start streaming the new file
-        mService.streamTorrent(torrentUrl);
+        service.streamTorrent(torrentUrl);
     }
 
     public void onTorrentServiceConnected(TorrentService service) {
@@ -129,26 +127,31 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
         }
     }
 
-    /**
-     * Update the view based on a state.
-     *
-     * @param state
-     * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
-     */
-    protected abstract void updateView(State state, Object extra);
+    @Override public void backPressed() {
+        getActivity().onBackPressed();
+    }
 
-    /**
-     * Start the internal player for a streaming torrent
-     *
-     * @param location
-     * @param resumePosition
-     */
-    protected abstract void startPlayerActivity(String location, int resumePosition);
+//    @Override public void startPlayerActivity(String location) {
+//        service.removeListener(presenter);
+//        startPlayerActivity(location, 0);
+//    }
+//
+//    /**
+//     * Start the internal player for a streaming torrent
+//     *
+//     * @param location
+//     * @param resumePosition
+//     */
+//    protected abstract void startPlayerActivity(String location, int resumePosition);
 
     @Override
     public void onResume() {
         super.onResume();
         presenter.onResume();
+
+        if (service != null && service.isStreaming() && service.isReady()) {
+            presenter.onStreamReady(service.getCurrentTorrent());
+        }
     }
 
     /**

@@ -17,6 +17,8 @@
 
 package butter.droid.base.ui.loading.fragment;
 
+import android.content.Context;
+
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
@@ -39,15 +41,14 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.ThreadUtils;
 
-import static android.os.Build.VERSION_CODES.M;
-
-public class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter, TorrentListener,
-        SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback{
+public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
+        TorrentListener, SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback{
 
     private final BaseStreamLoadingFragmentView view;
     private final ProviderManager providerManager;
     private final PreferencesHandler preferencesHandler;
-    private final PlayerManager playerManager;
+    protected final PlayerManager playerManager;
+    private final Context context;
 
     private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
 
@@ -58,13 +59,16 @@ public class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoading
     private String videoLocation;
     private SubsStatus subsStatus = SubsStatus.DOWNLOADING;
     private String subtitleLanguage = null;
+    protected boolean playingExternal = false;
+    protected Boolean playerStarted = false;
 
     public BaseStreamLoadingFragmentPresenterImpl(BaseStreamLoadingFragmentView view, ProviderManager providerManager,
-            PreferencesHandler preferencesHandler, PlayerManager playerManager) {
+            PreferencesHandler preferencesHandler, PlayerManager playerManager, Context context) {
         this.view = view;
         this.providerManager = providerManager;
         this.preferencesHandler = preferencesHandler;
         this.playerManager = playerManager;
+        this.context = context;
     }
 
     @Override public void onCreate(StreamInfo streamInfo) {
@@ -74,24 +78,20 @@ public class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoading
     }
 
     @Override public void onResume() {
-        if (mPlayerStarted) {
+        if (playerStarted) {
             BeamServer beamService = BeamServerService.getServer();
             if (beamService != null) {
                 beamService.stop();
             }
-            if (!mPlayingExternal) {
-                getActivity().onBackPressed();
+            if (!playingExternal) {
+                view.backPressed();
             }
         }
 
-        if (mService != null && mService.isStreaming() && mService.isReady()) {
-            onStreamReady(mService.getCurrentTorrent());
-        }
-
-        if (mState == null) {
+        if (state == null) {
             setState(State.WAITING_TORRENT);
         } else {
-            setState(mState);
+            setState(state);
         }
     }
 
@@ -114,11 +114,11 @@ public class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoading
 
     @Override public void onStreamError(Torrent torrent, Exception e) {
         if (e.getMessage().equals("Write error")) {
-            setState(State.ERROR, getString(R.string.error_files));
+            setState(State.ERROR, context.getString(R.string.error_files));
         } else if (e.getMessage().equals("Torrent error")) {
-            setState(State.ERROR, getString(R.string.torrent_failed));
+            setState(State.ERROR, context.getString(R.string.torrent_failed));
         } else {
-            setState(State.ERROR, getString(R.string.unknown_error));
+            setState(State.ERROR, context.getString(R.string.unknown_error));
         }
 
     }
@@ -194,6 +194,16 @@ public class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoading
     }
 
     /**
+     * Update the view based on a state.
+     *
+     * @param state
+     * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
+     */
+    protected abstract void updateView(State state, Object extra);
+
+    protected abstract void startPlayerActivity(String location, , int resumePosition);
+
+    /**
      * Starts the player for a torrent stream.
      * <p/>
      * Will either start an external player, or the internal one
@@ -209,11 +219,11 @@ public class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoading
             return;
         }
 
-        if (!mPlayerStarted) {
-            mService.removeListener(BaseStreamLoadingFragment.this);
+        if (!playerStarted) {
             startPlayerActivity(location, 0);
+//            view.startPlayerActivity(location);
 
-            mPlayerStarted = true;
+            playerStarted = true;
         }
     }
 

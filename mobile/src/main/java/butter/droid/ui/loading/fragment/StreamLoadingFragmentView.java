@@ -15,13 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.ui.loading.fragment;
+package butter.droid.ui.loading.fragment;
 
-public interface BaseStreamLoadingFragmentView {
-    void startStreamUrl(String torrentUrl);
+import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentView;
 
-    void backPressed();
+public interface StreamLoadingFragmentView extends BaseStreamLoadingFragmentView {
+    void loadBackgroundImage(String url);
 
-//    void startPlayerActivity(String location);
+    void pickTorrentFile(String[] fileNames);
+
+    void startBeamActivity(StreamInfo streamInfo, int resumePosition);
+
+    void closeSelf();
 
 }

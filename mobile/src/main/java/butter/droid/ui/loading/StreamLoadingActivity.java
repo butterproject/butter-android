@@ -35,7 +35,7 @@ import javax.inject.Inject;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.fragments.StreamLoadingFragment;
+import butter.droid.ui.loading.fragment.StreamLoadingFragment;
 import butter.droid.ui.ButterBaseActivity;
 
 public class StreamLoadingActivity extends ButterBaseActivity implements StreamLoadingView {
