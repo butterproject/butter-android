@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'hugo'//for method logging (only in debug builds)
-apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -54,7 +53,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
-    compile 'com.jakewharton.timber:timber:4.1.2'
+    compile 'com.jakewharton.timber:timber:4.5.1'
     compile "com.squareup.okhttp3:okhttp:${rootProject.ext.okHttpVersion}"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'

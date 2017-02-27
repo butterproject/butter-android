@@ -14,38 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
-apply plugin: 'org.moallemi.advanced-build-version'
 apply plugin: 'com.android.application'
+apply plugin: 'si.kamino.version'
 apply plugin: 'hugo'
-apply plugin: 'com.github.ben-manes.versions'
 
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-advancedVersioning {
-    codeOptions {
-        versionCodeType org.moallemi.gradle.internal.VersionCodeType.AUTO_INCREMENT_ONE_STEP
+androidVersion {
+
+    appVersion {
+        major 0
+        minor 1
+        build 2
     }
-    nameOptions {
-        versionMajor 0
-        versionMinor 1
-        versionPatch 2
-    }
+
 }
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
     buildToolsVersion rootProject.ext.buildToolsVersion
-    def buildNumber = (System.getenv("BUILD_NUMBER") == null ? advancedVersioning.versionCode : System.getenv("BUILD_NUMBER")) as int
 
     defaultConfig {
         applicationId "butter.droid.tv"
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdk
-        versionCode buildNumber
-        versionName advancedVersioning.versionName
         multiDexEnabled true
     }
 
@@ -64,8 +59,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         debug {
-            versionNameSuffix ("#" + (buildNumber == 0 ? "local" : buildNumber).toString())
             applicationIdSuffix ".dev"
         }
     }
@@ -79,11 +74,10 @@ android {
             enable true
             universalApk false
             reset()
-            include 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
+            include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
 
-    project.ext.versionCodes = ["armeabi": 1, "armeabi-v7a": 2, "arm64-v8a": 3, "x86": 4, "x86_64": 5]
 }
 
 //./gradlew dependencyUpdates -Drevision=release
