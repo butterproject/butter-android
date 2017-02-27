@@ -25,6 +25,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
+import android.support.annotation.Px;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,7 +34,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -51,18 +51,18 @@ import hugo.weaving.DebugLog;
 public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int NORMAL = 0, LOADING = 1;
-    private int mItemWidth, mItemHeight, mMargin, mColumns;
+    private int itemWidth, itemHeight, margin, columns;
     private ArrayList<OverviewItem> mItems = new ArrayList<>();
     //	private ArrayList<Media> mData = new ArrayList<>();
     private MediaGridAdapter.OnItemClickListener mItemClickListener;
 
     public MediaGridAdapter(Context context, ArrayList<Media> items, Integer columns) {
-        mColumns = columns;
+        this.columns = columns;
 
         int screenWidth = PixelUtils.getScreenWidth(context);
-        mItemWidth = (screenWidth / columns);
-        mItemHeight = (int) ((double) mItemWidth / 0.677);
-        mMargin = PixelUtils.getPixelsFromDp(context, 2);
+        itemWidth = (screenWidth / columns);
+        itemHeight = (int) ((double) itemWidth / 0.677);
+        margin = PixelUtils.getPixelsFromDp(context, 2);
 
         setItems(items);
     }
@@ -83,19 +83,19 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
-        int double_margin = mMargin * 2;
-        int top_margin = (position < mColumns) ? mMargin * 2 : mMargin;
+        @Px int doubleMargin = margin * 2;
+        @Px int topMargin = (position < columns) ? margin * 2 : margin;
 
         GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
-        layoutParams.height = mItemHeight;
-        layoutParams.width = mItemWidth;
+        layoutParams.height = itemHeight;
+        layoutParams.width = itemWidth;
         int mod = LocaleUtils.currentLocaleIsRTL() ? 1 : 0;
-        if (position % mColumns == mod) {
-            layoutParams.setMargins(double_margin, top_margin, mMargin, mMargin);
-        } else if (position % mColumns == mColumns - 1) {
-            layoutParams.setMargins(mMargin, top_margin, double_margin, mMargin);
+        if (position % columns == mod) {
+            viewHolder.itemView.setPadding(doubleMargin, topMargin, margin, margin);
+        } else if (position % columns == columns - 1) {
+            viewHolder.itemView.setPadding(margin, topMargin, doubleMargin, margin);
         } else {
-            layoutParams.setMargins(mMargin, top_margin, mMargin, mMargin);
+            viewHolder.itemView.setPadding(margin, topMargin, margin, margin);
         }
         viewHolder.itemView.setLayoutParams(layoutParams);
 
@@ -111,9 +111,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Picasso.with(videoViewHolder.coverImage.getContext()).cancelRequest(videoViewHolder.coverImage);
                 Picasso.with(videoViewHolder.coverImage.getContext())
                         .load(item.image)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .fit()
-                        .centerCrop()
+                        .resize(itemWidth, itemHeight)
+                        .transform(DrawGradient.getInstance())
                         .into(videoViewHolder.coverImage);
             }
         }
@@ -205,7 +204,14 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private static class DrawGradient implements Transformation {
-        static Transformation INSTANCE = new DrawGradient();
+        private static Transformation instance;
+
+        public static Transformation getInstance() {
+            if (instance == null) {
+                instance = new DrawGradient();
+            }
+            return instance;
+        }
 
         @Override
         public Bitmap transform(Bitmap src) {
@@ -257,7 +263,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
             itemView.setOnClickListener(this);
-            coverImage.setMinimumHeight(mItemHeight);
+            coverImage.setMinimumHeight(itemHeight);
 
             itemView.setOnFocusChangeListener(mOnFocusChangeListener);
         }
@@ -284,7 +290,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         LoadingHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            itemView.setMinimumHeight(mItemHeight);
+            itemView.setMinimumHeight(itemHeight);
         }
 
     }
