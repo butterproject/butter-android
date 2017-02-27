@@ -27,7 +27,6 @@ import butter.droid.base.providers.media.AnimeProvider;
 import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.TVProvider;
 import butter.droid.base.providers.subs.open.OpenSubsProvider;
-import butter.droid.base.providers.subs.ysubs.YSubsProvider;
 import dagger.Module;
 import dagger.Provides;
 import de.timroes.axmlrpc.XMLRPCClient;
@@ -35,12 +34,6 @@ import okhttp3.OkHttpClient;
 
 @Module
 public class ProviderModule {
-
-    @Provides
-    @Singleton
-    public YSubsProvider provideYSubsProvider(Context context, OkHttpClient client, ObjectMapper mapper) {
-        return new YSubsProvider(context, client, mapper);
-    }
 
     @Provides
     @Singleton
