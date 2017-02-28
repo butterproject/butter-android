@@ -44,10 +44,12 @@
         <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
 	</style>
 
-	<style name="Theme.Butter" parent="Theme.Base">
-		<item name="android:seekBarStyle">@style/Theme.Butter.SeekBar</item>
-		<item name="android:progressBarStyleHorizontal">@style/Theme.Butter.ProgressBar</item>
-	</style>
+	<style name="Theme.Butter" parent="Theme.Butter.Base" />
+
+    <style name="Theme.Butter.Base" parent="Theme.Base">
+        <item name="android:seekBarStyle">@style/Theme.Butter.SeekBar</item>
+        <item name="android:progressBarStyleHorizontal">@style/Theme.Butter.ProgressBar</item>
+    </style>
 
 	<style name="Theme.Butter.Search" parent="Theme.Butter">
 		<item name="android:windowAnimationStyle">@style/ActivityFadeAnimation</item>
@@ -93,9 +95,9 @@
 		<item name="colorAccent">@android:color/white</item>
 	</style>
 
-	<style name="Theme.Butter.NavigationDrawer" parent="Theme.Butter"></style>
+	<style name="Theme.Butter.NavigationDrawer" parent="Theme.Butter" />
 
-	<style name="Theme.Butter.TransparentStatusBar" parent="Theme.Butter"></style>
+	<style name="Theme.Butter.TransparentStatusBar" parent="Theme.Butter" />
 
 	<style name="Theme.Butter.ProgressBar" parent="android:Widget.ProgressBar.Horizontal">
 		<item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>

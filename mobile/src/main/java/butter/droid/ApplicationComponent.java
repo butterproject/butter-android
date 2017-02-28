@@ -21,7 +21,6 @@ import javax.inject.Singleton;
 
 import butter.droid.ui.about.AboutActivity;
 import butter.droid.activities.BeamPlayerActivity;
-import butter.droid.activities.MediaDetailActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.StreamLoadingActivity;
 import butter.droid.activities.TrailerPlayerActivity;
@@ -31,7 +30,6 @@ import butter.droid.fragments.BeamPlayerFragment;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.MediaListFragment;
-import butter.droid.fragments.MovieDetailFragment;
 import butter.droid.fragments.NavigationDrawerFragment;
 import butter.droid.fragments.StreamLoadingFragment;
 import butter.droid.fragments.VideoPlayerFragment;
@@ -40,6 +38,7 @@ import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import butter.droid.ui.about.AboutComponent;
 import butter.droid.ui.main.MainComponent;
+import butter.droid.ui.media.detail.MediaDetailComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.terms.TermsComponent;
 import dagger.Component;
@@ -54,7 +53,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TrailerPlayerActivity activity);
     void inject(AboutActivity activity);
     void inject(BeamPlayerActivity activity);
-    void inject(MediaDetailActivity activity);
     void inject(SearchActivity activity);
     void inject(StreamLoadingActivity activity);
     void inject(VideoPlayerActivity activity);
@@ -66,7 +64,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(LoadingDetailDialogFragment fragment);
     void inject(StreamLoadingFragment fragment);
     void inject(EpisodeDialogFragment fragment);
-    void inject(MovieDetailFragment fragment);
     void inject(VideoPlayerFragment fragment);
     void inject(BeamPlayerFragment fragment);
     void inject(BeamDeviceSelectorDialogFragment fragment);
@@ -74,6 +71,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     MainComponent.Builder mainComponentBuilder();
     PreferencesComponent.Builder preferencesComponentBuilder();
     TermsComponent.Builder termsComponentBuilder();
+    MediaDetailComponent.Builder mediaDetailsComponentBuilder();
     AboutComponent.Builder aboutComponentBuilder();
 
 }

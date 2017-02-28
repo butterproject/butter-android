@@ -45,8 +45,7 @@ import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 
-public abstract class TVBaseDetailsFragment extends DetailsFragment
-		implements MediaProvider.Callback,
+public abstract class TVBaseDetailsFragment extends DetailsFragment implements MediaProvider.Callback,
 		OnActionClickedListener {
 
 	public static final String EXTRA_ITEM = "item";

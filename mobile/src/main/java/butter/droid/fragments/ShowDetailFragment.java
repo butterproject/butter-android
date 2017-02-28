@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.adapters.ShowDetailPagerAdapter;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
@@ -35,10 +32,12 @@ import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
-import butter.droid.widget.ObservableParallaxScrollView;
+import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.widget.WrappingViewPager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
@@ -211,8 +210,6 @@ public class ShowDetailFragment extends BaseDetailFragment {
             mTabs.setTabMode(TabLayout.MODE_FIXED);
         }
 
-        mActivity.setSubScrollListener(mOnScrollListener);
-
         return mRoot;
     }
 
@@ -237,26 +234,5 @@ public class ShowDetailFragment extends BaseDetailFragment {
     public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
         StringArraySelectorDialogFragment.show(mActivity.getSupportFragmentManager(), title, items, -1, onClickListener);
     }
-
-    private ObservableParallaxScrollView.Listener mOnScrollListener = new ObservableParallaxScrollView.Listener() {
-        @Override
-        public void onScroll(int scrollY, ObservableParallaxScrollView.Direction direction) {
-            if (!mIsTablet) {
-                if (scrollY > 0) {
-                    int headerHeight = mActivity.getHeaderHeight();
-                    if (scrollY < headerHeight) {
-                        float alpha = 1.0f - ((float) scrollY / (float) headerHeight);
-                        mShadow.setAlpha(alpha);
-                        mTabs.setBackgroundColor(mActivity.getResources().getColor(android.R.color.transparent));
-                        mTabs.setTranslationY(0);
-                    } else {
-                        mShadow.setAlpha(0);
-                        mTabs.setBackgroundColor(sShow.color);
-                        mTabs.setTranslationY(scrollY - headerHeight);
-                    }
-                }
-            }
-        }
-    };
 
 }

@@ -25,6 +25,10 @@ import android.net.wifi.WifiManager;
 
 import butter.droid.base.ButterApplication;
 
+/**
+ * @deprecated Use {@link butter.droid.base.manager.network.NetworkManager} instead
+ */
+@Deprecated
 public class NetworkUtils {
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

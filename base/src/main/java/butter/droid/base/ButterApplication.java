@@ -75,12 +75,10 @@ public abstract class ButterApplication extends Application implements ButterUpd
         Foreground.init(this);
 
         Constants.DEBUG_ENABLED = false;
-        int versionCode = 0;
         try {
             String packageName = getPackageName();
             PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, 0);
             int flags = packageInfo.applicationInfo.flags;
-            versionCode = packageInfo.versionCode;
             Constants.DEBUG_ENABLED = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

@@ -55,14 +55,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements VideoPl
     public final static String LOCATION = "stream_url";
     public final static String DATA = "video_data";
 
-    public static Intent startActivity(Activity activity, String youTubeUrl, Media data) {
-        Intent i = new Intent(activity, TrailerPlayerActivity.class);
-        i.putExtra(DATA, data);
-        i.putExtra(LOCATION, youTubeUrl);
-        activity.startActivity(i);
-        return i;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         MobileButterApplication.getAppContext()
@@ -221,9 +213,15 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements VideoPl
 
     }
 
-    public static Intent getIntent(Context context, Movie movie, String url) {
+    @Deprecated public static Intent startActivity(Activity activity, String youTubeUrl, Media data) {
+        Intent i = getIntent(activity, data, youTubeUrl);
+        activity.startActivity(i);
+        return i;
+    }
+
+    public static Intent getIntent(Context context, Media media, String url) {
         Intent i = new Intent(context, TrailerPlayerActivity.class);
-        i.putExtra(TrailerPlayerActivity.DATA, movie);
+        i.putExtra(TrailerPlayerActivity.DATA, media);
         i.putExtra(TrailerPlayerActivity.LOCATION, url);
         return i;
     }
