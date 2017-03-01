@@ -17,10 +17,14 @@
 
 package butter.droid.ui.loading.fragment;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentView;
 
 public interface StreamLoadingFragmentView extends BaseStreamLoadingFragmentView {
+
     void loadBackgroundImage(String url);
 
     void pickTorrentFile(String[] fileNames);
@@ -29,4 +33,9 @@ public interface StreamLoadingFragmentView extends BaseStreamLoadingFragmentView
 
     void closeSelf();
 
+    void startExternalPlayer(@NonNull Intent intent);
+
+    void startPlayerActivity(StreamInfo streamInfo, int resumePosition);
+
+    void showExternalPlayerButton();
 }

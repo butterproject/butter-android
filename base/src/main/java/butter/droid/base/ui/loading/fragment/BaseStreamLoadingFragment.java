@@ -35,12 +35,19 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.R2;
 import butter.droid.base.torrent.TorrentService;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
@@ -68,6 +75,15 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
 
     @Inject BaseStreamLoadingFragmentPresenter presenter;
 
+    static class ViewHolder {
+        @BindView(R2.id.progress_indicator) ProgressBar progressIndicator;
+        @BindView(R2.id.primary_textview) TextView primaryTextView;
+        @BindView(R2.id.secondary_textview) TextView secondaryTextView;
+        @BindView(R2.id.tertiary_textview) TextView tertiaryTextView;
+    }
+
+    final ViewHolder viewHolder = new ViewHolder();
+
     private TorrentService service;
 
     public enum State {
@@ -77,10 +93,12 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true); // TODO: 2/16/17 Is needed?
+        setRetainInstance(true);
+    }
 
-        StreamInfo streamInfo = getArguments().getParcelable(ARGS_STREAM_INFO);
-        presenter.onCreate(streamInfo);
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(viewHolder, view);
     }
 
     @Override public void startStreamUrl(String torrentUrl) {
@@ -129,6 +147,30 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
 
     @Override public void backPressed() {
         getActivity().onBackPressed();
+    }
+
+    @Override public void displayPrimaryText(String text) {
+        viewHolder.primaryTextView.setText(text);
+    }
+
+    @Override public void displayPrimaryText(@StringRes int text) {
+        viewHolder.primaryTextView.setText(text);
+    }
+
+    @Override public void clearTexts() {
+        viewHolder.secondaryTextView.setText(null);
+        viewHolder.tertiaryTextView.setText(null);
+        viewHolder.progressIndicator.setIndeterminate(true);
+        viewHolder.progressIndicator.setProgress(0);
+    }
+
+    @Override public void displayDetails(int progress, String progressText, String speedText, String seedsText) {
+        viewHolder.progressIndicator.setIndeterminate(false);
+        viewHolder.progressIndicator.setProgress(progress);
+
+        viewHolder.primaryTextView.setText(progressText);
+        viewHolder.secondaryTextView.setText(speedText);
+        viewHolder.tertiaryTextView.setText(seedsText);
     }
 
 //    @Override public void startPlayerActivity(String location) {

@@ -62,7 +62,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(MediaListFragment fragment);
     void inject(MediaGenreSelectionFragment fragment);
     void inject(LoadingDetailDialogFragment fragment);
-//    void inject(StreamLoadingFragment fragment);
     void inject(EpisodeDialogFragment fragment);
     void inject(MovieDetailFragment fragment);
     void inject(VideoPlayerFragment fragment);

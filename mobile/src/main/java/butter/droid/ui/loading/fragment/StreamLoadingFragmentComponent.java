@@ -15,24 +15,25 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.loading;
+package butter.droid.ui.loading.fragment;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.loading.fragment.StreamLoadingFragmentComponent;
+import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(modules = StreamLoadingModule.class)
-@ActivityScope
-public interface StreamLoadingComponent {
+@Subcomponent(
+        modules = StreamLoadingFragmentModule.class
+)
+@FragmentScope
+public interface StreamLoadingFragmentComponent {
 
-    void inject(StreamLoadingActivity activity);
-
-    StreamLoadingFragmentComponent.Builder streamLoadingFragmentComponentBuilder();
+    void inject(StreamLoadingFragment fragment);
 
     @Subcomponent.Builder interface Builder {
-        Builder streamLoadingModule(StreamLoadingModule module);
 
-        StreamLoadingComponent build();
+        Builder stramLoadingFragmentModule(StreamLoadingFragmentModule module);
+
+        StreamLoadingFragmentComponent build();
+
     }
 
 }

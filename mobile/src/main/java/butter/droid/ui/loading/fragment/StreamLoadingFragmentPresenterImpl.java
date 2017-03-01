@@ -18,20 +18,17 @@
 package butter.droid.ui.loading.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.github.sv244.torrentstream.Torrent;
 
-import butter.droid.activities.BeamPlayerActivity;
-import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;
-import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.PixelUtils;
 
 public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmentPresenterImpl
@@ -62,26 +59,27 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
         loadBackgroundImage();
     }
 
-    @Override protected void updateView(State state, Object extra) {
-
-    }
-
     @Override protected void startPlayerActivity(String location, int resumePosition) {
         this.streamInfo.setVideoLocation(location);
         if (beamManager.isConnected()) {
             view.startBeamActivity(streamInfo, resumePosition);
         } else {
-            playingExternal = playerManager.start(this.streamInfo.getMedia(), this.streamInfo.getSubtitleLanguage(),
+            Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
                     location);
-            if (!playingExternal) {
-                VideoPlayerActivity.startActivity(context, this.streamInfo, resumePosition);
+
+            if (intent != null) {
+                playingExternal = true;
+                view.startExternalPlayer(intent);
+            } else {
+                playingExternal = false;
+                view.startPlayerActivity(streamInfo, resumePosition);
             }
         }
 
         if (!playingExternal) {
             view.closeSelf();
         } else {
-            mStartExternalButton.setVisibility(View.VISIBLE);
+            view.showExternalPlayerButton();
         }
     }
 
@@ -112,5 +110,15 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
     @Override public void selectTorrentFile(int position) {
         currentTorrent.setSelectedFile(position);
         onStreamPrepared(currentTorrent);
+    }
+
+    @Override public void startExternalPlayer() {
+        Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
+                streamInfo.getVideoLocation());
+        if (intent != null) {
+            view.startExternalPlayer(intent);
+        } else {
+            // TODO: 3/1/17 Notify user
+        }
     }
 }

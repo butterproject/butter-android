@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.github.ben-manes.versions'// to check for dependency updates
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk

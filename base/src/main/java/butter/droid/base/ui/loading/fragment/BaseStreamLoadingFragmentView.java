@@ -17,11 +17,19 @@
 
 package butter.droid.base.ui.loading.fragment;
 
+import android.support.annotation.StringRes;
+
 public interface BaseStreamLoadingFragmentView {
     void startStreamUrl(String torrentUrl);
 
     void backPressed();
 
-//    void startPlayerActivity(String location);
+    void displayPrimaryText(String text);
+
+    void displayPrimaryText(@StringRes int text);
+
+    void clearTexts();
+
+    void displayDetails(int progress, String progressText, String speedText, String seedsText);
 
 }

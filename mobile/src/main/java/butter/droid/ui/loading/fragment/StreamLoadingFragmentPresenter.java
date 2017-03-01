@@ -17,8 +17,13 @@
 
 package butter.droid.ui.loading.fragment;
 
+import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenter;
 
 public interface StreamLoadingFragmentPresenter extends BaseStreamLoadingFragmentPresenter {
+    void onCreate(StreamInfo streamInfo);
+
     void selectTorrentFile(int position);
+
+    void startExternalPlayer();
 }

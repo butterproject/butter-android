@@ -35,7 +35,6 @@ import butter.droid.tv.fragments.TVOverviewFragment;
 import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
 import butter.droid.tv.fragments.TVSearchFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
-import butter.droid.tv.fragments.TVStreamLoadingFragment;
 import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.service.RecommendationService;
@@ -70,7 +69,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVOverviewFragment fragment);
     void inject(TVMovieDetailsFragment fragment);
     void inject(TVMediaGridFragment fragment);
-//    void inject(TVStreamLoadingFragment fragment);
     void inject(TVSearchFragment fragment);
     void inject(TVVideoPlayerFragment fragment);
     void inject(TVPlaybackOverlayFragment fragment);

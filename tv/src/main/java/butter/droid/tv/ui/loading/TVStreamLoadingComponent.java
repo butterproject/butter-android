@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.loading;
 
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragmentComponent;
 import dagger.Subcomponent;
 
 @Subcomponent(modules = TVStreamLoadingModule.class)
@@ -25,6 +26,8 @@ import dagger.Subcomponent;
 public interface TVStreamLoadingComponent {
 
     void inject(TVStreamLoadingActivity activity);
+
+    TVStreamLoadingFragmentComponent.Builder streamLoadingFragmentComponentBuilder();
 
     @Subcomponent.Builder interface Builder {
         Builder streamLoadingModule(TVStreamLoadingModule module);

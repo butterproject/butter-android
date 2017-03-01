@@ -34,7 +34,6 @@ import butter.droid.base.utils.ThreadUtils;
 
 public class BackgroundUpdater {
 
-
     private int mDisplayWidth;
     private int mDisplayHeight;
     private static int BACKGROUND_UPDATE_DELAY = 300;

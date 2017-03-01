@@ -15,24 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.loading;
+package butter.droid.tv.ui.loading.fragment;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.loading.fragment.StreamLoadingFragmentComponent;
-import dagger.Subcomponent;
+import butter.droid.base.providers.media.models.Show;
+import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenter;
 
-@Subcomponent(modules = StreamLoadingModule.class)
-@ActivityScope
-public interface StreamLoadingComponent {
-
-    void inject(StreamLoadingActivity activity);
-
-    StreamLoadingFragmentComponent.Builder streamLoadingFragmentComponentBuilder();
-
-    @Subcomponent.Builder interface Builder {
-        Builder streamLoadingModule(StreamLoadingModule module);
-
-        StreamLoadingComponent build();
-    }
-
+public interface TVStreamLoadingFragmentPresenter extends BaseStreamLoadingFragmentPresenter {
+    void onCreate(StreamInfo streamInfo, Show show);
 }

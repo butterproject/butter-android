@@ -23,6 +23,8 @@ import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Map;
 
 import butter.droid.base.R;
@@ -39,6 +41,7 @@ import butter.droid.base.subs.SubtitleDownloader;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
+import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 
 public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
@@ -71,7 +74,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         this.context = context;
     }
 
-    @Override public void onCreate(StreamInfo streamInfo) {
+    public void onCreate(StreamInfo streamInfo) {
         this.streamInfo = streamInfo; // TODO: 2/16/17 Check if not null
 
         loadSubtitles();
@@ -129,7 +132,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     @Override public void onStreamProgress(Torrent torrent, StreamStatus status) {
-        if (!videoLocation.isEmpty()) {
+        if (!StringUtils.isEmpty(videoLocation)) {
             startPlayer(videoLocation);
         }
 
@@ -199,9 +202,41 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * @param state
      * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
      */
-    protected abstract void updateView(State state, Object extra);
+    protected void updateView(State state, Object extra) {
+        switch (state) {
+            case UNINITIALISED:
+                view.displayPrimaryText(null);
+                view.clearTexts();
+                break;
+            case ERROR:
+                if (null != extra && extra instanceof String) {
+                    view.displayPrimaryText((String) extra);
+                }
+                view.clearTexts();
+                break;
+            case BUFFERING:
+                view.displayPrimaryText(R.string.starting_buffering);
+                view.clearTexts();
+                break;
+            case STREAMING:
+                if (null != extra && extra instanceof StreamStatus) {
+                    updateStatus((StreamStatus) extra);
+                }
+                break;
+            case WAITING_SUBTITLES:
+                view.displayPrimaryText(R.string.waiting_for_subtitles);
+                view.clearTexts();
+                break;
+            case WAITING_TORRENT:
+                view.displayPrimaryText(R.string.waiting_torrent);
+                view.clearTexts();
+                break;
 
-    protected abstract void startPlayerActivity(String location, , int resumePosition);
+        }
+
+    }
+
+    protected abstract void startPlayerActivity(String location, int resumePosition);
 
     /**
      * Starts the player for a torrent stream.
@@ -247,5 +282,34 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
             subsProvider.getList((Movie) media, this);
         }
     }
+
+    private void updateStatus(final StreamStatus status) {
+        final DecimalFormat df = new DecimalFormat("#############0.00");
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int progress;
+                if (!playingExternal) {
+                    progress = status.bufferProgress;
+                } else {
+                    progress = ((Float) status.progress).intValue();
+                }
+
+                String progressText = String.format(Locale.US, "%d%%", progress);
+
+                String speedText;
+                if (status.downloadSpeed / 1024 < 1000) {
+                    speedText = df.format(status.downloadSpeed / 1024) + " KB/s";
+                } else {
+                    speedText = df.format(status.downloadSpeed / 1048576) + " MB/s";
+                }
+
+                String seedsText = status.seeds + " " + context.getString(R.string.seeds);
+
+                view.displayDetails(progress, progressText, speedText, seedsText);
+            }
+        });
+    }
+
 }
 

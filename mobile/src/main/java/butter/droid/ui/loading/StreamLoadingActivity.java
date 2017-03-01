@@ -44,6 +44,7 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
 
     @Inject StreamLoadingPresenter presenter;
 
+    private StreamLoadingComponent component;
     @Nullable private StreamLoadingFragment fragment;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -52,12 +53,12 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         getWindow().setBackgroundDrawableResource(R.color.bg);
 
-        MobileButterApplication.getAppContext()
+        component = MobileButterApplication.getAppContext()
                 .getComponent()
                 .streamLoadingComponentBuilder()
                 .streamLoadingModule(new StreamLoadingModule(this))
-                .build()
-                .inject(this);
+                .build();
+        component.inject(this);
 
         super.onCreate(savedInstanceState, 0);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -101,6 +102,10 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
                 .commit();
 
         this.fragment = fragment;
+    }
+
+    public StreamLoadingComponent getComponent() {
+        return component;
     }
 
     public static Intent startActivity(Activity activity, StreamInfo info) {
