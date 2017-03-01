@@ -18,14 +18,16 @@
 
 <resources>
 
-	<style name="Theme.Butter" parent="Theme.Base">
+	<style name="Theme.Butter" parent="Theme.Butter.21" />
+
+    <style name="Theme.Butter.21" parent="Theme.Butter.19">
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowActivityTransitions">true</item>
-		<!-- v21 specific customisations here -->
+
         <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
         <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
         <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
-	</style>
+    </style>
 
 	<style name="Theme.Butter.NavigationDrawer" parent="Theme.Butter">
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -33,9 +35,9 @@
 	</style>
 
 	<style name="Theme.Butter.TransparentStatusBar" parent="Theme.Butter">
-		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
-		<item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
 	</style>
 
     <style name="Theme.Butter.Detail" parent="Theme.Butter.TransparentStatusBar">

@@ -25,14 +25,15 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.BindView;
 import butter.droid.R;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SynopsisDialogFragment extends DialogFragment {
 
-    @BindView(R.id.synopsis)
-    TextView synopsisText;
+    private static final String ARG_SYNOPSIS = "butter.droid.fragments.dialog.SynopsisDialogFragment.synopsis";
+
+    @BindView(R.id.synopsis) TextView synopsisText;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -50,11 +51,18 @@ public class SynopsisDialogFragment extends DialogFragment {
                         }
                 );
 
-        if (getArguments().containsKey("text")) {
-            synopsisText.setText(getArguments().getString("text"));
-        }
+        synopsisText.setText(getArguments().getString(ARG_SYNOPSIS));
 
         return builder.create();
+    }
+
+    public static SynopsisDialogFragment newInstance(String synopsis) {
+        Bundle b = new Bundle();
+        b.putString(ARG_SYNOPSIS, synopsis);
+
+        SynopsisDialogFragment fragment = new SynopsisDialogFragment();
+        fragment.setArguments(b);
+        return fragment;
     }
 
 }

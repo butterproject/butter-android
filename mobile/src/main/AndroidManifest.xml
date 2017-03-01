@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -123,7 +122,7 @@
         </activity>
 
 		<activity
-			android:name="butter.droid.activities.MediaDetailActivity"
+			android:name="butter.droid.ui.media.detail.MediaDetailActivity"
 			android:theme="@style/Theme.Butter.Detail"
 			android:parentActivityName="butter.droid.ui.main.MainActivity">
 			<!-- Parent activity meta-data to support 4.0 and lower -->
@@ -147,8 +146,8 @@
             android:parentActivityName="butter.droid.ui.main.MainActivity" />
 
 		<activity
-            android:launchMode="singleTask"
 			android:name="butter.droid.ui.loading.StreamLoadingActivity"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.Butter.Detail" />
 
 		<activity

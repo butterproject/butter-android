@@ -17,9 +17,9 @@
   -->
 
 <resources>
-    <style name="Theme.Butter" parent="Theme.Base">
-        <item name="android:seekBarStyle">@style/Theme.Butter.SeekBar</item>
-        <item name="android:progressBarStyleHorizontal">@style/Theme.Butter.ProgressBar</item>
+    <style name="Theme.Butter" parent="Theme.Butter.19" />
+
+    <style name="Theme.Butter.19" parent="Theme.Butter.Base">
         <item name="android:ratingBarStyle">@style/Theme.Butter.RatingBar</item>
     </style>
 
@@ -27,4 +27,5 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
     </style>
+
 </resources>

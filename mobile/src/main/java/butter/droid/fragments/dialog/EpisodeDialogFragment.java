@@ -49,7 +49,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.MediaDetailActivity;
+import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
