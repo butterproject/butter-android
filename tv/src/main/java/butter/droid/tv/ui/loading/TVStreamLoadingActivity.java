@@ -61,7 +61,8 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
 		super.onCreate(savedInstanceState, 0);
 
 		StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-		presenter.onCreate(streamInfo, savedInstanceState != null);
+		Show show = getIntent().getParcelableExtra(EXTRA_SHOW_INFO);
+		presenter.onCreate(streamInfo, show, savedInstanceState != null);
 	}
 
 	@Override
@@ -84,8 +85,8 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
 		}
 	}
 
-	@Override public void displayStreamLoadingFragment(@NonNull StreamInfo info) {
-		TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info);
+	@Override public void displayStreamLoadingFragment(@NonNull StreamInfo info, Show show) {
+		TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info, show);
 		getSupportFragmentManager()
 				.beginTransaction()
 				.add(android.R.id.content, fragment)

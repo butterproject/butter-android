@@ -62,7 +62,7 @@ public class TVStreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragm
             } else {
                 view.startPlayerActivity(streamInfo, resumePosition);
             }
-		}
+        }
     }
 
 }

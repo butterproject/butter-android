@@ -86,9 +86,10 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
         TVVideoPlayerActivity.startActivity(getActivity(), streamInfo, show);
     }
 
-    public static TVStreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo) {
+    public static TVStreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo, @Nullable Show show) {
         Bundle args = new Bundle();
         args.putParcelable(ARGS_STREAM_INFO, streamInfo);
+        args.putParcelable(ARGS_SHOW_INFO, show);
 
         TVStreamLoadingFragment fragment = new TVStreamLoadingFragment();
         fragment.setArguments(args);

@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
+import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.ui.loading.fragment.StreamLoadingFragment;
 import butter.droid.ui.ButterBaseActivity;
@@ -67,7 +68,7 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
 
         StreamInfo info = getIntent().getParcelableExtra(EXTRA_INFO);
 
-        presenter.onCreate(info, savedInstanceState != null);
+        presenter.onCreate(info, null, savedInstanceState != null);
     }
 
     @Override
@@ -94,7 +95,7 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
         super.onBackPressed();
     }
 
-    @Override public void displayStreamLoadingFragment(@NonNull StreamInfo info) {
+    @Override public void displayStreamLoadingFragment(@NonNull StreamInfo info, Show show) {
         StreamLoadingFragment fragment = StreamLoadingFragment.newInstance(info);
         getSupportFragmentManager()
                 .beginTransaction()

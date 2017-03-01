@@ -17,10 +17,11 @@
 
 package butter.droid.base.ui.loading;
 
+import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 
 public interface BaseStreamLoadingPresenter {
 
-    void onCreate(StreamInfo info, boolean savedState);
+    void onCreate(StreamInfo info, Show show, boolean savedState);
 
 }
