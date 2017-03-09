@@ -15,10 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.search;
 
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
@@ -29,56 +29,51 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.presenters.MediaCardPresenter;
+import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.utils.BackgroundUpdater;
-import hugo.weaving.DebugLog;
 
 public class TVSearchFragment extends android.support.v17.leanback.app.SearchFragment
-		implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider {
-	private static final int SEARCH_DELAY_MS = 300;
+		implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, TVSearchView {
 
-	@Inject ProviderManager providerManager;
+	@Inject TVSearchPresenter presenter;
 
-	private MediaProvider.Filters mSearchFilter = new MediaProvider.Filters();
+	private final BackgroundUpdater backgroundUpdater = new BackgroundUpdater();
 
-	private ArrayObjectAdapter mRowsAdapter;
-	private Handler mHandler = new Handler();
-	private SearchRunnable mDelayedLoad;
+	private ArrayObjectAdapter rowsAdapter;
 	private ListRowPresenter mListRowPresenter;
 	private ListRow mLoadingRow;
-	private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
 
 	@Override public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.inject(this);
-	}
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .searchComponentBuilder()
+                .searchModule(new TVSearchModue(this))
+                .build()
+                .inject(this);
+
+    }
 
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mBackgroundUpdater.initialise(getActivity(), R.color.black);
+		backgroundUpdater.initialise(getActivity(), R.color.black);
 		mListRowPresenter = new ListRowPresenter();
 		mListRowPresenter.setShadowEnabled(false);
-		mRowsAdapter = new ArrayObjectAdapter(mListRowPresenter);
+		rowsAdapter = new ArrayObjectAdapter(mListRowPresenter);
 		setSearchResultProvider(this);
 		setOnItemViewClickedListener(getDefaultItemClickedListener());
 		setOnItemViewSelectedListener(new ItemViewSelectedListener());
-		mDelayedLoad = new SearchRunnable();
 
 		//setup row to use for loading
 		mLoadingRow = createLoadingRow();
@@ -86,7 +81,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 
 	@Override
 	public ObjectAdapter getResultsAdapter() {
-		return mRowsAdapter;
+		return rowsAdapter;
 	}
 
 	private ListRow createLoadingRow() {
@@ -96,81 +91,33 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 		return new ListRow(loadingHeader, loadingRowAdapter);
 	}
 
-	private void queryByWords(String words) {
-		mRowsAdapter.clear();
-		if (!TextUtils.isEmpty(words)) {
-			mDelayedLoad.setSearchQuery(words);
-			mHandler.removeCallbacks(mDelayedLoad);
-			mHandler.postDelayed(mDelayedLoad, SEARCH_DELAY_MS);
-		}
-	}
-
 	@Override
 	public boolean onQueryTextChange(String newQuery) {
-		if (newQuery.length() > 3)
-			queryByWords(newQuery);
+		presenter.onTextChanged(newQuery);
 		return true;
 	}
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
-		queryByWords(query);
+		presenter.onTextSubmitted(query);
 		return true;
 	}
 
-	@DebugLog
-	private void loadRows(String query) {
-		//mShowsProvider.cancel();
-		mRowsAdapter.clear();
-		addLoadingRow();
-
-		mSearchFilter.keywords = query;
-		mSearchFilter.page = 1;
-		/*
-		mShowsProvider.getList(mSearchFilter, new MediaProvider.Callback() {
-			@Override public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-				List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-				addRow(getString(R.string.show_results), list);
-			}
-
-			@Override public void onFailure(Exception e) {
-
-			}
-		});
-		*/
-
-		if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
-			MediaProvider mediaProvider = providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE);
-			//noinspection ConstantConditions
-			mediaProvider.cancel();
-			mediaProvider.getList(mSearchFilter, new MediaProvider.Callback() {
-						@Override
-						public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-							List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-							addRow(getString(R.string.movie_results), list);
-						}
-
-						@Override public void onFailure(Exception e) {
-
-						}
-					}
-
-			);
-		}
-
+	@Override public void clearData() {
+		rowsAdapter.clear();
 	}
 
-	private void addRow(String title, List<MediaCardPresenter.MediaCardItem> items) {
-		mRowsAdapter.remove(mLoadingRow);
+	@Override public void showLoadingRow() {
+		rowsAdapter.add(mLoadingRow);
+	}
 
-		HeaderItem header = new HeaderItem(0, title);
+	@Override public void addRow(@StringRes int title, List<MediaCardItem> items) {
+		rowsAdapter.remove(mLoadingRow);
+
+		HeaderItem header = new HeaderItem(0, getString(title));
 		ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
 		listRowAdapter.addAll(0, items);
-		mRowsAdapter.add(new ListRow(header, listRowAdapter));
-	}
-
-	private void addLoadingRow() {
-		mRowsAdapter.add(mLoadingRow);
+		rowsAdapter.add(new ListRow(header, listRowAdapter));
 	}
 
 	protected OnItemViewClickedListener getDefaultItemClickedListener() {
@@ -194,24 +141,8 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 				MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
 				if (overviewItem.isLoading()) return;
 
-				mBackgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
+				backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
 			}
-		}
-	}
-
-	private class SearchRunnable implements Runnable {
-
-		private volatile String searchQuery;
-
-		public SearchRunnable() {
-		}
-
-		public void run() {
-			loadRows(searchQuery);
-		}
-
-		public void setSearchQuery(String value) {
-			this.searchQuery = value;
 		}
 	}
 }
