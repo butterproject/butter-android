@@ -31,7 +31,7 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
 import butter.droid.base.ButterApplication;
-import butter.droid.base.activities.TorrentActivity;
+import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.LocaleUtils;
@@ -49,8 +49,12 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
-        setContentView(layoutId);
-        ButterKnife.bind(this);
+
+        if (layoutId != 0) {
+            setContentView(layoutId);
+            ButterKnife.bind(this);
+        }
+
         mHandler = new Handler(getMainLooper());
     }
 

@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Butter.
+  ~
+  ~ Butter is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Butter is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <item name="yts_filter_a_to_z" type="id" />
@@ -19,5 +36,10 @@
 
     <item name="haru_filter_popular" type="id" />
     <item name="haru_filter_a_to_z" type="id" />
+
+    <item name="progress_indicator" type="id" />
+    <item name="primary_textview" type="id" />
+    <item name="secondary_textview" type="id" />
+    <item name="tertiary_textview" type="id" />
 
 </resources>

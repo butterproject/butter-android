@@ -1,6 +1,5 @@
 package butter.droid.base.subs;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
@@ -23,18 +22,17 @@ public class SubtitleDownloader {
 
     private final SubsProvider subsProvider;
     private final Media media;
-    private final WeakReference<Context> contextReference;
     private final PlayerManager playerManager;
 
     private String subtitleLanguage;
     private WeakReference<ISubtitleDownloaderListener> listenerReference;
 
-    public SubtitleDownloader(@NonNull SubsProvider subsProvider, @NonNull Context context,
-            @NonNull StreamInfo streamInfo, PlayerManager playerManager, @NonNull String language) {
+    public SubtitleDownloader(@NonNull SubsProvider subsProvider, @NonNull StreamInfo streamInfo,
+            PlayerManager playerManager, @NonNull String language) {
+
         if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) throw new IllegalArgumentException("language must be specified");
 
         this.subsProvider = subsProvider;
-        contextReference = new WeakReference<>(context);
         subtitleLanguage = language;
         this.playerManager = playerManager;
 
@@ -44,7 +42,6 @@ public class SubtitleDownloader {
 
     public void downloadSubtitle() {
         if (listenerReference == null) throw new IllegalArgumentException("listener must not null. Call setSubtitleDownloaderListener() to sets one");
-        if (contextReference.get() == null) return;
         subsProvider.download(media, subtitleLanguage, new Callback() {
             @Override public void onFailure(Call call, IOException e) {
                 onSubtitleDownloadFailed();
@@ -73,7 +70,6 @@ public class SubtitleDownloader {
      * Invoked when subtitle download finished successfully.
      */
     private void onSubtitleDownloadSuccess() {
-        if (contextReference.get() == null) return;
         if (listenerReference.get() == null) return;
 
         ISubtitleDownloaderListener listener = listenerReference.get();

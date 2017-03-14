@@ -31,11 +31,12 @@ import com.github.sv244.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
 import butter.droid.base.ButterApplication;
-import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
+import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
 import butterknife.ButterKnife;
+import retrofit.http.HEAD;
 
 public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
 
@@ -48,8 +49,12 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
-        setContentView(layoutId);
-        ButterKnife.bind(this);
+
+        if (layoutId != 0) {
+            setContentView(layoutId);
+            ButterKnife.bind(this);
+        }
+
         torrentHandler = new Handler(getMainLooper());
     }
 
