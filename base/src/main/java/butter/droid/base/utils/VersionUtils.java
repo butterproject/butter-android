@@ -37,10 +37,6 @@ public class VersionUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
-    public static boolean isJellyBean() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-    }
-
     public static boolean isAndroidTV() {
         UiModeManager uiModeManager = (UiModeManager) ButterApplication.getAppContext().getSystemService(Context.UI_MODE_SERVICE);
         return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;

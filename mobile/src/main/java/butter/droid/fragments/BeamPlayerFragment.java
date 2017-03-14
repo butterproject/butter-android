@@ -180,11 +180,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
         mVolumeBar.setProgressDrawable(volumeDrawable);
         mVolumeBar.getThumbDrawable().setColorFilter(paletteColor, PorterDuff.Mode.SRC_IN);
 
-        if (!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, paletteColor));
-        } else {
-            mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, paletteColor));
-        }
+        mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, paletteColor));
 
         if (mStreamInfo.getImageUrl() != null && !mStreamInfo.getImageUrl().equals("")) {
             Picasso.with(mCoverImage.getContext()).load(mStreamInfo.getImageUrl())
