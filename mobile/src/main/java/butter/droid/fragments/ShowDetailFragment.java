@@ -15,29 +15,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import butter.droid.R;
 import butter.droid.adapters.ShowDetailPagerAdapter;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.utils.VersionUtils;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.widget.WrappingViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.squareup.picasso.Picasso;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ShowDetailFragment extends BaseDetailFragment {
 
@@ -88,7 +84,7 @@ public class ShowDetailFragment extends BaseDetailFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail, container, false);
         ButterKnife.bind(this, mRoot);
-        if (VersionUtils.isJellyBean() && container != null) {
+        if (container != null) {
             int minHeight = container.getMinimumHeight() + PixelUtils.getPixelsFromDp(mActivity, 48);
             mRoot.setMinimumHeight(minHeight);
             mViewPager.setMinimumHeight(minHeight);

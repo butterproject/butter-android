@@ -14,15 +14,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import butterknife.ButterKnife;
-import butterknife.BindView;
-import butterknife.OnClick;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
+import butter.droid.fragments.dialog.SynopsisDialogFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ShowDetailAboutFragment extends BaseDetailFragment {
 
@@ -61,7 +59,7 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_detail_about, container, false);
         ButterKnife.bind(this, mRoot);
-        if (VersionUtils.isJellyBean() && container != null) {
+        if (container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 

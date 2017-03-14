@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-import butter.droid.base.utils.VersionUtils;
-
 public class WrappingViewPager extends ViewPager {
 
     private Boolean mAnimStarted = false;
@@ -35,7 +33,7 @@ public class WrappingViewPager extends ViewPager {
             if (child != null) {
                 child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
                 height = child.getMeasuredHeight();
-                if (VersionUtils.isJellyBean() && height < getMinimumHeight()) {
+                if (height < getMinimumHeight()) {
                     height = getMinimumHeight();
                 }
             }

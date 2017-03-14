@@ -7,20 +7,17 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import butter.droid.R;
 import butter.droid.adapters.EpisodeListAdapter;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
+import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.widget.LinearList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ShowDetailSeasonFragment extends BaseDetailFragment {
 
@@ -73,7 +70,7 @@ public class ShowDetailSeasonFragment extends BaseDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_showdetail_season, container, false);
-        if (VersionUtils.isJellyBean() && container != null) {
+        if (container != null) {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
 
