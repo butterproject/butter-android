@@ -58,7 +58,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import butter.droid.base.activities.TorrentActivity;
+import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
@@ -67,7 +67,7 @@ import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVStreamLoadingActivity;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.events.ConfigureSubtitleEvent;
 import butter.droid.tv.events.PausePlaybackEvent;

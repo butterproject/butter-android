@@ -48,7 +48,7 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVStreamLoadingActivity;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import butter.droid.tv.presenters.showdetail.EpisodeCardPresenter;
 

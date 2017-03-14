@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import butter.droid.tv.TVButterApplication;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butterknife.ButterKnife;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Show;
@@ -55,10 +56,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
         return startActivity(context, info, 0);
     }
 
-    public static Intent startActivity(
-        Context context,
-        StreamInfo info,
-        @SuppressWarnings("UnusedParameters") long resumePosition) {
+    public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {
         Intent i = new Intent(context, TVVideoPlayerActivity.class);
         i.putExtra(EXTRA_STREAM_INFO, info);
         // todo: resume position

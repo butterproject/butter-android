@@ -36,6 +36,7 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsPresenterImpl;
 

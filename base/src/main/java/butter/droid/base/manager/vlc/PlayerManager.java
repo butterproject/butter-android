@@ -106,14 +106,7 @@ public class PlayerManager {
         }
     }
 
-    /**
-     * Start default video player if set, otherwise return {@code false} so that the application can handle the video itself
-     *
-     * @param location Video location
-     * @return {@code true} if activity started, {@code false} otherwise
-     */
-    public boolean start(Media media, String subLanguage, String location) {
-        Context context = ButterApplication.getAppContext();
+    @Nullable public Intent externalPlayerIntent(Media media, String subLanguage, String location) {
         String defaultPlayer = preferencesHandler.getDefaultPlayer();
 
         if (!StringUtils.isEmpty(defaultPlayer)) {
@@ -146,12 +139,30 @@ public class PlayerManager {
                     }
                 }
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-                return true;
+                return intent;
             }
         }
-        return false;
+
+        return null;
+    }
+
+    /**
+     * Start default video player if set, otherwise return {@code false} so that the application can handle the video itself
+     *
+     * @param location Video location
+     * @return {@code true} if activity started, {@code false} otherwise
+     * @deprecated Use {@link #externalPlayerIntent(Media, String, String)} instead.
+     */
+    @Deprecated public boolean start(Media media, String subLanguage, String location) {
+        Intent intent = externalPlayerIntent(media, subLanguage, location);
+        if (intent != null) {
+            Context context = ButterApplication.getAppContext();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String getDefaultQuality(List<String> availableQualities) {
