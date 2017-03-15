@@ -1,3 +1,5 @@
+apply from: './gradle/checkstyle.gradle'
+
 import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
