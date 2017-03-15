@@ -25,7 +25,6 @@ import butter.droid.tv.activities.TVMainActivity;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
-import butter.droid.tv.activities.TVStreamLoadingActivity;
 import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
@@ -34,12 +33,12 @@ import butter.droid.tv.fragments.TVMovieDetailsFragment;
 import butter.droid.tv.fragments.TVOverviewFragment;
 import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
-import butter.droid.tv.fragments.TVStreamLoadingFragment;
 import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TvAboutComponent;
+import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.search.TVSearchComponent;
@@ -60,7 +59,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVMediaGridActivity activity);
     void inject(TVPreferencesActivity activity);
     void inject(TVSearchActivity activity);
-    void inject(TVStreamLoadingActivity activity);
     void inject(TVUpdateActivity activity);
     void inject(TVVideoPlayerActivity activity);
     void inject(TVTermsActivity activity);
@@ -71,7 +69,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVOverviewFragment fragment);
     void inject(TVMovieDetailsFragment fragment);
     void inject(TVMediaGridFragment fragment);
-    void inject(TVStreamLoadingFragment fragment);
     void inject(TVVideoPlayerFragment fragment);
     void inject(TVPlaybackOverlayFragment fragment);
     void inject(TVShowDetailsFragment fragment);
@@ -82,6 +79,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     TVPreferencesComponent.Builder preferencesComponentBuilder();
     TVTermsComponent.Builder termsComponentBuilder();
     TvAboutComponent.Builder aboutComponentBuilder();
+    TVStreamLoadingComponent.Builder streamLoadingComponentBuilder();
 
     TVSearchComponent.Builder searchComponentBuilder();
 

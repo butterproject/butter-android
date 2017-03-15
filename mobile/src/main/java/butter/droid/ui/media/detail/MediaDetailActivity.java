@@ -47,7 +47,6 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.StreamLoadingActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
@@ -63,6 +62,7 @@ import butter.droid.fragments.ShowDetailFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.MessageDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.media.detail.movie.MovieDetailFragment;
 import butter.droid.widget.ObservableParallaxScrollView;
 import butterknife.BindView;

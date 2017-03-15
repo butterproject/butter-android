@@ -12,17 +12,19 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.2.2"
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
     }
 }
 
 ext {
-    appCompatVersion = "25.0.1"
+    appCompatVersion = "25.2.0"
     buildToolsVersion = "25.0.0"
     targetSdk = 25
     compileSdk = 25
-    minSdk = 15
-    butterknifeVersion = "8.1.0"
+    minSdk = 16
+    butterknifeVersion = "8.5.1"
     okHttpVersion = "3.4.2"
     daggerVersion = "2.9"
     javaxAnnotationVersion = "1.2"

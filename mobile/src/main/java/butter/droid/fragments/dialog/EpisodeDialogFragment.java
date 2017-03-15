@@ -36,20 +36,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
@@ -66,12 +54,19 @@ import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
-import butter.droid.base.utils.VersionUtils;
+import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.widget.BottomSheetScrollView;
 import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.squareup.picasso.Picasso;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
+import javax.inject.Inject;
 
 public class EpisodeDialogFragment extends DialogFragment {
 
@@ -121,15 +116,7 @@ public class EpisodeDialogFragment extends DialogFragment {
                 R.layout.fragment_dialog_episode, container, false);
         ButterKnife.bind(this, v);
 
-        if (!VersionUtils.isJellyBean()) {
-            mPlayButton.setBackgroundDrawable(
-                    PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle,
-                            mShow.color));
-        } else {
-            mPlayButton.setBackground(
-                    PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle,
-                            mShow.color));
-        }
+        mPlayButton.setBackground(PixelUtils.changeDrawableColor(mPlayButton.getContext(), R.drawable.play_button_circle, mShow.color));
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mPlaceholder.getLayoutParams();
         layoutParams.height = PixelUtils.getScreenHeight(mActivity);

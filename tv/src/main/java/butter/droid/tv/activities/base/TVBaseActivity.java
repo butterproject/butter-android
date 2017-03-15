@@ -22,8 +22,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.github.sv244.torrentstream.Torrent;
-
 import javax.inject.Inject;
 
 import butter.droid.base.manager.updater.ButterUpdateManager;
@@ -61,13 +59,6 @@ public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 	public boolean onSearchRequested() {
 		TVSearchActivity.startActivity(this);
 		return true;
-	}
-
-	@Override
-	public void onStreamPrepared(Torrent torrent) {
-		super.onStreamPrepared(torrent);
-
-		// todo?
 	}
 
 }
