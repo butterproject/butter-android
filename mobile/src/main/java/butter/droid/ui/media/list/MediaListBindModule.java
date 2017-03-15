@@ -15,9 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist;
+package butter.droid.ui.media.list;
 
-import butter.droid.ui.medialist.base.BaseMediaListView;
+import butter.droid.ui.media.list.base.BaseMediaListPresenter;
+import butter.droid.ui.media.list.base.BaseMediaListView;
+import dagger.Binds;
+import dagger.Module;
 
-public interface MediaListView extends BaseMediaListView {
+@Module
+public interface MediaListBindModule {
+
+    @Binds BaseMediaListView bindBaseView(MediaListView view);
+
+    @Binds BaseMediaListPresenter bindsBasePresenter(MediaListPresenter presenter);
+
 }

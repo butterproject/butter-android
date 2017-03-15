@@ -17,7 +17,7 @@
 
 package butter.droid.ui.search;
 
-import butter.droid.ui.medialist.base.BaseMediaListPresenter;
+import butter.droid.ui.media.list.base.BaseMediaListPresenter;
 
 public interface SearchPresenter extends BaseMediaListPresenter {
     void triggerSearch(String query);

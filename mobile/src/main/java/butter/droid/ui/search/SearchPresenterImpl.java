@@ -22,7 +22,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.ui.medialist.base.BaseMediaListPresenterImpl;
+import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
 import okhttp3.OkHttpClient;
 
 public class SearchPresenterImpl extends BaseMediaListPresenterImpl implements SearchPresenter {
@@ -44,13 +44,10 @@ public class SearchPresenterImpl extends BaseMediaListPresenterImpl implements S
         } else {
             items.clear();
 
-//        mAdapter.clearItems();//clear out adapter
-
             if (StringUtils.isEmpty(searchQuery)) {
                 view.clearAdapter();
                 showLoaded();
             } else {
-//                setState(State.SEARCHING);
                 filters.keywords = searchQuery;
                 view.refreshAdapter();
             }

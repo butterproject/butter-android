@@ -169,7 +169,7 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
                 break;
             case R.id.action_search:
                 //start the search activity
-                SearchActivity.startActivity(this);
+                startActivity(SearchActivity.getIntent(this));
                 break;
         }
         return super.onOptionsItemSelected(item);

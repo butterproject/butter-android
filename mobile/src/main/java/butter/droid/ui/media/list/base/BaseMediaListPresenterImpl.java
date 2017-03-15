@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist.base;
+package butter.droid.ui.media.list.base;
 
 import android.support.annotation.StringRes;
 

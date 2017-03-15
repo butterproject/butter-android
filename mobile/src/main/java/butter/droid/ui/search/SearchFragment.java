@@ -15,23 +15,6 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * This file is part of Butter.
- *
- * Butter is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Butter is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Butter. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package butter.droid.ui.search;
 
 import android.os.Bundle;
@@ -40,8 +23,9 @@ import android.support.annotation.Nullable;
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
+import butter.droid.R;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.ui.medialist.base.BaseMediaListFragment;
+import butter.droid.ui.media.list.base.BaseMediaListFragment;
 
 public class SearchFragment extends BaseMediaListFragment implements SearchView {
 
@@ -61,9 +45,7 @@ public class SearchFragment extends BaseMediaListFragment implements SearchView 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-//        mEmptyView.setText(getString(R.string.no_search_results));
-//        updateUI();
+        mEmptyView.setText(R.string.no_search_results);
     }
 
     public void triggerSearch(String query) {

@@ -15,28 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist.base;
+package butter.droid.ui.media.list;
 
-import android.support.annotation.StringRes;
+import butter.droid.base.ui.FragmentScope;
+import dagger.Subcomponent;
 
-import java.util.ArrayList;
+@Subcomponent(modules = MediaListModule.class)
+@FragmentScope
+public interface MediaListComponent {
 
-import butter.droid.base.providers.media.models.Media;
+    void inject(MediaListFragment fragment);
 
-public interface BaseMediaListView {
-    void updateLoadingMessage(@StringRes int messageRes);
+    @Subcomponent.Builder interface Builder {
 
-    void showData();
+        Builder mediaListModule(MediaListModule module);
 
-    void addItems(ArrayList<Media> items);
+        MediaListComponent build();
 
-    void showEmpty();
+    }
 
-    void showErrorMessage(@StringRes int message);
-
-    void clearAdapter();
-
-    void refreshAdapter();
-
-    void showLoading();
 }

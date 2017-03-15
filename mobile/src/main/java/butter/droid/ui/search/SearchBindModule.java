@@ -17,8 +17,8 @@
 
 package butter.droid.ui.search;
 
-import butter.droid.ui.medialist.base.BaseMediaListPresenter;
-import butter.droid.ui.medialist.base.BaseMediaListView;
+import butter.droid.ui.media.list.base.BaseMediaListPresenter;
+import butter.droid.ui.media.list.base.BaseMediaListView;
 import dagger.Binds;
 import dagger.Module;
 

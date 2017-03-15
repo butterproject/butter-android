@@ -15,12 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist;
+package butter.droid.ui.media.list;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.utils.ProviderUtils;
-import butter.droid.ui.medialist.base.BaseMediaListPresenterImpl;
+import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
 import okhttp3.OkHttpClient;
 
 public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implements MediaListPresenter {
@@ -38,7 +38,7 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
 
     public void changeGenre(String genre) {
         if (!(filters.genre == null ? "" : filters.genre).equals(genre == null ? "" : genre)) {
-            cancelOngoingCall();
+            items.clear();
             view.refreshAdapter();
         }
     }

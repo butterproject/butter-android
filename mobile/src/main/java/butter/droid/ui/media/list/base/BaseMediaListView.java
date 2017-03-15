@@ -15,18 +15,28 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist;
+package butter.droid.ui.media.list.base;
 
-import butter.droid.ui.medialist.base.BaseMediaListPresenter;
-import butter.droid.ui.medialist.base.BaseMediaListView;
-import dagger.Binds;
-import dagger.Module;
+import android.support.annotation.StringRes;
 
-@Module
-public interface MediaListBindModule {
+import java.util.ArrayList;
 
-    @Binds BaseMediaListView bindBaseView(MediaListView view);
+import butter.droid.base.providers.media.models.Media;
 
-    @Binds BaseMediaListPresenter bindsBasePresenter(MediaListPresenter presenter);
+public interface BaseMediaListView {
+    void updateLoadingMessage(@StringRes int messageRes);
 
+    void showData();
+
+    void addItems(ArrayList<Media> items);
+
+    void showEmpty();
+
+    void showErrorMessage(@StringRes int message);
+
+    void clearAdapter();
+
+    void refreshAdapter();
+
+    void showLoading();
 }

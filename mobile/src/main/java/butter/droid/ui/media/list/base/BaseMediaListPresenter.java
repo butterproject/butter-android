@@ -15,23 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist;
+package butter.droid.ui.media.list.base;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import java.util.ArrayList;
 
-@Subcomponent(modules = MediaListModule.class)
-@FragmentScope
-public interface MediaListComponent {
+import butter.droid.base.providers.media.MediaProvider.Filters.Order;
+import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
+import butter.droid.base.providers.media.models.Media;
 
-    void inject(MediaListFragment fragment);
+public interface BaseMediaListPresenter {
+    void onActivityCreated(Sort sort, Order sortOrder, String genre);
 
-    @Subcomponent.Builder interface Builder {
+    void loadNextPage(int index);
 
-        Builder mediaListModule(MediaListModule module);
-
-        MediaListComponent build();
-
-    }
-
+    ArrayList<Media> getCurrentList();
 }

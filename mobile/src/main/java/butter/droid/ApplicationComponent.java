@@ -38,7 +38,7 @@ import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.about.AboutComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
-import butter.droid.ui.medialist.MediaListComponent;
+import butter.droid.ui.media.list.MediaListComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;

@@ -17,7 +17,7 @@
 
 package butter.droid.ui.search;
 
-import butter.droid.ui.medialist.base.BaseMediaListView;
+import butter.droid.ui.media.list.base.BaseMediaListView;
 
 public interface SearchView extends BaseMediaListView {
 

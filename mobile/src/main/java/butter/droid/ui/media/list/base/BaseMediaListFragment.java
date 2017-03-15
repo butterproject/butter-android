@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist.base;
+package butter.droid.ui.media.list.base;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,7 +52,7 @@ import butter.droid.fragments.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.manager.paging.IndexPagingListener;
 import butter.droid.manager.paging.PagingManager;
 import butter.droid.ui.media.detail.MediaDetailActivity;
-import butter.droid.ui.medialist.base.list.MediaGridAdapter;
+import butter.droid.ui.media.list.base.list.MediaGridAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -90,7 +90,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     View mRootView;
     @BindView(R.id.progressOverlay) LinearLayout mProgressOverlay;
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
-    @BindView(R.id.emptyView) TextView mEmptyView;
+    @BindView(R.id.emptyView) public TextView mEmptyView;
     @BindView(R.id.progress_textview) TextView mProgressTextView;
 
     @Override

@@ -15,18 +15,9 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist.base;
+package butter.droid.ui.media.list;
 
-import java.util.ArrayList;
+import butter.droid.ui.media.list.base.BaseMediaListView;
 
-import butter.droid.base.providers.media.MediaProvider.Filters.Order;
-import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
-import butter.droid.base.providers.media.models.Media;
-
-public interface BaseMediaListPresenter {
-    void onActivityCreated(Sort sort, Order sortOrder, String genre);
-
-    void loadNextPage(int index);
-
-    ArrayList<Media> getCurrentList();
+public interface MediaListView extends BaseMediaListView {
 }

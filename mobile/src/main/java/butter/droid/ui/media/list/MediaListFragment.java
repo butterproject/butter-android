@@ -15,17 +15,21 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.medialist;
+package butter.droid.ui.media.list;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import javax.inject.Inject;
+
 import butter.droid.MobileButterApplication;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.ui.medialist.base.BaseMediaListFragment;
+import butter.droid.ui.media.list.base.BaseMediaListFragment;
 
 public class MediaListFragment extends BaseMediaListFragment implements MediaListView {
+
+    @Inject MediaListPresenter presenter;
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,23 +42,14 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
                 .inject(this);
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-//
-//        //don't load initial data in search mode
-//        if (mAdapter.getItemCount() == 0) {
-//            mCurrentCall = providerManager.getCurrentMediaProvider()
-//                    .getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
-//            setState(State.LOADING);
-//        } else {
-//            updateUI();
-//        }
-    }
-
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         pagingManager.getNextPage();
+    }
+
+    public void changeGenre(String genre) {
+        presenter.changeGenre(genre);
     }
 
     public static BaseMediaListFragment newInstance(MediaProvider.Filters.Sort filter,

@@ -18,7 +18,6 @@
 package butter.droid.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -106,17 +105,6 @@ public class SearchActivity extends ButterBaseActivity {
 
     public static Intent getIntent(Context context) {
         return new Intent(context, SearchActivity.class);
-    }
-
-    /**
-     * @deprecated Use {@link #getIntent(Context)}
-     */
-    @Deprecated
-    public static Intent startActivity(Activity activity) {
-        Intent intent = getIntent(activity);
-        activity.startActivity(intent);
-//		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out,);
-        return intent;
     }
 
 }
