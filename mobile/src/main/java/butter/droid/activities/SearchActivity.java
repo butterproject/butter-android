@@ -19,6 +19,7 @@ package butter.droid.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -26,12 +27,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import butter.droid.MobileButterApplication;
-import butterknife.BindView;
 import butter.droid.R;
-import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.fragments.MediaListFragment;
+import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.search.SearchFragment;
 import butter.droid.utils.ToolbarUtils;
+import butterknife.BindView;
 
 
 /**
@@ -42,16 +43,9 @@ import butter.droid.utils.ToolbarUtils;
 public class SearchActivity extends ButterBaseActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.searchview) SearchView mSearchview;
+    @BindView(R.id.searchview) SearchView searchview;
 
-    private MediaListFragment mFragment;
-
-    public static Intent startActivity(Activity activity) {
-        Intent intent = new Intent(activity, SearchActivity.class);
-        activity.startActivity(intent);
-//		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out,);
-        return intent;
-    }
+    private SearchFragment fragment;
 
     @SuppressLint("MissingSuperCall") @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,36 +60,33 @@ public class SearchActivity extends ButterBaseActivity {
 
         ToolbarUtils.updateToolbarHeight(this, toolbar);
 
-        mSearchview.onActionViewExpanded();
-        mSearchview.setOnQueryTextListener(mSearchListener);
+        searchview.onActionViewExpanded();
+        searchview.setOnQueryTextListener(mSearchListener);
 
         //dont re add the fragment if it exists
         if (null != savedInstanceState) {
-            mFragment = (MediaListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+            fragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
             return;
         }
 
         //create and add the media fragment
-        mFragment = MediaListFragment.newInstance(MediaListFragment.Mode.SEARCH, MediaProvider.Filters.Sort.POPULARITY,
+        fragment = SearchFragment.newInstance(MediaProvider.Filters.Sort.POPULARITY,
                 MediaProvider.Filters.Order.DESC);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }
 
     private SearchView.OnQueryTextListener mSearchListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String s) {
-            if (null == mFragment) return false;//fragment not added yet.
-            mFragment.triggerSearch(s);
+            if (null == fragment) return false; //fragment not added yet.
+            fragment.triggerSearch(s);
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String s) {
-            if (s.equals("")) {
-                onQueryTextSubmit(s);
-            }
-            return false;
+            return onQueryTextSubmit(s);
         }
     };
 
@@ -112,4 +103,20 @@ public class SearchActivity extends ButterBaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public static Intent getIntent(Context context) {
+        return new Intent(context, SearchActivity.class);
+    }
+
+    /**
+     * @deprecated Use {@link #getIntent(Context)}
+     */
+    @Deprecated
+    public static Intent startActivity(Activity activity) {
+        Intent intent = getIntent(activity);
+        activity.startActivity(intent);
+//		activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out,);
+        return intent;
+    }
+
 }

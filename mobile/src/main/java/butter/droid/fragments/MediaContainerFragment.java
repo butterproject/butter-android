@@ -13,14 +13,15 @@ import javax.inject.Inject;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.ui.main.MainActivity;
-import butter.droid.adapters.MediaPagerAdapter;
+import butter.droid.ui.medialist.list.MediaPagerAdapter;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.ui.medialist.base.BaseMediaListFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Fragment that contains a viewpager tabs for {@link butter.droid.fragments.MediaListFragment}
+ * Fragment that contains a viewpager tabs for {@link BaseMediaListFragment}
  */
 public class MediaContainerFragment extends Fragment {
 

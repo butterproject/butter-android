@@ -15,7 +15,24 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.adapters;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.ui.medialist.list;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +48,8 @@ import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.fragments.MediaGenreSelectionFragment;
-import butter.droid.fragments.MediaListFragment;
+import butter.droid.ui.medialist.MediaListFragment;
+import butter.droid.ui.medialist.base.BaseMediaListFragment;
 
 public class MediaPagerAdapter extends FragmentPagerAdapter {
 
@@ -75,7 +93,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         }
 
         position -= mHasGenreTabs;
-        return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
+        return MediaListFragment.newInstance(mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
     }
 
     @Override
@@ -94,13 +112,13 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         return obj;
     }
 
-    public MediaListFragment getMediaListFragment(int position) {
+    public BaseMediaListFragment getMediaListFragment(int position) {
         if (mFragTags.size() > position) {
             String tag = mFragTags.get(position);
             if (tag != null) {
                 Fragment frag = mFragmentManager.findFragmentByTag(tag);
-                if (frag instanceof MediaListFragment)
-                    return (MediaListFragment) frag;
+                if (frag instanceof BaseMediaListFragment)
+                    return (BaseMediaListFragment) frag;
             }
         }
         return null;
@@ -112,9 +130,10 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
             mGenre = genre;
             mProvider.cancel();
             for (int i = 0; i < getCount(); i++) {
-                MediaListFragment mediaListFragment = getMediaListFragment(i);
-                if (mediaListFragment != null)
-                    mediaListFragment.changeGenre(genre);
+                BaseMediaListFragment mediaListFragment = getMediaListFragment(i);
+                if (mediaListFragment != null) {
+//                    mediaListFragment.changeGenre(genre);
+                }
             }
         }
     };
