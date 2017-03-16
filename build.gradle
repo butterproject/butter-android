@@ -1,4 +1,4 @@
-apply from: './gradle/checkstyle.gradle'
+apply from: './config/gradle/checkstyle.gradle'
 
 import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 

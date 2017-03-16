@@ -76,8 +76,6 @@ android {
             include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
-
-//    preBuild.dependsOn 'checkstyle'
 }
 
 //./gradlew dependencyUpdates -Drevision=release
