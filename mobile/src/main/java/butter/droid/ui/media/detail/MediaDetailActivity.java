@@ -47,7 +47,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.TrailerPlayerActivity;
+import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.beaming.server.BeamServerService;

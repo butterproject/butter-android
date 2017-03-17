@@ -435,7 +435,7 @@
             android:screenOrientation="sensorPortrait" />
 
 		<activity
-			android:name="butter.droid.activities.TrailerPlayerActivity"
+			android:name="butter.droid.ui.trailer.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
         <service android:name="butter.droid.base.torrent.TorrentService" />

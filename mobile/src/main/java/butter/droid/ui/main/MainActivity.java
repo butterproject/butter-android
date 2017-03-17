@@ -50,7 +50,7 @@ import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.terms.TermsActivity;
-import butter.droid.activities.TrailerPlayerActivity;
+import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.Constants;
