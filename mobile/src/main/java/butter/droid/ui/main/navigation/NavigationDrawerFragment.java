@@ -73,7 +73,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
 
         presenter.onCreate(savedPosition);
-
     }
 
     @Override

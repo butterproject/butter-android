@@ -85,7 +85,7 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
     @Inject MainPresenter presenter;
     @Inject ProviderManager providerManager;
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout navigationDrawerContainer;
     @Nullable @BindView(R.id.tabs) TabLayout tabs;
 
@@ -106,13 +106,13 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
         setShowCasting(true);
-        ToolbarUtils.updateToolbarHeight(this, mToolbar);
+        ToolbarUtils.updateToolbarHeight(this, toolbar);
         setupDrawer();
 
         presenter.onCreate(savedInstanceState == null);
