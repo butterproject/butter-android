@@ -15,26 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main;
+package butter.droid.ui.main.navigation;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.main.navigation.NavigationDrawerComponent;
-import dagger.Subcomponent;
+import java.util.List;
 
-@Subcomponent(
-        modules = MainModule.class
-)
-@ActivityScope
-public interface MainComponent {
+import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
 
-    void inject(MainActivity activity);
+public interface NavigationDrawerView {
+    void populateItems(List<AbsNavDrawerItem> navigationItems);
 
-    NavigationDrawerComponent.Builder naviagtionDrawerBuilder();
-
-    @Subcomponent.Builder interface Builder {
-        Builder mainModule(MainModule module);
-
-        MainComponent build();
-    }
-
+    void itemsUpdated();
 }
