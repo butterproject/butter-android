@@ -18,6 +18,7 @@
 package butter.droid.ui.main;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
@@ -34,6 +36,7 @@ import butter.droid.base.manager.provider.ProviderManager.ProviderType;
 import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsPresenterImpl;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -48,6 +51,8 @@ public class MainPresenterImpl implements MainPresenter {
     private final Context context;
     private final PreferencesHandler preferencesHandler;
     private final PrefManager prefManager;
+
+    private boolean userLearnedDrawer;
 
     public MainPresenterImpl(MainView view, YouTubeManager youTubeManager, ProviderManager providerManager,
             BeamManager beamManager, Context context, PreferencesHandler preferencesHandler, PrefManager prefManager) {
@@ -64,6 +69,11 @@ public class MainPresenterImpl implements MainPresenter {
         if (isInitial) {
             @ProviderType int provider = preferencesHandler.getDefaultProvider();
             view.initProviders(provider);
+        }
+
+        userLearnedDrawer = prefManager.get(Prefs.DRAWER_LEARNED, false);
+        if (!userLearnedDrawer && isInitial) {
+            view.openDrawer();
         }
     }
 
@@ -129,6 +139,28 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override public void storagePermissionGranted() {
         view.checkIntentAction();
+    }
+
+    @Override public void drawerOpened() {
+        if (!userLearnedDrawer) {
+            userLearnedDrawer = true;
+            prefManager.save(Prefs.DRAWER_LEARNED, true);
+        }
+    }
+
+    @Override public void selectProvider(@ProviderType int providerType) {
+        providerManager.setCurrentProviderType(providerType);
+        view.closeDrawer();
+    }
+
+    @Override public void openMenuActivity(Class<? extends Activity> activityClass) {
+        if (activityClass == PreferencesActivity.class) {
+            view.openPreferenceScreen();
+        } else {
+            throw new IllegalStateException("Unknown menu activity");
+        }
+
+        view.closeDrawer();
     }
 
     private void openStream(StreamInfo info) {

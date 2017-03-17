@@ -16,9 +16,11 @@
   -->
 
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/recyclerview"
 	android:background="@color/nav_drawer_color"
 	android:scrollbars="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-    android:focusable="true" />
+    android:focusable="true"
+	app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>

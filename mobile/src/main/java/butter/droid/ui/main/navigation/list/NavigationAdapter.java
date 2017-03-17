@@ -15,11 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.adapters;
+package butter.droid.ui.main.navigation.list;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import butter.droid.R;
-import butter.droid.fragments.NavigationDrawerFragment;
-import butter.droid.fragments.NavigationDrawerFragment.AbsNavDrawerItem;
+import butter.droid.ui.main.navigation.NavigationDrawerFragment;
+import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,23 +44,18 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_ITEM = 1;
 
-    private OnItemClickListener mItemClickListener;
-    private List<NavigationDrawerFragment.AbsNavDrawerItem> mItems;
+    private List<NavigationDrawerFragment.AbsNavDrawerItem> items;
     final int mNormalColor, mCheckedColor, mCheckedBackgroundRes, mNormalBackgroundRes;
-    private Callback mCallback;
 
-    public NavigationAdapter(@NonNull Context context, @NonNull Callback callback,
-            List<NavigationDrawerFragment.AbsNavDrawerItem> items) {
-        mItems = items;
-        mCallback = callback;
-        mNormalColor = context.getResources().getColor(R.color.nav_drawer_deselected);
-        mCheckedColor = context.getResources().getColor(R.color.primary);
+    public NavigationAdapter(@NonNull Context context) {
+        mNormalColor = ContextCompat.getColor(context, R.color.nav_drawer_deselected);
+        mCheckedColor = ContextCompat.getColor(context, R.color.primary);
         mNormalBackgroundRes = R.drawable.selectable_nav_background;
         mCheckedBackgroundRes = R.color.nav_drawer_selected_bg;
     }
 
     public void setItems(List<NavigationDrawerFragment.AbsNavDrawerItem> items) {
-        mItems = items;
+        this.items = items;
         notifyDataSetChanged();
     }
 
@@ -118,7 +114,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         viewHolder.title.setText(item.getTitle());
 
-        boolean isSelected = (getCorrectPosition(position)) == mCallback.getSelectedPosition();
+        boolean isSelected = item.isSelected();
         viewHolder.title.setTextColor(isSelected ? mCheckedColor : mNormalColor);
         viewHolder.itemView.setBackgroundResource(isSelected ? mCheckedBackgroundRes : mNormalBackgroundRes);
         //		vh.itemView.setBackgroundResource(isSelected ? R.color.nav_drawer_highlight : 0);
@@ -134,11 +130,11 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return mItems.size();
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mItemClickListener = listener;
+        if (items != null) {
+            return items.size();
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -150,16 +146,11 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-
-    public interface OnItemClickListener {
-        void onItemClick(View v, ItemRowHolder vh,  NavigationDrawerFragment.AbsNavDrawerItem item, int position);
-    }
-
     public NavigationDrawerFragment.AbsNavDrawerItem getItem(int position) {
-        if (position < 0 || mItems.size() <= position) {
+        if (position < 0 || items.size() <= position) {
             return null;
         } else {
-            return mItems.get(position);
+            return items.get(position);
         }
     }
 
@@ -173,7 +164,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return position - 1;
     }
 
-    public class ItemRowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ItemRowHolder extends RecyclerView.ViewHolder {
 
         @BindView(android.R.id.icon) ImageView icon;
         @BindView(android.R.id.text1) TextView title;
@@ -183,16 +174,6 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public ItemRowHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mItemClickListener != null) {
-                int position = getAdapterPosition();
-                NavigationDrawerFragment.AbsNavDrawerItem item = getItem(position);
-                mItemClickListener.onItemClick(view, this, item, position);
-            }
         }
 
         public Switch getSwitch() {
@@ -216,7 +197,4 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface Callback {
-        int getSelectedPosition();
-    }
 }

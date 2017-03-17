@@ -15,39 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main;
+package butter.droid.ui.main.navigation;
 
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
 
-public interface MainView {
-    void showTermsScreen();
+public interface NavigationDrawerPresenter {
+    void onCreate(int savedPosition);
 
-    void showYoutubeVideo(Movie movie, String url);
+    void onViewCreated();
 
-    void showPlayerTestDialog(String[] fileTypes);
+    void onSavedInstanceState(Bundle outState);
 
-    void showPlayerTestUrlDialog();
+    void selectItem(int position);
 
-    void showVideoPlayer(@NonNull StreamInfo info);
+    void onMenuItemClicked(int position, AbsNavDrawerItem item);
 
-    void showBeamPlayer(@NonNull StreamInfo info);
-
-    void requestStoragePermissions();
-
-    void closeScreen();
-
-    void checkIntentAction();
-
-    void initProviders(@ProviderType int provider);
-
-    void openDrawer();
-
-    void closeDrawer();
-
-    void openPreferenceScreen();
-
+    void selectProvider(@ProviderType int providerType);
 }
