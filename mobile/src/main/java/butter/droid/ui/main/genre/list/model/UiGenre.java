@@ -15,28 +15,34 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main;
+package butter.droid.ui.main.genre.list.model;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.main.genre.GenreSelectionComponent;
-import butter.droid.ui.main.navigation.NavigationDrawerComponent;
-import dagger.Subcomponent;
+import android.support.annotation.StringRes;
 
-@Subcomponent(
-        modules = MainModule.class
-)
-@ActivityScope
-public interface MainComponent {
+public class UiGenre {
 
-    void inject(MainActivity activity);
+    private final String key;
+    @StringRes private final int label;
+    private boolean selected;
 
-    NavigationDrawerComponent.Builder navigtionDrawerBuilder();
-    GenreSelectionComponent.Builder genreSelectionBuilder();
-
-    @Subcomponent.Builder interface Builder {
-        Builder mainModule(MainModule module);
-
-        MainComponent build();
+    public UiGenre(String key, int label) {
+        this.key = key;
+        this.label = label;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public int getLabel() {
+        return label;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

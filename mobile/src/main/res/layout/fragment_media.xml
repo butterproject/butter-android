@@ -17,6 +17,7 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/root_layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -27,7 +28,8 @@
         android:focusableInTouchMode="false"
 		android:scrollbars="vertical"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="match_parent"
+		app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
 	<com.devspark.robototextview.widget.RobotoTextView
 		android:id="@+id/emptyView"

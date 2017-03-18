@@ -19,6 +19,7 @@ package butter.droid.base.providers.media;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 
 import com.google.gson.Gson;
 
@@ -118,40 +119,41 @@ public abstract class MediaProvider extends BaseProvider {
     }
 
     public static class NavInfo {
-        private final Integer mIconId;
-        private int mId;
-        private Filters.Sort mSort;
-        private Filters.Order mDefOrder;
-        private String mLabel;
 
-        public NavInfo(int id,Filters.Sort sort, Filters.Order defOrder, String label,
-                @Nullable @DrawableRes Integer icon) {
-            mId = id;
-            mSort = sort;
-            mDefOrder = defOrder;
-            mLabel = label;
-            mIconId = icon;
+        private int id;
+        @DrawableRes private final int iconId;
+        @StringRes private int label;
+        private Filters.Sort sort;
+        private Filters.Order defOrder;
+
+        public NavInfo(int id, Filters.Sort sort, Filters.Order defOrder, @StringRes int label, @DrawableRes int icon) {
+            this.id = id;
+            this.sort = sort;
+            this.defOrder = defOrder;
+            this.label = label;
+            iconId = icon;
         }
 
         public Filters.Sort getFilter() {
-            return mSort;
+            return sort;
         }
 
         public int getId() {
-            return mId;
+            return id;
         }
 
         @DrawableRes
         public int getIcon() {
-            return mIconId;
+            return iconId;
         }
 
         public Filters.Order getOrder() {
-            return mDefOrder;
+            return defOrder;
         }
 
-        public String getLabel() {
-            return mLabel;
+        @StringRes
+        public int getLabel() {
+            return label;
         }
     }
 

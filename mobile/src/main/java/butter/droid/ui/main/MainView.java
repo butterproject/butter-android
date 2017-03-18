@@ -18,8 +18,12 @@
 package butter.droid.ui.main;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+
+import java.util.List;
 
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 
@@ -50,4 +54,7 @@ public interface MainView {
 
     void openPreferenceScreen();
 
+    void displayProvider(@StringRes int title, boolean hasGenres, List<NavInfo> navigation);
+
+    void onGenreChanged(String genre);
 }

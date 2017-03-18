@@ -15,28 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main;
+package butter.droid.ui.main.genre;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.main.genre.GenreSelectionComponent;
-import butter.droid.ui.main.navigation.NavigationDrawerComponent;
+import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = MainModule.class
-)
-@ActivityScope
-public interface MainComponent {
+@Subcomponent(modules = GenreSelectionModule.class)
+@FragmentScope
+public interface GenreSelectionComponent {
 
-    void inject(MainActivity activity);
-
-    NavigationDrawerComponent.Builder navigtionDrawerBuilder();
-    GenreSelectionComponent.Builder genreSelectionBuilder();
+    void inject(GenreSelectionFragment fragment);
 
     @Subcomponent.Builder interface Builder {
-        Builder mainModule(MainModule module);
 
-        MainComponent build();
+        Builder genresSelectionModule(GenreSelectionModule module);
+
+        GenreSelectionComponent build();
+
     }
 
 }

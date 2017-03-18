@@ -25,8 +25,6 @@ import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.fragments.BeamPlayerFragment;
-import butter.droid.fragments.MediaContainerFragment;
-import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.MediaListFragment;
 import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
@@ -54,9 +52,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(SearchActivity activity);
     void inject(VideoPlayerActivity activity);
 
-    void inject(MediaContainerFragment fragment);
     void inject(MediaListFragment fragment);
-    void inject(MediaGenreSelectionFragment fragment);
     void inject(LoadingDetailDialogFragment fragment);
     void inject(EpisodeDialogFragment fragment);
     void inject(VideoPlayerFragment fragment);

@@ -31,6 +31,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butter.droid.base.ButterApplication;
@@ -53,8 +54,6 @@ public class VodoProvider extends MediaProvider {
             "http://butter.vodo.net/popcorn"
     };
     public static String CURRENT_URL = API_URLS[CURRENT_API];
-
-    private static Filters sFilters = new Filters();
 
     public VodoProvider(OkHttpClient client, Gson gson, @Nullable SubsProvider subsProvider) {
         super(client, gson, subsProvider);
@@ -82,7 +81,6 @@ public class VodoProvider extends MediaProvider {
 
     @Override
     public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
-        sFilters = filters;
 
         final ArrayList<Media> currentList;
         if (existingList == null) {
@@ -307,13 +305,18 @@ public class VodoProvider extends MediaProvider {
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
         tabs.add(new NavInfo(R.id.yts_filter_a_to_z, Filters.Sort.ALPHABET, Filters.Order.ASC,
-                ButterApplication.getAppContext().getString(R.string.a_to_z), R.drawable.yts_filter_a_to_z));
+                R.string.a_to_z, R.drawable.yts_filter_a_to_z));
         return tabs;
     }
 
     @Override
     public List<Genre> getGenres() {
-        return null;
+        return Arrays.asList(
+                new Genre("all", R.string.genre_all),
+                new Genre("anime", R.string.title_anime),
+                new Genre("shows", R.string.title_shows),
+                new Genre("movies", R.string.title_movies)
+        );
     }
 
 }
