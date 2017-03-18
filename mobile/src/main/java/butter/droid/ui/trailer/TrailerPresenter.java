@@ -5,7 +5,11 @@ import butter.droid.base.torrent.StreamInfo;
 
 public interface TrailerPresenter {
 
-  void onCreate(final Media media, final String youtubeUrl, StreamInfo streamInfo);
+  void onCreate(final Media media, final String youtubeUrl);
 
   StreamInfo getStreamInfo();
+
+  void onVideoUrlObtained(String videoUrl);
+
+  void onErrorObtainingVideoUrl();
 }

@@ -5,4 +5,8 @@ public interface TrailerView {
   void onDisableVideoPlayerSubsButton();
 
   void onExecuteQueryYoutubeTask(String youtubeUrl);
+
+  void onNotifyMediaReady();
+
+  void onDisplayErrorVideoDialog();
 }

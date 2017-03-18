@@ -36,6 +36,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.ui.ButterBaseActivity;
+import java.net.URLDecoder;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -44,11 +45,19 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
   public final static String LOCATION = "stream_url";
   public final static String DATA = "video_data";
 
+  private static final String TAG = TrailerPlayerActivity.class.getSimpleName();
+
   @Inject
   TrailerPresenter presenter;
 
   @Inject
   YouTubeManager youTubeManager;
+
+  @Inject
+  WifiManager wifiManager;
+
+  @Inject
+  TelephonyManager telephonyManager;
 
   VideoPlayerFragment videoPlayerFragment;
 
@@ -73,11 +82,10 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     final Media media = getIntent().getParcelableExtra(DATA);
     media.title += " " + getString(R.string.trailer);
     final String youtubeUrl = getIntent().getStringExtra(LOCATION);
-    final StreamInfo streamInfo = new StreamInfo(media, null, null, null, null, null);
 
     this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
-    presenter.onCreate(media, youtubeUrl, streamInfo);
+    presenter.onCreate(media, youtubeUrl);
   }
 
   @Override
@@ -112,8 +120,34 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
   @Override
   public void onExecuteQueryYoutubeTask(String youtubeUrl) {
-    final QueryYouTubeTask youTubeTask = new QueryYouTubeTask(youTubeManager);
-    youTubeTask.execute(youTubeManager.getYouTubeVideoId(youtubeUrl));
+    final QueryYouTubeTask youTubeTask = new QueryYouTubeTask(youTubeManager, wifiManager, telephonyManager);
+    final String youTubeVideoId = youTubeManager.getYouTubeVideoId(youtubeUrl);
+    youTubeTask.execute(youTubeVideoId);
+  }
+
+  @Override
+  public void onNotifyMediaReady() {
+    videoPlayerFragment.onMediaReady();
+  }
+
+  @Override
+  public void onDisplayErrorVideoDialog() {
+    try {
+      final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TrailerPlayerActivity.this)
+          .setTitle(R.string.comm_error)
+          .setCancelable(false)
+          .setMessage(R.string.comm_message)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              TrailerPlayerActivity.this.finish();
+            }
+          });
+      final AlertDialog dialog = alertDialogBuilder.create();
+      dialog.show();
+    } catch (Exception e) {
+      Log.e(TAG, "Problem showing error dialog: ", e);
+    }
   }
 
   private class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {
@@ -121,11 +155,13 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     private final String TAG = QueryYouTubeTask.class.getSimpleName();
 
     private final YouTubeManager youTubeManager;
+    private final WifiManager wifiManager;
+    private final TelephonyManager telephonyManager;
 
-    private boolean showedError;
-
-    private QueryYouTubeTask(YouTubeManager youTubeManager) {
+    private QueryYouTubeTask(final YouTubeManager youTubeManager, final WifiManager wifiManager, final TelephonyManager telephonyManager) {
       this.youTubeManager = youTubeManager;
+      this.wifiManager = wifiManager;
+      this.telephonyManager = telephonyManager;
     }
 
     @Override
@@ -139,9 +175,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
       }
 
       try {
-        WifiManager wifiManager = (WifiManager) TrailerPlayerActivity.this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        TelephonyManager telephonyManager = (TelephonyManager) TrailerPlayerActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
-
         // if we have a fast connection (wifi or 3g), then we'll get a high quality YouTube video
         if (wifiManager.isWifiEnabled() && wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getIpAddress() != 0) {
           quality = "22";
@@ -162,7 +195,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
           return null;
         }
 
-        ////////////////////////////////////
         // calculate the actual URL of the video, encoded with proper YouTube token
         uriStr = youTubeManager.calculateYouTubeUrl(quality, true, videoId);
 
@@ -184,7 +216,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     @Override
     protected void onPostExecute(Uri result) {
       super.onPostExecute(result);
-
       try {
         if (isCancelled()) {
           return;
@@ -194,42 +225,12 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
           throw new RuntimeException("Invalid NULL Url.");
         }
 
-//        streamInfo.setVideoLocation(URLDecoder.decode(result.toString()));
-
-//        videoPlayerFragment.onMediaReady();
+        final String videoUrl = URLDecoder.decode(result.toString());
+        presenter.onVideoUrlObtained(videoUrl);
       } catch (Exception e) {
-        Log.e(this.getClass().getSimpleName(), "Error playing video!", e);
-
-        if (!showedError) {
-          showErrorAlert();
-        }
+        Log.e(TAG, "Error playing video: ", e);
+        presenter.onErrorObtainingVideoUrl();
       }
-    }
-
-    private void showErrorAlert() {
-      try {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TrailerPlayerActivity.this);
-        alertDialogBuilder.setTitle(R.string.comm_error);
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setMessage(R.string.comm_message);
-
-        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            TrailerPlayerActivity.this.finish();
-          }
-        });
-
-        AlertDialog lDialog = alertDialogBuilder.create();
-        lDialog.show();
-      } catch (Exception e) {
-        Log.e(this.getClass().getSimpleName(), "Problem showing error dialog.", e);
-      }
-    }
-
-    @Override
-    protected void onProgressUpdate(Void... pValues) {
-      super.onProgressUpdate(pValues);
     }
 
   }

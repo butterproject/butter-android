@@ -7,20 +7,17 @@ public class TrailerPresenterImpl implements TrailerPresenter {
 
   private final TrailerView view;
 
-  private Media media;
-  private String youtubeUrl;
   private StreamInfo streamInfo;
+
+  private boolean errorDialogDisplayed;
 
   public TrailerPresenterImpl(TrailerView view) {
     this.view = view;
   }
 
   @Override
-  public void onCreate(Media media, String youtubeUrl, StreamInfo streamInfo) {
-    this.media = media;
-    this.youtubeUrl = youtubeUrl;
-    this.streamInfo = streamInfo;
-
+  public void onCreate(Media media, String youtubeUrl) {
+    this.streamInfo = new StreamInfo(media, null, null, null, null, null);
     view.onDisableVideoPlayerSubsButton();
     view.onExecuteQueryYoutubeTask(youtubeUrl);
   }
@@ -28,5 +25,19 @@ public class TrailerPresenterImpl implements TrailerPresenter {
   @Override
   public StreamInfo getStreamInfo() {
     return streamInfo;
+  }
+
+  @Override
+  public void onVideoUrlObtained(String videoUrl) {
+    streamInfo.setVideoLocation(videoUrl);
+    view.onNotifyMediaReady();
+  }
+
+  @Override
+  public void onErrorObtainingVideoUrl() {
+    if (!errorDialogDisplayed) {
+      errorDialogDisplayed = true;
+      view.onDisplayErrorVideoDialog();
+    }
   }
 }
