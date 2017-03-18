@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,26 +34,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.ui.loading.StreamLoadingActivity;
-import butter.droid.ui.terms.TermsActivity;
-import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.ui.ButterBaseActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
@@ -64,10 +57,18 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.fragments.MediaContainerFragment;
-import butter.droid.fragments.NavigationDrawerFragment;
+import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.loading.StreamLoadingActivity;
+import butter.droid.ui.main.navigation.NavigationDrawerFragment;
+import butter.droid.ui.preferences.PreferencesActivity;
+import butter.droid.ui.terms.TermsActivity;
+import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butterknife.BindView;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -81,27 +82,34 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
     @Inject MainPresenter presenter;
     @Inject ProviderManager providerManager;
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout mNavigationDrawerContainer;
-    @Nullable @BindView(R.id.tabs) TabLayout mTabs;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout navigationDrawerContainer;
+    @Nullable @BindView(R.id.tabs) TabLayout tabs;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private MainComponent component;
+    private NavigationDrawerFragment navigationDrawerFragment;
+    private ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
 
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MobileButterApplication.getAppContext()
+        component = MobileButterApplication.getAppContext()
                 .getComponent()
                 .mainComponentBuilder()
                 .mainModule(new MainModule(this))
-                .build()
-                .inject(this);
+                .build();
+        component.inject(this);
 
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         setShowCasting(true);
-        ToolbarUtils.updateToolbarHeight(this, mToolbar);
+        ToolbarUtils.updateToolbarHeight(this, toolbar);
         setupDrawer();
 
         presenter.onCreate(savedInstanceState == null);
@@ -115,8 +123,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
         setTitle(ProviderUtils.getProviderTitle(providerManager.getCurrentMediaProviderType()));
         supportInvalidateOptionsMenu();
-
-        mNavigationDrawerFragment.initItems();
 
         if (BeamServerService.getServer() != null) {
             BeamServerService.getServer().stop();
@@ -160,19 +166,29 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        } else {
+            switch (item.getItemId()) {
+                case android.R.id.home:
                 /* Override default {@link pct.droid.activities.BaseActivity } behaviour */
-                return false;
-            case R.id.action_playertests:
-                presenter.playerTestClicked();
-                break;
-            case R.id.action_search:
-                //start the search activity
-                SearchActivity.startActivity(this);
-                break;
+                    return false;
+                case R.id.action_playertests:
+                    presenter.playerTestClicked();
+                    return true;
+                case R.id.action_search:
+                    //start the search activity
+                    SearchActivity.startActivity(this);
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    @Override public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override public void onProviderChanged(@ProviderType int provider) {
@@ -193,7 +209,7 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
     }
 
     public void updateTabs(MediaContainerFragment containerFragment, final int position) {
-        if (mTabs == null) {
+        if (tabs == null) {
             return;
         }
 
@@ -203,28 +219,28 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
                 return;
             }
 
-            mTabs.setupWithViewPager(viewPager);
-            mTabs.setTabGravity(TabLayout.GRAVITY_CENTER);
-            mTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-            mTabs.setVisibility(View.VISIBLE);
+            tabs.setupWithViewPager(viewPager);
+            tabs.setTabGravity(TabLayout.GRAVITY_CENTER);
+            tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+            tabs.setVisibility(View.VISIBLE);
 
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
-            mTabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+            tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
-            if (mTabs.getTabCount() > 0) {
-                mTabs.getTabAt(0).select();
+            if (tabs.getTabCount() > 0) {
+                tabs.getTabAt(0).select();
                 torrentHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (mTabs.getTabCount() > position) {
-                            mTabs.getTabAt(position).select();
+                        if (tabs.getTabCount() > position) {
+                            tabs.getTabAt(position).select();
                         }
                     }
                 }, 10);
             }
 
         } else {
-            mTabs.setVisibility(View.GONE);
+            tabs.setVisibility(View.GONE);
         }
     }
 
@@ -294,8 +310,24 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
     }
 
     @Override public void initProviders(@ProviderType int provider) {
-        mNavigationDrawerFragment.selectItem(provider);
+        navigationDrawerFragment.selectProvider(provider);
         showProvider(provider);
+    }
+
+    @Override public void openDrawer() {
+        drawerLayout.openDrawer(navigationDrawerContainer);
+    }
+
+    @Override public void closeDrawer() {
+        drawerLayout.closeDrawer(navigationDrawerContainer);
+    }
+
+    @Override public void openPreferenceScreen() {
+        startActivity(PreferencesActivity.getIntent(this));
+    }
+
+    public MainComponent getComponent() {
+        return component;
     }
 
     private void checkActions() {
@@ -320,8 +352,8 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
         MediaContainerFragment mediaFragment = MediaContainerFragment.newInstance();
 
-        if (mTabs.getTabCount() > 0) {
-            mTabs.getTabAt(0).select();
+        if (tabs.getTabCount() > 0) {
+            tabs.getTabAt(0).select();
         }
 
         fragmentManager.beginTransaction().replace(R.id.container, mediaFragment).commit();
@@ -330,14 +362,30 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
     private void setupDrawer() {
         // Set up the drawer.
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.primary_dark));
 
-        mNavigationDrawerFragment =
+        navigationDrawerFragment =
                 (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(
                         R.id.navigation_drawer_fragment);
 
-        mNavigationDrawerFragment.initialise(mNavigationDrawerContainer, drawerLayout);
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                presenter.drawerOpened();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, 0);
+            }
+        };
+        drawerToggle.syncState();
+        drawerLayout.addDrawerListener(drawerToggle);
 
     }
 }

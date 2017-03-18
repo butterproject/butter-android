@@ -63,7 +63,7 @@
 
 		<fragment
 			android:id="@+id/navigation_drawer_fragment"
-			class="butter.droid.fragments.NavigationDrawerFragment"
+			class="butter.droid.ui.main.navigation.NavigationDrawerFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
 	</butter.droid.widget.ScrimInsetsFrameLayout>
