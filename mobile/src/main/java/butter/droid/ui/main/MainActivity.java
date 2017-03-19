@@ -32,7 +32,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -66,8 +65,8 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
-import butter.droid.ui.main.pager.MediaPagerAdapter;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment;
+import butter.droid.ui.main.pager.MediaPagerAdapter;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsActivity;
 import butter.droid.utils.ToolbarUtils;
@@ -78,7 +77,7 @@ import timber.log.Timber;
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
  */
-public class MainActivity extends ButterBaseActivity implements MainView, OnPageChangeListener {
+public class MainActivity extends ButterBaseActivity implements MainView {
 
     private static final int REQUEST_CODE_TERMS = 1;
     private static final int PERMISSIONS_REQUEST_STORAGE = 1;
@@ -306,18 +305,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnPage
         return component;
     }
 
-    @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        // nothing to do
-    }
-
-    @Override public void onPageSelected(int position) {
-
-    }
-
-    @Override public void onPageScrollStateChanged(int state) {
-        // nothing to do
-    }
-
     private void checkActions() {
         String action = getIntent().getAction();
         Uri data = getIntent().getData();
@@ -371,18 +358,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnPage
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
-//        if (tabs.getTabCount() > 0) {
-//            tabs.getTabAt(0).select();
-//            torrentHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (tabs.getTabCount() > position) {
-//                        tabs.getTabAt(position).select();
-//                    }
-//                }
-//            }, 10);
-//        }
 
     }
 

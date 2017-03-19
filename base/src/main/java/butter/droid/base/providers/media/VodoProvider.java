@@ -31,7 +31,6 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butter.droid.base.ButterApplication;
@@ -318,12 +317,7 @@ public class VodoProvider extends MediaProvider {
 
     @Override
     public List<Genre> getGenres() {
-        return Arrays.asList(
-                new Genre("all", R.string.genre_all),
-                new Genre("anime", R.string.title_anime),
-                new Genre("shows", R.string.title_shows),
-                new Genre("movies", R.string.title_movies)
-        );
+        return null;
     }
 
 }
