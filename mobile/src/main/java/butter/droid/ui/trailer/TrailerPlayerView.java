@@ -17,7 +17,7 @@
 
 package butter.droid.ui.trailer;
 
-public interface TrailerView {
+public interface TrailerPlayerView {
 
   void onDisableVideoPlayerSubsButton();
 

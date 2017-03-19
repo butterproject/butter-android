@@ -20,15 +20,15 @@ package butter.droid.ui.trailer;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 
-public class TrailerPresenterImpl implements TrailerPresenter {
+public class TrailerPlayerPresenterImpl implements TrailerPlayerPresenter {
 
-  private final TrailerView view;
+  private final TrailerPlayerView view;
 
   private StreamInfo streamInfo;
 
   private boolean errorDialogDisplayed;
 
-  public TrailerPresenterImpl(TrailerView view) {
+  public TrailerPlayerPresenterImpl(TrailerPlayerView view) {
     this.view = view;
   }
 

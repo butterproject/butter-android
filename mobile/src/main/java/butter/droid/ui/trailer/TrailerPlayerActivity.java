@@ -40,7 +40,7 @@ import java.net.URLDecoder;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerView, VideoPlayerFragment.Callback {
+public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
 
   public final static String LOCATION = "stream_url";
   public final static String DATA = "video_data";
@@ -48,7 +48,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
   private static final String TAG = TrailerPlayerActivity.class.getSimpleName();
 
   @Inject
-  TrailerPresenter presenter;
+  TrailerPlayerPresenter presenter;
 
   @Inject
   YouTubeManager youTubeManager;
@@ -73,7 +73,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     MobileButterApplication.getAppContext()
         .getComponent()
         .trailerComponentBuilder()
-        .trailerModule(new TrailerModule(this))
+        .trailerModule(new TrailerPlayerModule(this))
         .build()
         .inject(this);
 

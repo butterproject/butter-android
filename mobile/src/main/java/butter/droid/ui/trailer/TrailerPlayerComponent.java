@@ -18,28 +18,22 @@
 package butter.droid.ui.trailer;
 
 import butter.droid.base.ui.ActivityScope;
-import dagger.Module;
-import dagger.Provides;
+import dagger.Subcomponent;
 
-@Module
-public class TrailerModule {
+@Subcomponent(
+    modules = TrailerPlayerModule.class
+)
+@ActivityScope
+public interface TrailerPlayerComponent {
 
-  private final TrailerView view;
+  void inject(TrailerPlayerActivity activity);
 
-  public TrailerModule(TrailerView view) {
-    this.view = view;
-  }
+  @Subcomponent.Builder
+  interface Builder {
 
-  @Provides
-  @ActivityScope
-  TrailerView provideView() {
-    return view;
-  }
+    Builder trailerModule(TrailerPlayerModule module);
 
-  @Provides
-  @ActivityScope
-  TrailerPresenter providePresenter(TrailerView trailerView) {
-    return new TrailerPresenterImpl(trailerView);
+    TrailerPlayerComponent build();
   }
 
 }

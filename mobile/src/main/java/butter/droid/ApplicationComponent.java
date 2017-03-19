@@ -36,7 +36,7 @@ import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.terms.TermsComponent;
-import butter.droid.ui.trailer.TrailerComponent;
+import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -67,6 +67,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     MediaDetailComponent.Builder mediaDetailsComponentBuilder();
     AboutComponent.Builder aboutComponentBuilder();
     StreamLoadingComponent.Builder streamLoadingComponentBuilder();
-    TrailerComponent.Builder trailerComponentBuilder();
+    TrailerPlayerComponent.Builder trailerComponentBuilder();
 
 }
