@@ -57,4 +57,7 @@ public interface MainView {
     void displayProvider(@StringRes int title, boolean hasGenres, List<NavInfo> navigation);
 
     void onGenreChanged(String genre);
+
+    void showFirsContentScreen();
+
 }

@@ -298,6 +298,10 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnPage
         adapter.setGenre(genre);
     }
 
+    @Override public void showFirsContentScreen() {
+        tabs.getTabAt(1).select();
+    }
+
     public MainComponent getComponent() {
         return component;
     }

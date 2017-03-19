@@ -181,6 +181,8 @@ public class MainPresenterImpl implements MainPresenter {
                 genreListener.onGenreChanged(genre);
             }
         }
+
+        view.showFirsContentScreen();
     }
 
     @Override public void addGenreListener(OnGenreChangeListener listener) {

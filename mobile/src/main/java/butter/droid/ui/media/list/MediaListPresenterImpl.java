@@ -21,10 +21,12 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.main.MainPresenter;
+import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
+import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
 import okhttp3.OkHttpClient;
 
-public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implements MediaListPresenter {
+public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implements MediaListPresenter, OnGenreChangeListener {
 
     private final MediaListView view;
     private final ProviderManager providerManager;
@@ -43,18 +45,23 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
         return ProviderUtils.getProviderLoadingMessage(providerManager.getCurrentMediaProviderType());
     }
 
-    private void changeGenre(String genre) {
-        if (!(filters.genre == null ? "" : filters.genre).equals(genre == null ? "" : genre)) {
-            items.clear();
-            view.refreshAdapter();
-        }
-    }
-
     @Override public void onCreate() {
-//        parentPresenter.add
+        parentPresenter.addGenreListener(this);
     }
 
     @Override public void onDestroy() {
+        parentPresenter.removeGenreListener(this);
+    }
 
+    @Override public void onGenreChanged(UiGenre genre) {
+        changeGenre(genre.getKey());
+    }
+
+    private void changeGenre(String genre) {
+        if (!(filters.genre == null ? "" : filters.genre).equals(genre == null ? "" : genre)) {
+            filters.genre = genre;
+            items.clear();
+            view.refreshAdapter();
+        }
     }
 }
