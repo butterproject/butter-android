@@ -24,7 +24,8 @@
     android:layout_gravity="center"
     android:focusable="true"
     android:focusableInTouchMode="false"
-    android:background="@color/overlay">
+    android:background="@color/overlay"
+    android:clickable="true">
 
     <ImageView
         android:id="@+id/placeholder_image"

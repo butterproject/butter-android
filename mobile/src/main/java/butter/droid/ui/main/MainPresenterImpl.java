@@ -183,6 +183,14 @@ public class MainPresenterImpl implements MainPresenter {
         }
     }
 
+    @Override public void addGenreListener(OnGenreChangeListener listener) {
+        genreListeners.add(listener);
+    }
+
+    @Override public void removeGenreListener(OnGenreChangeListener listener) {
+        genreListeners.remove(listener);
+    }
+
     private void displayProviderData(@ProviderType int providerType) {
         MediaProvider provider = providerManager.getMediaProvider(providerType);
         boolean hasGenres = provider.getGenres() != null && provider.getGenres().size() > 0;

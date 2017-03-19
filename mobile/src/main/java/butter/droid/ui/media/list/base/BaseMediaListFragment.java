@@ -1,0 +1,248 @@
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.ui.media.list.base;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import butter.droid.R;
+import butter.droid.base.providers.media.MediaProvider.Filters.Order;
+import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
+import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.widget.recycler.RecyclerClickListener;
+import butter.droid.base.widget.recycler.RecyclerItemClickListener;
+import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butter.droid.fragments.dialog.LoadingDetailDialogFragment.Callback;
+import butter.droid.manager.paging.IndexPagingListener;
+import butter.droid.manager.paging.PagingManager;
+import butter.droid.ui.media.detail.MediaDetailActivity;
+import butter.droid.ui.media.list.base.list.MediaGridAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * This fragment is the main screen for viewing a collection of media items.
+ * <p/>
+ * LOADING
+ * <p/>
+ * This fragment has 2 ways of representing a loading state; If the data is being loaded for the first time, or the media detail for the
+ * detail screen is being loaded,a progress layout is displayed with a message.
+ * <p/>
+ * If a page is being loaded, the adapter will display a progress item.
+ * <p/>
+ * MODE
+ * <p/>
+ * This fragment can be instantiated with ether a SEARCH mode, or a NORMAL mode. SEARCH mode simply does not load any initial data.
+ */
+public class BaseMediaListFragment extends Fragment implements BaseMediaListView, Callback, IndexPagingListener, RecyclerClickListener {
+
+    public static final String EXTRA_SORT = "extra_sort";
+    public static final String EXTRA_ORDER = "extra_order";
+    public static final String EXTRA_GENRE = "extra_genre";
+    public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
+
+    public static final int LOADING_DIALOG_FRAGMENT = 1;
+
+    @Inject BaseMediaListPresenter presenter;
+
+    private Context mContext;
+    private MediaGridAdapter adapter;
+    private GridLayoutManager mLayoutManager;
+    private Integer mColumns = 2;
+    protected PagingManager<Media> pagingManager;
+
+    View mRootView;
+    @BindView(R.id.progressOverlay) LinearLayout mProgressOverlay;
+    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.emptyView) public TextView mEmptyView;
+    @BindView(R.id.progress_textview) TextView mProgressTextView;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mContext = getActivity();
+
+        mRootView = inflater.inflate(R.layout.fragment_media, container, false);
+        ButterKnife.bind(this, mRootView);
+
+        mColumns = getResources().getInteger(R.integer.overview_cols);
+
+        mLayoutManager = new GridLayoutManager(mContext, mColumns);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        return mRootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mRecyclerView.setHasFixedSize(true);
+        //adapter should only ever be created once on fragment initialise.
+        adapter = new MediaGridAdapter(mContext, mColumns);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), this));
+
+        pagingManager = new PagingManager<>();
+        pagingManager.init(mRecyclerView, adapter, this);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Sort sort = (Sort) getArguments().getSerializable(EXTRA_SORT);
+        Order sortOrder = (Order) getArguments().getSerializable(EXTRA_ORDER);
+        String genre = getArguments().getString(EXTRA_GENRE);
+
+        presenter.onActivityCreated(sort, sortOrder, genre);
+
+    }
+
+    @Override public void loadPage(int index, int pageSize) {
+        presenter.loadNextPage(index);
+    }
+
+    @Override public void onItemClick(View view, final int position) {
+        final Media media = adapter.getItem(position);
+
+        RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);
+        if (holder instanceof MediaGridAdapter.ViewHolder) {
+            ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
+
+            if (coverImage.getDrawable() == null) {
+                showLoadingDialog(position);
+                return;
+            }
+
+            Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
+            Palette.from(cover)
+                    .maximumColorCount(5)
+                    .generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            int vibrantColor = palette.getVibrantColor(Color.TRANSPARENT);
+                            int paletteColor;
+                            if (vibrantColor == Color.TRANSPARENT) {
+                                paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
+                            } else {
+                                paletteColor = vibrantColor;
+                            }
+                            media.color = paletteColor;
+                            showLoadingDialog(position);
+                        }
+                    });
+        } else {
+            showLoadingDialog(position);
+        }
+    }
+
+    @Override public void updateLoadingMessage(@StringRes int messageRes) {
+        mProgressTextView.setText(messageRes);
+    }
+
+    @Override public void showData() {
+        pagingManager.setLoading(false);
+        mProgressOverlay.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void addItems(ArrayList<Media> items) {
+        pagingManager.addItems(items);
+    }
+
+    @Override public void showEmpty() {
+        pagingManager.setLoading(false);
+        mProgressOverlay.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    @Override public void showErrorMessage(@StringRes int message) {
+        Snackbar.make(mRootView, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override public void clearAdapter() {
+        pagingManager.reset();
+    }
+
+    @Override public void refreshAdapter() {
+        pagingManager.reset();
+        pagingManager.getNextPage();
+    }
+
+    @Override public void showLoading() {
+        mEmptyView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
+        mProgressOverlay.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoadingDialog(Integer position) {
+        LoadingDetailDialogFragment loadingFragment = LoadingDetailDialogFragment.newInstance(position);
+        loadingFragment.setTargetFragment(BaseMediaListFragment.this, LOADING_DIALOG_FRAGMENT);
+        loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
+    }
+
+    /**
+     * Called when loading media details fails
+     */
+    @Override
+    public void onDetailLoadFailure() {
+        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Called when media details have been loaded. This should be called on a background thread.
+     *
+     * @param item
+     */
+    @Override
+    public void onDetailLoadSuccess(final Media item) {
+        startActivity(MediaDetailActivity.getIntent(getActivity(), item));
+    }
+
+    /**
+     * Called when loading media details
+     * @return mItems
+     */
+    @Override
+    public ArrayList<Media> getCurrentList() {
+        return presenter.getCurrentList();
+    }
+}

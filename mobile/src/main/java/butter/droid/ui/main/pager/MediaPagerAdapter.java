@@ -29,7 +29,7 @@ import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.ui.main.genre.GenreSelectionFragment;
-import butter.droid.fragments.MediaListFragment;
+import butter.droid.ui.media.list.MediaListFragment;
 
 public class MediaPagerAdapter extends FragmentPagerAdapter {
 
@@ -83,8 +83,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         }
 
         NavInfo navInfo = items.get(position);
-        return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, navInfo.getFilter(),
-                navInfo.getOrder(), genre);
+        return MediaListFragment.newInstance(navInfo.getFilter(), navInfo.getOrder(), genre);
     }
 
     public void setGenre(String genre) {
@@ -96,19 +95,5 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         this.items = items;
         notifyDataSetChanged();
     }
-
-//    private GenreSelectionFragment.Listener mediaGenreSelectionFragment
-//            = new GenreSelectionFragment.Listener() {
-//        @Override
-//        public void onGenreSelected(String genre) {
-//            genre = genre;
-//            mProvider.cancel();
-//            for (int i = 0; i < getCount(); i++) {
-//                MediaListFragment mediaListFragment = getMediaListFragment(i);
-//                if (mediaListFragment != null)
-//                    mediaListFragment.changeGenre(genre);
-//            }
-//        }
-//    };
 
 }

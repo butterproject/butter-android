@@ -66,7 +66,9 @@ public class VersionUtils {
             if(info.versionName.contains("local"))
                 return "local";
 
-            if(versionCode > 40000000) {
+            if(versionCode > 50000000) {
+                return "x86_64";
+            } else if(versionCode > 40000000) {
                 return "x86";
             } else if(versionCode > 30000000) {
                 return "arm64-v8a";

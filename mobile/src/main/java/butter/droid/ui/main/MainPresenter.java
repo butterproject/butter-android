@@ -20,6 +20,7 @@ package butter.droid.ui.main;
 import android.app.Activity;
 
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 
 public interface MainPresenter {
@@ -45,4 +46,8 @@ public interface MainPresenter {
     void openMenuActivity(Class<? extends Activity> activityClass);
 
     void onGenreChanged(UiGenre genre);
+
+    void addGenreListener(OnGenreChangeListener listener);
+
+    void removeGenreListener(OnGenreChangeListener listener);
 }
