@@ -25,6 +25,7 @@
  * Date:    02 - November - 2005    
  * ____________________________________________________________________________
  */
+
 package butter.droid.base.content;
 
 import java.io.IOException;
@@ -125,7 +126,7 @@ public class UnicodeBOMInputStream extends InputStream {
             return result;
         }
 
-        private BOM(final byte bom[], final String description) {
+        private BOM(final byte[] bom, final String description) {
             assert (bom != null) : "invalid BOM: null is not allowed";
             assert (description != null) : "invalid description: null is not allowed";
             assert (description.length() != 0) : "invalid description: empty string is not allowed";
@@ -145,9 +146,9 @@ public class UnicodeBOMInputStream extends InputStream {
      *
      * @param inputStream an <code>InputStream</code>.
      * @throws NullPointerException when <code>inputStream</code> is
-     *                              <code>null</code>.
-     * @throws IOException          on reading from the specified <code>InputStream</code>
-     *                              when trying to detect the Unicode BOM.
+     * <code>null</code>.
+     * @throws IOException on reading from the specified <code>InputStream</code>
+     * when trying to detect the Unicode BOM.
      */
     public UnicodeBOMInputStream(final InputStream inputStream) throws NullPointerException,
             IOException
@@ -222,7 +223,7 @@ public class UnicodeBOMInputStream extends InputStream {
      *
      * @return this <code>UnicodeBOMInputStream</code>.
      * @throws IOException when trying to skip the BOM from the wrapped
-     *                     <code>InputStream</code> object.
+     * <code>InputStream</code> object.
      */
     public final synchronized UnicodeBOMInputStream skipBOM() throws IOException {
         if (!skipped) {
@@ -251,8 +252,8 @@ public class UnicodeBOMInputStream extends InputStream {
      * {@inheritDoc}
      */
     public int read(final byte b[],
-                    final int off,
-                    final int len) throws IOException,
+            final int off,
+            final int len) throws IOException,
             NullPointerException {
         return in.read(b, off, len);
     }
