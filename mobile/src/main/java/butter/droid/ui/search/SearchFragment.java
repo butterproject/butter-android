@@ -45,7 +45,7 @@ public class SearchFragment extends BaseMediaListFragment implements SearchView 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mEmptyView.setText(R.string.no_search_results);
+        emptyView.setText(R.string.no_search_results);
     }
 
     public void triggerSearch(String query) {

@@ -83,43 +83,43 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
     private Context mContext;
     private MediaGridAdapter adapter;
-    private GridLayoutManager mLayoutManager;
-    private Integer mColumns = 2;
+    private GridLayoutManager layoutManager;
+    private Integer columns = 2;
     protected PagingManager<Media> pagingManager;
 
-    View mRootView;
-    @BindView(R.id.progressOverlay) LinearLayout mProgressOverlay;
-    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
-    @BindView(R.id.emptyView) public TextView mEmptyView;
-    @BindView(R.id.progress_textview) TextView mProgressTextView;
+    View rootView;
+    @BindView(R.id.progressOverlay) LinearLayout progressOverlay;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.emptyView) public TextView emptyView;
+    @BindView(R.id.progress_textview) TextView progressTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getActivity();
 
-        mRootView = inflater.inflate(R.layout.fragment_media, container, false);
-        ButterKnife.bind(this, mRootView);
+        rootView = inflater.inflate(R.layout.fragment_media, container, false);
+        ButterKnife.bind(this, rootView);
 
-        mColumns = getResources().getInteger(R.integer.overview_cols);
+        columns = getResources().getInteger(R.integer.overview_cols);
 
-        mLayoutManager = new GridLayoutManager(mContext, mColumns);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        layoutManager = new GridLayoutManager(mContext, columns);
+        recyclerView.setLayoutManager(layoutManager);
 
-        return mRootView;
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         //adapter should only ever be created once on fragment initialise.
-        adapter = new MediaGridAdapter(mContext, mColumns);
-        mRecyclerView.setAdapter(adapter);
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), this));
+        adapter = new MediaGridAdapter(mContext, columns);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), this));
 
         pagingManager = new PagingManager<>();
-        pagingManager.init(mRecyclerView, adapter, this);
+        pagingManager.init(recyclerView, adapter, this);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     @Override public void onItemClick(View view, final int position) {
         final Media media = adapter.getItem(position);
 
-        RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);
+        RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
         if (holder instanceof MediaGridAdapter.ViewHolder) {
             ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 
@@ -173,14 +173,14 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     }
 
     @Override public void updateLoadingMessage(@StringRes int messageRes) {
-        mProgressTextView.setText(messageRes);
+        progressTextView.setText(messageRes);
     }
 
     @Override public void showData() {
         pagingManager.setLoading(false);
-        mProgressOverlay.setVisibility(View.GONE);
-        mEmptyView.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        progressOverlay.setVisibility(View.GONE);
+        emptyView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override public void addItems(ArrayList<Media> items) {
@@ -189,13 +189,13 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
     @Override public void showEmpty() {
         pagingManager.setLoading(false);
-        mProgressOverlay.setVisibility(View.GONE);
-        mEmptyView.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
+        progressOverlay.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override public void showErrorMessage(@StringRes int message) {
-        Snackbar.make(mRootView, message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override public void clearAdapter() {
@@ -208,9 +208,9 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     }
 
     @Override public void showLoading() {
-        mEmptyView.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mProgressOverlay.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        progressOverlay.setVisibility(View.VISIBLE);
     }
 
     private void showLoadingDialog(Integer position) {
@@ -224,7 +224,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
      */
     @Override
     public void onDetailLoadFailure() {
-        Snackbar.make(mRootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(rootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
     }
 
     /**

@@ -50,8 +50,8 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 	private final BackgroundUpdater backgroundUpdater = new BackgroundUpdater();
 
 	private ArrayObjectAdapter rowsAdapter;
-	private ListRowPresenter mListRowPresenter;
-	private ListRow mLoadingRow;
+	private ListRowPresenter listRowPresenter;
+	private ListRow loadingRow;
 
 	@Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,15 +68,15 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 	@Override public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		backgroundUpdater.initialise(getActivity(), R.color.black);
-		mListRowPresenter = new ListRowPresenter();
-		mListRowPresenter.setShadowEnabled(false);
-		rowsAdapter = new ArrayObjectAdapter(mListRowPresenter);
+		listRowPresenter = new ListRowPresenter();
+		listRowPresenter.setShadowEnabled(false);
+		rowsAdapter = new ArrayObjectAdapter(listRowPresenter);
 		setSearchResultProvider(this);
 		setOnItemViewClickedListener(getDefaultItemClickedListener());
 		setOnItemViewSelectedListener(new ItemViewSelectedListener());
 
 		//setup row to use for loading
-		mLoadingRow = createLoadingRow();
+		loadingRow = createLoadingRow();
 	}
 
 	@Override
@@ -108,11 +108,11 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 	}
 
 	@Override public void showLoadingRow() {
-		rowsAdapter.add(mLoadingRow);
+		rowsAdapter.add(loadingRow);
 	}
 
 	@Override public void addRow(@StringRes int title, List<MediaCardItem> items) {
-		rowsAdapter.remove(mLoadingRow);
+		rowsAdapter.remove(loadingRow);
 
 		HeaderItem header = new HeaderItem(0, getString(title));
 		ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
