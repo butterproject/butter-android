@@ -4,24 +4,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import butterknife.ButterKnife;
-import butterknife.BindView;
 import butter.droid.R;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class OptionSelector extends LinearLayout {
 
     View mView;
     @BindView(android.R.id.text1) TextView mText;
-    @BindView(android.R.id.icon) ImageView mIcon;
+    @BindView(android.R.id.icon) AppCompatImageView mIcon;
 
     private FragmentManager mFragmentManager;
     private String[] mData = new String[0];

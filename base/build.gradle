@@ -20,6 +20,7 @@ android {
         buildConfigField 'String[]', 'UPDATE_URLS', '{' + updateUrls + '}'
         versionCode buildNumber
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
