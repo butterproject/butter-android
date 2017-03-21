@@ -17,6 +17,10 @@
 
 package butter.droid.ui.main;
 
+import android.app.Activity;
+
+import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+
 public interface MainPresenter {
 
     void onCreate(boolean isInitial);
@@ -33,4 +37,9 @@ public interface MainPresenter {
 
     void storagePermissionGranted();
 
+    void drawerOpened();
+
+    void selectProvider(@ProviderType int providerType);
+
+    void openMenuActivity(Class<? extends Activity> activityClass);
 }

@@ -18,7 +18,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	tools:layout_width="@dimen/nav_drawer_width"
-	android:clickable="true"
+	android:clickable="false"
 	android:layout_height="@dimen/navlist_item_header"
     android:layout_marginBottom="@dimen/list_vertical_padding">
 

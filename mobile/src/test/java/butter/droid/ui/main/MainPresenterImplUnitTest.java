@@ -63,6 +63,7 @@ public class MainPresenterImplUnitTest {
 
         //noinspection WrongConstant
         verify(view).initProviders(eq(ProviderManager.PROVIDER_TYPE_MOVIE));
+        verify(view).openDrawer();
         verifyNoMoreInteractions(view);
     }
 

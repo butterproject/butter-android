@@ -43,4 +43,11 @@ public interface MainView {
     void checkIntentAction();
 
     void initProviders(@ProviderType int provider);
+
+    void openDrawer();
+
+    void closeDrawer();
+
+    void openPreferenceScreen();
+
 }

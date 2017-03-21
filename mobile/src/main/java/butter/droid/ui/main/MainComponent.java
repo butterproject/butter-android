@@ -18,6 +18,7 @@
 package butter.droid.ui.main;
 
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.ui.main.navigation.NavigationDrawerComponent;
 import dagger.Subcomponent;
 
 @Subcomponent(
@@ -27,6 +28,8 @@ import dagger.Subcomponent;
 public interface MainComponent {
 
     void inject(MainActivity activity);
+
+    NavigationDrawerComponent.Builder naviagtionDrawerBuilder();
 
     @Subcomponent.Builder interface Builder {
         Builder mainModule(MainModule module);
