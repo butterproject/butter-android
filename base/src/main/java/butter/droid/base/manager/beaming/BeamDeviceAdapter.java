@@ -18,13 +18,16 @@
 package butter.droid.base.manager.beaming;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import butter.droid.base.R;
+import butter.droid.base.utils.ThreadUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
@@ -36,15 +39,9 @@ import com.connectsdk.service.NetcastTVService;
 import com.connectsdk.service.RokuService;
 import com.connectsdk.service.WebOSTVService;
 import com.connectsdk.service.command.ServiceCommandError;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import butterknife.ButterKnife;
-import butterknife.BindView;
-import butter.droid.base.R;
-import butter.droid.base.utils.ThreadUtils;
 
 public class BeamDeviceAdapter extends BaseAdapter {
 
@@ -54,7 +51,7 @@ public class BeamDeviceAdapter extends BaseAdapter {
     private ArrayList<String> keys = new ArrayList<>();
 
     class ViewHolder {
-        @BindView(android.R.id.icon) ImageView icon;
+        @BindView(android.R.id.icon) AppCompatImageView icon;
         @BindView(android.R.id.text1) TextView text1;
         @BindView(android.R.id.text2) TextView text2;
 

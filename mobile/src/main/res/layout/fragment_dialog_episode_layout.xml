@@ -139,7 +139,7 @@
                             android:layout_marginLeft="6dp"
                             android:layout_marginStart="6dp"
                             android:id="@+id/magnet"
-                            android:src="@drawable/ic_action_magnet"
+                            app:srcCompat="@drawable/ic_action_magnet"
                             android:background="@drawable/selectable_background"
                             android:visibility="visible"
                             tools:visibility="visible"
@@ -164,7 +164,7 @@
                             tools:text="Lorem ipsum dolor sit amet." />
                     </RelativeLayout>
 
-                    <ImageButton
+                    <android.support.v7.widget.AppCompatImageButton
                         android:id="@+id/play_button"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
@@ -175,7 +175,7 @@
                         android:layout_marginTop="152dp"
                         android:background="@drawable/play_button_circle"
                         android:elevation="5dp"
-                        android:src="@drawable/ic_av_play_button" />
+                        app:srcCompat="@drawable/ic_av_play_button" />
                 </RelativeLayout>
 
                 <View
