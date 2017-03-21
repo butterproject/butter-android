@@ -263,7 +263,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         if (!mMediaReady) {
             mMediaReady = true;
         }
-        if (libVLC != null) {
+        if (libVLC != null && mMediaPlayer != null) {
             loadMedia();
         }
     }
