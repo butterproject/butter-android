@@ -23,22 +23,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
-
-import javax.inject.Inject;
-
+import android.support.v7.app.AppCompatDelegate;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
 import butterknife.ButterKnife;
-import retrofit.http.HEAD;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
+import javax.inject.Inject;
 
 public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Inject PreferencesHandler preferencesHandler;
 
