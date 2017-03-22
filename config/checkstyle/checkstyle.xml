@@ -144,7 +144,7 @@
       <property name="braceAdjustment" value="0"/>
       <property name="caseIndent" value="4"/>
       <property name="throwsIndent" value="4"/>
-      <property name="lineWrappingIndentation" value="4"/>
+      <property name="lineWrappingIndentation" value="8"/>
       <property name="arrayInitIndent" value="8"/>
     </module>
     <module name="AbbreviationAsWordInName">
