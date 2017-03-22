@@ -166,6 +166,10 @@ public class VodoProvider extends MediaProvider {
             final Filters filters, final Callback callback) {
         return enqueue(requestBuilder.build(), new okhttp3.Callback() {
             @Override public void onFailure(Call call, IOException e) {
+                if (call.isCanceled()) {
+                    return;
+                }
+
                 String url = requestBuilder.build().url().toString();
                 if (CURRENT_API >= API_URLS.length - 1) {
                     callback.onFailure(e);
@@ -184,6 +188,10 @@ public class VodoProvider extends MediaProvider {
             }
 
             @Override public void onResponse(Call call, Response response) throws IOException {
+                if (call.isCanceled()) {
+                    return;
+                }
+
                 if (response.isSuccessful()) {
                     String responseStr;
                     try {
@@ -214,6 +222,7 @@ public class VodoProvider extends MediaProvider {
                         return;
                     }
                 }
+
                 onFailure(call, new IOException("Couldn't connect to Vodo"));
             }
         });
@@ -258,6 +267,8 @@ public class VodoProvider extends MediaProvider {
                 movies = downloads;
             }
 
+            ArrayList<Media> items = new ArrayList<>();
+
             for (LinkedTreeMap<String, Object> item : movies) {
                 Movie movie = new Movie();
 
@@ -291,16 +302,12 @@ public class VodoProvider extends MediaProvider {
                     torrent.url = (String) item.get("TorrentUrl");
                     movie.torrents.put(item.get("Quality").toString(), torrent);
 
-                    existingList.add(movie);
+                    items.add(movie);
                 }
             }
-            return existingList;
-        }
-    }
 
-    @Override
-    public int getLoadingMessage() {
-        return R.string.loading_movies;
+            return items;
+        }
     }
 
     @Override
