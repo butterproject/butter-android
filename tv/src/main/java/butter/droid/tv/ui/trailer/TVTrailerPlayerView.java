@@ -15,30 +15,16 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.terms;
+package butter.droid.tv.ui.trailer;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+public interface TVTrailerPlayerView {
 
-import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
-import javax.inject.Inject;
+  void onDisableVideoPlayerSubsButton();
 
-public class TVTermsActivity extends TVBaseActivity {
+  void onExecuteQueryYoutubeTask(String youtubeUrl);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.inject(this);
+  void onNotifyMediaReady();
 
-		super.onCreate(savedInstanceState,R.layout.activity_terms);
-	}
-
-	public static Intent getIntent(Context context) {
-		return new Intent(context, TVTermsActivity.class);
-	}
+  void onDisplayErrorVideoDialog();
 
 }

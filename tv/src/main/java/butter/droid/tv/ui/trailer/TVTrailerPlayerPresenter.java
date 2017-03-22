@@ -15,30 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.terms;
+package butter.droid.tv.ui.trailer;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.torrent.StreamInfo;
 
-import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
-import javax.inject.Inject;
+public interface TVTrailerPlayerPresenter {
 
-public class TVTermsActivity extends TVBaseActivity {
+  void onCreate(Media media, String youtubeUrl);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.inject(this);
+  StreamInfo getStreamInfo();
 
-		super.onCreate(savedInstanceState,R.layout.activity_terms);
-	}
+  void onVideoUrlObtained(String videoUrl);
 
-	public static Intent getIntent(Context context) {
-		return new Intent(context, TVTermsActivity.class);
-	}
-
+  void onErrorObtainingVideoUrl();
 }

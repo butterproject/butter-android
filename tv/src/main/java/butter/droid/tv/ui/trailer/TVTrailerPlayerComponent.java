@@ -15,30 +15,25 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.terms;
+package butter.droid.tv.ui.trailer;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import butter.droid.base.ui.ActivityScope;
+import dagger.Subcomponent;
 
-import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
-import javax.inject.Inject;
+@Subcomponent(
+    modules = TVTrailerPlayerModule.class
+)
+@ActivityScope
+public interface TVTrailerPlayerComponent {
 
-public class TVTermsActivity extends TVBaseActivity {
+  void inject(TVTrailerPlayerActivity activity);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.inject(this);
+  @Subcomponent.Builder
+  interface Builder {
 
-		super.onCreate(savedInstanceState,R.layout.activity_terms);
-	}
+    Builder tvTrailerModule(TVTrailerPlayerModule module);
 
-	public static Intent getIntent(Context context) {
-		return new Intent(context, TVTermsActivity.class);
-	}
+    TVTrailerPlayerComponent build();
+  }
 
 }

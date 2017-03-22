@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.trailer;
+package butter.droid.tv.ui.trailer;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,54 +24,55 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.MenuItem;
-import butter.droid.MobileButterApplication;
-import butter.droid.R;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.phone.PhoneManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.fragments.VideoPlayerFragment;
-import butter.droid.ui.ButterBaseActivity;
+import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
+import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
+import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
+public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback, TVTrailerPlayerView {
 
   public final static String LOCATION = "stream_url";
   public final static String DATA = "video_data";
 
-  private static final String TAG = TrailerPlayerActivity.class.getSimpleName();
+  private static final String TAG = TVTrailerPlayerActivity.class.getSimpleName();
 
   @Inject
-  TrailerPlayerPresenter presenter;
+  TVTrailerPlayerPresenter presenter;
   @Inject
   YouTubeManager youTubeManager;
   @Inject
   NetworkManager networkManager;
-  @Inject
-  PhoneManager phoneManager;
 
-  private VideoPlayerFragment videoPlayerFragment;
+  private TVVideoPlayerFragment playerFragment;
+  private TVPlaybackOverlayFragment tvPlaybackOverlayFragment;
 
-  public static Intent getIntent(Context context, Media media, String url) {
-    Intent i = new Intent(context, TrailerPlayerActivity.class);
-    i.putExtra(TrailerPlayerActivity.DATA, media);
-    i.putExtra(TrailerPlayerActivity.LOCATION, url);
+  public static Intent startActivity(Context context, String youTubeUrl, Media data) {
+    Intent i = new Intent(context, TVTrailerPlayerActivity.class);
+    i.putExtra(DATA, data);
+    i.putExtra(LOCATION, youTubeUrl);
+    context.startActivity(i);
     return i;
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    MobileButterApplication.getAppContext()
+    TVButterApplication.getAppContext()
         .getComponent()
-        .trailerComponentBuilder()
-        .trailerModule(new TrailerPlayerModule(this))
+        .tvTrailerPlayerComponentBuilder()
+        .tvTrailerModule(new TVTrailerPlayerModule(this))
         .build()
         .inject(this);
 
@@ -79,11 +80,13 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     final Media media = getIntent().getParcelableExtra(DATA);
     media.title += " " + getString(R.string.trailer);
-    final String youtubeUrl = getIntent().getStringExtra(LOCATION);
+    final String youTubeUrl = getIntent().getStringExtra(LOCATION);
 
-    this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+    final FragmentManager fm = getSupportFragmentManager();
+    this.playerFragment = (TVVideoPlayerFragment) fm.findFragmentById(R.id.fragment);
+    this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment) fm.findFragmentById(R.id.playback_overlay_fragment);
 
-    presenter.onCreate(media, youtubeUrl);
+    presenter.onCreate(media, youTubeUrl);
   }
 
   @Override
@@ -113,38 +116,40 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
   @Override
   public void onDisableVideoPlayerSubsButton() {
-    videoPlayerFragment.enableSubsButton(false);
+    tvPlaybackOverlayFragment.toggleSubtitleAction(false);
   }
 
   @Override
   public void onExecuteQueryYoutubeTask(String youtubeUrl) {
-    final QueryYouTubeTask youTubeTask = new QueryYouTubeTask(this, youTubeManager, networkManager, phoneManager);
+    final QueryYouTubeTask youTubeTask = new QueryYouTubeTask(this, youTubeManager, networkManager);
     final String youTubeVideoId = youTubeManager.getYouTubeVideoId(youtubeUrl);
     youTubeTask.execute(youTubeVideoId);
   }
 
   @Override
   public void onNotifyMediaReady() {
-    videoPlayerFragment.onMediaReady();
+    playerFragment.onMediaReady();
   }
 
   @Override
   public void onDisplayErrorVideoDialog() {
     try {
-      final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TrailerPlayerActivity.this)
-          .setTitle(R.string.comm_error)
-          .setCancelable(false)
-          .setMessage(R.string.comm_message)
-          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              TrailerPlayerActivity.this.finish();
-            }
-          });
-      final AlertDialog dialog = alertDialogBuilder.create();
-      dialog.show();
+      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TVTrailerPlayerActivity.this);
+      alertDialogBuilder.setTitle(R.string.comm_error);
+      alertDialogBuilder.setCancelable(false);
+      alertDialogBuilder.setMessage(R.string.comm_message);
+
+      alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          TVTrailerPlayerActivity.this.finish();
+        }
+      });
+
+      AlertDialog lDialog = alertDialogBuilder.create();
+      lDialog.show();
     } catch (Exception e) {
-      Log.e(TAG, "Problem showing error dialog: ", e);
+      Log.e(TAG, "Problem showing error dialog", e);
     }
   }
 
@@ -154,16 +159,14 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     private final YouTubeManager youTubeManager;
     private final NetworkManager networkManager;
-    private final PhoneManager phoneManager;
 
-    private final WeakReference<TrailerPlayerActivity> activityWeakReference;
+    private final WeakReference<TVTrailerPlayerActivity> activityWeakReference;
 
-    private QueryYouTubeTask(final TrailerPlayerActivity activity, final YouTubeManager youTubeManager, final NetworkManager networkManager,
-        final PhoneManager phoneManager) {
+    private QueryYouTubeTask(final TVTrailerPlayerActivity activity, final YouTubeManager youTubeManager,
+        final NetworkManager networkManager) {
       this.activityWeakReference = new WeakReference<>(activity);
       this.youTubeManager = youTubeManager;
       this.networkManager = networkManager;
-      this.phoneManager = phoneManager;
     }
 
     @Override
@@ -173,8 +176,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
         int videoQuality;
         if (networkManager.isWifiConnected()) {
           videoQuality = YouTubeManager.QUALITY_HIGH_MP4;
-        } else if (phoneManager.isConnected() && phoneManager.isHighSpeedConnection()) {
-          videoQuality = YouTubeManager.QUALITY_NORMAL_MP4;
         } else {
           videoQuality = YouTubeManager.QUALITY_MEDIUM_3GPP;
         }
@@ -189,7 +190,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     @Override
     protected void onPostExecute(Uri result) {
-      final TrailerPlayerActivity trailerPlayerActivity = activityWeakReference.get();
+      final TVTrailerPlayerActivity trailerPlayerActivity = activityWeakReference.get();
       if (isCancelled() || trailerPlayerActivity == null || trailerPlayerActivity.isFinishing()) {
         return;
       }
