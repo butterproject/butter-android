@@ -334,7 +334,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         @Override
         @DebugLog
         public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
-            if (!(mGenre == null ? "" : mGenre).equals(filters.genre == null ? "" : filters.genre)) return; // nothing changed according to the provider, so don't do anything
+//            if (!(mGenre == null ? "" : mGenre).equals(filters.genre == null ? "" : filters.genre)) return; // nothing changed according to the provider, so don't do anything
 
             items.removeAll(mItems);
             if(items.size() == 0) {

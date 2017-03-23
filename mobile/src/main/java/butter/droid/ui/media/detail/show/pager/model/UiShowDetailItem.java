@@ -15,28 +15,31 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail;
+package butter.droid.ui.media.detail.show.pager.model;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.media.detail.movie.MovieDetailComponent;
-import butter.droid.ui.media.detail.show.ShowDetailComponent;
-import dagger.Subcomponent;
+import android.content.Context;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 
-@Subcomponent (
-        modules = MediaDetailModule.class
-)
-@ActivityScope
-public interface MediaDetailComponent {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-    void inject(MediaDetailActivity activity);
+public interface UiShowDetailItem {
 
-    MovieDetailComponent.Builder movieDetailComponentBuilder();
-    ShowDetailComponent.Builder showDetailComponentBuilder();
+    @ShowDetailItemType int getType();
 
-    @Subcomponent.Builder interface Builder {
-        Builder mediaDetailModule(MediaDetailModule module);
+    String getTitle(@NonNull Context context);
 
-        MediaDetailComponent build();
-    }
+    // region IntDef
+
+    @IntDef({SHOW_DETAIL_ABOUT, SHOW_DETAIL_SPECIAL, SHOW_DETAIL_SEASON})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ShowDetailItemType { }
+
+    int SHOW_DETAIL_ABOUT = 0;
+    int SHOW_DETAIL_SPECIAL = 1;
+    int SHOW_DETAIL_SEASON = 2;
+
+    // endregion IntDef
 
 }

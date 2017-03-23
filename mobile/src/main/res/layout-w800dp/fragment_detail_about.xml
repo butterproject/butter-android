@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Butter.
+  ~
+  ~ Butter is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Butter is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--
+~ This file is part of Butter.
+~
+~ Butter is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU General Public License as published by
+~ the Free Software Foundation, either version 3 of the License, or
+~ (at your option) any later version.
+~
+~ Butter is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+~ GNU General Public License for more details.
+~
+~ You should have received a copy of the GNU General Public License
+~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<LinearLayout
+        android:id="@+id/content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <ImageView
+            android:id="@+id/cover_image"
+            android:layout_width="310dp"
+            android:layout_height="465dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:background="@android:color/white"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:id="@+id/title_header"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="@dimen/detail_title_header_offset"
+                android:paddingEnd="@dimen/detail_title_header_offset"
+                android:paddingLeft="@dimen/detail_title_header_offset"
+                android:paddingRight="@dimen/detail_title_header_offset"
+                android:background="@color/detail_header_title_bg"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+            <butter.droid.widget.AutoResizeRobotoTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="80dp"
+                    android:textColor="@color/text_color"
+                    android:textDirection="locale"
+                    android:textSize="42sp"
+                    app:typeface="roboto_medium"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras leo dolor, condimentum." />
+
+            <RatingBar
+                    android:id="@+id/rating"
+                    style="@style/Theme.Butter.RatingBar"
+                    android:layout_width="80dp"
+                    android:layout_height="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:isIndicator="true"
+                    android:max="10"
+                    android:progress="5"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/meta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/detail_meta_margin_top"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="@dimen/detail_meta_text_size"
+                    tools:text="2013 • 94 min • Animation"/>
+
+        </LinearLayout>
+
+        <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_vertical_offset"
+                android:layout_marginStart="@dimen/detail_title_header_offset"
+                android:layout_marginEnd="@dimen/detail_small_offset"
+                android:layout_marginLeft="@dimen/detail_title_header_offset"
+                android:layout_marginRight="@dimen/detail_small_offset"
+                android:layout_below="@id/title_header"
+                android:layout_toLeftOf="@id/play_button"
+                android:layout_toStartOf="@id/play_button"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:textColor="@color/text_color"
+                android:textDirection="locale"
+                android:textSize="@dimen/detail_desc_text_size"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+
+        <LinearLayout
+                android:id="@+id/info_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="@dimen/detail_vertical_offset"
+                android:layout_marginStart="@dimen/detail_infobutton_offset"
+                android:layout_marginEnd="@dimen/detail_infobutton_offset"
+                android:layout_marginLeft="@dimen/detail_infobutton_offset"
+                android:layout_marginRight="@dimen/detail_infobutton_offset"
+                android:layout_below="@id/synopsis"
+                android:orientation="horizontal">
+
+            <com.devspark.robototextview.widget.RobotoButton
+                    android:id="@+id/read_more"
+                    style="@style/Theme.Butter.DetailButton"
+                    android:layout_marginEnd="@dimen/detail_button_margin"
+                    android:layout_marginRight="@dimen/detail_button_margin"
+                    android:text="@string/read_more"
+                    app:typeface="roboto_medium"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
