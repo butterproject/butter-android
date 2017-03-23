@@ -18,7 +18,7 @@
   -->
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-	android:name="butter.droid.tv.fragments.TVSearchFragment"
+	android:name="butter.droid.tv.ui.search.TVSearchFragment"
 	android:id="@+id/search_fragment"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent" />

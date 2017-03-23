@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.adapters;
+package butter.droid.ui.media.list.base.list;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,6 +25,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,52 +34,52 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.BindView;
-import hugo.weaving.DebugLog;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
+import butter.droid.manager.paging.PagingAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
-public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements PagingAdapter<Media> {
+
+    private static final int VIEW_TYPE_ITEM = 0;
+    private static final int VIEW_TYPE_PROGRESS = 1;
 
     private int mItemWidth, mItemHeight, mMargin, mColumns;
-    private ArrayList<OverviewItem> mItems = new ArrayList<>();
-    //	private ArrayList<Media> mData = new ArrayList<>();
-    private MediaGridAdapter.OnItemClickListener mItemClickListener;
-    final int NORMAL = 0, LOADING = 1;
 
-    public MediaGridAdapter(Context context, ArrayList<Media> items, Integer columns) {
+    private List<Media> items;
+    private boolean showLoading = true;
+
+    public MediaGridAdapter(Context context, Integer columns) {
         mColumns = columns;
 
         int screenWidth = PixelUtils.getScreenWidth(context);
         mItemWidth = (screenWidth / columns);
         mItemHeight = (int) ((double) mItemWidth / 0.677);
         mMargin = PixelUtils.getPixelsFromDp(context, 2);
-
-        setItems(items);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         switch (viewType) {
-            case LOADING:
+            case VIEW_TYPE_PROGRESS:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_griditem_loading, parent, false);
                 return new MediaGridAdapter.LoadingHolder(v);
-            case NORMAL:
-            default:
+            case VIEW_TYPE_ITEM:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_griditem, parent, false);
                 return new MediaGridAdapter.ViewHolder(v);
+            default:
+                throw new IllegalStateException("Unknown view type: " + viewType);
         }
     }
 
@@ -100,10 +101,9 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         viewHolder.itemView.setLayoutParams(layoutParams);
 
-        if (getItemViewType(position) == NORMAL) {
+        if (getItemViewType(position) == VIEW_TYPE_ITEM) {
             final ViewHolder videoViewHolder = (ViewHolder) viewHolder;
-            final OverviewItem overviewItem = getItem(position);
-            Media item = overviewItem.media;
+            final Media item = getItem(position);
 
             videoViewHolder.title.setText(item.title);
             videoViewHolder.year.setText(item.year);
@@ -119,119 +119,95 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        int count = 0;
+        if (items != null && items.size() > 0) {
+            count += items.size();
+        }
+
+        if (showLoading()) {
+            count++;
+        }
+
+        return count;
+    }
+
+    @Override public void addItems(@Nullable List<Media> items) {
+        if (this.items == null) {
+            this.items = items;
+
+            if (items != null && items.size() > 0) {
+                int size = items.size();
+                notifyItemRangeInserted(0, size);
+
+                if (showLoading) {
+                    notifyItemInserted(size);
+                }
+            }
+        } else if (items != null) {
+            int lastItem = this.items.size();
+            this.items.addAll(items);
+            int size = items.size();
+            notifyItemRangeInserted(lastItem, size);
+
+            if (lastItem == 0 && showLoading) {
+                notifyItemInserted(size);
+            }
+        }
+
+    }
+
+    @Override public void showLoading(boolean show) {
+        if (showLoading != show) {
+            boolean before = showLoading();
+            showLoading = show;
+            boolean after = showLoading();
+
+            if (before != after) {
+                if (after) {
+                    notifyItemInserted(getItemsSize());
+                } else {
+                    notifyItemRemoved(getItemsSize());
+                }
+            }
+        }
+    }
+
+
+
+    @Override public void clear() {
+        if (items != null && !items.isEmpty()) {
+            notifyItemRangeRemoved(0, items.size());
+            items = null;
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).isLoadingItem) {
-            return LOADING;
-        }
-        return NORMAL;
-    }
-
-    public OverviewItem getItem(int position) {
-        if (position < 0 || mItems.size() <= position) return null;
-        return mItems.get(position);
-    }
-
-    public void setOnItemClickListener(MediaGridAdapter.OnItemClickListener listener) {
-        mItemClickListener = listener;
-    }
-
-    @DebugLog
-    public void removeLoading() {
-        if (getItemCount() <= 0) return;
-        OverviewItem item = mItems.get(getItemCount() - 1);
-        if (item.isLoadingItem) {
-            mItems.remove(getItemCount() - 1);
-            notifyDataSetChanged();
+        if (position < getItemsSize()) {
+            return VIEW_TYPE_ITEM;
+        } else {
+            return VIEW_TYPE_PROGRESS;
         }
     }
 
-    @DebugLog
-    public void addLoading() {
-        OverviewItem item = null;
-        if (getItemCount() != 0) {
-            item = mItems.get(getItemCount() - 1);
-        }
-
-        if (getItemCount() == 0 || (item != null && !item.isLoadingItem)) {
-            mItems.add(new OverviewItem(true));
-            notifyDataSetChanged();
+    @Nullable public Media getItem(int position) {
+        if (position < getItemsSize()) {
+            return items.get(position);
+        } else {
+            return null;
         }
     }
 
-    @DebugLog
-    public boolean isLoading() {
-        if (getItemCount() <= 0) return false;
-        return getItemViewType(getItemCount() - 1) == LOADING;
+    private boolean showLoading() {
+        return showLoading && items != null && items.size() > 0;
     }
 
-    @DebugLog
-    public void setItems(ArrayList<Media> items) {
-        // Clear items
-        mItems.clear();
-        // Add new items, if available
-        if (null != items) {
-            for (Media item : items) {
-                mItems.add(new OverviewItem(item));
-            }
+    private int getItemsSize() {
+        if (items != null) {
+            return items.size();
+        } else {
+            return 0;
         }
-        notifyDataSetChanged();
-    }
-
-    public void clearItems() {
-        mItems.clear();
-        notifyDataSetChanged();
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(View v, Media item, int position);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        View itemView;
-        @BindView(R.id.focus_overlay)
-        View focusOverlay;
-        @BindView(R.id.cover_image)
-        ImageView coverImage;
-        @BindView(R.id.title)
-        TextView title;
-        @BindView(R.id.year)
-        TextView year;
-
-        private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-            }
-        };
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            this.itemView = itemView;
-            itemView.setOnClickListener(this);
-            coverImage.setMinimumHeight(mItemHeight);
-
-            itemView.setOnFocusChangeListener(mOnFocusChangeListener);
-        }
-
-        public ImageView getCoverImage() {
-            return coverImage;
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mItemClickListener != null) {
-                int position = getPosition();
-                Media item = getItem(position).media;
-                mItemClickListener.onItemClick(view, item, position);
-            }
-        }
-
     }
 
     class LoadingHolder extends RecyclerView.ViewHolder {
@@ -244,19 +220,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setMinimumHeight(mItemHeight);
         }
 
-    }
-
-    class OverviewItem {
-        Media media;
-        boolean isLoadingItem = false;
-
-        OverviewItem(Media media) {
-            this.media = media;
-        }
-
-        OverviewItem(boolean loading) {
-            this.isLoadingItem = loading;
-        }
     }
 
     private static class DrawGradient implements Transformation {
@@ -275,7 +238,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             Paint paint = new Paint();
             float gradientHeight = h / 2f;
-            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h, 0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.CLAMP);
+            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h, 0xFFFFFFFF, 0x00FFFFFF,
+                    Shader.TileMode.CLAMP);
             paint.setShader(shader);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
             canvas.drawRect(0, h - gradientHeight, w, h, paint);
@@ -286,5 +250,35 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public String key() {
             return "gradient()";
         }
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        View itemView;
+        @BindView(R.id.focus_overlay) View focusOverlay;
+        @BindView(R.id.cover_image) ImageView coverImage;
+        @BindView(R.id.title) TextView title;
+        @BindView(R.id.year) TextView year;
+
+        private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
+            }
+        };
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            this.itemView = itemView;
+            coverImage.setMinimumHeight(mItemHeight);
+
+            itemView.setOnFocusChangeListener(mOnFocusChangeListener);
+        }
+
+        public ImageView getCoverImage() {
+            return coverImage;
+        }
+
     }
 }

@@ -24,7 +24,11 @@ import butter.droid.base.R;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
 
-public class ProviderUtils {
+public final class ProviderUtils {
+
+    private ProviderUtils() {
+        // no instances
+    }
 
     @StringRes public static int getProviderTitle(@ProviderType int providerType) {
         switch (providerType) {
@@ -45,6 +49,17 @@ public class ProviderUtils {
                 return R.drawable.ic_nav_tv;
             default:
                 throw new IllegalStateException("Unknown provider type");
+        }
+    }
+
+    @StringRes public static int getProviderLoadingMessage(@ProviderType int providerType) {
+        switch (providerType) {
+            case ProviderManager.PROVIDER_TYPE_MOVIE:
+                return R.string.loading_movies;
+            case ProviderManager.PROVIDER_TYPE_SHOW:
+                return R.string.loading_shows;
+            default:
+                return R.string.loading_data;
         }
     }
 
