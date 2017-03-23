@@ -17,7 +17,6 @@
 
 package butter.droid.ui.media.detail.show;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -110,12 +109,6 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         presenter.viewCreated(isTablet);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mActivity.setSubScrollListener(null);
-    }
-
     @Override public void displayData(@NonNull Show show, List<UiShowDetailItem> items) {
         if (items.size() == 1) {
             tabs.setTabMode(TabLayout.MODE_FIXED);
@@ -132,10 +125,6 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.about_content, ShowDetailAboutFragment.newInstance(show))
                 .commit();
-    }
-
-    public void openDialog(String title, String[] items, DialogInterface.OnClickListener onClickListener) {
-//        StringArraySelectorDialogFragment.show(mActivity.getSupportFragmentManager(), title, items, -1, onClickListener);
     }
 
     public ShowDetailComponent getComponent() {
