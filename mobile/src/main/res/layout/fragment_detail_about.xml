@@ -74,7 +74,7 @@
                 android:layout_marginStart="6dp"
                 android:maxWidth="20dp"
                 android:id="@+id/health"
-                android:src="@drawable/ic_health_unknown"
+                app:srcCompat="@drawable/ic_health_unknown"
                 android:scaleType="centerInside"
                 android:visibility="gone"
                 tools:visibility="visible" />
@@ -85,7 +85,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginStart="6dp"
                 android:id="@+id/magnet"
-                android:src="@drawable/ic_action_magnet"
+                app:srcCompat="@drawable/ic_action_magnet"
                 android:background="@drawable/selectable_background"
                 android:visibility="visible"
                 tools:visibility="visible"
