@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.adapters;
+package butter.droid.ui.media.list.list;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +31,7 @@ import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.fragments.MediaGenreSelectionFragment;
-import butter.droid.fragments.MediaListFragment;
+import butter.droid.ui.media.list.MediaListFragment;
 
 public class MediaPagerAdapter extends FragmentPagerAdapter {
 
@@ -75,7 +75,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         }
 
         position -= mHasGenreTabs;
-        return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
+        return MediaListFragment.newInstance(mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
     }
 
     @Override
@@ -113,8 +113,9 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
             mProvider.cancel();
             for (int i = 0; i < getCount(); i++) {
                 MediaListFragment mediaListFragment = getMediaListFragment(i);
-                if (mediaListFragment != null)
+                if (mediaListFragment != null) {
                     mediaListFragment.changeGenre(genre);
+                }
             }
         }
     };

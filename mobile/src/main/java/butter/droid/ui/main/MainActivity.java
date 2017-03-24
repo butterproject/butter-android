@@ -178,7 +178,7 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
                     return true;
                 case R.id.action_search:
                     //start the search activity
-                    SearchActivity.startActivity(this);
+                    startActivity(SearchActivity.getIntent(this));
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

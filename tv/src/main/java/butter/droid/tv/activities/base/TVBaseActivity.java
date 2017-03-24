@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.tv.activities.TVSearchActivity;
+import butter.droid.tv.ui.search.TVSearchActivity;
 
 public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 
