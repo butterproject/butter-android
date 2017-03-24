@@ -18,6 +18,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -119,18 +120,18 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/play_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"
                 android:layout_below="@id/time_bar"
                 android:background="@drawable/player_controls_play_bg"
-                android:src="@drawable/ic_av_play"
+                app:srcCompat="@drawable/ic_av_play"
                 android:contentDescription="@string/play"
                 android:scaleType="centerInside" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/rewind_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -140,11 +141,11 @@
                 android:layout_marginRight="@dimen/player_controls_distance"
                 android:layout_marginEnd="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
-                android:src="@drawable/ic_av_rewind"
+                app:srcCompat="@drawable/ic_av_rewind"
                 android:contentDescription="@string/rewind"
                 android:scaleType="centerInside" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/forward_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -154,11 +155,11 @@
                 android:layout_marginLeft="@dimen/player_controls_distance"
                 android:layout_marginStart="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
-                android:src="@drawable/ic_av_forward"
+                app:srcCompat="@drawable/ic_av_forward"
                 android:contentDescription="@string/fastforward"
                 android:scaleType="centerInside"/>
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/scale_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -168,11 +169,11 @@
                 android:layout_marginRight="@dimen/player_controls_distance"
                 android:layout_marginEnd="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
-                android:src="@drawable/ic_av_aspect_ratio"
+                app:srcCompat="@drawable/ic_av_aspect_ratio"
                 android:contentDescription="@string/scale"
                 android:scaleType="centerInside"/>
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/subs_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -182,7 +183,7 @@
                 android:layout_marginLeft="@dimen/player_controls_distance"
                 android:layout_marginStart="@dimen/player_controls_distance"
                 android:background="@drawable/selectable_background"
-                android:src="@drawable/ic_av_subs"
+                app:srcCompat="@drawable/ic_av_subs"
                 android:contentDescription="@string/subtitles"
                 android:scaleType="centerInside"/>
         </RelativeLayout>

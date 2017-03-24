@@ -1,0 +1,26 @@
+<!--
+  ~ This file is part of Butter.
+  ~
+  ~ Butter is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Butter is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:height="24dp"
+  android:viewportHeight="24.0"
+  android:viewportWidth="24.0"
+  android:width="24dp">
+  <path
+    android:fillColor="#FFF"
+    android:pathData="M14.5,13.5H16.5V10.5H14.5M18,14A1,1 0,0 1,17 15H16.25V16.5H14.75V15H14A1,1 0,0 1,13 14V10A1,1 0,0 1,14 9H17A1,1 0,0 1,18 10M11,15H9.5V13H7.5V15H6V9H7.5V11.5H9.5V9H11M19,4H5C3.89,4 3,4.89 3,6V18A2,2 0,0 0,5 20H19A2,2 0,0 0,21 18V6C21,4.89 20.1,4 19,4Z"/>
+</vector>

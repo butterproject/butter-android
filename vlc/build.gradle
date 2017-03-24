@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: '../config/gradle/checkstyle.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk

@@ -17,7 +17,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'si.kamino.version'
 apply plugin: 'hugo'
-
+apply from: '../config/gradle/checkstyle.gradle'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -77,7 +77,6 @@ android {
             include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
-
 }
 
 //./gradlew dependencyUpdates -Drevision=release

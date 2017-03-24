@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'hugo'//for method logging (only in debug builds)
 apply plugin: 'com.jakewharton.butterknife'
+apply from: '../config/gradle/checkstyle.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -20,6 +21,7 @@ android {
         buildConfigField 'String[]', 'UPDATE_URLS', '{' + updateUrls + '}'
         versionCode buildNumber
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
