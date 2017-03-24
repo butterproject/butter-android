@@ -174,7 +174,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
       final String videoId = params[0];
       try {
         int videoQuality;
-        if (networkManager.isWifiConnected()) {
+        if (networkManager.isWifiConnected() || networkManager.isEthernetConnected()) {
           videoQuality = YouTubeManager.QUALITY_HIGH_MP4;
         } else {
           videoQuality = YouTubeManager.QUALITY_MEDIUM_3GPP;

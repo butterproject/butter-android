@@ -41,7 +41,6 @@ import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
-import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -54,7 +53,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVButterApplication application);
 
     void inject(TVMainActivity activity);
-    void inject(TVTrailerPlayerActivity activity);
     void inject(TVMediaDetailActivity activity);
     void inject(TVMediaGridActivity activity);
     void inject(TVPreferencesActivity activity);
