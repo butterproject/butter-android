@@ -17,6 +17,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'si.kamino.version'
 apply plugin: 'hugo'
+apply from: '../config/gradle/checkstyle.gradle'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
