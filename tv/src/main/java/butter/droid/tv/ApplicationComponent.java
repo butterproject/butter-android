@@ -17,8 +17,6 @@
 
 package butter.droid.tv;
 
-import javax.inject.Singleton;
-
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.tv.activities.TVLaunchActivity;
 import butter.droid.tv.activities.TVMainActivity;
@@ -45,6 +43,7 @@ import butter.droid.tv.ui.search.TVSearchComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
 import dagger.Component;
+import javax.inject.Singleton;
 
 @Singleton @Component(
         modules = ApplicationModule.class

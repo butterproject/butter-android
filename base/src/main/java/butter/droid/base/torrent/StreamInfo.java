@@ -17,6 +17,7 @@
 
 package butter.droid.base.torrent;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,7 +38,7 @@ public class StreamInfo implements Parcelable {
     private String mShowEpisodeTitle;
 
     private Boolean mIsShow = false;
-    private Integer mColor = -1;
+    private int mColor = Color.TRANSPARENT;
     private Media mMedia;
 
     public StreamInfo(String torrentUrl) {
@@ -120,7 +121,7 @@ public class StreamInfo implements Parcelable {
         return mVideoLocation;
     }
 
-    public Integer getPaletteColor() {
+    public int getPaletteColor() {
         return mColor;
     }
 
