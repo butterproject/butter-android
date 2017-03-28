@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities;
+package butter.droid.tv.ui.search;
 
 import android.app.Activity;
 import android.content.Intent;

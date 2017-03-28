@@ -68,8 +68,6 @@ public abstract class MediaProvider extends BaseProvider {
 
     public abstract Call getDetail(ArrayList<Media> currentList, Integer index, Callback callback);
 
-    public abstract int getLoadingMessage();
-
     public abstract List<NavInfo> getNavigation();
 
     public int getDefaultNavigationIndex() {

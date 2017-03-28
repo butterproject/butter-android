@@ -67,7 +67,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(TVOverviewFragment fragment);
     void inject(TVMovieDetailsFragment fragment);
     void inject(TVMediaGridFragment fragment);
-    void inject(TVSearchFragment fragment);
     void inject(TVVideoPlayerFragment fragment);
     void inject(TVPlaybackOverlayFragment fragment);
     void inject(TVShowDetailsFragment fragment);
@@ -80,5 +79,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     TvAboutComponent.Builder aboutComponentBuilder();
     TVStreamLoadingComponent.Builder streamLoadingComponentBuilder();
     TVTrailerPlayerComponent.Builder tvTrailerPlayerComponentBuilder();
+
+    TVSearchComponent.Builder searchComponentBuilder();
 
 }
