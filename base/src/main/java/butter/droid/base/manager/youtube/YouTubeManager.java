@@ -54,7 +54,7 @@ public class YouTubeManager {
   private static final Pattern YOUTUBE_URL_PATTERN = Pattern
       .compile("^.*((youtu.be/)|(v/)|(/u/w/)|(embed/)|(watch\\?))\\??v?=?([^#&?]*).*", Pattern.CASE_INSENSITIVE);
   private static final Pattern YOUTUBE_URL_VIDEO_ID_EXTRACTOR_PATTERN = Pattern
-      .compile("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*", Pattern.CASE_INSENSITIVE);
+      .compile("^.*((youtu.be/)|(v/)|(/u/w/)|(embed/)|(watch\\?))\\??v?=?([^#&?]*).*", Pattern.CASE_INSENSITIVE);
 
   private static final int[] SUPPORTED_FORMATS_IDS = {
       QUALITY_LOW_3GPP,
