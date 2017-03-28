@@ -22,11 +22,11 @@ import butter.droid.base.torrent.StreamInfo;
 
 public interface TVTrailerPlayerPresenter {
 
-  void onCreate(Media media, String youtubeUrl);
+    void onCreate(Media media, String youtubeUrl);
 
-  StreamInfo getStreamInfo();
+    StreamInfo getStreamInfo();
 
-  void onVideoUrlObtained(String videoUrl);
+    void onVideoUrlObtained(String videoUrl);
 
-  void onErrorObtainingVideoUrl();
+    void onErrorObtainingVideoUrl();
 }

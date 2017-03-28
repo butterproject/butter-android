@@ -24,22 +24,22 @@ import dagger.Provides;
 @Module
 public class TVTrailerPlayerModule {
 
-  private final TVTrailerPlayerView view;
+    private final TVTrailerPlayerView view;
 
-  public TVTrailerPlayerModule(TVTrailerPlayerView view) {
-    this.view = view;
-  }
+    public TVTrailerPlayerModule(TVTrailerPlayerView view) {
+        this.view = view;
+    }
 
-  @Provides
-  @ActivityScope
-  public TVTrailerPlayerView provideView() {
-    return view;
-  }
+    @Provides
+    @ActivityScope
+    public TVTrailerPlayerView provideView() {
+        return view;
+    }
 
-  @Provides
-  @ActivityScope
-  public TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view) {
-    return new TVTrailerPlayerPresenterImpl(view);
-  }
+    @Provides
+    @ActivityScope
+    public TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view) {
+        return new TVTrailerPlayerPresenterImpl(view);
+    }
 
 }

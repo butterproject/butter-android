@@ -19,12 +19,12 @@ package butter.droid.tv.ui.trailer;
 
 public interface TVTrailerPlayerView {
 
-  void onDisableVideoPlayerSubsButton();
+    void onDisableVideoPlayerSubsButton();
 
-  void onExecuteQueryYoutubeTask(String youtubeUrl);
+    void onExecuteQueryYoutubeTask(String youtubeUrl);
 
-  void onNotifyMediaReady();
+    void onNotifyMediaReady();
 
-  void onDisplayErrorVideoDialog();
+    void onDisplayErrorVideoDialog();
 
 }

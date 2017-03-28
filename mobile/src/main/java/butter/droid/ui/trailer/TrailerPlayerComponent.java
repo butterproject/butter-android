@@ -21,19 +21,19 @@ import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
 @Subcomponent(
-    modules = TrailerPlayerModule.class
+        modules = TrailerPlayerModule.class
 )
 @ActivityScope
 public interface TrailerPlayerComponent {
 
-  void inject(TrailerPlayerActivity activity);
+    void inject(TrailerPlayerActivity activity);
 
-  @Subcomponent.Builder
-  interface Builder {
+    @Subcomponent.Builder
+    interface Builder {
 
-    Builder trailerModule(TrailerPlayerModule module);
+        Builder trailerModule(TrailerPlayerModule module);
 
-    TrailerPlayerComponent build();
-  }
+        TrailerPlayerComponent build();
+    }
 
 }
