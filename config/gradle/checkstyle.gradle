@@ -1,19 +1,23 @@
-subprojects { project ->
+apply plugin: 'checkstyle'
 
-  apply plugin: 'checkstyle'
-
-  task checkstyle(type: Checkstyle) {
+task checkstyle(type: Checkstyle) {
     configFile rootProject.file('config/checkstyle/checkstyle.xml')
-    source 'src/main/java'
     ignoreFailures false
     showViolations true
     include '**/*.java'
+    exclude '**/gen/**'
+    maxErrors (CHECKSTYLE_MAX_ERRORS as int)
     reports {
-      html {
-        destination "${rootProject.buildDir}/reports/checkstyle/${project.name}.html"
-      }
+        html {
+            destination "${rootProject.buildDir}/reports/checkstyle/${project.name}.html"
+        }
     }
 
     classpath = files()
-  }
+
+    project.android.sourceSets.all { sourceSet ->
+        if (!sourceSet.name.startsWith("test") && !sourceSet.name.startsWith("androidTest")) {
+            source sourceSet.java.srcDirs
+        }
+    }
 }

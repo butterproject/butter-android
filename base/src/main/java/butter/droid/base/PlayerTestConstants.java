@@ -24,7 +24,7 @@ public final class PlayerTestConstants {
             = "http://download.wavetlan.com/SVV/Media/HTTP/MP4/ConvertedFiles/QuickTime/QuickTime_test13_5m19s_AVC_VBR_324kbps_640x480_25fps_AAC-LCv4_CBR_93.4kbps_Stereo_44100Hz.mp4";
     public static final String SUBTITLES_URL = "http://sv244.cf/bbb-subs.srt";
 
-    public final static String[] FILE_TYPES = new String[]{
+    public static final String[] FILE_TYPES = new String[]{
             "TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS AC3 (5.1) 640 Kbps",
             "TASM2, MP4 720p h264 High 3.1 4062 Kbps 24 FPS MP3 167 Kbps",
             "TASM2, MP4 1080p h264 High 4.0 11.6 Mbps 24 FPS AC3 (5.1) 640 Kbps",
