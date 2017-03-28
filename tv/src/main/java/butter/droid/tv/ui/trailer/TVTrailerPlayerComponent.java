@@ -22,7 +22,7 @@ import dagger.Subcomponent;
 
 @Subcomponent(
     modules = TVTrailerPlayerModule.class
-)
+  )
 @ActivityScope
 public interface TVTrailerPlayerComponent {
 

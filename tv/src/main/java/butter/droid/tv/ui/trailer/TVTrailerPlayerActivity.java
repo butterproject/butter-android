@@ -44,8 +44,8 @@ import timber.log.Timber;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback, TVTrailerPlayerView {
 
-  public final static String LOCATION = "stream_url";
-  public final static String DATA = "video_data";
+  public static final String LOCATION = "stream_url";
+  public static final String DATA = "video_data";
 
   private static final String TAG = TVTrailerPlayerActivity.class.getSimpleName();
 
@@ -60,11 +60,11 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
   private TVPlaybackOverlayFragment tvPlaybackOverlayFragment;
 
   public static Intent startActivity(Context context, String youTubeUrl, Media data) {
-    Intent i = new Intent(context, TVTrailerPlayerActivity.class);
-    i.putExtra(DATA, data);
-    i.putExtra(LOCATION, youTubeUrl);
-    context.startActivity(i);
-    return i;
+    Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
+    intent.putExtra(DATA, data);
+    intent.putExtra(LOCATION, youTubeUrl);
+    context.startActivity(intent);
+    return intent;
   }
 
   @Override
@@ -95,8 +95,9 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
       case android.R.id.home:
         finish();
         return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
-    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -134,7 +135,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
   @Override
   public void onDisplayErrorVideoDialog() {
     try {
-      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TVTrailerPlayerActivity.this);
+      final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TVTrailerPlayerActivity.this);
       alertDialogBuilder.setTitle(R.string.comm_error);
       alertDialogBuilder.setCancelable(false);
       alertDialogBuilder.setMessage(R.string.comm_message);
@@ -146,8 +147,8 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
         }
       });
 
-      AlertDialog lDialog = alertDialogBuilder.create();
-      lDialog.show();
+      final AlertDialog dialog = alertDialogBuilder.create();
+      dialog.show();
     } catch (Exception e) {
       Log.e(TAG, "Problem showing error dialog", e);
     }
@@ -155,7 +156,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
 
   private static class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {
 
-    private final String TAG = QueryYouTubeTask.class.getSimpleName();
+    private static final String TAG = QueryYouTubeTask.class.getSimpleName();
 
     private final YouTubeManager youTubeManager;
     private final NetworkManager networkManager;
