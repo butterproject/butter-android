@@ -56,7 +56,7 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
             items.add(new UiShowDetailAbout());
         }
 
-        ArrayList<Integer> availableSeasons = getAvailableSeasons();
+        List<Integer> availableSeasons = getAvailableSeasons();
         for (int season : availableSeasons) {
             items.add(new UiShowDetailSeason(season));
         }
@@ -65,8 +65,8 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
 
     }
 
-    private ArrayList<Integer> getAvailableSeasons() {
-        final ArrayList<Integer> availableSeasons = new ArrayList<>();
+    private List<Integer> getAvailableSeasons() {
+        final List<Integer> availableSeasons = new ArrayList<>();
         for (Episode episode : show.episodes) {
             if (!availableSeasons.contains(episode.season)) {
                 availableSeasons.add(episode.season);
