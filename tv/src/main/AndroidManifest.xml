@@ -158,7 +158,7 @@
             android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".activities.TVMediaDetailActivity" />
         <activity android:name=".activities.TVMediaGridActivity" />
-        <activity android:name=".activities.TVSearchActivity" />
+        <activity android:name=".ui.search.TVSearchActivity" />
         <activity android:name=".activities.TVPreferencesActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".ui.loading.TVStreamLoadingActivity" android:noHistory="true" />
         <activity android:name=".activities.TVVideoPlayerActivity" android:launchMode="singleTask" />

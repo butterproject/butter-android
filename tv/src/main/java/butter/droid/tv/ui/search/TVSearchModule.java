@@ -23,11 +23,11 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class TVSearchModue {
+public class TVSearchModule {
 
     private final TVSearchView view;
 
-    public TVSearchModue(TVSearchView view) {
+    public TVSearchModule(TVSearchView view) {
         this.view = view;
     }
 
