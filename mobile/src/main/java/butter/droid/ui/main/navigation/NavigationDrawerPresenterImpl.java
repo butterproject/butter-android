@@ -53,7 +53,8 @@ public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter 
     }
 
     @Override public void onCreate(int savedPosition) {
-        selectItem(savedPosition);
+        selectedPosition = savedPosition;
+        items.get(savedPosition).setSelected(true);
     }
 
     @Override public void onViewCreated() {

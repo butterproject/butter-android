@@ -15,28 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail;
+package butter.droid.ui.media.detail.show;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.media.detail.movie.MovieDetailComponent;
-import butter.droid.ui.media.detail.show.ShowDetailComponent;
-import dagger.Subcomponent;
+import android.support.annotation.NonNull;
 
-@Subcomponent (
-        modules = MediaDetailModule.class
-)
-@ActivityScope
-public interface MediaDetailComponent {
+import java.util.List;
 
-    void inject(MediaDetailActivity activity);
+import butter.droid.base.providers.media.models.Show;
+import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 
-    MovieDetailComponent.Builder movieDetailComponentBuilder();
-    ShowDetailComponent.Builder showDetailComponentBuilder();
+public interface ShowDetailView {
+    void displayData(@NonNull Show show, List<UiShowDetailItem> items);
 
-    @Subcomponent.Builder interface Builder {
-        Builder mediaDetailModule(MediaDetailModule module);
-
-        MediaDetailComponent build();
-    }
-
+    void displayAboutData(@NonNull Show show);
 }

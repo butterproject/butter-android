@@ -58,7 +58,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.ShowDetailFragment;
+import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.MessageDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
