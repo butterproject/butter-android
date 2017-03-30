@@ -5,24 +5,38 @@ Allow any Android user to watch movies easily streaming from torrents, without a
 
 Visit the project's website at <http://butterproject.org>.
 
-* [Issue Tracker](https://github.com/butterproject/butter-android/issues)
-
 ## Community
 
 Keep track of Butter development and community activity.
 
 * Follow Butter on [Twitter](https://twitter.com/butterproject), [Facebook](https://www.facebook.com/ButterProjectOrg/) and [Google+](https://plus.google.com/communities/111003619134556931561).
-* Read and subscribe to [The Official Butter Blog](https://github.com/butterproject/blog).
 * Join in discussions on the [Butter Forum](https://www.reddit.com/r/ButterProject)
-* Connect with us on IRC at `#butterproject` on freenode ([web access](http://webchat.freenode.net/?channels=butterproject))
+
+## Roadmap
+
+### pre 1.0.0
+ - 0.4.0 - MVP
+ - 0.5.0 - media providers
+ - 0.6.0 - video player update and media streaming updates
+ - 0.7.0 - updater
+ - 0.8.0 - connect SDK
+ - 0.9.0 - cleanup proguard and so on
+ - 1.0.0 - makeing app stable
+
+### pos 1.0.0
+ - Make media providers available through Content Providers.
+ - Make desktop JS media providers available on Android.
+ - Support multiple audio sources.
 
 ## Getting Involved
 
-Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](CONTRIBUTING.md#contributing-to-butter).
+Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](.github/CONTRIBUTING.md#contributing-to-butter).
 
-## Build Instructions ##
+## Build Instructions
 
-The [gradle build system](http://tools.android.com/tech-docs/new-build-system/user-guide) will fetch all dependencies and generate
+[![Build Status](https://travis-ci.org/butterproject/butter-android.svg?branch=master)](https://travis-ci.org/butterproject/butter-android)
+
+The [gradle build system](https://developer.android.com/studio/build/index.html) will fetch all dependencies and generate
 files you need to build the project. You first need to generate the
 local.properties (replace YOUR_SDK_DIR by your actual android sdk dir)
 file:
@@ -35,7 +49,7 @@ You can now sync, build and install the project:
     $ ./gradlew installDebug  # install the debug .apk if you have an
                               # emulator or an Android device connected
 
-You can use [Android Studio](http://developer.android.com/sdk/installing/studio.html) by importing the project as a Gradle project.
+You can use [Android Studio](http://developer.android.com/sdk/installing/studio.html) by it as existing project.
 
 ## Directory structure ##
 
@@ -80,13 +94,13 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Butter will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
 
-###Beta versions
+### Beta versions
 
 Beta releases will be numbered with the following format:
 
 `0.<major>.<minor>-<patch>`
 
-###Stable versions
+### Stable versions
 
 Releases will be numbered with the following format:
 
@@ -100,16 +114,16 @@ Constructed with the following guidelines:
 
 ## License
 
-If you distribute a copy or make a fork of the project, you have to credit this project as source.
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
-
-Note: some dependencies are external libraries, which might be covered by a different license compatible with the GPLv3. They are mentioned in NOTICE.md.
-
-***
-
-Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).development/LICENSE.md).
+    If you distribute a copy or make a fork of the project, you have to credit this project as source.
+    
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+     
+    Note: some dependencies are external libraries, which might be covered by a different license compatible with the GPLv3. They are mentioned in NOTICE.md.
+    
+    ***
+    
+    Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).development/LICENSE.md).
