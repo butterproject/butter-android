@@ -15,13 +15,13 @@ Keep track of Butter development and community activity.
 ## Roadmap
 
 ### pre 1.0.0
- - 0.4.0 - MVP
- - 0.5.0 - media providers
- - 0.6.0 - video player update and media streaming updates
- - 0.7.0 - updater
- - 0.8.0 - connect SDK
- - 0.9.0 - cleanup proguard and so on
- - 1.0.0 - makeing app stable
+ - 0.4.0 - migrate MVP
+ - 0.5.0 - Refactor media providers
+ - 0.6.0 - Update video player and resolve media streaming issues
+ - 0.7.0 - Refactor updater to work on p2p protocol
+ - 0.8.0 - Updating connect SDK
+ - 0.9.0 - Cleaning up project (resources, proguard, ...)
+ - 1.0.0 - Making app stable for release
 
 ### pos 1.0.0
  - Make media providers available through Content Providers.
@@ -34,7 +34,7 @@ Want to report a bug, request a feature, contribute or translate Butter? Check o
 
 ## Build Instructions
 
-[![Build Status](https://travis-ci.org/butterproject/butter-android.svg?branch=master)](https://travis-ci.org/butterproject/butter-android)
+[![Build Status](https://travis-ci.org/butterproject/butter-android.svg?branch=development)](https://travis-ci.org/butterproject/butter-android)
 
 The [gradle build system](https://developer.android.com/studio/build/index.html) will fetch all dependencies and generate
 files you need to build the project. You first need to generate the
@@ -114,16 +114,16 @@ Constructed with the following guidelines:
 
 ## License
 
-    If you distribute a copy or make a fork of the project, you have to credit this project as source.
-    
-    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
-     
-    Note: some dependencies are external libraries, which might be covered by a different license compatible with the GPLv3. They are mentioned in NOTICE.md.
-    
-    ***
-    
-    Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).development/LICENSE.md).
+If you distribute a copy or make a fork of the project, you have to credit this project as source.
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+
+Note: some dependencies are external libraries, which might be covered by a different license compatible with the GPLv3. They are mentioned in NOTICE.md.
+
+***
+
+Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).
