@@ -15,7 +15,7 @@ Keep track of Butter development and community activity.
 ## Roadmap
 
 ### pre 1.0.0
- - 0.4.0 - migrate MVP
+ - 0.4.0 - Migrating app to MVP arhitecture
  - 0.5.0 - Refactor media providers
  - 0.6.0 - Update video player and resolve media streaming issues
  - 0.7.0 - Refactor updater to work on p2p protocol
