@@ -15,19 +15,27 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.updater.model;
+package butter.droid.base.manager.internal.vlc;
 
-import java.util.Map;
+import android.support.annotation.Nullable;
 
-public class UpdaterData {
+import org.videolan.libvlc.LibVLC;
 
-    public Map<String, Map<String, Arch>> mobile;
-    public Map<String, Map<String, Arch>> tv;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-    public class Arch {
-        public int versionCode;
-        public String versionName;
-        public String checksum;
-        public String updateUrl;
+@Singleton
+public class VLCManager {
+
+    @Nullable private final LibVLC libVLC;
+
+    @Inject
+    public VLCManager(@Nullable LibVLC libVLC) {
+        this.libVLC = libVLC;
     }
+
+    public boolean isCompatible() {
+        return libVLC != null;
+    }
+
 }

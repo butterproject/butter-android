@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.beaming.server;
+package butter.droid.base.manager.internal.beaming.server;
 
 import android.app.Service;
 import android.content.Intent;

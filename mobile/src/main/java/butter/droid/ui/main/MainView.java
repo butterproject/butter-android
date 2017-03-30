@@ -19,7 +19,7 @@ package butter.droid.ui.main;
 
 import android.support.annotation.NonNull;
 
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 

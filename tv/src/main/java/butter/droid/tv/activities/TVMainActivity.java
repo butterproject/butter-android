@@ -23,7 +23,7 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;

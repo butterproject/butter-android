@@ -17,13 +17,13 @@
 
 package butter.droid;
 
-import javax.inject.Singleton;
-
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
+import butter.droid.base.ApplicationScope;
 import butter.droid.base.BaseApplicationComponent;
+import butter.droid.base.providers.ProviderComponent;
 import butter.droid.fragments.BeamPlayerFragment;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.MediaGenreSelectionFragment;
@@ -42,7 +42,10 @@ import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
 import dagger.Component;
 
-@Singleton @Component(
+@ApplicationScope @Component(
+        dependencies = {
+                ProviderComponent.class
+        },
         modules = ApplicationModule.class
 )
 public interface ApplicationComponent extends BaseApplicationComponent {

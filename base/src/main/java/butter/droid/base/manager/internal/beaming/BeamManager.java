@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.beaming;
+package butter.droid.base.manager.internal.beaming;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,7 +25,12 @@ import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import butter.droid.base.ApplicationScope;
+import butter.droid.base.R;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.torrent.StreamInfo;
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
 import com.connectsdk.device.ConnectableDevice;
@@ -51,7 +56,6 @@ import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -60,15 +64,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import butter.droid.base.R;
-import butter.droid.base.manager.beaming.server.BeamServer;
-import butter.droid.base.manager.beaming.server.BeamServerService;
-import butter.droid.base.manager.vlc.PlayerManager;
-import butter.droid.base.torrent.StreamInfo;
 import timber.log.Timber;
 
 /**
@@ -76,7 +72,7 @@ import timber.log.Timber;
  * <p/>
  * Wrapper for ConnectSDK
  */
-@Singleton
+@ApplicationScope
 public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerListener {
 
     private final Context context;

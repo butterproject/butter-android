@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.MediaProvider.Filters.Order;
 import butter.droid.base.providers.media.MediaProvider.Filters.Sort;

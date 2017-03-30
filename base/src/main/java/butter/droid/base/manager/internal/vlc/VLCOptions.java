@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.vlc;
+package butter.droid.base.manager.internal.vlc;
 
 import android.content.Context;
 import android.content.SharedPreferences;

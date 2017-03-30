@@ -20,8 +20,8 @@ package butter.droid.tv.ui.loading.fragment;
 import android.content.Context;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;

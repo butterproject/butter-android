@@ -19,7 +19,7 @@
  * The pct.droid.base.youtube package contains code that is based on https://code.google.com/p/android-youtube-player/
  */
 
-package butter.droid.base.manager.youtube;
+package butter.droid.base.manager.internal.youtube;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import butter.droid.base.manager.youtube.model.Format;
-import butter.droid.base.manager.youtube.model.VideoStream;
+import butter.droid.base.manager.internal.youtube.model.Format;
+import butter.droid.base.manager.internal.youtube.model.VideoStream;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

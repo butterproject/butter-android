@@ -19,7 +19,7 @@ package butter.droid.ui.main;
 
 import android.app.Activity;
 
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 
 public interface MainPresenter {
 

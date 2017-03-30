@@ -17,13 +17,34 @@
 
 package butter.droid.base;
 
-import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
+import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.torrent.TorrentService;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import okhttp3.OkHttpClient;
 
 public interface BaseApplicationComponent {
 
     void inject(BeamPlayerNotificationService service);
 
     void inject(TorrentService service);
+
+    Context context();
+    Picasso picasso();
+    VodoProvider codoProvider();
+    OkHttpClient okHttpClient();
+    Gson gson();
+    PlayerManager playerManager();
+    SharedPreferences sharedPreferences();
+    Resources resources();
+    ConnectivityManager connectivityManager();
+    WifiManager wifiManager();
 
 }

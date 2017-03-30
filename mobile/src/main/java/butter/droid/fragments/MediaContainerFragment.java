@@ -14,7 +14,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.media.list.list.MediaPagerAdapter;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
 import butterknife.BindView;

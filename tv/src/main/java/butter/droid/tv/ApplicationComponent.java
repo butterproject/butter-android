@@ -17,9 +17,9 @@
 
 package butter.droid.tv;
 
-import javax.inject.Singleton;
-
+import butter.droid.base.ApplicationScope;
 import butter.droid.base.BaseApplicationComponent;
+import butter.droid.base.providers.ProviderComponent;
 import butter.droid.tv.activities.TVLaunchActivity;
 import butter.droid.tv.activities.TVMainActivity;
 import butter.droid.tv.activities.TVMediaDetailActivity;
@@ -46,7 +46,10 @@ import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
 import dagger.Component;
 
-@Singleton @Component(
+@ApplicationScope @Component(
+        dependencies = {
+                ProviderComponent.class
+        },
         modules = ApplicationModule.class
 )
 public interface ApplicationComponent extends BaseApplicationComponent {

@@ -20,9 +20,9 @@ package butter.droid.ui.media.detail.movie;
 import android.content.res.Resources;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.PlayerManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import dagger.Module;

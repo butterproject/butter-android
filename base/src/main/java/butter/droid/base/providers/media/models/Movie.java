@@ -23,7 +23,7 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 
 public class Movie extends Media implements Parcelable {
     public String type = "movie";

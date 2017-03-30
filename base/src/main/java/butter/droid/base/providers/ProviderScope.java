@@ -15,27 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.vlc;
+package butter.droid.base.providers;
 
-import android.support.annotation.Nullable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import org.videolan.libvlc.LibVLC;
+import javax.inject.Scope;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-@Singleton
-public class VLCManager {
-
-    @Nullable private final LibVLC libVLC;
-
-    @Inject
-    public VLCManager(@Nullable LibVLC libVLC) {
-        this.libVLC = libVLC;
-    }
-
-    public boolean isCompatible() {
-        return libVLC != null;
-    }
-
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ProviderScope {
 }

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.vlc;
+package butter.droid.base.manager.internal.vlc;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,8 +36,8 @@ import javax.inject.Inject;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.beaming.server.BeamServer;
-import butter.droid.base.manager.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;

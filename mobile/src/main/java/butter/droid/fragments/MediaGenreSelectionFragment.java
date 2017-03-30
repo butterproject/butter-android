@@ -37,7 +37,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.adapters.GenreAdapter;
 import butter.droid.adapters.decorators.DividerItemDecoration;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.models.Genre;
 import butterknife.BindView;
 import butterknife.ButterKnife;

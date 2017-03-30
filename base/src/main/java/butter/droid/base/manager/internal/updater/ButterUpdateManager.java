@@ -32,7 +32,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.updater;
+package butter.droid.base.manager.internal.updater;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -46,9 +46,15 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-
+import butter.droid.base.ApplicationScope;
+import butter.droid.base.BuildConfig;
+import butter.droid.base.Constants;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.manager.internal.updater.model.UpdaterData;
+import butter.droid.base.utils.NetworkUtils;
+import butter.droid.base.utils.VersionUtils;
 import com.google.gson.Gson;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,17 +65,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
-
 import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import butter.droid.base.BuildConfig;
-import butter.droid.base.Constants;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.updater.model.UpdaterData;
-import butter.droid.base.utils.NetworkUtils;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.utils.VersionUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -78,7 +74,7 @@ import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
 
-@Singleton
+@ApplicationScope
 public class ButterUpdateManager extends Observable {
 
     public static int NOTIFICATION_ID = 0x808C049;

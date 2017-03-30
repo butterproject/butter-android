@@ -26,10 +26,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;

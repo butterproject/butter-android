@@ -18,9 +18,9 @@
 package butter.droid.tv;
 
 import android.content.Context;
-
-import butter.droid.base.BaseApplicationModule;
+import android.support.annotation.NonNull;
 import butter.droid.base.ButterApplication;
+import butter.droid.base.providers.ProviderComponent;
 import butter.droid.base.utils.VersionUtils;
 
 public class TVButterApplication extends ButterApplication {
@@ -32,16 +32,6 @@ public class TVButterApplication extends ButterApplication {
     }
 
     @Override
-    public void onCreate() {
-        component = DaggerApplicationComponent.builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .build();
-        component.inject(this);
-
-        super.onCreate();
-    }
-
-    @Override
     public void updateAvailable(String filePath) {
         if(!VersionUtils.isAndroidTV()) {
             super.updateAvailable(filePath);
@@ -50,6 +40,14 @@ public class TVButterApplication extends ButterApplication {
 
     @Override public ApplicationComponent getComponent() {
         return component;
+    }
+
+    @Override protected void inject(@NonNull final ProviderComponent providerComponent) {
+        component = DaggerApplicationComponent.builder()
+                .providerComponent(providerComponent)
+                .build();
+
+        component.inject(this);
     }
 
     public static TVButterApplication getAppContext() {

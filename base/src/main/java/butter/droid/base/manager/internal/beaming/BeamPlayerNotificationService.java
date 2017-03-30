@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.beaming;
+package butter.droid.base.manager.internal.beaming;
 
 import android.app.Notification;
 import android.app.NotificationManager;

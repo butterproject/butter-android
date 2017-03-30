@@ -23,7 +23,7 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.meta.MetaProvider;
 
 public class Episode extends Media implements Parcelable {

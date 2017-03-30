@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.manager.provider;
+package butter.droid.base.manager.internal.provider;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.MainThread;
