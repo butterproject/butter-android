@@ -61,7 +61,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
         this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
-        presenter.onCreate(this, media, youtubeUrl);
+        presenter.onCreate(media, youtubeUrl);
     }
 
     @Override

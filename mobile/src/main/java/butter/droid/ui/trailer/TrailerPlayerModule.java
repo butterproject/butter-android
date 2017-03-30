@@ -17,6 +17,7 @@
 
 package butter.droid.ui.trailer;
 
+import android.content.Context;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.phone.PhoneManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
@@ -41,10 +42,9 @@ public class TrailerPlayerModule {
 
     @Provides
     @ActivityScope
-    TrailerPlayerPresenter providePresenter(TrailerPlayerView trailerPlayerView, YouTubeManager youTubeManager, NetworkManager
-            networkManager, PhoneManager phoneManager) {
-        return new TrailerPlayerPresenterImpl(trailerPlayerView, youTubeManager,
-                networkManager, phoneManager);
+    TrailerPlayerPresenter providePresenter(Context context, TrailerPlayerView trailerPlayerView, YouTubeManager youTubeManager,
+            NetworkManager networkManager, PhoneManager phoneManager) {
+        return new TrailerPlayerPresenterImpl(context, trailerPlayerView, youTubeManager, networkManager, phoneManager);
     }
 
 }

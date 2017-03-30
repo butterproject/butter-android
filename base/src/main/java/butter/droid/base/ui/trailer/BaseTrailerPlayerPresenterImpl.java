@@ -14,6 +14,7 @@ import timber.log.Timber;
 
 public class BaseTrailerPlayerPresenterImpl implements BaseTrailerPlayerPresenter {
 
+    private final Context context;
     private final BaseTrailerPlayerView view;
     private final YouTubeManager youTubeManager;
     private final NetworkManager networkManager;
@@ -23,8 +24,9 @@ public class BaseTrailerPlayerPresenterImpl implements BaseTrailerPlayerPresente
 
     private QueryYouTubeTask queryYouTubeTask;
 
-    public BaseTrailerPlayerPresenterImpl(BaseTrailerPlayerView view, final YouTubeManager youTubeManager,
+    public BaseTrailerPlayerPresenterImpl(final Context context, final BaseTrailerPlayerView view, final YouTubeManager youTubeManager,
             final NetworkManager networkManager, final PhoneManager phoneManager) {
+        this.context = context;
         this.view = view;
         this.youTubeManager = youTubeManager;
         this.networkManager = networkManager;
@@ -32,7 +34,7 @@ public class BaseTrailerPlayerPresenterImpl implements BaseTrailerPlayerPresente
     }
 
     @Override
-    public void onCreate(Context context, Media media, String youtubeUrl) {
+    public void onCreate(Media media, String youtubeUrl) {
         media.title += " " + context.getString(R.string.trailer);
         this.streamInfo = new StreamInfo(media, null, null, null, null, null);
         view.onDisableVideoPlayerSubsButton();

@@ -17,6 +17,7 @@
 
 package butter.droid.ui.trailer;
 
+import android.content.Context;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.phone.PhoneManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
@@ -25,9 +26,9 @@ import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 
 public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TrailerPlayerPresenter {
 
-    public TrailerPlayerPresenterImpl(final BaseTrailerPlayerView view, final YouTubeManager youTubeManager, final NetworkManager
-            networkManager, final PhoneManager phoneManager) {
-        super(view, youTubeManager, networkManager, phoneManager);
+    public TrailerPlayerPresenterImpl(final Context context, final BaseTrailerPlayerView view, final YouTubeManager youTubeManager, final
+    NetworkManager networkManager, final PhoneManager phoneManager) {
+        super(context, view, youTubeManager, networkManager, phoneManager);
     }
 
 }
