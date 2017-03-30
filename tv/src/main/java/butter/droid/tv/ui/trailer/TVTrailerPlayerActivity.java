@@ -44,10 +44,8 @@ import timber.log.Timber;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback, TVTrailerPlayerView {
 
-    public static final String LOCATION = "stream_url";
-    public static final String DATA = "video_data";
-
-    private static final String TAG = TVTrailerPlayerActivity.class.getSimpleName();
+    private static final String EXTRA_LOCATION = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_LOCATION";
+    private static final String EXTRA_DATA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_DATA";
 
     @Inject
     TVTrailerPlayerPresenter presenter;
@@ -58,14 +56,6 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
 
     private TVVideoPlayerFragment playerFragment;
     private TVPlaybackOverlayFragment tvPlaybackOverlayFragment;
-
-    public static Intent startActivity(Context context, String youTubeUrl, Media data) {
-        Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
-        intent.putExtra(DATA, data);
-        intent.putExtra(LOCATION, youTubeUrl);
-        context.startActivity(intent);
-        return intent;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,9 +68,9 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
 
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
-        final Media media = getIntent().getParcelableExtra(DATA);
+        final Media media = getIntent().getParcelableExtra(EXTRA_DATA);
         media.title += " " + getString(R.string.trailer);
-        final String youTubeUrl = getIntent().getStringExtra(LOCATION);
+        final String youTubeUrl = getIntent().getStringExtra(EXTRA_LOCATION);
 
         final FragmentManager fm = getSupportFragmentManager();
         this.playerFragment = (TVVideoPlayerFragment) fm.findFragmentById(R.id.fragment);
@@ -150,8 +140,16 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
             final AlertDialog dialog = alertDialogBuilder.create();
             dialog.show();
         } catch (Exception e) {
-            Log.e(TAG, "Problem showing error dialog", e);
+            Timber.e("Problem showing error dialog", e);
         }
+    }
+
+    public static Intent startActivity(Context context, String youTubeUrl, Media data) {
+        Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
+        intent.putExtra(EXTRA_DATA, data);
+        intent.putExtra(EXTRA_LOCATION, youTubeUrl);
+        context.startActivity(intent);
+        return intent;
     }
 
     private static class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {

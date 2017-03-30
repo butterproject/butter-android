@@ -19,12 +19,13 @@ public class PhoneManager {
     }
 
     public boolean isHighSpeedConnection() {
-        return telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS ||
-                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA ||
-                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA ||
-                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
-                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_EVDO_0 ||
-                telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_EVDO_A;
+        final int networkType = telephonyManager.getNetworkType();
+        return networkType == TelephonyManager.NETWORK_TYPE_UMTS ||
+                networkType == TelephonyManager.NETWORK_TYPE_HSUPA ||
+                networkType == TelephonyManager.NETWORK_TYPE_HSPA ||
+                networkType == TelephonyManager.NETWORK_TYPE_HSDPA ||
+                networkType == TelephonyManager.NETWORK_TYPE_EVDO_0 ||
+                networkType == TelephonyManager.NETWORK_TYPE_EVDO_A;
     }
 
 }

@@ -39,7 +39,7 @@ public class AndroidModule {
         return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
-    @Provides @Singleton static TelephonyManager provideTelephonyManager(Context context) {
+    @Provides @Singleton TelephonyManager provideTelephonyManager(Context context) {
         return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 }

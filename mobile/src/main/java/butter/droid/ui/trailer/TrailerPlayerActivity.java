@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
@@ -43,10 +42,8 @@ import timber.log.Timber;
 
 public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
 
-    public final static String LOCATION = "stream_url";
-    public final static String DATA = "video_data";
-
-    private static final String TAG = TrailerPlayerActivity.class.getSimpleName();
+    private final static String EXTRA_LOCATION = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_LOCATION";
+    private final static String EXTRA_DATA = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_DATA";
 
     @Inject
     TrailerPlayerPresenter presenter;
@@ -70,20 +67,13 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
-        final Media media = getIntent().getParcelableExtra(DATA);
+        final Media media = getIntent().getParcelableExtra(EXTRA_DATA);
         media.title += " " + getString(R.string.trailer);
-        final String youtubeUrl = getIntent().getStringExtra(LOCATION);
+        final String youtubeUrl = getIntent().getStringExtra(EXTRA_LOCATION);
 
         this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
         presenter.onCreate(media, youtubeUrl);
-    }
-
-    public static Intent getIntent(Context context, Media media, String url) {
-        Intent i = new Intent(context, TrailerPlayerActivity.class);
-        i.putExtra(TrailerPlayerActivity.DATA, media);
-        i.putExtra(TrailerPlayerActivity.LOCATION, url);
-        return i;
     }
 
     @Override
@@ -144,8 +134,15 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
             final AlertDialog dialog = alertDialogBuilder.create();
             dialog.show();
         } catch (Exception e) {
-            Log.e(TAG, "Problem showing error dialog: ", e);
+            Timber.e("Problem showing error dialog: ", e);
         }
+    }
+
+    public static Intent getIntent(Context context, Media media, String url) {
+        final Intent intent = new Intent(context, TrailerPlayerActivity.class);
+        intent.putExtra(TrailerPlayerActivity.EXTRA_DATA, media);
+        intent.putExtra(TrailerPlayerActivity.EXTRA_LOCATION, url);
+        return intent;
     }
 
     private static class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {
