@@ -17,16 +17,8 @@
 
 package butter.droid.ui.trailer;
 
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenter;
 
-public interface TrailerPlayerPresenter {
+public interface TrailerPlayerPresenter extends BaseTrailerPlayerPresenter {
 
-    void onCreate(final Media media, final String youtubeUrl);
-
-    StreamInfo getStreamInfo();
-
-    void onVideoUrlObtained(String videoUrl);
-
-    void onErrorObtainingVideoUrl();
 }

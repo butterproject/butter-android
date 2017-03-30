@@ -17,6 +17,9 @@
 
 package butter.droid.tv.ui.trailer;
 
+import butter.droid.base.manager.network.NetworkManager;
+import butter.droid.base.manager.phone.PhoneManager;
+import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Module;
 import dagger.Provides;
@@ -38,8 +41,9 @@ public class TVTrailerPlayerModule {
 
     @Provides
     @ActivityScope
-    public TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view) {
-        return new TVTrailerPlayerPresenterImpl(view);
+    public TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, YouTubeManager youTubeManager, NetworkManager
+            networkManager, PhoneManager phoneManager) {
+        return new TVTrailerPlayerPresenterImpl(view, youTubeManager, networkManager, phoneManager);
     }
 
 }

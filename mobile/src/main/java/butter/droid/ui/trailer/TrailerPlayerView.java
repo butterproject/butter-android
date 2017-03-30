@@ -17,13 +17,8 @@
 
 package butter.droid.ui.trailer;
 
-public interface TrailerPlayerView {
+import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 
-    void onDisableVideoPlayerSubsButton();
+public interface TrailerPlayerView extends BaseTrailerPlayerView {
 
-    void onExecuteQueryYoutubeTask(String youtubeUrl);
-
-    void onNotifyMediaReady();
-
-    void onDisplayErrorVideoDialog();
 }

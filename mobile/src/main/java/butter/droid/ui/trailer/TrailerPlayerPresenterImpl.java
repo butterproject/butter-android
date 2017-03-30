@@ -17,44 +17,17 @@
 
 package butter.droid.ui.trailer;
 
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.manager.network.NetworkManager;
+import butter.droid.base.manager.phone.PhoneManager;
+import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenterImpl;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 
-public class TrailerPlayerPresenterImpl implements TrailerPlayerPresenter {
+public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TrailerPlayerPresenter {
 
-    private final TrailerPlayerView view;
-
-    private StreamInfo streamInfo;
-
-    private boolean errorDialogDisplayed;
-
-    public TrailerPlayerPresenterImpl(TrailerPlayerView view) {
-        this.view = view;
+    public TrailerPlayerPresenterImpl(final BaseTrailerPlayerView view, final YouTubeManager youTubeManager, final NetworkManager
+            networkManager, final PhoneManager phoneManager) {
+        super(view, youTubeManager, networkManager, phoneManager);
     }
 
-    @Override
-    public void onCreate(Media media, String youtubeUrl) {
-        this.streamInfo = new StreamInfo(media, null, null, null, null, null);
-        view.onDisableVideoPlayerSubsButton();
-        view.onExecuteQueryYoutubeTask(youtubeUrl);
-    }
-
-    @Override
-    public StreamInfo getStreamInfo() {
-        return streamInfo;
-    }
-
-    @Override
-    public void onVideoUrlObtained(String videoUrl) {
-        streamInfo.setVideoLocation(videoUrl);
-        view.onNotifyMediaReady();
-    }
-
-    @Override
-    public void onErrorObtainingVideoUrl() {
-        if (!errorDialogDisplayed) {
-            errorDialogDisplayed = true;
-            view.onDisplayErrorVideoDialog();
-        }
-    }
 }

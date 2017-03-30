@@ -17,28 +17,22 @@
 
 package butter.droid.ui.trailer;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.phone.PhoneManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
+import butter.droid.base.ui.dialog.DialogFactory;
+import butter.droid.base.ui.dialog.DialogFactory.Action;
+import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
 import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.ui.ButterBaseActivity;
-import java.lang.ref.WeakReference;
-import java.net.URLDecoder;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
 
@@ -47,12 +41,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     @Inject
     TrailerPlayerPresenter presenter;
-    @Inject
-    YouTubeManager youTubeManager;
-    @Inject
-    NetworkManager networkManager;
-    @Inject
-    PhoneManager phoneManager;
 
     private VideoPlayerFragment videoPlayerFragment;
 
@@ -67,13 +55,19 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
         super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
-        final Media media = getIntent().getParcelableExtra(EXTRA_DATA);
-        media.title += " " + getString(R.string.trailer);
-        final String youtubeUrl = getIntent().getStringExtra(EXTRA_LOCATION);
+        final Intent intent = getIntent();
+        final Media media = intent.getParcelableExtra(EXTRA_DATA);
+        final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
 
         this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
-        presenter.onCreate(media, youtubeUrl);
+        presenter.onCreate(this, media, youtubeUrl);
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -107,99 +101,24 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     }
 
     @Override
-    public void onExecuteQueryYoutubeTask(String youtubeUrl) {
-        final QueryYouTubeTask youTubeTask = new QueryYouTubeTask(this, youTubeManager, networkManager, phoneManager);
-        final String youTubeVideoId = youTubeManager.getYouTubeVideoId(youtubeUrl);
-        youTubeTask.execute(youTubeVideoId);
-    }
-
-    @Override
     public void onNotifyMediaReady() {
         videoPlayerFragment.onMediaReady();
     }
 
     @Override
     public void onDisplayErrorVideoDialog() {
-        try {
-            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TrailerPlayerActivity.this)
-                    .setTitle(R.string.comm_error)
-                    .setCancelable(false)
-                    .setMessage(R.string.comm_message)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            TrailerPlayerActivity.this.finish();
-                        }
-                    });
-            final AlertDialog dialog = alertDialogBuilder.create();
-            dialog.show();
-        } catch (Exception e) {
-            Timber.e("Problem showing error dialog: ", e);
-        }
+        DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {
+            @Override
+            public void onButtonClick(final Dialog which, final Action action) {
+                finish();
+            }
+        }).show();
     }
 
-    public static Intent getIntent(Context context, Media media, String url) {
+    public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TrailerPlayerActivity.class);
         intent.putExtra(TrailerPlayerActivity.EXTRA_DATA, media);
         intent.putExtra(TrailerPlayerActivity.EXTRA_LOCATION, url);
         return intent;
     }
-
-    private static class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {
-
-        private final String TAG = QueryYouTubeTask.class.getSimpleName();
-
-        private final YouTubeManager youTubeManager;
-        private final NetworkManager networkManager;
-        private final PhoneManager phoneManager;
-
-        private final WeakReference<TrailerPlayerActivity> activityWeakReference;
-
-        private QueryYouTubeTask(final TrailerPlayerActivity activity, final YouTubeManager youTubeManager,
-                final NetworkManager networkManager,
-                final PhoneManager phoneManager) {
-            this.activityWeakReference = new WeakReference<>(activity);
-            this.youTubeManager = youTubeManager;
-            this.networkManager = networkManager;
-            this.phoneManager = phoneManager;
-        }
-
-        @Override
-        protected Uri doInBackground(String... params) {
-            final String videoId = params[0];
-            try {
-                int videoQuality;
-                if (networkManager.isWifiConnected()) {
-                    videoQuality = YouTubeManager.QUALITY_HIGH_MP4;
-                } else if (phoneManager.isConnected() && phoneManager.isHighSpeedConnection()) {
-                    videoQuality = YouTubeManager.QUALITY_NORMAL_MP4;
-                } else {
-                    videoQuality = YouTubeManager.QUALITY_MEDIUM_3GPP;
-                }
-                // calculate the actual URL of the video, encoded with proper YouTube token
-                final String uriStr = youTubeManager.calculateYouTubeUrl(videoQuality, true, videoId);
-                return Uri.parse(uriStr);
-            } catch (Exception e) {
-                Timber.e(TAG, "Error occurred while retrieving information from YouTube", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Uri result) {
-            final TrailerPlayerActivity trailerPlayerActivity = activityWeakReference.get();
-            if (isCancelled() || trailerPlayerActivity == null || trailerPlayerActivity.isFinishing()) {
-                return;
-            }
-
-            if (result != null) {
-                final String videoUrl = URLDecoder.decode(result.toString());
-                trailerPlayerActivity.presenter.onVideoUrlObtained(videoUrl);
-            } else {
-                trailerPlayerActivity.presenter.onErrorObtainingVideoUrl();
-            }
-        }
-
-    }
-
 }
