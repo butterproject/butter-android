@@ -17,11 +17,8 @@
 
 package butter.droid;
 
-import javax.inject.Singleton;
-
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.fragments.BeamPlayerFragment;
@@ -37,7 +34,9 @@ import butter.droid.ui.media.detail.MediaDetailComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
+import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
+import javax.inject.Singleton;
 
 @Singleton @Component(
         modules = ApplicationModule.class
@@ -46,7 +45,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
 
     void inject(MobileButterApplication application);
 
-    void inject(TrailerPlayerActivity activity);
     void inject(AboutActivity activity);
     void inject(BeamPlayerActivity activity);
     void inject(SearchActivity activity);
@@ -64,6 +62,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     MediaDetailComponent.Builder mediaDetailsComponentBuilder();
     AboutComponent.Builder aboutComponentBuilder();
     StreamLoadingComponent.Builder streamLoadingComponentBuilder();
+    TrailerPlayerComponent.Builder trailerComponentBuilder();
 
     SearchComponent.Builder searchComponentBuilder();
 

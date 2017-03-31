@@ -22,6 +22,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 
+import android.telephony.TelephonyManager;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -38,4 +39,7 @@ public class AndroidModule {
         return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
+    @Provides @Singleton TelephonyManager provideTelephonyManager(Context context) {
+        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
 }

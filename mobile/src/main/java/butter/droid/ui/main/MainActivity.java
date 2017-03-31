@@ -51,7 +51,6 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
@@ -69,9 +68,13 @@ import butter.droid.ui.main.navigation.NavigationDrawerFragment;
 import butter.droid.ui.main.pager.MediaPagerAdapter;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsActivity;
+import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butterknife.BindView;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**

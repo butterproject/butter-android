@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Butter.
   ~
   ~ Butter is free software: you can redistribute it and/or modify
@@ -18,6 +17,6 @@
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/video_fragment"
-	android:layout_width="match_parent"
-	class="butter.droid.fragments.VideoPlayerFragment"
-	android:layout_height="match_parent" />
+    class="butter.droid.fragments.VideoPlayerFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />

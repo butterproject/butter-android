@@ -59,7 +59,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
         TVButterApplication.getAppContext()
                 .getComponent()
                 .searchComponentBuilder()
-                .searchModule(new TVSearchModue(this))
+                .searchModule(new TVSearchModule(this))
                 .build()
                 .inject(this);
 

@@ -17,21 +17,26 @@
 
 package butter.droid.tv.ui.search;
 
+import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.ui.ActivityScope;
-import dagger.Subcomponent;
+import dagger.Module;
+import dagger.Provides;
 
-@Subcomponent(modules = TVSearchModule.class)
-@ActivityScope
-public interface TVSearchComponent {
+@Module
+public class TVSearchModule {
 
-    void inject(TVSearchFragment fragment);
+    private final TVSearchView view;
 
-    @Subcomponent.Builder interface Builder {
+    public TVSearchModule(TVSearchView view) {
+        this.view = view;
+    }
 
-        Builder searchModule(TVSearchModule modue);
+    @Provides @ActivityScope TVSearchView provideView() {
+        return view;
+    }
 
-        TVSearchComponent build();
-
+    @Provides @ActivityScope TVSearchPresenter providePresenter(TVSearchView view, ProviderManager providerManager) {
+        return new TVSearchPresenterImpl(view, providerManager);
     }
 
 }
