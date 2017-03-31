@@ -139,7 +139,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
             if (!youTubeManager.isYouTubeUrl(movie.trailer)) {
                 TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(movie, null, null, null, null, movie.trailer));
             } else {
-                TVTrailerPlayerActivity.startActivity(getActivity(), movie.trailer, movie);
+                startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, movie.trailer));
             }
         }
 	}

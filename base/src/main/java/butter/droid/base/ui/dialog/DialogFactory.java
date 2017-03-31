@@ -6,19 +6,24 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.support.annotation.IntDef;
 import butter.droid.base.R;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public class DialogFactory {
 
-    public enum Action {
-        POSITIVE,
-        NEGATIVE,
-        NEUTRAL
-    }
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(value = {ACTION_POSITIVE, ACTION_NEGATIVE, ACTION_NEUTRAL})
+    public @interface Action {}
+
+    public static final int ACTION_POSITIVE = 0;
+    public static final int ACTION_NEGATIVE = 1;
+    public static final int ACTION_NEUTRAL = 2;
 
     public interface ActionCallback {
 
-        void onButtonClick(Dialog which, Action action);
+        void onButtonClick(Dialog which, @Action int action);
     }
 
     private DialogFactory() {
@@ -34,7 +39,7 @@ public class DialogFactory {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (callback != null) {
-                            callback.onButtonClick(((Dialog) dialog), Action.POSITIVE);
+                            callback.onButtonClick(((Dialog) dialog), ACTION_POSITIVE);
                         }
                     }
                 }).create();

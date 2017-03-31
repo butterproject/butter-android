@@ -109,7 +109,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     public void onDisplayErrorVideoDialog() {
         DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {
             @Override
-            public void onButtonClick(final Dialog which, final Action action) {
+            public void onButtonClick(final Dialog which, final @Action int action) {
                 finish();
             }
         }).show();

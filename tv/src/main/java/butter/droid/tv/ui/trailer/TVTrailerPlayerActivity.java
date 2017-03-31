@@ -66,7 +66,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
         this.playerFragment = (TVVideoPlayerFragment) fm.findFragmentById(R.id.fragment);
         this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment) fm.findFragmentById(R.id.playback_overlay_fragment);
 
-        presenter.onCreate(this, media, youTubeUrl);
+        presenter.onCreate(media, youTubeUrl);
     }
 
     @Override
@@ -115,17 +115,16 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
     public void onDisplayErrorVideoDialog() {
         DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {
             @Override
-            public void onButtonClick(final Dialog which, final Action action) {
+            public void onButtonClick(final Dialog which, final @Action int action) {
                 finish();
             }
         }).show();
     }
 
-    public static Intent startActivity(final Context context, final String youTubeUrl, final Media data) {
+    public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
-        intent.putExtra(EXTRA_DATA, data);
-        intent.putExtra(EXTRA_LOCATION, youTubeUrl);
-        context.startActivity(intent);
+        intent.putExtra(EXTRA_DATA, media);
+        intent.putExtra(EXTRA_LOCATION, url);
         return intent;
     }
 }
