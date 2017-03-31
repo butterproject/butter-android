@@ -14,6 +14,10 @@ public class PhoneManager {
         this.telephonyManager = telephonyManager;
     }
 
+    public boolean isPhone() {
+        return telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
+    }
+
     public boolean isConnected() {
         return telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED;
     }

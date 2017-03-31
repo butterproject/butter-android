@@ -83,9 +83,9 @@ public class BaseTrailerPlayerPresenterImpl implements BaseTrailerPlayerPresente
             final String videoId = params[0];
             try {
                 int videoQuality;
-                if (networkManager.isWifiConnected()) {
+                if (networkManager.isWifiConnected() || networkManager.isEthernetConnected()) {
                     videoQuality = YouTubeManager.QUALITY_HIGH_MP4;
-                } else if (phoneManager.isConnected() && phoneManager.isHighSpeedConnection()) {
+                } else if (phoneManager.isPhone() && phoneManager.isConnected() && phoneManager.isHighSpeedConnection()) {
                     videoQuality = YouTubeManager.QUALITY_NORMAL_MP4;
                 } else {
                     videoQuality = YouTubeManager.QUALITY_MEDIUM_3GPP;

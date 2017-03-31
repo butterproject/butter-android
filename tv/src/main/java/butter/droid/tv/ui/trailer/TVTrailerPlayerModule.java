@@ -43,9 +43,8 @@ public class TVTrailerPlayerModule {
     @Provides
     @ActivityScope
     public TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, Context context, YouTubeManager youTubeManager,
-            NetworkManager
-            networkManager, PhoneManager phoneManager) {
-        return new TVTrailerPlayerPresenterImpl(view, youTubeManager, networkManager, phoneManager);
+            NetworkManager networkManager, PhoneManager phoneManager) {
+        return new TVTrailerPlayerPresenterImpl(context, view, youTubeManager, networkManager, phoneManager);
     }
 
 }
