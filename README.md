@@ -5,24 +5,38 @@ Allow any Android user to watch movies easily streaming from torrents, without a
 
 Visit the project's website at <http://butterproject.org>.
 
-* [Issue Tracker](https://github.com/butterproject/butter-android/issues)
-
 ## Community
 
 Keep track of Butter development and community activity.
 
 * Follow Butter on [Twitter](https://twitter.com/butterproject), [Facebook](https://www.facebook.com/ButterProjectOrg/) and [Google+](https://plus.google.com/communities/111003619134556931561).
-* Read and subscribe to [The Official Butter Blog](https://github.com/butterproject/blog).
 * Join in discussions on the [Butter Forum](https://www.reddit.com/r/ButterProject)
-* Connect with us on IRC at `#butterproject` on freenode ([web access](http://webchat.freenode.net/?channels=butterproject))
+
+## Roadmap
+
+### pre 1.0.0
+ - 0.4.0 - Migrating app to MVP arhitecture
+ - 0.5.0 - Refactor media providers
+ - 0.6.0 - Update video player and resolve media streaming issues
+ - 0.7.0 - Refactor updater to work on p2p protocol
+ - 0.8.0 - Updating connect SDK
+ - 0.9.0 - Cleaning up project (resources, proguard, ...)
+ - 1.0.0 - Making app stable for release
+
+### pos 1.0.0
+ - Make media providers available through Content Providers.
+ - Make desktop JS media providers available on Android.
+ - Support multiple audio sources.
 
 ## Getting Involved
 
-Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](CONTRIBUTING.md#contributing-to-butter).
+Want to report a bug, request a feature, contribute or translate Butter? Check out our in-depth guide to [Contributing to Butter](.github/CONTRIBUTING.md#contributing-to-butter).
 
-## Build Instructions ##
+## Build Instructions
 
-The [gradle build system](http://tools.android.com/tech-docs/new-build-system/user-guide) will fetch all dependencies and generate
+[![Build Status](https://travis-ci.org/butterproject/butter-android.svg?branch=development)](https://travis-ci.org/butterproject/butter-android)
+
+The [gradle build system](https://developer.android.com/studio/build/index.html) will fetch all dependencies and generate
 files you need to build the project. You first need to generate the
 local.properties (replace YOUR_SDK_DIR by your actual android sdk dir)
 file:
@@ -35,7 +49,7 @@ You can now sync, build and install the project:
     $ ./gradlew installDebug  # install the debug .apk if you have an
                               # emulator or an Android device connected
 
-You can use [Android Studio](http://developer.android.com/sdk/installing/studio.html) by importing the project as a Gradle project.
+You can use [Android Studio](http://developer.android.com/sdk/installing/studio.html) by it as existing project.
 
 ## Directory structure ##
 
@@ -80,13 +94,13 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Butter will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
 
-###Beta versions
+### Beta versions
 
 Beta releases will be numbered with the following format:
 
 `0.<major>.<minor>-<patch>`
 
-###Stable versions
+### Stable versions
 
 Releases will be numbered with the following format:
 
@@ -112,4 +126,4 @@ Note: some dependencies are external libraries, which might be covered by a diff
 
 ***
 
-Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).development/LICENSE.md).
+Copyright (c) 2015 Butter Project - Released under the [GPL v3 license](LICENSE.txt).
