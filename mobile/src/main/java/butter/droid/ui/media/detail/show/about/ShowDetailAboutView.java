@@ -15,28 +15,22 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail;
+package butter.droid.ui.media.detail.show.about;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.media.detail.movie.MovieDetailComponent;
-import butter.droid.ui.media.detail.show.ShowDetailComponent;
-import dagger.Subcomponent;
+public interface ShowDetailAboutView {
+    void displayTitle(String title);
 
-@Subcomponent (
-        modules = MediaDetailModule.class
-)
-@ActivityScope
-public interface MediaDetailComponent {
+    void hideRating();
 
-    void inject(MediaDetailActivity activity);
+    void displayRating(int rating, String cd);
 
-    MovieDetailComponent.Builder movieDetailComponentBuilder();
-    ShowDetailComponent.Builder showDetailComponentBuilder();
+    void displayMetaData(String metaData);
 
-    @Subcomponent.Builder interface Builder {
-        Builder mediaDetailModule(MediaDetailModule module);
+    void displaySynopsis(String synopsis);
 
-        MediaDetailComponent build();
-    }
+    void hideSynopsis();
 
+    void openSynopsisDialog(String synopsis);
+
+    void displayImage(String image);
 }

@@ -33,13 +33,13 @@
         android:layout_height="match_parent"
         android:background="@color/bg" />
 
-    <butter.droid.widget.WrappingViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_below="@id/top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:fadingEdgeLength="0dp"
-        android:background="@color/bg" />
+        android:background="@color/bg"/>
 
     <View
         android:layout_width="match_parent"

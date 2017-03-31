@@ -9,7 +9,6 @@ import butter.droid.base.torrent.StreamInfo;
 
 public abstract class BaseDetailFragment extends Fragment {
 
-    protected FragmentListener mCallback;
     protected MediaDetailActivity mActivity;
     protected View mRoot;
 

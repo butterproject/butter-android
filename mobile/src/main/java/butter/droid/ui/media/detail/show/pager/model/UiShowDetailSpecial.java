@@ -15,28 +15,25 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail;
+package butter.droid.ui.media.detail.show.pager.model;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.media.detail.movie.MovieDetailComponent;
-import butter.droid.ui.media.detail.show.ShowDetailComponent;
-import dagger.Subcomponent;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
-@Subcomponent (
-        modules = MediaDetailModule.class
-)
-@ActivityScope
-public interface MediaDetailComponent {
+import butter.droid.R;
 
-    void inject(MediaDetailActivity activity);
+public class UiShowDetailSpecial extends UiShowDetailSeason {
 
-    MovieDetailComponent.Builder movieDetailComponentBuilder();
-    ShowDetailComponent.Builder showDetailComponentBuilder();
+    public UiShowDetailSpecial(int season) {
+        super(season);
+    }
 
-    @Subcomponent.Builder interface Builder {
-        Builder mediaDetailModule(MediaDetailModule module);
+    @Override public int getType() {
+        return SHOW_DETAIL_SPECIAL;
+    }
 
-        MediaDetailComponent build();
+    @Override public String getTitle(@NonNull Context context) {
+        return context.getString(R.string.specials);
     }
 
 }
