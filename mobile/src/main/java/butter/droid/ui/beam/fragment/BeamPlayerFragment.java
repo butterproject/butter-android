@@ -112,7 +112,7 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        ButterKnife.bind(this, v);;
+        ButterKnife.bind(this, v);
 
         setupToolbar((AppCompatActivity) getActivity());
 

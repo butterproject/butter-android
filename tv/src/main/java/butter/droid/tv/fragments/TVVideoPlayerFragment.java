@@ -54,7 +54,7 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.fragments.BaseVideoPlayerFragment;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.torrent.StreamInfo;
@@ -184,7 +184,7 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
     }
 
     @Override
-    protected void updatePlayPauseState() {
+    protected void updatePlayPauseState(final boolean playing) {
         EventBus.getDefault().post(new ToggleSubtitleEvent(mIsSubtitleEnabled));
         EventBus.getDefault().post(new UpdatePlaybackStateEvent(isPlaying()));
 

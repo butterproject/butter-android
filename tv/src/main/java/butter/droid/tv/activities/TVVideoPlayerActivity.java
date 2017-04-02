@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butterknife.ButterKnife;
-import butter.droid.base.fragments.BaseVideoPlayerFragment;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;

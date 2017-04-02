@@ -18,11 +18,11 @@
 package butter.droid;
 
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.VideoPlayerActivity;
+import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.MediaGenreSelectionFragment;
-import butter.droid.fragments.VideoPlayerFragment;
+import butter.droid.ui.player.fragment.VideoPlayerFragment;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;

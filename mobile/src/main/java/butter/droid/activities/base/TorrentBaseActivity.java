@@ -35,7 +35,7 @@ import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
+public abstract class TorrentBaseActivity extends AppCompatActivity implements  TorrentListener, TorrentActivity {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

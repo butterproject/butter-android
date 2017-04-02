@@ -18,15 +18,15 @@
 package butter.droid.base;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-
 import android.telephony.TelephonyManager;
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module
 public class AndroidModule {
@@ -41,5 +41,13 @@ public class AndroidModule {
 
     @Provides @Singleton TelephonyManager provideTelephonyManager(Context context) {
         return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
+
+    @Provides @Singleton ContentResolver provideContentResolver(Context context) {
+        return context.getContentResolver();
+    }
+
+    @Provides @Singleton AudioManager provideAudioManager(Context context) {
+        return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 }

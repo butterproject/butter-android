@@ -45,7 +45,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.VideoPlayerActivity;
+import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;

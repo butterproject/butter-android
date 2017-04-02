@@ -30,7 +30,7 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
-import butter.droid.fragments.VideoPlayerFragment;
+import butter.droid.ui.player.fragment.VideoPlayerFragment;
 import butter.droid.ui.ButterBaseActivity;
 import javax.inject.Inject;
 
