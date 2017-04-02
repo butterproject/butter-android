@@ -17,15 +17,14 @@
 
 package butter.droid.tv;
 
-import butter.droid.base.Internal;
 import butter.droid.base.BaseInternalComponent;
+import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
 import butter.droid.tv.activities.TVLaunchActivity;
 import butter.droid.tv.activities.TVMainActivity;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
-import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
@@ -44,6 +43,7 @@ import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.search.TVSearchComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
+import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
 import dagger.Component;
 
 @Internal @Component(
@@ -57,8 +57,6 @@ public interface InternalComponent extends BaseInternalComponent {
     void inject(TVButterApplication application);
 
     void inject(TVMainActivity activity);
-
-    void inject(TVTrailerPlayerActivity activity);
 
     void inject(TVMediaDetailActivity activity);
 
@@ -103,5 +101,7 @@ public interface InternalComponent extends BaseInternalComponent {
     TVStreamLoadingComponent.Builder streamLoadingComponentBuilder();
 
     TVSearchComponent.Builder searchComponentBuilder();
+
+    TVTrailerPlayerComponent.Builder tvTrailerPlayerComponentBuilder();
 
 }

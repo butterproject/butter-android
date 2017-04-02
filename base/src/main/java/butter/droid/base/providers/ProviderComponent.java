@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
@@ -56,5 +57,7 @@ public interface ProviderComponent {
     NetworkManager networkManager();
 
     PrefManager prefManager();
+
+    TelephonyManager telephonyManager();
 
 }

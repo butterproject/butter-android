@@ -19,10 +19,9 @@ package butter.droid;
 
 import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
-import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.Internal;
 import butter.droid.base.BaseInternalComponent;
+import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
 import butter.droid.fragments.BeamPlayerFragment;
 import butter.droid.fragments.MediaContainerFragment;
@@ -40,6 +39,7 @@ import butter.droid.ui.media.list.MediaListComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
+import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
 
 @Internal @Component(
@@ -51,8 +51,6 @@ import dagger.Component;
 public interface InternalComponent extends BaseInternalComponent {
 
     void inject(MobileButterApplication application);
-
-    void inject(TrailerPlayerActivity activity);
 
     void inject(AboutActivity activity);
 
@@ -91,5 +89,7 @@ public interface InternalComponent extends BaseInternalComponent {
     MediaListComponent.Builder mediaListComponentBuilder();
 
     SearchComponent.Builder searchComponentBuilder();
+
+    TrailerPlayerComponent.Builder trailerComponentBuilder();
 
 }

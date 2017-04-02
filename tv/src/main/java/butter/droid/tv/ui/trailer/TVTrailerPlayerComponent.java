@@ -15,23 +15,25 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.search;
+package butter.droid.tv.ui.trailer;
 
 import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
-@Subcomponent(modules = TVSearchModule.class)
+@Subcomponent(
+        modules = TVTrailerPlayerModule.class
+)
 @ActivityScope
-public interface TVSearchComponent {
+public interface TVTrailerPlayerComponent {
 
-    void inject(TVSearchFragment fragment);
+    void inject(TVTrailerPlayerActivity activity);
 
-    @Subcomponent.Builder interface Builder {
+    @Subcomponent.Builder
+    interface Builder {
 
-        Builder searchModule(TVSearchModule modue);
+        Builder tvTrailerModule(TVTrailerPlayerModule module);
 
-        TVSearchComponent build();
-
+        TVTrailerPlayerComponent build();
     }
 
 }

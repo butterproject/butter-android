@@ -15,39 +15,19 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base;
+package butter.droid.tv.ui.trailer;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
-import android.telephony.TelephonyManager;
+import butter.droid.base.manager.internal.phone.PhoneManager;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.prefs.PrefManager;
-import com.google.gson.Gson;
-import okhttp3.OkHttpClient;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenterImpl;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 
-public interface BaseApplicationComponent {
+public class TVTrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TVTrailerPlayerPresenter {
 
-    Context context();
-
-    OkHttpClient okHttpClient();
-
-    Gson gson();
-
-    SharedPreferences sharedPreferences();
-
-    Resources resources();
-
-    ConnectivityManager connectivityManager();
-
-    WifiManager wifiManager();
-
-    NetworkManager networkManager();
-
-    PrefManager prefManager();
-
-    TelephonyManager telephonyManager();
-
+    public TVTrailerPlayerPresenterImpl(Context context, final BaseTrailerPlayerView view, final YouTubeManager youTubeManager, final
+    NetworkManager networkManager, final PhoneManager phoneManager) {
+        super(context, view, youTubeManager, networkManager, phoneManager);
+    }
 }

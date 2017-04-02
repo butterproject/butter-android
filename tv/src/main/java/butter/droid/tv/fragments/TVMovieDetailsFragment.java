@@ -24,12 +24,6 @@ import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
@@ -40,10 +34,13 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
-import butter.droid.tv.activities.TVTrailerPlayerActivity;
 import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
+import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
 
@@ -142,7 +139,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
             if (!youTubeManager.isYouTubeUrl(movie.trailer)) {
                 TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(movie, null, null, null, null, movie.trailer));
             } else {
-                TVTrailerPlayerActivity.startActivity(getActivity(), movie.trailer, movie);
+                startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, movie.trailer));
             }
         }
 	}
