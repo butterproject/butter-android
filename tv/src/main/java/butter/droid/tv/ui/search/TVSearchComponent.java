@@ -20,7 +20,7 @@ package butter.droid.tv.ui.search;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
-@Subcomponent(modules = TVSearchModue.class)
+@Subcomponent(modules = TVSearchModule.class)
 @ActivityScope
 public interface TVSearchComponent {
 
@@ -28,7 +28,7 @@ public interface TVSearchComponent {
 
     @Subcomponent.Builder interface Builder {
 
-        Builder searchModule(TVSearchModue modue);
+        Builder searchModule(TVSearchModule modue);
 
         TVSearchComponent build();
 

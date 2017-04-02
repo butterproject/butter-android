@@ -15,23 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.about;
+package butter.droid.base.ui;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-@Subcomponent(
-        modules = TvAboutModule.class
-)
-@FragmentScope
-public interface TvAboutComponent {
+import javax.inject.Scope;
 
-    void inject(TvAboutFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-        Builder aboutModule(TvAboutModule module);
-
-        TvAboutComponent build();
-    }
-
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SubFragmentScope {
 }
