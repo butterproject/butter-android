@@ -30,20 +30,25 @@ public class SubtitleDownloader {
     public SubtitleDownloader(@NonNull SubsProvider subsProvider, @NonNull StreamInfo streamInfo,
             PlayerManager playerManager, @NonNull String language) {
 
-        if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE))
+        if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
             throw new IllegalArgumentException("language must be specified");
+        }
 
         this.subsProvider = subsProvider;
         subtitleLanguage = language;
         this.playerManager = playerManager;
 
         media = streamInfo.getMedia();
-        if (media == null) throw new IllegalArgumentException("media from StreamInfo must not null");
+        if (media == null) {
+            throw new IllegalArgumentException("media from StreamInfo must not null");
+        }
     }
 
     public void downloadSubtitle() {
-        if (listenerReference == null) throw new IllegalArgumentException(
-                "listener must not null. Call setSubtitleDownloaderListener() to sets one");
+        if (listenerReference == null) {
+            throw new IllegalArgumentException(
+                    "listener must not null. Call setSubtitleDownloaderListener() to sets one");
+        }
         subsProvider.download(media, subtitleLanguage, new Callback() {
             @Override public void onFailure(Call call, IOException e) {
                 onSubtitleDownloadFailed();
@@ -56,16 +61,22 @@ public class SubtitleDownloader {
     }
 
     public void parseSubtitle(@NonNull File subtitleFile) {
-        if (listenerReference == null) throw new IllegalArgumentException(
-                "listener must not null. Call setSubtitleDownloaderListener() to sets one");
-        if (listenerReference.get() == null) return;
+        if (listenerReference == null) {
+            throw new IllegalArgumentException(
+                    "listener must not null. Call setSubtitleDownloaderListener() to sets one");
+        }
+        if (listenerReference.get() == null) {
+            return;
+        }
         ISubtitleDownloaderListener listener = listenerReference.get();
         SubtitleParseTask task = new SubtitleParseTask(subtitleLanguage, listener);
         task.execute(subtitleFile);
     }
 
     public void setSubtitleDownloaderListener(ISubtitleDownloaderListener listener) {
-        if (listener == null) throw new IllegalArgumentException("listener must not null");
+        if (listener == null) {
+            throw new IllegalArgumentException("listener must not null");
+        }
         listenerReference = new WeakReference<>(listener);
     }
 
@@ -73,7 +84,9 @@ public class SubtitleDownloader {
      * Invoked when subtitle download finished successfully.
      */
     private void onSubtitleDownloadSuccess() {
-        if (listenerReference.get() == null) return;
+        if (listenerReference.get() == null) {
+            return;
+        }
 
         ISubtitleDownloaderListener listener = listenerReference.get();
 
@@ -92,12 +105,15 @@ public class SubtitleDownloader {
      */
     private void onSubtitleDownloadFailed() {
         subtitleLanguage = SubsProvider.SUBTITLE_LANGUAGE_NONE;
-        if (listenerReference.get() == null) return;
+        if (listenerReference.get() == null) {
+            return;
+        }
         ISubtitleDownloaderListener listener = listenerReference.get();
         listener.onSubtitleDownloadCompleted(false, null);
     }
 
     private class SubtitleParseTask extends AsyncTask<File, TimedTextObject, TimedTextObject> {
+
         String subtitleLanguage;
         WeakReference<ISubtitleDownloaderListener> listenerReference;
 
@@ -135,7 +151,9 @@ public class SubtitleDownloader {
         protected void onProgressUpdate(TimedTextObject... values) {
             super.onProgressUpdate(values);
             for (TimedTextObject timedTextObject : values) {
-                if (listenerReference.get() == null) break;
+                if (listenerReference.get() == null) {
+                    break;
+                }
                 listenerReference.get().onSubtitleDownloadCompleted(true, timedTextObject);
             }
         }
@@ -153,6 +171,7 @@ public class SubtitleDownloader {
     }
 
     public interface ISubtitleDownloaderListener {
+
         void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile);
     }
 }

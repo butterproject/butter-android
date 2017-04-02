@@ -15,14 +15,27 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid;
+package butter.droid.base.data.internal;
 
-import butter.droid.base.BaseApplicationModule;
+import android.content.Context;
+import butter.droid.base.Internal;
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 import dagger.Module;
+import dagger.Provides;
+import okhttp3.OkHttpClient;
 
-@Module(
-        includes = BaseApplicationModule.class
-)
-public class ApplicationModule {
+@Module
+public class InternalDataModule {
+
+    @Provides @Internal public OkHttp3Downloader provideOkHttpDownloader(OkHttpClient client) {
+        return new OkHttp3Downloader(client);
+    }
+
+    @Provides @Internal public Picasso providePicasso(Context context, OkHttp3Downloader okHttpDownloader) {
+        return new Picasso.Builder(context)
+                .downloader(okHttpDownloader)
+                .build();
+    }
 
 }

@@ -15,16 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv;
+package butter.droid;
 
-import butter.droid.base.BaseApplicationComponent;
-import butter.droid.base.BaseApplicationModule;
-import dagger.Component;
-import javax.inject.Singleton;
+import butter.droid.base.BaseInternalModule;
+import dagger.Module;
 
-@Singleton @Component(
-        modules = BaseApplicationModule.class
+@Module(
+        includes = BaseInternalModule.class
 )
-public interface ApplicationComponent extends BaseApplicationComponent {
+public class InternalModule {
 
 }

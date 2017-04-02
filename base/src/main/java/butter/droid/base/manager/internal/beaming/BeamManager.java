@@ -25,7 +25,7 @@ import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-import butter.droid.base.ApplicationScope;
+import butter.droid.base.Internal;
 import butter.droid.base.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
@@ -72,7 +72,7 @@ import timber.log.Timber;
  * <p/>
  * Wrapper for ConnectSDK
  */
-@ApplicationScope
+@Internal
 public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerListener {
 
     private final Context context;

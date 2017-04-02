@@ -18,14 +18,15 @@
 package butter.droid.tv;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
+import butter.droid.base.providers.DaggerProviderComponent;
 import butter.droid.base.providers.ProviderComponent;
 import butter.droid.base.utils.VersionUtils;
 
 public class TVButterApplication extends ButterApplication {
 
-    private ApplicationComponent component;
+    private InternalComponent component;
 
     @Override protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -38,12 +39,21 @@ public class TVButterApplication extends ButterApplication {
         }
     }
 
-    @Override public ApplicationComponent getComponent() {
+    @Override public InternalComponent getComponent() {
         return component;
     }
 
-    @Override protected void inject(@NonNull final ProviderComponent providerComponent) {
-        component = DaggerApplicationComponent.builder()
+    @Override protected void inject() {
+
+        ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
+                .baseApplicationModule(new BaseApplicationModule(this))
+                .build();
+
+        ProviderComponent providerComponent = DaggerProviderComponent.builder()
+                .baseApplicationComponent(applicationComponent)
+                .build();
+
+        component = DaggerInternalComponent.builder()
                 .providerComponent(providerComponent)
                 .build();
 

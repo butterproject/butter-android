@@ -17,14 +17,42 @@
 
 package butter.droid.base;
 
-import butter.droid.base.manager.internal.InternalManagerModule;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import butter.droid.base.content.ObscuredSharedPreferences;
+import butter.droid.base.data.DataModule;
+import butter.droid.base.manager.ManagerModule;
 import dagger.Module;
+import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
         includes = {
-                InternalManagerModule.class,
+                AndroidModule.class,
+                ManagerModule.class,
+                DataModule.class
         }
 )
 public class BaseApplicationModule {
+
+    private final ButterApplication application;
+
+    public BaseApplicationModule(ButterApplication application) {
+        this.application = application;
+    }
+
+    @Provides @Singleton public Context provideContext() {
+        return application;
+    }
+
+    @Provides @Singleton public SharedPreferences provideSharedPreferences(Context context) {
+        return new ObscuredSharedPreferences(context,
+                context.getSharedPreferences(Constants.PREFS_FILE, Context.MODE_PRIVATE));
+    }
+
+    @Provides @Singleton public Resources provideResources(Context context) {
+        return context.getResources();
+    }
 
 }

@@ -17,20 +17,30 @@
 
 package butter.droid;
 
-import android.support.annotation.NonNull;
+import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
+import butter.droid.base.providers.DaggerProviderComponent;
 import butter.droid.base.providers.ProviderComponent;
 
 public class MobileButterApplication extends ButterApplication {
 
-    private ApplicationComponent component;
+    private InternalComponent component;
 
-    public ApplicationComponent getComponent() {
+    public InternalComponent getComponent() {
         return component;
     }
 
-    @Override protected void inject(@NonNull final ProviderComponent providerComponent) {
-        component = DaggerApplicationComponent.builder()
+    @Override protected void inject() {
+
+        ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
+                .baseApplicationModule(new BaseApplicationModule(this))
+                .build();
+
+        ProviderComponent providerComponent = DaggerProviderComponent.builder()
+                .baseApplicationComponent(applicationComponent)
+                .build();
+
+        component = DaggerInternalComponent.builder()
                 .providerComponent(providerComponent)
                 .build();
 

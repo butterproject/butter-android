@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class VideoStream {
 
-    protected String mUrl;
+    protected String url;
 
     /**
      * Construct a video stream from one of the strings obtained
@@ -44,11 +44,11 @@ public class VideoStream {
                 }
             }
         }
-        mUrl = argMap.get("url");
+        url = argMap.get("url");
     }
 
     public String getUrl() {
-        return mUrl;
+        return url;
     }
 
 }

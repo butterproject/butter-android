@@ -22,34 +22,39 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import butter.droid.base.ExposedComponent;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.BaseApplicationComponent;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.VodoProvider;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import dagger.Component;
 import okhttp3.OkHttpClient;
 
 @Component(
-        dependencies = ExposedComponent.class,
+        dependencies = BaseApplicationComponent.class,
         modules = ProviderModule.class
 )
 @ProviderScope
 public interface ProviderComponent {
 
     Context context();
-    Picasso picasso();
-    VodoProvider codoProvider();
+
     OkHttpClient okHttpClient();
+
+    VodoProvider vodoProvider();
+
     Gson gson();
-    PlayerManager playerManager();
+
     SharedPreferences sharedPreferences();
+
     Resources resources();
+
     ConnectivityManager connectivityManager();
+
     WifiManager wifiManager();
+
     NetworkManager networkManager();
+
     PrefManager prefManager();
 
 }

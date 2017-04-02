@@ -27,14 +27,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
-import butter.droid.base.providers.DaggerProviderComponent;
-import butter.droid.base.providers.ProviderComponent;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
@@ -68,15 +65,7 @@ public abstract class ButterApplication extends Application implements ButterUpd
         super.onCreate();
         sThis = this;
 
-        ExposedComponent exposedComponent = DaggerExposedComponent.builder()
-                .exposedModule(new ExposedModule(this))
-                .build();
-
-        ProviderComponent providerComponent = DaggerProviderComponent.builder()
-                .exposedComponent(exposedComponent)
-                .build();
-
-        inject(providerComponent);
+        inject();
 
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
@@ -159,9 +148,9 @@ public abstract class ButterApplication extends Application implements ButterUpd
         }
     }
 
-    public abstract BaseApplicationComponent getComponent();
+    public abstract BaseInternalComponent getComponent();
 
-    protected abstract void inject(@NonNull ProviderComponent providerComponent);
+    protected abstract void inject();
 
     public static ButterApplication getAppContext() {
         return sThis;

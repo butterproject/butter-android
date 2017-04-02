@@ -46,7 +46,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-import butter.droid.base.ApplicationScope;
+import butter.droid.base.Internal;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -74,7 +74,7 @@ import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
 
-@ApplicationScope
+@Internal
 public class ButterUpdateManager extends Observable {
 
     public static int NOTIFICATION_ID = 0x808C049;
