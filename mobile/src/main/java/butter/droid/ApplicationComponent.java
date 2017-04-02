@@ -36,7 +36,6 @@ import butter.droid.ui.media.list.MediaListComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
-import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -49,8 +48,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(MobileButterApplication application);
 
     void inject(AboutActivity activity);
-
-    void inject(TrailerPlayerActivity activity);
 
     void inject(SearchActivity activity);
 
