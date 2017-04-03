@@ -42,7 +42,6 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     }
 
     @Override public void onViewCreated() {
-
         List<Genre> genreList = providerManager.getCurrentMediaProvider().getGenres();
         genres = mapGenres(genreList);
 
@@ -67,7 +66,6 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     }
 
     private List<UiGenre> mapGenres(List<Genre> genres) {
-
         List<UiGenre> uiGenres = new ArrayList<>();
 
         if (genres != null && genres.size() > 0) {
