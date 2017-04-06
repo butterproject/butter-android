@@ -18,11 +18,9 @@
 package butter.droid;
 
 import butter.droid.activities.SearchActivity;
-import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.fragments.MediaGenreSelectionFragment;
-import butter.droid.ui.player.fragment.VideoPlayerFragment;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
@@ -33,10 +31,10 @@ import butter.droid.ui.loading.StreamLoadingComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
 import butter.droid.ui.media.list.MediaListComponent;
+import butter.droid.ui.player.VideoPlayerComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
-import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -50,11 +48,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
 
     void inject(AboutActivity activity);
 
-    void inject(TrailerPlayerActivity activity);
-
     void inject(SearchActivity activity);
-
-    void inject(VideoPlayerActivity activity);
 
     void inject(MediaContainerFragment fragment);
 
@@ -63,8 +57,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(LoadingDetailDialogFragment fragment);
 
     void inject(EpisodeDialogFragment fragment);
-
-    void inject(VideoPlayerFragment fragment);
 
     void inject(BeamDeviceSelectorDialogFragment fragment);
 
@@ -87,5 +79,7 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     MediaListComponent.Builder mediaListComponentBuilder();
 
     SearchComponent.Builder searchComponentBuilder();
+
+    VideoPlayerComponent.Builder videoPlayerComponentBuilder();
 
 }

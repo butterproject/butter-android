@@ -69,6 +69,8 @@ public interface BaseVideoPlayerPresenter {
 
     void onStopSeeking();
 
+    void surfaceCreated();
+
     // region IntDef
 
     @IntDef({SURFACE_BEST_FIT, SURFACE_FIT_HORIZONTAL, SURFACE_FIT_VERTICAL, SURFACE_FILL, SURFACE_16_9, SURFACE_4_3, SURFACE_ORIGINAL})

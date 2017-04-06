@@ -17,14 +17,13 @@
 
 package butter.droid.ui.player.fragment;
 
-import android.support.annotation.ColorInt;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
+import dagger.Binds;
+import dagger.Module;
 
-public interface VideoPlayerFView extends BaseVideoPlayerView {
+@Module
+public interface VideoPlayerFBindModule {
 
-    void displayStreamProgress(int progress);
+    @Binds BaseVideoPlayerPresenter bindBasePresenter(VideoPlayerFPresenter presenter);
 
-    void displayTitle(String title);
-
-    void setupSubtitles(@ColorInt int color, int size, @ColorInt int strokeColor, int strokeWidth);
 }

@@ -19,13 +19,13 @@ package butter.droid.ui.player.fragment;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.support.annotation.Nullable;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.vlc.PlayerManager;
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenterImpl;
 import java.util.Locale;
 import org.videolan.libvlc.LibVLC;
@@ -35,13 +35,12 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     private final VideoPlayerFView view;
     private final Context context;
     private final AudioManager audioManager;
+    private final PreferencesHandler preferencesHandler;
 
     private final int audioMax;
 
-    public VideoPlayerFPresenterImpl(final VideoPlayerFView view,
-            final Context context, final PrefManager prefManager,
-            final LibVLC libVLC, final PreferencesHandler preferencesHandler,
-            final ProviderManager providerManager,
+    public VideoPlayerFPresenterImpl(final VideoPlayerFView view, final Context context, final PrefManager prefManager,
+            @Nullable final LibVLC libVLC, final PreferencesHandler preferencesHandler, final ProviderManager providerManager,
             final PlayerManager playerManager, final BeamManager beamManager, final AudioManager audioManager) {
         super(view, context, prefManager, libVLC, preferencesHandler, providerManager, playerManager, beamManager);
         this.view = view;
@@ -49,10 +48,11 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
         this.audioManager = audioManager;
 
         audioMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        this.preferencesHandler = preferencesHandler;
     }
 
-    @Override public void onCreate(final StreamInfo streamInfo, final long resumePosition) {
-        super.onCreate(streamInfo, resumePosition);
+    @Override public void onResume() {
+        super.onResume();
 
         displayTitle();
     }
@@ -70,7 +70,8 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     }
 
     @Override public void onViewCreated() {
-
+        view.setupSubtitles(preferencesHandler.getSubtitleColor(), preferencesHandler.getSubtitleSize(),
+                preferencesHandler.getSubtitleStrokeColor(), preferencesHandler.getSubtitleStrokeWidth());
     }
 
     @Override public void onProgressChanged(final int progress) {
@@ -86,6 +87,10 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     @Override public void streamProgressUpdated(final float progress) {
         super.streamProgressUpdated(progress);
         view.displayStreamProgress(getStreamerProgress());
+    }
+
+    @Override public void surfaceCreated() {
+
     }
 
     private void displayTitle() {

@@ -29,19 +29,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnSystemUiVisibilityChangeListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -51,34 +51,36 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.VersionUtils;
+import butter.droid.manager.brightness.BrightnessManager;
+import butter.droid.ui.player.VideoPlayerActivity;
+import butter.droid.ui.player.fragment.VideoPlayerTouchHandler.OnVideoTouchListener;
 import butter.droid.widget.StrokedRobotoTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import javax.inject.Inject;
 
-public class VideoPlayerFragment extends BaseVideoPlayerFragment implements VideoPlayerFView, View.OnSystemUiVisibilityChangeListener {
+public class VideoPlayerFragment extends BaseVideoPlayerFragment implements VideoPlayerFView, OnSystemUiVisibilityChangeListener,
+        OnVideoTouchListener {
 
     @Inject VideoPlayerFPresenter presenter;
-    @Inject PreferencesHandler preferencesHandler;
+    @Inject VideoPlayerTouchHandler touchHandler;
+    @Inject BrightnessManager brightnessManager;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.progress_indicator) ProgressBar mProgressIndicator;
+    @BindView(R.id.progress_indicator) ProgressBar progressIndicator;
     @BindView(R.id.video_surface) SurfaceView videoSurface;
-    @BindView(R.id.subtitle_text) StrokedRobotoTextView mSubtitleText;
+    @BindView(R.id.subtitle_text) StrokedRobotoTextView subtitleText;
     @BindView(R.id.control_layout) RelativeLayout mControlLayout;
     @BindView(R.id.player_info) TextView mPlayerInfo;
     @BindView(R.id.control_bar) butter.droid.widget.SeekBar controlBar;
@@ -96,30 +98,22 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
     private static final int FADE_OUT_INFO = 1000;
 
     private int mLastSystemUIVisibility;
-    private boolean mOverlayVisible = true;
 
     private Handler mDisplayHandler;
 
-    private static final int TOUCH_NONE = 0;
-    private static final int TOUCH_VOLUME = 1;
-    private static final int TOUCH_BRIGHTNESS = 2;
-    private static final int TOUCH_SEEK = 3;
-    private int mTouchAction;
-    private int mSurfaceYDisplayRange;
-    private float mTouchY, mTouchX;
-
     private float mVol;
-
-    private boolean mIsFirstBrightnessGesture = true;
-    private float mRestoreAutoBrightness = -1f;
+    private boolean overlayVisible;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        MobileButterApplication.getAppContext()
-                .getComponent()
+        VideoPlayerActivity activity = (VideoPlayerActivity) getActivity();
+        activity.getComponent()
+                .videoPlayerFComponentBuilder()
+                .videoPlayerFModule(new VideoPlayerFModule(this, activity))
+                .build()
                 .inject(this);
+
+        super.onCreate(savedInstanceState);
 
         mShowReload = true;
     }
@@ -129,28 +123,19 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
         return inflater.inflate(R.layout.fragment_videoplayer, container, false);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return onTouchEvent(event);
-            }
-        });
+        view.setOnTouchListener(touchHandler);
         ButterKnife.bind(this, view);
 
         getAppCompatActivity().setSupportActionBar(toolbar);
-        toolbar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                onTouchEvent(event);
-                return true;
-            }
-        });
+        toolbar.setOnTouchListener(touchHandler);
 
-        videoSurface.setVisibility(View.VISIBLE);
+        touchHandler.setListener(this);
+
+        setupToolbar();
+        setupDecorView();
 
         presenter.onViewCreated();
 
@@ -161,7 +146,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
             mForwardButton.setImageDrawable(rewind);
         }
 
-        int color = getResources().getColor(R.color.primary);
+        int color = ContextCompat.getColor(getContext(), R.color.primary);
         LayerDrawable progressDrawable;
         if (!VersionUtils.isLollipop()) {
             progressDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.scrubber_progress_horizontal);
@@ -187,24 +172,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
 
         mDisplayHandler = new Handler(Looper.getMainLooper());
 
-        decorView = getActivity().getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(this);
-
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                    getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) +
-                            PixelUtils.getStatusBarHeight(getActivity())));
-            toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(getActivity()), toolbar.getPaddingRight(),
-                    toolbar.getPaddingBottom());
-        }
-
-        mSubtitleText.setTextColor(preferencesHandler.getSubtitleColor());
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleSize());
-        mSubtitleText.setStrokeColor(preferencesHandler.getSubtitleStrokeColor());
-        mSubtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, preferencesHandler.getSubtitleStrokeWidth());
-
         controlBar.setOnSeekBarChangeListener(controlBarListener);
 
         getAppCompatActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -218,16 +185,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
     @Override
     public void onStop() {
         super.onStop();
-        //restore brightness
-        if (mRestoreAutoBrightness != -1f) {
-            int brightness = (int) (mRestoreAutoBrightness * 255f);
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS,
-                    brightness);
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS_MODE,
-                    Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
-        }
+
+        brightnessManager.restoreBrightness();
     }
 
     @Override public void displayStreamProgress(final int progress) {
@@ -239,6 +198,14 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
         getAppCompatActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public void setupSubtitles(@ColorInt final int color, final int size, @ColorInt final int strokeColor, final int strokeWidth) {
+        subtitleText.setTextColor(color);
+        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        subtitleText.setStrokeColor(strokeColor);
+        subtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, strokeWidth);
+    }
+
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
@@ -247,73 +214,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
     protected SurfaceView getVideoSurface() {
         return videoSurface;
     }
-
-
-    public boolean onTouchEvent(MotionEvent event) {
-        DisplayMetrics screen = new DisplayMetrics();
-        getAppCompatActivity().getWindowManager().getDefaultDisplay().getMetrics(screen);
-
-        if (mSurfaceYDisplayRange == 0) {
-            mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
-        }
-
-        float y_changed = event.getRawY() - mTouchY;
-        float x_changed = event.getRawX() - mTouchX;
-
-        // coef is the gradient's move to determine a neutral zone
-        float coef = Math.abs(y_changed / x_changed);
-        float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
-
-        int[] offset = new int[2];
-        videoSurface.getLocationOnScreen(offset);
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                // Audio
-                mTouchY = event.getRawY();
-                mVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                mTouchAction = TOUCH_NONE;
-                // Seek
-                mTouchX = event.getRawX();
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                if (coef > 2) {
-                    mTouchY = event.getRawY();
-                    mTouchX = event.getRawX();
-                    if ((int) mTouchX > (screen.widthPixels / 2)) {
-                        doVolumeTouch(y_changed);
-                    }
-                    if ((int) mTouchX < (screen.widthPixels / 2)) {
-                        if(VersionUtils.isMarshmallow() && Settings.System.canWrite(getContext())) {
-                            doVolumeTouch(y_changed);
-                        } else {
-                            doBrightnessTouch(y_changed);
-                        }
-                    }
-                } else {
-                    // Seek (Right or Left move)
-                    doSeekTouch(coef, xgesturesize, false);
-                }
-                break;
-
-            case MotionEvent.ACTION_UP:
-                if (mTouchAction == TOUCH_NONE) {
-                    if (!mOverlayVisible) {
-                        showOverlay();
-                    } else {
-                        hideOverlay();
-                    }
-                } else {
-                    showOverlay();
-                }
-
-                doSeekTouch(coef, xgesturesize, true);
-                break;
-        }
-        return true;
-    }
-
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
@@ -324,110 +224,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
 
         mLastSystemUIVisibility = visibility;
     }
-
-    private void doSeekTouch(float coef, float gesturesize, boolean seek) {
-        // No seek action if coef > 0.5 and gesturesize < 1cm
-        if (coef > 0.5 || Math.abs(gesturesize) < 1) {
-            return;
-        }
-
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK) {
-            return;
-        }
-        mTouchAction = TOUCH_SEEK;
-
-        // Size of the jump, 10 minutes max (600000), with a bi-cubic progression, for a 8cm gesture
-        int jump = (int) (Math.signum(gesturesize) * ((600000 * Math.pow((gesturesize / 8), 4)) + 3000));
-
-        // Adjust the jump
-        if ((jump > 0) && ((getCurrentTime() + jump) > controlBar.getSecondaryProgress())) {
-            jump = (int) (controlBar.getSecondaryProgress() - getCurrentTime());
-        }
-        if ((jump < 0) && ((getCurrentTime() + jump) < 0)) {
-            jump = (int) -getCurrentTime();
-        }
-
-        long currentTime = getCurrentTime();
-        if (seek && controlBar.getSecondaryProgress() > 0) {
-            seek(jump);
-        }
-
-        if (getDuration() > 0) {
-            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(currentTime + jump)));
-        }
-    }
-
-    private void doVolumeTouch(float y_changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
-            return;
-        float delta = -((y_changed / mSurfaceYDisplayRange) * mAudioMax);
-        mVol += delta;
-        int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
-        if (delta != 0f) {
-            setAudioVolume(vol);
-        }
-    }
-
-    private void setAudioVolume(int vol) {
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
-
-        /* Since android 4.3, the safe volume warning dialog is displayed only with the FLAG_SHOW_UI flag.
-         * We don't want to always show the default UI volume, so show it only when volume is not set. */
-        int newVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        if (vol != newVol) {
-            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, AudioManager.FLAG_SHOW_UI);
-        }
-
-        mTouchAction = TOUCH_VOLUME;
-        showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol));
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private void initBrightnessTouch() {
-        float brightnesstemp = 0.6f;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO &&
-                    Settings.System.getInt(getActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-                if (VersionUtils.isMarshmallow() && Settings.System.canWrite(getActivity()))
-                    Settings.System.putInt(getActivity().getContentResolver(),
-                            Settings.System.SCREEN_BRIGHTNESS_MODE,
-                            Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-                mRestoreAutoBrightness = android.provider.Settings.System.getInt(getActivity().getContentResolver(),
-                        android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
-            } else {
-                brightnesstemp = android.provider.Settings.System.getInt(getActivity().getContentResolver(),
-                        android.provider.Settings.System.SCREEN_BRIGHTNESS) / 255.0f;
-            }
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        WindowManager.LayoutParams lp = getAppCompatActivity().getWindow().getAttributes();
-        lp.screenBrightness = brightnesstemp;
-        getAppCompatActivity().getWindow().setAttributes(lp);
-        mIsFirstBrightnessGesture = false;
-    }
-
-    private void doBrightnessTouch(float y_changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
-            return;
-        if (mIsFirstBrightnessGesture) initBrightnessTouch();
-        mTouchAction = TOUCH_BRIGHTNESS;
-
-        // Set delta : 2f is arbitrary for now, it possibly will change in the future
-        float delta = -y_changed / mSurfaceYDisplayRange;
-
-        changeBrightness(delta);
-    }
-
-    private void changeBrightness(float delta) {
-        // Estimate and adjust Brightness
-        WindowManager.LayoutParams lp = getAppCompatActivity().getWindow().getAttributes();
-        lp.screenBrightness = Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
-        // Set Brightness
-        getAppCompatActivity().getWindow().setAttributes(lp);
-        showPlayerInfo(getString(R.string.brightness) + '\u00A0' + Math.round(lp.screenBrightness * 15));
-    }
-
 
     @Override public void onErrorEncountered() {
         /* Encountered Error, exit player with a message */
@@ -446,7 +242,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
 
 
     public void showOverlay() {
-        if (!mOverlayVisible) {
+        if (!overlayVisible) {
             updatePlayPauseState(true); // TODO: 4/2/17 Get State
 
             AnimUtils.fadeIn(mControlLayout);
@@ -464,12 +260,11 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
             mLastSystemShowTime = System.currentTimeMillis();
         }
 
-        mOverlayVisible = true;
+        overlayVisible = true;
         mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
         mDisplayHandler.postDelayed(mOverlayHideRunnable, FADE_OUT_OVERLAY);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void hideOverlay() {
         // Can only hide 1000 millisec after show, because navbar doesn't seem to hide otherwise.
         if (mLastSystemShowTime + 1000 < System.currentTimeMillis()) {
@@ -485,7 +280,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
             }
 
             mDisplayHandler.removeCallbacks(mOverlayHideRunnable);
-            mOverlayVisible = false;
+            overlayVisible = false;
         }
     }
 
@@ -537,28 +332,28 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
         }
     };
 
-    @Override
-    protected void onHardwareAccelerationError() {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        disableHardwareAcceleration();
-                        loadMedia();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        getAppCompatActivity().finish();
-                    }
-                })
-                .setTitle(R.string.hardware_acceleration_error_title)
-                .setMessage(R.string.hardware_acceleration_error_message)
-                .create();
-        if (!getAppCompatActivity().isFinishing())
-            dialog.show();
-    }
+//    @Override
+//    protected void onHardwareAccelerationError() {
+//        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+//                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        disableHardwareAcceleration();
+//                        loadMedia();
+//                    }
+//                })
+//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        getAppCompatActivity().finish();
+//                    }
+//                })
+//                .setTitle(R.string.hardware_acceleration_error_title)
+//                .setMessage(R.string.hardware_acceleration_error_message)
+//                .create();
+//        if (!getAppCompatActivity().isFinishing())
+//            dialog.show();
+//    }
 
     private Runnable mOverlayHideRunnable = new Runnable() {
         @Override
@@ -579,8 +374,8 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
             @Override
             public void run() {
                 if (text == null) {
-                    if (mSubtitleText.getText().length() > 0) {
-                        mSubtitleText.setText("");
+                    if (subtitleText.getText().length() > 0) {
+                        subtitleText.setText("");
                     }
                     return;
                 }
@@ -591,21 +386,21 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
                     styledString.removeSpan(remove);
                 }
 
-                if (!mSubtitleText.getText().toString().equals(styledString.toString())) {
-                    mSubtitleText.setText(styledString);
+                if (!subtitleText.getText().toString().equals(styledString.toString())) {
+                    subtitleText.setText(styledString);
                 }
             }
         });
     }
 
     @Override public void setProgressVisible(boolean visible) {
-        if(mProgressIndicator.getVisibility() == View.VISIBLE && visible)
+        if(progressIndicator.getVisibility() == View.VISIBLE && visible)
             return;
 
-        if(mProgressIndicator.getVisibility() == View.GONE && !visible)
+        if(progressIndicator.getVisibility() == View.GONE && !visible)
             return;
 
-        mProgressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
+        progressIndicator.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -631,20 +426,20 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
     }
 
     protected void updateSubtitleSize(int size) {
-        mSubtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
     }
 
     @OnClick(R.id.play_button) void onPlayPauseClick() {
         presenter.togglePlayPause();
     }
 
-    @OnClick(R.id.rewind_button) void onRewindClick() {
-        seekBackwardClick();
-    }
-
-    @OnClick(R.id.forward_button) void onForwardClick() {
-        seekForwardClick();
-    }
+//    @OnClick(R.id.rewind_button) void onRewindClick() {
+//        seekBackwardClick();
+//    }
+//
+//    @OnClick(R.id.forward_button) void onForwardClick() {
+//        seekForwardClick();
+//    }
 
     @OnClick(R.id.scale_button) void onScaleClick() {
         presenter.onScaleClicked();
@@ -655,13 +450,84 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
     }
 
     public void startBeamPlayerActivity() {
-        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), callback.getInfo(), getCurrentTime()));
+//        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), callback.getInfo(), getCurrentTime()));
     }
+
+    private void setupToolbar() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                    getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) +
+                            PixelUtils.getStatusBarHeight(getActivity())));
+            toolbar.setPadding(toolbar.getPaddingLeft(), PixelUtils.getStatusBarHeight(getActivity()), toolbar.getPaddingRight(),
+                    toolbar.getPaddingBottom());
+        }
+    }
+
+    private void setupDecorView() {
+        decorView = getActivity().getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(this);
+    }
+
+    @Override public void onSeekChange(final int jump) {
+//        // Adjust the jump
+//        if ((jump > 0) && ((getCurrentTime() + jump) > controlBar.getSecondaryProgress())) {
+//            jump = (int) (controlBar.getSecondaryProgress() - getCurrentTime());
+//        }
+//        if ((jump < 0) && ((getCurrentTime() + jump) < 0)) {
+//            jump = (int) -getCurrentTime();
+//        }
+//
+//        long currentTime = getCurrentTime();
+//        if (seek && controlBar.getSecondaryProgress() > 0) {
+//            seek(jump);
+//        }
+//
+//        if (getDuration() > 0) {
+//            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(currentTime + jump)));
+//        }
+    }
+
+    @Override public void onBrightnessChange(final float delta) {
+
+    }
+
+    @Override public void onVolumeChange(final float delta) {
+//        float delta = -((diff / surfaceYDisplayRange) * mAudioMax);
+//        mVol += delta;
+//        int vol = (int) Math.min(Math.max(mVol, 0), mAudioMax);
+//        if (delta != 0f) {
+//            setAudioVolume(vol);
+//        }
+    }
+
+    @Override public void onToggleOverlay() {
+        if (overlayVisible) {
+            hideOverlay();
+        } else {
+            showOverlay();
+        }
+    }
+
+    //    private void setAudioVolume(int vol) {
+//        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, 0);
+//
+//        /* Since android 4.3, the safe volume warning dialog is displayed only with the FLAG_SHOW_UI flag.
+//         * We don't want to always show the default UI volume, so show it only when volume is not set. */
+//        int newVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//        if (vol != newVol) {
+//            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol, AudioManager.FLAG_SHOW_UI);
+//        }
+//
+//        showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(vol));
+//    }
 
     public static VideoPlayerFragment newInstance(final StreamInfo streamInfo, final long resumePosition) {
         VideoPlayerFragment fragment = new VideoPlayerFragment();
         fragment.setArguments(newInstanceArgs(streamInfo, resumePosition));
         return fragment;
     }
+
 
 }

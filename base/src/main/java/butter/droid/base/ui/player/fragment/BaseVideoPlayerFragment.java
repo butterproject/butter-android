@@ -89,7 +89,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        setProgressVisible(true);
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
         long resumePosition = getArguments().getLong(ARG_RESUME_POSITION);
@@ -104,6 +103,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
         if (callback.getService() != null) {
             callback.getService().addListener(this);
         }
+
+        setProgressVisible(true);
     }
 
     @Override
@@ -291,6 +292,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
 
     @Override
     public void onSurfacesCreated(IVLCVout ivlcVout) {
+        presenter.surfaceCreated();
     }
 
     @Override

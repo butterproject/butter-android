@@ -53,7 +53,8 @@ public final class PlayerTestConstants {
     };
 
     public final static String[] FILES = new String[]{
-            "https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4",
+            "http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4",
+//            "https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4",
             "https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_mp3.mp4",
             "https://get.butterproject.org/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4",
             "https://get.butterproject.org/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4",

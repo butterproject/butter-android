@@ -25,12 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.manager.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.fragment.BeamPlayerFragment;
+import butter.droid.ui.player.VideoPlayerActivity;
 import javax.inject.Inject;
 
 public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayerActivityView {

@@ -89,9 +89,8 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     @Surface private int currentSize = SURFACE_BEST_FIT;
 
     public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final Context context, final PrefManager prefManager,
-            final LibVLC libVLC,
-            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
-            final BeamManager beamManager) {
+            @Nullable final LibVLC libVLC,final PreferencesHandler preferencesHandler, final ProviderManager providerManager,
+            final PlayerManager playerManager, final BeamManager beamManager) {
         this.view = view;
         this.context = context;
         this.prefManager = prefManager;
@@ -140,14 +139,15 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
         updateSubtitleSize(preferencesHandler.getSubtitleSize());
 
-        prepareVlcVout();
-        loadMedia();
-
     }
 
     @Override public void onResume() {
         beamManager.addDeviceListener(deviceListener);
         view.onProgressChanged(prefManager.get(PREF_RESUME_POSITION, resumePosition), getStreamerProgress(), videoDuration);
+
+
+        prepareVlcVout();
+        loadMedia();
     }
 
     @Override public void onPause() {
@@ -387,30 +387,32 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
      */
     protected void loadMedia() {
 
-        String videoLocation;
-        if (TextUtils.isEmpty(streamInfo.getVideoLocation())) {
+        if (mediaPlayer.getMedia() == null) {
+            String videoLocation;
+            if (TextUtils.isEmpty(streamInfo.getVideoLocation())) {
 //            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
 //            getActivity().finish();
-            return;
-        } else {
-            videoLocation = streamInfo.getVideoLocation();
-            if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
-                    "http://") && !videoLocation.startsWith("https://")) {
-                videoLocation = "file://" + videoLocation;
+                return;
+            } else {
+                videoLocation = streamInfo.getVideoLocation();
+                if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
+                        "http://") && !videoLocation.startsWith("https://")) {
+                    videoLocation = "file://" + videoLocation;
+                }
             }
-        }
 
-        int flags = disabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
-        flags = flags | VLCOptions.MEDIA_VIDEO;
+            int flags = disabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
+            flags = flags | VLCOptions.MEDIA_VIDEO;
 
-        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(libVLC, Uri.parse(videoLocation));
-        VLCOptions.setMediaOptions(media, preferencesHandler, flags);
+            org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(libVLC, Uri.parse(videoLocation));
+            VLCOptions.setMediaOptions(media, preferencesHandler, flags);
 
-        mediaPlayer.setMedia(media);
+            mediaPlayer.setMedia(media);
 
-        long resumeFrom = prefManager.get(PREF_RESUME_POSITION, resumePosition);
-        if (resumeFrom > 0) {
-            mediaPlayer.setTime(resumeFrom);
+            long resumeFrom = prefManager.get(PREF_RESUME_POSITION, resumePosition);
+            if (resumeFrom > 0) {
+                mediaPlayer.setTime(resumeFrom);
+            }
         }
 
         videoDuration = mediaPlayer.getLength();

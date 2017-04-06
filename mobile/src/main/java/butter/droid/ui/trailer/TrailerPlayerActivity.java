@@ -23,15 +23,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
-import butter.droid.R;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
-import butter.droid.ui.player.fragment.VideoPlayerFragment;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.player.fragment.VideoPlayerFragment;
 import javax.inject.Inject;
 
 public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
@@ -53,13 +52,13 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
                 .build()
                 .inject(this);
 
-        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+//        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
         final Intent intent = getIntent();
         final Media media = intent.getParcelableExtra(EXTRA_DATA);
         final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
 
-        this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+//        this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
         presenter.onCreate(media, youtubeUrl);
     }
@@ -80,12 +79,10 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
     public Long getResumePosition() {
         return 0L;
     }
 
-    @Override
     public StreamInfo getInfo() {
         return presenter.getStreamInfo();
     }
@@ -102,7 +99,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     @Override
     public void onNotifyMediaReady() {
-        videoPlayerFragment.onMediaReady();
+//        videoPlayerFragment.onMediaReady();
     }
 
     @Override

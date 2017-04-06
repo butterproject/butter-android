@@ -15,16 +15,28 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+package butter.droid.ui.player;
 
-import android.support.annotation.ColorInt;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
+import android.content.ContentResolver;
+import butter.droid.base.ui.ActivityScope;
+import dagger.Module;
+import dagger.Provides;
 
-public interface VideoPlayerFView extends BaseVideoPlayerView {
+@Module
+public class VideoPlayerModule {
 
-    void displayStreamProgress(int progress);
+    private final VideoPlayerView view;
 
-    void displayTitle(String title);
+    public VideoPlayerModule(final VideoPlayerView view) {
+        this.view = view;
+    }
 
-    void setupSubtitles(@ColorInt int color, int size, @ColorInt int strokeColor, int strokeWidth);
+    @Provides @ActivityScope VideoPlayerView provideView() {
+        return view;
+    }
+
+    @Provides @ActivityScope VideoPlayerPresenter providePresenter(VideoPlayerView view, ContentResolver contentResolver) {
+        return new VideoPlayerPresenterImpl(view, contentResolver);
+    }
+
 }

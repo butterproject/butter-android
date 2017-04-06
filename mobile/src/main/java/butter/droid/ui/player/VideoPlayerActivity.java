@@ -40,13 +40,17 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Inject VideoPlayerPresenter presenter;
 
+    private VideoPlayerComponent component;
     private VideoPlayerFragment fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MobileButterApplication.getAppContext()
+        component = MobileButterApplication.getAppContext()
                 .getComponent()
-                .inject(this);
+                .videoPlayerComponentBuilder()
+                .videoPlayerModule(new VideoPlayerModule(this))
+                .build();
+        component.inject(this);
 
         super.onCreate(savedInstanceState, 0);
 
@@ -100,13 +104,18 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     @Override public void showVideoFragment(@NonNull final StreamInfo streamInfo, final long resumePosition) {
         fragment = VideoPlayerFragment.newInstance(streamInfo, resumePosition);
         getSupportFragmentManager().beginTransaction()
-                .add(fragment, TAG_VIDEO_FRAGMENT)
+                .add(android.R.id.content, fragment, TAG_VIDEO_FRAGMENT)
                 .commit();
+    }
+
+    public VideoPlayerComponent getComponent() {
+        return component;
     }
 
     private void showExitDialog() {
         OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title),
-                String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes),
+//                String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes),
+                String.format(getString(R.string.leave_videoplayer_message), ""), getString(android.R.string.yes),
                 getString(android.R.string.no), new OptionDialogFragment.Listener() {
                     @Override
                     public void onSelectionPositive() {

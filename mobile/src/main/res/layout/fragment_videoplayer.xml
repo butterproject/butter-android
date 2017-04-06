@@ -31,16 +31,8 @@
         android:layout_height="match_parent"
         android:foregroundGravity="clip_horizontal|clip_vertical">
 
-        <VideoView
-            android:id="@+id/trailer_view"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
         <SurfaceView
             android:id="@+id/video_surface"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />

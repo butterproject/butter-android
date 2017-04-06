@@ -41,6 +41,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import butter.droid.base.manager.beaming.server.BeamServer;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
 import com.squareup.picasso.Picasso;
 
@@ -126,7 +127,12 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         if (null != torrentStream) {
             torrentStream.stopStreaming();
         }
-        BeamServerService.getServer().stop();
+
+        BeamServer server = BeamServerService.getServer();
+        if (server != null) {
+            server.stop();
+        }
+
         BeamPlayerNotificationService.cancelNotification();
     }
 
