@@ -17,15 +17,14 @@
 
 package butter.droid.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 
-public class SeekBar extends android.widget.SeekBar {
+public class SeekBar extends AppCompatSeekBar {
 
-    private Drawable mThumb;
+    private Drawable thumb;
 
     public SeekBar(Context context) {
         super(context);
@@ -39,19 +38,14 @@ public class SeekBar extends android.widget.SeekBar {
         super(context, attrs, defStyleAttr);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public SeekBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     @Override
     public void setThumb(Drawable thumb) {
         super.setThumb(thumb);
-        mThumb = thumb;
+        this.thumb = thumb;
     }
 
     public Drawable getThumbDrawable() {
-        return mThumb;
+        return thumb;
     }
 
 }

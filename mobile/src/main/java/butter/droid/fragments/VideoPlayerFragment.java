@@ -21,7 +21,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -65,15 +64,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butter.droid.R;
-import butter.droid.activities.BeamPlayerActivity;
-import butter.droid.base.content.preferences.Prefs;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.widget.StrokedRobotoTextView;
@@ -706,7 +703,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
 
     public void startBeamPlayerActivity(){
-        BeamPlayerActivity.startActivity(getActivity(), mCallback.getInfo(), getCurrentTime());
+        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), mCallback.getInfo(), getCurrentTime()));
     }
 
 }

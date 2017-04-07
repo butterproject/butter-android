@@ -49,7 +49,7 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.BeamPlayerActivity;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.Constants;
