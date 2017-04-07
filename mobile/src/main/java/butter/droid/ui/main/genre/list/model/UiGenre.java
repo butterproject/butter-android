@@ -15,16 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.providers.media.models;
+package butter.droid.ui.main.genre.list.model;
 
 import android.support.annotation.StringRes;
 
-public class Genre {
+public class UiGenre {
 
     private final String key;
     @StringRes private final int label;
+    private boolean selected;
 
-    public Genre(String key, @StringRes int label) {
+    public UiGenre(String key, int label) {
         this.key = key;
         this.label = label;
     }
@@ -33,8 +34,15 @@ public class Genre {
         return key;
     }
 
-    @StringRes public int getLabelId() {
+    public int getLabel() {
         return label;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

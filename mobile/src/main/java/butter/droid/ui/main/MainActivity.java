@@ -27,10 +27,9 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -41,6 +40,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.ui.beam.BeamPlayerActivity;
@@ -51,15 +57,15 @@ import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.beaming.server.BeamServerService;
 import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.provider.ProviderManager.OnProviderChangeListener;
 import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ProviderUtils;
-import butter.droid.fragments.MediaContainerFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment;
+import butter.droid.ui.main.pager.MediaPagerAdapter;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsActivity;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
@@ -74,7 +80,7 @@ import timber.log.Timber;
 /**
  * The main activity that houses the navigation drawer, and controls navigation between fragments
  */
-public class MainActivity extends ButterBaseActivity implements MainView, OnProviderChangeListener {
+public class MainActivity extends ButterBaseActivity implements MainView {
 
     private static final int REQUEST_CODE_TERMS = 1;
     private static final int PERMISSIONS_REQUEST_STORAGE = 1;
@@ -84,12 +90,14 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout navigationDrawerContainer;
-    @Nullable @BindView(R.id.tabs) TabLayout tabs;
+    @BindView(R.id.tabs) TabLayout tabs;
+    @BindView(R.id.pager) ViewPager viewPager;
 
     private MainComponent component;
     private NavigationDrawerFragment navigationDrawerFragment;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
+    private MediaPagerAdapter adapter;
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -111,6 +119,10 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
         setShowCasting(true);
         ToolbarUtils.updateToolbarHeight(this, toolbar);
         setupDrawer();
+        setupTabs();
+
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(adapter);
 
         presenter.onCreate(savedInstanceState == null);
     }
@@ -129,14 +141,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
         }
 
         BeamPlayerNotificationService.cancelNotification();
-
-        providerManager.addProviderListener(this);
-    }
-
-    @Override protected void onPause() {
-        super.onPause();
-
-        providerManager.removeProviderListener(this);
     }
 
     @Override
@@ -191,10 +195,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override public void onProviderChanged(@ProviderType int provider) {
-        showProvider(provider);
-    }
-
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_TERMS:
@@ -205,42 +205,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
-        }
-    }
-
-    public void updateTabs(MediaContainerFragment containerFragment, final int position) {
-        if (tabs == null) {
-            return;
-        }
-
-        if (containerFragment != null) {
-            ViewPager viewPager = containerFragment.getViewPager();
-            if (viewPager == null) {
-                return;
-            }
-
-            tabs.setupWithViewPager(viewPager);
-            tabs.setTabGravity(TabLayout.GRAVITY_CENTER);
-            tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-            tabs.setVisibility(View.VISIBLE);
-
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-            tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
-            if (tabs.getTabCount() > 0) {
-                tabs.getTabAt(0).select();
-                torrentHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (tabs.getTabCount() > position) {
-                            tabs.getTabAt(position).select();
-                        }
-                    }
-                }, 10);
-            }
-
-        } else {
-            tabs.setVisibility(View.GONE);
         }
     }
 
@@ -311,7 +275,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
     @Override public void initProviders(@ProviderType int provider) {
         navigationDrawerFragment.selectProvider(provider);
-        showProvider(provider);
     }
 
     @Override public void openDrawer() {
@@ -324,6 +287,21 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
 
     @Override public void openPreferenceScreen() {
         startActivity(PreferencesActivity.getIntent(this));
+    }
+
+    @Override public void displayProvider(@StringRes int title, boolean hasGenres, List<NavInfo> navigation) {
+        setTitle(title);
+        adapter.setData(hasGenres, navigation);
+
+        tabs.getTabAt(hasGenres ? 1 : 0).select();
+    }
+
+    @Override public void onGenreChanged(String genre) {
+        adapter.setGenre(genre);
+    }
+
+    @Override public void showFirsContentScreen() {
+        tabs.getTabAt(1).select();
     }
 
     public MainComponent getComponent() {
@@ -343,21 +321,6 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
                 Timber.d("Unknown encoding"); // this should never happen
             }
         }
-    }
-
-    private void showProvider(@ProviderType int provider) {
-        setTitle(ProviderUtils.getProviderTitle(provider));
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        MediaContainerFragment mediaFragment = MediaContainerFragment.newInstance();
-
-        if (tabs.getTabCount() > 0) {
-            tabs.getTabAt(0).select();
-        }
-
-        fragmentManager.beginTransaction().replace(R.id.container, mediaFragment).commit();
-        updateTabs(mediaFragment, mediaFragment.getCurrentSelection());
     }
 
     private void setupDrawer() {
@@ -388,4 +351,17 @@ public class MainActivity extends ButterBaseActivity implements MainView, OnProv
         drawerLayout.addDrawerListener(drawerToggle);
 
     }
+
+    private void setupTabs() {
+
+        tabs.setupWithViewPager(viewPager);
+        tabs.setTabGravity(TabLayout.GRAVITY_CENTER);
+        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabs.setVisibility(View.VISIBLE);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+    }
+
 }

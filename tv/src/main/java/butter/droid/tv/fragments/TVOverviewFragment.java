@@ -296,9 +296,11 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
         MorePresenter gridPresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
         if (BuildConfig.DEBUG) {
-            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, getString(R.string.tests), R.drawable.more_player_tests, null));
+            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, R.string.tests,
+                    R.drawable.more_player_tests, null));
         }
-        gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, getString(R.string.preferences), R.drawable.ic_settings, null));
+        gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, R.string.preferences,
+                R.drawable.ic_settings, null));
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
     }
 

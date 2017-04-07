@@ -24,8 +24,6 @@ import android.support.annotation.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.List;
 
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -48,8 +46,6 @@ public class ProviderManager {
     @Nullable private final MediaProvider showProvider;
 
     @ProviderType private int currentProviderType;
-
-    private final List<OnProviderChangeListener> listeners = new ArrayList<>();
 
     public ProviderManager(@Nullable MediaProvider movieProvider, @Nullable MediaProvider showProvider) {
         this.movieProvider = movieProvider;
@@ -77,11 +73,6 @@ public class ProviderManager {
         if (getMediaProvider(providerType) != null) {
             if (this.currentProviderType != providerType) {
                 this.currentProviderType = providerType;
-                if (listeners.size() > 0) {
-                    for (OnProviderChangeListener listener : listeners) {
-                        listener.onProviderChanged(providerType);
-                    }
-                }
             }
         } else {
             throw new IllegalStateException("Provider for type no provided");
@@ -100,29 +91,12 @@ public class ProviderManager {
         return getMediaProvider(providerType) != null;
     }
 
-    public void addProviderListener(@NonNull OnProviderChangeListener listener) {
-        //noinspection ConstantConditions
-        if (listener != null && !listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-
-    public void removeProviderListener(@NonNull OnProviderChangeListener listener) {
-        if (listener != null && listeners.size() > 0) {
-            listeners.remove(listener);
-        }
-    }
-
     public SubsProvider getCurrentSubsProvider() {
         return getCurrentMediaProvider().getSubsProvider();
     }
 
     public boolean hasCurrentSubsProvider() {
         return getCurrentMediaProvider().hasSubsProvider();
-    }
-
-    public interface OnProviderChangeListener {
-        @MainThread void onProviderChanged(@ProviderType int provider);
     }
 
 }

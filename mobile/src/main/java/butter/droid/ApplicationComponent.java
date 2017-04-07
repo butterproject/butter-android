@@ -20,8 +20,6 @@ package butter.droid;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.BaseApplicationComponent;
-import butter.droid.fragments.MediaContainerFragment;
-import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
@@ -32,7 +30,6 @@ import butter.droid.ui.beam.BeamPlayerActivityComponent;
 import butter.droid.ui.loading.StreamLoadingComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
-import butter.droid.ui.media.list.MediaListComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
@@ -52,10 +49,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     void inject(SearchActivity activity);
 
     void inject(VideoPlayerActivity activity);
-
-    void inject(MediaContainerFragment fragment);
-
-    void inject(MediaGenreSelectionFragment fragment);
 
     void inject(LoadingDetailDialogFragment fragment);
 
@@ -80,8 +73,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     BeamPlayerActivityComponent.Builder beamPlayerActivityComponentBuilder();
 
     TrailerPlayerComponent.Builder trailerComponentBuilder();
-
-    MediaListComponent.Builder mediaListComponentBuilder();
 
     SearchComponent.Builder searchComponentBuilder();
 

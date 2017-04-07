@@ -62,7 +62,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         super.onCreate(savedInstanceState);
 
         ((MainActivity) getActivity()).getComponent()
-                .naviagtionDrawerBuilder()
+                .navigtionDrawerBuilder()
                 .navigationDrawerModule(new NavigationDrawerModule(this))
                 .build()
                 .inject(this);

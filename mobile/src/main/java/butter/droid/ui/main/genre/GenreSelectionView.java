@@ -15,26 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.providers.media.models;
+package butter.droid.ui.main.genre;
 
-import android.support.annotation.StringRes;
+import java.util.List;
 
-public class Genre {
+import butter.droid.ui.main.genre.list.model.UiGenre;
 
-    private final String key;
-    @StringRes private final int label;
+public interface GenreSelectionView {
+    void displayGenres(List<UiGenre> uiGenres);
 
-    public Genre(String key, @StringRes int label) {
-        this.key = key;
-        this.label = label;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    @StringRes public int getLabelId() {
-        return label;
-    }
-
+    void notifyItemUpdated(int position);
 }

@@ -23,8 +23,8 @@ import android.view.View;
 
 import javax.inject.Inject;
 
-import butter.droid.MobileButterApplication;
 import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
 
 public class MediaListFragment extends BaseMediaListFragment implements MediaListView {
@@ -34,12 +34,13 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MobileButterApplication.getAppContext()
-                .getComponent()
+        ((MainActivity) getActivity()).getComponent()
                 .mediaListComponentBuilder()
                 .mediaListModule(new MediaListModule(this))
                 .build()
                 .inject(this);
+
+        presenter.onCreate();
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -48,8 +49,10 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
         pagingManager.getNextPage();
     }
 
-    public void changeGenre(String genre) {
-        presenter.changeGenre(genre);
+    @Override public void onDestroy() {
+        super.onDestroy();
+
+        presenter.onDestroy();
     }
 
     public static BaseMediaListFragment newInstance(MediaProvider.Filters.Sort filter,
