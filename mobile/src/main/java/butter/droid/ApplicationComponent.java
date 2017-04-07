@@ -30,7 +30,6 @@ import butter.droid.ui.beam.BeamPlayerActivityComponent;
 import butter.droid.ui.loading.StreamLoadingComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
-import butter.droid.ui.media.list.MediaListComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
@@ -74,8 +73,6 @@ public interface ApplicationComponent extends BaseApplicationComponent {
     BeamPlayerActivityComponent.Builder beamPlayerActivityComponentBuilder();
 
     TrailerPlayerComponent.Builder trailerComponentBuilder();
-
-    MediaListComponent.Builder mediaListComponentBuilder();
 
     SearchComponent.Builder searchComponentBuilder();
 
