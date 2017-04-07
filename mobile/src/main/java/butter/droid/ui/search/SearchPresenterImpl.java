@@ -20,7 +20,7 @@ package butter.droid.ui.search;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
 import okhttp3.OkHttpClient;

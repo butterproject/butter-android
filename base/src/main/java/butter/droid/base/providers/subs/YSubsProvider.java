@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Movie;
 import okhttp3.Call;

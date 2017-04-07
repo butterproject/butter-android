@@ -19,22 +19,32 @@ package butter.droid;
 
 import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
+import butter.droid.base.providers.DaggerProviderComponent;
+import butter.droid.base.providers.ProviderComponent;
 
 public class MobileButterApplication extends ButterApplication {
 
-    private ApplicationComponent component;
+    private InternalComponent component;
 
-    @Override public void onCreate() {
-        component = DaggerApplicationComponent.builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .build();
-        component.inject(this);
-
-        super.onCreate();
+    public InternalComponent getComponent() {
+        return component;
     }
 
-    public ApplicationComponent getComponent() {
-        return component;
+    @Override protected void inject() {
+
+        ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
+                .baseApplicationModule(new BaseApplicationModule(this))
+                .build();
+
+        ProviderComponent providerComponent = DaggerProviderComponent.builder()
+                .baseApplicationComponent(applicationComponent)
+                .build();
+
+        component = DaggerInternalComponent.builder()
+                .providerComponent(providerComponent)
+                .build();
+
+        component.inject(this);
     }
 
     public static MobileButterApplication getAppContext() {

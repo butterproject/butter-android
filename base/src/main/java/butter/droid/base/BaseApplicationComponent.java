@@ -17,13 +17,37 @@
 
 package butter.droid.base;
 
-import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
-import butter.droid.base.torrent.TorrentService;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
+import butter.droid.base.manager.network.NetworkManager;
+import butter.droid.base.manager.prefs.PrefManager;
+import com.google.gson.Gson;
+import okhttp3.OkHttpClient;
 
 public interface BaseApplicationComponent {
 
-    void inject(BeamPlayerNotificationService service);
+    Context context();
 
-    void inject(TorrentService service);
+    OkHttpClient okHttpClient();
+
+    Gson gson();
+
+    SharedPreferences sharedPreferences();
+
+    Resources resources();
+
+    ConnectivityManager connectivityManager();
+
+    WifiManager wifiManager();
+
+    NetworkManager networkManager();
+
+    PrefManager prefManager();
+
+    TelephonyManager telephonyManager();
 
 }

@@ -21,8 +21,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 
 import butter.droid.base.R;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 
 public final class ProviderUtils {
 

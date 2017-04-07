@@ -17,13 +17,12 @@
 
 package butter.droid.ui.main.genre;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.genre.list.model.UiGenre;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
 

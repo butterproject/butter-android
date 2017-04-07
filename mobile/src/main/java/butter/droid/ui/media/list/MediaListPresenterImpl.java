@@ -18,7 +18,7 @@
 package butter.droid.ui.media.list;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;

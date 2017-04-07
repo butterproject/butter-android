@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.search;
 
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Module;
 import dagger.Provides;

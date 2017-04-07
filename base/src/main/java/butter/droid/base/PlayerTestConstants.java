@@ -52,7 +52,7 @@ public final class PlayerTestConstants {
             "Open dialog"
     };
 
-    public final static String[] FILES = new String[]{
+    public final static String[] FILES = new String[] {
             "https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_surround_ac3.mp4",
             "https://get.butterproject.org/nwtests/Spider-Man_2_720p_24fps_mp3.mp4",
             "https://get.butterproject.org/nwtests/Spider-Man_2_1080p_24fps_surround_ac3.mp4",

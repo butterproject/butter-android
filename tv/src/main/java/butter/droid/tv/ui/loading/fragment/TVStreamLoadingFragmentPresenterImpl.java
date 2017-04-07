@@ -21,8 +21,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;

@@ -54,10 +54,10 @@ import butter.droid.activities.SearchActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
-import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
-import butter.droid.base.manager.beaming.server.BeamServerService;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
@@ -72,9 +72,6 @@ import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butterknife.BindView;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 /**

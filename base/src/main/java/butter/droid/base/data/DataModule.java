@@ -17,20 +17,13 @@
 
 package butter.droid.base.data;
 
-import android.content.Context;
-
-import com.google.gson.Gson;
-import com.jakewharton.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Singleton;
-
 import butter.droid.base.content.preferences.PreferencesHandler;
+import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Singleton;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -51,16 +44,6 @@ public class DataModule {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .cache(cache)
-                .build();
-    }
-
-    @Provides @Singleton public OkHttp3Downloader provideOkHttpDownloader(OkHttpClient client) {
-        return new OkHttp3Downloader(client);
-    }
-
-    @Provides @Singleton public Picasso providePicasso(Context context, OkHttp3Downloader okHttpDownloader) {
-        return new Picasso.Builder(context)
-                .downloader(okHttpDownloader)
                 .build();
     }
 

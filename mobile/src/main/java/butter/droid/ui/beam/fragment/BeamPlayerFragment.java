@@ -40,7 +40,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import butter.droid.R;
-import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.PixelUtils;
