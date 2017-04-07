@@ -40,7 +40,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import butter.droid.R;
-import butter.droid.base.manager.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.PixelUtils;
@@ -184,7 +184,6 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
     }
 
     @Override public void tintProgress(@ColorInt int paletteColor) {
-
         if (paletteColor == Color.TRANSPARENT) {
             paletteColor = ContextCompat.getColor(getContext(), R.color.primary);
         }

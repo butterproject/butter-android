@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butter.droid.R;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;

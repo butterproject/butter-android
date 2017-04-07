@@ -19,8 +19,8 @@ package butter.droid.ui.beam.fragment;
 
 import android.support.annotation.Nullable;
 import butter.droid.R;
-import butter.droid.base.manager.beaming.BeamDeviceListener;
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.ui.beam.BeamPlayerActivityPresenter;

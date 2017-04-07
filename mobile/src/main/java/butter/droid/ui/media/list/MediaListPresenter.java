@@ -20,5 +20,8 @@ package butter.droid.ui.media.list;
 import butter.droid.ui.media.list.base.BaseMediaListPresenter;
 
 public interface MediaListPresenter extends BaseMediaListPresenter {
-    void changeGenre(String genre);
+
+    void onCreate();
+
+    void onDestroy();
 }

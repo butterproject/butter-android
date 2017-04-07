@@ -30,8 +30,8 @@ import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.base.manager.beaming.BeamDeviceAdapter;
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.internal.beaming.BeamDeviceAdapter;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 
 public class BeamDeviceSelectorDialogFragment extends DialogFragment {
 

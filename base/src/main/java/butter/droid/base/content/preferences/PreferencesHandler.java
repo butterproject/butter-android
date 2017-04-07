@@ -1,5 +1,7 @@
 package butter.droid.base.content.preferences;
 
+import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -11,7 +13,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.format.DateFormat;
-
+import butter.droid.base.ButterApplication;
+import butter.droid.base.Constants;
+import butter.droid.base.R;
+import butter.droid.base.content.preferences.PrefItem.SubtitleGenerator;
+import butter.droid.base.content.preferences.Prefs.PrefKey;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.vlc.VLCOptions;
+import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.StorageUtils;
+import dagger.Reusable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,24 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.inject.Inject;
-
-import butter.droid.base.ButterApplication;
-import butter.droid.base.Constants;
-import butter.droid.base.R;
-import butter.droid.base.content.preferences.PrefItem.SubtitleGenerator;
-import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.updater.ButterUpdateManager;
-import butter.droid.base.manager.vlc.VLCOptions;
-import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.StorageUtils;
-import dagger.Reusable;
-
-import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
 
 @Reusable
 public class PreferencesHandler {

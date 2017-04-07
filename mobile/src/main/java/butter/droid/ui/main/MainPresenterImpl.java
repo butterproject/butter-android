@@ -24,18 +24,23 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
-import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
+import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.utils.ProviderUtils;
+import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsPresenterImpl;
 import okhttp3.Call;
@@ -51,6 +56,8 @@ public class MainPresenterImpl implements MainPresenter {
     private final Context context;
     private final PreferencesHandler preferencesHandler;
     private final PrefManager prefManager;
+
+    private final List<OnGenreChangeListener> genreListeners = new ArrayList<>();
 
     private boolean userLearnedDrawer;
 
@@ -87,6 +94,8 @@ public class MainPresenterImpl implements MainPresenter {
         } else {
             view.checkIntentAction();
         }
+
+        displayProviderData(providerManager.getCurrentMediaProviderType());
 
     }
 
@@ -150,6 +159,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override public void selectProvider(@ProviderType int providerType) {
         providerManager.setCurrentProviderType(providerType);
+        displayProviderData(providerType);
         view.closeDrawer();
     }
 
@@ -163,6 +173,32 @@ public class MainPresenterImpl implements MainPresenter {
         view.closeDrawer();
     }
 
+    @Override public void onGenreChanged(UiGenre genre) {
+        view.onGenreChanged(genre.getKey());
+
+        if (genreListeners.size() > 0) {
+            for (OnGenreChangeListener genreListener : genreListeners) {
+                genreListener.onGenreChanged(genre);
+            }
+        }
+
+        view.showFirsContentScreen();
+    }
+
+    @Override public void addGenreListener(OnGenreChangeListener listener) {
+        genreListeners.add(listener);
+    }
+
+    @Override public void removeGenreListener(OnGenreChangeListener listener) {
+        genreListeners.remove(listener);
+    }
+
+    private void displayProviderData(@ProviderType int providerType) {
+        MediaProvider provider = providerManager.getMediaProvider(providerType);
+        boolean hasGenres = provider.getGenres() != null && provider.getGenres().size() > 0;
+        view.displayProvider(ProviderUtils.getProviderTitle(providerType), hasGenres, provider.getNavigation());
+    }
+
     private void openStream(StreamInfo info) {
         if (beamManager.isConnected()) {
             view.showBeamPlayer(info);
@@ -170,4 +206,9 @@ public class MainPresenterImpl implements MainPresenter {
             view.showVideoPlayer(info);
         }
     }
+
+    public interface OnGenreChangeListener {
+        void onGenreChanged(UiGenre genre);
+    }
+
 }

@@ -18,13 +18,10 @@
 package butter.droid.ui.media.list.base;
 
 import android.support.annotation.StringRes;
-
-import java.util.ArrayList;
-
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.MediaProvider.Filters.Order;
 import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
@@ -32,6 +29,8 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.ThreadUtils;
 import hugo.weaving.DebugLog;
+import java.util.ArrayList;
+import java.util.List;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
@@ -64,7 +63,6 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
     }
 
     @Override public void loadNextPage(int page) {
-
         cancelOngoingCall();
 
         if (items.isEmpty()) {
@@ -127,7 +125,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
         @Override
         @DebugLog
         public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
-            ArrayList<Media> allItems = BaseMediaListPresenterImpl.this.items;
+            List<Media> allItems = BaseMediaListPresenterImpl.this.items;
             allItems.addAll(items);
 
             ThreadUtils.runOnUiThread(new Runnable() {

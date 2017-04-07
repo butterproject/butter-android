@@ -18,8 +18,9 @@
 package butter.droid.ui.media.list;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.ui.main.MainPresenter;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -38,7 +39,7 @@ public class MediaListModule {
     }
 
     @Provides @FragmentScope MediaListPresenter providePresenter(MediaListView view, ProviderManager providerManager,
-            OkHttpClient client, PreferencesHandler preferencesHandler) {
-        return new MediaListPresenterImpl(view, providerManager, client, preferencesHandler);
+            OkHttpClient client, PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
+        return new MediaListPresenterImpl(view, providerManager, client, preferencesHandler, parentPresenter);
     }
 }

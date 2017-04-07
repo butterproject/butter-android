@@ -23,7 +23,7 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.meta.MetaProvider;
 
 public class Episode extends Media implements Parcelable {
@@ -36,11 +36,11 @@ public class Episode extends Media implements Parcelable {
     public boolean dateBased;
     public Map<String, Torrent> torrents = new HashMap<>();
 
-    protected MetaProvider mMetaProvider;
+    protected MetaProvider metaProvider;
 
     public Episode(MetaProvider metaProvider) {
         super();
-        mMetaProvider = metaProvider;
+        this.metaProvider = metaProvider;
     }
 
     protected Episode(Parcel in) {
@@ -55,10 +55,10 @@ public class Episode extends Media implements Parcelable {
         dateBased = in.readInt() == 1;
 
         String className = in.readString();
-        mMetaProvider = null;
+        metaProvider = null;
         try {
             Class<?> clazz = Class.forName(className);
-            mMetaProvider = (MetaProvider) clazz.newInstance();
+            metaProvider = (MetaProvider) clazz.newInstance();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -95,7 +95,7 @@ public class Episode extends Media implements Parcelable {
         dest.writeString(tvdbId);
         dest.writeString(showName);
         dest.writeInt(dateBased ? 1 : 0);
-        dest.writeString(mMetaProvider != null ? mMetaProvider.getClass().getCanonicalName() : "");
+        dest.writeString(metaProvider != null ? metaProvider.getClass().getCanonicalName() : "");
         if (torrents != null) {
             dest.writeInt(torrents.size());
             for (String s : torrents.keySet()) {
@@ -121,7 +121,7 @@ public class Episode extends Media implements Parcelable {
     };
 
     public MetaProvider getMetaProvider() {
-        return mMetaProvider;
+        return metaProvider;
     }
 
 }

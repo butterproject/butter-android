@@ -17,14 +17,11 @@
 
 package butter.droid.base.providers;
 
-import com.google.gson.Gson;
-
-import javax.inject.Singleton;
-
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
+import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -32,12 +29,12 @@ import okhttp3.OkHttpClient;
 @Module
 public class ProviderModule {
 
-    @Provides @Singleton
+    @Provides @ProviderScope
     public SubsProvider provideSubsProvider(OkHttpClient client, Gson gson, PlayerManager playerManager) {
         return new YSubsProvider(client, gson, playerManager);
     }
 
-    @Provides @Singleton
+    @Provides @ProviderScope
     public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson, SubsProvider subsProvider) {
         return new VodoProvider(client, gson, subsProvider);
     }

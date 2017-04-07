@@ -47,7 +47,7 @@ import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
-import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.ResourceUtils;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;

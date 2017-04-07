@@ -17,7 +17,7 @@
 
 package butter.droid.ui.main.navigation;
 
-import butter.droid.base.manager.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.main.MainPresenter;
 import dagger.Module;

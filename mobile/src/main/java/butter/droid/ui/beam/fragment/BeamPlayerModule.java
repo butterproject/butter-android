@@ -17,7 +17,7 @@
 
 package butter.droid.ui.beam.fragment;
 
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.beam.BeamPlayerActivityPresenter;
 import dagger.Module;

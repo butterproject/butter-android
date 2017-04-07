@@ -30,7 +30,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 
