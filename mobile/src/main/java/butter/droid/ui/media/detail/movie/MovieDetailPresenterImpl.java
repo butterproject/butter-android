@@ -26,9 +26,9 @@ import java.util.Map;
 
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.PlayerManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;

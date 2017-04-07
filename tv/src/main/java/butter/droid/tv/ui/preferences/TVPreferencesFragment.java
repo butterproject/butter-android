@@ -35,7 +35,7 @@ import javax.inject.Inject;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVUpdateActivity;

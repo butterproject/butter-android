@@ -29,10 +29,10 @@ import java.util.Map;
 
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.beaming.server.BeamServer;
-import butter.droid.base.manager.beaming.server.BeamServerService;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;

@@ -19,11 +19,9 @@ package butter.droid.base.manager.prefs;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-
+import butter.droid.base.content.ObscuredSharedPreferences;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import butter.droid.base.content.ObscuredSharedPreferences;
 
 @Singleton
 public class PrefManager {

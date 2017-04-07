@@ -17,23 +17,24 @@
 
 package butter.droid.base.providers.media.models;
 
+import android.support.annotation.StringRes;
 
 public class Genre {
 
-    private String mKey;
-    private int mLabel;
+    private final String key;
+    @StringRes private final int label;
 
-    public Genre(String key, int label) {
-        mKey = key;
-        mLabel = label;
+    public Genre(String key, @StringRes int label) {
+        this.key = key;
+        this.label = label;
     }
 
     public String getKey() {
-        return mKey;
+        return key;
     }
 
-    public int getLabelId() {
-        return mLabel;
+    @StringRes public int getLabelId() {
+        return label;
     }
 
 }

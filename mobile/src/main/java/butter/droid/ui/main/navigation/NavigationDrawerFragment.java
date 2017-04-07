@@ -38,7 +38,7 @@ import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.adapters.decorators.OneShotDividerDecorator;
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.ui.main.MainActivity;
@@ -62,7 +62,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         super.onCreate(savedInstanceState);
 
         ((MainActivity) getActivity()).getComponent()
-                .naviagtionDrawerBuilder()
+                .navigtionDrawerBuilder()
                 .navigationDrawerModule(new NavigationDrawerModule(this))
                 .build()
                 .inject(this);

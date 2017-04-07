@@ -19,7 +19,7 @@ package butter.droid.ui.main.navigation;
 
 import android.os.Bundle;
 
-import butter.droid.base.manager.provider.ProviderManager.ProviderType;
+import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
 
 public interface NavigationDrawerPresenter {

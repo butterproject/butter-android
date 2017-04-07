@@ -34,7 +34,7 @@ public class SignUtils {
                 Timber.d("Detected signature: %s", currentSignature);
 
                 //compare signatures
-                if (SIGNATURE.equals(currentSignature) || SIGNATURE_DEV.equals(currentSignature)){
+                if (SIGNATURE.equals(currentSignature) || SIGNATURE_DEV.equals(currentSignature)) {
                     return VALID;
                 }
             }

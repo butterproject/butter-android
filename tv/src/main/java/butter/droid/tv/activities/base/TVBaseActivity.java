@@ -24,7 +24,7 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.ui.search.TVSearchActivity;
 

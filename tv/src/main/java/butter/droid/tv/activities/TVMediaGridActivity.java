@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.tv.R;
@@ -40,7 +41,8 @@ public class TVMediaGridActivity extends TVBaseActivity implements TVMediaGridFr
     private MediaProvider.Filters.Sort mSort;
     private String mGenre;
 
-    public static Intent startActivity(Activity activity,String title, MediaProvider.Filters.Sort sort, MediaProvider.Filters.Order defOrder, String genre) {
+    public static Intent startActivity(Activity activity, @StringRes int title, MediaProvider.Filters.Sort sort,
+            MediaProvider.Filters.Order defOrder, String genre) {
         Intent intent = new Intent(activity, TVMediaGridActivity.class);
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_GENRE, genre);
@@ -62,7 +64,7 @@ public class TVMediaGridActivity extends TVBaseActivity implements TVMediaGridFr
         mSort = (MediaProvider.Filters.Sort) getIntent().getExtras().getSerializable(EXTRA_SORT);
         mDefOrder = (MediaProvider.Filters.Order) getIntent().getExtras().getSerializable(EXTRA_ORDER);
         mGenre = getIntent().getExtras().getString(EXTRA_GENRE);
-        String title = getIntent().getExtras().getString(EXTRA_TITLE);
+        int title = getIntent().getExtras().getInt(EXTRA_TITLE);
         setTitle(title);
 
         mFilter.sort = mSort;

@@ -20,24 +20,24 @@ package butter.droid.tv.presenters;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
 
 public class MorePresenter extends Presenter {
 
-	private Context mContext;
+	private Context context;
 
 	public MorePresenter(Context context) {
-		mContext = context.getApplicationContext();
+		this.context = context.getApplicationContext();
 	}
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent) {
-		final MoreCardView cardView = new MoreCardView(mContext);
+		final MoreCardView cardView = new MoreCardView(context);
 		return new ViewHolder(cardView);
 	}
 
@@ -46,8 +46,8 @@ public class MorePresenter extends Presenter {
 		MoreItem moreItem = (MoreItem) item;
 		MoreCardView cardView = (MoreCardView) viewHolder.view;
 
-		cardView.setTitleText(StringUtils.capWords(moreItem.mTitle.toLowerCase()));
-		cardView.setImageResource(moreItem.mIcon);
+		cardView.setTitleText(StringUtils.capWords(context.getString(moreItem.title).toLowerCase()));
+		cardView.setImageResource(moreItem.icon);
 	}
 
 	@Override
@@ -56,24 +56,24 @@ public class MorePresenter extends Presenter {
 
 	public static class MoreItem {
 
-		private final String mTitle;
-		private final int mIcon;
-		private final int mId;
-		private MediaProvider.NavInfo mNavInfo;
+		@StringRes private final int title;
+		private final int icon;
+		private final int id;
+		private MediaProvider.NavInfo navInfo;
 
-		public MoreItem(int id, String text, @DrawableRes int iconResId, @Nullable MediaProvider.NavInfo info) {
-			mId = id;
-			mIcon = iconResId;
-			mTitle = text.toUpperCase(LocaleUtils.getCurrent());
-			this.mNavInfo = info;
+		public MoreItem(int id, @StringRes int text, @DrawableRes int iconResId, @Nullable MediaProvider.NavInfo info) {
+			this.id = id;
+			icon = iconResId;
+			title = text;
+			this.navInfo = info;
 		}
 
 		public int getId() {
-			return mId;
+			return id;
 		}
 
 		public MediaProvider.NavInfo getNavInfo() {
-			return mNavInfo;
+			return navInfo;
 		}
 	}
 

@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;

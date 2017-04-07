@@ -21,8 +21,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import butter.droid.base.Constants;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.vlc.VLCOptions;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.vlc.VLCOptions;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import dagger.Module;
@@ -44,7 +44,7 @@ public class ManagerModule {
     @Provides
     @Singleton
     @Nullable
-    LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {
+    public LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {
         if (!VLCUtil.hasCompatibleCPU(context)) {
             Timber.e(VLCUtil.getErrorMsg());
             return null;

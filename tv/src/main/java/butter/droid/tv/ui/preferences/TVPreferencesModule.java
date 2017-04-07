@@ -22,8 +22,8 @@ import android.content.res.Resources;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.updater.ButterUpdateManager;
-import butter.droid.base.manager.vlc.PlayerManager;
+import butter.droid.base.manager.internal.updater.ButterUpdateManager;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;

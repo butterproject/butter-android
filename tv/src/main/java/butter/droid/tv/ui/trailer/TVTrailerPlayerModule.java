@@ -18,9 +18,9 @@
 package butter.droid.tv.ui.trailer;
 
 import android.content.Context;
+import butter.droid.base.manager.internal.phone.PhoneManager;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.phone.PhoneManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Module;
 import dagger.Provides;

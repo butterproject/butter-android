@@ -430,7 +430,7 @@
         </activity>
 
         <activity
-            android:name="butter.droid.activities.BeamPlayerActivity"
+            android:name="butter.droid.ui.beam.BeamPlayerActivity"
             android:theme="@style/Theme.Butter.RemoteControl"
             android:screenOrientation="sensorPortrait" />
 
@@ -439,8 +439,8 @@
 			android:screenOrientation="sensorLandscape" />
 
         <service android:name="butter.droid.base.torrent.TorrentService" />
-        <service android:name="butter.droid.base.manager.beaming.server.BeamServerService" />
-        <service android:name="butter.droid.base.manager.beaming.BeamPlayerNotificationService" />
+        <service android:name=".base.manager.internal.beaming.server.BeamServerService" />
+        <service android:name=".base.manager.internal.beaming.BeamPlayerNotificationService" />
 
         <receiver android:name="butter.droid.base.torrent.TorrentBroadcastReceiver" android:exported="false">
             <intent-filter>

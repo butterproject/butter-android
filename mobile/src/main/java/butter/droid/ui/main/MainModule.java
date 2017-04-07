@@ -20,10 +20,10 @@ package butter.droid.ui.main;
 import android.content.Context;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.beaming.BeamManager;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.provider.ProviderManager;
-import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Module;
 import dagger.Provides;

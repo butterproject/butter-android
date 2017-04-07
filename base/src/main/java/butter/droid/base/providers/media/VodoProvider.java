@@ -54,8 +54,6 @@ public class VodoProvider extends MediaProvider {
     };
     public static String CURRENT_URL = API_URLS[CURRENT_API];
 
-    private static Filters sFilters = new Filters();
-
     public VodoProvider(OkHttpClient client, Gson gson, @Nullable SubsProvider subsProvider) {
         super(client, gson, subsProvider);
     }
@@ -82,7 +80,6 @@ public class VodoProvider extends MediaProvider {
 
     @Override
     public Call getList(final ArrayList<Media> existingList, Filters filters, final Callback callback) {
-        sFilters = filters;
 
         final ArrayList<Media> currentList;
         if (existingList == null) {
@@ -314,7 +311,7 @@ public class VodoProvider extends MediaProvider {
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
         tabs.add(new NavInfo(R.id.yts_filter_a_to_z, Filters.Sort.ALPHABET, Filters.Order.ASC,
-                ButterApplication.getAppContext().getString(R.string.a_to_z), R.drawable.yts_filter_a_to_z));
+                R.string.a_to_z, R.drawable.yts_filter_a_to_z));
         return tabs;
     }
 
