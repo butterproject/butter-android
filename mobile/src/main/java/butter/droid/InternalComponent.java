@@ -17,25 +17,21 @@
 
 package butter.droid;
 
-import butter.droid.activities.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.fragments.BeamPlayerFragment;
-import butter.droid.fragments.MediaContainerFragment;
-import butter.droid.fragments.MediaGenreSelectionFragment;
 import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.fragments.dialog.EpisodeDialogFragment;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.about.AboutComponent;
+import butter.droid.ui.beam.BeamPlayerActivityComponent;
 import butter.droid.ui.loading.StreamLoadingComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
-import butter.droid.ui.media.list.MediaListComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
@@ -54,23 +50,15 @@ public interface InternalComponent extends BaseInternalComponent {
 
     void inject(AboutActivity activity);
 
-    void inject(BeamPlayerActivity activity);
-
     void inject(SearchActivity activity);
 
     void inject(VideoPlayerActivity activity);
-
-    void inject(MediaContainerFragment fragment);
-
-    void inject(MediaGenreSelectionFragment fragment);
 
     void inject(LoadingDetailDialogFragment fragment);
 
     void inject(EpisodeDialogFragment fragment);
 
     void inject(VideoPlayerFragment fragment);
-
-    void inject(BeamPlayerFragment fragment);
 
     void inject(BeamDeviceSelectorDialogFragment fragment);
 
@@ -86,10 +74,10 @@ public interface InternalComponent extends BaseInternalComponent {
 
     StreamLoadingComponent.Builder streamLoadingComponentBuilder();
 
-    MediaListComponent.Builder mediaListComponentBuilder();
-
     SearchComponent.Builder searchComponentBuilder();
 
     TrailerPlayerComponent.Builder trailerComponentBuilder();
+
+    BeamPlayerActivityComponent.Builder beamPlayerActivityComponentBuilder();
 
 }

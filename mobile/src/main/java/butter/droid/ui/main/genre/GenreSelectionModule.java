@@ -15,31 +15,30 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.list;
+package butter.droid.ui.main.genre;
 
-import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.main.MainPresenter;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 
-@Module(includes = MediaListBindModule.class)
-public class MediaListModule {
+@Module
+public class GenreSelectionModule {
 
-    private final MediaListView view;
+    private final GenreSelectionView view;
 
-    public MediaListModule(MediaListView view) {
+    public GenreSelectionModule(GenreSelectionView view) {
         this.view = view;
     }
 
-    @Provides @FragmentScope MediaListView provideView() {
+    @Provides @FragmentScope GenreSelectionView provideView() {
         return view;
     }
 
-    @Provides @FragmentScope MediaListPresenter providePresenter(MediaListView view, ProviderManager providerManager,
-            OkHttpClient client, PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
-        return new MediaListPresenterImpl(view, providerManager, client, preferencesHandler, parentPresenter);
+    @Provides @FragmentScope GenreSelectionPresenter providePresenter(GenreSelectionView view,
+            ProviderManager providerManager, MainPresenter parentPresenter) {
+        return new GenreSelectionPresenterImpl(view, providerManager, parentPresenter);
     }
+
 }

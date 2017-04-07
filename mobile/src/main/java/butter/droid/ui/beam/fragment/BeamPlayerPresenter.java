@@ -15,14 +15,31 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid;
+package butter.droid.ui.beam.fragment;
 
-import butter.droid.base.BaseApplicationComponent;
-import butter.droid.base.BaseApplicationModule;
-import dagger.Component;
-import javax.inject.Singleton;
+import butter.droid.base.torrent.StreamInfo;
 
-@Singleton @Component(modules = BaseApplicationModule.class)
-public interface ApplicationComponent extends BaseApplicationComponent {
+public interface BeamPlayerPresenter {
 
+    void onCreate(StreamInfo streamInfo, long resumePosition);
+
+    void onResume();
+
+    void onPause();
+
+    void playPauseClicked();
+
+    void forwardClicked();
+
+    void backwardClicked();
+
+    void closePlayer();
+
+    void onUserVolumeChanged(int progress);
+
+    void seek(int progress);
+
+    void beamVideo();
+
+    void onViewCreated();
 }

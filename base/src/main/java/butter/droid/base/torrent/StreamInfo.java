@@ -17,6 +17,7 @@
 
 package butter.droid.base.torrent;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -25,20 +26,20 @@ import butter.droid.base.providers.media.models.Show;
 
 public class StreamInfo implements Parcelable {
 
-    private String mSubtitleLanguage;
-    private String mQuality;
-    private String mTorrentUrl;
-    private String mVideoLocation;
-    private String mTitle;
-    private String mImageUrl;
-    private String mHeaderImageUrl;
+    private String subtitleLanguage;
+    private String quality;
+    private String torrentUrl;
+    private String videoLocation;
+    private String title;
+    private String imageUrl;
+    private String headerImageUrl;
 
-    private String mShowTitle;
-    private String mShowEpisodeTitle;
+    private String showTitle;
+    private String showEpisodeTitle;
 
-    private Boolean mIsShow = false;
-    private Integer mColor = -1;
-    private Media mMedia;
+    private Boolean isShow = false;
+    private int color = Color.TRANSPARENT;
+    private Media media;
 
     public StreamInfo(String torrentUrl) {
         this(null, null, torrentUrl, null, null);
@@ -53,87 +54,87 @@ public class StreamInfo implements Parcelable {
     }
 
     public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality, String videoLocation) {
-        mTorrentUrl = torrentUrl;
-        mSubtitleLanguage = subtitleLanguage;
-        mQuality = quality;
-        mVideoLocation = videoLocation;
+        this.torrentUrl = torrentUrl;
+        this.subtitleLanguage = subtitleLanguage;
+        this.quality = quality;
+        this.videoLocation = videoLocation;
 
         if (media != null) {
             if (show != null) {
-                mTitle = show.title == null ? "" : show.title;
-                mTitle += media.title == null ? "" : ": " + media.title;
-                mImageUrl = show.image;
-                mHeaderImageUrl = show.headerImage;
-                mColor = show.color;
-                mShowTitle = show.title == null ? "" : show.title;
-                mShowEpisodeTitle = media.title == null ? "" : media.title;
+                title = show.title == null ? "" : show.title;
+                title += media.title == null ? "" : ": " + media.title;
+                imageUrl = show.image;
+                headerImageUrl = show.headerImage;
+                color = show.color;
+                showTitle = show.title == null ? "" : show.title;
+                showEpisodeTitle = media.title == null ? "" : media.title;
             } else {
-                mTitle = media.title == null ? "" : media.title;
-                mImageUrl = media.image;
-                mHeaderImageUrl = media.headerImage;
-                mColor = media.color;
+                title = media.title == null ? "" : media.title;
+                imageUrl = media.image;
+                headerImageUrl = media.headerImage;
+                color = media.color;
             }
 
-            mIsShow = show != null;
+            isShow = show != null;
 
-            mMedia = media;
+            this.media = media;
         }
     }
 
     public boolean isShow() {
-        return mIsShow;
+        return isShow;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public String getShowTitle() {
-        return mShowTitle;
+        return showTitle;
     }
 
     public String getShowEpisodeTitle() {
-        return mShowEpisodeTitle;
+        return showEpisodeTitle;
     }
 
     public String getImageUrl() {
-        return mImageUrl;
+        return imageUrl;
     }
 
     public String getHeaderImageUrl() {
-        return mHeaderImageUrl;
+        return headerImageUrl;
     }
 
     public String getSubtitleLanguage() {
-        return mSubtitleLanguage;
+        return subtitleLanguage;
     }
 
     public String getQuality() {
-        return mQuality;
+        return quality;
     }
 
     public String getTorrentUrl() {
-        return mTorrentUrl;
+        return torrentUrl;
     }
 
     public String getVideoLocation() {
-        return mVideoLocation;
+        return videoLocation;
     }
 
-    public Integer getPaletteColor() {
-        return mColor;
+    public int getPaletteColor() {
+        return color;
     }
 
     public Media getMedia() {
-        return mMedia;
+        return media;
     }
 
     public void setSubtitleLanguage(String subtitleLanguage) {
-        mSubtitleLanguage = subtitleLanguage;
+        this.subtitleLanguage = subtitleLanguage;
     }
 
     public void setVideoLocation(String videoLocation) {
-        mVideoLocation = videoLocation;
+        this.videoLocation = videoLocation;
     }
 
     @Override
@@ -143,33 +144,33 @@ public class StreamInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mSubtitleLanguage);
-        dest.writeString(this.mQuality);
-        dest.writeString(this.mTorrentUrl);
-        dest.writeString(this.mVideoLocation);
-        dest.writeString(this.mImageUrl);
-        dest.writeString(this.mHeaderImageUrl);
-        dest.writeString(this.mTitle);
-        dest.writeInt(this.mIsShow ? 1 : 0);
-        dest.writeInt(this.mColor);
-        dest.writeParcelable(this.mMedia, 0);
-        dest.writeString(this.mShowTitle);
-        dest.writeString(this.mShowEpisodeTitle);
+        dest.writeString(this.subtitleLanguage);
+        dest.writeString(this.quality);
+        dest.writeString(this.torrentUrl);
+        dest.writeString(this.videoLocation);
+        dest.writeString(this.imageUrl);
+        dest.writeString(this.headerImageUrl);
+        dest.writeString(this.title);
+        dest.writeInt(this.isShow ? 1 : 0);
+        dest.writeInt(this.color);
+        dest.writeParcelable(this.media, 0);
+        dest.writeString(this.showTitle);
+        dest.writeString(this.showEpisodeTitle);
     }
 
     private StreamInfo(Parcel in) {
-        this.mSubtitleLanguage = in.readString();
-        this.mQuality = in.readString();
-        this.mTorrentUrl = in.readString();
-        this.mVideoLocation = in.readString();
-        this.mImageUrl = in.readString();
-        this.mHeaderImageUrl = in.readString();
-        this.mTitle = in.readString();
-        this.mIsShow = in.readInt() == 1;
-        this.mColor = in.readInt();
-        this.mMedia = in.readParcelable(Media.class.getClassLoader());
-        this.mShowTitle = in.readString();
-        this.mShowEpisodeTitle = in.readString();
+        this.subtitleLanguage = in.readString();
+        this.quality = in.readString();
+        this.torrentUrl = in.readString();
+        this.videoLocation = in.readString();
+        this.imageUrl = in.readString();
+        this.headerImageUrl = in.readString();
+        this.title = in.readString();
+        this.isShow = in.readInt() == 1;
+        this.color = in.readInt();
+        this.media = in.readParcelable(Media.class.getClassLoader());
+        this.showTitle = in.readString();
+        this.showEpisodeTitle = in.readString();
     }
 
     public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {

@@ -15,31 +15,29 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.list;
+package butter.droid.ui.beam.fragment;
 
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.FragmentScope;
-import butter.droid.ui.main.MainPresenter;
+import butter.droid.ui.beam.BeamPlayerActivityPresenter;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 
-@Module(includes = MediaListBindModule.class)
-public class MediaListModule {
+@Module
+public class BeamPlayerModule {
 
-    private final MediaListView view;
+    private final BeamPlayerView view;
 
-    public MediaListModule(MediaListView view) {
+    public BeamPlayerModule(final BeamPlayerView view) {
         this.view = view;
     }
 
-    @Provides @FragmentScope MediaListView provideView() {
+    @Provides @FragmentScope BeamPlayerView provideView() {
         return view;
     }
 
-    @Provides @FragmentScope MediaListPresenter providePresenter(MediaListView view, ProviderManager providerManager,
-            OkHttpClient client, PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
-        return new MediaListPresenterImpl(view, providerManager, client, preferencesHandler, parentPresenter);
+    @Provides @FragmentScope BeamPlayerPresenter providePresenter(BeamPlayerView view, BeamManager beamManager,
+            BeamPlayerActivityPresenter parentPresenter) {
+        return new BeamPlayerPresenterImpl(view, beamManager, parentPresenter);
     }
 }

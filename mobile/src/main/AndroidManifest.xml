@@ -430,7 +430,7 @@
         </activity>
 
         <activity
-            android:name="butter.droid.activities.BeamPlayerActivity"
+            android:name="butter.droid.ui.beam.BeamPlayerActivity"
             android:theme="@style/Theme.Butter.RemoteControl"
             android:screenOrientation="sensorPortrait" />
 

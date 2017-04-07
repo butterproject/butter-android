@@ -17,6 +17,8 @@
 
 package butter.droid.base.manager.internal.beaming;
 
+import static butter.droid.base.ButterApplication.getAppContext;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,21 +28,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
-
+import butter.droid.base.ButterApplication;
+import butter.droid.base.R;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
 import javax.inject.Inject;
-
-import butter.droid.base.ButterApplication;
-import butter.droid.base.R;
-
-import static butter.droid.base.ButterApplication.getAppContext;
 
 public class BeamPlayerNotificationService extends Service {
 
@@ -70,32 +68,33 @@ public class BeamPlayerNotificationService extends Service {
         return null;
     }
 
-    private void handleIntent( Intent intent ) {
-        if( intent == null || intent.getAction() == null )
+    private void handleIntent(Intent intent) {
+        if (intent == null || intent.getAction() == null) {
             return;
+        }
 
         String action = intent.getAction();
 
-        if(mediaControl == null) {
-            Intent stopIntent = new Intent( getApplicationContext(), BeamPlayerNotificationService.class );
+        if (mediaControl == null) {
+            Intent stopIntent = new Intent(getApplicationContext(), BeamPlayerNotificationService.class);
             stopService(stopIntent);
             return;
         }
 
-        if( action.equalsIgnoreCase( ACTION_PLAY ) || action.equalsIgnoreCase( ACTION_PAUSE ) ) {
+        if (action.equalsIgnoreCase(ACTION_PLAY) || action.equalsIgnoreCase(ACTION_PAUSE)) {
             ResponseListener<Object> responseListener = new ResponseListener<Object>() {
                 @Override
                 public void onSuccess(Object object) {
-                    mediaControl.getPlayState(mPlayStateListener);
+                    mediaControl.getPlayState(playStateListener);
                 }
 
                 @Override
                 public void onError(ServiceCommandError error) {
-                    mediaControl.getPlayState(mPlayStateListener);
+                    mediaControl.getPlayState(playStateListener);
                 }
             };
 
-            if(isPlaying) {
+            if (isPlaying) {
                 isPlaying = false;
                 mediaControl.pause(responseListener);
                 buildNotification(generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY));
@@ -104,8 +103,8 @@ public class BeamPlayerNotificationService extends Service {
                 mediaControl.play(responseListener);
                 buildNotification(generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE));
             }
-            mediaControl.getPlayState(mPlayStateListener);
-        } else if( action.equalsIgnoreCase( ACTION_FAST_FORWARD ) ) {
+            mediaControl.getPlayState(playStateListener);
+        } else if (action.equalsIgnoreCase(ACTION_FAST_FORWARD)) {
             mediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long object) {
@@ -118,7 +117,7 @@ public class BeamPlayerNotificationService extends Service {
 
                 }
             });
-        } else if( action.equalsIgnoreCase( ACTION_REWIND ) ) {
+        } else if (action.equalsIgnoreCase(ACTION_REWIND)) {
             mediaControl.getPosition(new MediaControl.PositionListener() {
                 @Override
                 public void onSuccess(Long object) {
@@ -131,26 +130,27 @@ public class BeamPlayerNotificationService extends Service {
 
                 }
             });
-        } else if( action.equalsIgnoreCase( ACTION_STOP ) ) {
+        } else if (action.equalsIgnoreCase(ACTION_STOP)) {
             manager.stopVideo();
         }
     }
 
-    private NotificationCompat.Action generateAction( int icon, String title, String intentAction ) {
-        Intent intent = new Intent( getApplicationContext(), BeamPlayerNotificationService.class );
+    private NotificationCompat.Action generateAction(int icon, String title, String intentAction) {
+        Intent intent = new Intent(getApplicationContext(), BeamPlayerNotificationService.class);
         intent.setAction(intentAction);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
-        return new NotificationCompat.Action.Builder( icon, title, pendingIntent ).build();
+        return new NotificationCompat.Action.Builder(icon, title, pendingIntent).build();
     }
 
-    private void buildNotification( NotificationCompat.Action action ) {
-        if(manager.getStreamInfo() == null)
+    private void buildNotification(NotificationCompat.Action action) {
+        if (manager.getStreamInfo() == null) {
             return;
+        }
 
         NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
 
         Intent intent = new Intent(this, BeamPlayerNotificationService.class);
-        intent.setAction( ACTION_STOP );
+        intent.setAction(ACTION_STOP);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
         NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
@@ -167,15 +167,15 @@ public class BeamPlayerNotificationService extends Service {
         builder.addAction(generateAction(R.drawable.ic_av_rewind, "Rewind", ACTION_REWIND));
         builder.addAction(action);
         builder.addAction(generateAction(R.drawable.ic_av_forward, "Fast Foward", ACTION_FAST_FORWARD));
-        style.setShowActionsInCompactView(0,1,2);
+        style.setShowActionsInCompactView(0, 1, 2);
 
-        if(image != null) {
+        if (image != null) {
             builder.setLargeIcon(image);
         }
 
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify( NOTIFICATION_ID, notification );
+        notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
     public static void cancelNotification() {
@@ -186,7 +186,7 @@ public class BeamPlayerNotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(manager == null ) {
+        if (manager == null) {
             initMediaSessions();
         } else {
             handleIntent(intent);
@@ -196,24 +196,24 @@ public class BeamPlayerNotificationService extends Service {
     }
 
     private void initMediaSessions() {
-        if(manager.getConnectedDevice() != null) {
+        if (manager.getConnectedDevice() != null) {
 
             mediaControl = manager.getMediaControl();
-            mediaControl.subscribePlayState(mPlayStateListener);
+            mediaControl.subscribePlayState(playStateListener);
             manager.addDeviceListener(mDeviceListener);
 
-            mediaControl.getPlayState(mPlayStateListener);
+            mediaControl.getPlayState(playStateListener);
 
-            if(manager.getStreamInfo().getImageUrl() != null)
+            if (manager.getStreamInfo().getImageUrl() != null) {
                 Picasso.with(this).load(manager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         image = bitmap;
 
-                        if(!isPlaying) {
-                            buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );
+                        if (!isPlaying) {
+                            buildNotification(generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY));
                         } else {
-                            buildNotification( generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE ) );
+                            buildNotification(generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE));
                         }
                     }
 
@@ -225,6 +225,7 @@ public class BeamPlayerNotificationService extends Service {
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
                     }
                 });
+            }
 
         }
     }
@@ -237,19 +238,26 @@ public class BeamPlayerNotificationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(1);
     }
 
-    private MediaControl.PlayStateListener mPlayStateListener = new MediaControl.PlayStateListener() {
+    public static Intent getIntent(@NonNull Context context, boolean isPlaying) {
+        Intent intent = new Intent(context, BeamPlayerNotificationService.class);
+        intent.setAction(isPlaying ? BeamPlayerNotificationService.ACTION_PLAY : BeamPlayerNotificationService.ACTION_PAUSE);
+        return intent;
+    }
+
+    private MediaControl.PlayStateListener playStateListener = new MediaControl.PlayStateListener() {
         @Override
         public void onSuccess(MediaControl.PlayStateStatus state) {
             isPlaying = state.equals(MediaControl.PlayStateStatus.Playing);
 
-            if(state.equals(MediaControl.PlayStateStatus.Paused)) {
-                buildNotification( generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY ) );
+            if (state.equals(MediaControl.PlayStateStatus.Paused)) {
+                buildNotification(generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY));
             } else {
-                buildNotification( generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE ) );
+                buildNotification(generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE));
             }
         }
 
@@ -264,9 +272,10 @@ public class BeamPlayerNotificationService extends Service {
         public void onDeviceDisconnected(ConnectableDevice device) {
             super.onDeviceDisconnected(device);
 
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel( 1 );
-            Intent intent = new Intent( getApplicationContext(), BeamPlayerNotificationService.class );
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext()
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(1);
+            Intent intent = new Intent(getApplicationContext(), BeamPlayerNotificationService.class);
             stopService(intent);
         }
     };

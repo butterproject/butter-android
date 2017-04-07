@@ -15,23 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.about;
+package butter.droid.ui.beam;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import butter.droid.base.torrent.StreamInfo;
 
-@Subcomponent(
-        modules = TvAboutModule.class
-)
-@FragmentScope
-public interface TvAboutComponent {
+public interface BeamPlayerActivityView {
 
-    void inject(TvAboutFragment fragment);
+    void closePlayer();
 
-    @Subcomponent.Builder interface Builder {
-        Builder aboutModule(TvAboutModule module);
-
-        TvAboutComponent build();
-    }
-
+    void fallbackToVideoPlayer(final StreamInfo streamInfo, final int resumePosition);
 }

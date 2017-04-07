@@ -36,7 +36,7 @@ import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
-import butter.droid.tv.ui.about.TvAboutComponent;
+import butter.droid.tv.ui.about.TVAboutComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.search.TVSearchActivity;
@@ -96,7 +96,7 @@ public interface InternalComponent extends BaseInternalComponent {
 
     TVTermsComponent.Builder termsComponentBuilder();
 
-    TvAboutComponent.Builder aboutComponentBuilder();
+    TVAboutComponent.Builder aboutComponentBuilder();
 
     TVStreamLoadingComponent.Builder streamLoadingComponentBuilder();
 

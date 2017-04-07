@@ -15,14 +15,34 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid;
+package butter.droid.ui.main.genre.list.model;
 
-import butter.droid.base.BaseApplicationComponent;
-import butter.droid.base.BaseApplicationModule;
-import dagger.Component;
-import javax.inject.Singleton;
+import android.support.annotation.StringRes;
 
-@Singleton @Component(modules = BaseApplicationModule.class)
-public interface ApplicationComponent extends BaseApplicationComponent {
+public class UiGenre {
 
+    private final String key;
+    @StringRes private final int label;
+    private boolean selected;
+
+    public UiGenre(String key, int label) {
+        this.key = key;
+        this.label = label;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public int getLabel() {
+        return label;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

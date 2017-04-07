@@ -22,9 +22,7 @@ import butter.droid.base.BaseApplicationModule;
 import dagger.Component;
 import javax.inject.Singleton;
 
-@Singleton @Component(
-        modules = BaseApplicationModule.class
-)
+@Singleton @Component(modules = BaseApplicationModule.class)
 public interface ApplicationComponent extends BaseApplicationComponent {
 
 }

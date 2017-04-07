@@ -15,30 +15,27 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main;
+package butter.droid.ui.beam;
 
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.main.genre.GenreSelectionComponent;
-import butter.droid.ui.main.navigation.NavigationDrawerComponent;
-import butter.droid.ui.media.list.MediaListComponent;
-import dagger.Subcomponent;
+import dagger.Module;
+import dagger.Provides;
 
-@Subcomponent(
-        modules = MainModule.class
-)
-@ActivityScope
-public interface MainComponent {
+@Module
+public class BeamPlayerActivityModule {
 
-    void inject(MainActivity activity);
+    private final BeamPlayerActivityView view;
 
-    NavigationDrawerComponent.Builder navigtionDrawerBuilder();
-    GenreSelectionComponent.Builder genreSelectionBuilder();
-    MediaListComponent.Builder mediaListComponentBuilder();
-
-    @Subcomponent.Builder interface Builder {
-        Builder mainModule(MainModule module);
-
-        MainComponent build();
+    public BeamPlayerActivityModule(final BeamPlayerActivityView view) {
+        this.view = view;
     }
 
+    @Provides @ActivityScope BeamPlayerActivityView provideView() {
+        return view;
+    }
+
+    @Provides @ActivityScope BeamPlayerActivityPresenter providePresenter(BeamPlayerActivityView view, BeamManager beamManager) {
+        return new BeamPlayerActivityPresenterImpl(view, beamManager);
+    }
 }

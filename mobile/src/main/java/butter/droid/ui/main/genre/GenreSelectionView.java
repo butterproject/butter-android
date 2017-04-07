@@ -15,14 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid;
+package butter.droid.ui.main.genre;
 
-import butter.droid.base.BaseApplicationComponent;
-import butter.droid.base.BaseApplicationModule;
-import dagger.Component;
-import javax.inject.Singleton;
+import java.util.List;
 
-@Singleton @Component(modules = BaseApplicationModule.class)
-public interface ApplicationComponent extends BaseApplicationComponent {
+import butter.droid.ui.main.genre.list.model.UiGenre;
 
+public interface GenreSelectionView {
+    void displayGenres(List<UiGenre> uiGenres);
+
+    void notifyItemUpdated(int position);
 }
