@@ -38,24 +38,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.connectsdk.device.ConnectableDevice;
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
-
-import org.videolan.libvlc.IVLCVout;
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.MediaPlayer;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
@@ -76,10 +58,23 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FragmentUtil;
 import butter.droid.base.utils.LocaleUtils;
+import com.connectsdk.device.ConnectableDevice;
+import com.github.sv244.torrentstream.StreamStatus;
+import com.github.sv244.torrentstream.Torrent;
+import com.github.sv244.torrentstream.listeners.TorrentListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
+import javax.inject.Inject;
+import org.videolan.libvlc.IVLCVout;
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.MediaPlayer;
 import timber.log.Timber;
 
-public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVout.Callback, TorrentListener,
-        MediaPlayer.EventListener, LibVLC.HardwareAccelerationError, SubtitleDownloader.ISubtitleDownloaderListener {
+public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVout.Callback,
+        TorrentListener, MediaPlayer.EventListener, SubtitleDownloader.ISubtitleDownloaderListener {
 
     public static final String RESUME_POSITION = "resume_position";
     public static final int SUBTITLE_MINIMUM_SIZE = 10;
@@ -186,9 +181,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
         }
 
         mMedia = streamInfo.getMedia();
-
-        libVLC.setOnHardwareAccelerationError(this);
-
+        
         mMediaPlayer = new MediaPlayer(libVLC);
         mMediaPlayer.setEventListener(this);
 
@@ -657,8 +650,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
      * @param sarDen Surface aspect ratio denominator
      */
     @Override
-    public void onNewLayout(
-            IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (width * height <= 0) {
             return;
         }
@@ -732,7 +724,7 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
     }
 
     @Override
-    public void eventHardwareAccelerationError() {
+    public void onHardwareAccelerationError(IVLCVout out) {
         handleHardwareAccelerationError();
     }
 
