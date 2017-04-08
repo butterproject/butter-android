@@ -20,7 +20,7 @@ import butter.droid.base.content.preferences.PrefItem.SubtitleGenerator;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
-import butter.droid.base.manager.internal.vlc.VLCOptions;
+import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
@@ -411,14 +411,14 @@ public class PreferencesHandler {
                             public String get(PrefItem item) {
                                 int value = ((Integer) item.getValue());
                                 switch (value) {
-                                    case VLCOptions.HW_ACCELERATION_DECODING:
+                                    case VLCMediaOptions.HW_ACCELERATION_DECODING:
                                         return resources.getString(R.string.hw_decoding);
-                                    case VLCOptions.HW_ACCELERATION_DISABLED:
+                                    case VLCMediaOptions.HW_ACCELERATION_DISABLED:
                                         return resources.getString(R.string.disabled);
-                                    case VLCOptions.HW_ACCELERATION_FULL:
+                                    case VLCMediaOptions.HW_ACCELERATION_FULL:
                                         return resources.getString(R.string.hw_full);
                                     default:
-                                    case VLCOptions.HW_ACCELERATION_AUTOMATIC:
+                                    case VLCMediaOptions.HW_ACCELERATION_AUTOMATIC:
                                         return resources.getString(R.string.hw_automatic);
                                 }
                             }
@@ -610,7 +610,7 @@ public class PreferencesHandler {
     }
 
     public int getHwAcceleration() {
-        return prefManager.get(Prefs.HW_ACCELERATION, VLCOptions.HW_ACCELERATION_AUTOMATIC);
+        return prefManager.get(Prefs.HW_ACCELERATION, VLCMediaOptions.HW_ACCELERATION_AUTOMATIC);
     }
 
     public boolean automaticUpdates() {

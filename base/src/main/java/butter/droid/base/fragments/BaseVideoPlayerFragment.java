@@ -45,10 +45,10 @@ import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.manager.internal.vlc.VLCOptions;
+import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.subs.Caption;
@@ -286,11 +286,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements IVLCVo
             }
         }
 
-        int flags = mDisabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
-        flags = flags | VLCOptions.MEDIA_VIDEO;
-
-        org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(libVLC, Uri.parse(videoLocation));
-        VLCOptions.setMediaOptions(media, preferencesHandler, flags);
+        final org.videolan.libvlc.Media media = VLCMediaOptions.builder(libVLC, Uri.parse(videoLocation))
+                .withHardwareAcceleration(preferencesHandler.getHwAcceleration())
+                .build();
 
         mMediaPlayer.setMedia(media);
 
