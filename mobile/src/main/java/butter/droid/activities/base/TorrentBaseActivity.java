@@ -30,12 +30,9 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
 import butterknife.ButterKnife;
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public abstract class TorrentBaseActivity extends AppCompatActivity implements  TorrentListener, TorrentActivity {
+public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentActivity {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -101,46 +98,15 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements  
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             torrentStream = ((TorrentService.ServiceBinder) service).getService();
-            torrentStream.addListener(TorrentBaseActivity.this);
             torrentStream.setCurrentActivity(TorrentBaseActivity.this);
             onTorrentServiceConnected(torrentStream);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            torrentStream.removeListener(TorrentBaseActivity.this);
             onTorrentServiceDisconnected(torrentStream);
             torrentStream = null;
         }
     };
 
-    @Override
-    public void onStreamPrepared(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamStarted(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamReady(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamError(Torrent torrent, Exception e) {
-
-    }
-
-    @Override
-    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-
-    }
-
-    @Override
-    public void onStreamStopped() {
-
-    }
 }

@@ -21,8 +21,6 @@ import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
 
 public interface VideoPlayerFPresenter extends BaseVideoPlayerPresenter {
 
-    void onViewCreated();
-
     void onProgressChanged(int progress);
 
     void onStop();

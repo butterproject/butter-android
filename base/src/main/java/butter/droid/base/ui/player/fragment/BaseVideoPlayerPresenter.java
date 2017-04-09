@@ -31,6 +31,8 @@ public interface BaseVideoPlayerPresenter {
 
     void onPause();
 
+    void onViewCreated();
+
     void onDestroy();
 
     void play();

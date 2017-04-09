@@ -21,6 +21,7 @@ import static android.R.attr.value;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import butter.droid.base.R;
@@ -137,8 +138,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
             loadOrDownloadSubtitle();
         }
 
-        updateSubtitleSize(preferencesHandler.getSubtitleSize());
-
     }
 
     @Override public void onResume() {
@@ -148,6 +147,10 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
         prepareVlcVout();
         loadMedia();
+    }
+
+    @CallSuper @Override public void onViewCreated() {
+        updateSubtitleSize(preferencesHandler.getSubtitleSize());
     }
 
     @Override public void onPause() {
