@@ -18,6 +18,7 @@
 package butter.droid.base.providers;
 
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
@@ -35,7 +36,7 @@ public class ProviderModule {
     }
 
     @Provides @ProviderScope
-    public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson, SubsProvider subsProvider) {
+    public MediaProvider provideMediaProvier(OkHttpClient client, Gson gson, SubsProvider subsProvider) {
         return new VodoProvider(client, gson, subsProvider);
     }
 

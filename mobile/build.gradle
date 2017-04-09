@@ -78,7 +78,9 @@ dependencies {
     compile 'com.github.johnkil.android-robototextview:robototextview:2.5.0'
     compile 'com.sothree.slidinguppanel:library:3.3.0'
 
-    compile project(':base')
+    // http://stackoverflow.com/a/34430998
+    releaseCompile project(path: ':base', configuration: 'release')
+    debugCompile project(path: ':base', configuration: 'debug')
 
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"

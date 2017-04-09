@@ -24,7 +24,7 @@ import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.VLCOptions;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MediaProvider;
 import dagger.Module;
 import dagger.Provides;
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ import timber.log.Timber;
 @Module
 public class InternalManagerModule {
 
-    @Provides @Internal ProviderManager provideProviderManager(VodoProvider moviesProvider) {
-        return new ProviderManager(moviesProvider, null);
+    @Provides @Internal ProviderManager provideProviderManager(MediaProvider mediaProvider) {
+        return new ProviderManager(mediaProvider, null);
     }
 
     @Provides @Internal @Nullable LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {

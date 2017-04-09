@@ -24,7 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.torrent.TorrentService;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -40,7 +40,7 @@ public interface BaseInternalComponent {
 
     Picasso picasso();
 
-    VodoProvider vodoProvider();
+    MediaProvider mediaProvider();
 
     OkHttpClient okHttpClient();
 

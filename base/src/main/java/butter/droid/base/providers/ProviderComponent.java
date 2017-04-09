@@ -42,7 +42,7 @@ public interface ProviderComponent {
 
     OkHttpClient okHttpClient();
 
-    VodoProvider vodoProvider();
+    MediaProvider mediaProvider();
 
     Gson gson();
 

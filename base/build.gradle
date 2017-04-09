@@ -12,13 +12,17 @@ android {
     def releaseType = (System.getenv('RELEASE_TYPE') == null ? 'NONE' : System.getenv('RELEASE_TYPE'))
     def updateUrls = (System.getenv('UPDATE_URLS') == null ? '"http://localhost/android-update.json"' : System.getenv('UPDATE_URLS'))
 
+    publishNonDefault true
+
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
+
         buildConfigField 'Integer', 'BUILD_NUMBER', '' + buildNumber + ''
         buildConfigField 'String', 'GIT_BRANCH', '\"' + gitBranch + '\"'
         buildConfigField 'String', 'RELEASE_TYPE', '\"' + releaseType + '\"'
         buildConfigField 'String[]', 'UPDATE_URLS', '{' + updateUrls + '}'
+
         versionCode buildNumber
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
