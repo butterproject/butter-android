@@ -15,7 +15,24 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.tv.ui.player;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -35,43 +52,22 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
-import butter.droid.tv.fragments.TVVideoPlayerFragment;
+import butter.droid.tv.ui.player.overlay.TVPlaybackOverlayFragment;
+import butter.droid.tv.ui.player.video.TVVideoPlayerFragment;
 
-public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback {
+public class TVVideoPlayerActivity extends TVBaseActivity {
+
+    public final static String EXTRA_STREAM_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.streamInfo";
+    public final static String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
 
     @Inject PrefManager prefManager;
 
     private TVVideoPlayerFragment mPlayerFragment;
     private TVPlaybackOverlayFragment mPlaybackOverlayFragment;
 
-    public final static String EXTRA_STREAM_INFO = "stream_info";
-    public final static String EXTRA_SHOW_INFO = "episode_info";
-
     private StreamInfo mStreamInfo;
     private boolean mIsBackPressed = false;
     private boolean mCurrentStreamStopped = false;
-
-    public static Intent startActivity(Context context, StreamInfo info) {
-        return startActivity(context, info, 0);
-    }
-
-    public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {
-        Intent i = new Intent(context, TVVideoPlayerActivity.class);
-        i.putExtra(EXTRA_STREAM_INFO, info);
-        // todo: resume position
-        context.startActivity(i);
-        return i;
-    }
-
-    public static Intent startActivity(Context context, StreamInfo info, Show show) {
-        Intent i = new Intent(context, TVVideoPlayerActivity.class);
-        i.putExtra(EXTRA_STREAM_INFO, info);
-        i.putExtra(EXTRA_SHOW_INFO, show);
-        // todo: resume position
-        context.startActivity(i);
-        return i;
-    }
 
     @Override
     public void onBackPressed() {
@@ -138,20 +134,9 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
             case android.R.id.home:
                 finish();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public StreamInfo getInfo() {
-        if (mStreamInfo == null)
-            createStreamInfo();
-        return mStreamInfo;
-    }
-
-    @Override
-    public TorrentService getService() {
-        return mService;
     }
 
     @Override
@@ -162,12 +147,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
     @Override
     public void onTorrentServiceDisconnected(final TorrentService service) {
         mService.removeListener(mPlayerFragment);
-    }
-
-    @Override
-    public Long getResumePosition() {
-        //todo: Implement ResumePosition on Android TV
-        return 0L;
     }
 
     private void createStreamInfo() {
@@ -191,5 +170,26 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
         finish();
 
         TVStreamLoadingActivity.startActivity(this, info, show);
+    }
+
+    public static Intent startActivity(Context context, StreamInfo info) {
+        return startActivity(context, info, 0);
+    }
+
+    public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {
+        Intent i = new Intent(context, TVVideoPlayerActivity.class);
+        i.putExtra(EXTRA_STREAM_INFO, info);
+        // todo: resume position
+        context.startActivity(i);
+        return i;
+    }
+
+    public static Intent startActivity(Context context, StreamInfo info, Show show) {
+        Intent i = new Intent(context, TVVideoPlayerActivity.class);
+        i.putExtra(EXTRA_STREAM_INFO, info);
+        i.putExtra(EXTRA_SHOW_INFO, show);
+        // todo: resume position
+        context.startActivity(i);
+        return i;
     }
 }

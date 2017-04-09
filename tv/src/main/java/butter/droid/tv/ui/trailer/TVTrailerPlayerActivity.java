@@ -32,8 +32,8 @@ import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
-import butter.droid.tv.fragments.TVVideoPlayerFragment;
+import butter.droid.tv.ui.player.overlay.TVPlaybackOverlayFragment;
+import butter.droid.tv.ui.player.video.TVVideoPlayerFragment;
 import javax.inject.Inject;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback, TVTrailerPlayerView {

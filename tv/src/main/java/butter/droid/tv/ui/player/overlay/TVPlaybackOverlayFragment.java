@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
-package butter.droid.tv.fragments;
+
+package butter.droid.tv.ui.player.overlay;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -50,6 +51,7 @@ import android.util.Log;
 import android.view.InputEvent;
 import android.view.KeyEvent;
 
+import butter.droid.tv.ui.player.video.TVVideoPlayerFragment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,7 +70,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
-import butter.droid.tv.activities.TVVideoPlayerActivity;
+import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.events.ConfigureSubtitleEvent;
 import butter.droid.tv.events.PausePlaybackEvent;
 import butter.droid.tv.events.PlaybackProgressChangedEvent;

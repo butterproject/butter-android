@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.player.video;
 
 import android.app.Activity;
 import android.app.AlertDialog;

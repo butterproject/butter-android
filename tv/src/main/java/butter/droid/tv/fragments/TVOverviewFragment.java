@@ -56,7 +56,7 @@ import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
-import butter.droid.tv.activities.TVVideoPlayerActivity;
+import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MorePresenter;
 import butter.droid.tv.ui.search.TVSearchActivity;
