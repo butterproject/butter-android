@@ -19,8 +19,6 @@ package butter.droid.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -39,39 +37,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.activities.SearchActivity;
 import butter.droid.activities.VideoPlayerActivity;
-import butter.droid.base.Constants;
-import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment;
 import butter.droid.ui.main.pager.MediaPagerAdapter;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsActivity;
-import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butterknife.BindView;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -144,10 +134,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.activity_overview, menu);
-
-        MenuItem playerTestMenuItem = menu.findItem(R.id.action_playertests);
-        playerTestMenuItem.setVisible(Constants.DEBUG_ENABLED);
-
         return true;
     }
 
@@ -174,9 +160,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
                 case android.R.id.home:
                 /* Override default {@link pct.droid.activities.BaseActivity } behaviour */
                     return false;
-                case R.id.action_playertests:
-                    presenter.playerTestClicked();
-                    return true;
                 case R.id.action_search:
                     //start the search activity
                     startActivity(SearchActivity.getIntent(this));
@@ -207,46 +190,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
     @Override public void showTermsScreen() {
         startActivityForResult(TermsActivity.getIntent(this), REQUEST_CODE_TERMS);
-    }
-
-    @Override public void showYoutubeVideo(Movie movie, String url) {
-        Intent i = TrailerPlayerActivity.getIntent(this, movie, url);
-        startActivity(i);
-    }
-
-    @Override public void showPlayerTestDialog(String[] fileTypes) {
-        new AlertDialog.Builder(this)
-                .setTitle("Player Tests")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setSingleChoiceItems(fileTypes, -1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int index) {
-                        dialogInterface.dismiss();
-                        presenter.onPlayerTestItemClicked(index);
-                    }
-                })
-                .show();
-    }
-
-    @Override public void showPlayerTestUrlDialog() {
-        final EditText dialogInput = new EditText(MainActivity.this);
-        dialogInput.setText(PlayerTestConstants.DEFAULT_CUSTOM_FILE);
-
-        new AlertDialog.Builder(MainActivity.this)
-                .setView(dialogInput)
-                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String location = dialogInput.getText().toString();
-                        presenter.openPlayerTestCustomUrl(location);
-                    }
-                })
-                .show();
     }
 
     @Override public void showVideoPlayer(@NonNull StreamInfo info) {
@@ -350,7 +293,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     }
 
     private void setupTabs() {
-
         tabs.setupWithViewPager(viewPager);
         tabs.setTabGravity(TabLayout.GRAVITY_CENTER);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -358,7 +300,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
     }
 
 }
