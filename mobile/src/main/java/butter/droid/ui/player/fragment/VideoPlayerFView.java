@@ -18,6 +18,8 @@
 package butter.droid.ui.player.fragment;
 
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
 
 public interface VideoPlayerFView extends BaseVideoPlayerView {
@@ -27,4 +29,16 @@ public interface VideoPlayerFView extends BaseVideoPlayerView {
     void displayTitle(String title);
 
     void setupSubtitles(@ColorInt int color, int size, @ColorInt int strokeColor, int strokeWidth);
+
+    void toggleOverlay();
+
+    void hideOverlay();
+
+    void showVolumeMessage(int volume);
+
+    void onHardwareAccelerationError();
+
+    void startBeamPlayerActivity(@NonNull StreamInfo streamInfo, long currentTime);
+
+    void updateSubtitleSize(int size);
 }

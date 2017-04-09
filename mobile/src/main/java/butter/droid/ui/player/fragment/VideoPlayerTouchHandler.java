@@ -18,6 +18,8 @@
 package butter.droid.ui.player.fragment;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -25,16 +27,18 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import butter.droid.base.ui.FragmentScope;
-import butter.droid.manager.brightness.BrightnessManager;
+import butter.droid.manager.internal.brightness.BrightnessManager;
 import javax.inject.Inject;
 
 @FragmentScope
 public class VideoPlayerTouchHandler implements OnTouchListener {
 
-    private final Activity activity;
+    private static final int FADE_OUT_OVERLAY = 5000;
+
     private final BrightnessManager brightnessManager;
     private final DisplayMetrics displayMetrics;
     private final int touchSlop;
+    private final Handler displayHandler;
 
     private int surfaceYDisplayRange;
     private float touchX;
@@ -47,7 +51,6 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
 
     @Inject
     public VideoPlayerTouchHandler(final Activity activity, final BrightnessManager brightnessManager) {
-        this.activity = activity;
         this.brightnessManager = brightnessManager;
 
         ViewConfiguration configuration = ViewConfiguration.get(activity);
@@ -55,6 +58,13 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
 
         displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        displayHandler = new Handler(Looper.getMainLooper());
+    }
+
+    public void init(@Nullable final OnVideoTouchListener listener) {
+        setListener(listener);
+        delayOverlayHide();
     }
 
     public void setListener(@Nullable final OnVideoTouchListener listener) {
@@ -71,6 +81,7 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 touchY = event.getRawY();
                 touchX = event.getRawX();
+                clearOverlayHide();
                 break;
             case MotionEvent.ACTION_MOVE:
                 float xDiff = event.getRawX() - touchX;
@@ -90,14 +101,16 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
                 }
 
                 if (swipeY) {
-                    touchY = event.getRawY();
-
                     float halfPoint = displayMetrics.widthPixels / 2f;
                     // right side of screen is for brightens if supported
                     if (touchX < halfPoint && brightnessManager.canChangeBrightness()) {
-                        doBrightnessTouch(yDiff);
+                        if (doBrightnessTouch(yDiff)) {
+                            touchY = event.getRawY();
+                        }
                     } else { // left side of screen is for volume
-                        doVolumeTouch(yDiff);
+                        if (doVolumeTouch(yDiff)) {
+                            touchY = event.getRawY();
+                        }
                     }
                 }
 
@@ -111,17 +124,33 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
             case MotionEvent.ACTION_CANCEL:
                 swipeX = false;
                 swipeY = false;
+                delayOverlayHide();
                 break;
         }
         return true;
     }
 
-    private void doBrightnessTouch(final float diff ) {
+    public void delayOverlayHide() {
+        clearOverlayHide();
+        setOverlayHide();
+    }
+
+    private void clearOverlayHide() {
+        displayHandler.removeCallbacks(overlayHideRunnable);
+    }
+
+    private void setOverlayHide() {
+        displayHandler.postDelayed(overlayHideRunnable, FADE_OUT_OVERLAY);
+    }
+
+    private boolean doBrightnessTouch(final float diff ) {
         // Set delta : 2f is arbitrary for now, it possibly will change in the future
         float delta = -diff / surfaceYDisplayRange;
 
         if (listener != null) {
-            listener.onBrightnessChange(delta);
+            return listener.onBrightnessChange(delta);
+        } else {
+            return true;
         }
     }
 
@@ -136,11 +165,13 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
 
     }
 
-    private void doVolumeTouch(float diff) {
+    private boolean doVolumeTouch(float diff) {
         float deltaFraction = -(diff / surfaceYDisplayRange);
 
         if (listener != null) {
-            listener.onVolumeChange(deltaFraction);
+            return listener.onVolumeChange(deltaFraction);
+        } else {
+            return true;
         }
 
     }
@@ -155,13 +186,24 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
 
         void onSeekChange(int jump);
 
-        void onBrightnessChange(float delta);
+        boolean onBrightnessChange(float delta);
 
-        void onVolumeChange(float delta);
+        boolean onVolumeChange(float delta);
 
         void onToggleOverlay();
 
+        void hideOverlay();
 
     }
+
+    private Runnable overlayHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (listener != null) {
+                listener.hideOverlay();
+            }
+        }
+    };
+
 
 }

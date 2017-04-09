@@ -26,7 +26,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 
 @Module
-public class InternalDataModule {
+public class InternalBaseDataModule {
 
     @Provides @Internal public OkHttp3Downloader provideOkHttpDownloader(OkHttpClient client) {
         return new OkHttp3Downloader(client);

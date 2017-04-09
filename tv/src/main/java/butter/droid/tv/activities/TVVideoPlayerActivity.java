@@ -155,12 +155,12 @@ public class TVVideoPlayerActivity extends TVBaseActivity implements TVVideoPlay
     }
 
     @Override
-    public void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected(final TorrentService service) {
         mService.addListener(mPlayerFragment);
     }
 
     @Override
-    public void onTorrentServiceDisconnected() {
+    public void onTorrentServiceDisconnected(final TorrentService service) {
         mService.removeListener(mPlayerFragment);
     }
 

@@ -24,4 +24,8 @@ public interface VideoPlayerFPresenter extends BaseVideoPlayerPresenter {
     void onViewCreated();
 
     void onProgressChanged(int progress);
+
+    void onStop();
+
+    void requestDisableHardwareAcceleration();
 }

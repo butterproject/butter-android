@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.manager.brightness;
+package butter.droid.manager.internal.brightness;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -28,6 +28,7 @@ import android.view.WindowManager.LayoutParams;
 import butter.droid.base.utils.VersionUtils;
 import dagger.Reusable;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 @Reusable
 public class BrightnessManager {
@@ -43,8 +44,7 @@ public class BrightnessManager {
         this.contentResolver = contentResolver;
     }
 
-    public void setBrightnes(float deltaFraction) {
-
+    public void increaseBrightness(float deltaFraction) {
         if (!inited) {
             initBrightnessTouch();
         }
@@ -91,6 +91,7 @@ public class BrightnessManager {
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.screenBrightness = value;
         window.setAttributes(lp);
+        Timber.d("Brightness %f", value);
     }
 
     private boolean canWriteSettings() {

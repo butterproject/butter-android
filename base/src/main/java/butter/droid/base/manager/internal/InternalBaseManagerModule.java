@@ -32,7 +32,7 @@ import org.videolan.libvlc.util.VLCUtil;
 import timber.log.Timber;
 
 @Module
-public class InternalManagerModule {
+public class InternalBaseManagerModule {
 
     @Provides @Internal ProviderManager provideProviderManager(VodoProvider moviesProvider) {
         return new ProviderManager(moviesProvider, null);

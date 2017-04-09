@@ -17,10 +17,10 @@
 
 package butter.droid.tv;
 
-import butter.droid.base.BaseInternalModule;
+import butter.droid.base.InternalBaseModule;
 import dagger.Module;
 
-@Module(includes = BaseInternalModule.class)
+@Module(includes = InternalBaseModule.class)
 public class InternalModule {
 
 }

@@ -69,7 +69,9 @@ public interface BaseVideoPlayerPresenter {
 
     void onStopSeeking();
 
-    void surfaceCreated();
+    void seekForwardClick();
+
+    void seekBackwardClick();
 
     // region IntDef
 

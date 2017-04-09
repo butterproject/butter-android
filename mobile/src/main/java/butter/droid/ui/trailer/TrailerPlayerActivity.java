@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
@@ -33,7 +32,7 @@ import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.player.fragment.VideoPlayerFragment;
 import javax.inject.Inject;
 
-public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
+public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView {
 
     private final static String EXTRA_LOCATION = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_LOCATION";
     private final static String EXTRA_DATA = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_DATA";
@@ -85,11 +84,6 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     public StreamInfo getInfo() {
         return presenter.getStreamInfo();
-    }
-
-    @Override
-    public TorrentService getService() {
-        return null;
     }
 
     @Override

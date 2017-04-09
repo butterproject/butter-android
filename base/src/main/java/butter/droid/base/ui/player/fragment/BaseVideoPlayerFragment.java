@@ -25,7 +25,6 @@ import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURF
 import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
 import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
@@ -45,7 +44,6 @@ import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.Surface;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
@@ -74,16 +72,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
     private int mSarNum;
     private int mSarDen;
 
-    protected Callback callback;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Callback) {
-            callback = (Callback) context;
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,10 +87,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (callback.getService() != null) {
-            callback.getService().addListener(this);
-        }
 
         setProgressVisible(true);
     }
@@ -126,10 +110,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
         super.onDestroy();
 
         presenter.onDestroy();
-
-        if (callback.getService() != null) {
-            callback.getService().removeListener(this);
-        }
     }
 
     @Override public void attachVlcViews(@NonNull final IVLCVout vlcVout) {
@@ -291,11 +271,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
     }
 
     @Override
-    public void onSurfacesCreated(IVLCVout ivlcVout) {
-        presenter.surfaceCreated();
-    }
-
-    @Override
     public void onSurfacesDestroyed(IVLCVout ivlcVout) {
     }
 
@@ -324,10 +299,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
         presenter.streamProgressUpdated(streamStatus.progress);
     }
 
-    public interface Callback {
-        TorrentService getService();
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -337,8 +308,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        switch (item.getItemId()) {
+        int id = item.getItemId();
+        switch (id) {
             case R2.id.action_reload:
                 presenter.reloadMedia();
                 return true;

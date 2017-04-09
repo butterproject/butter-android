@@ -30,6 +30,7 @@ import android.support.v4.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
 
+import butter.droid.base.torrent.TorrentService;
 import javax.inject.Inject;
 
 import butter.droid.MobileButterApplication;
@@ -72,16 +73,16 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
     }
 
     @Override
-    public void onTorrentServiceConnected() {
-        super.onTorrentServiceConnected();
+    public void onTorrentServiceConnected(final TorrentService service) {
+        super.onTorrentServiceConnected(service);
         if (null != fragment) {
-            fragment.onTorrentServiceConnected(getTorrentService());
+            fragment.onTorrentServiceConnected(service);
         }
     }
 
     @Override
-    public void onTorrentServiceDisconnected() {
-        super.onTorrentServiceDisconnected();
+    public void onTorrentServiceDisconnected(final TorrentService service) {
+        super.onTorrentServiceDisconnected(service);
         if (null != fragment) {
             fragment.onTorrentServiceDisconnected();
         }

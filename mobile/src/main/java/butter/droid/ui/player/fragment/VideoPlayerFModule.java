@@ -19,7 +19,6 @@ package butter.droid.ui.player.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.AudioManager;
 import android.support.annotation.Nullable;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
@@ -27,6 +26,8 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.manager.internal.audio.AudioManager;
+import butter.droid.manager.internal.brightness.BrightnessManager;
 import dagger.Module;
 import dagger.Provides;
 import org.videolan.libvlc.LibVLC;
@@ -48,9 +49,9 @@ public class VideoPlayerFModule {
 
     @Provides @FragmentScope VideoPlayerFPresenter providePresenter(VideoPlayerFView view, Context context, PrefManager prefManager,
             @Nullable LibVLC libVLC, PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager,
-            BeamManager beamManager, AudioManager audioManager) {
+            BeamManager beamManager, AudioManager audioManager, BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler) {
         return new VideoPlayerFPresenterImpl(view, context, prefManager, libVLC, preferencesHandler, providerManager, playerManager,
-                beamManager, audioManager);
+                beamManager, brightnessManager, audioManager, touchHandler);
     }
 
     @Provides @FragmentScope Activity provideActivity() {

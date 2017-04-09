@@ -15,15 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.ui;
+package butter.droid.manager.internal;
 
-import butter.droid.base.torrent.TorrentService;
+import dagger.Module;
 
-public interface TorrentActivity {
+@Module
+public class InternalDataModule {
 
-	TorrentService getTorrentService();
-
-	void onTorrentServiceConnected(final TorrentService service);
-
-	void onTorrentServiceDisconnected(final TorrentService service);
 }

@@ -369,6 +369,15 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         seeking = false;
     }
 
+    @Override public void seekForwardClick() {
+        seek(10000);
+    }
+
+    @Override public void seekBackwardClick() {
+        seek(-10000);
+    }
+
+
     protected abstract void onHardwareAccelerationError();
 
     /**
@@ -468,14 +477,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         return seeking;
     }
 
-    protected void seekForwardClick() {
-        seek(10000);
-    }
-
-    protected void seekBackwardClick() {
-        seek(-10000);
-    }
-
     /**
      * Is a video currently playing with VLC
      *
@@ -542,7 +543,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     private void prepareVlcVout() {
-        // TODO: 4/2/17 Check if has to be done in on resume
         final IVLCVout vlcVout = mediaPlayer.getVLCVout();
 
         if (!vlcVout.areViewsAttached()) {

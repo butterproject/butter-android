@@ -31,7 +31,7 @@ import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import javax.inject.Inject;
 
-public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlayerView, VideoPlayerFragment.Callback {
+public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlayerView {
 
     private final static String EXTRA_STREAM_INFO = "butter.droid.ui.player.VideoPlayerActivity.streamInfo";
     private final static String EXTRA_RESUME_POSITION = "butter.droid.ui.player.VideoPlayerActivity.resumePosition";
@@ -73,17 +73,10 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     @Override
     protected void onResume() {
         super.onResume();
-        if (null != torrentStream && torrentStream.checkStopped()) {
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null && torrentService.checkStopped()) {
             finish();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        if (torrentStream != null) {
-            torrentStream.removeListener(fragment);
-        }
-        super.onPause();
     }
 
     @Override
@@ -119,8 +112,9 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
                 getString(android.R.string.no), new OptionDialogFragment.Listener() {
                     @Override
                     public void onSelectionPositive() {
-                        if (torrentStream != null) {
-                            torrentStream.stopStreaming();
+                        TorrentService torrentService = getTorrentService();
+                        if (torrentService != null) {
+                            torrentService.stopStreaming();
                         }
                         finish();
                     }
@@ -132,28 +126,24 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     }
 
     @Override
-    public TorrentService getService() {
-        return torrentStream;
-    }
-
-    @Override
-    public void onTorrentServiceDisconnected() {
-        if (null != fragment) {
-            torrentStream.removeListener(fragment);
+    public void onTorrentServiceDisconnected(final TorrentService service) {
+        if (fragment != null) {
+            service.removeListener(fragment);
         }
-        super.onTorrentServiceDisconnected();
+
+        super.onTorrentServiceDisconnected(service);
     }
 
     @Override
-    public void onTorrentServiceConnected() {
-        super.onTorrentServiceConnected();
+    public void onTorrentServiceConnected(final TorrentService service) {
+        super.onTorrentServiceConnected(service);
 
-        if (torrentStream.checkStopped()) {
+        if (service.checkStopped()) {
             finish();
             return;
         }
 
-        torrentStream.addListener(fragment);
+        service.addListener(fragment);
     }
 
     public static Intent getIntent(Context context, @NonNull StreamInfo info) {

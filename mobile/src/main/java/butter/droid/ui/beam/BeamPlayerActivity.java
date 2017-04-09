@@ -27,6 +27,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.torrent.TorrentService;
 import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.fragment.BeamPlayerFragment;
@@ -86,15 +87,18 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     @Override
     protected void onResume() {
         super.onResume();
-        if (null != torrentStream && torrentStream.checkStopped()) {
+
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null && torrentService.checkStopped()) {
             finish();
         }
     }
 
     @Override
     protected void onStop() {
-        if (null != torrentStream) {
-            torrentStream.removeListener(fragment);
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.removeListener(fragment);
         }
         super.onStop();
     }
@@ -116,20 +120,21 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     }
 
     @Override
-    public void onTorrentServiceConnected() {
-        super.onTorrentServiceConnected();
+    public void onTorrentServiceConnected(final TorrentService service) {
+        super.onTorrentServiceConnected(service);
 
-        if (torrentStream.checkStopped()) {
+        if (service.checkStopped()) {
             finish();
             return;
         }
 
-        torrentStream.addListener(fragment);
+        service.addListener(fragment);
     }
 
     @Override public void closePlayer() {
-        if (torrentStream != null) {
-            torrentStream.stopStreaming();
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.stopStreaming();
         }
 
         finish();

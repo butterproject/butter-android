@@ -93,21 +93,21 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
         mService = ((TorrentService.ServiceBinder) service).getService();
         mService.addListener(this);
         mService.setCurrentActivity(this);
-        onTorrentServiceConnected();
+        onTorrentServiceConnected(torrentStream);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mService.removeListener(this);
         mService = null;
-        onTorrentServiceDisconnected();
+        onTorrentServiceDisconnected(torrentStream);
     }
 
-    public void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected(final TorrentService service) {
         // Placeholder
     }
 
-    public void onTorrentServiceDisconnected() {
+    public void onTorrentServiceDisconnected(final TorrentService service) {
         // Placeholder
     }
 

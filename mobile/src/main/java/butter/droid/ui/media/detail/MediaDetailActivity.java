@@ -50,6 +50,7 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
+import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.fragments.base.BaseDetailFragment;
@@ -121,8 +122,9 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         super.onResume();
         supportInvalidateOptionsMenu();
 
-        if (null != torrentStream) {
-            torrentStream.stopStreaming();
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.stopStreaming();
         }
 
         BeamServer server = BeamServerService.getServer();
@@ -181,8 +183,9 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     }
 
     @Override public void playStream(StreamInfo streamInfo) {
-        if (torrentStream != null) {
-            torrentStream.startForeground();
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.startForeground();
         }
 
         if (VersionUtils.isLollipop()) {
