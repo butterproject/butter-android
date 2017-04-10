@@ -43,7 +43,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;

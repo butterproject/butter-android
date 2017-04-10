@@ -22,7 +22,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import butter.droid.base.content.ObscuredSharedPreferences;
 import butter.droid.base.data.DataModule;
-import butter.droid.base.manager.ManagerModule;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -30,7 +29,6 @@ import javax.inject.Singleton;
 @Module(
         includes = {
                 AndroidModule.class,
-                ManagerModule.class,
                 DataModule.class
         }
 )

@@ -19,14 +19,15 @@ package butter.droid.base.manager.internal;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import butter.droid.base.Internal;
 import butter.droid.base.Constants;
+import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.VLCOptions;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.base.providers.media.MediaProvider;
 import dagger.Module;
 import dagger.Provides;
+import java.util.ArrayList;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.util.VLCUtil;
 import timber.log.Timber;
@@ -34,8 +35,8 @@ import timber.log.Timber;
 @Module
 public class InternalManagerModule {
 
-    @Provides @Internal ProviderManager provideProviderManager(VodoProvider moviesProvider) {
-        return new ProviderManager(moviesProvider, null);
+    @Provides @Internal ProviderManager provideProviderManager(MediaProvider mediaProvider) {
+        return new ProviderManager(mediaProvider, null);
     }
 
     @Provides @Internal @Nullable LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {
@@ -43,8 +44,17 @@ public class InternalManagerModule {
             Timber.e(VLCUtil.getErrorMsg());
             return null;
         } else {
-            String chroma = preferencesHandler.getPixelFormat();
-            return new LibVLC(VLCOptions.getLibOptions(context, true, "UTF-8", true, chroma, Constants.DEBUG_ENABLED));
+            final String chroma = preferencesHandler.getPixelFormat();
+            final ArrayList<String> options = new VLCOptions.Builder()
+                    .withVideoSkipLoopFilter()
+                    .withAudioTimeStreching(true)
+                    .withVideoSkipFrame(true)
+                    .withVideoSkipIDCT(true)
+                    .withAndroidWindowChroma(chroma)
+                    .withStats(true)
+                    .withVerbosity(Constants.DEBUG_ENABLED)
+                    .build();
+            return new LibVLC(context, options);
         }
     }
 

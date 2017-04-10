@@ -22,20 +22,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
@@ -43,9 +36,8 @@ import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsPresenterImpl;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPresenterImpl implements MainPresenter {
 
@@ -96,41 +88,6 @@ public class MainPresenterImpl implements MainPresenter {
         }
 
         displayProviderData(providerManager.getCurrentMediaProviderType());
-
-    }
-
-    @Override public void playerTestClicked() {
-        view.showPlayerTestDialog(PlayerTestConstants.FILE_TYPES);
-    }
-
-    @Override public void onPlayerTestItemClicked(int index) {
-
-        final String file = PlayerTestConstants.FILES[index];
-
-        if (PlayerTestConstants.CUSTOM_FILE.equals(file)) {
-            view.showPlayerTestUrlDialog();
-        } else if (youTubeManager.isYouTubeUrl(file)) {
-            Movie movie = new Movie(PlayerTestConstants.FILE_TYPES[index]);
-            view.showYoutubeVideo(movie, file);
-        } else {
-            final Movie media = new Movie();
-            media.videoId = "bigbucksbunny";
-            media.title = PlayerTestConstants.FILE_TYPES[index];
-            media.subtitles = new HashMap<>();
-            media.subtitles.put("en", PlayerTestConstants.SUBTITLES_URL);
-
-            // TODO: 11/29/16 Show progress while subtitles are loading
-
-            providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                @Override public void onFailure(Call call, IOException e) {
-                    openStream(new StreamInfo(media, null, null, null, null, file));
-                }
-
-                @Override public void onResponse(Call call, Response response) throws IOException {
-                    openStream(new StreamInfo(media, null, null, "en", null, file));
-                }
-            });
-        }
 
     }
 

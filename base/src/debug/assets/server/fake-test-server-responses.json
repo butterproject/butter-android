@@ -1,0 +1,93 @@
+[
+  {
+    "id": "bbs-1",
+    "title": "Big Buck Bunny - 4K - 60 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_2160p_60fps_normal.mp4.torrent"
+      }
+    }
+  },
+  {
+    "id": "bbs-2",
+    "title": "Big Buck Bunny - 4K - 30 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_2160p_30fps_normal.mp4.torrent"
+      }
+    }
+  },
+  {
+    "id": "bbs-3",
+    "title": "Big Buck Bunny - Full HD - 60 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4.torrent"
+      }
+    }
+  },
+  {
+    "id": "bbs-4",
+    "title": "Big Buck Bunny - Full HD - 30 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4.torrent"
+      }
+    }
+  },
+  {
+    "id": "bbs-5",
+    "title": "Big Buck Bunny - Full HD - 24 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_stereo_abl.mp4.torrent"
+      }
+    }
+  },
+  {
+    "id": "bbs-6",
+    "title": "Big Buck Bunny - HD 720p - 24 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_stereo_abl.mp4.torrent"
+      }
+    }
+  },
+  {
+    "id": "bbs-7",
+    "title": "Big Buck Bunny - HD 480p - 24 fps",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/724px-Big_buck_bunny_poster_big.jpg",
+    "rating": "-1",
+    "torrents": {
+      "1080p": {
+        "seeds": 10,
+        "peers": 10,
+        "url": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_stereo_abl.mp4.torrent"
+      }
+    }
+  }
+]
