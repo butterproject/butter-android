@@ -52,19 +52,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butter.droid.R;
-import butter.droid.ui.beam.BeamPlayerActivity;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.fragments.BaseVideoPlayerFragment;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.utils.AnimUtils;
@@ -73,7 +63,14 @@ import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.VersionUtils;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.widget.StrokedRobotoTextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
+import javax.inject.Inject;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View.OnSystemUiVisibilityChangeListener {
 
