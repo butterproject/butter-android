@@ -244,7 +244,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Override
     public void onTorrentServiceDisconnected() {
-        if (null!=mFragment){
+        if (mFragment != null && torrentStream != null){
             torrentStream.removeListener(mFragment);
         }
         super.onTorrentServiceDisconnected();

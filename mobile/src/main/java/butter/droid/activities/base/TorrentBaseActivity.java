@@ -70,6 +70,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         super.onStop();
         if (null != torrentStream) {
             unbindService(mServiceConnection);
+            mServiceConnection.onServiceDisconnected(null);
             torrentStream = null;
         }
     }
