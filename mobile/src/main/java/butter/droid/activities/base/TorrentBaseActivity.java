@@ -30,9 +30,9 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
 import butterknife.ButterKnife;
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
 public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
@@ -70,6 +70,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         super.onStop();
         if (null != torrentStream) {
             unbindService(mServiceConnection);
+            mServiceConnection.onServiceDisconnected(null);
             torrentStream = null;
         }
     }

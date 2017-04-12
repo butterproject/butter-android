@@ -29,26 +29,22 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.TorrentOptions;
-import com.github.sv244.torrentstream.TorrentStream;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
+import butter.droid.base.R;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.ui.TorrentActivity;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.TorrentOptions;
+import com.github.se_bastiaan.torrentstream.TorrentStream;
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import com.sjl.foreground.Foreground;
-
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.inject.Inject;
-
-import butter.droid.base.R;
-import butter.droid.base.ui.TorrentActivity;
-import butter.droid.base.content.preferences.PreferencesHandler;
 import timber.log.Timber;
 
 import static butter.droid.base.ButterApplication.getAppContext;
@@ -93,15 +89,19 @@ public class TorrentService extends Service implements TorrentListener {
         sThis = this;
         Foreground.get().addListener(mForegroundListener);
 
-        TorrentOptions options = new TorrentOptions();
-        options.setRemoveFilesAfterStop(true);
-        options.setMaxConnections(preferencesHandler.getTorrentConnectionLimit());
-        options.setMaxDownloadSpeed(preferencesHandler.getTorrentDownloadLimit());
-        options.setMaxUploadSpeed(preferencesHandler.getTorrentUploadLimit());
+        final TorrentOptions.Builder builder = new TorrentOptions.Builder()
+                .removeFilesAfterStop(true)
+                .maxConnections(preferencesHandler.getTorrentConnectionLimit())
+                .maxDownloadSpeed(preferencesHandler.getTorrentDownloadLimit())
+                .maxUploadSpeed(preferencesHandler.getTorrentDownloadLimit())
+                .saveLocation(getStreamDir());
+
         if (!preferencesHandler.torrentAutomaticPort()) {
-            options.setListeningPort(preferencesHandler.getTorrentListeningPort());
+            builder.listeningPort(preferencesHandler.getTorrentListeningPort());
         }
-        options.setSaveLocation(getStreamDir());
+
+        final TorrentOptions options = builder.build();
+
         mTorrentStream = TorrentStream.init(options);
     }
 
@@ -232,15 +232,19 @@ public class TorrentService extends Service implements TorrentListener {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK);
         mWakeLock.acquire();
 
-        TorrentOptions options = mTorrentStream.getOptions();
-        options.setRemoveFilesAfterStop(true);
-        options.setMaxConnections(preferencesHandler.getTorrentConnectionLimit());
-        options.setMaxDownloadSpeed(preferencesHandler.getTorrentDownloadLimit());
-        options.setMaxUploadSpeed(preferencesHandler.getTorrentUploadLimit());
+        final TorrentOptions.Builder builder = new TorrentOptions.Builder()
+                .removeFilesAfterStop(true)
+                .maxConnections(preferencesHandler.getTorrentConnectionLimit())
+                .maxDownloadSpeed(preferencesHandler.getTorrentDownloadLimit())
+                .maxUploadSpeed(preferencesHandler.getTorrentDownloadLimit())
+                .saveLocation(getStreamDir());
+
         if (!preferencesHandler.torrentAutomaticPort()) {
-            options.setListeningPort(preferencesHandler.getTorrentListeningPort());
+            builder.listeningPort(preferencesHandler.getTorrentListeningPort());
         }
-        options.setSaveLocation(getStreamDir());
+
+        final TorrentOptions options = builder.build();
+
         mTorrentStream.setOptions(options);
 
         mIsReady = false;

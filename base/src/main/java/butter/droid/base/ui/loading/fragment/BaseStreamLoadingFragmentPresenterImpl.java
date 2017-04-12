@@ -18,15 +18,6 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.content.Context;
-
-import com.github.sv244.torrentstream.StreamStatus;
-import com.github.sv244.torrentstream.Torrent;
-import com.github.sv244.torrentstream.listeners.TorrentListener;
-
-import java.text.DecimalFormat;
-import java.util.Locale;
-import java.util.Map;
-
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
@@ -43,6 +34,12 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import java.text.DecimalFormat;
+import java.util.Locale;
+import java.util.Map;
 
 public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
         TorrentListener, SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback{

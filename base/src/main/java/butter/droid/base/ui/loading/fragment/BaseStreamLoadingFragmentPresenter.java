@@ -17,9 +17,10 @@
 
 package butter.droid.base.ui.loading.fragment;
 
-import com.github.sv244.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 
 public interface BaseStreamLoadingFragmentPresenter extends TorrentListener {
+
     void onResume();
 
     void startStream();
