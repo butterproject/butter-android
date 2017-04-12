@@ -6,7 +6,7 @@
   <string name="enabled">Aktiverad</string>
   <string name="disabled">Inaktiverad</string>
   <string name="update_available">Ny uppdatering tillgänglig</string>
-  <string name="wrong_abi">Hoppsan! Du använder fel version av Popcorn \"Time\" för Android. Rätt version laddas ned just nu, om det är möjligt. Om installationsprogrammet inte startas inom en minut så stöds inte enheten eller har din Internet-anslutning bryts, vilket innebär att du bör försöka igen senare. Om installern misslyckas då måste du installera rätt version manuellt.</string>
+  <string name="wrong_abi">Hoppsan! Du använder fel version av Butter för Android. Rätt version laddas ned just nu, om detär möjligt. Om installationsprogrammet inte startas inom en minut så stöds inte enheten eller har din Internet-anslutning bryts, vilket innebär att du bör försöka igen senare. Om installern misslyckas då måste du installera rätt version manuellt.</string>
   <string name="press_install">Tryck för att installera</string>
   <string name="loading_data">Laddar data...</string>
   <string name="loading_details">Laddar information...</string>

@@ -123,7 +123,7 @@ public class YSubsProvider extends SubsProvider {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-                    callback.onSuccess(result.formatForPopcorn(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
+                    callback.onSuccess(result.formatForButte(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
             }
         });
@@ -134,7 +134,7 @@ public class YSubsProvider extends SubsProvider {
         public int subtitles;
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, Object>>>> subs;
 
-        public Map<String, Map<String, String>> formatForPopcorn(String prefix, HashMap<String, String> mapping) {
+        public Map<String, Map<String, String>> formatForButte(String prefix, HashMap<String, String> mapping) {
             Map<String, Map<String, String>> returnMap = new HashMap<>();
             if (success && subs != null) {
                 String[] imdbIds = getKeys(subs);
