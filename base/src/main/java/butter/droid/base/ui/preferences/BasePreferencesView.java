@@ -37,8 +37,6 @@ public interface BasePreferencesView {
 
     void openActivity(Intent intent);
 
-    void openChangelog();
-
     void showMessage(@StringRes int message);
 
     void showAboutScreen();

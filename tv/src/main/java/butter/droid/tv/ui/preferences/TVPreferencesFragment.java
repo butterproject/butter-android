@@ -193,10 +193,6 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         startActivity(intent);
     }
 
-    @Override public void openChangelog() {
-        // TODO: 1/21/17 Open changelog
-    }
-
     @Override public void showMessage(@StringRes int message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }

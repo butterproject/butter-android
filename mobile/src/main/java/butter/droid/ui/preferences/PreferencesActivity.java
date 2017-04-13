@@ -34,7 +34,6 @@ import butter.droid.R;
 import butter.droid.adapters.PreferencesAdapter;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
@@ -229,10 +228,6 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @Override public void openActivity(Intent intent) {
         startActivity(intent);
-    }
-
-    @Override public void openChangelog() {
-        new ChangeLogDialogFragment().show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
     @Override public void updateItem(int position, PrefItem preferenceItem) {

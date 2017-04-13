@@ -63,7 +63,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
     compile 'com.uwetrottmann:trakt-java:4.6.2'
-    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.1.0'
 
     compile 'com.koushikdutta.async:androidasync:2.1.8'
 
