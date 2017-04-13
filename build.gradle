@@ -29,6 +29,7 @@ ext {
     daggerVersion = "2.9"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.3.0'
+    filePickerVersion = '1.1.0'
 }
 
 allprojects {
@@ -38,6 +39,7 @@ allprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
         maven { url "https://jitpack.io" }
+        maven { url  "http://dl.bintray.com/lukaville/maven" }
     }
 
     //let project evaluate its script first
