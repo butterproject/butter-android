@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingItemDecoration;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -112,10 +113,15 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView.setHasFixedSize(true);
-        //adapter should only ever be created once on fragment initialise.
-        adapter = new MediaGridAdapter(mContext, columns);
+        final MediaGridSpacingItemDecoration gridSpacingDecoration = new MediaGridSpacingItemDecoration(mContext, columns);
+        final int itemHeight = gridSpacingDecoration.getItemHeight();
+        final int itemWidth = gridSpacingDecoration.getItemWidth();
+
+        adapter = new MediaGridAdapter(itemHeight, itemWidth);
+
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(gridSpacingDecoration);
+        recyclerView.setHasFixedSize(true);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), this));
 
         pagingManager = new PagingManager<>();

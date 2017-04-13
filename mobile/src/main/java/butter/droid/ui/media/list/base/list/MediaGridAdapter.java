@@ -24,21 +24,17 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.Shader;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-
-import java.util.List;
-
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
@@ -46,38 +42,39 @@ import butter.droid.base.utils.PixelUtils;
 import butter.droid.manager.paging.PagingAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
+import java.util.List;
 
-
-public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements PagingAdapter<Media> {
+public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PagingAdapter<Media> {
 
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_PROGRESS = 1;
 
-    private int mItemWidth, mItemHeight, mMargin, mColumns;
-
     private List<Media> items;
+
+    private final int itemHeight;
+    private final int itemWidth;
+
     private boolean showLoading = true;
 
-    public MediaGridAdapter(Context context, Integer columns) {
-        mColumns = columns;
-
-        int screenWidth = PixelUtils.getScreenWidth(context);
-        mItemWidth = (screenWidth / columns);
-        mItemHeight = (int) ((double) mItemWidth / 0.677);
-        mMargin = PixelUtils.getPixelsFromDp(context, 2);
+    public MediaGridAdapter(final int itemHeight, final int itemWidth) {
+        this.itemHeight = itemHeight;
+        this.itemWidth = itemWidth;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final Context context = parent.getContext();
+        final LayoutInflater inflater = LayoutInflater.from(context);
         View v;
         switch (viewType) {
             case VIEW_TYPE_PROGRESS:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_griditem_loading, parent, false);
-                return new MediaGridAdapter.LoadingHolder(v);
+                v = inflater.inflate(R.layout.media_griditem_loading, parent, false);
+                return new LoadingHolder(v, itemHeight);
             case VIEW_TYPE_ITEM:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_griditem, parent, false);
-                return new MediaGridAdapter.ViewHolder(v);
+                v = inflater.inflate(R.layout.media_griditem, parent, false);
+                return new ViewHolder(v, itemHeight);
             default:
                 throw new IllegalStateException("Unknown view type: " + viewType);
         }
@@ -85,22 +82,6 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
-        int double_margin = mMargin * 2;
-        int top_margin = (position < mColumns) ? mMargin * 2 : mMargin;
-
-        GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
-        layoutParams.height = mItemHeight;
-        layoutParams.width = mItemWidth;
-        int mod = LocaleUtils.currentLocaleIsRTL() ? 1 : 0;
-        if (position % mColumns == mod) {
-            layoutParams.setMargins(double_margin, top_margin, mMargin, mMargin);
-        } else if (position % mColumns == mColumns - 1) {
-            layoutParams.setMargins(mMargin, top_margin, double_margin, mMargin);
-        } else {
-            layoutParams.setMargins(mMargin, top_margin, mMargin, mMargin);
-        }
-        viewHolder.itemView.setLayoutParams(layoutParams);
-
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
             final ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             final Media item = getItem(position);
@@ -108,12 +89,20 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             videoViewHolder.title.setText(item.title);
             videoViewHolder.year.setText(item.year);
 
-            if (item.image != null && !item.image.equals("")) {
-                Picasso.with(videoViewHolder.coverImage.getContext()).load(item.image)
-                        .resize(mItemWidth, mItemHeight)
-                        .transform(DrawGradient.INSTANCE)
+            if (!TextUtils.isEmpty(item.image)) {
+                final Context context = videoViewHolder.coverImage.getContext();
+                Picasso.with(context).load(item.image).resize(itemWidth, itemHeight).transform(DrawGradient.INSTANCE)
                         .into(videoViewHolder.coverImage);
             }
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position < getItemsSize()) {
+            return VIEW_TYPE_ITEM;
+        } else {
+            return VIEW_TYPE_PROGRESS;
         }
     }
 
@@ -131,7 +120,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return count;
     }
 
-    @Override public void addItems(@Nullable List<Media> items) {
+    @Override
+    public void addItems(@Nullable List<Media> items) {
         if (this.items == null) {
             this.items = items;
 
@@ -153,10 +143,10 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 notifyItemInserted(size);
             }
         }
-
     }
 
-    @Override public void showLoading(boolean show) {
+    @Override
+    public void showLoading(boolean show) {
         if (showLoading != show) {
             boolean before = showLoading();
             showLoading = show;
@@ -172,25 +162,16 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-
-
-    @Override public void clear() {
+    @Override
+    public void clear() {
         if (items != null && !items.isEmpty()) {
             notifyItemRangeRemoved(0, items.size());
             items = null;
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position < getItemsSize()) {
-            return VIEW_TYPE_ITEM;
-        } else {
-            return VIEW_TYPE_PROGRESS;
-        }
-    }
-
-    @Nullable public Media getItem(int position) {
+    @Nullable
+    public Media getItem(int position) {
         if (position < getItemsSize()) {
             return items.get(position);
         } else {
@@ -210,19 +191,54 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    class LoadingHolder extends RecyclerView.ViewHolder {
+    public static class MediaGridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
-        View itemView;
+        private final int itemWidth;
+        private final int itemHeight;
+        private final int margin;
+        private final int doubleMargin;
+        private final int columns;
+        private final int mod;
 
-        public LoadingHolder(View itemView) {
-            super(itemView);
-            this.itemView = itemView;
-            itemView.setMinimumHeight(mItemHeight);
+        public MediaGridSpacingItemDecoration(final Context context, final int columns) {
+            this.columns = columns;
+            final int screenWidth = PixelUtils.getScreenWidth(context);
+            this.itemWidth = (screenWidth / columns);
+            this.itemHeight = (int) ((double) itemWidth / 0.677);
+            this.margin = PixelUtils.getPixelsFromDp(context, 2);
+            this.doubleMargin = margin * 2;
+            this.mod = LocaleUtils.currentLocaleIsRTL() ? 1 : 0;
         }
 
+        @Override
+        public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent, final RecyclerView.State state) {
+            final GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) view.getLayoutParams();
+            layoutParams.height = itemHeight;
+            view.setLayoutParams(layoutParams);
+
+            final int position = parent.getChildAdapterPosition(view);
+            final int topMargin = (position < columns) ? doubleMargin : margin;
+
+            if (position % columns == mod) {
+                outRect.set(doubleMargin, topMargin, margin, margin);
+            } else if (position % columns == columns - 1) {
+                outRect.set(margin, topMargin, doubleMargin, margin);
+            } else {
+                outRect.set(margin, topMargin, margin, margin);
+            }
+        }
+
+        public int getItemHeight() {
+            return itemHeight;
+        }
+
+        public int getItemWidth() {
+            return itemWidth;
+        }
     }
 
     private static class DrawGradient implements Transformation {
+
         static Transformation INSTANCE = new DrawGradient();
 
         @Override
@@ -238,8 +254,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             Paint paint = new Paint();
             float gradientHeight = h / 2f;
-            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h, 0xFFFFFFFF, 0x00FFFFFF,
-                    Shader.TileMode.CLAMP);
+            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h, 0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.CLAMP);
             paint.setShader(shader);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
             canvas.drawRect(0, h - gradientHeight, w, h, paint);
@@ -252,28 +267,34 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private static class LoadingHolder extends RecyclerView.ViewHolder {
 
-        View itemView;
+        LoadingHolder(View itemView, int itemHeight) {
+            super(itemView);
+            itemView.setMinimumHeight(itemHeight);
+        }
+
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.focus_overlay) View focusOverlay;
         @BindView(R.id.cover_image) ImageView coverImage;
         @BindView(R.id.title) TextView title;
         @BindView(R.id.year) TextView year;
 
-        private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
+        private View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
             }
         };
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, int itemHeight) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.itemView = itemView;
-            coverImage.setMinimumHeight(mItemHeight);
-
-            itemView.setOnFocusChangeListener(mOnFocusChangeListener);
+            this.coverImage.setMinimumHeight(itemHeight);
+            itemView.setOnFocusChangeListener(onFocusChangeListener);
         }
 
         public ImageView getCoverImage() {
