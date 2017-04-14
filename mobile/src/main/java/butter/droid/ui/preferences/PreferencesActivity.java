@@ -45,6 +45,7 @@ import butter.droid.fragments.dialog.NumberDialogFragment;
 import butter.droid.fragments.dialog.SeekBarDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.about.AboutActivity;
+import butter.droid.ui.preferences.fragment.ChangeLogDialogFragment;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
@@ -230,6 +231,11 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
         startActivity(intent);
     }
 
+    @Override
+    public void openChangelog() {
+        new ChangeLogDialogFragment().show(getSupportFragmentManager(), ChangeLogDialogFragment.TAG);
+    }
+
     @Override public void updateItem(int position, PrefItem preferenceItem) {
         adapter.updateItem(position, preferenceItem);
     }
@@ -253,7 +259,6 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
         dialogFragment.setArguments(args);
         dialogFragment.setDialogClickListener(listener);
         dialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
-
     }
 
     public static Intent getIntent(Context context) {

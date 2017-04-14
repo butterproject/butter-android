@@ -112,6 +112,7 @@ public class PreferencesHandler {
         if (!Constants.DEBUG_ENABLED && !isTV) {
             keys.add(Prefs.REPORT_BUG);
         }
+        keys.add(Prefs.CHANGE_LOG);
         keys.add(Prefs.NOTICE);
         keys.add(Prefs.VERSION);
         keys.add(Prefs.ABOUT);
@@ -496,6 +497,18 @@ public class PreferencesHandler {
                         .setIconResource(R.drawable.ic_prefs_report_bug)
                         .setTitleResource(R.string.report_a_bug)
                         .setPreferenceKey(Prefs.REPORT_BUG)
+                        .setSubtitleGenerator(new SubtitleGenerator() {
+                            @Override
+                            public String get(PrefItem item) {
+                                return resources.getString(R.string.tap_to_open);
+                            }
+                        })
+                        .build();
+            case Prefs.CHANGE_LOG:
+                return PrefItem.newBuilder()
+                        .setIconResource(R.drawable.ic_prefs_changelog)
+                        .setTitleResource(R.string.changelog)
+                        .setPreferenceKey(Prefs.CHANGE_LOG)
                         .setSubtitleGenerator(new SubtitleGenerator() {
                             @Override
                             public String get(PrefItem item) {

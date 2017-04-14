@@ -16,12 +16,18 @@
   ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <color name="bad_health">#D40E00</color>
-    <color name="medium_health">#D47800</color>
-    <color name="good_health">#C9D400</color>
-    <color name="excellent_health">#5ABA00</color>
-    <color name="unknown_health">#696969</color>
+<changelog bulletedList="true">
 
-    <color name="chglib_material_color_text_1">#fff</color>
-</resources>
+    <changelogversion versionName="0.3.0">
+        <changelogtext>Write new changes</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.1.2">
+        <changelogtext>Minor bug fixes</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.1.0">
+        <changelogtext>Initial release</changelogtext>
+    </changelogversion>
+
+</changelog>

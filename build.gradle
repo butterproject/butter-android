@@ -30,6 +30,7 @@ ext {
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.3.0'
     filePickerVersion = '1.1.0'
+    changeloglibVersion = '2.1.0'
 }
 
 allprojects {

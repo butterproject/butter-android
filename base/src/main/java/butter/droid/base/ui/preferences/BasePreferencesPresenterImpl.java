@@ -264,6 +264,9 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
                 i.setData(Uri.parse(Constants.REPORT_ISSUE_URL));
                 view.openActivity(i);
                 break;
+            case Prefs.CHANGE_LOG:
+                view.openChangelog();
+                break;
             case Prefs.NOTICE:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(Constants.NOTICE_URL));

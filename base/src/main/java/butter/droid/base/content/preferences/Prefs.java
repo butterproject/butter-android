@@ -30,7 +30,7 @@ public final class Prefs {
             STORAGE_LOCATION, REMOVE_CACHE, HW_ACCELERATION, AUTOMATIC_UPDATES, DEFAULT_PROVIDER, DEFAULT_PLAYER,
             DEFAULT_PLAYER_NAME, WIFI_ONLY, LOCALE, DRAWER_LEARNED, LIBTORRENT_CONNECTION_LIMIT,
             LIBTORRENT_DOWNLOAD_LIMIT, LIBTORRENT_UPLOAD_LIMIT, LIBTORRENT_LISTENING_PORT, LIBTORRENT_AUTOMATIC_PORT,
-            SHOW_VPN, PIXEL_FORMAT, QUALITY_DEFAULT, CHECK_UPDATE, REPORT_BUG, NOTICE, VERSION, ABOUT})
+            SHOW_VPN, PIXEL_FORMAT, QUALITY_DEFAULT, CHECK_UPDATE, REPORT_BUG, CHANGE_LOG, NOTICE, VERSION, ABOUT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface PrefKey {
     }
@@ -68,6 +68,7 @@ public final class Prefs {
     public static final String QUALITY_DEFAULT = "quality_default";
     public static final String CHECK_UPDATE = "check_update";
     public static final String REPORT_BUG = "report_bug";
+    public static final String CHANGE_LOG = "change_log";
     public static final String NOTICE = "notice";
     public static final String VERSION = "version";
     public static final String ABOUT = "about";
