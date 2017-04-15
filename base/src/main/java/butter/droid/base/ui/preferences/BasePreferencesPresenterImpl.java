@@ -258,6 +258,7 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
                 break;
             case Prefs.CHECK_UPDATE:
                 updateManager.checkUpdatesManually();
+                view.showMessage(R.string.checking_for_updates);
                 break;
             case Prefs.REPORT_BUG:
                 Intent i = new Intent(Intent.ACTION_VIEW);
