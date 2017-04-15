@@ -30,7 +30,7 @@
   <string name="title_movies">Filme</string>
   <string name="title_anime">Anime</string>
   <string name="signature_invalid">App-Signatur ist inkorrekt</string>
-  <string name="possibly_dangerous">Popcorntime wurde manipuliert. Downloaden Sie bitte die neueste Version von: http://butterproject.org/</string>
+  <string name="possibly_dangerous">Butter wurde manipuliert. Downloaden Sie bitte die neueste Version von: http://butterproject.org/</string>
   <string name="subtitles">Untertitel</string>
   <string name="now_playing">Läuft jetzt</string>
   <!--SettingsActivity strings-->

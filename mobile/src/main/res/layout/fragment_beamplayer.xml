@@ -25,7 +25,7 @@
     android:background="@color/bg_dark">
 
     <ImageView
-        android:id="@+id/popcorn_logo"
+        android:id="@+id/butter_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
