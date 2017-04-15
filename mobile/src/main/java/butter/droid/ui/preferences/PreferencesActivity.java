@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -47,6 +48,7 @@ import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.preferences.fragment.ChangeLogDialogFragment;
 import butter.droid.utils.ToolbarUtils;
+import butter.droid.utils.ButterCustomTabActivityHelper;
 import butterknife.BindView;
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
@@ -227,8 +229,9 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
         dialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
-    @Override public void openActivity(Intent intent) {
-        startActivity(intent);
+    @Override public void openBrowser(Intent intent) {
+        final Uri url = intent.getData();
+        ButterCustomTabActivityHelper.openCustomTab(this, url);
     }
 
     @Override
@@ -245,7 +248,7 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
     }
 
     @Override public void showAboutScreen() {
-        openActivity(AboutActivity.getIntent(this));
+        startActivity(AboutActivity.getIntent(this));
     }
 
     private void openListDialog(@StringRes int title, String[] items, int currentItem, OnClickListener listener) {

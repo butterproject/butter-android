@@ -188,7 +188,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         GuidedStepFragment.add(getFragmentManager(), fragment);
     }
 
-    @Override public void openActivity(Intent intent) {
+    @Override public void openBrowser(Intent intent) {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             final Uri uri = intent.getData();
             final TVWebViewFragment fragment = TVWebViewFragment.newInstance(uri);

@@ -77,6 +77,7 @@ dependencies {
     compile "com.github.angads25:filepicker:${filePickerVersion}"
     compile 'com.github.johnkil.android-robototextview:robototextview:2.5.0'
     compile 'com.sothree.slidinguppanel:library:3.3.0'
+    compile "com.android.support:customtabs:${appCompatVersion}"
 
     compile project(':base')
 

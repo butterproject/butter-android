@@ -262,7 +262,7 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
             case Prefs.REPORT_BUG:
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(Constants.REPORT_ISSUE_URL));
-                view.openActivity(i);
+                view.openBrowser(i);
                 break;
             case Prefs.CHANGE_LOG:
                 view.openChangelog();
@@ -270,7 +270,7 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
             case Prefs.NOTICE:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(Constants.NOTICE_URL));
-                view.openActivity(intent);
+                view.openBrowser(intent);
                 break;
             case Prefs.ABOUT:
                 view.showAboutScreen();
