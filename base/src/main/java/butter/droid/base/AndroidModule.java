@@ -19,6 +19,7 @@ package butter.droid.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 
@@ -41,5 +42,9 @@ public class AndroidModule {
 
     @Provides @Singleton TelephonyManager provideTelephonyManager(Context context) {
         return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
+
+    @Provides @Singleton PackageManager providePackageManager(Context context) {
+        return context.getPackageManager();
     }
 }
