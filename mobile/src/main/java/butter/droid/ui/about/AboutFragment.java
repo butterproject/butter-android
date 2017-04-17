@@ -67,7 +67,6 @@ public class AboutFragment extends Fragment implements AboutView {
             R.id.logo_imageview,
             R.id.facebook_button,
             R.id.git_button,
-            R.id.blog_button,
             R.id.butter_button,
             R.id.discuss_button,
             R.id.twitter_button

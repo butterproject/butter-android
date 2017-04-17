@@ -28,7 +28,8 @@ public interface PreferencesComponent {
 
     void inject(PreferencesActivity activity);
 
-    @Subcomponent.Builder interface Builder {
+    @Subcomponent.Builder
+    interface Builder {
 
         Builder preferencesModule(PreferencesModule module);
 
