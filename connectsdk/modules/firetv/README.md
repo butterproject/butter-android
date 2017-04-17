@@ -7,11 +7,11 @@ following functionality:
     * Media control
 Using Connect SDK for discovery/control of Fire TV devices will result in your app complying with the [Amazon Fling SDK terms of service](https://developer.amazon.com/public/support/pml.html).
 
-##General Information
+## General Information
 For more information about Connect SDK, visit the [main repository](https://github.com/ConnectSDK/Connect-SDK-Android). This project can be built in Android Studio or directly with Gradle. Eclipse IDE is not supported.
 
-##Setup
-###Connect SDK Integration
+## Setup
+### Connect SDK Integration
 1. Setup [Connect-SDK-Android](https://github.com/ConnectSDK/Connect-SDK-Android)
 2. Download AmazonFling.jar and WhisperPlay.jar from [the Amazon website](https://developer.amazon.com/public/apis/experience/fling/docs/amazon-fling-sdk-download) and put them into ```Connect-SDK-Android/modules/firetv/libs/``` folder
 3. Add these lines into dependency section of build.gradle file:
@@ -22,7 +22,7 @@ For more information about Connect SDK, visit the [main repository](https://gith
     ```
 4. Synchronize your project with Gradle files
 
-###Connect SDK Lite Integration
+### Connect SDK Lite Integration
 1. Setup [Connect-SDK-Android-Lite](https://github.com/ConnectSDK/Connect-SDK-Android-Lite)
 2. Clone this repository into a subfolder of the Connect SDK Lite project (e.g. modules/firetv)
 3. Go to the [Amazon Developer site](https://developer.amazon.com/) download the AmazonFling.jar and WhisperPlay.jar and put them into ```Connect-SDK-Android/modules/firetv/libs/``` folder
@@ -64,7 +64,7 @@ For more information about Connect SDK, visit the [main repository](https://gith
     inside `getDeviceServiceMap()` method.
 
 
-##License
+## License
 Copyright (c) 2015 LG Electronics.
 
 Licensed under the Apache License, Version 2.0 (the "License");
