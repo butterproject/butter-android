@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -40,6 +41,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -106,6 +108,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
     View mDecorView;
 
     private AudioManager mAudioManager;
+    private GestureDetectorCompat mGestureDetector;
 
     private long mLastSystemShowTime = System.currentTimeMillis();
 
@@ -130,6 +133,34 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
     private boolean mIsFirstBrightnessGesture = true;
     private float mRestoreAutoBrightness = -1f;
+
+    private final GestureDetector.SimpleOnGestureListener mGestureListener =
+            new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            togglePlayPause();
+            return true;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (mTouchAction == TOUCH_NONE) {
+                if (!mOverlayVisible) {
+                    showOverlay();
+                } else {
+                    hideOverlay();
+                }
+            } else {
+                showOverlay();
+            }
+            return true;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -181,6 +212,9 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
         mControlBar.setProgressDrawable(progressDrawable);
         mControlBar.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        mGestureDetector = new GestureDetectorCompat(getActivity(), mGestureListener);
+        mGestureDetector.setOnDoubleTapListener(mGestureListener);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -289,6 +323,7 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
 
 
     public boolean onTouchEvent(MotionEvent event) {
+        mGestureDetector.onTouchEvent(event);
         DisplayMetrics screen = new DisplayMetrics();
         getAppCompatActivity().getWindowManager().getDefaultDisplay().getMetrics(screen);
 
@@ -339,16 +374,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements View
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (mTouchAction == TOUCH_NONE) {
-                    if (!mOverlayVisible) {
-                        showOverlay();
-                    } else {
-                        hideOverlay();
-                    }
-                } else {
-                    showOverlay();
-                }
-
                 doSeekTouch(coef, xgesturesize, true);
                 break;
         }
