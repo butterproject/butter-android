@@ -67,7 +67,7 @@ dependencies {
 
     compile 'com.koushikdutta.async:androidasync:2.1.8'
 
-    compile 'com.github.sv244:torrentstream-android:1.1.1'
+    compile "com.github.se-bastiaan:TorrentStream-Android:${torrentstreamVersion}"
 
     compile 'de.timroes:aXMLRPC:1.8.1'
     compile "com.google.dagger:dagger:${rootProject.ext.daggerVersion}"

@@ -65,8 +65,7 @@ public class PlayerManager {
      */
     public Map<String, String> getVideoPlayerApps() {
         Intent playerIntent = new Intent(Intent.ACTION_VIEW);
-        playerIntent.setDataAndType(
-                Uri.parse("http://get.popcorntime.io/nwtests/bbb_sunflower_1080p_30fps_normal_aac.mp4"), "video/*");
+        playerIntent.setDataAndType(Uri.parse("http://butterproject.org/test.mp4"), "video/*");
 
         PackageManager packageManager = ButterApplication.getAppContext().getPackageManager();
         List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(playerIntent, 0);
