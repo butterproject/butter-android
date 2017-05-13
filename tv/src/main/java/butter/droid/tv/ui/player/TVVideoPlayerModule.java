@@ -15,7 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player;
 
-public class ConfigureSubtitleEvent {
+import dagger.Module;
+
+@Module
+public class TVVideoPlayerModule {
+
 }

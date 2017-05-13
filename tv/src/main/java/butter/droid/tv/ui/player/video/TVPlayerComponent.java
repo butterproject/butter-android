@@ -15,18 +15,21 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player.video;
 
-public class StreamProgressChangedEvent {
-    private final long bufferedTime;
+import butter.droid.base.ui.FragmentScope;
+import dagger.Subcomponent;
 
-    public StreamProgressChangedEvent(long bufferedTime) {
-        if (bufferedTime < 0) throw new IllegalArgumentException("buffered time must be larger or equal than 0");
-        this.bufferedTime = bufferedTime;
+@Subcomponent(modules = TVPlayerModule.class)
+@FragmentScope
+public interface TVPlayerComponent {
+
+    void inject(TVPlayerFragment fragment);
+
+    @Subcomponent.Builder interface Builder {
+        Builder tvPlayerModule(TVPlayerModule module);
+
+        TVPlayerComponent build();
     }
 
-    public long getBufferedTime()
-    {
-        return bufferedTime;
-    }
 }

@@ -15,22 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player;
 
-public class SeekBackwardEvent {
-    public static final int MINIMUM_SEEK_SPEED = 2000;
-    private int seek = MINIMUM_SEEK_SPEED;
+import android.view.WindowManager;
+import butter.droid.tv.ui.player.video.TVPlayerComponent;
+import dagger.Subcomponent;
 
-    public SeekBackwardEvent() {
-        setSeek(MINIMUM_SEEK_SPEED);
+@Subcomponent
+public interface TVVideoPlayerComponent {
+
+    void inject(TVVideoPlayerActivity activity);
+
+    TVPlayerComponent.Builder tvPlayerComponentBuilder();
+
+    WindowManager windowManager();
+
+    @Subcomponent.Builder interface Builder {
+        TVVideoPlayerComponent build();
     }
 
-    public void setSeek(int seek) {
-        if (seek < 0) throw new IllegalArgumentException("Seek speed must be larger than 0");
-        this.seek = seek;
-    }
-
-    public int getSeek() {
-        return seek > 0 ? -1 * seek : seek;
-    }
 }

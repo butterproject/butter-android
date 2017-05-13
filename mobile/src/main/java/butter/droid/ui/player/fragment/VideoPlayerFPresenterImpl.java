@@ -18,19 +18,18 @@
 package butter.droid.ui.player.fragment;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenterImpl;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
 import butter.droid.ui.player.fragment.VideoPlayerTouchHandler.OnVideoTouchListener;
 import java.util.Locale;
-import org.videolan.libvlc.LibVLC;
 
 public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl implements VideoPlayerFPresenter, OnVideoTouchListener {
 
@@ -40,18 +39,20 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     private final BrightnessManager brightnessManager;
     private final AudioManager audioManager;
     private final VideoPlayerTouchHandler touchHandler;
+    private final VlcPlayer player;
 
     public VideoPlayerFPresenterImpl(final VideoPlayerFView view, final Context context, final PrefManager prefManager,
-            @Nullable final LibVLC libVLC, final PreferencesHandler preferencesHandler, final ProviderManager providerManager,
-            final PlayerManager playerManager, final BeamManager beamManager, final BrightnessManager brightnessManager,
-            final AudioManager audioManager, final VideoPlayerTouchHandler touchHandler) {
-        super(view, context, prefManager, libVLC, preferencesHandler, providerManager, playerManager, beamManager);
+            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
+            final BeamManager beamManager, final BrightnessManager brightnessManager, final AudioManager audioManager,
+            final VideoPlayerTouchHandler touchHandler, final VlcPlayer player) {
+        super(view, context, prefManager, preferencesHandler, providerManager, playerManager, beamManager, player);
         this.view = view;
         this.context = context;
         this.brightnessManager = brightnessManager;
         this.audioManager = audioManager;
         this.preferencesHandler = preferencesHandler;
         this.touchHandler = touchHandler;
+        this.player = player;
     }
 
     @Override public void onResume() {
@@ -81,7 +82,7 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     }
 
     @Override public void onProgressChanged(final int progress) {
-        if (isSeeking() && progress <= (getDuration() / 100 * getStreamerProgress())) {
+        if (isSeeking() && progress <= (player.getLength() / 100 * getStreamerProgress())) {
             setLastSubtitleCaption(null);
             setCurrentTime(progress);
             progressSubtitleCaption();

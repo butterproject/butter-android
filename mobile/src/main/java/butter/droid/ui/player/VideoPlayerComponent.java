@@ -17,6 +17,7 @@
 
 package butter.droid.ui.player;
 
+import android.view.WindowManager;
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.ui.player.fragment.VideoPlayerFComponent;
 import dagger.Subcomponent;
@@ -28,6 +29,8 @@ public interface VideoPlayerComponent {
     void inject(VideoPlayerActivity activity);
 
     VideoPlayerFComponent.Builder videoPlayerFComponentBuilder();
+
+    WindowManager windowManager();
 
     @Subcomponent.Builder interface Builder {
         Builder videoPlayerModule(VideoPlayerModule module);

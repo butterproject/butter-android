@@ -41,8 +41,6 @@ public interface BaseVideoPlayerPresenter {
 
     void togglePlayPause();
 
-    void vlcNewLayout();
-
     void streamProgressUpdated(float progress);
 
     void reloadMedia();
@@ -79,7 +77,7 @@ public interface BaseVideoPlayerPresenter {
 
     @IntDef({SURFACE_BEST_FIT, SURFACE_FIT_HORIZONTAL, SURFACE_FIT_VERTICAL, SURFACE_FILL, SURFACE_16_9, SURFACE_4_3, SURFACE_ORIGINAL})
     @Retention(RetentionPolicy.SOURCE)
-    @interface Surface {
+    public @interface SizePolicy {
 
     }
 

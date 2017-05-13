@@ -23,15 +23,15 @@
 
     <fragment
         android:id="@+id/fragment"
-        class="butter.droid.tv.ui.player.video.TVVideoPlayerFragment"
+        class="butter.droid.tv.ui.player.video.TVPlayerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_videoplayer"/>
 
-    <fragment
-        android:id="@+id/playback_overlay_fragment"
-        class="butter.droid.tv.ui.player.overlay.TVPlaybackOverlayFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<fragment-->
+        <!--android:id="@+id/playback_overlay_fragment"-->
+        <!--class="butter.droid.tv.ui.player.overlay.TVPlaybackOverlayFragment2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
 </FrameLayout>

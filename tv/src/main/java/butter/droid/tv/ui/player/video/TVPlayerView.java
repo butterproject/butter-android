@@ -15,22 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player.video;
 
-public class SeekForwardEvent {
-    public static final int MINIMUM_SEEK_SPEED = 2000;
-    private int seek = MINIMUM_SEEK_SPEED;
+import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
 
-    public SeekForwardEvent() {
-        setSeek(MINIMUM_SEEK_SPEED);
-    }
+public interface TVPlayerView extends BaseVideoPlayerView {
 
-    public void setSeek(int seek) {
-        if (seek < 0) throw new IllegalArgumentException("Seek speed must be larger than 0");
-        this.seek = seek;
-    }
-
-    public int getSeek() {
-        return seek;
-    }
+    void setupControls(StreamInfo streamInfo);
 }

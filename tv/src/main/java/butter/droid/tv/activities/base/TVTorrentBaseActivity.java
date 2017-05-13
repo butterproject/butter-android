@@ -43,7 +43,7 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
     @Inject PreferencesHandler preferencesHandler;
 
     protected Handler mHandler;
-    protected TorrentService mService;
+    protected TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         String language = preferencesHandler.getLocale();
@@ -67,8 +67,8 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (null != mService) {
-            mService.removeListener(this);
+        if (null != torrentStream) {
+            torrentStream.removeListener(this);
             unbindService(this);
         }
     }
@@ -85,22 +85,22 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
     }
 
     public TorrentService getTorrentService() {
-        return mService;
+        return torrentStream;
     }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mService = ((TorrentService.ServiceBinder) service).getService();
-        mService.addListener(this);
-        mService.setCurrentActivity(this);
+        torrentStream = ((TorrentService.ServiceBinder) service).getService();
+        torrentStream.addListener(this);
+        torrentStream.setCurrentActivity(this);
         onTorrentServiceConnected(torrentStream);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        mService.removeListener(this);
-        mService = null;
+        torrentStream.removeListener(this);
         onTorrentServiceDisconnected(torrentStream);
+        torrentStream = null;
     }
 
     public void onTorrentServiceConnected(final TorrentService service) {

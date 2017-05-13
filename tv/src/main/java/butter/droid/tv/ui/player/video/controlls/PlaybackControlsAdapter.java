@@ -15,7 +15,15 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player.video.controlls;
 
-public class StartPlaybackEvent {
+import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.PresenterSelector;
+
+public class PlaybackControlsAdapter extends ArrayObjectAdapter {
+
+    public PlaybackControlsAdapter(final PresenterSelector presenterSelector) {
+        super(presenterSelector);
+    }
+
 }

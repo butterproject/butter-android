@@ -23,7 +23,9 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
+import android.view.WindowManager;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -50,4 +52,9 @@ public class AndroidModule {
     @Provides @Singleton AudioManager provideAudioManager(Context context) {
         return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
+
+    @Provides @Singleton WindowManager provideWindowManager(Context context) {
+        return (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    }
+
 }

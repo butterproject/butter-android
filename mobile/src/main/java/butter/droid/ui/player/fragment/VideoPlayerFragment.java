@@ -37,6 +37,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnSystemUiVisibilityChangeListener;
@@ -66,7 +67,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import javax.inject.Inject;
-import org.videolan.libvlc.IVLCVout;
 
 public class VideoPlayerFragment extends BaseVideoPlayerFragment implements VideoPlayerFView, OnSystemUiVisibilityChangeListener {
 
@@ -173,10 +173,6 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
         } else {
             showOverlay();
         }
-    }
-
-    @Override public void onSurfacesCreated(final IVLCVout vlcVout) {
-
     }
 
     @Override
@@ -318,6 +314,21 @@ public class VideoPlayerFragment extends BaseVideoPlayerFragment implements Vide
         if (!subtitleText.getText().toString().equals(styledString.toString())) {
             subtitleText.setText(styledString);
         }
+    }
+
+    @Override public void updateControlsState(final boolean playing, final long progress, final int streamerProgress, final long length) {
+
+    }
+
+    @Override public void updateSurfaceSize(final int width, final int height) {
+        SurfaceHolder holder = getVideoSurface().getHolder();
+        holder.setFixedSize(width, height);
+
+        ViewGroup.LayoutParams lp = getVideoSurface().getLayoutParams();
+        lp.width = width;
+        lp.height = height;
+        getVideoSurface().setLayoutParams(lp);
+        getVideoSurface().invalidate();
     }
 
     @Override public void setProgressVisible(boolean visible) {

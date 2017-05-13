@@ -15,23 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player.video;
 
-public class PlaybackProgressChangedEvent {
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
 
-    private final long currentTime;
-    private final long duration;
+public interface TVPlayerPresenter extends BaseVideoPlayerPresenter {
 
-    public PlaybackProgressChangedEvent(long currentTime, long duration) {
-        this.currentTime = currentTime;
-        this.duration = duration;
-    }
-
-    public long getCurrentTime() {
-        return currentTime;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
 }

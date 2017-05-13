@@ -15,9 +15,8 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+package butter.droid.tv.ui.player.video;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
@@ -28,40 +27,31 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
-import butter.droid.manager.internal.audio.AudioManager;
-import butter.droid.manager.internal.brightness.BrightnessManager;
 import dagger.Module;
 import dagger.Provides;
 import org.videolan.libvlc.LibVLC;
 
-@Module(includes = VideoPlayerFBindModule.class)
-public class VideoPlayerFModule {
+@Module(includes = TVPlaterBindModule.class)
+public class TVPlayerModule {
 
-    private final VideoPlayerFView view;
-    private final Activity activity;
+    private final TVPlayerView view;
 
-    public VideoPlayerFModule(final VideoPlayerFView view, final Activity activity) {
+    public TVPlayerModule(final TVPlayerView view) {
         this.view = view;
-        this.activity = activity;
     }
 
-    @Provides @FragmentScope VideoPlayerFView provideView() {
+    @Provides @FragmentScope TVPlayerView provideView() {
         return view;
     }
 
-    @Provides @FragmentScope VideoPlayerFPresenter providePresenter(VideoPlayerFView view, Context context, PrefManager prefManager,
+    @Provides @FragmentScope TVPlayerPresenter providePresenter(TVPlayerView view, Context context, PrefManager prefManager,
             PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
-            AudioManager audioManager, BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player) {
-        return new VideoPlayerFPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
-                beamManager, brightnessManager, audioManager, touchHandler, player);
-    }
-
-    @Provides @FragmentScope Activity provideActivity() {
-        return activity;
+            VlcPlayer vlcPlayer) {
+        return new TVPlayerPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
+                beamManager, vlcPlayer);
     }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
         return new VlcPlayer(libVLC, windowManager);
     }
-
 }

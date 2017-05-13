@@ -18,11 +18,11 @@
 package butter.droid.base.ui.player.fragment;
 
 import static android.R.attr.value;
+import static butter.droid.base.manager.internal.vlc.VLCOptions.HW_ACCELERATION_DISABLED;
 
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -30,7 +30,8 @@ import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.manager.internal.vlc.VLCOptions;
+import butter.droid.base.manager.internal.vlc.VlcPlayer;
+import butter.droid.base.manager.internal.vlc.VlcPlayer.PlayerCallback;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -44,31 +45,21 @@ import com.connectsdk.device.ConnectableDevice;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Locale;
-import org.videolan.libvlc.IVLCVout;
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.LibVLC.HardwareAccelerationError;
-import org.videolan.libvlc.MediaPlayer;
-import org.videolan.libvlc.MediaPlayer.Event;
-import org.videolan.libvlc.MediaPlayer.EventListener;
 import timber.log.Timber;
 
-public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPresenter, HardwareAccelerationError, EventListener,
-        ISubtitleDownloaderListener {
+public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPresenter, ISubtitleDownloaderListener, PlayerCallback {
 
     private static final String PREF_RESUME_POSITION = "resume_position";
 
     private final BaseVideoPlayerView view;
     private final Context context;
     private final PrefManager prefManager;
-    @Nullable private final LibVLC libVLC;
     private final PreferencesHandler preferencesHandler;
     private final ProviderManager providerManager;
     private final PlayerManager playerManager;
     private final BeamManager beamManager;
-
-    private MediaPlayer mediaPlayer;
+    private final VlcPlayer player;
 
     protected StreamInfo streamInfo;
     private long resumePosition;
@@ -83,46 +74,41 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     private boolean disabledHardwareAcceleration;
     private boolean seeking;
 
-    private long videoDuration;
     private int streamerProgress;
     private boolean videoEnded;
     private int subtitleOffset;
-    @Surface private int currentSize = SURFACE_BEST_FIT;
 
     public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final Context context, final PrefManager prefManager,
-            @Nullable final LibVLC libVLC,final PreferencesHandler preferencesHandler, final ProviderManager providerManager,
-            final PlayerManager playerManager, final BeamManager beamManager) {
+            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
+            final BeamManager beamManager, final VlcPlayer player) {
         this.view = view;
         this.context = context;
         this.prefManager = prefManager;
-        this.libVLC = libVLC;
         this.preferencesHandler = preferencesHandler;
         this.providerManager = providerManager;
         this.playerManager = playerManager;
         this.beamManager = beamManager;
+        this.player = player;
     }
 
     @Override public void onCreate(final StreamInfo streamInfo, final long resumePosition) {
 
-        if (libVLC == null) {
+        if (streamInfo == null) {
+            throw new IllegalStateException("Stream info was not provided");
+        }
+
+        if (!player.initialize()) {
             // TODO: 4/2/17 Stop activity & maybe show error
             return;
         }
 
-        if (streamInfo == null) {
-            throw new IllegalStateException("Stream info was not provided");
-        }
+        player.setCallback(this);
 
         this.streamInfo = streamInfo;
         this.resumePosition = resumePosition;
         this.media = streamInfo.getMedia();
 
         prefManager.save(PREF_RESUME_POSITION, resumePosition);
-
-        libVLC.setOnHardwareAccelerationError(this);
-
-        mediaPlayer = new MediaPlayer(libVLC);
-        mediaPlayer.setEventListener(this);
 
         if (streamInfo.getSubtitleLanguage() == null) {
             // Get selected default subtitle
@@ -142,8 +128,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
     @Override public void onResume() {
         beamManager.addDeviceListener(deviceListener);
-        view.onProgressChanged(prefManager.get(PREF_RESUME_POSITION, resumePosition), getStreamerProgress(), videoDuration);
-
 
         prepareVlcVout();
         loadMedia();
@@ -155,10 +139,9 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
     @Override public void onPause() {
         saveVideoCurrentTime();
-        mediaPlayer.stop();
+        player.stop();
 
-        final IVLCVout vlcout = mediaPlayer.getVLCVout();
-        view.detachVlcViews(vlcout);
+        player.detachFromSurface();
 
         beamManager.removeDeviceListener(deviceListener);
     }
@@ -166,75 +149,24 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     @Override public void onDestroy() {
         prefManager.save(PREF_RESUME_POSITION, 0);
 
-        mediaPlayer.release();
-        if (libVLC != null) {
-            libVLC.release();
-        }
+        player.release();
+        player.setCallback(null);
     }
 
     @Override public void play() {
-        mediaPlayer.play();
+        player.play();
     }
 
     @Override public void pause() {
-        mediaPlayer.pause();
+        player.pause();
     }
 
     @Override public void togglePlayPause() {
-        if (videoEnded) {
-            loadMedia();
-        }
+//        if (videoEnded) {
+//            loadMedia();
+//        }
 
-        if (mediaPlayer.isPlaying()) {
-            pause();
-        } else {
-            play();
-        }
-    }
-
-    @Override public void eventHardwareAccelerationError() {
-        handleHardwareAccelerationError();
-    }
-
-    @Override public void onEvent(final Event event) {
-        switch (event.type) {
-            case MediaPlayer.Event.Playing:
-                videoDuration = mediaPlayer.getLength();
-                view.setKeepScreenOn(true);
-                resumeVideo();
-                view.setProgressVisible(false);
-                view.showOverlay();
-                view.updatePlayPauseState(true);
-                break;
-            case MediaPlayer.Event.Paused:
-                view.setKeepScreenOn(false);
-                saveVideoCurrentTime();
-                view.updatePlayPauseState(false);
-                break;
-            case MediaPlayer.Event.Stopped:
-                view.setKeepScreenOn(false);
-                view.updatePlayPauseState(false);
-                break;
-            case MediaPlayer.Event.EndReached:
-                endReached();
-                view.updatePlayPauseState(false);
-                break;
-            case MediaPlayer.Event.EncounteredError:
-                view.onErrorEncountered();
-                view.updatePlayPauseState(false);
-                break;
-            case MediaPlayer.Event.Opening:
-                view.setProgressVisible(true);
-                videoDuration = mediaPlayer.getLength();
-                mediaPlayer.play();
-                break;
-            case MediaPlayer.Event.TimeChanged:
-            case MediaPlayer.Event.PositionChanged:
-                view.onProgressChanged(getCurrentTime(), getStreamerProgress(), getDuration());
-                progressSubtitleCaption();
-                break;
-        }
-
+        player.togglePlayPause();
     }
 
     @Override public void onSubtitleDownloadCompleted(final boolean isSuccessful, final TimedTextObject subtitleFile) {
@@ -242,19 +174,16 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         subs = subtitleFile;
     }
 
-    @Override public void vlcNewLayout() {
-        view.changeSurfaceSize(mediaPlayer.getVLCVout(), currentSize, false);
-    }
-
     @Override public void streamProgressUpdated(final float progress) {
-        int newProgress = (int) ((getDuration() / 100) * progress);
+        int newProgress = (int) ((player.getLength() / 100) * progress);
         if (streamerProgress < newProgress) {
             streamerProgress = newProgress;
         }
     }
 
     @Override public void reloadMedia() {
-        mediaPlayer.stop();
+        player.stop();
+//        mediaPlayer.stop();
         view.clearFrame();
         loadMedia();
     }
@@ -348,13 +277,14 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     @Override public void onScaleClicked() {
-        if (currentSize < SURFACE_ORIGINAL) {
-            currentSize++;
+        int currentPolicy = player.getSizePolicy();
+        if (currentPolicy < SURFACE_ORIGINAL) {
+            currentPolicy++;
         } else {
-            currentSize = SURFACE_BEST_FIT;
+            currentPolicy = SURFACE_BEST_FIT;
         }
 
-        view.changeSurfaceSize(mediaPlayer.getVLCVout(), currentSize, true);
+        player.setSizePolicy(currentPolicy);
         view.showOverlay();
     }
 
@@ -399,7 +329,7 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
      */
     protected void loadMedia() {
 
-        if (mediaPlayer.getMedia() == null) {
+//        if (mediaPlayer.getMedia() == null) {
             String videoLocation;
             if (TextUtils.isEmpty(streamInfo.getVideoLocation())) {
 //            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
@@ -413,22 +343,23 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
                 }
             }
 
-            int flags = disabledHardwareAcceleration ? VLCOptions.MEDIA_NO_HWACCEL : 0;
-            flags = flags | VLCOptions.MEDIA_VIDEO;
+            int ha;
+            if (disabledHardwareAcceleration) {
+                ha = HW_ACCELERATION_DISABLED;
+            } else {
+                ha = preferencesHandler.getHwAcceleration();
+            }
 
-            org.videolan.libvlc.Media media = new org.videolan.libvlc.Media(libVLC, Uri.parse(videoLocation));
-            VLCOptions.setMediaOptions(media, preferencesHandler, flags);
-
-            mediaPlayer.setMedia(media);
+            player.loadMedia(Uri.parse(videoLocation), ha);
 
             long resumeFrom = prefManager.get(PREF_RESUME_POSITION, resumePosition);
             if (resumeFrom > 0) {
-                mediaPlayer.setTime(resumeFrom);
+                player.setTime(resumeFrom);
             }
-        }
+//        }
 
-        videoDuration = mediaPlayer.getLength();
-        mediaPlayer.play();
+//        videoDuration = mediaPlayer.getLength();
+        player.play();
         videoEnded = false;
     }
 
@@ -438,32 +369,28 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     protected long getCurrentTime() {
-        return mediaPlayer.getTime();
-    }
-
-    protected long getDuration() {
-        return videoDuration;
+        return player.getTime();
     }
 
     protected void seek(int delta) {
-        if (mediaPlayer.getLength() <= 0 && !seeking) {
+        if (player.getLength() <= 0 && !seeking) {
             return;
         }
 
-        long position = mediaPlayer.getTime() + delta;
+        long position = player.getTime() + delta;
         if (position < 0) {
             position = 0;
         }
 
         setCurrentTime(position);
         view.showOverlay();
-        view.onProgressChanged(getCurrentTime(), getStreamerProgress(), getDuration()); // TODO: 4/2/17 Is this already handled by vlc event?
+//        view.onProgressChanged(getCurrentTime(), getStreamerProgress(), player.getLength()); // TODO: 4/2/17 Is this already handled by vlc event?
         lastSubs = null;
     }
 
     protected void setCurrentTime(long time) {
-        if (time / getDuration() * 100 <= getStreamerProgress()) {
-            mediaPlayer.setTime(time);
+        if (time / player.getLength() * 100 <= getStreamerProgress()) {
+            player.setTime(time);
         }
     }
 
@@ -472,7 +399,7 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     private void saveVideoCurrentTime() {
-        long currentTime = mediaPlayer.getTime();
+        long currentTime = player.getTime();
         prefManager.save(PREF_RESUME_POSITION, currentTime);
     }
 
@@ -486,7 +413,7 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
      * @return true if video is played using VLC
      */
     protected boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        return player.isPlaying();
     }
 
     protected void setLastSubtitleCaption(Caption sub) {
@@ -496,23 +423,23 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     protected abstract void startBeamPlayerActivity();
 
     protected final void progressSubtitleCaption() {
-        if (libVLC != null && mediaPlayer != null && mediaPlayer.isPlaying() && subs != null) {
-            Collection<Caption> subtitles = subs.captions.values();
-            double currentTime = getCurrentTime() - subtitleOffset;
-            if (lastSubs != null && currentTime >= lastSubs.start.getMilliseconds() && currentTime <= lastSubs.end.getMilliseconds()) {
-                view.showTimedCaptionText(lastSubs);
-            } else {
-                for (Caption caption : subtitles) {
-                    if (currentTime >= caption.start.getMilliseconds() && currentTime <= caption.end.getMilliseconds()) {
-                        lastSubs = caption;
-                        view.showTimedCaptionText(caption);
-                        break;
-                    } else if (currentTime > caption.end.getMilliseconds()) {
-                        view.showTimedCaptionText(null);
-                    }
-                }
-            }
-        }
+//        if (libVLC != null && mediaPlayer != null && mediaPlayer.isPlaying() && subs != null) {
+//            Collection<Caption> subtitles = subs.captions.values();
+//            double currentTime = getCurrentTime() - subtitleOffset;
+//            if (lastSubs != null && currentTime >= lastSubs.start.getMilliseconds() && currentTime <= lastSubs.end.getMilliseconds()) {
+//                view.showTimedCaptionText(lastSubs);
+//            } else {
+//                for (Caption caption : subtitles) {
+//                    if (currentTime >= caption.start.getMilliseconds() && currentTime <= caption.end.getMilliseconds()) {
+//                        lastSubs = caption;
+//                        view.showTimedCaptionText(caption);
+//                        break;
+//                    } else if (currentTime > caption.end.getMilliseconds()) {
+//                        view.showTimedCaptionText(null);
+//                    }
+//                }
+//            }
+//        }
     }
 
     private void loadOrDownloadSubtitle() {
@@ -541,30 +468,90 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
     private void handleHardwareAccelerationError() {
         saveVideoCurrentTime();
-        mediaPlayer.stop();
+        player.stop();
         onHardwareAccelerationError();
     }
 
     private void prepareVlcVout() {
-        final IVLCVout vlcVout = mediaPlayer.getVLCVout();
-
-        if (!vlcVout.areViewsAttached()) {
-            view.attachVlcViews(vlcVout);
-        }
+       view.attachVlcViews();
     }
 
     private void resumeVideo() {
         long resumePosition = prefManager.get(PREF_RESUME_POSITION, 0);
-        videoDuration = mediaPlayer.getLength();
-        if (videoDuration > resumePosition && resumePosition > 0) {
+        if (player.getLength() > resumePosition && resumePosition > 0) {
             setCurrentTime(resumePosition);
             prefManager.save(PREF_RESUME_POSITION, 0);
         }
     }
 
-    private void endReached() {
+    @Override public void updateSurfaceSize(final int width, final int height) {
+        view.updateSurfaceSize(width, height);
+    }
+
+    @Override public void progressChanged(final long progress) {
+        updateControlls();
+    }
+
+    @Override public void playing() {
+        updateControlls();
+    }
+
+    @Override public void paused() {
+        updateControlls();
+    }
+
+    @Override public void stopped() {
+
+    }
+
+    private void updateControlls() {
+        view.updateControlsState(player.isPlaying(), getCurrentTime(), getStreamerProgress(), player.getLength());
+    }
+
+//            switch (event.type) {
+//        case MediaPlayer.Event.Playing:
+//            videoDuration = player.getLength();
+//            view.setKeepScreenOn(true);
+//            resumeVideo();
+//            view.setProgressVisible(false);
+//            view.showOverlay();
+//            view.updatePlayPauseState(true);
+//            break;
+//        case MediaPlayer.Event.Paused:
+//            view.setKeepScreenOn(false);
+//            saveVideoCurrentTime();
+//            view.updatePlayPauseState(false);
+//            break;
+//        case MediaPlayer.Event.Stopped:
+//            view.setKeepScreenOn(false);
+//            view.updatePlayPauseState(false);
+//            break;
+//        case MediaPlayer.Event.EndReached:
+//            endReached();
+//            view.updatePlayPauseState(false);
+//            break;
+//        case MediaPlayer.Event.EncounteredError:
+//            view.onErrorEncountered();
+//            view.updatePlayPauseState(false);
+//            break;
+//        case MediaPlayer.Event.Opening:
+//            view.setProgressVisible(true);
+//            videoDuration = player.getLength();
+////                mediaPlayer.play(); // should be handled by auto plau
+//            break;
+//        case MediaPlayer.Event.TimeChanged:
+//        case MediaPlayer.Event.PositionChanged:
+//            view.onProgressChanged(getCurrentTime(), getStreamerProgress(), getDuration());
+//            progressSubtitleCaption();
+//            break;
+
+    @Override public void endReached() {
         videoEnded = true;
         view.onPlaybackEndReached();
+    }
+
+    @Override public void playerError() {
+        handleHardwareAccelerationError();
     }
 
     private final BeamDeviceListener deviceListener = new BeamDeviceListener() {

@@ -24,19 +24,15 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.ui.player.overlay.TVPlaybackOverlayFragment;
-import butter.droid.tv.ui.player.video.TVVideoPlayerFragment;
 import javax.inject.Inject;
 
-public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback, TVTrailerPlayerView {
+public class TVTrailerPlayerActivity extends TVBaseActivity implements TVTrailerPlayerView {
 
     private static final String EXTRA_LOCATION = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_LOCATION";
     private static final String EXTRA_DATA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_DATA";
@@ -44,8 +40,8 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
     @Inject
     TVTrailerPlayerPresenter presenter;
 
-    private TVVideoPlayerFragment playerFragment;
-    private TVPlaybackOverlayFragment tvPlaybackOverlayFragment;
+//    private TVVideoPlayerFragment2 playerFragment;
+//    private TVPlaybackOverlayFragment2 tvPlaybackOverlayFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +59,8 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
         final String youTubeUrl = intent.getStringExtra(EXTRA_LOCATION);
 
         final FragmentManager fm = getSupportFragmentManager();
-        this.playerFragment = (TVVideoPlayerFragment) fm.findFragmentById(R.id.fragment);
-        this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment) fm.findFragmentById(R.id.playback_overlay_fragment);
+//        this.playerFragment = (TVVideoPlayerFragment2) fm.findFragmentById(R.id.fragment);
+//        this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment2) fm.findFragmentById(R.id.playback_overlay_fragment);
 
         presenter.onCreate(media, youTubeUrl);
     }
@@ -86,29 +82,29 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPl
         }
     }
 
-    @Override
-    public Long getResumePosition() {
-        return 0L;
-    }
-
-    @Override
-    public StreamInfo getInfo() {
-        return presenter.getStreamInfo();
-    }
-
-    @Override
-    public TorrentService getService() {
-        return null;
-    }
+//    @Override
+//    public Long getResumePosition() {
+//        return 0L;
+//    }
+//
+//    @Override
+//    public StreamInfo getInfo() {
+//        return presenter.getStreamInfo();
+//    }
+//
+//    @Override
+//    public TorrentService getService() {
+//        return null;
+//    }
 
     @Override
     public void onDisableVideoPlayerSubsButton() {
-        tvPlaybackOverlayFragment.toggleSubtitleAction(false);
+//        tvPlaybackOverlayFragment.toggleSubtitleAction(false);
     }
 
     @Override
     public void onNotifyMediaReady() {
-        playerFragment.onMediaReady();
+//        playerFragment.onMediaReady();
     }
 
     @Override

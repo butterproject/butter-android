@@ -17,16 +17,11 @@
 
 package butter.droid.base.ui.player.fragment;
 
-import android.support.annotation.NonNull;
 import butter.droid.base.subs.Caption;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.Surface;
-import org.videolan.libvlc.IVLCVout;
 
 public interface BaseVideoPlayerView {
 
-    void attachVlcViews(@NonNull IVLCVout vlcVout);
-
-    void detachVlcViews(@NonNull IVLCVout vlcout);
+    void attachVlcViews();
 
     void updatePlayPauseState(final boolean playing);
 
@@ -44,8 +39,6 @@ public interface BaseVideoPlayerView {
 
     void showTimedCaptionText(Caption caption);
 
-    void changeSurfaceSize(IVLCVout vlcVout, @Surface int currentSize, boolean message);
-
     void clearFrame();
 
     void showSubsSelectorDialog();
@@ -57,4 +50,8 @@ public interface BaseVideoPlayerView {
     void displaySubsSizeDialog();
 
     void displaySubsTimingDialog(int subtitleOffset);
+
+    void updateControlsState(boolean playing, long progress, int streamerProgress, long length);
+
+    void updateSurfaceSize(int width, int height);
 }

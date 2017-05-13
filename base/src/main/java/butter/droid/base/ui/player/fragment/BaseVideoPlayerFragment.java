@@ -17,44 +17,31 @@
 
 package butter.droid.base.ui.player.fragment;
 
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_16_9;
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_4_3;
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_FILL;
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_FIT_HORIZONTAL;
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
-import static butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
-
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.ViewGroup;
 import butter.droid.base.R;
 import butter.droid.base.R2;
 import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter.Surface;
 import com.github.sv244.torrentstream.StreamStatus;
 import com.github.sv244.torrentstream.Torrent;
 import com.github.sv244.torrentstream.listeners.TorrentListener;
 import java.io.File;
 import java.util.Arrays;
 import javax.inject.Inject;
-import org.videolan.libvlc.IVLCVout;
-import timber.log.Timber;
 
-public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVideoPlayerView, IVLCVout.Callback, TorrentListener {
+public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVideoPlayerView, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.streamInfo";
     private static final String ARG_RESUME_POSITION = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.resumePosition";
@@ -62,15 +49,9 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
     public static final int SUBTITLE_MINIMUM_SIZE = 10;
 
     @Inject BaseVideoPlayerPresenter presenter;
+    @Inject VlcPlayer player;
 
     protected boolean mShowReload = false;
-
-    private int mVideoHeight;
-    private int mVideoWidth;
-    private int mVideoVisibleHeight;
-    private int mVideoVisibleWidth;
-    private int mSarNum;
-    private int mSarDen;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,15 +93,8 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
         presenter.onDestroy();
     }
 
-    @Override public void attachVlcViews(@NonNull final IVLCVout vlcVout) {
-        vlcVout.setVideoView(getVideoSurface());
-        vlcVout.addCallback(this);
-        vlcVout.attachViews();
-    }
-
-    @Override public void detachVlcViews(@NonNull final IVLCVout vlcout) {
-        vlcout.removeCallback(this);
-        vlcout.detachViews();
+    @Override public void attachVlcViews() {
+        player.attachToSurface(getVideoSurface());
     }
 
     @Override public void setKeepScreenOn(final boolean keep) {
@@ -130,149 +104,6 @@ public abstract class BaseVideoPlayerFragment extends Fragment implements BaseVi
     protected abstract void showPlayerInfo(String info);
 
     protected abstract SurfaceView getVideoSurface();
-
-    @SuppressWarnings("SuspiciousNameCombination") @Override
-    public void changeSurfaceSize(final IVLCVout vlcVout, @Surface final int currentSize, final boolean message) {
-        int screenWidth = getActivity().getWindow().getDecorView().getWidth();
-        int screenHeight = getActivity().getWindow().getDecorView().getHeight();
-
-        vlcVout.setWindowSize(screenWidth, screenHeight);
-
-        double displayWidth = screenWidth;
-        double displayHeight = screenHeight;
-
-        if (screenWidth < screenHeight) {
-            displayWidth = screenHeight;
-            displayHeight = screenWidth;
-        }
-
-        // sanity check
-        if (displayWidth * displayHeight <= 1 || mVideoWidth * mVideoHeight <= 1) {
-            Timber.e("Invalid surface size");
-            onErrorEncountered();
-            return;
-        }
-
-        // compute the aspect ratio
-        double aspectRatio, visibleWidth;
-        if (mSarDen == mSarNum) {
-            /* No indication about the density, assuming 1:1 */
-            visibleWidth = mVideoVisibleWidth;
-            aspectRatio = (double) mVideoVisibleWidth / (double) mVideoVisibleHeight;
-        } else {
-            /* Use the specified aspect ratio */
-            visibleWidth = mVideoVisibleWidth * (double) mSarNum / mSarDen;
-            aspectRatio = visibleWidth / mVideoVisibleHeight;
-        }
-
-        // compute the display aspect ratio
-        double displayAspectRatio = displayWidth / displayHeight;
-
-        switch (currentSize) {
-            case SURFACE_BEST_FIT:
-                if (message) {
-                    showPlayerInfo(getString(R.string.best_fit));
-                }
-                if (displayAspectRatio < aspectRatio) {
-                    displayHeight = displayWidth / aspectRatio;
-                } else {
-                    displayWidth = displayHeight * aspectRatio;
-                }
-                break;
-            case SURFACE_FIT_HORIZONTAL:
-                displayHeight = displayWidth / aspectRatio;
-                if (message) {
-                    showPlayerInfo(getString(R.string.fit_horizontal));
-                }
-                break;
-            case SURFACE_FIT_VERTICAL:
-                displayWidth = displayHeight * aspectRatio;
-                if (message) {
-                    showPlayerInfo(getString(R.string.fit_vertical));
-                }
-                break;
-            case SURFACE_FILL:
-                if (message) {
-                    showPlayerInfo(getString(R.string.fill));
-                }
-                break;
-            case SURFACE_16_9:
-                if (message) {
-                    showPlayerInfo("16:9");
-                }
-                aspectRatio = 16.0 / 9.0;
-                if (displayAspectRatio < aspectRatio) {
-                    displayHeight = displayWidth / aspectRatio;
-                } else {
-                    displayWidth = displayHeight * aspectRatio;
-                }
-                break;
-            case SURFACE_4_3:
-                if (message) {
-                    showPlayerInfo("4:3");
-                }
-                aspectRatio = 4.0 / 3.0;
-                if (displayAspectRatio < aspectRatio) {
-                    displayHeight = displayWidth / aspectRatio;
-                } else {
-                    displayWidth = displayHeight * aspectRatio;
-                }
-                break;
-            case SURFACE_ORIGINAL:
-                if (message) {
-                    showPlayerInfo(getString(R.string.original_size));
-                }
-                displayHeight = mVideoVisibleHeight;
-                displayWidth = visibleWidth;
-                break;
-        }
-
-        // set display size
-        int finalWidth = (int) Math.ceil(displayWidth * mVideoWidth / mVideoVisibleWidth);
-        int finalHeight = (int) Math.ceil(displayHeight * mVideoHeight / mVideoVisibleHeight);
-
-        SurfaceHolder holder = getVideoSurface().getHolder();
-        holder.setFixedSize(finalWidth, finalHeight);
-
-        ViewGroup.LayoutParams lp = getVideoSurface().getLayoutParams();
-        lp.width = finalWidth;
-        lp.height = finalHeight;
-        getVideoSurface().setLayoutParams(lp);
-        getVideoSurface().invalidate();
-    }
-
-    /**
-     * This callback is called when the native vout call request a new Layout.
-     *
-     * @param vlcVout vlcVout
-     * @param width Frame width
-     * @param height Frame height
-     * @param visibleWidth Visible frame width
-     * @param visibleHeight Visible frame height
-     * @param sarNum Surface aspect ratio numerator
-     * @param sarDen Surface aspect ratio denominator
-     */
-    @Override
-    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
-        if (width * height <= 0) {
-            return;
-        }
-
-        // store video size
-        mVideoWidth = width;
-        mVideoHeight = height;
-        mVideoVisibleWidth = visibleWidth;
-        mVideoVisibleHeight = visibleHeight;
-        mSarNum = sarNum;
-        mSarDen = sarDen;
-
-        presenter.vlcNewLayout();
-
-    }
-
-    @Override
-    public void onSurfacesDestroyed(IVLCVout ivlcVout) {
-    }
 
     @Override
     public void onStreamPrepared(Torrent torrent) {

@@ -15,7 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.events;
+package butter.droid.tv.ui.player.video;
 
-public class ScaleVideoEvent {
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
+import dagger.Binds;
+import dagger.Module;
+
+@Module
+public interface TVPlaterBindModule {
+
+    @Binds BaseVideoPlayerView bindBaseVideoPlayerView(TVPlayerView view);
+
+    @Binds BaseVideoPlayerPresenter bindBaseVideoPlayerPresenter(TVPlayerPresenter presenter);
+
 }
