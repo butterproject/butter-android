@@ -22,8 +22,8 @@ import dagger.Binds;
 import dagger.Module;
 
 @Module
-public interface VideoPlayerFBindModule {
+public interface PlayerBindModule {
 
-    @Binds BaseVideoPlayerPresenter bindBasePresenter(VideoPlayerFPresenter presenter);
+    @Binds BaseVideoPlayerPresenter bindBasePresenter(PlayerPresenter presenter);
 
 }

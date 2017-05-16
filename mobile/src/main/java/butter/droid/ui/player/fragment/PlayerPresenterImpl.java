@@ -31,9 +31,9 @@ import butter.droid.manager.internal.brightness.BrightnessManager;
 import butter.droid.ui.player.fragment.VideoPlayerTouchHandler.OnVideoTouchListener;
 import java.util.Locale;
 
-public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl implements VideoPlayerFPresenter, OnVideoTouchListener {
+public class PlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
 
-    private final VideoPlayerFView view;
+    private final PlayerView view;
     private final Context context;
     private final PreferencesHandler preferencesHandler;
     private final BrightnessManager brightnessManager;
@@ -41,7 +41,7 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     private final VideoPlayerTouchHandler touchHandler;
     private final VlcPlayer player;
 
-    public VideoPlayerFPresenterImpl(final VideoPlayerFView view, final Context context, final PrefManager prefManager,
+    public PlayerPresenterImpl(final PlayerView view, final Context context, final PrefManager prefManager,
             final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
             final BeamManager beamManager, final BrightnessManager brightnessManager, final AudioManager audioManager,
             final VideoPlayerTouchHandler touchHandler, final VlcPlayer player) {

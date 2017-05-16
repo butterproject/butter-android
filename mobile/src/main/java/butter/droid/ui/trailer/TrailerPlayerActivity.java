@@ -29,7 +29,7 @@ import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
 import butter.droid.ui.ButterBaseActivity;
-import butter.droid.ui.player.fragment.VideoPlayerFragment;
+import butter.droid.ui.player.fragment.PlayerFragment;
 import javax.inject.Inject;
 
 public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView {
@@ -40,7 +40,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
     @Inject
     TrailerPlayerPresenter presenter;
 
-    private VideoPlayerFragment videoPlayerFragment;
+    private PlayerFragment playerFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
         final Media media = intent.getParcelableExtra(EXTRA_DATA);
         final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
 
-//        this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
+//        this.playerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
         presenter.onCreate(media, youtubeUrl);
     }
@@ -89,12 +89,12 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     @Override
     public void onDisableVideoPlayerSubsButton() {
-        videoPlayerFragment.enableSubsButton(false);
+        playerFragment.enableSubsButton(false);
     }
 
     @Override
     public void onNotifyMediaReady() {
-//        videoPlayerFragment.onMediaReady();
+//        playerFragment.onMediaReady();
     }
 
     @Override

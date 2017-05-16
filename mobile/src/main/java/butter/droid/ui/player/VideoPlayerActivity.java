@@ -26,7 +26,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.ui.player.fragment.VideoPlayerFragment;
+import butter.droid.ui.player.fragment.PlayerFragment;
 import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import javax.inject.Inject;
@@ -41,7 +41,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     @Inject VideoPlayerPresenter presenter;
 
     private VideoPlayerComponent component;
-    private VideoPlayerFragment fragment;
+    private PlayerFragment fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
         if (savedInstanceState == null) {
             presenter.onCreate(streamInfo, resumePosition, intent.getAction(), intent);
         } else {
-            fragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
+            fragment = (PlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
         }
 
 //        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
@@ -95,7 +95,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     }
 
     @Override public void showVideoFragment(@NonNull final StreamInfo streamInfo, final long resumePosition) {
-        fragment = VideoPlayerFragment.newInstance(streamInfo, resumePosition);
+        fragment = PlayerFragment.newInstance(streamInfo, resumePosition);
         getSupportFragmentManager().beginTransaction()
                 .add(android.R.id.content, fragment, TAG_VIDEO_FRAGMENT)
                 .commit();

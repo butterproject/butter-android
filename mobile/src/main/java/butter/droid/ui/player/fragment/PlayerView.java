@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
 
-public interface VideoPlayerFView extends BaseVideoPlayerView {
+public interface PlayerView extends BaseVideoPlayerView {
 
     void displayStreamProgress(int progress);
 

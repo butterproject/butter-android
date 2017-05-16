@@ -34,25 +34,25 @@ import dagger.Module;
 import dagger.Provides;
 import org.videolan.libvlc.LibVLC;
 
-@Module(includes = VideoPlayerFBindModule.class)
-public class VideoPlayerFModule {
+@Module(includes = PlayerBindModule.class)
+public class PlayerModule {
 
-    private final VideoPlayerFView view;
+    private final PlayerView view;
     private final Activity activity;
 
-    public VideoPlayerFModule(final VideoPlayerFView view, final Activity activity) {
+    public PlayerModule(final PlayerView view, final Activity activity) {
         this.view = view;
         this.activity = activity;
     }
 
-    @Provides @FragmentScope VideoPlayerFView provideView() {
+    @Provides @FragmentScope PlayerView provideView() {
         return view;
     }
 
-    @Provides @FragmentScope VideoPlayerFPresenter providePresenter(VideoPlayerFView view, Context context, PrefManager prefManager,
+    @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PrefManager prefManager,
             PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
             AudioManager audioManager, BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player) {
-        return new VideoPlayerFPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
+        return new PlayerPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
                 beamManager, brightnessManager, audioManager, touchHandler, player);
     }
 

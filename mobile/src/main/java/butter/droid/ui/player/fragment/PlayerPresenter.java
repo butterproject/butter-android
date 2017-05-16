@@ -19,7 +19,7 @@ package butter.droid.ui.player.fragment;
 
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
 
-public interface VideoPlayerFPresenter extends BaseVideoPlayerPresenter {
+public interface PlayerPresenter extends BaseVideoPlayerPresenter {
 
     void onProgressChanged(int progress);
 

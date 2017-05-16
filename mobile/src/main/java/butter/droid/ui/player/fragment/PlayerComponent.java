@@ -20,16 +20,16 @@ package butter.droid.ui.player.fragment;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(modules = VideoPlayerFModule.class)
+@Subcomponent(modules = PlayerModule.class)
 @FragmentScope
-public interface VideoPlayerFComponent {
+public interface PlayerComponent {
 
-    void inject(VideoPlayerFragment fragment);
+    void inject(PlayerFragment fragment);
 
     @Subcomponent.Builder interface Builder {
-        Builder videoPlayerFModule(VideoPlayerFModule module);
+        Builder videoPlayerFModule(PlayerModule module);
 
-        VideoPlayerFComponent build();
+        PlayerComponent build();
     }
 
 }

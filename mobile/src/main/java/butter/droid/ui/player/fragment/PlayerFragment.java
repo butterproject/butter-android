@@ -81,7 +81,7 @@ import java.io.File;
 import java.util.Arrays;
 import javax.inject.Inject;
 
-public class VideoPlayerFragment extends Fragment implements VideoPlayerFView, OnSystemUiVisibilityChangeListener, TorrentListener {
+public class PlayerFragment extends Fragment implements PlayerView, OnSystemUiVisibilityChangeListener, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.streamInfo";
     private static final String ARG_RESUME_POSITION = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.resumePosition";
@@ -92,7 +92,7 @@ public class VideoPlayerFragment extends Fragment implements VideoPlayerFView, O
     private static final int FADE_OUT_INFO = 1000;
     public static final int SUBTITLE_MINIMUM_SIZE = 10;
 
-    @Inject VideoPlayerFPresenter presenter;
+    @Inject PlayerPresenter presenter;
     @Inject VideoPlayerTouchHandler touchHandler;
     @Inject VlcPlayer player;
 
@@ -127,7 +127,7 @@ public class VideoPlayerFragment extends Fragment implements VideoPlayerFView, O
         VideoPlayerActivity activity = (VideoPlayerActivity) getActivity();
         activity.getComponent()
                 .videoPlayerFComponentBuilder()
-                .videoPlayerFModule(new VideoPlayerFModule(this, activity))
+                .videoPlayerFModule(new PlayerModule(this, activity))
                 .build()
                 .inject(this);
 
@@ -705,12 +705,12 @@ public class VideoPlayerFragment extends Fragment implements VideoPlayerFView, O
         }
     };
 
-    public static VideoPlayerFragment newInstance(final StreamInfo streamInfo, final long resumePosition) {
+    public static PlayerFragment newInstance(final StreamInfo streamInfo, final long resumePosition) {
         Bundle args = new Bundle(2);
         args.putParcelable(ARG_STREAM_INFO, streamInfo);
         args.putLong(ARG_RESUME_POSITION, resumePosition);
 
-        VideoPlayerFragment fragment = new VideoPlayerFragment();
+        PlayerFragment fragment = new PlayerFragment();
         fragment.setArguments(args);
         return fragment;
     }
