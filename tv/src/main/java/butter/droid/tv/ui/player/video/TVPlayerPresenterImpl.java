@@ -38,12 +38,6 @@ public class TVPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implemen
         this.view = view;
     }
 
-    @Override public void onViewCreated() {
-        super.onViewCreated();
-
-        view.setupControls(streamInfo);
-    }
-
     @Override protected void onHardwareAccelerationError() {
 
     }

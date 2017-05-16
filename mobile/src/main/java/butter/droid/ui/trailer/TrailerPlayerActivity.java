@@ -51,6 +51,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
                 .build()
                 .inject(this);
 
+        super.onCreate(savedInstanceState, 0);
 //        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
 
         final Intent intent = getIntent();

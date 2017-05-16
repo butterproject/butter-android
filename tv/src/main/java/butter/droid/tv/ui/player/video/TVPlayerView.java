@@ -17,10 +17,8 @@
 
 package butter.droid.tv.ui.player.video;
 
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
 
 public interface TVPlayerView extends BaseVideoPlayerView {
 
-    void setupControls(StreamInfo streamInfo);
 }

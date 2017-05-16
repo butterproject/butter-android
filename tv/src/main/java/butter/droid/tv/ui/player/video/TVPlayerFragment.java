@@ -18,10 +18,7 @@
 package butter.droid.tv.ui.player.video;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.VideoSupportFragment;
@@ -68,6 +65,7 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
     private MediaSessionCompat mediaSession;
     private Builder stateBuilder;
     private MediaMetadataCompat.Builder metadataBuilder;
+    private PlayerMediaControllerGlue mediaControllerGlue;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +132,7 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
 
         MediaControllerCompat mediaController = new MediaControllerCompat(getContext(), mediaSession);
 
-        final PlayerMediaControllerGlue mediaControllerGlue = new PlayerMediaControllerGlue(getContext(), new int[]{ 1 }, new int[]{ 1 });
+        mediaControllerGlue = new PlayerMediaControllerGlue(getContext(), new int[]{ 1 }, new int[]{ 1 });
         mediaControllerGlue.attachToMediaController(mediaController);
 
         PlaybackControlsRowPresenter controlsRowPresenter = new PlaybackControlsRowPresenter(new DescriptionPresenter());
@@ -156,11 +154,6 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
         player.attachToSurface(getSurfaceView());
     }
 
-    @Override public void updatePlayPauseState(final boolean playing) {
-        stateBuilder.setState(playing ? PlaybackStateCompat.STATE_PAUSED : PlaybackStateCompat.STATE_PLAYING, 0, 1);
-        mediaSession.setPlaybackState(stateBuilder.build());
-    }
-
     @Override public void showOverlay() {
         // nothing to do
     }
@@ -179,15 +172,6 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
 
     @Override public void onErrorEncountered() {
         // TODO: 5/7/17
-    }
-
-    @Override public void onProgressChanged(final long currentTime, final int streamProgress, final long duration) {
-        stateBuilder.setBufferedPosition(duration);
-        stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, currentTime, 1);
-        mediaSession.setPlaybackState(stateBuilder.build());
-
-        metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration);
-        mediaSession.setMetadata(metadataBuilder.build());
     }
 
     @Override public void updateControlsState(final boolean playing, final long currentTime, final int streamerProgress,
@@ -211,14 +195,13 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
         surfaceView.setLayoutParams(lp);
     }
 
-    @Override public void showTimedCaptionText(final Caption caption) {
-        // TODO: 5/7/17
+    @Override public void detachMediaSession() {
+        mediaControllerGlue.detach();
+        mediaSession.release();
     }
 
-    @Override public void clearFrame() {
-        Canvas canvas = new Canvas();
-        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        getSurfaceView().draw(canvas);
+    @Override public void showTimedCaptionText(final Caption caption) {
+        // TODO: 5/7/17
     }
 
     @Override public void showSubsSelectorDialog() {
@@ -334,10 +317,6 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
 
     public class PlayerSessionCallback extends MediaSessionCompat.Callback {
 
-        @Override public void onCommand(final String command, final Bundle extras, final ResultReceiver cb) {
-            super.onCommand(command, extras, cb);
-        }
-
         @Override public void onPlay() {
             presenter.play();
         }
@@ -368,7 +347,7 @@ public class TVPlayerFragment extends VideoSupportFragment implements TVPlayerVi
                     presenter.onScaleClicked();
                     break;
                 case PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION:
-                    presenter.showCustomSubsPicker();
+                    presenter.onSubsClicked();
                     break;
                 default:
                     super.onCustomAction(action, extras);

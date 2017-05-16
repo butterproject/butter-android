@@ -26,4 +26,5 @@ public interface VideoPlayerFPresenter extends BaseVideoPlayerPresenter {
     void onStop();
 
     void requestDisableHardwareAcceleration();
+
 }

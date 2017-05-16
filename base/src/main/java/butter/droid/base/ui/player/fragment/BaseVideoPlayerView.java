@@ -18,12 +18,13 @@
 package butter.droid.base.ui.player.fragment;
 
 import butter.droid.base.subs.Caption;
+import butter.droid.base.torrent.StreamInfo;
 
 public interface BaseVideoPlayerView {
 
-    void attachVlcViews();
+    void setupControls(StreamInfo streamInfo);
 
-    void updatePlayPauseState(final boolean playing);
+    void attachVlcViews();
 
     void showOverlay();
 
@@ -35,11 +36,7 @@ public interface BaseVideoPlayerView {
 
     void onErrorEncountered();
 
-    void onProgressChanged(long currentTime, int streamProgress, long duration);
-
     void showTimedCaptionText(Caption caption);
-
-    void clearFrame();
 
     void showSubsSelectorDialog();
 
@@ -54,4 +51,6 @@ public interface BaseVideoPlayerView {
     void updateControlsState(boolean playing, long progress, int streamerProgress, long length);
 
     void updateSurfaceSize(int width, int height);
+
+    void detachMediaSession();
 }

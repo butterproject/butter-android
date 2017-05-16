@@ -39,11 +39,7 @@ public interface BaseVideoPlayerPresenter {
 
     void pause();
 
-    void togglePlayPause();
-
     void streamProgressUpdated(float progress);
-
-    void reloadMedia();
 
     void showSubsLanguageSettings();
 
@@ -64,10 +60,6 @@ public interface BaseVideoPlayerPresenter {
     void onScaleClicked();
 
     void onSubsClicked();
-
-    void onStartSeeking();
-
-    void onStopSeeking();
 
     void seekForwardClick();
 

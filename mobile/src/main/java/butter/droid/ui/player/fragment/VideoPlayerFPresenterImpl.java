@@ -75,6 +75,8 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     }
 
     @Override public void onViewCreated() {
+        super.onViewCreated();
+
         view.setupSubtitles(preferencesHandler.getSubtitleColor(), preferencesHandler.getSubtitleSize(),
                 preferencesHandler.getSubtitleStrokeColor(), preferencesHandler.getSubtitleStrokeWidth());
 
@@ -82,7 +84,8 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
     }
 
     @Override public void onProgressChanged(final int progress) {
-        if (isSeeking() && progress <= (player.getLength() / 100 * getStreamerProgress())) {
+        if (progress <= player.getLength()) {
+//        if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
             setLastSubtitleCaption(null);
             setCurrentTime(progress);
             progressSubtitleCaption();
@@ -141,7 +144,6 @@ public class VideoPlayerFPresenterImpl extends BaseVideoPlayerPresenterImpl impl
 //        if (getDuration() > 0) {
 //            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(currentTime + jump)));
 //        }
-
     }
 
     @Override public boolean onBrightnessChange(final float delta) {
