@@ -28,29 +28,21 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;
-import butterknife.ButterKnife;
 import javax.inject.Inject;
 
 public class TVVideoPlayerActivity extends TVBaseActivity {
 
-    public final static String EXTRA_STREAM_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.streamInfo";
-    public final static String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
+    private final static String EXTRA_STREAM_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.streamInfo";
+    private final static String EXTRA_RESUME_POSITION = "butter.droid.tv.ui.player.TVVideoPlayerActivity.resumePosition";
+    private final static String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
 
     @Inject PrefManager prefManager;
 
     private TVVideoPlayerComponent component;
 
     private StreamInfo mStreamInfo;
-    private boolean mIsBackPressed = false;
     private boolean mCurrentStreamStopped = false;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mIsBackPressed = true;
-    }
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -62,7 +54,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         component.inject(this);
 
         super.onCreate(savedInstanceState, 0);
-//        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
         createStreamInfo();
 
         if (savedInstanceState == null) {
@@ -70,23 +61,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
                     .add(android.R.id.content, TVPlayerFragment.newInstance(mStreamInfo, 0))
                     .commit();
         }
-
-        ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mIsBackPressed = false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-//        if (mIsBackPressed) {
-//            mPlayerFragment.deactivateMediaSession();
-//        }
 
     }
 
@@ -97,12 +71,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
             mCurrentStreamStopped = true;
         }
         super.onDestroy();
-    }
-
-    @Override
-    public void onVisibleBehindCanceled() {
-//        mPlayerFragment.pause();
-        super.onVisibleBehindCanceled();
     }
 
     @Override
@@ -117,13 +85,17 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     }
 
     @Override
-    public void onTorrentServiceConnected(final TorrentService service) {
-//        torrentStream.addListener(mPlayerFragment);
+    public void onTorrentServiceDisconnected(final TorrentService service) {
+//        if (null != fragment) {
+//            fragment.onTorrentServiceDisconnected();
+//        }
     }
 
     @Override
-    public void onTorrentServiceDisconnected(final TorrentService service) {
-//        torrentStream.removeListener(mPlayerFragment);
+    public void onTorrentServiceConnected(final TorrentService service) {
+//        if (null != fragment) {
+//            fragment.onTorrentServiceConnected(getTorrentService());
+//        }
     }
 
     private void createStreamInfo() {
@@ -137,18 +109,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         mStreamInfo.setVideoLocation(location);
     }
 
-    public void skipTo(StreamInfo info, Show show) {
-        torrentStream.stopStreaming();
-        mCurrentStreamStopped = true;
-
-//        mPlayerFragment.pause();
-//        mPlayerFragment.onPlaybackEndReached();
-
-        finish();
-
-        TVStreamLoadingActivity.startActivity(this, info, show);
-    }
-
     public TVVideoPlayerComponent getComponent() {
         return component;
     }
@@ -160,7 +120,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {
         Intent i = new Intent(context, TVVideoPlayerActivity.class);
         i.putExtra(EXTRA_STREAM_INFO, info);
-        // todo: resume position
+        i.putExtra(EXTRA_RESUME_POSITION, resumePosition);
         context.startActivity(i);
         return i;
     }
@@ -168,8 +128,8 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     public static Intent startActivity(Context context, StreamInfo info, Show show) {
         Intent i = new Intent(context, TVVideoPlayerActivity.class);
         i.putExtra(EXTRA_STREAM_INFO, info);
+        i.putExtra(EXTRA_RESUME_POSITION, 0);
         i.putExtra(EXTRA_SHOW_INFO, show);
-        // todo: resume position
         context.startActivity(i);
         return i;
     }

@@ -67,7 +67,6 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
             fragment = (PlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
         }
 
-//        mTitle = mStreamInfo.getTitle() == null ? getString(R.string.the_video) : mStreamInfo.getTitle();
     }
 
     @Override
@@ -85,8 +84,9 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
             case android.R.id.home:
                 showExitDialog();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

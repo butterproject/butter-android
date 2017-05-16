@@ -126,7 +126,7 @@ public class PlayerFragment extends Fragment implements PlayerView, OnSystemUiVi
 
         VideoPlayerActivity activity = (VideoPlayerActivity) getActivity();
         activity.getComponent()
-                .videoPlayerFComponentBuilder()
+                .playerComponentBuilder()
                 .videoPlayerFModule(new PlayerModule(this, activity))
                 .build()
                 .inject(this);

@@ -28,7 +28,7 @@ public interface VideoPlayerComponent {
 
     void inject(VideoPlayerActivity activity);
 
-    PlayerComponent.Builder videoPlayerFComponentBuilder();
+    PlayerComponent.Builder playerComponentBuilder();
 
     WindowManager windowManager();
 

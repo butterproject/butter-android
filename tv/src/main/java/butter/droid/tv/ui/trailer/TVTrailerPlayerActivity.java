@@ -27,7 +27,6 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
-import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import javax.inject.Inject;
@@ -52,7 +51,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVTrailer
                 .build()
                 .inject(this);
 
-        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+        super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
         final Media media = intent.getParcelableExtra(EXTRA_DATA);
