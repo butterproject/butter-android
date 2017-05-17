@@ -19,7 +19,7 @@ package butter.droid.ui.player;
 
 import android.view.WindowManager;
 import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.player.fragment.PlayerComponent;
+import butter.droid.ui.player.stream.PlayerComponent;
 import dagger.Subcomponent;
 
 @Subcomponent(modules = VideoPlayerModule.class)

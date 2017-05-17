@@ -26,7 +26,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.ui.player.fragment.PlayerFragment;
+import butter.droid.ui.player.stream.PlayerFragment;
 import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import javax.inject.Inject;

@@ -39,7 +39,7 @@ public class BaseTrailerPlayerPresenterImpl implements BaseTrailerPlayerPresente
         this.streamInfo = new StreamInfo(media, null, null, null, null, null);
         view.onDisableVideoPlayerSubsButton();
         this.queryYouTubeTask = new QueryYouTubeTask(youTubeManager, networkManager, phoneManager);
-        queryYouTubeTask.execute(youTubeManager.getYouTubeVideoId(youtubeUrl));
+//        queryYouTubeTask.execute(youTubeManager.getYouTubeVideoId(youtubeUrl));
     }
 
     @Override

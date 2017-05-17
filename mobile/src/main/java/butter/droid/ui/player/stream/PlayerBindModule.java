@@ -15,16 +15,15 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+package butter.droid.ui.player.stream;
 
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
+import dagger.Binds;
+import dagger.Module;
 
-public interface PlayerPresenter extends BaseVideoPlayerPresenter {
+@Module
+public interface PlayerBindModule {
 
-    void onProgressChanged(int progress);
-
-    void onStop();
-
-    void requestDisableHardwareAcceleration();
+    @Binds BaseVideoPlayerPresenter bindBasePresenter(PlayerPresenter presenter);
 
 }

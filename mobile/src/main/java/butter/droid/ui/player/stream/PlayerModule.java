@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+package butter.droid.ui.player.stream;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,6 +30,7 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
+import butter.droid.ui.player.abs.VideoPlayerTouchHandler;
 import dagger.Module;
 import dagger.Provides;
 import org.videolan.libvlc.LibVLC;

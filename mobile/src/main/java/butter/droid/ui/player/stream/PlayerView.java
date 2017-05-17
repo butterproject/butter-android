@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+package butter.droid.ui.player.stream;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -41,4 +41,5 @@ public interface PlayerView extends BaseVideoPlayerView {
     void startBeamPlayerActivity(@NonNull StreamInfo streamInfo, long currentTime);
 
     void updateSubtitleSize(int size);
+
 }

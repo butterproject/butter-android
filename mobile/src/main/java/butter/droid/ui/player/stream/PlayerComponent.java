@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+package butter.droid.ui.player.stream;
 
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
@@ -27,7 +27,7 @@ public interface PlayerComponent {
     void inject(PlayerFragment fragment);
 
     @Subcomponent.Builder interface Builder {
-        Builder videoPlayerFModule(PlayerModule module);
+        Builder playerModule(PlayerModule module);
 
         PlayerComponent build();
     }

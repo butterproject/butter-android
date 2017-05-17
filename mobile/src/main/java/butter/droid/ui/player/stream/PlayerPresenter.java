@@ -15,30 +15,16 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.trailer;
+package butter.droid.ui.player.stream;
 
-import android.view.WindowManager;
-import butter.droid.base.ui.ActivityScope;
-import dagger.Subcomponent;
+import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
 
-@Subcomponent(
-        modules = TrailerPlayerModule.class
-)
-@ActivityScope
-public interface TrailerPlayerComponent {
+public interface PlayerPresenter extends BaseVideoPlayerPresenter {
 
-    void inject(TrailerPlayerActivity activity);
+    void onProgressChanged(int progress);
 
-    butter.droid.ui.trailer.fragment.TrailerPlayerComponent.Builder trailerPlayerComponentBuilder();
+    void onStop();
 
-    WindowManager windowManager();
-
-    @Subcomponent.Builder
-    interface Builder {
-
-        Builder trailerModule(TrailerPlayerModule module);
-
-        TrailerPlayerComponent build();
-    }
+    void requestDisableHardwareAcceleration();
 
 }

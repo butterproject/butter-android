@@ -15,7 +15,41 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.ui.player.abs;
 
 import android.content.Context;
 import butter.droid.R;
@@ -28,10 +62,12 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenterImpl;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
-import butter.droid.ui.player.fragment.VideoPlayerTouchHandler.OnVideoTouchListener;
+import butter.droid.ui.player.stream.PlayerPresenter;
+import butter.droid.ui.player.stream.PlayerView;
+import butter.droid.ui.player.abs.VideoPlayerTouchHandler.OnVideoTouchListener;
 import java.util.Locale;
 
-public class PlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
+public abstract class AbsPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
 
     private final PlayerView view;
     private final Context context;
@@ -41,7 +77,7 @@ public class PlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements
     private final VideoPlayerTouchHandler touchHandler;
     private final VlcPlayer player;
 
-    public PlayerPresenterImpl(final PlayerView view, final Context context, final PrefManager prefManager,
+    public AbsPlayerPresenterImpl(final PlayerView view, final Context context, final PrefManager prefManager,
             final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
             final BeamManager beamManager, final BrightnessManager brightnessManager, final AudioManager audioManager,
             final VideoPlayerTouchHandler touchHandler, final VlcPlayer player) {
@@ -98,7 +134,7 @@ public class PlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements
 
     @Override public void requestDisableHardwareAcceleration() {
         disableHardwareAcceleration();
-        loadMedia();
+//        loadMedia();
     }
 
     @Override public void onDestroy() {
@@ -126,7 +162,7 @@ public class PlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements
         }
         view.displayTitle(title);
     }
-
+    
     @Override public void onSeekChange(final int jump) {
 //        // Adjust the jump
 //        if ((jump > 0) && ((getCurrentTime() + jump) > controlBar.getSecondaryProgress())) {

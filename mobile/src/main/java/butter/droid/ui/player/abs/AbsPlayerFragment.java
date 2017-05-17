@@ -15,7 +15,24 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.player.fragment;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package butter.droid.ui.player.abs;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -69,7 +86,8 @@ import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.ui.player.VideoPlayerActivity;
+import butter.droid.ui.player.stream.PlayerPresenter;
+import butter.droid.ui.player.stream.PlayerView;
 import butter.droid.widget.StrokedRobotoTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,7 +99,7 @@ import java.io.File;
 import java.util.Arrays;
 import javax.inject.Inject;
 
-public class PlayerFragment extends Fragment implements PlayerView, OnSystemUiVisibilityChangeListener, TorrentListener {
+public class AbsPlayerFragment extends Fragment implements PlayerView, OnSystemUiVisibilityChangeListener, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.streamInfo";
     private static final String ARG_RESUME_POSITION = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.resumePosition";
@@ -123,13 +141,6 @@ public class PlayerFragment extends Fragment implements PlayerView, OnSystemUiVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
-        VideoPlayerActivity activity = (VideoPlayerActivity) getActivity();
-        activity.getComponent()
-                .playerComponentBuilder()
-                .videoPlayerFModule(new PlayerModule(this, activity))
-                .build()
-                .inject(this);
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
         long resumePosition = getArguments().getLong(ARG_RESUME_POSITION);
@@ -210,7 +221,7 @@ public class PlayerFragment extends Fragment implements PlayerView, OnSystemUiVi
 
         MediaControllerCompat.setMediaController(getActivity(), mediaController);
 
-        metadataBuilder.putText(MediaMetadataCompat.METADATA_KEY_TITLE, streamInfo.getTitle());
+//        metadataBuilder.putText(MediaMetadataCompat.METADATA_KEY_TITLE, streamInfo.getTitle());
         mediaSession.setMetadata(metadataBuilder.build());
     }
 
@@ -704,15 +715,4 @@ public class PlayerFragment extends Fragment implements PlayerView, OnSystemUiVi
 
         }
     };
-
-    public static PlayerFragment newInstance(final StreamInfo streamInfo, final long resumePosition) {
-        Bundle args = new Bundle(2);
-        args.putParcelable(ARG_STREAM_INFO, streamInfo);
-        args.putLong(ARG_RESUME_POSITION, resumePosition);
-
-        PlayerFragment fragment = new PlayerFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 }

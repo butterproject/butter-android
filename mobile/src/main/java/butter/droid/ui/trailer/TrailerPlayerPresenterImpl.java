@@ -26,8 +26,8 @@ import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 
 public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TrailerPlayerPresenter {
 
-    public TrailerPlayerPresenterImpl(final Context context, final BaseTrailerPlayerView view, final YouTubeManager youTubeManager, final
-    NetworkManager networkManager, final PhoneManager phoneManager) {
+    public TrailerPlayerPresenterImpl(final Context context, final BaseTrailerPlayerView view, final YouTubeManager youTubeManager,
+            final NetworkManager networkManager, final PhoneManager phoneManager) {
         super(context, view, youTubeManager, networkManager, phoneManager);
     }
 

@@ -23,6 +23,7 @@ import static butter.droid.base.manager.internal.vlc.VLCOptions.HW_ACCELERATION_
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -75,7 +76,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     private boolean disabledHardwareAcceleration;
 
     private int streamerProgress;
-    private boolean videoEnded;
     private int subtitleOffset;
 
     public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final Context context, final PrefManager prefManager,
@@ -130,7 +130,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         beamManager.addDeviceListener(deviceListener);
 
         prepareVlcVout();
-        loadMedia();
     }
 
     @CallSuper @Override public void onViewCreated() {
@@ -304,43 +303,43 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
     protected abstract void updateSubtitleSize(int size);
 
+    protected void loadMedia() {
+        String videoLocation = streamInfo.getVideoLocation();
+        if (TextUtils.isEmpty(videoLocation)) {
+//            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
+//            getActivity().finish();
+            return;
+        }
+
+        videoLocation = streamInfo.getVideoLocation();
+        if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
+                "http://") && !videoLocation.startsWith("https://")) {
+            videoLocation = "file://" + videoLocation;
+        }
+
+        loadMedia(Uri.parse(videoLocation));
+    }
+
     /**
      * External extras: - position (long) - position of the video to start with (in ms)
      */
-    protected void loadMedia() {
+    protected void loadMedia(@NonNull Uri uri) {
 
-//        if (mediaPlayer.getMedia() == null) {
-            String videoLocation;
-            if (TextUtils.isEmpty(streamInfo.getVideoLocation())) {
-//            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
-//            getActivity().finish();
-                return;
-            } else {
-                videoLocation = streamInfo.getVideoLocation();
-                if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
-                        "http://") && !videoLocation.startsWith("https://")) {
-                    videoLocation = "file://" + videoLocation;
-                }
-            }
+        int ha;
+        if (disabledHardwareAcceleration) {
+            ha = HW_ACCELERATION_DISABLED;
+        } else {
+            ha = preferencesHandler.getHwAcceleration();
+        }
 
-            int ha;
-            if (disabledHardwareAcceleration) {
-                ha = HW_ACCELERATION_DISABLED;
-            } else {
-                ha = preferencesHandler.getHwAcceleration();
-            }
+        player.loadMedia(uri, ha);
 
-            player.loadMedia(Uri.parse(videoLocation), ha);
+        long resumeFrom = prefManager.get(PREF_RESUME_POSITION, resumePosition);
+        if (resumeFrom > 0) {
+            player.setTime(resumeFrom);
+        }
 
-            long resumeFrom = prefManager.get(PREF_RESUME_POSITION, resumePosition);
-            if (resumeFrom > 0) {
-                player.setTime(resumeFrom);
-            }
-//        }
-
-//        videoDuration = mediaPlayer.getLength();
         player.play();
-        videoEnded = false;
     }
 
     protected void disableHardwareAcceleration() {
@@ -522,7 +521,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 //            break;
 
     @Override public void endReached() {
-        videoEnded = true;
         view.onPlaybackEndReached();
     }
 
