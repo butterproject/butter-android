@@ -17,13 +17,10 @@
 
 package butter.droid.ui.player.stream;
 
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
+import butter.droid.ui.player.abs.AbsPlayerPresenter;
+import butter.droid.base.ui.player.stream.StreamPlayerPresenter;
 
-public interface PlayerPresenter extends BaseVideoPlayerPresenter {
-
-    void onProgressChanged(int progress);
-
-    void onStop();
+public interface PlayerPresenter extends AbsPlayerPresenter, StreamPlayerPresenter {
 
     void requestDisableHardwareAcceleration();
 

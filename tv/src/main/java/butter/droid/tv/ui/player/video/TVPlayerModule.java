@@ -31,7 +31,7 @@ import dagger.Module;
 import dagger.Provides;
 import org.videolan.libvlc.LibVLC;
 
-@Module(includes = TVPlaterBindModule.class)
+@Module(includes = TVPlayerBindModule.class)
 public class TVPlayerModule {
 
     private final TVPlayerView view;

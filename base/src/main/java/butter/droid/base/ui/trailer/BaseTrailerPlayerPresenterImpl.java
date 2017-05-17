@@ -3,11 +3,9 @@ package butter.droid.base.ui.trailer;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import butter.droid.base.R;
+import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.internal.phone.PhoneManager;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 import java.net.URLDecoder;
 import timber.log.Timber;
@@ -33,14 +31,14 @@ public class BaseTrailerPlayerPresenterImpl implements BaseTrailerPlayerPresente
         this.phoneManager = phoneManager;
     }
 
-    @Override
-    public void onCreate(Media media, String youtubeUrl) {
-        media.title += " " + context.getString(R.string.trailer);
-        this.streamInfo = new StreamInfo(media, null, null, null, null, null);
-        view.onDisableVideoPlayerSubsButton();
-        this.queryYouTubeTask = new QueryYouTubeTask(youTubeManager, networkManager, phoneManager);
-//        queryYouTubeTask.execute(youTubeManager.getYouTubeVideoId(youtubeUrl));
-    }
+//    @Override
+//    public void onCreate(Media media, String youtubeUrl) {
+//        media.title += " " + context.getString(R.string.trailer);
+//        this.streamInfo = new StreamInfo(media, null, null, null, null, null);
+//        view.onDisableVideoPlayerSubsButton();
+//        this.queryYouTubeTask = new QueryYouTubeTask(youTubeManager, networkManager, phoneManager);
+////        queryYouTubeTask.execute(youTubeManager.getYouTubeVideoId(youtubeUrl));
+//    }
 
     @Override
     public void onDestroy() {

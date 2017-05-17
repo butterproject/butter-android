@@ -24,9 +24,9 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenterImpl;
+import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 
-public class TVPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements TVPlayerPresenter {
+public class TVPlayerPresenterImpl extends StreamPlayerPresenterImpl implements TVPlayerPresenter {
 
     private final TVPlayerView view;
 
@@ -42,12 +42,12 @@ public class TVPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implemen
 
     }
 
-    @Override protected void updateSubtitleSize(final int size) {
-
-    }
+//    @Override protected void updateSubtitleSize(final int size) {
+//
+//    }
 
     @Override protected void startBeamPlayerActivity() {
 
-    }
+     }
 
 }

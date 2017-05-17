@@ -15,27 +15,31 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.trailer;
+package butter.droid.base.ui.player.base;
 
-import butter.droid.base.ui.ActivityScope;
-import dagger.Subcomponent;
+import butter.droid.base.subs.Caption;
 
-@Subcomponent(
-        modules = TVTrailerPlayerModule.class
-)
-@ActivityScope
-public interface TVTrailerPlayerComponent {
+public interface BaseVideoPlayerView {
 
-    void inject(TVTrailerPlayerActivity activity);
+    void setupControls(String title);
 
-    butter.droid.tv.ui.trailer.fragment.TVTrailerPlayerComponent.Builder trailerPlayerComponentBuilder();
+    void attachVlcViews();
 
-    @Subcomponent.Builder
-    interface Builder {
+    void showOverlay();
 
-        Builder tvTrailerModule(TVTrailerPlayerModule module);
+    void setProgressVisible(boolean visible);
 
-        TVTrailerPlayerComponent build();
-    }
+    void setKeepScreenOn(boolean keep);
 
+    void onPlaybackEndReached();
+
+    void onErrorEncountered();
+
+    void updateControlsState(boolean playing, long progress, int streamerProgress, long length);
+
+    void updateSurfaceSize(int width, int height);
+
+    void detachMediaSession();
+
+    void onHardwareAccelerationError();
 }

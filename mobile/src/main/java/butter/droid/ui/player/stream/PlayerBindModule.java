@@ -17,13 +17,13 @@
 
 package butter.droid.ui.player.stream;
 
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
+import butter.droid.ui.player.abs.AbsPlayerPresenter;
 import dagger.Binds;
 import dagger.Module;
 
 @Module
 public interface PlayerBindModule {
 
-    @Binds BaseVideoPlayerPresenter bindBasePresenter(PlayerPresenter presenter);
+    @Binds AbsPlayerPresenter bindBasePresenter(PlayerPresenter presenter);
 
 }

@@ -15,31 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.ui.player.fragment;
+package butter.droid.base.ui.player.stream;
 
-import android.support.annotation.IntDef;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 import java.io.File;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
-public interface BaseVideoPlayerPresenter {
+public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter {
 
     void onCreate(StreamInfo streamInfo, long resumePosition);
 
-    void onResume();
-
-    void onPause();
-
-    void onViewCreated();
-
-    void onDestroy();
-
-    void play();
-
-    void pause();
-
-    void streamProgressUpdated(float progress);
+    void onSubsClicked();
 
     void showSubsLanguageSettings();
 
@@ -56,31 +42,5 @@ public interface BaseVideoPlayerPresenter {
     void showSubsTimingSettings();
 
     void onSubsTimingChanged(int offset);
-
-    void onScaleClicked();
-
-    void onSubsClicked();
-
-    void seekForwardClick();
-
-    void seekBackwardClick();
-
-    // region IntDef
-
-    @IntDef({SURFACE_BEST_FIT, SURFACE_FIT_HORIZONTAL, SURFACE_FIT_VERTICAL, SURFACE_FILL, SURFACE_16_9, SURFACE_4_3, SURFACE_ORIGINAL})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface SizePolicy {
-
-    }
-
-    int SURFACE_BEST_FIT = 0;
-    int SURFACE_FIT_HORIZONTAL = 1;
-    int SURFACE_FIT_VERTICAL = 2;
-    int SURFACE_FILL = 3;
-    int SURFACE_16_9 = 4;
-    int SURFACE_4_3 = 5;
-    int SURFACE_ORIGINAL = 6;
-
-    // endregion IntDef
 
 }

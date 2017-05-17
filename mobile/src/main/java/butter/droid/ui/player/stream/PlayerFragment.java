@@ -17,35 +17,45 @@
 
 package butter.droid.ui.player.stream;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
-import android.view.View.OnSystemUiVisibilityChangeListener;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
+import butter.droid.R;
+import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
+import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
+import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butter.droid.base.subs.Caption;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
+import butter.droid.widget.StrokedRobotoTextView;
+import butterknife.BindView;
+import butterknife.OnClick;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import java.io.File;
+import java.util.Arrays;
+import javax.inject.Inject;
 
-public class PlayerFragment extends AbsPlayerFragment implements PlayerView, OnSystemUiVisibilityChangeListener, TorrentListener {
+public class PlayerFragment extends AbsPlayerFragment implements PlayerView, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.streamInfo";
     private static final String ARG_RESUME_POSITION = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.resumePosition";
 
-    private static final String ACTION_SCALE = "butter.droid.tv.ui.player.video.action.SCALE";
     private static final String ACTION_CLOSE_CAPTION = "butter.droid.tv.ui.player.video.action.CLOSE_CAPTION";
 
-    private static final int FADE_OUT_INFO = 1000;
     public static final int SUBTITLE_MINIMUM_SIZE = 10;
 
-    private MediaSessionCompat mediaSession;
-    private MediaControllerCompat mediaController;
-    private PlaybackStateCompat.Builder stateBuilder;
-    private MediaMetadataCompat.Builder metadataBuilder;
+    @Inject PlayerPresenter presenter;
 
-    private int lastSystemUIVisibility;
-    private boolean overlayVisible;
+    @BindView(R.id.subtitle_text) StrokedRobotoTextView subtitleText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +67,191 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, OnS
                 .inject(this);
 
         super.onCreate(savedInstanceState);
+
+        StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
+        long resumePosition = getArguments().getLong(ARG_RESUME_POSITION);
+
+        stateBuilder.addCustomAction(ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
+
+        presenter.onCreate(streamInfo, resumePosition);
+    }
+
+    @Override public void displayStreamProgress(final int progress) {
+        stateBuilder.setBufferedPosition(progress);
+        mediaSession.setPlaybackState(stateBuilder.build());
+    }
+
+    @Override
+    public void setupSubtitles(@ColorInt final int color, final int size, @ColorInt final int strokeColor, final int strokeWidth) {
+        subtitleText.setTextColor(color);
+        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        subtitleText.setStrokeColor(strokeColor);
+        subtitleText.setStrokeWidth(TypedValue.COMPLEX_UNIT_DIP, strokeWidth);
+    }
+
+    @Override public void toggleOverlay() {
+        if (overlayVisible) {
+            hideOverlay();
+        } else {
+            showOverlay();
+        }
+    }
+
+    @Override public void showVolumeMessage(final int volume) {
+        showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(volume));
+    }
+
+    @Override public void showTimedCaptionText(final Caption text) {
+        if (text == null) {
+            if (subtitleText.getText().length() > 0) {
+                subtitleText.setText("");
+            }
+            return;
+        }
+        SpannableStringBuilder styledString = (SpannableStringBuilder) Html.fromHtml(text.content);
+
+        ForegroundColorSpan[] toRemoveSpans = styledString.getSpans(0, styledString.length(), ForegroundColorSpan.class);
+        for (ForegroundColorSpan remove : toRemoveSpans) {
+            styledString.removeSpan(remove);
+        }
+
+        if (!subtitleText.getText().toString().equals(styledString.toString())) {
+            subtitleText.setText(styledString);
+        }
+    }
+
+    @Override public void startBeamPlayerActivity(@NonNull final StreamInfo streamInfo, final long currentTime) {
+        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), streamInfo, currentTime));
+    }
+
+    @Override public void updateSubtitleSize(int size) {
+        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+    }
+
+    @OnClick(R.id.subs_button) void onSubsClick() {
+        mediaController.getTransportControls().sendCustomAction(ACTION_CLOSE_CAPTION, null);
+    }
+
+    @Override public void showSubsSelectorDialog() {
+        if (getChildFragmentManager().findFragmentByTag("overlay_fragment") != null) {
+            return;
+        }
+
+        final String[] subsOptions = {
+                getString(R.string.subtitle_language),
+                getString(R.string.subtitle_size),
+                getString(R.string.subtitle_timing)
+        };
+
+        StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.subtitle_settings, subsOptions,
+                -1,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int position) {
+                        switch (position) {
+                            case 0:
+                                presenter.showSubsLanguageSettings();
+                                break;
+                            case 1:
+                                presenter.showSubsSizeSettings();
+                                break;
+                            case 2:
+                                presenter.showSubsTimingSettings();
+                                break;
+                        }
+                    }
+                });
+    }
+
+    @Override public void showPickSubsDialog(final String[] readableNames, final String[] adapterSubtitles, final String currentSubsLang) {
+        StringArraySelectorDialogFragment.showSingleChoice(
+                getChildFragmentManager(),
+                R.string.subtitles,
+                readableNames,
+                Arrays.asList(adapterSubtitles).indexOf(currentSubsLang),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int position) {
+                        if (position == adapterSubtitles.length - 1) {
+                            presenter.showCustomSubsPicker();
+                        } else {
+                            presenter.onSubtitleLanguageSelected(adapterSubtitles[position]);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+    }
+
+    @Override public void showSubsFilePicker() {
+        FileSelectorDialogFragment.show(getChildFragmentManager(),
+                new FileSelectorDialogFragment.Listener() {
+                    @Override
+                    public void onFileSelected(File f) {
+                        presenter.onSubsFileSelected(f);
+                        FileSelectorDialogFragment.hide();
+                    }
+                });
+    }
+
+    @Override public void displaySubsSizeDialog() {
+        Bundle args = new Bundle();
+        args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_size));
+        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 60);
+        args.putInt(NumberPickerDialogFragment.MIN_VALUE, SUBTITLE_MINIMUM_SIZE);
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, 16);
+
+        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+        dialogFragment.setArguments(args);
+        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+            @Override
+            public void onNewValue(int value) {
+                presenter.onSubsSizeChanged(value);
+            }
+        });
+        dialogFragment.show(getChildFragmentManager(), "overlay_fragment");
+    }
+
+    @Override public void displaySubsTimingDialog(int subtitleOffset) {
+        Bundle args = new Bundle();
+        args.putString(NumberPickerDialogFragment.TITLE, getString(R.string.subtitle_timing));
+        args.putInt(NumberPickerDialogFragment.MAX_VALUE, 3600);
+        args.putInt(NumberPickerDialogFragment.MIN_VALUE, -3600);
+        args.putInt(NumberPickerDialogFragment.DEFAULT_VALUE, subtitleOffset / 60);
+        args.putBoolean(NumberPickerDialogFragment.FOCUSABLE, true);
+
+        NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
+        dialogFragment.setArguments(args);
+        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
+            @Override
+            public void onNewValue(int value) {
+                presenter.onSubsTimingChanged(value * 60);
+            }
+        });
+        dialogFragment.show(getChildFragmentManager(), "overlay_fragment");
+    }
+
+    @Override public void onStreamPrepared(final Torrent torrent) {
+        // nothing to do
+    }
+
+    @Override public void onStreamStarted(final Torrent torrent) {
+        // nothing to do
+    }
+
+    @Override public void onStreamError(final Torrent torrent, final Exception e) {
+        // nothing to do
+    }
+
+    @Override public void onStreamReady(final Torrent torrent) {
+        // nothing to do
+    }
+
+    @Override public void onStreamProgress(final Torrent torrent, final StreamStatus streamStatus) {
+        presenter.streamProgressUpdated(streamStatus.progress);
+    }
+
+    @Override public void onStreamStopped() {
+        // nothing to do
     }
 
     public static PlayerFragment newInstance(final StreamInfo streamInfo, final long resumePosition) {

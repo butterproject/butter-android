@@ -94,4 +94,5 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+    compile project(path: ':mobile')
 }

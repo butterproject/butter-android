@@ -15,18 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.player.video;
+package butter.droid.ui.player.abs;
 
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerPresenter;
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
-import dagger.Binds;
-import dagger.Module;
+public interface AbsPlayerView {
 
-@Module
-public interface TVPlaterBindModule {
+    void displayTitle(String title);
 
-    @Binds BaseVideoPlayerView bindBaseVideoPlayerView(TVPlayerView view);
+    void toggleOverlay();
 
-    @Binds BaseVideoPlayerPresenter bindBaseVideoPlayerPresenter(TVPlayerPresenter presenter);
+    void hideOverlay();
 
 }

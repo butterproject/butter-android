@@ -15,27 +15,15 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.trailer;
+package butter.droid.ui.trailer.fragment;
 
-import butter.droid.base.ui.ActivityScope;
-import dagger.Subcomponent;
+import butter.droid.base.providers.media.models.Media;
+import butter.droid.ui.player.abs.AbsPlayerPresenter;
 
-@Subcomponent(
-        modules = TVTrailerPlayerModule.class
-)
-@ActivityScope
-public interface TVTrailerPlayerComponent {
+public interface TrailerPlayerPresenter extends AbsPlayerPresenter {
 
-    void inject(TVTrailerPlayerActivity activity);
+    void onCreate(Media media, String trailerUri);
 
-    butter.droid.tv.ui.trailer.fragment.TVTrailerPlayerComponent.Builder trailerPlayerComponentBuilder();
-
-    @Subcomponent.Builder
-    interface Builder {
-
-        Builder tvTrailerModule(TVTrailerPlayerModule module);
-
-        TVTrailerPlayerComponent build();
-    }
+    void requestDisableHardwareAcceleration();
 
 }

@@ -14,28 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
+package butter.droid.tv.ui.trailer.fragment;
 
-package butter.droid.tv.ui.trailer;
+import butter.droid.tv.ui.player.abs.TVAbsPlayerPresenter;
+import dagger.Binds;
+import dagger.Module;
 
-import butter.droid.base.ui.ActivityScope;
-import dagger.Subcomponent;
+@Module
+public interface TVTrailerPlayerBindModule {
 
-@Subcomponent(
-        modules = TVTrailerPlayerModule.class
-)
-@ActivityScope
-public interface TVTrailerPlayerComponent {
-
-    void inject(TVTrailerPlayerActivity activity);
-
-    butter.droid.tv.ui.trailer.fragment.TVTrailerPlayerComponent.Builder trailerPlayerComponentBuilder();
-
-    @Subcomponent.Builder
-    interface Builder {
-
-        Builder tvTrailerModule(TVTrailerPlayerModule module);
-
-        TVTrailerPlayerComponent build();
-    }
+    @Binds TVAbsPlayerPresenter bindBasePresenter(TVTrailerPlayerPresenter presenter);
 
 }

@@ -17,8 +17,8 @@
 
 package butter.droid.tv.ui.player.video;
 
-import butter.droid.base.ui.player.fragment.BaseVideoPlayerView;
+import butter.droid.base.ui.player.stream.StreamPlayerView;
 
-public interface TVPlayerView extends BaseVideoPlayerView {
+public interface TVPlayerView extends StreamPlayerView {
 
 }

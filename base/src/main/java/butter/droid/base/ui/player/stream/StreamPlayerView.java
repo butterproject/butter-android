@@ -15,28 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.ui.player.fragment;
+package butter.droid.base.ui.player.stream;
 
+import android.support.annotation.ColorInt;
 import butter.droid.base.subs.Caption;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.player.base.BaseVideoPlayerView;
 
-public interface BaseVideoPlayerView {
+public interface StreamPlayerView extends BaseVideoPlayerView {
 
-    void setupControls(StreamInfo streamInfo);
+    void setupSubtitles(@ColorInt int color, int size, @ColorInt int strokeColor, int strokeWidth);
 
-    void attachVlcViews();
-
-    void showOverlay();
-
-    void setProgressVisible(boolean visible);
-
-    void setKeepScreenOn(boolean keep);
-
-    void onPlaybackEndReached();
-
-    void onErrorEncountered();
-
-    void showTimedCaptionText(Caption caption);
+    void updateSubtitleSize(int size);
 
     void showSubsSelectorDialog();
 
@@ -48,9 +37,6 @@ public interface BaseVideoPlayerView {
 
     void displaySubsTimingDialog(int subtitleOffset);
 
-    void updateControlsState(boolean playing, long progress, int streamerProgress, long length);
+    void showTimedCaptionText(Caption caption);
 
-    void updateSurfaceSize(int width, int height);
-
-    void detachMediaSession();
 }

@@ -34,8 +34,8 @@ import javax.inject.Inject;
 
 public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView {
 
-    private final static String EXTRA_LOCATION = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_LOCATION";
-    private final static String EXTRA_DATA = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_DATA";
+    private final static String EXTRA_URI = "butter.droid.ui.trailer.TrailerPlayerActivity.uri";
+    private final static String EXTRA_MEDIA = "butter.droid.ui.trailer.TrailerPlayerActivity.media";
 
     private final static String TAG_VIDEO_FRAGMENT = "butter.droid.ui.player.VideoPlayerActivity.videoFragment";
 
@@ -57,13 +57,13 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
-        final Media media = intent.getParcelableExtra(EXTRA_DATA);
-        final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
+        final Media media = intent.getParcelableExtra(EXTRA_MEDIA);
+        final String youtubeUrl = intent.getStringExtra(EXTRA_URI);
 
 //        this.playerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
 
         if (savedInstanceState == null) {
-            playerFragment = TrailerPlayerFragment.newInstance(null, 0);
+            playerFragment = TrailerPlayerFragment.newInstance(media, youtubeUrl);
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, playerFragment, TAG_VIDEO_FRAGMENT)
                     .commit();
@@ -71,7 +71,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
         } else {
             playerFragment = (TrailerPlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
         }
-        presenter.onCreate(media, youtubeUrl);
+//        presenter.onCreate(media, youtubeUrl);
     }
 
     @Override
@@ -124,8 +124,8 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
 
     public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TrailerPlayerActivity.class);
-        intent.putExtra(TrailerPlayerActivity.EXTRA_DATA, media);
-        intent.putExtra(TrailerPlayerActivity.EXTRA_LOCATION, url);
+        intent.putExtra(TrailerPlayerActivity.EXTRA_MEDIA, media);
+        intent.putExtra(TrailerPlayerActivity.EXTRA_URI, url);
         return intent;
     }
 }

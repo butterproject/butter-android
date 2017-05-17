@@ -21,14 +21,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.ui.dialog.DialogFactory;
 import butter.droid.base.ui.dialog.DialogFactory.Action;
 import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.trailer.fragment.TVTrailerPlayerFragment;
 import javax.inject.Inject;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity implements TVTrailerPlayerView {
@@ -36,49 +35,50 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVTrailer
     private static final String EXTRA_LOCATION = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_LOCATION";
     private static final String EXTRA_DATA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_DATA";
 
-    @Inject
-    TVTrailerPlayerPresenter presenter;
+    private final static String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.videoFragment";
 
-//    private TVVideoPlayerFragment2 playerFragment;
+    @Inject TVTrailerPlayerPresenter presenter;
+
+    private TVTrailerPlayerComponent component;
+
+    private TVTrailerPlayerFragment playerFragment;
 //    private TVPlaybackOverlayFragment2 tvPlaybackOverlayFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
+        component = TVButterApplication.getAppContext()
                 .getComponent()
                 .tvTrailerPlayerComponentBuilder()
                 .tvTrailerModule(new TVTrailerPlayerModule(this))
-                .build()
-                .inject(this);
+                .build();
+        component.inject(this);
 
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
         final Media media = intent.getParcelableExtra(EXTRA_DATA);
-        final String youTubeUrl = intent.getStringExtra(EXTRA_LOCATION);
+        final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
 
-        final FragmentManager fm = getSupportFragmentManager();
+        if (savedInstanceState == null) {
+            playerFragment = TVTrailerPlayerFragment.newInstance(media, youtubeUrl);
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, playerFragment, TAG_VIDEO_FRAGMENT)
+                    .commit();
+//            presenter.onCreate(streamInfo, resumePosition, intent.getAction(), intent);
+        } else {
+            playerFragment = (TVTrailerPlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
+        }
+
 //        this.playerFragment = (TVVideoPlayerFragment2) fm.findFragmentById(R.id.fragment);
 //        this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment2) fm.findFragmentById(R.id.playback_overlay_fragment);
 
-        presenter.onCreate(media, youTubeUrl);
+//        presenter.onCreate(media, youTubeUrl);
     }
 
     @Override
     protected void onDestroy() {
         presenter.onDestroy();
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 //    @Override
@@ -114,6 +114,10 @@ public class TVTrailerPlayerActivity extends TVBaseActivity implements TVTrailer
                 finish();
             }
         }).show();
+    }
+
+    public TVTrailerPlayerComponent getComponent() {
+        return component;
     }
 
     public static Intent getIntent(final Context context, final Media media, final String url) {
