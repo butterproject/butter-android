@@ -17,113 +17,38 @@
 
 package butter.droid.tv.ui.trailer;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.ui.dialog.DialogFactory;
-import butter.droid.base.ui.dialog.DialogFactory.Action;
-import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.ui.trailer.fragment.TVTrailerPlayerFragment;
-import javax.inject.Inject;
 
-public class TVTrailerPlayerActivity extends TVBaseActivity implements TVTrailerPlayerView {
+public class TVTrailerPlayerActivity extends TVBaseActivity {
 
-    private static final String EXTRA_LOCATION = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_LOCATION";
-    private static final String EXTRA_DATA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_DATA";
-
-    private final static String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.videoFragment";
-
-    @Inject TVTrailerPlayerPresenter presenter;
-
-    private TVTrailerPlayerComponent component;
-
-    private TVTrailerPlayerFragment playerFragment;
-//    private TVPlaybackOverlayFragment2 tvPlaybackOverlayFragment;
+    private static final String EXTRA_URI = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_URI";
+    private static final String EXTRA_MEDIA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_MEDIA";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        component = TVButterApplication.getAppContext()
-                .getComponent()
-                .tvTrailerPlayerComponentBuilder()
-                .tvTrailerModule(new TVTrailerPlayerModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
-        final Media media = intent.getParcelableExtra(EXTRA_DATA);
-        final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
+        final Media media = intent.getParcelableExtra(EXTRA_MEDIA);
+        final String youtubeUrl = intent.getStringExtra(EXTRA_URI);
 
         if (savedInstanceState == null) {
-            playerFragment = TVTrailerPlayerFragment.newInstance(media, youtubeUrl);
+            TVTrailerPlayerFragment fragment = TVTrailerPlayerFragment.newInstance(media, youtubeUrl);
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, playerFragment, TAG_VIDEO_FRAGMENT)
+                    .add(android.R.id.content, fragment)
                     .commit();
-//            presenter.onCreate(streamInfo, resumePosition, intent.getAction(), intent);
-        } else {
-            playerFragment = (TVTrailerPlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
         }
 
-//        this.playerFragment = (TVVideoPlayerFragment2) fm.findFragmentById(R.id.fragment);
-//        this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment2) fm.findFragmentById(R.id.playback_overlay_fragment);
-
-//        presenter.onCreate(media, youTubeUrl);
-    }
-
-    @Override
-    protected void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
-    }
-
-//    @Override
-//    public Long getResumePosition() {
-//        return 0L;
-//    }
-//
-//    @Override
-//    public StreamInfo getInfo() {
-//        return presenter.getStreamInfo();
-//    }
-//
-//    @Override
-//    public TorrentService getService() {
-//        return null;
-//    }
-
-    @Override
-    public void onDisableVideoPlayerSubsButton() {
-//        tvPlaybackOverlayFragment.toggleSubtitleAction(false);
-    }
-
-    @Override
-    public void onNotifyMediaReady() {
-//        playerFragment.onMediaReady();
-    }
-
-    @Override
-    public void onDisplayErrorVideoDialog() {
-        DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {
-            @Override
-            public void onButtonClick(final Dialog which, final @Action int action) {
-                finish();
-            }
-        }).show();
-    }
-
-    public TVTrailerPlayerComponent getComponent() {
-        return component;
     }
 
     public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
-        intent.putExtra(EXTRA_DATA, media);
-        intent.putExtra(EXTRA_LOCATION, url);
+        intent.putExtra(EXTRA_MEDIA, media);
+        intent.putExtra(EXTRA_URI, url);
         return intent;
     }
 }
