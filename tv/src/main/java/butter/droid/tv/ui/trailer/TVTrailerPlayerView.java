@@ -17,17 +17,9 @@
 
 package butter.droid.tv.ui.trailer;
 
-import android.support.annotation.NonNull;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.ui.player.base.BaseVideoPlayerView;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerView;
 
-public interface TVTrailerPlayerView extends TVAbsPlayerView, BaseVideoPlayerView {
-
-    void displayStreamProgress(int progress);
-
-    void showVolumeMessage(int volume);
-
-    void startBeamPlayerActivity(@NonNull StreamInfo streamInfo, long currentTime);
+public interface TVTrailerPlayerView extends TVAbsPlayerView, BaseTrailerPlayerView {
 
 }

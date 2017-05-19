@@ -177,10 +177,6 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         mediaSession.release();
     }
 
-    @Override public void onHardwareAccelerationError() {
-
-    }
-
     protected boolean onCustomAction(final String action, final Bundle extras) {
         switch (action) {
             case PlayerMediaControllerGlue.ACTION_SCALE:

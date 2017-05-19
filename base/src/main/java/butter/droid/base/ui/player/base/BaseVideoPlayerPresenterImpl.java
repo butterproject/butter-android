@@ -17,52 +17,33 @@
 
 package butter.droid.base.ui.player.base;
 
-import static butter.droid.base.manager.internal.vlc.VLCOptions.HW_ACCELERATION_DISABLED;
-
-import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.vlc.VlcPlayer.PlayerCallback;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.subs.SubtitleDownloader.ISubtitleDownloaderListener;
 
-public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPresenter, ISubtitleDownloaderListener, PlayerCallback {
+public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPresenter, PlayerCallback {
 
     private static final String PREF_RESUME_POSITION = "resume_position";
 
     private final BaseVideoPlayerView view;
-    private final Context context;
     private final PrefManager prefManager;
     private final PreferencesHandler preferencesHandler;
-    private final ProviderManager providerManager;
-    private final PlayerManager playerManager;
-    private final BeamManager beamManager;
     private final VlcPlayer player;
 
     private long resumePosition;
     protected Media media;
 
-    // probably required when hardware acceleration selection during playback is implemented
-    private boolean disabledHardwareAcceleration;
-
     private int streamerProgress;
 
-    public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final Context context, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
-            final BeamManager beamManager, final VlcPlayer player) {
+    public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final PrefManager prefManager,
+            final PreferencesHandler preferencesHandler, final VlcPlayer player) {
         this.view = view;
-        this.context = context;
         this.prefManager = prefManager;
         this.preferencesHandler = preferencesHandler;
-        this.providerManager = providerManager;
-        this.playerManager = playerManager;
-        this.beamManager = beamManager;
         this.player = player;
     }
 
@@ -136,29 +117,12 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         seek(-10000);
     }
 
-
-    protected abstract void onHardwareAccelerationError();
-
-    /**
-     * Called when subtitle for current media successfully loaded or disabled.
-     *
-     * @param enabled Whether subtitle is loaded or disabled.
-     */
-    protected void onSubtitleEnabledStateChanged(boolean enabled) {
-        // override if needed
-    }
-
     /**
      * External extras: - position (long) - position of the video to start with (in ms)
      */
     protected void loadMedia(@NonNull Uri uri) {
 
-        int ha;
-        if (disabledHardwareAcceleration) {
-            ha = HW_ACCELERATION_DISABLED;
-        } else {
-            ha = preferencesHandler.getHwAcceleration();
-        }
+        int ha = preferencesHandler.getHwAcceleration();
 
         player.loadMedia(uri, ha);
 
@@ -168,11 +132,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         }
 
         player.play();
-    }
-
-    protected void disableHardwareAcceleration() {
-        disabledHardwareAcceleration = true;
-        saveVideoCurrentTime();
     }
 
     protected long getCurrentTime() {
@@ -216,12 +175,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
      */
     protected boolean isPlaying() {
         return player.isPlaying();
-    }
-
-    private void handleHardwareAccelerationError() {
-        saveVideoCurrentTime();
-        player.stop();
-        onHardwareAccelerationError();
     }
 
     private void prepareVlcVout() {
@@ -302,7 +255,7 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     @Override public void playerError() {
-        handleHardwareAccelerationError();
+        // TODO: 5/19/17
     }
 
 }

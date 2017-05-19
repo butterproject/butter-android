@@ -38,16 +38,8 @@ public class TVPlayerPresenterImpl extends StreamPlayerPresenterImpl implements 
         this.view = view;
     }
 
-    @Override protected void onHardwareAccelerationError() {
-
-    }
-
-//    @Override protected void updateSubtitleSize(final int size) {
-//
-//    }
-
     @Override protected void startBeamPlayerActivity() {
 
-     }
+    }
 
 }

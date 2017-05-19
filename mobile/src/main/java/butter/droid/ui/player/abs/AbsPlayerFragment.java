@@ -277,27 +277,6 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         mediaController.unregisterCallback(controllerCallback);
     }
 
-    @Override public void onHardwareAccelerationError() {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-//                        presenter.requestDisableHardwareAcceleration();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        getAppCompatActivity().finish();
-                    }
-                })
-                .setTitle(R.string.hardware_acceleration_error_title)
-                .setMessage(R.string.hardware_acceleration_error_message)
-                .create();
-        if (!getAppCompatActivity().isFinishing())
-            dialog.show();
-    }
-
     @Override public void onSystemUiVisibilityChange(int visibility) {
         if ((lastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0 &&
                 (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {

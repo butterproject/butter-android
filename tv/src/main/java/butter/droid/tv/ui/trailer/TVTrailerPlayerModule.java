@@ -53,8 +53,8 @@ public class TVTrailerPlayerModule {
     @Provides @FragmentScope TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, Context context, PrefManager prefManager,
             PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
             VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager, PhoneManager phoneManager) {
-        return new TVTrailerPlayerPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
-                beamManager, player, youTubeManager, networkManager, phoneManager);
+        return new TVTrailerPlayerPresenterImpl(view, prefManager, preferencesHandler, player, youTubeManager, networkManager,
+                phoneManager);
     }
 
     @Provides @FragmentScope Activity provideActivity() {

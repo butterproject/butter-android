@@ -15,11 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.trailer;
+package butter.droid.base.ui.trailer;
 
-import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
-import butter.droid.ui.player.abs.AbsPlayerView;
+import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 
-public interface TrailerPlayerView extends AbsPlayerView, BaseTrailerPlayerView {
+public interface BaseTrailerPlayerPresenter extends BaseVideoPlayerPresenter {
+
+    void onCreate(Media media, String trailerUri);
 
 }

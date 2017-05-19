@@ -17,11 +17,12 @@
 
 package butter.droid.base.ui.player.stream;
 
+import butter.droid.base.subs.SubtitleDownloader.ISubtitleDownloaderListener;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 import java.io.File;
 
-public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter {
+public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter, ISubtitleDownloaderListener {
 
     void onCreate(StreamInfo streamInfo, long resumePosition);
 

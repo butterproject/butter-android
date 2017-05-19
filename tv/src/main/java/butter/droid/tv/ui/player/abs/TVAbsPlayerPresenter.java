@@ -19,6 +19,6 @@ package butter.droid.tv.ui.player.abs;
 
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 
-public interface TVAbsPlayerPresenter extends BaseVideoPlayerPresenter{
+public interface TVAbsPlayerPresenter extends BaseVideoPlayerPresenter {
 
 }

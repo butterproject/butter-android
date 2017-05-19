@@ -22,6 +22,4 @@ import butter.droid.base.ui.player.stream.StreamPlayerPresenter;
 
 public interface PlayerPresenter extends AbsPlayerPresenter, StreamPlayerPresenter {
 
-    void requestDisableHardwareAcceleration();
-
 }

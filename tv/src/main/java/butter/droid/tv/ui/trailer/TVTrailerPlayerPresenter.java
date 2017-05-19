@@ -17,13 +17,9 @@
 
 package butter.droid.tv.ui.trailer;
 
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenter;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerPresenter;
 
-public interface TVTrailerPlayerPresenter extends TVAbsPlayerPresenter {
-
-    void onCreate(Media media, String trailerUri);
-
-    void requestDisableHardwareAcceleration();
+public interface TVTrailerPlayerPresenter extends TVAbsPlayerPresenter, BaseTrailerPlayerPresenter {
 
 }

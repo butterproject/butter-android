@@ -57,8 +57,8 @@ public class TrailerPlayerModule {
             PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
             AudioManager audioManager, BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player,
             YouTubeManager youTubeManager, NetworkManager networkManager, PhoneManager phoneManager) {
-        return new TrailerPlayerPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
-                beamManager, player, youTubeManager, networkManager, phoneManager, brightnessManager, touchHandler, audioManager);
+        return new TrailerPlayerPresenterImpl(view, context, prefManager, preferencesHandler, player, youTubeManager, networkManager,
+                phoneManager, brightnessManager, touchHandler, audioManager);
     }
 
     @Provides @FragmentScope Activity provideActivity() {

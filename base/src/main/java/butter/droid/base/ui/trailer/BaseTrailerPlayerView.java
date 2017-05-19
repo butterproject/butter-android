@@ -15,11 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.trailer;
+package butter.droid.base.ui.trailer;
 
-import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
-import butter.droid.ui.player.abs.AbsPlayerView;
+import android.support.annotation.NonNull;
+import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.ui.player.base.BaseVideoPlayerView;
 
-public interface TrailerPlayerView extends AbsPlayerView, BaseTrailerPlayerView {
+public interface BaseTrailerPlayerView extends BaseVideoPlayerView {
+
+    void displayStreamProgress(int progress);
+
+    void showVolumeMessage(int volume);
+
+    void startBeamPlayerActivity(@NonNull StreamInfo streamInfo, long currentTime);
 
 }

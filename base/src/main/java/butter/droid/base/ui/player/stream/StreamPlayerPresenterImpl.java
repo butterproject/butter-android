@@ -64,7 +64,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     public StreamPlayerPresenterImpl(final StreamPlayerView view, final Context context, final PrefManager prefManager,
             final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
             final BeamManager beamManager, final VlcPlayer player) {
-        super(view, context, prefManager, preferencesHandler, providerManager, playerManager, beamManager, player);
+        super(view, prefManager, preferencesHandler, player);
         this.view = view;
         this.context = context;
         this.preferencesHandler = preferencesHandler;
@@ -110,11 +110,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         super.onPause();
 
         beamManager.removeDeviceListener(deviceListener);
-    }
-
-    @Override protected void onHardwareAccelerationError() {
-        view.onHardwareAccelerationError();
-        disableHardwareAcceleration();
     }
 
     @Override public void onViewCreated() {
@@ -227,6 +222,15 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
     }
 
+    /**
+     * Called when subtitle for current media successfully loaded or disabled.
+     *
+     * @param enabled Whether subtitle is loaded or disabled.
+     */
+    protected void onSubtitleEnabledStateChanged(boolean enabled) {
+        // override if needed
+    }
+
     protected abstract void startBeamPlayerActivity();
 
     protected void setLastSubtitleCaption(Caption sub) {
@@ -281,7 +285,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
     }
 
-    protected void loadMedia() {
+    private void loadMedia() {
         String videoLocation = streamInfo.getVideoLocation();
         if (TextUtils.isEmpty(videoLocation)) {
 //            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();

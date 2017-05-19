@@ -17,8 +17,6 @@
 
 package butter.droid.base.ui.player.base;
 
-import butter.droid.base.subs.Caption;
-
 public interface BaseVideoPlayerView {
 
     void setupControls(String title);
@@ -41,5 +39,4 @@ public interface BaseVideoPlayerView {
 
     void detachMediaSession();
 
-    void onHardwareAccelerationError();
 }

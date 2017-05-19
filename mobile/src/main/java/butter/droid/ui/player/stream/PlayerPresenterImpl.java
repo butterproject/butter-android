@@ -91,11 +91,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         }
     }
 
-    @Override public void requestDisableHardwareAcceleration() {
-        disableHardwareAcceleration();
-        loadMedia();
-    }
-
     @Override public void streamProgressUpdated(final float progress) {
         super.streamProgressUpdated(progress);
         view.displayStreamProgress(getStreamerProgress());
