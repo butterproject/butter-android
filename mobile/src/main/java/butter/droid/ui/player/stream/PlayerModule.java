@@ -26,7 +26,6 @@ import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
@@ -50,10 +49,10 @@ public class PlayerModule {
         return view;
     }
 
-    @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PrefManager prefManager,
-            PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
-            AudioManager audioManager, BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player) {
-        return new PlayerPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
+    @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PreferencesHandler preferencesHandler,
+            ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager, AudioManager audioManager,
+            BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player) {
+        return new PlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager,
                 beamManager, brightnessManager, audioManager, touchHandler, player);
     }
 

@@ -18,18 +18,13 @@
 package butter.droid.tv.ui.trailer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.phone.PhoneManager;
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
@@ -50,10 +45,9 @@ public class TVTrailerPlayerModule {
         return view;
     }
 
-    @Provides @FragmentScope TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, Context context, PrefManager prefManager,
-            PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
+    @Provides @FragmentScope TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, PreferencesHandler preferencesHandler,
             VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager, PhoneManager phoneManager) {
-        return new TVTrailerPlayerPresenterImpl(view, prefManager, preferencesHandler, player, youTubeManager, networkManager,
+        return new TVTrailerPlayerPresenterImpl(view, preferencesHandler, player, youTubeManager, networkManager,
                 phoneManager);
     }
 

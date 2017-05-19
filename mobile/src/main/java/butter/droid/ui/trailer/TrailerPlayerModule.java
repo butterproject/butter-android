@@ -22,14 +22,10 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.phone.PhoneManager;
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
@@ -53,11 +49,11 @@ public class TrailerPlayerModule {
         return view;
     }
 
-    @Provides @FragmentScope TrailerPlayerPresenter providePresenter(TrailerPlayerView view, Context context, PrefManager prefManager,
-            PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
-            AudioManager audioManager, BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player,
-            YouTubeManager youTubeManager, NetworkManager networkManager, PhoneManager phoneManager) {
-        return new TrailerPlayerPresenterImpl(view, context, prefManager, preferencesHandler, player, youTubeManager, networkManager,
+    @Provides @FragmentScope TrailerPlayerPresenter providePresenter(TrailerPlayerView view, Context context,
+            PreferencesHandler preferencesHandler, AudioManager audioManager, BrightnessManager brightnessManager,
+            VideoPlayerTouchHandler touchHandler, VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager,
+            PhoneManager phoneManager) {
+        return new TrailerPlayerPresenterImpl(view, context, preferencesHandler, player, youTubeManager, networkManager,
                 phoneManager, brightnessManager, touchHandler, audioManager);
     }
 

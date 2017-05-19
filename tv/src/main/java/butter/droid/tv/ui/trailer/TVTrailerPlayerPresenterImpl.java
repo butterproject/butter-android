@@ -22,15 +22,13 @@ import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenterImpl;
 
 public class TVTrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TVTrailerPlayerPresenter {
 
-    public TVTrailerPlayerPresenterImpl(final TVTrailerPlayerView view, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final VlcPlayer player, final YouTubeManager youTubeManager,
-            final NetworkManager networkManager, final PhoneManager phoneManager) {
-        super(view, prefManager, preferencesHandler, player, youTubeManager, networkManager, phoneManager);
+    public TVTrailerPlayerPresenterImpl(final TVTrailerPlayerView view, final PreferencesHandler preferencesHandler, final VlcPlayer player,
+            final YouTubeManager youTubeManager, final NetworkManager networkManager, final PhoneManager phoneManager) {
+        super(view, preferencesHandler, player, youTubeManager, networkManager, phoneManager);
     }
 
 }

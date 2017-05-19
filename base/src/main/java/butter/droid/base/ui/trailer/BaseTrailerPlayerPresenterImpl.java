@@ -24,7 +24,6 @@ import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import java.net.URLDecoder;
@@ -39,10 +38,10 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
 
     private QueryYouTubeTask queryYouTubeTask;
 
-    public BaseTrailerPlayerPresenterImpl(final BaseTrailerPlayerView view, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final VlcPlayer player, final YouTubeManager youTubeManager,
+    public BaseTrailerPlayerPresenterImpl(final BaseTrailerPlayerView view, final PreferencesHandler preferencesHandler,
+            final VlcPlayer player, final YouTubeManager youTubeManager,
             final NetworkManager networkManager, final PhoneManager phoneManager) {
-        super(view, prefManager, preferencesHandler, player);
+        super(view, preferencesHandler, player);
 
         this.view = view;
         this.youTubeManager = youTubeManager;
@@ -50,8 +49,8 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
         this.phoneManager = phoneManager;
     }
 
-    @Override public void onCreate(final Media media, final String trailerUri) {
-        super.onCreate(media, 0);
+    @Override public void onCreate(final Media media, final String trailerUri, long resumePosition) {
+        super.onCreate(media, resumePosition);
 
         if (youTubeManager.isYouTubeUrl(trailerUri)) {
             queryYouTubeTask = new QueryYouTubeTask(youTubeManager, networkManager, phoneManager);

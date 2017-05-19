@@ -44,4 +44,6 @@ public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter, ISubtit
 
     void onSubsTimingChanged(int offset);
 
+    void streamProgressUpdated(float progress);
+
 }

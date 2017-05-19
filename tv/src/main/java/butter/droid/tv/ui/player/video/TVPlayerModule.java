@@ -21,11 +21,9 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
@@ -44,14 +42,13 @@ public class TVPlayerModule {
         return view;
     }
 
-    @Provides @FragmentScope TVPlayerPresenter providePresenter(TVPlayerView view, Context context, PrefManager prefManager,
-            PreferencesHandler preferencesHandler, ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager,
-            VlcPlayer vlcPlayer) {
-        return new TVPlayerPresenterImpl(view, context, prefManager, preferencesHandler, providerManager, playerManager,
-                beamManager, vlcPlayer);
+    @Provides @FragmentScope TVPlayerPresenter providePresenter(TVPlayerView view, Context context, PreferencesHandler preferencesHandler,
+            ProviderManager providerManager, PlayerManager playerManager, VlcPlayer vlcPlayer) {
+        return new TVPlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager, vlcPlayer);
     }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
         return new VlcPlayer(libVLC, windowManager);
     }
+
 }

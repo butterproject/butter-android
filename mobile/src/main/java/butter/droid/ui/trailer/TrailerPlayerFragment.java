@@ -30,12 +30,9 @@ import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butter.droid.widget.StrokedRobotoTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.github.se_bastiaan.torrentstream.StreamStatus;
-import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerPlayerView, TorrentListener {
+public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerPlayerView {
 
     private final static String ARG_URI = "butter.droid.ui.trailer.TrailerPlayerFragment.uri";
     private final static String ARG_MEDIA = "butter.droid.ui.trailer.TrailerPlayerFragment.media";
@@ -59,7 +56,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
         String uri = args.getString(ARG_URI);
         Media media = args.getParcelable(ARG_MEDIA);
 
-        presenter.onCreate(media, uri);
+        presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
 
     @Override public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
@@ -80,30 +77,6 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 
     @Override public void startBeamPlayerActivity(@NonNull final StreamInfo streamInfo, final long currentTime) {
         getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), streamInfo, currentTime));
-    }
-
-    @Override public void onStreamPrepared(final Torrent torrent) {
-        // nothing to do
-    }
-
-    @Override public void onStreamStarted(final Torrent torrent) {
-        // nothing to do
-    }
-
-    @Override public void onStreamError(final Torrent torrent, final Exception e) {
-        // nothing to do
-    }
-
-    @Override public void onStreamReady(final Torrent torrent) {
-        // nothing to do
-    }
-
-    @Override public void onStreamProgress(final Torrent torrent, final StreamStatus streamStatus) {
-        presenter.streamProgressUpdated(streamStatus.progress);
-    }
-
-    @Override public void onStreamStopped() {
-        // nothing to do
     }
 
 //    @Override

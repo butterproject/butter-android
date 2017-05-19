@@ -22,12 +22,9 @@ import android.net.Uri;
 import android.text.TextUtils;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
-import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.subs.SubtitleDownloader;
@@ -35,7 +32,6 @@ import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import butter.droid.base.utils.LocaleUtils;
-import com.connectsdk.device.ConnectableDevice;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -51,7 +47,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     private final VlcPlayer player;
     private final ProviderManager providerManager;
     private final PlayerManager playerManager;
-    private final BeamManager beamManager;
 
     protected StreamInfo streamInfo;
 
@@ -60,18 +55,17 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     private TimedTextObject subs;
     private Caption lastSubs;
     private int subtitleOffset;
+    private int streamerProgress;
 
-    public StreamPlayerPresenterImpl(final StreamPlayerView view, final Context context, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
-            final BeamManager beamManager, final VlcPlayer player) {
-        super(view, prefManager, preferencesHandler, player);
+    public StreamPlayerPresenterImpl(final StreamPlayerView view, final Context context, final PreferencesHandler preferencesHandler,
+            final ProviderManager providerManager, final PlayerManager playerManager, final VlcPlayer player) {
+        super(view, preferencesHandler, player);
         this.view = view;
         this.context = context;
         this.preferencesHandler = preferencesHandler;
         this.player = player;
         this.providerManager = providerManager;
         this.playerManager = playerManager;
-        this.beamManager = beamManager;
     }
 
     @Override public void onCreate(final StreamInfo streamInfo, final long resumePosition) {
@@ -101,15 +95,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     @Override public void onResume() {
         super.onResume();
 
-        beamManager.addDeviceListener(deviceListener);
-
         loadMedia();
-    }
-
-    @Override public void onPause() {
-        super.onPause();
-
-        beamManager.removeDeviceListener(deviceListener);
     }
 
     @Override public void onViewCreated() {
@@ -222,6 +208,24 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
     }
 
+    @Override public void streamProgressUpdated(final float progress) {
+        int newProgress = (int) ((player.getLength() / 100) * progress);
+        if (streamerProgress < newProgress) {
+            streamerProgress = newProgress;
+            view.displayStreamProgress(getStreamerProgress());
+        }
+    }
+
+    @Override protected void setCurrentTime(final long time) {
+        if (time / player.getLength() * 100 <= getStreamerProgress()) {
+            super.setCurrentTime(time);
+        }
+    }
+
+    protected int getStreamerProgress() {
+        return streamerProgress;
+    }
+
     /**
      * Called when subtitle for current media successfully loaded or disabled.
      *
@@ -230,8 +234,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     protected void onSubtitleEnabledStateChanged(boolean enabled) {
         // override if needed
     }
-
-    protected abstract void startBeamPlayerActivity();
 
     protected void setLastSubtitleCaption(Caption sub) {
         lastSubs = sub;
@@ -301,15 +303,5 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
         loadMedia(Uri.parse(videoLocation));
     }
-
-    private final BeamDeviceListener deviceListener = new BeamDeviceListener() {
-
-        @Override
-        public void onDeviceReady(ConnectableDevice device) {
-            startBeamPlayerActivity();
-
-//            getActivity().finish();
-        }
-    };
 
 }

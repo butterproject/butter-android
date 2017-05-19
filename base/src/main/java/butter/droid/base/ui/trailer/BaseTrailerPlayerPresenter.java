@@ -22,6 +22,6 @@ import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 
 public interface BaseTrailerPlayerPresenter extends BaseVideoPlayerPresenter {
 
-    void onCreate(Media media, String trailerUri);
+    void onCreate(Media media, String trailerUri, long resumePosition);
 
 }

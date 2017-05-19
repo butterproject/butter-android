@@ -17,6 +17,8 @@
 
 package butter.droid.base.ui.player.base;
 
+import android.os.Bundle;
+
 public interface BaseVideoPlayerView {
 
     void setupControls(String title);
@@ -33,10 +35,13 @@ public interface BaseVideoPlayerView {
 
     void onErrorEncountered();
 
-    void updateControlsState(boolean playing, long progress, int streamerProgress, long length);
+    void updateControlsState(boolean playing, long progress, long length);
 
     void updateSurfaceSize(int width, int height);
 
     void detachMediaSession();
 
+    void close();
+
+    void saveState(Bundle outState, long resumePosition);
 }

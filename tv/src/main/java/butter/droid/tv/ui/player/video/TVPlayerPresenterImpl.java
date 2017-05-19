@@ -19,27 +19,20 @@ package butter.droid.tv.ui.player.video;
 
 import android.content.Context;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 
 public class TVPlayerPresenterImpl extends StreamPlayerPresenterImpl implements TVPlayerPresenter {
 
     private final TVPlayerView view;
 
-    public TVPlayerPresenterImpl(final TVPlayerView view, final Context context, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
-            final BeamManager beamManager, final VlcPlayer vlcPlayer) {
-        super(view, context, prefManager, preferencesHandler, providerManager, playerManager, beamManager, vlcPlayer);
+    public TVPlayerPresenterImpl(final TVPlayerView view, final Context context, final PreferencesHandler preferencesHandler,
+            final ProviderManager providerManager, final PlayerManager playerManager, final VlcPlayer vlcPlayer) {
+        super(view, context, preferencesHandler, providerManager, playerManager, vlcPlayer);
 
         this.view = view;
-    }
-
-    @Override protected void startBeamPlayerActivity() {
-
     }
 
 }

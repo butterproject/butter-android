@@ -24,7 +24,6 @@ import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenterImpl;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
@@ -40,11 +39,11 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
     private final VideoPlayerTouchHandler touchHandler;
     private final AudioManager audioManager;
 
-    public TrailerPlayerPresenterImpl(final TrailerPlayerView view, final Context context, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final VlcPlayer player, final YouTubeManager youTubeManager,
-            final NetworkManager networkManager, final PhoneManager phoneManager, final BrightnessManager brightnessManager,
-            final VideoPlayerTouchHandler touchHandler, final AudioManager audioManager) {
-        super(view, prefManager, preferencesHandler, player, youTubeManager, networkManager, phoneManager);
+    public TrailerPlayerPresenterImpl(final TrailerPlayerView view, final Context context, final PreferencesHandler preferencesHandler,
+            final VlcPlayer player, final YouTubeManager youTubeManager, final NetworkManager networkManager,
+            final PhoneManager phoneManager, final BrightnessManager brightnessManager, final VideoPlayerTouchHandler touchHandler,
+            final AudioManager audioManager) {
+        super(view, preferencesHandler, player, youTubeManager, networkManager, phoneManager);
 
         this.view = view;
         this.context = context;
@@ -82,23 +81,20 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
         touchHandler.setListener(null);
     }
 
-    @Override public void onSeekChange(final int jump) {
-//        // Adjust the jump
-//        if ((jump > 0) && ((getCurrentTime() + jump) > controlBar.getSecondaryProgress())) {
-//            jump = (int) (controlBar.getSecondaryProgress() - getCurrentTime());
-//        }
-//        if ((jump < 0) && ((getCurrentTime() + jump) < 0)) {
-//            jump = (int) -getCurrentTime();
-//        }
-//
-//        long currentTime = getCurrentTime();
-//        if (seek && controlBar.getSecondaryProgress() > 0) {
-//            seek(jump);
-//        }
-//
-//        if (getDuration() > 0) {
-//            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(currentTime + jump)));
-//        }
+    @Override public void onSeekChange(int jump) {
+        // Adjust the jump
+        long currentTime = getCurrentTime();
+        long length = player.getLength();
+        if ((jump > 0) && ((currentTime + jump) > length)) {
+            jump = (int) (length - currentTime);
+        }
+        if ((jump < 0) && ((currentTime + jump) < 0)) {
+            jump = (int) -currentTime;
+        }
+
+        if (length > 0) {
+            seek(jump);
+        }
     }
 
     @Override public boolean onBrightnessChange(final float delta) {

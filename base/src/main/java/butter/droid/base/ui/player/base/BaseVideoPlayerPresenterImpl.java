@@ -18,39 +18,34 @@
 package butter.droid.base.ui.player.base;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.vlc.VlcPlayer.PlayerCallback;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Media;
+import timber.log.Timber;
 
 public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPresenter, PlayerCallback {
 
-    private static final String PREF_RESUME_POSITION = "resume_position";
-
     private final BaseVideoPlayerView view;
-    private final PrefManager prefManager;
     private final PreferencesHandler preferencesHandler;
     private final VlcPlayer player;
 
     private long resumePosition;
     protected Media media;
 
-    private int streamerProgress;
-
-    public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final VlcPlayer player) {
+    public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final PreferencesHandler preferencesHandler,
+            final VlcPlayer player) {
         this.view = view;
-        this.prefManager = prefManager;
         this.preferencesHandler = preferencesHandler;
         this.player = player;
     }
 
     protected void onCreate(final Media media, final long resumePosition) {
-
         if (!player.initialize()) {
-            // TODO: 4/2/17 Stop activity & maybe show error
+            view.close();
+            Timber.e("Error initializing media player");
             return;
         }
 
@@ -59,8 +54,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         this.resumePosition = resumePosition;
         this.media = media;
 
-        prefManager.save(PREF_RESUME_POSITION, resumePosition);
-
     }
 
     @Override public void onResume() {
@@ -68,16 +61,18 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     @Override public void onPause() {
-        saveVideoCurrentTime();
+        resumePosition = player.getTime();
         player.stop();
 
         player.detachFromSurface();
         view.detachMediaSession();
     }
 
-    @Override public void onDestroy() {
-        prefManager.save(PREF_RESUME_POSITION, 0);
+    @Override public void onSaveInstanceState(final Bundle outState) {
+        view.saveState(outState, resumePosition);
+    }
 
+    @Override public void onDestroy() {
         player.release();
         player.setCallback(null);
     }
@@ -88,13 +83,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
     @Override public void pause() {
         player.pause();
-    }
-
-    @Override public void streamProgressUpdated(final float progress) {
-        int newProgress = (int) ((player.getLength() / 100) * progress);
-        if (streamerProgress < newProgress) {
-            streamerProgress = newProgress;
-        }
     }
 
     @Override public void onScaleClicked() {
@@ -126,9 +114,8 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
         player.loadMedia(uri, ha);
 
-        long resumeFrom = prefManager.get(PREF_RESUME_POSITION, resumePosition);
-        if (resumeFrom > 0) {
-            player.setTime(resumeFrom);
+        if (resumePosition > 0) {
+            player.setTime(resumePosition);
         }
 
         player.play();
@@ -150,22 +137,12 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
         setCurrentTime(position);
         view.showOverlay();
-//        view.onProgressChanged(getCurrentTime(), getStreamerProgress(), player.getLength()); // TODO: 4/2/17 Is this already handled by vlc event?
     }
 
     protected void setCurrentTime(long time) {
-        if (time / player.getLength() * 100 <= getStreamerProgress()) {
+        if (time <= player.getLength()) {
             player.setTime(time);
         }
-    }
-
-    protected int getStreamerProgress() {
-        return streamerProgress;
-    }
-
-    private void saveVideoCurrentTime() {
-        long currentTime = player.getTime();
-        prefManager.save(PREF_RESUME_POSITION, currentTime);
     }
 
     /**
@@ -175,18 +152,6 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
      */
     protected boolean isPlaying() {
         return player.isPlaying();
-    }
-
-    private void prepareVlcVout() {
-       view.attachVlcViews();
-    }
-
-    private void resumeVideo() {
-        long resumePosition = prefManager.get(PREF_RESUME_POSITION, 0);
-        if (player.getLength() > resumePosition && resumePosition > 0) {
-            setCurrentTime(resumePosition);
-            prefManager.save(PREF_RESUME_POSITION, 0);
-        }
     }
 
     @Override public void updateSurfaceSize(final int width, final int height) {
@@ -199,63 +164,35 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
 
     @Override public void playing() {
         updateControls();
+        view.setKeepScreenOn(true);
+        view.setProgressVisible(false);
+        view.showOverlay();
     }
 
     @Override public void paused() {
         updateControls();
+        view.setKeepScreenOn(false);
     }
 
     @Override public void stopped() {
-
+        view.setKeepScreenOn(false);
+        updateControls();
     }
-
-    private void updateControls() {
-        view.updateControlsState(player.isPlaying(), getCurrentTime(), getStreamerProgress(), player.getLength());
-    }
-
-//            switch (event.type) {
-//        case MediaPlayer.Event.Playing:
-//            videoDuration = player.getLength();
-//            view.setKeepScreenOn(true);
-//            resumeVideo();
-//            view.setProgressVisible(false);
-//            view.showOverlay();
-//            view.updatePlayPauseState(true);
-//            break;
-//        case MediaPlayer.Event.Paused:
-//            view.setKeepScreenOn(false);
-//            saveVideoCurrentTime();
-//            view.updatePlayPauseState(false);
-//            break;
-//        case MediaPlayer.Event.Stopped:
-//            view.setKeepScreenOn(false);
-//            view.updatePlayPauseState(false);
-//            break;
-//        case MediaPlayer.Event.EndReached:
-//            endReached();
-//            view.updatePlayPauseState(false);
-//            break;
-//        case MediaPlayer.Event.EncounteredError:
-//            view.onErrorEncountered();
-//            view.updatePlayPauseState(false);
-//            break;
-//        case MediaPlayer.Event.Opening:
-//            view.setProgressVisible(true);
-//            videoDuration = player.getLength();
-////                mediaPlayer.play(); // should be handled by auto plau
-//            break;
-//        case MediaPlayer.Event.TimeChanged:
-//        case MediaPlayer.Event.PositionChanged:
-//            view.onProgressChanged(getCurrentTime(), getStreamerProgress(), getDuration());
-//            progressSubtitleCaption();
-//            break;
 
     @Override public void endReached() {
         view.onPlaybackEndReached();
     }
 
     @Override public void playerError() {
-        // TODO: 5/19/17
+        view.onErrorEncountered();
+    }
+
+    private void prepareVlcVout() {
+        view.attachVlcViews();
+    }
+
+    private void updateControls() {
+        view.updateControlsState(player.isPlaying(), getCurrentTime(), player.getLength());
     }
 
 }

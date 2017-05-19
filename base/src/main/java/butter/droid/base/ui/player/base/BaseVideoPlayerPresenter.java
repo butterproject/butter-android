@@ -17,6 +17,7 @@
 
 package butter.droid.base.ui.player.base;
 
+import android.os.Bundle;
 import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,13 +36,13 @@ public interface BaseVideoPlayerPresenter {
 
     void pause();
 
-    void streamProgressUpdated(float progress);
-
     void onScaleClicked();
 
     void seekForwardClick();
 
     void seekBackwardClick();
+
+    void onSaveInstanceState(Bundle outState);
 
     // region IntDef
 

@@ -50,10 +50,12 @@ import javax.inject.Inject;
 
 public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPlayerView {
 
+    protected static final String ARG_RESUME_POSITION = "butter.droid.tv.ui.player.abs.TVAbsPlayerFragment.resumePosition";
+
     @Inject TVAbsPlayerPresenter presenter;
     @Inject VlcPlayer player;
 
-    private MediaSessionCompat mediaSession;
+    protected MediaSessionCompat mediaSession;
     protected Builder stateBuilder;
     private MediaMetadataCompat.Builder metadataBuilder;
     private PlayerMediaControllerGlue mediaControllerGlue;
@@ -94,6 +96,12 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         super.onPause();
 
         presenter.onPause();
+    }
+
+    @Override public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        presenter.onSaveInstanceState(outState);
     }
 
     @Override public void onDestroy() {
@@ -151,8 +159,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         // TODO: 5/7/17
     }
 
-    @Override public void updateControlsState(final boolean playing, final long currentTime, final int streamerProgress,
-            final long duration) {
+    @Override public void updateControlsState(final boolean playing, final long currentTime, final long duration) {
         stateBuilder.setBufferedPosition(duration);
         stateBuilder.setState(playing ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED, currentTime, 1);
         mediaSession.setPlaybackState(stateBuilder.build());
@@ -177,6 +184,14 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         mediaSession.release();
     }
 
+    @Override public void close() {
+        getActivity().finish();
+    }
+
+    @Override public void saveState(final Bundle outState, final long resumePosition) {
+        outState.putLong(ARG_RESUME_POSITION, resumePosition);
+    }
+
     protected boolean onCustomAction(final String action, final Bundle extras) {
         switch (action) {
             case PlayerMediaControllerGlue.ACTION_SCALE:
@@ -184,6 +199,14 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
                 return true;
             default:
                 return false;
+        }
+    }
+
+    protected long getResumePosition(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            return savedInstanceState.getLong(ARG_RESUME_POSITION);
+        } else {
+            return getArguments().getLong(ARG_RESUME_POSITION);
         }
     }
 

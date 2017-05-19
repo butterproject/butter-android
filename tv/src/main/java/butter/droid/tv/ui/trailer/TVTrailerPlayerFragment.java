@@ -47,7 +47,7 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
         String uri = args.getString(ARG_URI);
         Media media = args.getParcelable(ARG_MEDIA);
 
-        presenter.onCreate(media, uri);
+        presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
 
     @Override public void displayStreamProgress(final int progress) {

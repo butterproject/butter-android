@@ -20,16 +20,17 @@ package butter.droid.ui.player.stream;
 import android.content.Context;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
-import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.ui.player.VideoPlayerTouchHandler;
 import butter.droid.ui.player.VideoPlayerTouchHandler.OnVideoTouchListener;
+import com.connectsdk.device.ConnectableDevice;
 import java.util.Locale;
 
 public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
@@ -41,12 +42,13 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
     private final BrightnessManager brightnessManager;
     private final VlcPlayer player;
     private final AudioManager audioManager;
+    private final BeamManager beamManager;
 
-    public PlayerPresenterImpl(final PlayerView view, final Context context, final PrefManager prefManager,
-            final PreferencesHandler preferencesHandler, final ProviderManager providerManager, final PlayerManager playerManager,
-            final BeamManager beamManager, final BrightnessManager brightnessManager, final AudioManager audioManager,
-            final VideoPlayerTouchHandler touchHandler, final VlcPlayer player) {
-        super(view, context, prefManager, preferencesHandler, providerManager, playerManager, beamManager, player);
+    public PlayerPresenterImpl(final PlayerView view, final Context context, final PreferencesHandler preferencesHandler,
+            final ProviderManager providerManager, final PlayerManager playerManager, final BeamManager beamManager,
+            final BrightnessManager brightnessManager, final AudioManager audioManager, final VideoPlayerTouchHandler touchHandler,
+            final VlcPlayer player) {
+        super(view, context, preferencesHandler, providerManager, playerManager, player);
 
         this.view = view;
         this.context = context;
@@ -55,6 +57,7 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         this.brightnessManager = brightnessManager;
         this.player = player;
         this.audioManager = audioManager;
+        this.beamManager = beamManager;
     }
 
     @Override public void onViewCreated() {
@@ -70,6 +73,13 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         super.onResume();
 
         displayTitle();
+        beamManager.addDeviceListener(deviceListener);
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+
+        beamManager.removeDeviceListener(deviceListener);
     }
 
     @Override public void onStop() {
@@ -83,40 +93,27 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
     }
 
     @Override public void onProgressChanged(final int progress) {
-        if (progress <= player.getLength()) {
-//        if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
+        if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
             setLastSubtitleCaption(null);
             setCurrentTime(progress);
             progressSubtitleCaption();
         }
     }
 
-    @Override public void streamProgressUpdated(final float progress) {
-        super.streamProgressUpdated(progress);
-        view.displayStreamProgress(getStreamerProgress());
-    }
+    @Override public void onSeekChange(int jump) {
+        // Adjust the jump
+        long currentTime = getCurrentTime();
+        int streamerProgress = getStreamerProgress();
+        if ((jump > 0) && ((currentTime + jump) > streamerProgress)) {
+            jump = (int) (streamerProgress - currentTime);
+        }
+        if ((jump < 0) && ((currentTime + jump) < 0)) {
+            jump = (int) -currentTime;
+        }
 
-    @Override public void onSeekChange(final int jump) {
-//        // Adjust the jump
-//        if ((jump > 0) && ((getCurrentTime() + jump) > controlBar.getSecondaryProgress())) {
-//            jump = (int) (controlBar.getSecondaryProgress() - getCurrentTime());
-//        }
-//        if ((jump < 0) && ((getCurrentTime() + jump) < 0)) {
-//            jump = (int) -getCurrentTime();
-//        }
-//
-//        long currentTime = getCurrentTime();
-//        if (seek && controlBar.getSecondaryProgress() > 0) {
-//            seek(jump);
-//        }
-//
-//        if (getDuration() > 0) {
-//            showPlayerInfo(String.format("%s%s (%s)", jump >= 0 ? "+" : "", StringUtils.millisToString(jump), StringUtils.millisToString(currentTime + jump)));
-//        }
-    }
-
-    @Override protected void startBeamPlayerActivity() {
-        view.startBeamPlayerActivity(streamInfo, getCurrentTime());
+        if (streamerProgress > 0) {
+            seek(jump);
+        }
     }
 
     @Override public boolean onBrightnessChange(final float delta) {
@@ -157,5 +154,15 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         }
         view.displayTitle(title);
     }
+
+    private final BeamDeviceListener deviceListener = new BeamDeviceListener() {
+
+        @Override
+        public void onDeviceReady(ConnectableDevice device) {
+            view.startBeamPlayerActivity(streamInfo, getCurrentTime());
+
+            view.close();
+        }
+    };
 
 }

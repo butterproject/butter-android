@@ -35,14 +35,13 @@ import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SizePolicy;
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.IVLCVout.Callback;
 import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.LibVLC.HardwareAccelerationError;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.MediaPlayer.Event;
 import org.videolan.libvlc.MediaPlayer.EventListener;
 import timber.log.Timber;
 
-public class VlcPlayer implements HardwareAccelerationError, EventListener, Callback {
+public class VlcPlayer implements EventListener, Callback {
 
     @Nullable private final LibVLC libVLC;
     private final WindowManager windowManager;
@@ -66,8 +65,6 @@ public class VlcPlayer implements HardwareAccelerationError, EventListener, Call
         if (libVLC == null) {
             return false;
         }
-
-        libVLC.setOnHardwareAccelerationError(this);
 
         mediaPlayer = new MediaPlayer(libVLC);
         mediaPlayer.setEventListener(this);
@@ -158,10 +155,6 @@ public class VlcPlayer implements HardwareAccelerationError, EventListener, Call
 
     @SizePolicy public int getSizePolicy() {
         return layoutHolder.sizePolicy;
-    }
-
-    @Override public void eventHardwareAccelerationError() {
-
     }
 
     @Override public void onEvent(final Event event) {

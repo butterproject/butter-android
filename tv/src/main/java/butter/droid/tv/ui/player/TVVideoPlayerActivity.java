@@ -37,9 +37,12 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     private final static String EXTRA_RESUME_POSITION = "butter.droid.tv.ui.player.TVVideoPlayerActivity.resumePosition";
     private final static String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
 
+    private final static String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.player.TVVideoPlayerActivity.videoFragment";
+
     @Inject PrefManager prefManager;
 
     private TVVideoPlayerComponent component;
+    private TVPlayerFragment fragment;
 
     private StreamInfo mStreamInfo;
     private boolean mCurrentStreamStopped = false;
@@ -57,9 +60,12 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         createStreamInfo();
 
         if (savedInstanceState == null) {
+            fragment = TVPlayerFragment.newInstance(mStreamInfo, 0);
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, TVPlayerFragment.newInstance(mStreamInfo, 0))
+                    .add(android.R.id.content, fragment, TAG_VIDEO_FRAGMENT)
                     .commit();
+        } else {
+            fragment = (TVPlayerFragment) getSupportFragmentManager().findFragmentByTag(TAG_VIDEO_FRAGMENT);
         }
 
     }
@@ -86,16 +92,23 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
 
     @Override
     public void onTorrentServiceDisconnected(final TorrentService service) {
-//        if (null != fragment) {
-//            fragment.onTorrentServiceDisconnected();
-//        }
+        if (fragment != null) {
+            service.removeListener(fragment);
+        }
+
+        super.onTorrentServiceDisconnected(service);
     }
 
     @Override
     public void onTorrentServiceConnected(final TorrentService service) {
-//        if (null != fragment) {
-//            fragment.onTorrentServiceConnected(getTorrentService());
-//        }
+        super.onTorrentServiceConnected(service);
+
+        if (service.checkStopped()) {
+            finish();
+            return;
+        }
+
+        service.addListener(fragment);
     }
 
     private void createStreamInfo() {

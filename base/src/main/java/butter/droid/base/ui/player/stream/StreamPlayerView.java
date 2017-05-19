@@ -39,4 +39,6 @@ public interface StreamPlayerView extends BaseVideoPlayerView {
 
     void showTimedCaptionText(Caption caption);
 
+    void displayStreamProgress(int progress);
+
 }

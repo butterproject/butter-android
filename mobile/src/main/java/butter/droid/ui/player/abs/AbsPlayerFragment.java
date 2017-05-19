@@ -67,6 +67,8 @@ import javax.inject.Inject;
 
 public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVideoPlayerView, OnSystemUiVisibilityChangeListener {
 
+    protected static final String ARG_RESUME_POSITION = "butter.droid.ui.player.abs.AbsPlayerFragment.resumePosition";
+
     private static final String ACTION_SCALE = "butter.droid.ui.player.abs.action.SCALE";
 
     private static final int FADE_OUT_INFO = 1000;
@@ -145,6 +147,12 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         super.onPause();
 
         presenter.onPause();
+    }
+
+    @Override public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        presenter.onSaveInstanceState(outState);
     }
 
     @Override public void onStop() {
@@ -253,8 +261,7 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         dialog.show();
     }
 
-    @Override public void updateControlsState(final boolean playing, final long progress, final int streamerProgress, final long length) {
-        stateBuilder.setBufferedPosition(streamerProgress);
+    @Override public void updateControlsState(final boolean playing, final long progress, final long length) {
         stateBuilder.setState(playing ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED, progress, 1);
         mediaSession.setPlaybackState(stateBuilder.build());
 
@@ -286,6 +293,14 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         lastSystemUIVisibility = visibility;
     }
 
+    @Override public void close() {
+        getActivity().finish();
+    }
+
+    @Override public void saveState(final Bundle outState, final long resumePosition) {
+        outState.putLong(ARG_RESUME_POSITION, resumePosition);
+    }
+
     @OnClick(R.id.play_button) void onPlayPauseClick() {
         if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             mediaController.getTransportControls().pause();
@@ -311,6 +326,14 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         playerInfo.setText(text);
         playerInfo.removeCallbacks(infoHideRunnable);
         playerInfo.postDelayed(infoHideRunnable, FADE_OUT_INFO);
+    }
+
+    protected long getResumePosition(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            return savedInstanceState.getLong(ARG_RESUME_POSITION);
+        } else {
+            return getArguments().getLong(ARG_RESUME_POSITION);
+        }
     }
 
     private void setupToolbar() {

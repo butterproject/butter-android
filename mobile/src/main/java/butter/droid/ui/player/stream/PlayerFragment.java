@@ -47,7 +47,6 @@ import javax.inject.Inject;
 public class PlayerFragment extends AbsPlayerFragment implements PlayerView, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.streamInfo";
-    private static final String ARG_RESUME_POSITION = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.resumePosition";
 
     private static final String ACTION_CLOSE_CAPTION = "butter.droid.tv.ui.player.video.action.CLOSE_CAPTION";
 
@@ -69,7 +68,7 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
         super.onCreate(savedInstanceState);
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
-        long resumePosition = getArguments().getLong(ARG_RESUME_POSITION);
+        long resumePosition = getResumePosition(savedInstanceState);
 
         stateBuilder.addCustomAction(ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
 

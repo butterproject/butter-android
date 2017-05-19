@@ -28,12 +28,14 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
+import com.github.se_bastiaan.torrentstream.StreamStatus;
+import com.github.se_bastiaan.torrentstream.Torrent;
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerView, BaseOnItemViewSelectedListener {
+public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerView, BaseOnItemViewSelectedListener, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.tv.ui.player.video.TVPlayerFragment.streamInfo";
-    private static final String ARG_RESUME_POSITION = "butter.droid.tv.ui.player.video.TVPlayerFragment.resumePosition";
 
     @Inject TVPlayerPresenter presenter;
 
@@ -49,11 +51,16 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         super.onCreate(savedInstanceState);
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
-        long resumePosition = getArguments().getLong(ARG_RESUME_POSITION);
+        long resumePosition = getResumePosition(savedInstanceState);
 
         stateBuilder.addCustomAction(PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
 
         presenter.onCreate(streamInfo, resumePosition);
+    }
+
+    @Override public void displayStreamProgress(final int progress) {
+        stateBuilder.setBufferedPosition(progress);
+        mediaSession.setPlaybackState(stateBuilder.build());
     }
 
     @Override public void showTimedCaptionText(final Caption caption) {
@@ -104,6 +111,30 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         }
     }
 
+    @Override public void onStreamPrepared(final Torrent torrent) {
+        // nothing to do
+    }
+
+    @Override public void onStreamStarted(final Torrent torrent) {
+        // nothing to do
+    }
+
+    @Override public void onStreamError(final Torrent torrent, final Exception e) {
+        // nothing to do
+    }
+
+    @Override public void onStreamReady(final Torrent torrent) {
+        // nothing to do
+    }
+
+    @Override public void onStreamProgress(final Torrent torrent, final StreamStatus streamStatus) {
+        presenter.streamProgressUpdated(streamStatus.progress);
+    }
+
+    @Override public void onStreamStopped() {
+        // nothing to do
+    }
+
     public static TVPlayerFragment newInstance(@NonNull StreamInfo streamInfo, long resumePosition) {
         Bundle args = new Bundle(2);
         args.putParcelable(ARG_STREAM_INFO, streamInfo);
@@ -113,6 +144,5 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         fragment.setArguments(args);
         return fragment;
     }
-
 
 }
