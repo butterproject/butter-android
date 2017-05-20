@@ -20,7 +20,6 @@ package butter.droid.tv;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.tv.activities.TVLaunchActivity;
 import butter.droid.tv.activities.TVMainActivity;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
@@ -34,6 +33,7 @@ import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TVAboutComponent;
+import butter.droid.tv.ui.launch.TVLaunchComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.player.TVVideoPlayerComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
@@ -69,8 +69,6 @@ public interface InternalComponent extends BaseInternalComponent {
 
     void inject(TVTermsActivity activity);
 
-    void inject(TVLaunchActivity activity);
-
     void inject(TVTrailerPlayerActivity activity);
 
     void inject(RecommendationService service);
@@ -100,5 +98,7 @@ public interface InternalComponent extends BaseInternalComponent {
     TVTrailerPlayerComponent.Builder tvTrailerPlayerComponentBuilder();
 
     TVVideoPlayerComponent.Builder tvVideoPlayerComponentBuilder();
+
+    TVLaunchComponent.Builder tvLaunchComponentBuilder();
 
 }
