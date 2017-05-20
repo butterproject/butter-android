@@ -20,7 +20,6 @@ package butter.droid.tv.activities.base;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import butter.droid.base.ButterApplication;
@@ -34,12 +33,10 @@ import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public abstract class TVTorrentBaseActivity extends FragmentActivity
-    implements TorrentListener, TorrentActivity, ServiceConnection {
+public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity, ServiceConnection {
 
     @Inject PreferencesHandler preferencesHandler;
 
-    protected Handler mHandler;
     protected TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
@@ -51,8 +48,6 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
             setContentView(layoutId);
             ButterKnife.bind(this);
         }
-
-        mHandler = new Handler(getMainLooper());
     }
 
     @Override

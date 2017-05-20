@@ -25,4 +25,6 @@ public interface AbsPlayerView {
 
     void hideOverlay();
 
+    void showVolumeMessage(int volume);
+
 }

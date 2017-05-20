@@ -18,9 +18,7 @@
 package butter.droid.tv.ui.trailer;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import javax.inject.Inject;
@@ -48,18 +46,6 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
         Media media = args.getParcelable(ARG_MEDIA);
 
         presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
-    }
-
-    @Override public void displayStreamProgress(final int progress) {
-
-    }
-
-    @Override public void showVolumeMessage(final int volume) {
-
-    }
-
-    @Override public void startBeamPlayerActivity(@NonNull final StreamInfo streamInfo, final long currentTime) {
-
     }
 
 //    DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {

@@ -60,4 +60,8 @@ public class VideoPlayerPresenterImpl implements VideoPlayerPresenter {
         }
 
     }
+
+    @Override public void close() {
+        view.showExitDialog(streamInfo.getTitle());
+    }
 }

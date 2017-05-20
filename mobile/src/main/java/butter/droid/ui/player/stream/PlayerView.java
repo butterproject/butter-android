@@ -24,8 +24,6 @@ import butter.droid.base.ui.player.stream.StreamPlayerView;
 
 public interface PlayerView extends AbsPlayerView, StreamPlayerView {
 
-    void showVolumeMessage(int volume);
-
     void startBeamPlayerActivity(@NonNull StreamInfo streamInfo, long currentTime);
 
 }

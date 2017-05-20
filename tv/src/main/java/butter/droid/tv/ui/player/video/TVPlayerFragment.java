@@ -20,9 +20,8 @@ package butter.droid.tv.ui.player.video;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.v17.leanback.widget.BaseOnItemViewSelectedListener;
-import android.support.v17.leanback.widget.Presenter.ViewHolder;
-import android.support.v17.leanback.widget.RowPresenter;
+import android.support.annotation.StringRes;
+import android.widget.Toast;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
@@ -33,7 +32,7 @@ import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerView, BaseOnItemViewSelectedListener, TorrentListener {
+public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerView, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.tv.ui.player.video.TVPlayerFragment.streamInfo";
 
@@ -63,48 +62,48 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         mediaSession.setPlaybackState(stateBuilder.build());
     }
 
+    @Override public void showErrorMessage(@StringRes final int message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void showTimedCaptionText(final Caption caption) {
-        // TODO: 5/7/17
+        // TODO: 5/7/17 - will be implemented later
     }
 
     @Override
     public void setupSubtitles(@ColorInt final int color, final int size, @ColorInt final int strokeColor, final int strokeWidth) {
-        // TODO: 5/17/17
+        // TODO: 5/17/17 - will be implemented later
     }
 
     @Override public void updateSubtitleSize(final int size) {
-        // TODO: 5/17/17
+        // TODO: 5/17/17 - will be implemented later
     }
 
     @Override public void showSubsSelectorDialog() {
-        // TODO: 5/7/17  
+        // TODO: 5/7/17 - will be implemented later
     }
 
     @Override public void showPickSubsDialog(final String[] readableNames, final String[] adapterSubtitles, final String currentSubsLang) {
-        // TODO: 5/7/17  
+        // TODO: 5/7/17 - will be implemented later
     }
 
     @Override public void showSubsFilePicker() {
-        // TODO: 5/7/17
+        // TODO: 5/7/17 - will be implemented later
     }
 
     @Override public void displaySubsSizeDialog() {
-        // TODO: 5/7/17  
+        // TODO: 5/7/17 - will be implemented later
     }
 
     @Override public void displaySubsTimingDialog(final int subtitleOffset) {
-        // TODO: 5/7/17
-    }
-
-    @Override public void onItemSelected(final ViewHolder itemViewHolder, final Object item, final RowPresenter.ViewHolder rowViewHolder,
-            final Object row) {
-
+        // TODO: 5/7/17 - will be implemented later
     }
 
     @Override protected boolean onCustomAction(final String action, final Bundle extras) {
         switch (action) {
             case PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION:
                 presenter.onSubsClicked();
+                tickle();
                 return true;
             default:
                 return super.onCustomAction(action, extras);

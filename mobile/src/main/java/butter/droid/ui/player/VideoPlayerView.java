@@ -23,4 +23,6 @@ import butter.droid.base.torrent.StreamInfo;
 public interface VideoPlayerView {
 
     void showVideoFragment(@NonNull StreamInfo streamInfo, long resumePosition);
+
+    void showExitDialog(String title);
 }

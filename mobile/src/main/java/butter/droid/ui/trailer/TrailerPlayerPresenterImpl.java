@@ -66,7 +66,6 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
 
     @Override public void onProgressChanged(final int progress) {
         if (progress <= player.getLength()) {
-//        if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
             setCurrentTime(progress);
         }
     }

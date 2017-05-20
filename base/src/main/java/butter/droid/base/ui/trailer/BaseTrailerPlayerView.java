@@ -17,16 +17,8 @@
 
 package butter.droid.base.ui.trailer;
 
-import android.support.annotation.NonNull;
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerView;
 
 public interface BaseTrailerPlayerView extends BaseVideoPlayerView {
-
-    void displayStreamProgress(int progress);
-
-    void showVolumeMessage(int volume);
-
-    void startBeamPlayerActivity(@NonNull StreamInfo streamInfo, long currentTime);
 
 }

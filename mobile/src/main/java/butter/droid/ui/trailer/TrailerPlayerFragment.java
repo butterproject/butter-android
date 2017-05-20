@@ -18,14 +18,11 @@
 package butter.droid.ui.trailer;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butter.droid.widget.StrokedRobotoTextView;
 import butterknife.BindView;
@@ -64,19 +61,6 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
         ButterKnife.bind(this, view);
 
         subtitleText.setVisibility(View.GONE);
-    }
-
-    @Override public void displayStreamProgress(final int progress) {
-        stateBuilder.setBufferedPosition(progress);
-        mediaSession.setPlaybackState(stateBuilder.build());
-    }
-
-    @Override public void showVolumeMessage(final int volume) {
-        showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(volume));
-    }
-
-    @Override public void startBeamPlayerActivity(@NonNull final StreamInfo streamInfo, final long currentTime) {
-        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), streamInfo, currentTime));
     }
 
 //    @Override

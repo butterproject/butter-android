@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity {
@@ -30,6 +31,10 @@ public class TVTrailerPlayerActivity extends TVBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
+
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();

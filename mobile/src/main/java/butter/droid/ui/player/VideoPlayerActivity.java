@@ -26,9 +26,9 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.ui.player.stream.PlayerFragment;
 import butter.droid.fragments.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.player.stream.PlayerFragment;
 import javax.inject.Inject;
 
 public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlayerView {
@@ -82,7 +82,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                showExitDialog();
+                presenter.close();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -91,7 +91,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Override
     public void onBackPressed() {
-        showExitDialog();
+        presenter.close();
     }
 
     @Override public void showVideoFragment(@NonNull final StreamInfo streamInfo, final long resumePosition) {
@@ -101,14 +101,9 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
                 .commit();
     }
 
-    public VideoPlayerComponent getComponent() {
-        return component;
-    }
-
-    private void showExitDialog() {
+    @Override public void showExitDialog(final String title) {
         OptionDialogFragment.show(getSupportFragmentManager(), getString(R.string.leave_videoplayer_title),
-//                String.format(getString(R.string.leave_videoplayer_message), mTitle), getString(android.R.string.yes),
-                String.format(getString(R.string.leave_videoplayer_message), ""), getString(android.R.string.yes),
+                String.format(getString(R.string.leave_videoplayer_message), title), getString(android.R.string.yes),
                 getString(android.R.string.no), new OptionDialogFragment.Listener() {
                     @Override
                     public void onSelectionPositive() {
@@ -123,6 +118,10 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
                     public void onSelectionNegative() {
                     }
                 });
+    }
+
+    public VideoPlayerComponent getComponent() {
+        return component;
     }
 
     @Override

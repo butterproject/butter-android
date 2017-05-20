@@ -21,6 +21,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -80,6 +82,10 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
         mediaSession.setPlaybackState(stateBuilder.build());
     }
 
+    @Override public void showErrorMessage(@StringRes final int message) {
+        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
     @Override
     public void setupSubtitles(@ColorInt final int color, final int size, @ColorInt final int strokeColor, final int strokeWidth) {
         subtitleText.setTextColor(color);
@@ -94,10 +100,6 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
         } else {
             showOverlay();
         }
-    }
-
-    @Override public void showVolumeMessage(final int volume) {
-        showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(volume));
     }
 
     @Override public void showTimedCaptionText(final Caption text) {
@@ -251,6 +253,17 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
 
     @Override public void onStreamStopped() {
         // nothing to do
+    }
+
+    @Override protected boolean onCustomAction(final String action) {
+        switch (action) {
+            case ACTION_CLOSE_CAPTION:
+                presenter.onSubsClicked();
+                return true;
+            default:
+                return super.onCustomAction(action);
+        }
+
     }
 
     public static PlayerFragment newInstance(final StreamInfo streamInfo, final long resumePosition) {

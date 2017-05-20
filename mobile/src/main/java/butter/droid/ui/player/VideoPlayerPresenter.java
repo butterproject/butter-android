@@ -24,4 +24,6 @@ import butter.droid.base.torrent.StreamInfo;
 public interface VideoPlayerPresenter {
 
     void onCreate(@Nullable StreamInfo streamInfo, long resumePosition, String action, final Intent intent);
+
+    void close();
 }

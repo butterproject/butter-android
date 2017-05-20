@@ -41,6 +41,7 @@ import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.search.TVSearchComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
+import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
 import dagger.Component;
 
@@ -69,6 +70,8 @@ public interface InternalComponent extends BaseInternalComponent {
     void inject(TVTermsActivity activity);
 
     void inject(TVLaunchActivity activity);
+
+    void inject(TVTrailerPlayerActivity activity);
 
     void inject(RecommendationService service);
 

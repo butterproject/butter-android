@@ -167,9 +167,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     @Override public void onSubsFileSelected(final File f) {
         if (!f.getPath().endsWith(".srt")) {
-//            Snackbar.make(getView(), R.string.unknown_error,
-//                    Snackbar.LENGTH_SHORT).show();
-            return;
+            view.showErrorMessage(R.string.unknown_error);
         } else {
             subsFile = f;
         }

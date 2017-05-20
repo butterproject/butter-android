@@ -34,7 +34,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v4.media.session.PlaybackStateCompat.Builder;
 import android.support.v4.media.session.PlaybackStateCompat.CustomAction;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -56,7 +55,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     @Inject VlcPlayer player;
 
     protected MediaSessionCompat mediaSession;
-    protected Builder stateBuilder;
+    protected PlaybackStateCompat.Builder stateBuilder;
     private MediaMetadataCompat.Builder metadataBuilder;
     private PlayerMediaControllerGlue mediaControllerGlue;
 
@@ -68,7 +67,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         mediaSession.setMediaButtonReceiver(null);
         mediaSession.setCallback(new PlayerSessionCallback());
 
-        stateBuilder = new Builder()
+        stateBuilder = new PlaybackStateCompat.Builder()
                 .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
                         | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                         | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
@@ -196,6 +195,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         switch (action) {
             case PlayerMediaControllerGlue.ACTION_SCALE:
                 presenter.onScaleClicked();
+                tickle();
                 return true;
             default:
                 return false;

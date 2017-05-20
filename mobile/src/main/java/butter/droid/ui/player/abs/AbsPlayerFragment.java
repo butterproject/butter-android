@@ -301,6 +301,10 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         outState.putLong(ARG_RESUME_POSITION, resumePosition);
     }
 
+    @Override public void showVolumeMessage(final int volume) {
+        showPlayerInfo(getString(R.string.volume) + '\u00A0' + Integer.toString(volume));
+    }
+
     @OnClick(R.id.play_button) void onPlayPauseClick() {
         if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             mediaController.getTransportControls().pause();
@@ -333,6 +337,16 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
             return savedInstanceState.getLong(ARG_RESUME_POSITION);
         } else {
             return getArguments().getLong(ARG_RESUME_POSITION);
+        }
+    }
+
+    protected boolean onCustomAction(final String action) {
+        switch (action) {
+            case ACTION_SCALE:
+                presenter.onScaleClicked();
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -480,15 +494,8 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         }
 
         @Override public void onCustomAction(final String action, final Bundle extras) {
-            switch (action) {
-                case ACTION_SCALE:
-                    presenter.onScaleClicked();
-                    break;
-//                case ACTION_CLOSE_CAPTION:
-//                    presenter.onSubsClicked();
-//                    break;
-                default:
-                    super.onCustomAction(action, extras);
+            if (!AbsPlayerFragment.this.onCustomAction(action)) {
+                super.onCustomAction(action, extras);
             }
         }
     }
