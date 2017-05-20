@@ -10,7 +10,7 @@ import android.view.animation.Transformation;
 
 public class WrappingViewPager extends ViewPager {
 
-    private Boolean mAnimStarted = false;
+    private Boolean animStarted = false;
 
     public WrappingViewPager(Context context) {
         super(context);
@@ -24,7 +24,7 @@ public class WrappingViewPager extends ViewPager {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if (!mAnimStarted && null != getAdapter()) {
+        if (!animStarted && null != getAdapter()) {
             int height = 0;
             View child = ((FragmentPagerAdapter) getAdapter()).getItem(getCurrentItem()).getView();
             if (child != null) {
@@ -42,9 +42,9 @@ public class WrappingViewPager extends ViewPager {
                 final int currentHeight = getLayoutParams().height;
                 final int heightChange = targetHeight - currentHeight;
 
-                Animation a = new Animation() {
+                Animation animation = new Animation() {
                     @Override
-                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    protected void applyTransformation(float interpolatedTime, Transformation trans) {
                         if (interpolatedTime >= 1) {
                             getLayoutParams().height = targetHeight;
                         } else {
@@ -60,15 +60,15 @@ public class WrappingViewPager extends ViewPager {
                     }
                 };
 
-                a.setAnimationListener(new Animation.AnimationListener() {
+                animation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        mAnimStarted = true;
+                        animStarted = true;
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mAnimStarted = false;
+                        animStarted = false;
                     }
 
                     @Override
@@ -77,12 +77,12 @@ public class WrappingViewPager extends ViewPager {
                 });
 
                 if (heightChange > 0) {
-                    a.setDuration(50);
+                    animation.setDuration(50);
                 } else {
-                    a.setDuration(500);
+                    animation.setDuration(500);
                 }
-                startAnimation(a);
-                mAnimStarted = true;
+                startAnimation(animation);
+                animStarted = true;
             } else {
                 heightMeasureSpec = newHeight;
             }

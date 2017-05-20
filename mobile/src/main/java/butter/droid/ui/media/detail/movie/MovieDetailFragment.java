@@ -17,12 +17,13 @@
 
 package butter.droid.ui.media.detail.movie;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -33,52 +34,46 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
-import java.util.Arrays;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.TorrentHealth;
-import butter.droid.fragments.base.BaseDetailFragment;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
+import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import com.squareup.picasso.Picasso;
+import java.util.Arrays;
+import java.util.Locale;
+import javax.inject.Inject;
 
-public class MovieDetailFragment extends BaseDetailFragment implements MovieDetailView {
+public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
     private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.MovieDetailFragment.movie";
 
     @Inject MovieDetailPresenter presenter;
 
-    private Magnet mMagnet;
+    private Magnet magnet;
 
     @BindView(R.id.fab) @Nullable FloatingActionButton fab;
-    @BindView(R.id.title) TextView mTitle;
-    @BindView(R.id.health) ImageView mHealth;
-    @BindView(R.id.meta) TextView mMeta;
-    @BindView(R.id.synopsis) TextView mSynopsis;
-    @BindView(R.id.read_more) Button mReadMore;
-    @BindView(R.id.watch_trailer) Button mWatchTrailer;
-    @BindView(R.id.magnet) ImageButton mOpenMagnet;
-    @BindView(R.id.rating) RatingBar mRating;
-    @BindView(R.id.subtitles) OptionSelector mSubtitles;
-    @BindView(R.id.quality) OptionSelector mQuality;
-    @Nullable @BindView(R.id.cover_image) ImageView mCoverImage;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.health) ImageView health;
+    @BindView(R.id.meta) TextView meta;
+    @BindView(R.id.synopsis) TextView synopsis;
+    @BindView(R.id.read_more) Button readMore;
+    @BindView(R.id.watch_trailer) Button watchTrailer;
+    @BindView(R.id.magnet) ImageButton openMagnet;
+    @BindView(R.id.rating) RatingBar rating;
+    @BindView(R.id.subtitles) OptionSelector subtitles;
+    @BindView(R.id.quality) OptionSelector quality;
+    @Nullable @BindView(R.id.cover_image) ImageView coverImage;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MediaDetailActivity) activity).getComponent()
+    @Override public void onAttach(final Context context) {
+        super.onAttach(context);
+        ((MediaDetailActivity) context).getComponent()
                 .movieDetailComponentBuilder()
                 .movieDetailModule(new MovieDetailModule(this))
                 .build()
@@ -110,25 +105,25 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     }
 
     @Override public void renderHealth(Movie movie, String quality) {
-        if (mHealth.getVisibility() == View.GONE) {
-            mHealth.setVisibility(View.VISIBLE);
+        if (health.getVisibility() == View.GONE) {
+            health.setVisibility(View.VISIBLE);
         }
 
         TorrentHealth health = TorrentHealth.calculate(movie.torrents.get(quality).seeds,
                 movie.torrents.get(quality).peers);
-        mHealth.setImageResource(health.getImageResource());
+        this.health.setImageResource(health.getImageResource());
     }
 
     @Override public void updateMagnet(Movie movie, String quality) {
-        if (mMagnet == null) {
-            mMagnet = new Magnet(mActivity, movie.torrents.get(quality).url);
+        if (magnet == null) {
+            magnet = new Magnet(getContext(), movie.torrents.get(quality).url);
         }
-        mMagnet.setUrl(movie.torrents.get(quality).url);
+        magnet.setUrl(movie.torrents.get(quality).url);
 
-        if (!mMagnet.canOpen()) {
-            mOpenMagnet.setVisibility(View.GONE);
+        if (!magnet.canOpen()) {
+            openMagnet.setVisibility(View.GONE);
         } else {
-            mOpenMagnet.setVisibility(View.VISIBLE);
+            openMagnet.setVisibility(View.VISIBLE);
         }
     }
 
@@ -142,26 +137,26 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     }
 
     @Override public void hideRating() {
-        mRating.setVisibility(View.GONE);
+        rating.setVisibility(View.GONE);
     }
 
     @Override public void displayRating(int rating) {
-        mRating.setProgress(rating);
-        mRating.setContentDescription(String.format(Locale.US, "Rating: %d out of 10", rating));
-        mRating.setVisibility(View.VISIBLE);
+        this.rating.setProgress(rating);
+        this.rating.setContentDescription(String.format(Locale.US, "Rating: %d out of 10", rating));
+        this.rating.setVisibility(View.VISIBLE);
     }
 
     @Override public void displayMetaData(CharSequence metaData) {
-        mMeta.setText(metaData);
+        meta.setText(metaData);
     }
 
     @Override public void displaySynopsis(String synopsis) {
-        mSynopsis.setText(synopsis);
-        mSynopsis.post(new Runnable() {
+        this.synopsis.setText(synopsis);
+        this.synopsis.post(new Runnable() {
             @Override
             public void run() {
                 boolean ellipsized = false;
-                Layout layout = mSynopsis.getLayout();
+                Layout layout = MovieDetailFragment.this.synopsis.getLayout();
                 int lines = layout.getLineCount();
                 if (lines > 0) {
                     int ellipsisCount = layout.getEllipsisCount(lines - 1);
@@ -169,39 +164,39 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                         ellipsized = true;
                     }
                 }
-                mReadMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+                readMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
             }
         });
 
-        mReadMore.setVisibility(View.GONE);
+        readMore.setVisibility(View.GONE);
     }
 
     @Override public void hideSynopsis() {
-        mReadMore.setVisibility(View.GONE);
+        readMore.setVisibility(View.GONE);
     }
 
     @Override public void setSubtitleText(@StringRes int subtitleText) {
-        mSubtitles.setText(subtitleText);
+        subtitles.setText(subtitleText);
     }
 
     @Override public void setSubtitleText(String subtitleText) {
-        mSubtitles.setText(subtitleText);
+        subtitles.setText(subtitleText);
     }
 
     @Override public void setSubtitleEnabled(boolean enabled) {
-        mSubtitles.setClickable(enabled);
+        subtitles.setClickable(enabled);
     }
 
     @Override public void setSubsData(String[] names, int defaultIndex) {
-        mSubtitles.setData(names);
-        mSubtitles.setDefault(defaultIndex);
+        subtitles.setData(names);
+        subtitles.setDefault(defaultIndex);
         setSubtitleText(names[defaultIndex]);
     }
 
     @Override public void setQualities(String[] qualities, String quality) {
-        mQuality.setData(qualities);
-        mQuality.setText(quality);
-        mQuality.setDefault(Arrays.asList(qualities).indexOf(quality));
+        this.quality.setData(qualities);
+        this.quality.setText(quality);
+        this.quality.setDefault(Arrays.asList(qualities).indexOf(quality));
     }
 
     @OnClick(R.id.read_more) public void openReadMore() {
@@ -219,7 +214,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     @OnClick(R.id.magnet)
     public void openMagnet() {
-        mMagnet.open(mActivity);
+        magnet.open(getActivity());
     }
 
     @OnClick(R.id.health)
@@ -229,20 +224,20 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     @Override public void initLayout(Movie movie) {
 
-        mTitle.setText(movie.title);
+        title.setText(movie.title);
 
-        mSubtitles.setFragmentManager(getFragmentManager());
-        mSubtitles.setTitle(R.string.subtitles);
-        mSubtitles.setListener(new OptionSelector.SelectorListener() {
+        subtitles.setFragmentManager(getFragmentManager());
+        subtitles.setTitle(R.string.subtitles);
+        subtitles.setListener(new OptionSelector.SelectorListener() {
             @Override
             public void onSelectionChanged(int position, String value) {
                 presenter.subtitleSelected(position);
             }
         });
 
-        mQuality.setFragmentManager(getFragmentManager());
-        mQuality.setTitle(R.string.quality);
-        mQuality.setListener(new OptionSelector.SelectorListener() {
+        quality.setFragmentManager(getFragmentManager());
+        quality.setTitle(R.string.quality);
+        quality.setListener(new OptionSelector.SelectorListener() {
             @Override
             public void onSelectionChanged(int position, String value) {
                 setQuality(value);
@@ -253,10 +248,10 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             fab.setBackgroundTintList(ColorStateList.valueOf(movie.color));
         }
 
-        mWatchTrailer.setVisibility(TextUtils.isEmpty(movie.trailer) ? View.GONE : View.VISIBLE);
+        watchTrailer.setVisibility(TextUtils.isEmpty(movie.trailer) ? View.GONE : View.VISIBLE);
 
-        if (mCoverImage != null) {
-            Picasso.with(mCoverImage.getContext()).load(movie.image).into(mCoverImage);
+        if (coverImage != null) {
+            Picasso.with(coverImage.getContext()).load(movie.image).into(coverImage);
         }
     }
 

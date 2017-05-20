@@ -22,15 +22,14 @@ import butter.droid.ui.media.detail.movie.MovieDetailComponent;
 import butter.droid.ui.media.detail.show.ShowDetailComponent;
 import dagger.Subcomponent;
 
-@Subcomponent (
-        modules = MediaDetailModule.class
-)
+@Subcomponent (modules = MediaDetailModule.class)
 @ActivityScope
 public interface MediaDetailComponent {
 
     void inject(MediaDetailActivity activity);
 
     MovieDetailComponent.Builder movieDetailComponentBuilder();
+
     ShowDetailComponent.Builder showDetailComponentBuilder();
 
     @Subcomponent.Builder interface Builder {

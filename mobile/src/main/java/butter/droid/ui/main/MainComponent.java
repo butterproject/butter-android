@@ -23,16 +23,16 @@ import butter.droid.ui.main.navigation.NavigationDrawerComponent;
 import butter.droid.ui.media.list.MediaListComponent;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = MainModule.class
-)
+@Subcomponent(modules = MainModule.class)
 @ActivityScope
 public interface MainComponent {
 
     void inject(MainActivity activity);
 
-    NavigationDrawerComponent.Builder navigtionDrawerBuilder();
+    NavigationDrawerComponent.Builder navigationDrawerBuilder();
+
     GenreSelectionComponent.Builder genreSelectionBuilder();
+
     MediaListComponent.Builder mediaListComponentBuilder();
 
     @Subcomponent.Builder interface Builder {

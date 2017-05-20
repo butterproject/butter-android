@@ -40,18 +40,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.activities.SearchActivity;
-import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
@@ -63,15 +53,22 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment;
 import butter.droid.ui.main.pager.MediaPagerAdapter;
+import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.preferences.PreferencesActivity;
+import butter.droid.ui.search.SearchActivity;
 import butter.droid.ui.terms.TermsActivity;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.utils.ToolbarUtils;
 import butter.droid.widget.ScrimInsetsFrameLayout;
 import butterknife.BindView;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -152,16 +149,17 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-            @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_STORAGE: {
+            case PERMISSIONS_REQUEST_STORAGE:
                 if (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     presenter.storagePermissionDenied();
                 } else {
                     presenter.storagePermissionGranted();
                 }
-            }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -210,8 +208,8 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     }
 
     @Override public void showYoutubeVideo(Movie movie, String url) {
-        Intent i = TrailerPlayerActivity.getIntent(this, movie, url);
-        startActivity(i);
+        Intent intent = TrailerPlayerActivity.getIntent(this, movie, url);
+        startActivity(intent);
     }
 
     @Override public void showPlayerTestDialog(String[] fileTypes) {
@@ -219,7 +217,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
                 .setTitle("Player Tests")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
                     }
                 })
@@ -258,7 +256,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     }
 
     @Override public void requestStoragePermissions() {
-        ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE },
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 PERMISSIONS_REQUEST_STORAGE);
     }
 

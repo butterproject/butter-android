@@ -20,9 +20,7 @@ package butter.droid.ui.about;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = AboutModule.class
-)
+@Subcomponent(modules = AboutModule.class)
 @FragmentScope
 public interface AboutComponent {
 

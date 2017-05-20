@@ -36,10 +36,10 @@ import timber.log.Timber;
 
 public final class StreamInfoUtils {
 
-    private final static String CONTENT_PROVIDER_GMAIL = "gmail-ls";
-    private final static String CONTENT_PROVIDER_K9 = "com.fsck.k9.attachmentprovider";
+    private static final String CONTENT_PROVIDER_GMAIL = "gmail-ls";
+    private static final String CONTENT_PROVIDER_K9 = "com.fsck.k9.attachmentprovider";
 
-    private final static String FOLDER_DOWNLOADS = "Downloads";
+    private static final String FOLDER_DOWNLOADS = "Downloads";
 
     private StreamInfoUtils() {
         // no instances

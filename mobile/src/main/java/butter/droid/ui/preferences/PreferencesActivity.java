@@ -23,25 +23,15 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-
-import net.rdrei.android.dirchooser.DirectoryChooserConfig;
-import net.rdrei.android.dirchooser.DirectoryChooserFragment;
-
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.ui.about.AboutActivity;
-import butter.droid.ui.ButterBaseActivity;
-import butter.droid.adapters.PreferencesAdapter;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
@@ -51,11 +41,18 @@ import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.ResourceUtils;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.fragments.dialog.ColorPickerDialogFragment;
-import butter.droid.fragments.dialog.NumberDialogFragment;
-import butter.droid.fragments.dialog.SeekBarDialogFragment;
+import butter.droid.ui.preferences.dialog.ColorPickerDialogFragment;
+import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.about.AboutActivity;
+import butter.droid.ui.preferences.dialog.NumberDialogFragment;
+import butter.droid.ui.preferences.dialog.NumberDialogFragment.ResultListener;
+import butter.droid.ui.preferences.dialog.SeekBarDialogFragment;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
+import java.util.Map;
+import javax.inject.Inject;
+import net.rdrei.android.dirchooser.DirectoryChooserConfig;
+import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
 public class PreferencesActivity extends ButterBaseActivity implements PreferencesView, RecyclerClickListener {
 
@@ -129,32 +126,20 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
         });
     }
 
-    @Override public void openColorSelector(@PrefKey final String key, @StringRes int title, int value) {
-        Bundle args = new Bundle();
-        args.putString(ColorPickerDialogFragment.TITLE, getString(title));
-        args.putInt(ColorPickerDialogFragment.DEFAULT_VALUE, value);
-
-        ColorPickerDialogFragment dialogFragment = new ColorPickerDialogFragment();
-        dialogFragment.setArguments(args);
-        dialogFragment.setOnResultListener(new ColorPickerDialogFragment.ResultListener() {
-            @Override
-            public void onNewValue(int value) {
-                presenter.onColorSelected(key, value);
-            }
-        });
-        dialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
+    @Override public void openColorSelector(@PrefKey final String key, @StringRes int title, @ColorInt int value) {
+        ColorPickerDialogFragment fragment = ColorPickerDialogFragment
+                .newInstance(getString(title), value, new ColorPickerDialogFragment.ResultListener() {
+                    @Override
+                    public void onNewValue(int value) {
+                        presenter.onColorSelected(key, value);
+                    }
+                });
+        fragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
     @Override
     public void openNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max) {
-        Bundle args = new Bundle();
-        args.putString(SeekBarDialogFragment.TITLE, getString(title));
-        args.putInt(SeekBarDialogFragment.MAX_VALUE, max);
-        args.putInt(SeekBarDialogFragment.MIN_VALUE, min);
-        args.putInt(SeekBarDialogFragment.DEFAULT_VALUE, value);
-
-        SeekBarDialogFragment dialogFragment = new SeekBarDialogFragment();
-        dialogFragment.setArguments(args);
+        SeekBarDialogFragment dialogFragment = SeekBarDialogFragment.newInstance(getString(title), max, min, value);
         dialogFragment.setOnResultListener(new SeekBarDialogFragment.ResultListener() {
             @Override
             public void onNewValue(int value) {
@@ -182,8 +167,8 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
                     directoryChooserFragment.setDirectoryChooserListener(
                             new DirectoryChooserFragment.OnFragmentInteractionListener() {
                                 @Override
-                                public void onSelectDirectory(String s) {
-                                    presenter.onFolderSelected(key, s);
+                                public void onSelectDirectory(String dir) {
+                                    presenter.onFolderSelected(key, dir);
                                     directoryChooserFragment.dismiss();
                                 }
 
@@ -202,21 +187,15 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @Override public void openPreciseNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min,
             int max) {
-        Bundle args = new Bundle();
-        args.putString(NumberDialogFragment.TITLE, getString(title));
-        args.putInt(NumberDialogFragment.MAX_VALUE, max);
-        args.putInt(NumberDialogFragment.MIN_VALUE, min);
-        args.putInt(NumberDialogFragment.DEFAULT_VALUE, value);
 
-        NumberDialogFragment dialogFragment = new NumberDialogFragment();
-        dialogFragment.setArguments(args);
-        dialogFragment.setOnResultListener(new NumberDialogFragment.ResultListener() {
-            @Override
-            public void onNewValue(int value) {
-                presenter.onNumberSelected(key, value);
-            }
-        });
-        dialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
+        NumberDialogFragment fragment = NumberDialogFragment
+                .newInstance(getString(title), max, min, value, new ResultListener() {
+                    @Override
+                    public void onNewValue(int value) {
+                        presenter.onNumberSelected(key, value);
+                    }
+                });
+        fragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
     @Override

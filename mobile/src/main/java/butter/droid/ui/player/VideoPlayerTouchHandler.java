@@ -71,11 +71,10 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
         this.listener = listener;
     }
 
-    @Override public boolean onTouch(final View v, final MotionEvent event) {
+    @Override public boolean onTouch(final View view, final MotionEvent event) {
         if (surfaceYDisplayRange == 0) {
             surfaceYDisplayRange = Math.min(displayMetrics.widthPixels, displayMetrics.heightPixels);
         }
-
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -84,31 +83,31 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
                 clearOverlayHide();
                 break;
             case MotionEvent.ACTION_MOVE:
-                float xDiff = event.getRawX() - touchX;
-                float yDiff = event.getRawY() - touchY;
+                float diffX = event.getRawX() - touchX;
+                float diffY = event.getRawY() - touchY;
 
                 if (!swipeX && !swipeY) {
-                    if (Math.abs(xDiff) > touchSlop) {
+                    if (Math.abs(diffX) > touchSlop) {
                         swipeX = true;
-                    } else if (Math.abs(yDiff) > touchSlop) {
+                    } else if (Math.abs(diffY) > touchSlop) {
                         swipeY = true;
                     }
                 }
 
                 if (swipeX) {
                     touchX = event.getRawX();
-                    doSeekTouch(xDiff);
+                    doSeekTouch(diffX);
                 }
 
                 if (swipeY) {
                     float halfPoint = displayMetrics.widthPixels / 2f;
                     // right side of screen is for brightens if supported
                     if (touchX < halfPoint && brightnessManager.canChangeBrightness()) {
-                        if (doBrightnessTouch(yDiff)) {
+                        if (doBrightnessTouch(diffY)) {
                             touchY = event.getRawY();
                         }
                     } else { // left side of screen is for volume
-                        if (doVolumeTouch(yDiff)) {
+                        if (doVolumeTouch(diffY)) {
                             touchY = event.getRawY();
                         }
                     }
@@ -116,15 +115,21 @@ public class VideoPlayerTouchHandler implements OnTouchListener {
 
                 break;
             case MotionEvent.ACTION_UP:
-
+                if (!swipeX && !swipeY) {
+                    toggleOverlay();
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
                 if (!swipeX && !swipeY) {
                     toggleOverlay();
                 }
 
-            case MotionEvent.ACTION_CANCEL:
                 swipeX = false;
                 swipeY = false;
                 delayOverlayHide();
+                break;
+            default:
+                // nothing to do
                 break;
         }
         return true;

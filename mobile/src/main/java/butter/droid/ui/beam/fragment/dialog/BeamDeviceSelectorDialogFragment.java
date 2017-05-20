@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.fragments.dialog;
+package butter.droid.ui.beam.fragment.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,7 +37,7 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
 
     @Inject BeamManager beamManager;
 
-    private BeamDeviceAdapter mAdapter;
+    private BeamDeviceAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +52,12 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder;
         if (!beamManager.isConnected()) {
-            mAdapter = new BeamDeviceAdapter(getActivity(), beamManager);
+            adapter = new BeamDeviceAdapter(getActivity(), beamManager);
             builder = new AlertDialog.Builder(getActivity())
-                    .setSingleChoiceItems(mAdapter, -1, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
-                            ConnectableDevice device = mAdapter.getItem(position);
+                            ConnectableDevice device = adapter.getItem(position);
                             beamManager.connect(device);
                             dismiss();
                         }
@@ -72,7 +72,7 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
                             }
                     );
             return builder.create();
-        } else if(beamManager.getConnectedDevice() != null) {
+        } else if (beamManager.getConnectedDevice() != null) {
             builder = new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.connected_to) + " " + beamManager.getConnectedDevice().getFriendlyName())
                     .setNeutralButton(R.string.disconnect, new DialogInterface.OnClickListener() {
@@ -82,20 +82,25 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
                         }
                     });
             return builder.create();
+        } else {
+            return super.onCreateDialog(savedInstanceState);
         }
-        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != mAdapter)
-            mAdapter.destroy();
+        if (null != adapter) {
+            adapter.destroy();
+        }
+    }
+
+    public static BeamDeviceSelectorDialogFragment newInstance() {
+        return new BeamDeviceSelectorDialogFragment();
     }
 
     public static void show(FragmentManager fm) {
-        BeamDeviceSelectorDialogFragment fragment = new BeamDeviceSelectorDialogFragment();
-        fragment.show(fm, "overlay_fragment");
+        newInstance().show(fm, "overlay_fragment");
     }
 
 }

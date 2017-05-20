@@ -92,8 +92,8 @@ public class EpisodeListAdapter extends BaseAdapter {
         @BindView(R.id.info) TextView number;
         @BindView(R.id.title) TextView title;
 
-        public ViewHolder(View v) {
-            ButterKnife.bind(this, v);
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
         }
 
         void bind(Episode episode) {

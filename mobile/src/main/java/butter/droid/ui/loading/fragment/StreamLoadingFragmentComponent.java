@@ -20,9 +20,7 @@ package butter.droid.ui.loading.fragment;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = StreamLoadingFragmentModule.class
-)
+@Subcomponent(modules = StreamLoadingFragmentModule.class)
 @FragmentScope
 public interface StreamLoadingFragmentComponent {
 
@@ -30,7 +28,7 @@ public interface StreamLoadingFragmentComponent {
 
     @Subcomponent.Builder interface Builder {
 
-        Builder stramLoadingFragmentModule(StreamLoadingFragmentModule module);
+        Builder streamLoadingFragmentModule(StreamLoadingFragmentModule module);
 
         StreamLoadingFragmentComponent build();
 

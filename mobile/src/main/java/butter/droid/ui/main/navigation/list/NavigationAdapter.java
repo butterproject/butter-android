@@ -45,13 +45,16 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int VIEW_TYPE_ITEM = 1;
 
     private List<NavigationDrawerFragment.AbsNavDrawerItem> items;
-    final int mNormalColor, mCheckedColor, mCheckedBackgroundRes, mNormalBackgroundRes;
+    private final int normalColor;
+    private final int checkedColor;
+    private final int checkedBackgroundRes;
+    private final int normalBackgroundRes;
 
     public NavigationAdapter(@NonNull Context context) {
-        mNormalColor = ContextCompat.getColor(context, R.color.nav_drawer_deselected);
-        mCheckedColor = ContextCompat.getColor(context, R.color.primary);
-        mNormalBackgroundRes = R.drawable.selectable_nav_background;
-        mCheckedBackgroundRes = R.color.nav_drawer_selected_bg;
+        normalColor = ContextCompat.getColor(context, R.color.nav_drawer_deselected);
+        checkedColor = ContextCompat.getColor(context, R.color.primary);
+        normalBackgroundRes = R.drawable.selectable_nav_background;
+        checkedBackgroundRes = R.color.nav_drawer_selected_bg;
     }
 
     public void setItems(List<NavigationDrawerFragment.AbsNavDrawerItem> items) {
@@ -61,14 +64,14 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v;
+        View view;
         switch (viewType) {
             case VIEW_TYPE_HEADER:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_header, parent, false);
-                return new HeaderHolder(v);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_header, parent, false);
+                return new HeaderHolder(view);
             case VIEW_TYPE_ITEM:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_list_item, parent, false);
-                return new ItemRowHolder(v);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_drawer_list_item, parent, false);
+                return new ItemRowHolder(view);
             default:
                 throw new IllegalStateException("Unknown view type");
         }
@@ -84,15 +87,17 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case VIEW_TYPE_ITEM:
                 onBindItemViewHolder((ItemRowHolder) holder, position);
                 break;
+            default:
+                throw new IllegalStateException("Unknown view type");
         }
 
     }
 
     private void onBindHeaderViewHolder(HeaderHolder holder) {
         //do nothing for now
-        holder.mBackgroundImageView.setBackgroundResource(R.color.primary_dark);
-        holder.mProfileImageView.setVisibility(View.VISIBLE);
-        holder.mProfileImageView.setImageResource(R.drawable.butter_profile);
+        holder.backgroundImageView.setBackgroundResource(R.color.primary_dark);
+        holder.profileImageView.setVisibility(View.VISIBLE);
+        holder.profileImageView.setImageResource(R.drawable.butter_profile);
     }
 
     private void onBindItemViewHolder(ItemRowHolder viewHolder, int position) {
@@ -115,14 +120,18 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         viewHolder.title.setText(item.getTitle());
 
         boolean isSelected = item.isSelected();
-        viewHolder.title.setTextColor(isSelected ? mCheckedColor : mNormalColor);
-        viewHolder.itemView.setBackgroundResource(isSelected ? mCheckedBackgroundRes : mNormalBackgroundRes);
-        //		vh.itemView.setBackgroundResource(isSelected ? R.color.nav_drawer_highlight : 0);
+        viewHolder.title.setTextColor(isSelected ? checkedColor : normalColor);
+        viewHolder.itemView.setBackgroundResource(isSelected ? checkedBackgroundRes : normalBackgroundRes);
+//        vh.itemView.setBackgroundResource(isSelected ? R.color.nav_drawer_highlight : 0);
 
         if (item.getIcon() > 0) {
             viewHolder.icon.setImageResource(item.getIcon());
-            if (isSelected) viewHolder.icon.setColorFilter(mCheckedColor, PorterDuff.Mode.SRC_IN);
-            else viewHolder.icon.setColorFilter(mNormalColor, PorterDuff.Mode.SRC_IN);
+
+            if (isSelected) {
+                viewHolder.icon.setColorFilter(checkedColor, PorterDuff.Mode.SRC_IN);
+            } else {
+                viewHolder.icon.setColorFilter(normalColor, PorterDuff.Mode.SRC_IN);
+            }
         }
 
 
@@ -164,7 +173,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return position - 1;
     }
 
-    public class ItemRowHolder extends RecyclerView.ViewHolder {
+    class ItemRowHolder extends RecyclerView.ViewHolder {
 
         @BindView(android.R.id.icon) ImageView icon;
         @BindView(android.R.id.text1) TextView title;
@@ -179,17 +188,18 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public Switch getSwitch() {
             return checkbox;
         }
+
         public ProgressBar getProgressBar() {
             return progressBar;
         }
     }
 
-    public static class HeaderHolder extends RecyclerView.ViewHolder {
+    static class HeaderHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.bg_imageview) ImageView mBackgroundImageView;
-        @BindView(R.id.profile_imageview) CircleImageView mProfileImageView;
-        @BindView(R.id.title_textview) TextView mTitleTextView;
-        @BindView(R.id.subtitle_textview) TextView mSubtitleTextView;
+        @BindView(R.id.bg_imageview) ImageView backgroundImageView;
+        @BindView(R.id.profile_imageview) CircleImageView profileImageView;
+        @BindView(R.id.title_textview) TextView titleTextView;
+        @BindView(R.id.subtitle_textview) TextView subtitleTextView;
 
         public HeaderHolder(View itemView) {
             super(itemView);

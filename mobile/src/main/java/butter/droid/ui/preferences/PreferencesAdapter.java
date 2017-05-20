@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.adapters;
+package butter.droid.ui.preferences;
 
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
@@ -25,21 +25,20 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.Map;
-
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PrefItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.Map;
 
 public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_NORMAL = 0;
+    private static final int VIEW_TYPE_HEADER = 1;
+
     private String[] keys;
     private Map<String, PrefItem> items;
-
-    final int NORMAL = 0, HEADER = 1;
 
     public PreferencesAdapter() {
     }
@@ -52,26 +51,27 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v;
+        View view;
         switch (viewType) {
-            case HEADER:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_subheader, parent, false);
-                return new PreferencesAdapter.HeaderHolder(v);
-            case NORMAL:
+            case VIEW_TYPE_HEADER:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_subheader, parent, false);
+                return new PreferencesAdapter.HeaderHolder(view);
+            case VIEW_TYPE_NORMAL:
             default:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_icon_twoline_item, parent, false);
-                return new PreferencesAdapter.ViewHolder(v);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_icon_twoline_item, parent, false);
+                return new PreferencesAdapter.ViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (getItemViewType(position) == NORMAL) {
+        if (getItemViewType(position) == VIEW_TYPE_NORMAL) {
             ViewHolder itemViewHolder = (ViewHolder) viewHolder;
             PrefItem item = items.get(keys[position]);
             itemViewHolder.itemView.setClickable(item.isClickable());
             itemViewHolder.icon.setImageResource(item.getIconResource());
-            itemViewHolder.icon.setColorFilter(ButterApplication.getAppContext().getResources().getColor(R.color.text_color), PorterDuff.Mode.SRC_IN);
+            itemViewHolder.icon.setColorFilter(ButterApplication.getAppContext().getResources().getColor(R.color.text_color),
+                    PorterDuff.Mode.SRC_IN);
             itemViewHolder.text1.setText(item.getTitleRes());
             itemViewHolder.text2.setText(item.getSubtitle());
 
@@ -81,7 +81,7 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             } else {
                 itemViewHolder.checkBox.setVisibility(View.GONE);
             }
-        } else if (getItemViewType(position) == HEADER) {
+        } else if (getItemViewType(position) == VIEW_TYPE_HEADER) {
             HeaderHolder headerViewHolder = (HeaderHolder) viewHolder;
             headerViewHolder.itemView.setText(items.get(keys[position]).getTitleRes());
         }
@@ -95,9 +95,9 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         if (items.get(keys[position]).isTitle()) {
-            return HEADER;
+            return VIEW_TYPE_HEADER;
         } else {
-            return NORMAL;
+            return VIEW_TYPE_NORMAL;
         }
     }
 

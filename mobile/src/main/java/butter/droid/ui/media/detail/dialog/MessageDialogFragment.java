@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.fragments.dialog;
+package butter.droid.ui.media.detail.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -30,22 +30,23 @@ import butter.droid.base.ButterApplication;
 
 public class MessageDialogFragment extends DialogFragment {
 
-    public static final String TITLE = "title";
-    public static final String MESSAGE = "message";
-    public static final String CANCELABLE = "cancelable";
+    private static final String ARG_TITLE = "butter.droid.ui.media.detail.dialog.MessageDialogFragment.title";
+    private static final String ARG_MESSAGE = "butter.droid.ui.media.detail.dialog.MessageDialogFragment.message";
+    private static final String ARG_CANCELABLE = "butter.droid.ui.media.detail.dialog.MessageDialogFragment.cancelable";
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (!getArguments().containsKey(TITLE) || !getArguments().containsKey(MESSAGE)) {
+        Bundle arguments = getArguments();
+        if (!arguments.containsKey(ARG_TITLE) || !arguments.containsKey(ARG_MESSAGE)) {
             return super.onCreateDialog(savedInstanceState);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(getArguments().getString(TITLE))
-                .setMessage(getArguments().getString(MESSAGE));
+                .setTitle(arguments.getString(ARG_TITLE))
+                .setMessage(arguments.getString(ARG_MESSAGE));
 
-        if(getArguments().getBoolean(CANCELABLE, true)) {
+        if (arguments.getBoolean(ARG_CANCELABLE, true)) {
             builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -60,18 +61,24 @@ public class MessageDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    public static MessageDialogFragment newInstance(String title, String message, Boolean cancelable) {
+        Bundle args = new Bundle();
+        args.putString(ARG_TITLE, title);
+        args.putString(ARG_MESSAGE, message);
+        args.putBoolean(ARG_CANCELABLE, cancelable);
+
+        MessageDialogFragment fragment = new MessageDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public static void show(FragmentManager fm, String title, String message) {
         show(fm, title, message, true);
     }
 
     public static void show(FragmentManager fm, String title, String message, Boolean cancelable) {
-        MessageDialogFragment dialogFragment = new MessageDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(TITLE, title);
-        args.putString(MESSAGE, message);
-        args.putBoolean(CANCELABLE, cancelable);
-        dialogFragment.setArguments(args);
-        dialogFragment.show(fm, "overlay_fragment");
+        MessageDialogFragment fragment = newInstance(title, message, cancelable);
+        fragment.show(fm, "overlay_fragment");
     }
 
     public static void show(FragmentManager fm, int titleRes, int messageRes) {
@@ -79,6 +86,7 @@ public class MessageDialogFragment extends DialogFragment {
     }
 
     public static void show(FragmentManager fm, int titleRes, int messageRes, Boolean cancelable) {
-        show(fm, ButterApplication.getAppContext().getString(titleRes), ButterApplication.getAppContext().getString(messageRes), cancelable);
+        show(fm, ButterApplication.getAppContext().getString(titleRes), ButterApplication.getAppContext().getString(messageRes),
+                cancelable);
     }
 }

@@ -159,6 +159,8 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
                             case 2:
                                 presenter.showSubsTimingSettings();
                                 break;
+                            default:
+                                throw new IllegalStateException("Unknown position");
                         }
                     }
                 });
@@ -187,8 +189,8 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
         FileSelectorDialogFragment.show(getChildFragmentManager(),
                 new FileSelectorDialogFragment.Listener() {
                     @Override
-                    public void onFileSelected(File f) {
-                        presenter.onSubsFileSelected(f);
+                    public void onFileSelected(File file) {
+                        presenter.onSubsFileSelected(file);
                         FileSelectorDialogFragment.hide();
                     }
                 });
@@ -239,7 +241,7 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
         // nothing to do
     }
 
-    @Override public void onStreamError(final Torrent torrent, final Exception e) {
+    @Override public void onStreamError(final Torrent torrent, final Exception ex) {
         // nothing to do
     }
 

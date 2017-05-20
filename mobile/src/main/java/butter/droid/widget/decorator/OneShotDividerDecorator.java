@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.adapters.decorators;
+package butter.droid.widget.decorator;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -27,39 +27,43 @@ import android.view.View;
 
 public class OneShotDividerDecorator extends RecyclerView.ItemDecoration {
 
-    private Drawable mDivider;
+    private Drawable divider;
 
-    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
-    private int mPosition;
+    private static final int[] ATTRS = new int[] { android.R.attr.listDivider };
+    private int position;
 
     public OneShotDividerDecorator(Context context, int position) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
-        mDivider = a.getDrawable(0);
+        divider = a.getDrawable(0);
         a.recycle();
-        mPosition = position;
+        this.position = position;
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        super.onDraw(c, parent, state);
+    public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+        super.onDraw(canvas, parent, state);
         final int left = parent.getPaddingLeft();
         final int right = parent.getWidth() - parent.getPaddingRight();
 
         //only draw the divider at the specified position
-        final View child = parent.getChildAt(mPosition);
-        if (null == child) return;
+        final View child = parent.getChildAt(position);
+        if (null == child) {
+            return;
+        }
 
         final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
         final int top = child.getBottom() + params.bottomMargin;
-        final int bottom = top + mDivider.getIntrinsicHeight();
-        mDivider.setBounds(left, top, right, bottom);
-        mDivider.draw(c);
+        final int bottom = top + divider.getIntrinsicHeight();
+        divider.setBounds(left, top, right, bottom);
+        divider.draw(canvas);
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        if (parent.getChildPosition(view) == mPosition)
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+        if (parent.getChildLayoutPosition(view) == position) {
+            outRect.set(0, 0, 0, divider.getIntrinsicHeight());
+        }
     }
+
 }

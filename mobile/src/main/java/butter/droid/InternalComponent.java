@@ -17,13 +17,13 @@
 
 package butter.droid;
 
-import butter.droid.activities.SearchActivity;
+import butter.droid.ui.search.SearchActivity;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
-import butter.droid.fragments.dialog.EpisodeDialogFragment;
-import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
+import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
+import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
 import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.about.AboutComponent;
 import butter.droid.ui.beam.BeamPlayerActivityComponent;

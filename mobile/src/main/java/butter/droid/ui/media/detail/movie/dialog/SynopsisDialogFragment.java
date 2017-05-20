@@ -15,12 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.fragments.dialog;
+package butter.droid.ui.media.detail.movie.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
@@ -31,12 +32,11 @@ import butterknife.ButterKnife;
 
 public class SynopsisDialogFragment extends DialogFragment {
 
-    private static final String ARG_SYNOPSIS = "butter.droid.fragments.dialog.SynopsisDialogFragment.synopsis";
+    private static final String ARG_SYNOPSIS = "butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment.synopsis";
 
     @BindView(R.id.synopsis) TextView synopsisText;
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @NonNull @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_synopsis, null);
         ButterKnife.bind(this, view);
 
@@ -57,11 +57,11 @@ public class SynopsisDialogFragment extends DialogFragment {
     }
 
     public static SynopsisDialogFragment newInstance(String synopsis) {
-        Bundle b = new Bundle();
-        b.putString(ARG_SYNOPSIS, synopsis);
+        Bundle args = new Bundle();
+        args.putString(ARG_SYNOPSIS, synopsis);
 
         SynopsisDialogFragment fragment = new SynopsisDialogFragment();
-        fragment.setArguments(b);
+        fragment.setArguments(args);
         return fragment;
     }
 
