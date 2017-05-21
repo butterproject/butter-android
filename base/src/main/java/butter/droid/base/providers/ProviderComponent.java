@@ -17,12 +17,15 @@
 
 package butter.droid.base.providers;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
+import android.view.WindowManager;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
@@ -59,5 +62,11 @@ public interface ProviderComponent {
     PrefManager prefManager();
 
     TelephonyManager telephonyManager();
+
+    ContentResolver contentResolver();
+
+    AudioManager audioManager();
+
+    WindowManager windowManager();
 
 }

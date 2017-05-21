@@ -17,11 +17,15 @@
 
 package butter.droid;
 
-import butter.droid.base.BaseInternalModule;
+import butter.droid.base.InternalBaseModule;
+import butter.droid.manager.internal.InternalDataModule;
 import dagger.Module;
 
 @Module(
-        includes = BaseInternalModule.class
+        includes = {
+                InternalBaseModule.class,
+                InternalDataModule.class
+        }
 )
 public class InternalModule {
 

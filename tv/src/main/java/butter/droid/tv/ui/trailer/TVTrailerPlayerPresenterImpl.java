@@ -17,17 +17,18 @@
 
 package butter.droid.tv.ui.trailer;
 
-import android.content.Context;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.phone.PhoneManager;
+import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenterImpl;
-import butter.droid.base.ui.trailer.BaseTrailerPlayerView;
 
 public class TVTrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TVTrailerPlayerPresenter {
 
-    public TVTrailerPlayerPresenterImpl(Context context, final BaseTrailerPlayerView view, final YouTubeManager youTubeManager, final
-    NetworkManager networkManager, final PhoneManager phoneManager) {
-        super(context, view, youTubeManager, networkManager, phoneManager);
+    public TVTrailerPlayerPresenterImpl(final TVTrailerPlayerView view, final PreferencesHandler preferencesHandler, final VlcPlayer player,
+            final YouTubeManager youTubeManager, final NetworkManager networkManager, final PhoneManager phoneManager) {
+        super(view, preferencesHandler, player, youTubeManager, networkManager, phoneManager);
     }
+
 }

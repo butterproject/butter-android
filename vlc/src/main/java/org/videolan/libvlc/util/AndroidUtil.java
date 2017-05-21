@@ -22,8 +22,6 @@ package org.videolan.libvlc.util;
 
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
-
 import java.io.File;
 
 public class AndroidUtil {
@@ -77,11 +75,11 @@ public class AndroidUtil {
      * @param path The path to be converted.
      * @return A URI representation of path
      */
-    public static Uri PathToUri(String path) {
+    public static Uri pathToUri(String path) {
         return Uri.fromFile(new File(path));
     }
 
-    public static Uri LocationToUri(String location) {
+    public static Uri locationToUri(String location) {
         Uri uri = Uri.parse(location);
         if (uri.getScheme() == null)
             throw new IllegalArgumentException("location has no scheme");

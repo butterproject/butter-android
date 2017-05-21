@@ -40,34 +40,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
-import butter.droid.ui.trailer.TrailerPlayerActivity;
-import com.squareup.picasso.Picasso;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
+import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.MessageDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.media.detail.movie.MovieDetailFragment;
+import butter.droid.ui.media.detail.show.ShowDetailFragment;
+import butter.droid.ui.player.VideoPlayerActivity;
+import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.widget.ObservableParallaxScrollView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
+import com.squareup.picasso.Picasso;
+import javax.inject.Inject;
 
 public class MediaDetailActivity extends ButterBaseActivity implements MediaDetailView,
         BaseDetailFragment.FragmentListener {
@@ -123,10 +122,16 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         super.onResume();
         supportInvalidateOptionsMenu();
 
-        if (null != torrentStream) {
-            torrentStream.stopStreaming();
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.stopStreaming();
         }
-        BeamServerService.getServer().stop();
+
+        BeamServer server = BeamServerService.getServer();
+        if (server != null) {
+            server.stop();
+        }
+
         BeamPlayerNotificationService.cancelNotification();
     }
 
@@ -178,8 +183,9 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     }
 
     @Override public void playStream(StreamInfo streamInfo) {
-        if (torrentStream != null) {
-            torrentStream.startForeground();
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.startForeground();
         }
 
         if (VersionUtils.isLollipop()) {

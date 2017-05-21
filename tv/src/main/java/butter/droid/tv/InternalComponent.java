@@ -26,23 +26,22 @@ import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
-import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
 import butter.droid.tv.fragments.TVMovieDetailsFragment;
 import butter.droid.tv.fragments.TVOverviewFragment;
-import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
 import butter.droid.tv.fragments.TVUpdateFragment;
-import butter.droid.tv.fragments.TVVideoPlayerFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TVAboutComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
+import butter.droid.tv.ui.player.TVVideoPlayerComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.search.TVSearchComponent;
 import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
+import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
 import dagger.Component;
 
@@ -68,11 +67,11 @@ public interface InternalComponent extends BaseInternalComponent {
 
     void inject(TVUpdateActivity activity);
 
-    void inject(TVVideoPlayerActivity activity);
-
     void inject(TVTermsActivity activity);
 
     void inject(TVLaunchActivity activity);
+
+    void inject(TVTrailerPlayerActivity activity);
 
     void inject(RecommendationService service);
 
@@ -81,10 +80,6 @@ public interface InternalComponent extends BaseInternalComponent {
     void inject(TVMovieDetailsFragment fragment);
 
     void inject(TVMediaGridFragment fragment);
-
-    void inject(TVVideoPlayerFragment fragment);
-
-    void inject(TVPlaybackOverlayFragment fragment);
 
     void inject(TVShowDetailsFragment fragment);
 
@@ -103,5 +98,7 @@ public interface InternalComponent extends BaseInternalComponent {
     TVSearchComponent.Builder searchComponentBuilder();
 
     TVTrailerPlayerComponent.Builder tvTrailerPlayerComponentBuilder();
+
+    TVVideoPlayerComponent.Builder tvVideoPlayerComponentBuilder();
 
 }

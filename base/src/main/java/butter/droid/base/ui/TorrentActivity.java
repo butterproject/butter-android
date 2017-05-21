@@ -23,7 +23,7 @@ public interface TorrentActivity {
 
 	TorrentService getTorrentService();
 
-	void onTorrentServiceConnected();
+	void onTorrentServiceConnected(final TorrentService service);
 
-	void onTorrentServiceDisconnected();
+	void onTorrentServiceDisconnected(final TorrentService service);
 }

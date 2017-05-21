@@ -30,12 +30,9 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
 import butterknife.ButterKnife;
-import com.github.se_bastiaan.torrentstream.StreamStatus;
-import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
+public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentActivity {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -44,7 +41,7 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     @Inject PreferencesHandler preferencesHandler;
 
     protected Handler torrentHandler;
-    protected TorrentService torrentStream;
+    private TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         String language = preferencesHandler.getLocale();
@@ -62,15 +59,15 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     @Override
     protected void onStart() {
         super.onStart();
-        TorrentService.bindHere(this, mServiceConnection);
+        TorrentService.bindHere(this, serviceConnection);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (null != torrentStream) {
-            unbindService(mServiceConnection);
-            mServiceConnection.onServiceDisconnected(null);
+            unbindService(serviceConnection);
+            serviceConnection.onServiceDisconnected(null);
             torrentStream = null;
         }
     }
@@ -90,58 +87,27 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
         return torrentStream;
     }
 
-    public void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected(final TorrentService service) {
         // Placeholder
     }
 
-    public void onTorrentServiceDisconnected() {
+    public void onTorrentServiceDisconnected(final TorrentService service) {
         // Placeholder
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             torrentStream = ((TorrentService.ServiceBinder) service).getService();
-            torrentStream.addListener(TorrentBaseActivity.this);
             torrentStream.setCurrentActivity(TorrentBaseActivity.this);
-            onTorrentServiceConnected();
+            onTorrentServiceConnected(torrentStream);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            torrentStream.removeListener(TorrentBaseActivity.this);
+            onTorrentServiceDisconnected(torrentStream);
             torrentStream = null;
-            onTorrentServiceDisconnected();
         }
     };
 
-    @Override
-    public void onStreamPrepared(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamStarted(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamReady(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamError(Torrent torrent, Exception e) {
-
-    }
-
-    @Override
-    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-
-    }
-
-    @Override
-    public void onStreamStopped() {
-
-    }
 }

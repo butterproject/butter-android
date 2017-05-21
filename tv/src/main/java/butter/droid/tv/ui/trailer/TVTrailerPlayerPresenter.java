@@ -18,7 +18,8 @@
 package butter.droid.tv.ui.trailer;
 
 import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenter;
+import butter.droid.tv.ui.player.abs.TVAbsPlayerPresenter;
 
-public interface TVTrailerPlayerPresenter extends BaseTrailerPlayerPresenter {
+public interface TVTrailerPlayerPresenter extends TVAbsPlayerPresenter, BaseTrailerPlayerPresenter {
 
 }
