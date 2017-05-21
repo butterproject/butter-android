@@ -34,6 +34,7 @@ import butter.droid.ui.player.VideoPlayerComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
+import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
 
@@ -50,6 +51,8 @@ public interface InternalComponent extends BaseInternalComponent {
     void inject(AboutActivity activity);
 
     void inject(SearchActivity activity);
+
+    void inject(TrailerPlayerActivity activity);
 
     void inject(LoadingDetailDialogFragment fragment);
 

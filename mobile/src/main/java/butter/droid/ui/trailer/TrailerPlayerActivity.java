@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import butter.droid.MobileButterApplication;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.ui.ButterBaseActivity;
 
@@ -31,6 +32,9 @@ public class TrailerPlayerActivity extends ButterBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        MobileButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
