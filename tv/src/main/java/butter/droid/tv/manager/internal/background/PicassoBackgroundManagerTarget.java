@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.utils;
+package butter.droid.tv.manager.internal.background;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -28,20 +28,21 @@ import com.squareup.picasso.Target;
  * Picasso target for updating default_background images
  */
 public class PicassoBackgroundManagerTarget implements Target {
-    BackgroundManager mBackgroundManager;
+
+    private final BackgroundManager backgroundManager;
 
     public PicassoBackgroundManagerTarget(BackgroundManager backgroundManager) {
-        this.mBackgroundManager = backgroundManager;
+        this.backgroundManager = backgroundManager;
     }
 
     @Override
     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-        this.mBackgroundManager.setBitmap(bitmap);
+        this.backgroundManager.setBitmap(bitmap);
     }
 
     @Override
     public void onBitmapFailed(Drawable drawable) {
-        this.mBackgroundManager.setDrawable(drawable);
+        this.backgroundManager.setDrawable(drawable);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class PicassoBackgroundManagerTarget implements Target {
 
         PicassoBackgroundManagerTarget that = (PicassoBackgroundManagerTarget) o;
 
-        if (!mBackgroundManager.equals(that.mBackgroundManager))
+        if (!backgroundManager.equals(that.backgroundManager))
             return false;
 
         return true;
@@ -66,6 +67,6 @@ public class PicassoBackgroundManagerTarget implements Target {
 
     @Override
     public int hashCode() {
-        return mBackgroundManager.hashCode();
+        return backgroundManager.hashCode();
     }
 }

@@ -91,7 +91,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
             TaskStackBuilder.create(this)
                     // Add all of this activity's parents to the back stack
                     .addNextIntentWithParentStack(upIntent)
-                            // Navigate up to the closest parent
+                    // Navigate up to the closest parent
                     .startActivities();
         } else {
             finish();

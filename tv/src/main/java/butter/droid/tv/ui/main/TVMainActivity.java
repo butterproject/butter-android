@@ -15,28 +15,31 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities;
+package butter.droid.tv.ui.main;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import javax.inject.Inject;
-
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
+import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.activities.base.TVBaseActivity;
+import javax.inject.Inject;
 
-public class TVMainActivity extends TVBaseActivity {
+public class TVMainActivity extends TVBaseActivity implements TVMainView {
 
-    @Inject ButterUpdateManager butterUpdateManager;
+    @Inject TVMainPresenter presenter;
+
+    private TVMainComponent component;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
+        component = TVButterApplication.getAppContext()
                 .getComponent()
-                .inject(this);
+                .tvMaincomponentBuilder()
+                .mainModule(new TVMainModule(this))
+                .build();
+        component.inject(this);
 
         super.onCreate(savedInstanceState, R.layout.activity_main);
     }
@@ -45,13 +48,15 @@ public class TVMainActivity extends TVBaseActivity {
     protected void onResume() {
         super.onResume();
 
-        butterUpdateManager.setListener(new ButterUpdateManager.Listener() {
-            @Override
-            public void updateAvailable(String filePath) {
-                TVUpdateActivity.startActivity(TVMainActivity.this);
-            }
-        });
-        butterUpdateManager.checkUpdates(false);
+        presenter.onResume();
+    }
+
+    @Override public void showUpdateActivity() {
+        TVUpdateActivity.startActivity(this);
+    }
+
+    public TVMainComponent getComponent() {
+        return component;
     }
 
     public static Intent startActivity(Activity activity) {

@@ -37,117 +37,122 @@ import butter.droid.tv.R;
 
 public class EpisodeCardPresenter extends Presenter {
 
-	private Context mContext;
-	private int mCardWidth;
-	private int mCardHeight;
+    private Context mContext;
+    private int mCardWidth;
+    private int mCardHeight;
     private Listener clickListener;
 
     public EpisodeCardPresenter(Context context) {
-		mCardWidth = (int) context.getResources().getDimension(R.dimen.card_thumbnail_width);
-		mCardHeight = (int) context.getResources().getDimension(R.dimen.card_thumbnail_height);
-	}
+        mCardWidth = (int) context.getResources().getDimension(R.dimen.card_thumbnail_width);
+        mCardHeight = (int) context.getResources().getDimension(R.dimen.card_thumbnail_height);
+    }
 
     public void setOnClickListener(@NonNull Listener listener) {
         clickListener = listener;
     }
 
-	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent) {
-		mContext = parent.getContext();
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent) {
+        mContext = parent.getContext();
 
-		ImageCardView cardView = new ImageCardView(mContext);
-		cardView.setCardType(BaseCardView.CARD_TYPE_INFO_UNDER);
-		cardView.setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
-		cardView.setFocusable(true);
-		cardView.setFocusableInTouchMode(true);
-		cardView.setBackgroundColor(ActivityCompat.getColor(mContext, R.color.default_background));
+        ImageCardView cardView = new ImageCardView(mContext);
+        cardView.setCardType(BaseCardView.CARD_TYPE_INFO_UNDER);
+        cardView.setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
+        cardView.setFocusable(true);
+        cardView.setFocusableInTouchMode(true);
+        cardView.setBackgroundColor(ActivityCompat.getColor(mContext, R.color.default_background));
 
-		return new ViewHolder(cardView);
-	}
+        return new ViewHolder(cardView);
+    }
 
-	@Override
-	public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-		final Episode episode = (Episode) item;
-		((ViewHolder) viewHolder).setEpisode(episode);
-		((ViewHolder) viewHolder).getCardView().setTitleText(episode.title);
-		((ViewHolder) viewHolder).getCardView().setContentText(
-            String.format(mContext.getString(R.string.episode_number_format), episode.episode));
-		((ViewHolder) viewHolder).getCardView().setMainImageDimensions(mCardWidth, mCardHeight);
-		((ViewHolder) viewHolder).updateCardViewImage(episode.image);
+    @Override
+    public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
+        final Episode episode = (Episode) item;
+        ((ViewHolder) viewHolder).setEpisode(episode);
+        ((ViewHolder) viewHolder).getCardView().setTitleText(episode.title);
+        ((ViewHolder) viewHolder).getCardView().setContentText(
+                String.format(mContext.getString(R.string.episode_number_format), episode.episode));
+        ((ViewHolder) viewHolder).getCardView().setMainImageDimensions(mCardWidth, mCardHeight);
+        ((ViewHolder) viewHolder).updateCardViewImage(episode.image);
         ((ViewHolder) viewHolder).cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != clickListener) clickListener.onEpisodeClicked(episode);
+                if (null != clickListener) {
+                    clickListener.onEpisodeClicked(episode);
+                }
             }
         });
-	}
+    }
 
-	@Override
-	public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) { }
+    @Override
+    public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
+    }
 
-	public class ViewHolder extends Presenter.ViewHolder {
+    public class ViewHolder extends Presenter.ViewHolder {
 
-		private Episode episode;
-		private ImageCardView cardView;
-		private Drawable defaultImage;
-		private PicassoImageCardViewTarget imageCardViewTarget;
+        private Episode episode;
+        private ImageCardView cardView;
+        private Drawable defaultImage;
+        private PicassoImageCardViewTarget imageCardViewTarget;
 
-		public ViewHolder(View view) {
-			super(view);
-			cardView = (ImageCardView) view;
-			imageCardViewTarget = new PicassoImageCardViewTarget(cardView);
-			defaultImage = ActivityCompat.getDrawable(mContext, R.drawable.banner);
+        public ViewHolder(View view) {
+            super(view);
+            cardView = (ImageCardView) view;
+            imageCardViewTarget = new PicassoImageCardViewTarget(cardView);
+            defaultImage = ActivityCompat.getDrawable(mContext, R.drawable.banner);
             cardView.setMainImage(defaultImage);
-		}
+        }
 
-		public void setEpisode(Episode episode) {
-			this.episode = episode;
-		}
+        public void setEpisode(Episode episode) {
+            this.episode = episode;
+        }
 
-		public Episode getEpisode() {
-			return episode;
-		}
+        public Episode getEpisode() {
+            return episode;
+        }
 
-		public ImageCardView getCardView() {
-			return cardView;
-		}
+        public ImageCardView getCardView() {
+            return cardView;
+        }
 
-		protected void updateCardViewImage(String uri) {
-			Picasso.with(mContext)
-				.load(uri)
-				.resize(mCardWidth, mCardHeight)
-                .centerCrop()
-				.placeholder(defaultImage)
-				.error(defaultImage)
-				.into(imageCardViewTarget);
-		}
-	}
+        protected void updateCardViewImage(String uri) {
+            Picasso.with(mContext)
+                    .load(uri)
+                    .resize(mCardWidth, mCardHeight)
+                    .centerCrop()
+                    .placeholder(defaultImage)
+                    .error(defaultImage)
+                    .into(imageCardViewTarget);
+        }
+    }
 
-	public class PicassoImageCardViewTarget implements Target {
-		private ImageCardView mImageCardView;
+    public class PicassoImageCardViewTarget implements Target {
 
-		public PicassoImageCardViewTarget(ImageCardView imageCardView) {
-			mImageCardView = imageCardView;
-		}
+        private ImageCardView mImageCardView;
 
-		@Override
-		public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-			Drawable bitmapDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
-			mImageCardView.setMainImage(bitmapDrawable);
-		}
+        public PicassoImageCardViewTarget(ImageCardView imageCardView) {
+            mImageCardView = imageCardView;
+        }
 
-		@Override
-		public void onBitmapFailed(Drawable drawable) {
-			mImageCardView.setMainImage(drawable);
-		}
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+            Drawable bitmapDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
+            mImageCardView.setMainImage(bitmapDrawable);
+        }
 
-		@Override
-		public void onPrepareLoad(Drawable drawable) {
-			// Do nothing, default_background manager has its own transitions
-		}
-	}
+        @Override
+        public void onBitmapFailed(Drawable drawable) {
+            mImageCardView.setMainImage(drawable);
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable drawable) {
+            // Do nothing, default_background manager has its own transitions
+        }
+    }
 
     public interface Listener {
+
         void onEpisodeClicked(Episode row);
     }
 }

@@ -22,7 +22,6 @@ android {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         multiDexEnabled true
-        check.dependsOn('checkstyle')
     }
 
     signingConfigs {

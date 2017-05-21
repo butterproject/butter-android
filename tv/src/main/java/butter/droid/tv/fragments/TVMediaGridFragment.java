@@ -22,6 +22,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.app.VerticalGridFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
@@ -31,12 +32,6 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
@@ -47,9 +42,16 @@ import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.manager.internal.background.BackgroundUpdater;
+import butter.droid.tv.presenters.LoadingCardPresenter;
+import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
-import butter.droid.tv.utils.BackgroundUpdater;
+import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
+import com.squareup.picasso.Picasso;
 import hugo.weaving.DebugLog;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 
@@ -61,6 +63,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     private static final int NUM_COLUMNS = 6;
 
     @Inject ProviderManager providerManager;
+    @Inject Picasso picasso;
 
     private List<MediaCardPresenter.MediaCardItem> mItems = new ArrayList<>();
     private ArrayObjectAdapter mAdapter;
@@ -105,14 +108,18 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
 
     private void setupFragment() {
         //setup background updater
-        mBackgroundUpdater = new BackgroundUpdater();
+        mBackgroundUpdater = BackgroundUpdater.newInstance(getActivity());
         mBackgroundUpdater.initialise(getActivity(), R.color.black);
 
         VerticalGridPresenter gridPresenter = new VerticalGridPresenter();
         gridPresenter.setNumberOfColumns(NUM_COLUMNS);
         setGridPresenter(gridPresenter);
 
-        mAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
+        ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+
+        mAdapter = new ArrayObjectAdapter(presenterSelector);
         setAdapter(mAdapter);
 
         setOnItemViewClickedListener(this);
@@ -177,7 +184,6 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     }
 
     private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
-        if (media.isLoading()) return;
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
                 view.getMainImageView(),
@@ -193,7 +199,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-            if (overviewItem.isLoading()) return;
+//            if (overviewItem.isLoading()) return;
 
             mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
         }

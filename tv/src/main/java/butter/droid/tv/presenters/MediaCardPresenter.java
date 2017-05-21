@@ -20,6 +20,7 @@ package butter.droid.tv.presenters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.v17.leanback.widget.BaseCardView;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
@@ -29,16 +30,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.tv.R;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand. 
@@ -46,184 +44,171 @@ import butter.droid.tv.R;
  */
 public class MediaCardPresenter extends Presenter {
 
-	private static Context mContext;
-	private static int mCardWidth;
-	private static int mCardHeight;
+    private final Context context;
+    private final Picasso picasso;
 
-	private final int mDefaultInfoBackgroundColor;
-	private final int mDefaultSelectedInfoBackgroundColor;
+    private final int cardWidth;
+    private final int cardHeight;
+    @ColorInt private final int defaultInfoBackgroundColor;
+    @ColorInt private final int defaultSelectedInfoBackgroundColor;
 
-	public MediaCardPresenter(Context context) {
-		mDefaultSelectedInfoBackgroundColor = context.getResources().getColor(R.color.primary_dark);
-		mDefaultInfoBackgroundColor = context.getResources().getColor(R.color.default_background);
-		mCardWidth = (int) context.getResources().getDimension(R.dimen.card_width);
-		mCardHeight = (int) context.getResources().getDimension(R.dimen.card_height);
-	}
+    public MediaCardPresenter(Context context, final Picasso picasso) {
+        this.context = context;
+        this.picasso = picasso;
+        defaultSelectedInfoBackgroundColor = context.getResources().getColor(R.color.primary_dark);
+        defaultInfoBackgroundColor = context.getResources().getColor(R.color.default_background);
+        cardWidth = (int) context.getResources().getDimension(R.dimen.card_width);
+        cardHeight = (int) context.getResources().getDimension(R.dimen.card_height);
+    }
 
-	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent) {
-		mContext = parent.getContext();
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent) {
+        final CustomImageCardView cardView = new CustomImageCardView(context) {
+            @Override
+            public void setSelected(boolean selected) {
+                if (getCustomSelectedSwatch() != null && selected) {
+                    setInfoAreaBackgroundColor(getCustomSelectedSwatch().getRgb());
+                } else {
+                    setInfoAreaBackgroundColor(selected ? defaultSelectedInfoBackgroundColor : defaultInfoBackgroundColor);
+                }
+                super.setSelected(selected);
+            }
+        };
 
-		final CustomImageCardView cardView = new CustomImageCardView(mContext) {
-			@Override
-			public void setSelected(boolean selected) {
-				if (getCustomSelectedSwatch() != null && selected) {
-					setInfoAreaBackgroundColor(getCustomSelectedSwatch().getRgb());
-				} else setInfoAreaBackgroundColor(selected ? mDefaultSelectedInfoBackgroundColor : mDefaultInfoBackgroundColor);
-				super.setSelected(selected);
-			}
-		};
+        cardView.setInfoAreaBackgroundColor(defaultInfoBackgroundColor);
+        cardView.setFocusable(true);
+        cardView.setFocusableInTouchMode(true);
+        return new ViewHolder(cardView);
+    }
 
-		cardView.setInfoAreaBackgroundColor(mDefaultInfoBackgroundColor);
-		cardView.setFocusable(true);
-		cardView.setFocusableInTouchMode(true);
-		return new ViewHolder(cardView);
-	}
+    @Override
+    public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object object) {
+        onBindMediaViewHolder(viewHolder, (MediaCardItem) object);
+    }
 
-	@Override
-	public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object object) {
-		MediaCardItem overview = (MediaCardItem) object;
+    public void onBindMediaViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
 
-		if (overview.isLoading()) onBindLoadingViewHolder(viewHolder, overview);
-		else onBindMediaViewHolder(viewHolder, overview);
-	}
-
-	public void onBindLoadingViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
-		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
-		cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		cardView.setMainImage(mContext.getResources().getDrawable(R.drawable.placeholder_inset, null));
-		cardView.setTitleText(mContext.getString(R.string.loading));
-		cardView.setMainImageDimensions(mCardWidth, mCardHeight);
-	}
-
-	public void onBindMediaViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
-
-		Media item = overview.getMedia();
-		final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
+        Media item = overview.getMedia();
+        final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 
         cardView.setTitleText(item.title);
         cardView.setContentText(!TextUtils.isEmpty(item.genre) ? item.genre : item.year);
         cardView.getMainImageView().setAlpha(1f);
-        cardView.getMainImageView().setPadding(0,0,0,0);
-        cardView.setMainImageDimensions(mCardWidth, mCardHeight);
+        cardView.getMainImageView().setPadding(0, 0, 0, 0);
+        cardView.setMainImageDimensions(cardWidth, cardHeight);
         cardView.getMainImageView().setVisibility(View.GONE);
         cardView.setCustomSelectedSwatch(null);
 
-		if (item.image != null) {
-			Target target = new Target() {
-				@Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-					Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
-						@Override public void onGenerated(Palette palette) {
-							Palette.Swatch swatch = palette.getDarkMutedSwatch();
-							cardView.setCustomSelectedSwatch(swatch);
+        if (item.image != null) {
+            Target target = new Target() {
+                @Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
+                        @Override public void onGenerated(Palette palette) {
+                            Palette.Swatch swatch = palette.getDarkMutedSwatch();
+                            cardView.setCustomSelectedSwatch(swatch);
 
                             cardView.getMainImageView().setImageBitmap(bitmap);
                             cardView.getMainImageView().setVisibility(View.GONE);
                             AnimUtils.fadeIn(cardView.getMainImageView());
-						}
-					});
-				}
+                        }
+                    });
+                }
 
-				@Override public void onBitmapFailed(Drawable errorDrawable) {
-					cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
+                @Override public void onBitmapFailed(Drawable errorDrawable) {
+                    cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
                     cardView.getMainImageView().setAlpha(0.4f);
-					cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-					cardView.getMainImageView().setVisibility(View.GONE);
-					AnimUtils.fadeIn(cardView.getMainImageView());
+                    cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                    cardView.getMainImageView().setVisibility(View.GONE);
+                    AnimUtils.fadeIn(cardView.getMainImageView());
 
-				}
+                }
 
-				@Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+                @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-				}
-			};
-			//load image
-			Picasso.with(mContext).load(item.image).resize(mCardWidth, mCardHeight).centerCrop().into(target);
-			cardView.setTarget(target);
-		} else {
+                }
+            };
+            //load image
+            picasso.load(item.image).resize(cardWidth, cardHeight).centerCrop().into(target);
+            cardView.setTarget(target);
+        } else {
             cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
             cardView.getMainImageView().setAlpha(0.4f);
             cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             cardView.getMainImageView().setVisibility(View.GONE);
             AnimUtils.fadeIn(cardView.getMainImageView());
         }
-	}
+    }
 
-	@Override
-	public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-		CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
-		// Remove references to images so that the garbage collector can free up memory
-		cardView.setBadgeImage(null);
-		cardView.setMainImage(null);
-		if (cardView.getTarget() != null) {
-			Picasso.with(mContext).cancelRequest(cardView.getTarget());
-			cardView.setTarget(null);
-		}
-	}
+    @Override
+    public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
+        CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
+        // Remove references to images so that the garbage collector can free up memory
+        cardView.setBadgeImage(null);
+        cardView.setMainImage(null);
+        if (cardView.getTarget() != null) {
+            picasso.cancelRequest(cardView.getTarget());
+            cardView.setTarget(null);
+        }
+    }
 
+    public static class CustomImageCardView extends ImageCardView {
 
-	public static class CustomImageCardView extends ImageCardView {
+        private Palette.Swatch customSelectedSwatch;
 
-		private Palette.Swatch mCustomSelectedSwatch;
+        private Target target;
 
-		private Target mTarget;
+        public CustomImageCardView(Context context) {
+            super(context);
+            setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
+        }
 
-		public CustomImageCardView(Context context) {
-			super(context);
-			setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
-		}
+        public CustomImageCardView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
+        }
 
-		public CustomImageCardView(Context context, AttributeSet attrs) {
-			super(context, attrs);
-			setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
-		}
+        public CustomImageCardView(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+            setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
+        }
 
-		public CustomImageCardView(Context context, AttributeSet attrs, int defStyle) {
-			super(context, attrs, defStyle);
-			setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
-		}
+        public Palette.Swatch getCustomSelectedSwatch() {
+            return customSelectedSwatch;
+        }
 
-		public Palette.Swatch getCustomSelectedSwatch() {
-			return mCustomSelectedSwatch;
-		}
+        public void setCustomSelectedSwatch(Palette.Swatch customSelectedSwatch) {
+            this.customSelectedSwatch = customSelectedSwatch;
+        }
 
-		public void setCustomSelectedSwatch(Palette.Swatch customSelectedSwatch) {
-			mCustomSelectedSwatch = customSelectedSwatch;
-		}
+        public Target getTarget() {
+            return target;
+        }
 
-		public Target getTarget() {
-			return mTarget;
-		}
+        public void setTarget(Target target) {
+            this.target = target;
+        }
+    }
 
-		public void setTarget(Target target) {
-			mTarget = target;
-		}
-	}
+    public static class MediaCardItem {
 
-	public static class MediaCardItem {
-		private Media mMedia;
-		private boolean mLoading;
+        private final Media media;
 
-		public MediaCardItem(Media media) {
-			mMedia = media;
-		}
+        public MediaCardItem(Media media) {
+            this.media = media;
+        }
 
-		public MediaCardItem(boolean loading) {
-			mLoading = loading;
-		}
+        public Media getMedia() {
+            return media;
+        }
 
-		public Media getMedia() {
-			return mMedia;
-		}
+    }
 
-		public boolean isLoading() {
-			return mLoading;
-		}
-	}
+    public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
+        List<MediaCardItem> list = new ArrayList<>();
+        for (Media media : items) {
+            list.add(new MediaCardItem(media));
+        }
+        return list;
+    }
 
-	public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
-		List<MediaCardItem> list = new ArrayList<>();
-		for (Media media : items) list.add(new MediaCardItem(media));
-		return list;
-	}
 }

@@ -18,6 +18,7 @@
 package butter.droid.base.providers.media;
 
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
@@ -118,13 +119,13 @@ public abstract class MediaProvider extends BaseProvider {
 
     public static class NavInfo {
 
-        private int id;
+        @IdRes private int id;
         @DrawableRes private final int iconId;
         @StringRes private int label;
         private Filters.Sort sort;
         private Filters.Order defOrder;
 
-        public NavInfo(int id, Filters.Sort sort, Filters.Order defOrder, @StringRes int label, @DrawableRes int icon) {
+        public NavInfo(@IdRes int id, Filters.Sort sort, Filters.Order defOrder, @StringRes int label, @DrawableRes int icon) {
             this.id = id;
             this.sort = sort;
             this.defOrder = defOrder;
@@ -136,7 +137,7 @@ public abstract class MediaProvider extends BaseProvider {
             return sort;
         }
 
-        public int getId() {
+        @IdRes public int getId() {
             return id;
         }
 

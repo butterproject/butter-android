@@ -20,14 +20,12 @@ package butter.droid.tv;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.tv.activities.TVMainActivity;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
 import butter.droid.tv.fragments.TVMovieDetailsFragment;
-import butter.droid.tv.fragments.TVOverviewFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
 import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.service.RecommendationService;
@@ -35,6 +33,7 @@ import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TVAboutComponent;
 import butter.droid.tv.ui.launch.TVLaunchComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
+import butter.droid.tv.ui.main.TVMainComponent;
 import butter.droid.tv.ui.player.TVVideoPlayerComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.search.TVSearchActivity;
@@ -49,13 +48,11 @@ import dagger.Component;
         dependencies = {
                 ProviderComponent.class
         },
-        modules = InternalModule.class
+        modules = TVInternalModule.class
 )
-public interface InternalComponent extends BaseInternalComponent {
+public interface TVInternalComponent extends BaseInternalComponent {
 
     void inject(TVButterApplication application);
-
-    void inject(TVMainActivity activity);
 
     void inject(TVMediaDetailActivity activity);
 
@@ -72,8 +69,6 @@ public interface InternalComponent extends BaseInternalComponent {
     void inject(TVTrailerPlayerActivity activity);
 
     void inject(RecommendationService service);
-
-    void inject(TVOverviewFragment fragment);
 
     void inject(TVMovieDetailsFragment fragment);
 
@@ -100,5 +95,7 @@ public interface InternalComponent extends BaseInternalComponent {
     TVVideoPlayerComponent.Builder tvVideoPlayerComponentBuilder();
 
     TVLaunchComponent.Builder tvLaunchComponentBuilder();
+
+    TVMainComponent.Builder tvMaincomponentBuilder();
 
 }

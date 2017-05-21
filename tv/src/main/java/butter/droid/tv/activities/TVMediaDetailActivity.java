@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.utils.VersionUtils;
@@ -31,14 +30,14 @@ import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import butter.droid.tv.fragments.TVMovieDetailsFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
-import butter.droid.tv.utils.BackgroundUpdater;
+import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 
 public class TVMediaDetailActivity extends TVBaseActivity implements TVMovieDetailsFragment.Callback {
 
     public static final String EXTRA_ITEM = "item";
     public static final String SHARED_ELEMENT_NAME = "hero";
 
-    private BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
+    private BackgroundUpdater mBackgroundUpdater;
 
     public static Intent startActivity(Activity activity, Media item) {
         return startActivity(activity, null, item);
@@ -69,6 +68,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMovieDeta
 
         super.onCreate(savedInstanceState, R.layout.activity_media_details);
 
+        mBackgroundUpdater = BackgroundUpdater.newInstance(this);
         mBackgroundUpdater.initialise(this, R.color.black);
         Media media = getIntent().getParcelableExtra(EXTRA_ITEM);
 
@@ -93,7 +93,9 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMovieDeta
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (null != mBackgroundUpdater) mBackgroundUpdater.destroy();
+        if (mBackgroundUpdater != null) {
+            mBackgroundUpdater.destroy();
+        }
     }
 
     protected void updateBackground(String backgroundImage) {

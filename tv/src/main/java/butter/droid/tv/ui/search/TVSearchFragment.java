@@ -20,6 +20,7 @@ package butter.droid.tv.ui.search;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
@@ -29,31 +30,32 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.manager.internal.background.BackgroundUpdater;
+import butter.droid.tv.presenters.LoadingCardPresenter;
+import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
-import butter.droid.tv.utils.BackgroundUpdater;
+import com.squareup.picasso.Picasso;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TVSearchFragment extends android.support.v17.leanback.app.SearchFragment
-		implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, TVSearchView {
+        implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, TVSearchView {
 
-	@Inject TVSearchPresenter presenter;
+    @Inject TVSearchPresenter presenter;
+    @Inject Picasso picasso;
 
-	private final BackgroundUpdater backgroundUpdater = new BackgroundUpdater();
+    private BackgroundUpdater backgroundUpdater;
 
-	private ArrayObjectAdapter rowsAdapter;
-	private ListRowPresenter listRowPresenter;
-	private ListRow loadingRow;
+    private ArrayObjectAdapter rowsAdapter;
+    private ListRowPresenter listRowPresenter;
+    private ListRow loadingRow;
 
-	@Override public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         TVButterApplication.getAppContext()
@@ -65,84 +67,89 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 
     }
 
-	@Override public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		backgroundUpdater.initialise(getActivity(), R.color.black);
-		listRowPresenter = new ListRowPresenter();
-		listRowPresenter.setShadowEnabled(false);
-		rowsAdapter = new ArrayObjectAdapter(listRowPresenter);
-		setSearchResultProvider(this);
-		setOnItemViewClickedListener(getDefaultItemClickedListener());
-		setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    @Override public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        backgroundUpdater = BackgroundUpdater.newInstance(getActivity());
+        backgroundUpdater.initialise(getActivity(), R.color.black);
+        listRowPresenter = new ListRowPresenter();
+        listRowPresenter.setShadowEnabled(false);
+        rowsAdapter = new ArrayObjectAdapter(listRowPresenter);
+        setSearchResultProvider(this);
+        setOnItemViewClickedListener(getDefaultItemClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
 
-		//setup row to use for loading
-		loadingRow = createLoadingRow();
-	}
+        //setup row to use for loading
+        loadingRow = createLoadingRow();
+    }
 
-	@Override
-	public ObjectAdapter getResultsAdapter() {
-		return rowsAdapter;
-	}
+    @Override
+    public ObjectAdapter getResultsAdapter() {
+        return rowsAdapter;
+    }
 
-	private ListRow createLoadingRow() {
-		HeaderItem loadingHeader = new HeaderItem(0, getString(R.string.search_results));
-		ArrayObjectAdapter loadingRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
-		loadingRowAdapter.add(new MediaCardPresenter.MediaCardItem(true));
-		return new ListRow(loadingHeader, loadingRowAdapter);
-	}
+    private ListRow createLoadingRow() {
+        final HeaderItem loadingHeader = new HeaderItem(getString(R.string.search_results));
 
-	@Override
-	public boolean onQueryTextChange(String newQuery) {
-		presenter.onTextChanged(newQuery);
-		return true;
-	}
+        ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
 
-	@Override
-	public boolean onQueryTextSubmit(String query) {
-		presenter.onTextSubmitted(query);
-		return true;
-	}
+        ArrayObjectAdapter loadingRowAdapter = new ArrayObjectAdapter(presenterSelector);
+        loadingRowAdapter.add(new LoadingCardItem());
+        return new ListRow(loadingHeader, loadingRowAdapter);
+    }
 
-	@Override public void clearData() {
-		rowsAdapter.clear();
-	}
+    @Override
+    public boolean onQueryTextChange(String newQuery) {
+        presenter.onTextChanged(newQuery);
+        return true;
+    }
 
-	@Override public void showLoadingRow() {
-		rowsAdapter.add(loadingRow);
-	}
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        presenter.onTextSubmitted(query);
+        return true;
+    }
 
-	@Override public void addRow(@StringRes int title, List<MediaCardItem> items) {
-		rowsAdapter.remove(loadingRow);
+    @Override public void clearData() {
+        rowsAdapter.clear();
+    }
 
-		HeaderItem header = new HeaderItem(0, getString(title));
-		ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
-		listRowAdapter.addAll(0, items);
-		rowsAdapter.add(new ListRow(header, listRowAdapter));
-	}
+    @Override public void showLoadingRow() {
+        rowsAdapter.add(loadingRow);
+    }
 
-	protected OnItemViewClickedListener getDefaultItemClickedListener() {
-		return new OnItemViewClickedListener() {
-			@Override public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object object, RowPresenter.ViewHolder rowViewHolder,
-					Row row) {
-				if (object instanceof MediaCardPresenter.MediaCardItem) {
-					MediaCardPresenter.MediaCardItem item = (MediaCardPresenter.MediaCardItem) object;
-					Media media = item.getMedia();
-					TVMediaDetailActivity.startActivity(getActivity(), media);
-				}
-			}
-		};
-	}
+    @Override public void addRow(@StringRes int title, List<MediaCardItem> items) {
+        rowsAdapter.remove(loadingRow);
 
-	private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
-		@Override
-		public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-				RowPresenter.ViewHolder rowViewHolder, Row row) {
-			if (item instanceof MediaCardPresenter.MediaCardItem) {
-				MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-				if (overviewItem.isLoading()) return;
+        HeaderItem header = new HeaderItem(getString(title));
+        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity(), picasso));
+        listRowAdapter.addAll(0, items);
+        rowsAdapter.add(new ListRow(header, listRowAdapter));
+    }
 
-				backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
-			}
-		}
-	}
+    protected OnItemViewClickedListener getDefaultItemClickedListener() {
+        return new OnItemViewClickedListener() {
+            @Override public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object object, RowPresenter.ViewHolder rowViewHolder,
+                    Row row) {
+                if (object instanceof MediaCardPresenter.MediaCardItem) {
+                    MediaCardPresenter.MediaCardItem item = (MediaCardPresenter.MediaCardItem) object;
+                    Media media = item.getMedia();
+                    TVMediaDetailActivity.startActivity(getActivity(), media);
+                }
+            }
+        };
+    }
+
+    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof MediaCardPresenter.MediaCardItem) {
+                MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
+                backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
+            }
+        }
+    }
 }

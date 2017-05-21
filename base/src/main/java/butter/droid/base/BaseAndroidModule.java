@@ -23,7 +23,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 import dagger.Module;
@@ -31,7 +30,7 @@ import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module
-public class AndroidModule {
+public class BaseAndroidModule {
 
     @Provides @Singleton ConnectivityManager provideConnectivityManager(Context context) {
         return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

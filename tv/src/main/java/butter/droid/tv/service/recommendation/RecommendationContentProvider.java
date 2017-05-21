@@ -41,116 +41,117 @@ import okhttp3.Response;
 
 public class RecommendationContentProvider extends ContentProvider {
 
-	public static String AUTHORITY = "pct.droid.tv.RecommendationContentProvider";
-	public static String CONTENT_URI = "content://" + AUTHORITY + "/";
+    public static String AUTHORITY = "pct.droid.tv.RecommendationContentProvider";
+    public static String CONTENT_URI = "content://" + AUTHORITY + "/";
 
-	@Inject OkHttpClient client;
+    @Inject OkHttpClient client;
 
-	private boolean initialized;
+    private boolean initialized;
 
-	@Override
-	public boolean onCreate() {
-		return true;
-	}
+    @Override
+    public boolean onCreate() {
+        return true;
+    }
 
-	@Override
-	public ParcelFileDescriptor openFile(Uri uri, String mode)
-			throws FileNotFoundException {
-		ParcelFileDescriptor[] pipe = null;
+    @Override
+    public ParcelFileDescriptor openFile(Uri uri, String mode)
+            throws FileNotFoundException {
+        ParcelFileDescriptor[] pipe = null;
 
-		String url = uri.getPath();
+        String url = uri.getPath();
 
-		try {
-			String decodedUrl = URLDecoder.decode(url.replaceFirst("/", ""),
-					"UTF-8");
-			pipe = ParcelFileDescriptor.createPipe();
+        try {
+            String decodedUrl = URLDecoder.decode(url.replaceFirst("/", ""),
+                    "UTF-8");
+            pipe = ParcelFileDescriptor.createPipe();
 
-			Request request = new Builder()
-					.url(new URL(decodedUrl))
-					.build();
+            Request request = new Builder()
+                    .url(new URL(decodedUrl))
+                    .build();
 
-			Response response = getOkHttpClient().newCall(request)
-					.execute();
+            Response response = getOkHttpClient().newCall(request)
+                    .execute();
 
-			new TransferThread(response.body().byteStream(),
-					new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]))
-					.start();
-		} catch (IOException e) {
-			Log.e(getClass().getSimpleName(), "Exception opening pipe", e);
-			throw new FileNotFoundException("Could not open pipe for: "
-					+ uri.toString());
-		}
+            new TransferThread(response.body().byteStream(),
+                    new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]))
+                    .start();
+        } catch (IOException e) {
+            Log.e(getClass().getSimpleName(), "Exception opening pipe", e);
+            throw new FileNotFoundException("Could not open pipe for: "
+                    + uri.toString());
+        }
 
-		return (pipe[0]);
-	}
+        return (pipe[0]);
+    }
 
-	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		return null;
-	}
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection,
+            String[] selectionArgs, String sortOrder) {
+        return null;
+    }
 
-	@Override
-	public String getType(Uri uri) {
-		return "image/*";
-	}
+    @Override
+    public String getType(Uri uri) {
+        return "image/*";
+    }
 
-	@Override
-	public Uri insert(Uri uri, ContentValues values) {
-		return null;
-	}
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        return null;
+    }
 
-	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		return 0;
-	}
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        return 0;
+    }
 
-	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
-		return 0;
-	}
+    @Override
+    public int update(Uri uri, ContentValues values, String selection,
+            String[] selectionArgs) {
+        return 0;
+    }
 
-	static class TransferThread extends Thread {
-		InputStream in;
-		OutputStream out;
+    static class TransferThread extends Thread {
 
-		TransferThread(InputStream in, OutputStream out) {
-			this.in = in;
-			this.out = out;
-		}
+        InputStream in;
+        OutputStream out;
 
-		@Override
-		public void run() {
-			byte[] buf = new byte[8192];
-			int len;
+        TransferThread(InputStream in, OutputStream out) {
+            this.in = in;
+            this.out = out;
+        }
 
-			try {
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
+        @Override
+        public void run() {
+            byte[] buf = new byte[8192];
+            int len;
 
-				in.close();
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				Log.e(getClass().getSimpleName(),
-						"Exception transferring file", e);
-			}
-		}
-	}
+            try {
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
 
-	private OkHttpClient getOkHttpClient() {
-		init();
-		return client;
-	}
+                in.close();
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                Log.e(getClass().getSimpleName(),
+                        "Exception transferring file", e);
+            }
+        }
+    }
 
-	private void init() {
-		if (!initialized) {
-			TVButterApplication.getAppContext()
-					.getComponent()
-					.inject(this);
-		}
-	}
+    private OkHttpClient getOkHttpClient() {
+        init();
+        return client;
+    }
+
+    private void init() {
+        if (!initialized) {
+            TVButterApplication.getAppContext()
+                    .getComponent()
+                    .inject(this);
+        }
+    }
 
 }

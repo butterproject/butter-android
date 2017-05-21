@@ -46,137 +46,144 @@ import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 
 public abstract class TVBaseDetailsFragment extends DetailsFragment implements MediaProvider.Callback,
-		OnActionClickedListener {
+        OnActionClickedListener {
 
-	public static final String EXTRA_ITEM = "item";
-	public static final String EXTRA_HERO_URL = "hero_url";
+    public static final String EXTRA_ITEM = "item";
+    public static final String EXTRA_HERO_URL = "hero_url";
 
-	private ArrayObjectAdapter mAdapter;
-	private ClassPresenterSelector mPresenterSelector;
-	private Media mItem;
-	private String mHeroImage;
+    private ArrayObjectAdapter mAdapter;
+    private ClassPresenterSelector mPresenterSelector;
+    private Media mItem;
+    private String mHeroImage;
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-		mItem = getArguments().getParcelable(EXTRA_ITEM);
-		mHeroImage = mItem.image;
+        mItem = getArguments().getParcelable(EXTRA_ITEM);
+        mHeroImage = mItem.image;
 
-		setupAdapter();
-		setupDetailsOverviewRowPresenter();
+        setupAdapter();
+        setupDetailsOverviewRowPresenter();
 
-		final DetailsOverviewRow detailRow = createDetailsOverviewRow();
-		mAdapter.add(detailRow);
+        final DetailsOverviewRow detailRow = createDetailsOverviewRow();
+        mAdapter.add(detailRow);
 
-		loadDetails();
-	}
+        loadDetails();
+    }
 
-	abstract void loadDetails();
+    abstract void loadDetails();
 
-	abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
+    abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
 
-	abstract void onDetailLoaded();
+    abstract void onDetailLoaded();
 
-	protected ArrayObjectAdapter getObjectArrayAdapter() {
-		return mAdapter;
-	}
+    protected ArrayObjectAdapter getObjectArrayAdapter() {
+        return mAdapter;
+    }
 
-	public Media getMediaItem() {
-		return mItem;
-	}
+    public Media getMediaItem() {
+        return mItem;
+    }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
-	private void setupAdapter() {
-		mPresenterSelector = new ClassPresenterSelector();
-		createPresenters(mPresenterSelector);
+    private void setupAdapter() {
+        mPresenterSelector = new ClassPresenterSelector();
+        createPresenters(mPresenterSelector);
 
-		mAdapter = createAdapter(mPresenterSelector);
-		setAdapter(mAdapter);
-	}
+        mAdapter = createAdapter(mPresenterSelector);
+        setAdapter(mAdapter);
+    }
 
-	abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
+    abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
 
-	protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
-		return new ArrayObjectAdapter(selector);
-	}
+    protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
+        return new ArrayObjectAdapter(selector);
+    }
 
-	private void setupDetailsOverviewRowPresenter() {
-		// Set detail background and style.
-		PTVDetailsOverviewRowPresenter headerPresenter = new PTVDetailsOverviewRowPresenter(getDetailPresenter());
+    private void setupDetailsOverviewRowPresenter() {
+        // Set detail background and style.
+        PTVDetailsOverviewRowPresenter headerPresenter = new PTVDetailsOverviewRowPresenter(getDetailPresenter());
         headerPresenter.setBackgroundColor(mItem.color);
-		headerPresenter.setStyleLarge(true);
-		headerPresenter.setOnActionClickedListener(this);
+        headerPresenter.setStyleLarge(true);
+        headerPresenter.setOnActionClickedListener(this);
 
-		// Hook up transition element.
-		headerPresenter.setSharedElementEnterTransition(
-			getActivity(),
-			TVMediaDetailActivity.SHARED_ELEMENT_NAME);
+        // Hook up transition element.
+        headerPresenter.setSharedElementEnterTransition(
+                getActivity(),
+                TVMediaDetailActivity.SHARED_ELEMENT_NAME);
 
-		mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, headerPresenter);
-		mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
-	}
+        mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, headerPresenter);
+        mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
+    }
 
-	private DetailsOverviewRow createDetailsOverviewRow() {
-		final DetailsOverviewRow detailsRow = new DetailsOverviewRow(mItem);
+    private DetailsOverviewRow createDetailsOverviewRow() {
+        final DetailsOverviewRow detailsRow = new DetailsOverviewRow(mItem);
 
-		Picasso.with(getActivity()).load(mHeroImage).into(new Target() {
-			@Override
-			public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-				detailsRow.setImageBitmap(getActivity(), bitmap);
-				mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
+        Picasso.with(getActivity()).load(mHeroImage).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                detailsRow.setImageBitmap(getActivity(), bitmap);
+                mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
 
-			}
+            }
 
-			@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-			@Override
-			public void onBitmapFailed(Drawable errorDrawable) {
-				if(VersionUtils.isLollipop())
-					getActivity().startPostponedEnterTransition();
-			}
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                if (VersionUtils.isLollipop()) {
+                    getActivity().startPostponedEnterTransition();
+                }
+            }
 
-			@Override
-			public void onPrepareLoad(Drawable placeHolderDrawable) {
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-			}
-		});
-		return detailsRow;
-	}
+            }
+        });
+        return detailsRow;
+    }
 
-	protected void addAction(Action action) {
-		DetailsOverviewRow detailRow = (DetailsOverviewRow) mAdapter.get(0);
-		detailRow.addAction(action);
-	}
+    protected void addAction(Action action) {
+        DetailsOverviewRow detailRow = (DetailsOverviewRow) mAdapter.get(0);
+        detailRow.addAction(action);
+    }
 
-	abstract void addActions(Media item);
+    abstract void addActions(Media item);
 
-	@Override
-	public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-		if (!isAdded()) return;
+    @Override
+    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+        if (!isAdded()) {
+            return;
+        }
 
-		if (null == items || items.size() == 0) return;
+        if (null == items || items.size() == 0) {
+            return;
+        }
 
-		Media itemDetail = items.get(0);
+        Media itemDetail = items.get(0);
 
-		mItem = itemDetail;
+        mItem = itemDetail;
 
-		ThreadUtils.runOnUiThread(new Runnable() {
-			@Override public void run() {
-				final DetailsOverviewRow detailRow = createDetailsOverviewRow();
-				mAdapter.replace(0, detailRow);
-				onDetailLoaded();
-			}
-		});
-	}
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override public void run() {
+                final DetailsOverviewRow detailRow = createDetailsOverviewRow();
+                mAdapter.replace(0, detailRow);
+                onDetailLoaded();
+            }
+        });
+    }
 
-	@Override
-	public void onFailure(Exception e) {
-		//todo: on load failure
-	}
+    @Override
+    public void onFailure(Exception e) {
+        //todo: on load failure
+    }
 
-	public interface Callback { }
+    public interface Callback {
+
+    }
 }
