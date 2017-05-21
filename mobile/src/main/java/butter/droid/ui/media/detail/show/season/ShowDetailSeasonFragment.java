@@ -36,7 +36,7 @@ import butter.droid.R;
 import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Show;
-import butter.droid.fragments.dialog.EpisodeDialogFragment;
+import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.widget.LinearList;
 
@@ -91,8 +91,8 @@ public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeas
         presenter.onViewCreated();
     }
 
-    @Override public void onClick(View v) {
-        int position = rootView.indexOfChild(v);
+    @Override public void onClick(View view) {
+        int position = rootView.indexOfChild(view);
 
         presenter.episodeSelected(position);
     }

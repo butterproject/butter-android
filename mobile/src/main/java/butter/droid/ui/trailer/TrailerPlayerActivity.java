@@ -27,8 +27,8 @@ import butter.droid.ui.ButterBaseActivity;
 
 public class TrailerPlayerActivity extends ButterBaseActivity {
 
-    private final static String EXTRA_URI = "butter.droid.ui.trailer.TrailerPlayerActivity.uri";
-    private final static String EXTRA_MEDIA = "butter.droid.ui.trailer.TrailerPlayerActivity.media";
+    private static final String EXTRA_URI = "butter.droid.ui.trailer.TrailerPlayerActivity.uri";
+    private static final String EXTRA_MEDIA = "butter.droid.ui.trailer.TrailerPlayerActivity.media";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

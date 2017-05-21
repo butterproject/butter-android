@@ -17,6 +17,8 @@
 
 package butter.droid.widget;
 
+import static android.R.attr.y;
+
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Build;
@@ -26,14 +28,14 @@ import android.widget.ScrollView;
 
 public class BottomSheetScrollView extends ScrollView {
 
-    private final static int CHECK_INTERVAL = 100;
-    private int mInitPosition;
-    private Boolean mTouchDown = false, mIsScrolling = false;
-    private Listener mListener = null;
+    private static final int CHECK_INTERVAL = 100;
 
-    public enum Direction {UP, DOWN}
+    private int initPosition;
+    private Boolean touchDown = false;
+    private Boolean isScrolling = false;
+    private Listener listener = null;
 
-    ;
+    public enum Direction { UP, DOWN }
 
     public BottomSheetScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -69,17 +71,18 @@ public class BottomSheetScrollView extends ScrollView {
     }
 
     @Override
-    protected void onScrollChanged(int x, int y, int oldX, int oldY) {
-        super.onScrollChanged(x, y, oldX, oldY);
-        if (!mIsScrolling) {
-            if (mListener != null)
-                mListener.onScrollStart();
+    protected void onScrollChanged(int newX, int newY, int oldX, int oldY) {
+        super.onScrollChanged(newX, newY, oldX, oldY);
+        if (!isScrolling) {
+            if (listener != null) {
+                listener.onScrollStart();
+            }
         }
-        mIsScrolling = true;
+        isScrolling = true;
 
-        if (mListener != null) {
-            Direction d = y > oldY ? Direction.DOWN : Direction.UP;
-            mListener.onScroll(y, d);
+        if (listener != null) {
+            Direction direction = y > oldY ? Direction.DOWN : Direction.UP;
+            listener.onScroll(y, direction);
         }
     }
 
@@ -87,36 +90,42 @@ public class BottomSheetScrollView extends ScrollView {
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (mListener != null && !mTouchDown)
-                    mListener.onTouch(true);
-                mTouchDown = true;
+                if (listener != null && !touchDown) {
+                    listener.onTouch(true);
+                }
+                touchDown = true;
                 break;
             case MotionEvent.ACTION_UP:
-                if (mListener != null && mTouchDown)
-                    mListener.onTouch(false);
-                mTouchDown = false;
-                mScrollerTask.run();
+                if (listener != null && touchDown) {
+                    listener.onTouch(false);
+                }
+                touchDown = false;
+                scrollerTask.run();
+                break;
+            default:
+                // nothing to do
                 break;
         }
         return super.onTouchEvent(ev);
     }
 
     public void setListener(Listener listener) {
-        mListener = listener;
+        this.listener = listener;
     }
 
     public interface Listener {
-        public void onScroll(int scrollY, Direction direction);
+        void onScroll(int scrollY, Direction direction);
 
-        public void onTouch(boolean touching);
+        void onTouch(boolean touching);
 
-        public void onScrollStart();
+        void onScrollStart();
 
-        public void onScrollEnd();
+        void onScrollEnd();
     }
 
     @Override
-    protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
+    protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX,
+            int maxOverScrollY, boolean isTouchEvent) {
         return super.overScrollBy(
                 deltaX,
                 deltaY,
@@ -129,16 +138,16 @@ public class BottomSheetScrollView extends ScrollView {
                 isTouchEvent);
     }
 
-    Runnable mScrollerTask = new Runnable() {
+    Runnable scrollerTask = new Runnable() {
         public void run() {
             int newPosition = getScrollY();
-            if (mInitPosition - newPosition == 0) {
-                if (mListener != null) {
-                    mListener.onScrollEnd();
+            if (initPosition - newPosition == 0) {
+                if (listener != null) {
+                    listener.onScrollEnd();
                 }
             } else {
-                mInitPosition = getScrollY();
-                BottomSheetScrollView.this.postDelayed(mScrollerTask, CHECK_INTERVAL);
+                initPosition = getScrollY();
+                BottomSheetScrollView.this.postDelayed(scrollerTask, CHECK_INTERVAL);
             }
         }
     };

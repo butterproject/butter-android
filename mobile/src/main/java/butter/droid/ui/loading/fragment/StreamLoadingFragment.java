@@ -61,7 +61,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
 
         ((StreamLoadingActivity) context).getComponent()
                 .streamLoadingFragmentComponentBuilder()
-                .stramLoadingFragmentModule(new StreamLoadingFragmentModule(this))
+                .streamLoadingFragmentModule(new StreamLoadingFragmentModule(this))
                 .build()
                 .inject(this);
     }

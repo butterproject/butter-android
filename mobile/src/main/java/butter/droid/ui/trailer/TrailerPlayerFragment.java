@@ -31,8 +31,8 @@ import javax.inject.Inject;
 
 public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerPlayerView {
 
-    private final static String ARG_URI = "butter.droid.ui.trailer.TrailerPlayerFragment.uri";
-    private final static String ARG_MEDIA = "butter.droid.ui.trailer.TrailerPlayerFragment.media";
+    private static final String ARG_URI = "butter.droid.ui.trailer.TrailerPlayerFragment.uri";
+    private static final String ARG_MEDIA = "butter.droid.ui.trailer.TrailerPlayerFragment.media";
 
     @Inject TrailerPlayerPresenter presenter;
 

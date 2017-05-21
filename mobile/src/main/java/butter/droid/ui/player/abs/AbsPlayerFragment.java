@@ -131,7 +131,7 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         setupToolbar();
         setupDecorView();
         setupProgressBar();
-        setupControls();
+        initControlls();
         setProgressVisible(true);
 
         presenter.onViewCreated();
@@ -219,8 +219,8 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
             AnimUtils.fadeIn(toolbar);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
                 decorView.setSystemUiVisibility(uiOptions);
             } else {
                 getAppCompatActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -285,8 +285,8 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
     }
 
     @Override public void onSystemUiVisibilityChange(int visibility) {
-        if ((lastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0 &&
-                (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+        if ((lastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
+                && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
             showOverlay();
         }
 
@@ -390,7 +390,7 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         controlBar.setOnSeekBarChangeListener(controlBarListener);
     }
 
-    private void setupControls() {
+    private void initControlls() {
         if (LocaleUtils.isRTL(LocaleUtils.getCurrent())) {
             Drawable forward = forwardButton.getDrawable();
             Drawable rewind = rewindButton.getDrawable();

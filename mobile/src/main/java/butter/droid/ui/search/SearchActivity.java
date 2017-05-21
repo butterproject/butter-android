@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.activities;
+package butter.droid.ui.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,7 +29,6 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.ui.ButterBaseActivity;
-import butter.droid.ui.search.SearchFragment;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
 
@@ -60,7 +59,7 @@ public class SearchActivity extends ButterBaseActivity {
         ToolbarUtils.updateToolbarHeight(this, toolbar);
 
         searchview.onActionViewExpanded();
-        searchview.setOnQueryTextListener(mSearchListener);
+        searchview.setOnQueryTextListener(searchListener);
 
         //dont re add the fragment if it exists
         if (null != savedInstanceState) {
@@ -75,17 +74,19 @@ public class SearchActivity extends ButterBaseActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }
 
-    private SearchView.OnQueryTextListener mSearchListener = new SearchView.OnQueryTextListener() {
+    private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
         @Override
-        public boolean onQueryTextSubmit(String s) {
-            if (null == fragment) return false; //fragment not added yet.
-            fragment.triggerSearch(s);
+        public boolean onQueryTextSubmit(String string) {
+            if (null == fragment) {
+                return false; //fragment not added yet.
+            }
+            fragment.triggerSearch(string);
             return true;
         }
 
         @Override
-        public boolean onQueryTextChange(String s) {
-            return onQueryTextSubmit(s);
+        public boolean onQueryTextChange(String string) {
+            return onQueryTextSubmit(string);
         }
     };
 
@@ -98,9 +99,9 @@ public class SearchActivity extends ButterBaseActivity {
                 //to fade out the activity
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
-
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public static Intent getIntent(Context context) {

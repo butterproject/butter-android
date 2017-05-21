@@ -18,14 +18,15 @@ import butterknife.ButterKnife;
 
 public class OptionSelector extends LinearLayout {
 
-    View mView;
-    @BindView(android.R.id.text1) TextView mText;
-    @BindView(android.R.id.icon) AppCompatImageView mIcon;
+    View view;
+    @BindView(android.R.id.text1) TextView text;
+    @BindView(android.R.id.icon) AppCompatImageView icon;
 
-    private FragmentManager mFragmentManager;
-    private String[] mData = new String[0];
-    private int mDefaultOption = -1, mTitle;
-    private SelectorListener mListener;
+    private FragmentManager fragmentManager;
+    private String[] data = new String[0];
+    private int defaultOption = -1;
+    private int title;
+    private SelectorListener listener;
 
     public OptionSelector(Context context) {
         super(context);
@@ -46,69 +47,73 @@ public class OptionSelector extends LinearLayout {
         setFocusable(true);
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = layoutInflater.inflate(R.layout.optionselector, this);
-        ButterKnife.bind(this, mView);
+        view = layoutInflater.inflate(R.layout.optionselector, this);
+        ButterKnife.bind(this, view);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OptionSelector, defStyle, 0);
+        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.OptionSelector, defStyle, 0);
 
-        String str = a.getString(R.styleable.OptionSelector_optionText);
+        String str = attr.getString(R.styleable.OptionSelector_optionText);
         if (!TextUtils.isEmpty(str)) {
-            mText.setText(str);
+            text.setText(str);
             setContentDescription(str);
         }
 
-        int res = a.getResourceId(R.styleable.OptionSelector_optionIcon, R.mipmap.ic_launcher);
-        mIcon.setImageResource(res);
+        int res = attr.getResourceId(R.styleable.OptionSelector_optionIcon, R.mipmap.ic_launcher);
+        icon.setImageResource(res);
 
-        setOnClickListener(mOnClickListener);
+        setOnClickListener(onClickListener);
 
-        a.recycle();
+        attr.recycle();
     }
 
     public void setText(String str) {
-        mText.setText(str);
+        text.setText(str);
     }
 
     public void setText(int strRes) {
-        mText.setText(strRes);
+        text.setText(strRes);
     }
 
     public void setTitle(int strRes) {
-        mTitle = strRes;
+        title = strRes;
     }
 
     public void setIcon(int iconRes) {
-        mIcon.setImageResource(iconRes);
+        icon.setImageResource(iconRes);
     }
 
     public void setListener(SelectorListener listener) {
-        mListener = listener;
+        this.listener = listener;
     }
 
     public void setFragmentManager(FragmentManager fragmentManager) {
-        mFragmentManager = fragmentManager;
+        this.fragmentManager = fragmentManager;
     }
 
     public void setData(String[] data) {
-        mData = data;
+        this.data = data;
     }
 
     public void setDefault(int defaultOption) {
-        mDefaultOption = defaultOption;
+        this.defaultOption = defaultOption;
     }
 
-    OnClickListener mOnClickListener = new OnClickListener() {
+    OnClickListener onClickListener = new OnClickListener() {
         @Override
-        public void onClick(View v) {
-            if (mFragmentManager == null) return;
-            StringArraySelectorDialogFragment.showSingleChoice(mFragmentManager, mTitle, mData, mDefaultOption,
+        public void onClick(View view) {
+            if (fragmentManager == null) {
+                return;
+            }
+
+            StringArraySelectorDialogFragment.showSingleChoice(fragmentManager, title, data, defaultOption,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
-                            if (mListener != null)
-                                mListener.onSelectionChanged(position, mData[position]);
-                            mDefaultOption = position;
-                            setText(mData[position]);
+                            if (listener != null) {
+                                listener.onSelectionChanged(position, data[position]);
+                            }
+                            defaultOption = position;
+                            setText(data[position]);
                             dialog.dismiss();
                         }
                     }
@@ -117,7 +122,7 @@ public class OptionSelector extends LinearLayout {
     };
 
     public interface SelectorListener {
-        public void onSelectionChanged(int position, String value);
+        void onSelectionChanged(int position, String value);
     }
 
 }

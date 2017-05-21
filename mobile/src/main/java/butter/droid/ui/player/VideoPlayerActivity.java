@@ -26,17 +26,17 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.fragments.dialog.OptionDialogFragment;
+import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.player.stream.PlayerFragment;
 import javax.inject.Inject;
 
 public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlayerView {
 
-    private final static String EXTRA_STREAM_INFO = "butter.droid.ui.player.VideoPlayerActivity.streamInfo";
-    private final static String EXTRA_RESUME_POSITION = "butter.droid.ui.player.VideoPlayerActivity.resumePosition";
+    private static final String EXTRA_STREAM_INFO = "butter.droid.ui.player.VideoPlayerActivity.streamInfo";
+    private static final String EXTRA_RESUME_POSITION = "butter.droid.ui.player.VideoPlayerActivity.resumePosition";
 
-    private final static String TAG_VIDEO_FRAGMENT = "butter.droid.ui.player.VideoPlayerActivity.videoFragment";
+    private static final String TAG_VIDEO_FRAGMENT = "butter.droid.ui.player.VideoPlayerActivity.videoFragment";
 
     @Inject VideoPlayerPresenter presenter;
 
@@ -154,10 +154,10 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
             throw new IllegalArgumentException("StreamInfo must not be null");
         }
 
-        Intent i = new Intent(context, VideoPlayerActivity.class);
-        i.putExtra(EXTRA_STREAM_INFO, info);
-        i.putExtra(EXTRA_RESUME_POSITION, resumePosition);
-        return i;
+        Intent intent = new Intent(context, VideoPlayerActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
+        intent.putExtra(EXTRA_RESUME_POSITION, resumePosition);
+        return intent;
     }
 
 }

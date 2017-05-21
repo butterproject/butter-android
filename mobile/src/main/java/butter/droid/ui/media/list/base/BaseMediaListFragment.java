@@ -47,8 +47,8 @@ import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
-import butter.droid.fragments.dialog.LoadingDetailDialogFragment.Callback;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.manager.paging.IndexPagingListener;
 import butter.droid.manager.paging.PagingManager;
 import butter.droid.ui.media.detail.MediaDetailActivity;
@@ -81,7 +81,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
     @Inject BaseMediaListPresenter presenter;
 
-    private Context mContext;
+    private Context context;
     private MediaGridAdapter adapter;
     private GridLayoutManager layoutManager;
     private Integer columns = 2;
@@ -95,14 +95,14 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContext = getActivity();
+        context = getActivity();
 
         rootView = inflater.inflate(R.layout.fragment_media, container, false);
         ButterKnife.bind(this, rootView);
 
         columns = getResources().getInteger(R.integer.overview_cols);
 
-        layoutManager = new GridLayoutManager(mContext, columns);
+        layoutManager = new GridLayoutManager(context, columns);
         recyclerView.setLayoutManager(layoutManager);
 
         return rootView;
@@ -114,7 +114,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
         recyclerView.setHasFixedSize(true);
         //adapter should only ever be created once on fragment initialise.
-        adapter = new MediaGridAdapter(mContext, columns);
+        adapter = new MediaGridAdapter(context, columns);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), this));
 

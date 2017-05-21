@@ -15,12 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.fragments.dialog;
+package butter.droid.ui.preferences.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
@@ -35,10 +36,10 @@ import butterknife.ButterKnife;
 
 public class ColorPickerDialogFragment extends DialogFragment {
 
-    public static final String TITLE = "title";
-    public static final String DEFAULT_VALUE = "default_val";
+    private static final String TITLE = "butter.droid.ui.preferences.dialog.ColorPickerDialogFragment.title";
+    private static final String DEFAULT_VALUE = "butter.droid.ui.preferences.dialog.ColorPickerDialogFragment.default_val";
 
-    private ResultListener mOnResultListener;
+    private ResultListener onResultListener;
 
     @BindView(R.id.picker) ColorPicker colorPicker;
     @BindView(R.id.svbar) SVBar svBar;
@@ -55,7 +56,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if (getArguments() == null || !getArguments().containsKey(TITLE) || mOnResultListener == null) {
+        if (getArguments() == null || !getArguments().containsKey(TITLE) || onResultListener == null) {
             return builder.create();
         }
 
@@ -73,7 +74,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mOnResultListener.onNewValue(colorPicker.getColor());
+                                onResultListener.onNewValue(colorPicker.getColor());
                                 dialog.dismiss();
                             }
                         })
@@ -83,17 +84,28 @@ public class ColorPickerDialogFragment extends DialogFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
-                        }
-                );
+                        });
 
         return builder.create();
     }
 
     public void setOnResultListener(ResultListener resultListener) {
-        mOnResultListener = resultListener;
+        onResultListener = resultListener;
+    }
+
+    public static ColorPickerDialogFragment newInstance(String title, @ColorInt int value, ResultListener listener) {
+        Bundle args = new Bundle();
+        args.putString(ColorPickerDialogFragment.TITLE, title);
+        args.putInt(ColorPickerDialogFragment.DEFAULT_VALUE, value);
+
+        ColorPickerDialogFragment fragment = new ColorPickerDialogFragment();
+        fragment.setArguments(args);
+        fragment.setOnResultListener(listener);
+        return fragment;
     }
 
     public interface ResultListener {
         void onNewValue(int value);
     }
+
 }

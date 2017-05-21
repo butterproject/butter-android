@@ -132,7 +132,7 @@
 		</activity>
 
         <activity
-            android:name="butter.droid.activities.SearchActivity"
+            android:name="butter.droid.ui.search.SearchActivity"
             android:theme="@style/Theme.Butter.Search" />
 
         <activity android:name="butter.droid.ui.terms.TermsActivity" />

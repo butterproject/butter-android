@@ -32,7 +32,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.providers.media.models.Show;
-import butter.droid.fragments.dialog.SynopsisDialogFragment;
+import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,9 +50,9 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
     @BindView(R.id.meta) TextView tvMetaData;
     @BindView(R.id.synopsis) TextView tvSynopsis;
     @BindView(R.id.rating) RatingBar rbRating;
-    @BindView(R.id.read_more) Button mReadMore;
-    @BindView(R.id.info_buttons) LinearLayout vInfoButtons;
-    @BindView(R.id.magnet) @Nullable ImageButton mOpenMagnet;
+    @BindView(R.id.read_more) Button readMore;
+    @BindView(R.id.info_buttons) LinearLayout infoButtons;
+    @BindView(R.id.magnet) @Nullable ImageButton openMagnet;
     @Nullable @BindView(R.id.cover_image) ImageView coverImage;
 
     @Override
@@ -85,8 +85,8 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        if (mOpenMagnet != null) {
-            mOpenMagnet.setVisibility(View.GONE);
+        if (openMagnet != null) {
+            openMagnet.setVisibility(View.GONE);
         }
 
         presenter.onViewCreated();
@@ -122,7 +122,9 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
             public void run() {
                 boolean ellipsized = false;
                 Layout layout = tvSynopsis.getLayout();
-                if (layout == null) return;
+                if (layout == null) {
+                    return;
+                }
                 int lines = layout.getLineCount();
                 if (lines > 0) {
                     int ellipsisCount = layout.getEllipsisCount(lines - 1);
@@ -130,14 +132,14 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
                         ellipsized = true;
                     }
                 }
-                vInfoButtons.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+                infoButtons.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
             }
         });
     }
 
     @Override public void hideSynopsis() {
         tvSynopsis.setVisibility(View.GONE);
-        vInfoButtons.setVisibility(View.GONE);
+        infoButtons.setVisibility(View.GONE);
     }
 
     @Override public void openSynopsisDialog(String synopsis) {
@@ -147,9 +149,9 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
         }
 
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
-        Bundle b = new Bundle();
-        b.putString("text", synopsis);
-        synopsisDialogFragment.setArguments(b);
+        Bundle args = new Bundle();
+        args.putString("text", synopsis);
+        synopsisDialogFragment.setArguments(args);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 

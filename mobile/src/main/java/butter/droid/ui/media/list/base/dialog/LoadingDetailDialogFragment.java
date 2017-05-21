@@ -15,48 +15,36 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.fragments.dialog;
+package butter.droid.ui.media.list.base.dialog;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.ThreadUtils;
+import java.util.ArrayList;
+import javax.inject.Inject;
 
 public class LoadingDetailDialogFragment extends DialogFragment {
 
+    public static final String ARG_MEDIA = "butter.droid.ui.media.list.base.dialog.butter.droid.ui.media.list.base.dialog.media_item";
+
     @Inject ProviderManager providerManager;
 
-    private Callback mCallback;
+    private Callback callback;
 
-    public static final String EXTRA_MEDIA = "media_item";
-    private Boolean mSavedInstanceState = false;
+    private Boolean savedInstanceState = false;
 
-    public static LoadingDetailDialogFragment newInstance(Integer position) {
-        LoadingDetailDialogFragment frag = new LoadingDetailDialogFragment();
-        Bundle args = new Bundle();
-        args.putInt(EXTRA_MEDIA, position);
-        frag.setArguments(args);
-        return frag;
-    }
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     * on create view
-     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_Butter)).inflate(R.layout
@@ -71,7 +59,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
                 .getComponent()
                 .inject(this);
 
-        mSavedInstanceState = false;
+        this.savedInstanceState = false;
         setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Transparent);
     }
 
@@ -81,49 +69,58 @@ public class LoadingDetailDialogFragment extends DialogFragment {
         providerManager.getCurrentMediaProvider().cancel();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (null == getTargetFragment())
+    @Override public void onAttach(final Context context) {
+        super.onAttach(context);
+
+        Fragment targetFragment = getTargetFragment();
+        if (targetFragment == null) {
             throw new IllegalArgumentException("target fragment must be set");
-        if (getTargetFragment() instanceof Callback) mCallback = (Callback) getTargetFragment();
-        else throw new IllegalArgumentException("target fragment must implement callbacks");
+        } else if (targetFragment instanceof Callback) {
+            callback = (Callback) targetFragment;
+        } else {
+            throw new IllegalArgumentException("target fragment must implement callbacks");
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayList<Media> currentList = mCallback.getCurrentList();
-        int position = getArguments().getInt(EXTRA_MEDIA);
+        ArrayList<Media> currentList = callback.getCurrentList();
+        int position = getArguments().getInt(ARG_MEDIA);
         final Media media = currentList.get(position);
         providerManager.getCurrentMediaProvider().getDetail(currentList, position, new MediaProvider.Callback() {
                     @Override
                     public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                        if (!isAdded()) return;
-                        if (items.size() <= 0) return;
+                        if (!isAdded() || items.size() <= 0) {
+                            return;
+                        }
 
                         final Media item = items.get(0);
                         item.color = media.color;
                         ThreadUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mCallback.onDetailLoadSuccess(item);
-                                if (!mSavedInstanceState) dismiss();
+                                callback.onDetailLoadSuccess(item);
+                                if (!LoadingDetailDialogFragment.this.savedInstanceState) {
+                                    dismiss();
+                                }
                             }
                         });
 
                     }
 
                     @Override
-                    public void onFailure(Exception e) {
-                        if (!e.getMessage().equals("Canceled")) {
-                            e.printStackTrace();
+                    public void onFailure(Exception ex) {
+                        if (!ex.getMessage().equals("Canceled")) {
+                            ex.printStackTrace();
                             ThreadUtils.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mCallback.onDetailLoadFailure();
-                                    if (!mSavedInstanceState) dismiss();
+                                    callback.onDetailLoadFailure();
+                                    if (!LoadingDetailDialogFragment.this.savedInstanceState) {
+                                        dismiss();
+                                    }
                                 }
                             });
                         }
@@ -136,7 +133,16 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mSavedInstanceState = true;
+        savedInstanceState = true;
+    }
+
+    public static LoadingDetailDialogFragment newInstance(Integer position) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_MEDIA, position);
+
+        LoadingDetailDialogFragment fragment = new LoadingDetailDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public interface Callback {

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.activities.base;
+package butter.droid.ui;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;

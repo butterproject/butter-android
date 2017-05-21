@@ -42,7 +42,7 @@ import butter.droid.ui.ButterBaseActivity;
 
 public class StreamLoadingActivity extends ButterBaseActivity implements StreamLoadingView {
 
-    private final static String EXTRA_INFO = "butter.droid.ui.loading.StreamLoadingActivity.info";
+    private static final String EXTRA_INFO = "butter.droid.ui.loading.StreamLoadingActivity.info";
 
     @Inject StreamLoadingPresenter presenter;
 
@@ -65,7 +65,9 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
         super.onCreate(savedInstanceState, 0);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        if (!getIntent().hasExtra(EXTRA_INFO)) finish();
+        if (!getIntent().hasExtra(EXTRA_INFO)) {
+            finish();
+        }
 
         StreamInfo info = getIntent().getParcelableExtra(EXTRA_INFO);
 
@@ -111,19 +113,19 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
     }
 
     public static Intent startActivity(Activity activity, StreamInfo info) {
-        Intent i = new Intent(activity, StreamLoadingActivity.class);
-        i.putExtra(EXTRA_INFO, info);
-        activity.startActivity(i);
-        return i;
+        Intent intent = new Intent(activity, StreamLoadingActivity.class);
+        intent.putExtra(EXTRA_INFO, info);
+        activity.startActivity(intent);
+        return intent;
     }
 
     public static Intent startActivity(Activity activity, StreamInfo info, Pair<View, String>... elements) {
-        Intent i = new Intent(activity, StreamLoadingActivity.class);
-        i.putExtra(EXTRA_INFO, info);
+        Intent intent = new Intent(activity, StreamLoadingActivity.class);
+        intent.putExtra(EXTRA_INFO, info);
 
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(activity, elements);
-        ActivityCompat.startActivity(activity, i, options.toBundle());
-        return i;
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
+        return intent;
     }
 }

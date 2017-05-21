@@ -23,7 +23,7 @@ import javax.inject.Inject;
 @Reusable
 public class AudioManager {
 
-    private final static int AUDIO_STREAM = android.media.AudioManager.STREAM_MUSIC;
+    private static final int AUDIO_STREAM = android.media.AudioManager.STREAM_MUSIC;
 
     private final android.media.AudioManager audioManager;
 

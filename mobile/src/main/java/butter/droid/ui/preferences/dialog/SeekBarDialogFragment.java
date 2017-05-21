@@ -1,54 +1,69 @@
-package butter.droid.fragments.dialog;
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import android.annotation.TargetApi;
+package butter.droid.ui.preferences.dialog;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import butter.droid.R;
 
 public class SeekBarDialogFragment extends DialogFragment {
 
-    public static final String TITLE = "title";
-    public static final String MAX_VALUE = "max_val";
-    public static final String MIN_VALUE = "min_val";
-    public static final String DEFAULT_VALUE = "default_val";
+    private static final String ARG_TITLE = "butter.droid.ui.preferences.dialog.SeekBarDialogFragment.title";
+    private static final String ARG_MAX_VALUE = "butter.droid.ui.preferences.dialog.SeekBarDialogFragment.max_val";
+    private static final String ARG_MIN_VALUE = "butter.droid.ui.preferences.dialog.SeekBarDialogFragment.min_val";
+    private static final String ARG_DEFAULT_VALUE = "butter.droid.ui.preferences.dialog.SeekBarDialogFragment.default_val";
 
-    private ResultListener mOnResultListener;
+    private ResultListener onResultListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if (getArguments() == null || !getArguments().containsKey(MAX_VALUE) || !getArguments().containsKey(MIN_VALUE) || !getArguments().containsKey(TITLE) || mOnResultListener == null) {
+        Bundle arguments = getArguments();
+        if (arguments == null || !arguments.containsKey(ARG_MAX_VALUE) || !arguments.containsKey(ARG_MIN_VALUE)
+                || !arguments.containsKey(ARG_TITLE) || onResultListener == null) {
             return builder.create();
         }
 
-
-        int defaultValue =  getArguments().getInt(DEFAULT_VALUE, getArguments().getInt(MAX_VALUE)/2);
+        final int defaultValue = arguments.getInt(ARG_DEFAULT_VALUE, arguments.getInt(ARG_MAX_VALUE) / 2);
 
         LinearLayout layout = new LinearLayout(getActivity());
         layout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(params);
 
         final SeekBar seekbar = new SeekBar(getActivity());
         seekbar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        seekbar.setMax(getArguments().getInt(MAX_VALUE));
+        seekbar.setMax(arguments.getInt(ARG_MAX_VALUE));
         seekbar.setProgress(defaultValue);
 
         final TextView textSpeed = new TextView(getActivity());
@@ -59,8 +74,8 @@ public class SeekBarDialogFragment extends DialogFragment {
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                textSpeed.setText(i + " Kb/s");
+            public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
+                textSpeed.setText(position + " Kb/s");
             }
 
             @Override
@@ -79,12 +94,12 @@ public class SeekBarDialogFragment extends DialogFragment {
 
         builder
                 .setView(layout)
-                .setTitle(getArguments().getString(TITLE))
+                .setTitle(arguments.getString(ARG_TITLE))
                 .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mOnResultListener.onNewValue(seekbar.getProgress() * 1000);
+                                onResultListener.onNewValue(seekbar.getProgress() * 1000);
                                 dialog.dismiss();
                             }
                         })
@@ -94,17 +109,29 @@ public class SeekBarDialogFragment extends DialogFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
-                        }
-                );
+                        });
 
         return builder.create();
     }
 
     public void setOnResultListener(ResultListener resultListener) {
-        mOnResultListener = resultListener;
+        onResultListener = resultListener;
+    }
+
+    public static SeekBarDialogFragment newInstance(String title, int max, int min, int defaultValue) {
+        Bundle args = new Bundle();
+        args.putString(ARG_TITLE, title);
+        args.putInt(ARG_MAX_VALUE, max);
+        args.putInt(ARG_MIN_VALUE, min);
+        args.putInt(ARG_DEFAULT_VALUE, defaultValue);
+
+        SeekBarDialogFragment fragment = new SeekBarDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public interface ResultListener {
+
         void onNewValue(int value);
     }
 
