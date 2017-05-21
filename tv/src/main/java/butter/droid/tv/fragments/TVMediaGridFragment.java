@@ -199,9 +199,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-//            if (overviewItem.isLoading()) return;
-
-            mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
+            mBackgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
         }
 
         //really hacky way of making and 'endless' adapter
