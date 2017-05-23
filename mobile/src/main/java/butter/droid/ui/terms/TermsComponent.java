@@ -20,9 +20,7 @@ package butter.droid.ui.terms;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = TermsModule.class
-)
+@Subcomponent(modules = TermsModule.class)
 @ActivityScope
 public interface TermsComponent {
 

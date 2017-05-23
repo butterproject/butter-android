@@ -17,114 +17,43 @@
 
 package butter.droid.tv.ui.trailer;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.ui.dialog.DialogFactory;
-import butter.droid.base.ui.dialog.DialogFactory.Action;
-import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
-import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
-import butter.droid.tv.fragments.TVPlaybackOverlayFragment;
-import butter.droid.tv.fragments.TVVideoPlayerFragment;
-import javax.inject.Inject;
 
-public class TVTrailerPlayerActivity extends TVBaseActivity implements TVVideoPlayerFragment.Callback, TVTrailerPlayerView {
+public class TVTrailerPlayerActivity extends TVBaseActivity {
 
-    private static final String EXTRA_LOCATION = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_LOCATION";
-    private static final String EXTRA_DATA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_DATA";
-
-    @Inject
-    TVTrailerPlayerPresenter presenter;
-
-    private TVVideoPlayerFragment playerFragment;
-    private TVPlaybackOverlayFragment tvPlaybackOverlayFragment;
+    private static final String EXTRA_URI = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_URI";
+    private static final String EXTRA_MEDIA = "butter.droid.tv.ui.trailer.TVTrailerPlayerActivity.EXTRA_MEDIA";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
                 .getComponent()
-                .tvTrailerPlayerComponentBuilder()
-                .tvTrailerModule(new TVTrailerPlayerModule(this))
-                .build()
                 .inject(this);
 
-        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+        super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
-        final Media media = intent.getParcelableExtra(EXTRA_DATA);
-        final String youTubeUrl = intent.getStringExtra(EXTRA_LOCATION);
+        final Media media = intent.getParcelableExtra(EXTRA_MEDIA);
+        final String youtubeUrl = intent.getStringExtra(EXTRA_URI);
 
-        final FragmentManager fm = getSupportFragmentManager();
-        this.playerFragment = (TVVideoPlayerFragment) fm.findFragmentById(R.id.fragment);
-        this.tvPlaybackOverlayFragment = (TVPlaybackOverlayFragment) fm.findFragmentById(R.id.playback_overlay_fragment);
-
-        presenter.onCreate(media, youTubeUrl);
-    }
-
-    @Override
-    protected void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (savedInstanceState == null) {
+            TVTrailerPlayerFragment fragment = TVTrailerPlayerFragment.newInstance(media, youtubeUrl);
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, fragment)
+                    .commit();
         }
-    }
 
-    @Override
-    public Long getResumePosition() {
-        return 0L;
-    }
-
-    @Override
-    public StreamInfo getInfo() {
-        return presenter.getStreamInfo();
-    }
-
-    @Override
-    public TorrentService getService() {
-        return null;
-    }
-
-    @Override
-    public void onDisableVideoPlayerSubsButton() {
-        tvPlaybackOverlayFragment.toggleSubtitleAction(false);
-    }
-
-    @Override
-    public void onNotifyMediaReady() {
-        playerFragment.onMediaReady();
-    }
-
-    @Override
-    public void onDisplayErrorVideoDialog() {
-        DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {
-            @Override
-            public void onButtonClick(final Dialog which, final @Action int action) {
-                finish();
-            }
-        }).show();
     }
 
     public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
-        intent.putExtra(EXTRA_DATA, media);
-        intent.putExtra(EXTRA_LOCATION, url);
+        intent.putExtra(EXTRA_MEDIA, media);
+        intent.putExtra(EXTRA_URI, url);
         return intent;
     }
 }

@@ -24,26 +24,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.List;
-
 import butter.droid.R;
 import butter.droid.ui.main.genre.list.GenreAdapter.ViewHolder;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.List;
 
 public class GenreAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private List<UiGenre> items;
 
-    private int mSelectedColor, mNormalColor;
+    private int selectedColor;
+    private int normalColor;
+
     public GenreAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
 
-        mSelectedColor = ContextCompat.getColor(context, R.color.selectable_focused);
-        mNormalColor = ContextCompat.getColor(context, android.R.color.transparent);
+        selectedColor = ContextCompat.getColor(context, R.color.selectable_focused);
+        normalColor = ContextCompat.getColor(context, android.R.color.transparent);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GenreAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override public void onBindViewHolder(ViewHolder holder, int position) {
         UiGenre item = getItem(position);
 
-        holder.itemView.setBackgroundColor(item.isSelected() ? mSelectedColor : mNormalColor);
+        holder.itemView.setBackgroundColor(item.isSelected() ? selectedColor : normalColor);
         holder.text1.setText(item.getLabel());
     }
 
@@ -85,9 +85,9 @@ public class GenreAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         @BindView(android.R.id.text1) TextView text1;
 
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
+        public ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
 
     }

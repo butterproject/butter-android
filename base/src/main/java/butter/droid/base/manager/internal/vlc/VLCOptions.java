@@ -21,14 +21,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
+import java.util.ArrayList;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.util.HWDecoderUtil;
 import org.videolan.libvlc.util.VLCUtil;
-
-import java.util.ArrayList;
-
-import butter.droid.base.content.preferences.PreferencesHandler;
 
 
 public class VLCOptions {
@@ -122,29 +118,24 @@ public class VLCOptions {
         return ret;
     }
 
-    public static void setMediaOptions(Media media, PreferencesHandler preferencesHandler, int flags) {
-        boolean noHardwareAcceleration = (flags & MEDIA_NO_HWACCEL) != 0;
-        boolean noVideo = (flags & MEDIA_VIDEO) == 0;
-        final boolean paused = (flags & MEDIA_PAUSED) != 0;
-        int hardwareAcceleration = HW_ACCELERATION_DISABLED;
+    public static void setMediaOptions(Media media, boolean video, boolean paused, int hardwareAcceleration) {
 
-        if (!noHardwareAcceleration) {
-            hardwareAcceleration = preferencesHandler.getHwAcceleration();
+        if (!video) {
+            media.addOption(":no-video");
         }
 
-        if (hardwareAcceleration == HW_ACCELERATION_DISABLED)
+        if (paused) {
+            media.addOption(":start-paused");
+        }
+
+        if (hardwareAcceleration == HW_ACCELERATION_DISABLED) {
             media.setHWDecoderEnabled(false, false);
-        else if (hardwareAcceleration == HW_ACCELERATION_FULL || hardwareAcceleration == HW_ACCELERATION_DECODING) {
+        } else if (hardwareAcceleration == HW_ACCELERATION_FULL || hardwareAcceleration == HW_ACCELERATION_DECODING) {
             media.setHWDecoderEnabled(true, true);
             if (hardwareAcceleration == HW_ACCELERATION_DECODING) {
                 media.addOption(":no-mediacodec-dr");
                 media.addOption(":no-omxil-dr");
             }
         } /* else automatic: use default options */
-
-        if (noVideo)
-            media.addOption(":no-video");
-        if (paused)
-            media.addOption(":start-paused");
     }
 }

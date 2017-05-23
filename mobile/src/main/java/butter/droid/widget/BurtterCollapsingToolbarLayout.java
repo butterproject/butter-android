@@ -50,13 +50,13 @@ public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
         setTitleEnabled(false);
 
-        TypedArray a = context.obtainStyledAttributes(attrs,
+        TypedArray attr = context.obtainStyledAttributes(attrs,
                 R.styleable.CollapsingToolbarLayout, 0,
                 R.style.Widget_Design_CollapsingToolbar);
 
-        toolbarId = a.getResourceId(android.support.design.R.styleable.CollapsingToolbarLayout_toolbarId, -1);
+        toolbarId = attr.getResourceId(android.support.design.R.styleable.CollapsingToolbarLayout_toolbarId, -1);
 
-        a.recycle();
+        attr.recycle();
 
         scrimsAreShown = true;
 

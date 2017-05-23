@@ -20,9 +20,7 @@ package butter.droid.ui.media.detail.movie;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = MovieDetailModule.class
-)
+@Subcomponent(modules = MovieDetailModule.class)
 @FragmentScope
 public interface MovieDetailComponent {
 

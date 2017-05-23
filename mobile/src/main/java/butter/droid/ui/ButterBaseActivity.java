@@ -29,13 +29,12 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import butter.droid.R;
-import butter.droid.activities.base.TorrentBaseActivity;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.BeamDeviceSelectorDialogFragment;
+import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
 
 public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
 
@@ -49,7 +48,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState, layoutId);
 
-        if(!VersionUtils.isUsingCorrectBuild()) {
+        if (!VersionUtils.isUsingCorrectBuild()) {
             new AlertDialog.Builder(this)
                     .setMessage(butter.droid.base.R.string.wrong_abi)
                     .setCancelable(false)
@@ -121,9 +120,10 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
                 return true;
             case R.id.action_casting:
                 BeamDeviceSelectorDialogFragment.show(getFragmentManager());
-                break;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -139,15 +139,15 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
         @Override
         @DebugLog
-        public void onFailure(Exception e) {
-            if (e.getMessage().equals("Canceled")) {
+        public void onFailure(Exception ex) {
+            if (ex.getMessage().equals("Canceled")) {
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showLoaded();
                     }
                 });
-            } else if (e.getMessage() != null && e.getMessage().equals(
+            } else if (ex.getMessage() != null && ex.getMessage().equals(
                     ButterApplication.getAppContext().getString(R.string.movies_error))) {
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
@@ -158,7 +158,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                     }
                 });
             } else {
-                Timber.e(e.getMessage());
+                Timber.e(ex.getMessage());
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

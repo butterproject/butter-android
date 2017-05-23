@@ -40,7 +40,7 @@ import javax.inject.Inject;
 
 public class ShowDetailFragment extends Fragment implements ShowDetailView {
 
-    private final static String ARG_SHOW = "butter.droid.ui.media.detail.show.ShowDetailFragment.show";
+    private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.ShowDetailFragment.show";
 
     @Inject ShowDetailPresenter presenter;
 

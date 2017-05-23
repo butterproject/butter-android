@@ -18,10 +18,6 @@
 package butter.droid.ui.main.navigation;
 
 import android.os.Bundle;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
@@ -32,6 +28,8 @@ import butter.droid.ui.main.navigation.NavigationDrawerFragment.HeaderNavDrawerI
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.ProviderNavDrawerItem;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.ScreenNavDrawerItem;
 import butter.droid.ui.preferences.PreferencesActivity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter {
 
@@ -85,6 +83,8 @@ public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter 
             case AbsNavDrawerItem.TYPE_SCREEN:
                 parentPresenter.openMenuActivity(((ScreenNavDrawerItem) item).getActivityClass());
                 break;
+            default:
+                throw new IllegalStateException("Unknown item type");
         }
     }
 

@@ -20,7 +20,6 @@ package butter.droid.tv.activities.base;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import butter.droid.base.ButterApplication;
@@ -34,13 +33,11 @@ import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import javax.inject.Inject;
 
-public abstract class TVTorrentBaseActivity extends FragmentActivity
-    implements TorrentListener, TorrentActivity, ServiceConnection {
+public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity, ServiceConnection {
 
     @Inject PreferencesHandler preferencesHandler;
 
-    protected Handler mHandler;
-    protected TorrentService mService;
+    protected TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
         String language = preferencesHandler.getLocale();
@@ -51,8 +48,6 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
             setContentView(layoutId);
             ButterKnife.bind(this);
         }
-
-        mHandler = new Handler(getMainLooper());
     }
 
     @Override
@@ -64,8 +59,8 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (null != mService) {
-            mService.removeListener(this);
+        if (null != torrentStream) {
+            torrentStream.removeListener(this);
             unbindService(this);
         }
     }
@@ -82,29 +77,29 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity
     }
 
     public TorrentService getTorrentService() {
-        return mService;
+        return torrentStream;
     }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mService = ((TorrentService.ServiceBinder) service).getService();
-        mService.addListener(this);
-        mService.setCurrentActivity(this);
-        onTorrentServiceConnected();
+        torrentStream = ((TorrentService.ServiceBinder) service).getService();
+        torrentStream.addListener(this);
+        torrentStream.setCurrentActivity(this);
+        onTorrentServiceConnected(torrentStream);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        mService.removeListener(this);
-        mService = null;
-        onTorrentServiceDisconnected();
+        torrentStream.removeListener(this);
+        onTorrentServiceDisconnected(torrentStream);
+        torrentStream = null;
     }
 
-    public void onTorrentServiceConnected() {
+    public void onTorrentServiceConnected(final TorrentService service) {
         // Placeholder
     }
 
-    public void onTorrentServiceDisconnected() {
+    public void onTorrentServiceDisconnected(final TorrentService service) {
         // Placeholder
     }
 

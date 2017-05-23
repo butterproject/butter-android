@@ -122,7 +122,7 @@ public class MainPresenterImpl implements MainPresenter {
             // TODO: 11/29/16 Show progress while subtitles are loading
 
             providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                @Override public void onFailure(Call call, IOException e) {
+                @Override public void onFailure(Call call, IOException ex) {
                     openStream(new StreamInfo(media, null, null, null, null, file));
                 }
 

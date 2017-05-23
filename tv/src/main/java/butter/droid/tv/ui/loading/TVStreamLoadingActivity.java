@@ -28,6 +28,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
+import butter.droid.base.torrent.TorrentService;
 import javax.inject.Inject;
 
 import butter.droid.base.providers.media.models.Show;
@@ -72,14 +73,14 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
 	}
 
 	@Override
-    public void onTorrentServiceDisconnected() {
+    public void onTorrentServiceDisconnected(final TorrentService service) {
 		if (null != fragment) {
 			fragment.onTorrentServiceDisconnected();
 		}
 	}
 
 	@Override
-	public void onTorrentServiceConnected() {
+	public void onTorrentServiceConnected(final TorrentService service) {
 		if (null != fragment) {
 			fragment.onTorrentServiceConnected(getTorrentService());
 		}

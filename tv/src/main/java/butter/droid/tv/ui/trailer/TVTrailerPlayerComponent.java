@@ -17,21 +17,17 @@
 
 package butter.droid.tv.ui.trailer;
 
-import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = TVTrailerPlayerModule.class
-)
-@ActivityScope
+@Subcomponent(modules = TVTrailerPlayerModule.class)
+@FragmentScope
 public interface TVTrailerPlayerComponent {
 
-    void inject(TVTrailerPlayerActivity activity);
+    void inject(TVTrailerPlayerFragment fragment);
 
-    @Subcomponent.Builder
-    interface Builder {
-
-        Builder tvTrailerModule(TVTrailerPlayerModule module);
+    @Subcomponent.Builder interface Builder {
+        Builder trailerPlayerModule(TVTrailerPlayerModule module);
 
         TVTrailerPlayerComponent build();
     }

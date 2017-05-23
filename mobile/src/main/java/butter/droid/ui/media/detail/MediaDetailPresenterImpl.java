@@ -61,8 +61,8 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
     }
 
     @Override public void playMediaClicked() {
-        if (preferencesHandler.wifiOnly() && !networkManager.isWifiConnected() &&
-                !networkManager.isEthernetConnected() && networkManager.isNetworkConnected()) {
+        if (preferencesHandler.wifiOnly() && !networkManager.isWifiConnected() && !networkManager.isEthernetConnected()
+                && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
             String streamUrl = ((Movie) media).torrents.get(selectedQuality).url;

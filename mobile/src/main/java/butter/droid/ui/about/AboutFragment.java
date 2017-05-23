@@ -69,8 +69,7 @@ public class AboutFragment extends Fragment implements AboutView {
             R.id.git_button,
             R.id.butter_button,
             R.id.discuss_button,
-            R.id.twitter_button
-    })
+            R.id.twitter_button})
     void onLogoClick(View view) {
         presenter.aboutButtonClicked(view.getId());
     }

@@ -17,12 +17,15 @@
 
 package butter.droid.base;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.view.WindowManager;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.VodoProvider;
@@ -58,4 +61,10 @@ public interface BaseInternalComponent {
     WifiManager wifiManager();
 
     PackageManager packageManager();
+
+    ContentResolver contentResolver();
+
+    AudioManager audioManager();
+
+    WindowManager windowManager();
 }

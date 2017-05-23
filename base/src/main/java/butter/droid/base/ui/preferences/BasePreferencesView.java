@@ -18,6 +18,7 @@
 package butter.droid.base.ui.preferences;
 
 import android.content.Intent;
+import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
 
 import butter.droid.base.content.preferences.Prefs.PrefKey;
@@ -25,7 +26,7 @@ import butter.droid.base.content.preferences.Prefs.PrefKey;
 public interface BasePreferencesView {
     void openSimpleChoiceSelector(@PrefKey final String key, @StringRes int title, String[] items, int value);
 
-    void openColorSelector(@PrefKey final String key, @StringRes int title, int value);
+    void openColorSelector(@PrefKey final String key, @StringRes int title, @ColorInt int value);
 
     void openNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max);
 

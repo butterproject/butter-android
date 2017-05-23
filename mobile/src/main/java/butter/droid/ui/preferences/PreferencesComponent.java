@@ -20,9 +20,7 @@ package butter.droid.ui.preferences;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = PreferencesModule.class
-)
+@Subcomponent(modules = PreferencesModule.class)
 @ActivityScope
 public interface PreferencesComponent {
 

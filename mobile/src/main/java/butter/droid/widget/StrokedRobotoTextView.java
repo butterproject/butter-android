@@ -12,8 +12,8 @@ import com.devspark.robototextview.widget.RobotoTextView;
 
 public class StrokedRobotoTextView extends RobotoTextView {
 
-    private int mStrokeColor;
-    private float mStrokeWidth;
+    private int strokeColor;
+    private float strokeWidth;
 
     public StrokedRobotoTextView(Context context) {
         super(context);
@@ -28,31 +28,37 @@ public class StrokedRobotoTextView extends RobotoTextView {
     }
 
     public void setStrokeColor(int color) {
-        mStrokeColor = color;
+        strokeColor = color;
     }
 
     public void setStrokeWidth(int unit, int size) {
-        Context c = getContext();
-        Resources r;
+        Context context = getContext();
 
-        if (c == null)
-            r = Resources.getSystem();
-        else
-            r = c.getResources();
+        Resources resources;
+        if (context == null) {
+            resources = Resources.getSystem();
+        } else {
+            resources = context.getResources();
+        }
 
-        mStrokeWidth = TypedValue.applyDimension(unit, size, r.getDisplayMetrics());
+        strokeWidth = TypedValue.applyDimension(unit, size, resources.getDisplayMetrics());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         ColorStateList states = getTextColors();
-        getPaint().setStyle(Paint.Style.STROKE);
-        getPaint().setStrokeWidth(mStrokeWidth);
-        setTextColor(mStrokeColor);
+        modifyPaint();
         super.onDraw(canvas);
 
-        getPaint().setStyle(Paint.Style.FILL);
         setTextColor(states);
+        getPaint().setStyle(Paint.Style.FILL);
         super.onDraw(canvas);
     }
+
+    private void modifyPaint() {
+        getPaint().setStyle(Paint.Style.STROKE);
+        getPaint().setStrokeWidth(strokeWidth);
+        setTextColor(strokeColor);
+    }
+
 }

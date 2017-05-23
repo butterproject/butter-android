@@ -25,20 +25,21 @@ import android.view.MenuItem;
 import android.view.View;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.activities.VideoPlayerActivity;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.fragments.dialog.OptionDialogFragment;
+import butter.droid.base.torrent.TorrentService;
+import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.fragment.BeamPlayerFragment;
+import butter.droid.ui.player.VideoPlayerActivity;
 import javax.inject.Inject;
 
 public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayerActivityView {
 
-    private final static String EXTRA_STREAM_INFO = "butter.droid.ui.beam.BeamPlayerActivity.streamInfo";
-    private final static String EXTRA_RESUME_POSITION = "butter.droid.ui.beam.BeamPlayerActivity.resumePosition";
+    private static final String EXTRA_STREAM_INFO = "butter.droid.ui.beam.BeamPlayerActivity.streamInfo";
+    private static final String EXTRA_RESUME_POSITION = "butter.droid.ui.beam.BeamPlayerActivity.resumePosition";
 
-    private final static String TAG_FRAGMENT_BEAM = "butter.droid.ui.beam.fragment.BeamPlayerFragment";
+    private static final String TAG_FRAGMENT_BEAM = "butter.droid.ui.beam.fragment.BeamPlayerFragment";
 
     @Inject BeamPlayerActivityPresenter presenter;
 
@@ -86,15 +87,18 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     @Override
     protected void onResume() {
         super.onResume();
-        if (null != torrentStream && torrentStream.checkStopped()) {
+
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null && torrentService.checkStopped()) {
             finish();
         }
     }
 
     @Override
     protected void onStop() {
-        if (null != torrentStream) {
-            torrentStream.removeListener(fragment);
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.removeListener(fragment);
         }
         super.onStop();
     }
@@ -116,20 +120,21 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     }
 
     @Override
-    public void onTorrentServiceConnected() {
-        super.onTorrentServiceConnected();
+    public void onTorrentServiceConnected(final TorrentService service) {
+        super.onTorrentServiceConnected(service);
 
-        if (torrentStream.checkStopped()) {
+        if (service.checkStopped()) {
             finish();
             return;
         }
 
-        torrentStream.addListener(fragment);
+        service.addListener(fragment);
     }
 
     @Override public void closePlayer() {
-        if (torrentStream != null) {
-            torrentStream.stopStreaming();
+        TorrentService torrentService = getTorrentService();
+        if (torrentService != null) {
+            torrentService.stopStreaming();
         }
 
         finish();
@@ -169,10 +174,10 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
             throw new IllegalArgumentException("StreamInfo must not be null");
         }
 
-        Intent i = new Intent(context, BeamPlayerActivity.class);
-        i.putExtra(EXTRA_STREAM_INFO, info);
-        i.putExtra(EXTRA_RESUME_POSITION, resumePosition);
-        return i;
+        Intent intent = new Intent(context, BeamPlayerActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
+        intent.putExtra(EXTRA_RESUME_POSITION, resumePosition);
+        return intent;
     }
 
 }

@@ -209,7 +209,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
                 }
 
                 @Override
-                public void onFailure(Exception e) {
+                public void onFailure(Exception ex) {
                     ThreadUtils.runOnUiThread(new Runnable() {
                         @Override public void run() {
                             view.setSubtitleText(R.string.no_subs_available);

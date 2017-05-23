@@ -21,17 +21,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.R;
-import butter.droid.adapters.decorators.DividerItemDecoration;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.ui.main.MainActivity;
@@ -39,6 +35,8 @@ import butter.droid.ui.main.genre.list.GenreAdapter;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.List;
+import javax.inject.Inject;
 
 public class GenreSelectionFragment extends Fragment implements GenreSelectionView, RecyclerClickListener {
 
@@ -72,8 +70,9 @@ public class GenreSelectionFragment extends Fragment implements GenreSelectionVi
         Context context = getContext();
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST,
-                R.drawable.list_divider_nospacing));
+        DividerItemDecoration decor = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        decor.setDrawable(ContextCompat.getDrawable(context, R.drawable.list_divider_nospacing));
+        recyclerView.addItemDecoration(decor);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, this));
 
         //adapter should only ever be created once on fragment initialise.
