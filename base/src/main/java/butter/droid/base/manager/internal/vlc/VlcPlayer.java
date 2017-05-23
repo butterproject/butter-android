@@ -17,14 +17,6 @@
 
 package butter.droid.base.manager.internal.vlc;
 
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_16_9;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_HORIZONTAL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
-
 import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -33,15 +25,21 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SizePolicy;
 import org.videolan.libvlc.IVLCVout;
-import org.videolan.libvlc.IVLCVout.Callback;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.MediaPlayer.Event;
-import org.videolan.libvlc.MediaPlayer.EventListener;
 import timber.log.Timber;
 
-public class VlcPlayer implements EventListener, Callback {
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_16_9;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_HORIZONTAL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
+
+public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
 
     @Nullable private final LibVLC libVLC;
     private final WindowManager windowManager;
@@ -72,8 +70,9 @@ public class VlcPlayer implements EventListener, Callback {
     }
 
     public void loadMedia(Uri uri, int hardwareAcceleration) {
-        Media media = new Media(libVLC, uri);
-        VLCOptions.setMediaOptions(media, true, false, hardwareAcceleration);
+        final Media media = VLCMediaOptions.builder(libVLC, uri)
+                .withHardwareAcceleration(hardwareAcceleration)
+                .build();
 
         mediaPlayer.setMedia(media);
 
@@ -298,6 +297,11 @@ public class VlcPlayer implements EventListener, Callback {
     }
 
     @Override public void onSurfacesDestroyed(final IVLCVout vlcVout) {
+        // nothing to do
+    }
+
+    @Override
+    public void onHardwareAccelerationError(final IVLCVout ivlcVout) {
         // nothing to do
     }
 
