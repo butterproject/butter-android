@@ -15,75 +15,81 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.detail.base;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v17.leanback.app.DetailsFragment;
+import android.support.v17.leanback.app.DetailsSupportFragment;
+import android.support.v17.leanback.app.DetailsSupportFragmentBackgroundController;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
+import android.support.v17.leanback.widget.FullWidthDetailsOverviewRowPresenter;
+import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElementHelper;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.PTVDetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.PresenterSelector;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.util.ArrayList;
-
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import java.util.ArrayList;
+import javax.inject.Inject;
 
-public abstract class TVBaseDetailsFragment extends DetailsFragment implements MediaProvider.Callback,
+public abstract class TVBaseDetailsFragment extends DetailsSupportFragment implements MediaProvider.Callback,
         OnActionClickedListener {
 
-    public static final String EXTRA_ITEM = "item";
-    public static final String EXTRA_HERO_URL = "hero_url";
+    @Inject Picasso picasso;
 
-    private ArrayObjectAdapter mAdapter;
-    private ClassPresenterSelector mPresenterSelector;
-    private Media mItem;
-    private String mHeroImage;
+    private final DetailsSupportFragmentBackgroundController detailsBackground =
+            new DetailsSupportFragmentBackgroundController(this);
+
+    public static final String EXTRA_ITEM = "item";
+
+    private ArrayObjectAdapter adapter;
+    private ClassPresenterSelector presenterSelector;
+
+    private Media item;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mItem = getArguments().getParcelable(EXTRA_ITEM);
-        mHeroImage = mItem.image;
+        detailsBackground.enableParallax();
+        item = getArguments().getParcelable(EXTRA_ITEM);
 
         setupAdapter();
         setupDetailsOverviewRowPresenter();
 
-        final DetailsOverviewRow detailRow = createDetailsOverviewRow();
-        mAdapter.add(detailRow);
+        final DetailsOverviewRow detailRow = createDetailsOverviewRow(item.image);
+        adapter.add(detailRow);
 
         loadDetails();
+
+        setAdapter(adapter);
     }
 
-    abstract void loadDetails();
+    protected abstract void loadDetails();
 
-    abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
+    protected abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
 
-    abstract void onDetailLoaded();
+    protected abstract void onDetailLoaded();
 
     protected ArrayObjectAdapter getObjectArrayAdapter() {
-        return mAdapter;
+        return adapter;
     }
 
-    public Media getMediaItem() {
-        return mItem;
+    protected Media getMediaItem() {
+        return item;
     }
 
     @Override
@@ -92,14 +98,13 @@ public abstract class TVBaseDetailsFragment extends DetailsFragment implements M
     }
 
     private void setupAdapter() {
-        mPresenterSelector = new ClassPresenterSelector();
-        createPresenters(mPresenterSelector);
+        presenterSelector = new ClassPresenterSelector();
+        createPresenters(presenterSelector);
 
-        mAdapter = createAdapter(mPresenterSelector);
-        setAdapter(mAdapter);
+        adapter = createAdapter(presenterSelector);
     }
 
-    abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
+    protected abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
 
     protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
         return new ArrayObjectAdapter(selector);
@@ -107,28 +112,27 @@ public abstract class TVBaseDetailsFragment extends DetailsFragment implements M
 
     private void setupDetailsOverviewRowPresenter() {
         // Set detail background and style.
-        PTVDetailsOverviewRowPresenter headerPresenter = new PTVDetailsOverviewRowPresenter(getDetailPresenter());
-        headerPresenter.setBackgroundColor(mItem.color);
-        headerPresenter.setStyleLarge(true);
-        headerPresenter.setOnActionClickedListener(this);
+        FullWidthDetailsOverviewRowPresenter detailsPresenter = new FullWidthDetailsOverviewRowPresenter(getDetailPresenter());
+        detailsPresenter.setBackgroundColor(item.color);
+        detailsPresenter.setOnActionClickedListener(this);
 
-        // Hook up transition element.
-        headerPresenter.setSharedElementEnterTransition(
-                getActivity(),
-                TVMediaDetailActivity.SHARED_ELEMENT_NAME);
+        final FullWidthDetailsOverviewSharedElementHelper sharedElementHelper = new FullWidthDetailsOverviewSharedElementHelper();
+        sharedElementHelper.setSharedElementEnterTransition(getActivity(), TVMediaDetailActivity.SHARED_ELEMENT_NAME);
+        detailsPresenter.setListener(sharedElementHelper);
+        detailsPresenter.setParticipatingEntranceTransition(false);
 
-        mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, headerPresenter);
-        mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
+        presenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
+        presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
 
-    private DetailsOverviewRow createDetailsOverviewRow() {
-        final DetailsOverviewRow detailsRow = new DetailsOverviewRow(mItem);
+    private DetailsOverviewRow createDetailsOverviewRow(String imageUrl) {
+        final DetailsOverviewRow detailsRow = new DetailsOverviewRow(item);
 
-        Picasso.with(getActivity()).load(mHeroImage).into(new Target() {
+        picasso.load(imageUrl).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 detailsRow.setImageBitmap(getActivity(), bitmap);
-                mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
+                adapter.notifyArrayItemRangeChanged(0, adapter.size());
 
             }
 
@@ -149,11 +153,11 @@ public abstract class TVBaseDetailsFragment extends DetailsFragment implements M
     }
 
     protected void addAction(Action action) {
-        DetailsOverviewRow detailRow = (DetailsOverviewRow) mAdapter.get(0);
+        DetailsOverviewRow detailRow = (DetailsOverviewRow) adapter.get(0);
         detailRow.addAction(action);
     }
 
-    abstract void addActions(Media item);
+    protected abstract void addActions(Media item);
 
     @Override
     public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
@@ -165,14 +169,14 @@ public abstract class TVBaseDetailsFragment extends DetailsFragment implements M
             return;
         }
 
-        Media itemDetail = items.get(0);
+        final Media itemDetail = items.get(0);
 
-        mItem = itemDetail;
+        item = itemDetail;
 
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override public void run() {
-                final DetailsOverviewRow detailRow = createDetailsOverviewRow();
-                mAdapter.replace(0, detailRow);
+                final DetailsOverviewRow detailRow = createDetailsOverviewRow(itemDetail.image);
+                adapter.replace(0, detailRow);
                 onDetailLoaded();
             }
         });
@@ -183,7 +187,4 @@ public abstract class TVBaseDetailsFragment extends DetailsFragment implements M
         //todo: on load failure
     }
 
-    public interface Callback {
-
-    }
 }

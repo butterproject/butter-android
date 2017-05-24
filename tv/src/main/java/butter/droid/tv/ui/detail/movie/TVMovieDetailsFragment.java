@@ -15,14 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.detail.movie;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.OnActionClickedListener;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
@@ -34,9 +34,10 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
+import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
+import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +48,6 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
     @Inject ProviderManager providerManager;
     @Inject YouTubeManager youTubeManager;
     @Inject PreferencesHandler preferencesHandler;
-
-    public static Fragment newInstance(Media media) {
-        TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_ITEM, media);
-
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     private Movie getMovieItem() {
         return (Movie) getMediaItem();
@@ -70,26 +61,22 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
                 .inject(this);
     }
 
-    @Override
-    void loadDetails() {
+    @Override protected void loadDetails() {
         ArrayList<Media> mediaList = new ArrayList<>();
         mediaList.add(getMovieItem());
 
         providerManager.getCurrentMediaProvider().getDetail(mediaList, 0, this);
     }
 
-    @Override
-    AbstractDetailsDescriptionPresenter getDetailPresenter() {
+    @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
         return new MovieDetailsDescriptionPresenter();
     }
 
-    @Override
-    void onDetailLoaded() {
+    @Override protected void onDetailLoaded() {
         addActions(getMovieItem());
     }
 
-    @Override
-    void addActions(Media item) {
+    @Override protected void addActions(Media item) {
         if (item instanceof Movie) {
             Movie movie = (Movie) item;
 
@@ -111,8 +98,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
         }
     }
 
-    @Override
-    ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
+    @Override protected ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
         return null;
     }
 
@@ -142,6 +128,16 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
                 startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, movie.trailer));
             }
         }
+    }
+
+    public static Fragment newInstance(Media media) {
+        TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_ITEM, media);
+
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     public static class WatchAction extends android.support.v17.leanback.widget.Action {

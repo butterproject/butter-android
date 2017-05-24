@@ -15,10 +15,9 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.detail.show;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
@@ -30,16 +29,7 @@ import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.PresenterSelector;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.inject.Inject;
-
+import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Episode;
@@ -48,9 +38,17 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import butter.droid.tv.presenters.showdetail.EpisodeCardPresenter;
+import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import javax.inject.Inject;
 
 public class TVShowDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback,
         OnActionClickedListener, EpisodeCardPresenter.Listener {
@@ -77,31 +75,26 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements Medi
                 .inject(this);
     }
 
-    @Override
-    void loadDetails() {
+    @Override public void loadDetails() {
         ArrayList<Media> mediaList = new ArrayList<>();
         mediaList.add(getShowItem());
         mTvProvider.getDetail(mediaList, 0, this);
     }
 
-    @Override
-    AbstractDetailsDescriptionPresenter getDetailPresenter() {
+    @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
         return new ShowDetailsDescriptionPresenter();
     }
 
-    @Override
-    void onDetailLoaded() {
+    @Override protected void onDetailLoaded() {
         updateShowsAdapterContent();
     }
 
-    @Override
-    ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
+    @Override protected ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
         selector.addClassPresenter(DetailsOverviewRow.class, new EpisodeCardPresenter(getActivity()));
         return null;
     }
 
-    @Override
-    void addActions(Media item) { }
+    @Override protected void addActions(Media item) { }
 
     @Override
     protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {

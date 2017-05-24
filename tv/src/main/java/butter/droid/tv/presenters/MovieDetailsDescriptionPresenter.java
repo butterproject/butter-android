@@ -24,17 +24,18 @@ import butter.droid.base.providers.media.models.Movie;
 
 
 public class MovieDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
-	@Override
-	protected void onBindDescription(ViewHolder viewHolder, Object item) {
-		Media itemWrapper = (Media) item;
-		if (itemWrapper != null && itemWrapper != null) {
-			viewHolder.getTitle().setText(itemWrapper.title);
-			viewHolder.getSubtitle().setText(itemWrapper.genre);
 
-			if (itemWrapper instanceof Movie) {
-				Movie movieItem = (Movie) itemWrapper;
-				viewHolder.getBody().setText(movieItem.synopsis);
-			}
-		}
-	}
+    @Override
+    protected void onBindDescription(ViewHolder viewHolder, Object item) {
+        Media itemWrapper = (Media) item;
+        if (itemWrapper != null) {
+            viewHolder.getTitle().setText(itemWrapper.title);
+            viewHolder.getSubtitle().setText(itemWrapper.genre);
+
+            if (itemWrapper instanceof Movie) {
+                Movie movieItem = (Movie) itemWrapper;
+                viewHolder.getBody().setText(movieItem.synopsis);
+            }
+        }
+    }
 }
