@@ -72,7 +72,7 @@ dependencies {
     compile 'de.timroes:aXMLRPC:1.8.1'
     compile "com.google.dagger:dagger:${rootProject.ext.daggerVersion}"
 
-    compile project(':vlc')
+    compile 'com.butterproject:vlc-android-sdk:2.0.6'
     compile project(':connectsdk')
 
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"

@@ -38,6 +38,7 @@ allprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
         maven { url "https://jitpack.io" }
+        maven { url  "http://dl.bintray.com/butter-project/maven" }
     }
 
     //let project evaluate its script first
