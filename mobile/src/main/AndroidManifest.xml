@@ -438,6 +438,10 @@
 			android:name="butter.droid.ui.trailer.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
 
+        <activity
+            android:name=".ui.base.WebViewActivity"
+            android:screenOrientation="sensorPortrait" />
+
         <service android:name="butter.droid.base.torrent.TorrentService" />
         <service android:name=".base.manager.internal.beaming.server.BeamServerService" />
         <service android:name=".base.manager.internal.beaming.BeamPlayerNotificationService" />

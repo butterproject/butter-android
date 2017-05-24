@@ -24,15 +24,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
@@ -44,16 +35,29 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.inject.Inject;
 
 public class PlayerManager {
 
+    private static final Uri FAKE_HTTP_VIDEO_URI = Uri.parse("http://butterproject.org/test.mp4");
+    private static final Uri FAKE_LOCAL_VIDEO_URI = Uri.parse("/path/video.mp4");
+
     private static final String DELIMITER = "/-/";
 
+    private final PackageManager packageManager;
     private final PreferencesHandler preferencesHandler;
     private final PrefManager prefManager;
 
     @Inject
-    public PlayerManager(PreferencesHandler preferencesHandler, PrefManager prefManager) {
+    public PlayerManager(PackageManager packageManager, PreferencesHandler preferencesHandler, PrefManager prefManager) {
+        this.packageManager = packageManager;
         this.preferencesHandler = preferencesHandler;
         this.prefManager = prefManager;
     }
@@ -64,26 +68,29 @@ public class PlayerManager {
      * @return Map with options
      */
     public Map<String, String> getVideoPlayerApps() {
-        Intent playerIntent = new Intent(Intent.ACTION_VIEW);
-        playerIntent.setDataAndType(Uri.parse("http://butterproject.org/test.mp4"), "video/*");
+        final Intent httpVideoIntent = new Intent(Intent.ACTION_VIEW);
+        httpVideoIntent.setDataAndType(FAKE_HTTP_VIDEO_URI, "video/*");
 
-        PackageManager packageManager = ButterApplication.getAppContext().getPackageManager();
-        List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(playerIntent, 0);
+        final Intent localVideoIntent = new Intent(Intent.ACTION_VIEW, FAKE_LOCAL_VIDEO_URI);
+        localVideoIntent.setDataAndType(FAKE_LOCAL_VIDEO_URI, "video/mp4");
 
-        HashMap<String, String> returnMap = new HashMap<>();
-        for (ResolveInfo resolveInfo : resolveInfoList) {
-            returnMap.put(resolveInfo.activityInfo.name + DELIMITER + resolveInfo.activityInfo.packageName,
-                    resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString());
-        }
+        final List<ResolveInfo> remoteInfoList = packageManager.queryIntentActivities(httpVideoIntent, 0);
+        final List<ResolveInfo> localInfoList = packageManager.queryIntentActivities(localVideoIntent, 0);
 
-        playerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("/path/video.mp4"));
-        playerIntent.setDataAndType(Uri.parse("/path/video.mp4"), "video/mp4");
+        final Set<ResolveInfo> resultInfoList = new HashSet<>();
+        resultInfoList.addAll(remoteInfoList);
+        resultInfoList.addAll(localInfoList);
 
-        resolveInfoList = packageManager.queryIntentActivities(playerIntent, 0);
+        final HashMap<String, String> returnMap = new HashMap<>();
 
-        for (ResolveInfo resolveInfo : resolveInfoList) {
-            returnMap.put(resolveInfo.activityInfo.name + DELIMITER + resolveInfo.activityInfo.packageName,
-                    resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString());
+        for (ResolveInfo resolveInfo : resultInfoList) {
+            final String applicationName = resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString();
+            final String playerActivity = resolveInfo.activityInfo.name;
+            final String playerPackageName = resolveInfo.activityInfo.packageName;
+
+            if (!playerPackageName.startsWith("butter.droid")) {
+                returnMap.put(playerActivity + DELIMITER + playerPackageName, applicationName);
+            }
         }
 
         return returnMap;
@@ -106,7 +113,7 @@ public class PlayerManager {
     }
 
     @Nullable public Intent externalPlayerIntent(Media media, String subLanguage, String location) {
-        String defaultPlayer = preferencesHandler.getDefaultPlayer();
+        final String defaultPlayer = preferencesHandler.getDefaultPlayer();
 
         if (!StringUtils.isEmpty(defaultPlayer)) {
             String[] playerData = defaultPlayer.split(DELIMITER);

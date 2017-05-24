@@ -43,12 +43,6 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public PreferencesAdapter() {
     }
 
-    public void setItems(String[] keys, Map<String, PrefItem> items) {
-        this.keys = keys;
-        this.items = items;
-        notifyDataSetChanged();
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -88,17 +82,17 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-    @Override
     public int getItemViewType(int position) {
         if (items.get(keys[position]).isTitle()) {
             return VIEW_TYPE_HEADER;
         } else {
             return VIEW_TYPE_NORMAL;
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
     }
 
     public PrefItem getItem(int position) {
@@ -110,7 +104,13 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemChanged(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void setItems(String[] keys, Map<String, PrefItem> items) {
+        this.keys = keys;
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(android.R.id.icon) ImageView icon;
         @BindView(android.R.id.text1) TextView text1;
@@ -124,11 +124,11 @@ public class PreferencesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
-    public class HeaderHolder extends RecyclerView.ViewHolder {
+    private static class HeaderHolder extends RecyclerView.ViewHolder {
 
         TextView itemView;
 
-        public HeaderHolder(View itemView) {
+        HeaderHolder(View itemView) {
             super(itemView);
             this.itemView = (TextView) itemView;
         }

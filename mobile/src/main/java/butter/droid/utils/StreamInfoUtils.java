@@ -75,10 +75,10 @@ public final class StreamInfoUtils {
     @Nullable private static String getDataStringVideoLocation(String location, Uri data) {
         // Remove VLC prefix if needed
         if (location.startsWith("vlc://")) {
-            return AndroidUtil.locationToUri(location.substring(6)).toString();
+            return AndroidUtil.LocationToUri(location.substring(6)).toString();
         } else {
             if (data.getScheme() == null) {
-                return AndroidUtil.pathToUri(data.getPath()).toString();
+                return AndroidUtil.PathToUri(data.getPath()).toString();
             } else {
                 return data.toString();
             }
@@ -109,7 +109,7 @@ public final class StreamInfoUtils {
                     os.write(buffer, 0, bytesRead);
                 }
 
-                return AndroidUtil.pathToUri(fileLocation).toString();
+                return AndroidUtil.PathToUri(fileLocation).toString();
             } else {
                 return null;
             }
@@ -137,7 +137,7 @@ public final class StreamInfoUtils {
                 try {
                     int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
                     if (cursor.moveToFirst()) {
-                        return AndroidUtil.pathToUri(cursor.getString(columnIndex)).toString();
+                        return AndroidUtil.PathToUri(cursor.getString(columnIndex)).toString();
                     } else {
                         return null;
                     }
@@ -145,13 +145,13 @@ public final class StreamInfoUtils {
                     cursor.close();
                 }
             } else if (data.getScheme() == null) {
-                return AndroidUtil.pathToUri(data.getPath()).toString();
+                return AndroidUtil.PathToUri(data.getPath()).toString();
             } else { // other content-based URI (probably file pickers)
                 return data.toString();
             }
         } catch (Exception e) {
             if (data.getScheme() == null) {
-                return AndroidUtil.pathToUri(data.getPath()).toString();
+                return AndroidUtil.PathToUri(data.getPath()).toString();
             }  else {
                 return data.toString();
             }
@@ -166,10 +166,10 @@ public final class StreamInfoUtils {
             inputPFD = contentResolver.openFileDescriptor(data, "r");
 
             if (AndroidUtil.isHoneycombMr1OrLater()) {
-                return AndroidUtil.locationToUri("fd://" + inputPFD.getFd()).toString();
+                return AndroidUtil.LocationToUri("fd://" + inputPFD.getFd()).toString();
             } else {
                 String fdString = inputPFD.getFileDescriptor().toString();
-                return AndroidUtil.locationToUri("fd://" + fdString.substring(15, fdString.length() - 1)).toString();
+                return AndroidUtil.LocationToUri("fd://" + fdString.substring(15, fdString.length() - 1)).toString();
             }
         } catch (FileNotFoundException e) {
             return null;
