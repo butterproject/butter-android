@@ -22,4 +22,6 @@
     <color name="good_health">#C9D400</color>
     <color name="excellent_health">#5ABA00</color>
     <color name="unknown_health">#696969</color>
+
+    <color name="chglib_material_color_text_1">#fff</color>
 </resources>

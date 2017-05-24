@@ -128,7 +128,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_color</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead.Inverse</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="Theme.Butter.RatingBar" parent="android:Widget.RatingBar">

@@ -17,7 +17,9 @@
 
 package butter.droid.tv.ui.about;
 
+import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
@@ -26,6 +28,7 @@ import android.support.v17.leanback.widget.GuidanceStylist.Guidance;
 import android.support.v17.leanback.widget.GuidedAction;
 import android.support.v4.content.ContextCompat;
 
+import butter.droid.tv.ui.preferences.fragment.TVWebViewFragment;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,6 +67,9 @@ public class TvAboutFragment extends GuidedStepFragment implements TvAboutView {
     }
 
     @Override public void displayIntent(@NonNull Intent intent) {
-        startActivity(intent);
+        final Uri uri = intent.getData();
+        final TVWebViewFragment fragment = TVWebViewFragment.newInstance(uri);
+        final FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(android.R.id.content, fragment, TVWebViewFragment.TAG).addToBackStack(TVWebViewFragment.TAG).commit();
     }
 }

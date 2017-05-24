@@ -26,7 +26,7 @@ public interface BaseAboutPresenter {
 
     // region IntDef
 
-    @IntDef({ABOUT_BUTTER, ABOUT_FB, ABOUT_GIT, ABOUT_BLOG, ABOUT_DISCUSS, ABOUT_TWITTER})
+    @IntDef({ABOUT_BUTTER, ABOUT_FB, ABOUT_GIT, ABOUT_DISCUSS, ABOUT_TWITTER})
     @Retention(RetentionPolicy.SOURCE)
     public @interface AboutLinks {
     }
@@ -34,7 +34,6 @@ public interface BaseAboutPresenter {
     int ABOUT_BUTTER = 0;
     int ABOUT_FB = 1;
     int ABOUT_GIT = 2;
-    int ABOUT_BLOG = 3;
     int ABOUT_DISCUSS = 4;
     int ABOUT_TWITTER = 5;
 
