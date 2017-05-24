@@ -25,10 +25,9 @@ public class Constants {
     public static final String GIT_URL = "https://github.com/butterproject/butter-android";
     public static final String BUTTER_URL = "http://butterproject.org/";
     public static final String FB_URL = "https://fb.com/ButterProjectOrg";
-    public static final String BLOG_URL = "https://blog.butterproject.org";
     public static final String DISCUSS_URL = "https://www.reddit.com/r/ButterProject";
     public static final String TWITTER_URL = "https://twitter.com/butterproject";
     public static final String REPORT_ISSUE_URL = "https://github.com/butterproject/butter-android/issues/new";
-    public static final String NOTICE_URL = GIT_URL  + "/blob/master/NOTICE.md";
+    public static final String NOTICE_URL = GIT_URL  + "/blob/develop/NOTICE.md";
 
 }

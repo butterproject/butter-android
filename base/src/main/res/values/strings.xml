@@ -91,6 +91,7 @@
     <string name="updates">Updates</string>
     <string name="auto_updates">Automatic updates</string>
     <string name="check_for_updates">Check for updates</string>
+    <string name="checking_for_updates">Checking for updates…</string>
     <string name="last_check">Last check</string>
     <string name="about_app">About</string>
     <string name="version">Version</string>

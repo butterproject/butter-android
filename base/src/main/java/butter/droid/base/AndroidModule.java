@@ -20,10 +20,10 @@ package butter.droid.base;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 import dagger.Module;
@@ -43,6 +43,10 @@ public class AndroidModule {
 
     @Provides @Singleton TelephonyManager provideTelephonyManager(Context context) {
         return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
+
+    @Provides @Singleton PackageManager providePackageManager(Context context) {
+        return context.getPackageManager();
     }
 
     @Provides @Singleton ContentResolver provideContentResolver(Context context) {

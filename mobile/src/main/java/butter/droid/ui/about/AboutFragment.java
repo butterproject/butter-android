@@ -18,20 +18,21 @@
 package butter.droid.ui.about;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
+import butter.droid.utils.ButterCustomTabActivityHelper;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import javax.inject.Inject;
 
 public class AboutFragment extends Fragment implements AboutView {
 
@@ -66,7 +67,6 @@ public class AboutFragment extends Fragment implements AboutView {
             R.id.logo_imageview,
             R.id.facebook_button,
             R.id.git_button,
-            R.id.blog_button,
             R.id.butter_button,
             R.id.discuss_button,
             R.id.twitter_button})
@@ -75,7 +75,9 @@ public class AboutFragment extends Fragment implements AboutView {
     }
 
     @Override public void displayIntent(@NonNull Intent intent) {
-        startActivity(intent);
+        final FragmentActivity activity = getActivity();
+        final Uri url = intent.getData();
+        ButterCustomTabActivityHelper.openCustomTab(activity, url);
     }
 
 }

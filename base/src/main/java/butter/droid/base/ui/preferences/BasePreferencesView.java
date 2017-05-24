@@ -36,7 +36,7 @@ public interface BasePreferencesView {
 
     void openPreciseSmallNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max);
 
-    void openActivity(Intent intent);
+    void openBrowser(Intent intent);
 
     void openChangelog();
 

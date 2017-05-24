@@ -51,12 +51,6 @@ public class TvAboutPresenterImpl extends BaseAboutPresenterImpl implements TvAb
                 .build());
 
         actions.add(new GuidedAction.Builder(context)
-                .id(ABOUT_BLOG)
-                .title(R.string.blog)
-                .icon(R.drawable.icon_blog)
-                .build());
-
-        actions.add(new GuidedAction.Builder(context)
                 .id(ABOUT_TWITTER)
                 .title(R.string.twitter)
                 .icon(R.drawable.icon_twitter)
