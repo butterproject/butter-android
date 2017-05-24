@@ -18,7 +18,11 @@
 
 <changelog bulletedList="true">
 
-    <changelogversion>
+    <changelogversion versionName="0.3.0">
+        <changelogtext>Write changes here</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.2.6">
         <changelogtext>Fixed casting to Samsung TV's</changelogtext>
         <changelogtext>Fixed NumberPicker in settings regarding subtitle size</changelogtext>
     </changelogversion>

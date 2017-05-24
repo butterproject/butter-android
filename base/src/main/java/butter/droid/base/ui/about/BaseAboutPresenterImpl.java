@@ -31,9 +31,6 @@ public class BaseAboutPresenterImpl implements BaseAboutPresenter {
     protected void displayPage(@AboutLinks int aboutLink) {
         String url;
         switch (aboutLink) {
-            case BaseAboutPresenter.ABOUT_BLOG:
-                url = Constants.BLOG_URL;
-                break;
             case BaseAboutPresenter.ABOUT_BUTTER:
                 url = Constants.BUTTER_URL;
                 break;

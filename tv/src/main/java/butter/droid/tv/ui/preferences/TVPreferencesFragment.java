@@ -17,8 +17,10 @@
 
 package butter.droid.tv.ui.preferences;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -27,12 +29,6 @@ import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
 import android.view.View;
 import android.widget.Toast;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
@@ -42,6 +38,11 @@ import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.fragments.TVPreferencesListFragment;
 import butter.droid.tv.fragments.TVPreferencesListFragment.SelectionListener;
 import butter.droid.tv.ui.about.TvAboutFragment;
+import butter.droid.tv.ui.preferences.fragment.TVChangeLogDialogFragment;
+import butter.droid.tv.ui.preferences.fragment.TVWebViewFragment;
+import java.util.Arrays;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TVPreferencesFragment extends GuidedStepFragment implements TVPreferencesView {
 
@@ -167,7 +168,6 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
                     }
                 });
         GuidedStepFragment.add(getFragmentManager(), fragment);
-
     }
 
     @Override
@@ -186,15 +186,21 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
                     }
                 });
         GuidedStepFragment.add(getFragmentManager(), fragment);
-
     }
 
-    @Override public void openActivity(Intent intent) {
-        startActivity(intent);
+    @Override public void openBrowser(Intent intent) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            final Uri uri = intent.getData();
+            final TVWebViewFragment fragment = TVWebViewFragment.newInstance(uri);
+            final FragmentManager fm = getFragmentManager();
+            fm.beginTransaction().replace(android.R.id.content, fragment, TVWebViewFragment.TAG).addToBackStack(TVWebViewFragment.TAG).commit();
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override public void openChangelog() {
-        // TODO: 1/21/17 Open changelog
+        new TVChangeLogDialogFragment().show(getFragmentManager(), TVChangeLogDialogFragment.TAG);
     }
 
     @Override public void showMessage(@StringRes int message) {

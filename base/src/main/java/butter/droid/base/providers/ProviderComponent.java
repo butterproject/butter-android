@@ -20,6 +20,7 @@ package butter.droid.base.providers;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -62,6 +63,8 @@ public interface ProviderComponent {
     PrefManager prefManager();
 
     TelephonyManager telephonyManager();
+
+    PackageManager packageManager();
 
     ContentResolver contentResolver();
 

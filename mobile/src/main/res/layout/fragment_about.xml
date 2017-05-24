@@ -70,14 +70,6 @@
 				android:layout_height="wrap_content" />
 
 			<com.devspark.robototextview.widget.RobotoTextView
-				android:id="@+id/blog_button"
-				android:drawableTop="@drawable/icon_blog"
-				android:text="@string/blog"
-				style="@style/Theme.Butter.AboutButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-
-			<com.devspark.robototextview.widget.RobotoTextView
 				android:id="@+id/twitter_button"
 				android:drawableTop="@drawable/icon_twitter"
 				android:text="@string/twitter"

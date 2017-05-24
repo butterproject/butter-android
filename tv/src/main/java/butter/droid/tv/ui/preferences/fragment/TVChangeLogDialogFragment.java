@@ -15,19 +15,20 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.fragments.dialog;
+package butter.droid.tv.ui.preferences.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
-
-import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 import butter.droid.base.R;
+import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 
-public class ChangeLogDialogFragment extends DialogFragment {
+public class TVChangeLogDialogFragment extends DialogFragment {
+
+    public static final String TAG = TVChangeLogDialogFragment.class.getSimpleName();
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
