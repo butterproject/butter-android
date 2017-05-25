@@ -36,25 +36,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import butter.droid.R;
 import butter.droid.base.providers.media.MediaProvider.Filters.Order;
 import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
-import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.manager.paging.IndexPagingListener;
 import butter.droid.manager.paging.PagingManager;
 import butter.droid.ui.media.detail.MediaDetailActivity;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.ui.media.list.base.list.MediaGridAdapter;
+import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingItemDecoration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.ArrayList;
+import javax.inject.Inject;
 
 /**
  * This fragment is the main screen for viewing a collection of media items.
@@ -112,10 +110,15 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView.setHasFixedSize(true);
-        //adapter should only ever be created once on fragment initialise.
-        adapter = new MediaGridAdapter(context, columns);
+        final MediaGridSpacingItemDecoration gridSpacingDecoration = new MediaGridSpacingItemDecoration(context, columns);
+        final int itemHeight = gridSpacingDecoration.getItemHeight();
+        final int itemWidth = gridSpacingDecoration.getItemWidth();
+
+        adapter = new MediaGridAdapter(itemHeight, itemWidth);
+
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(gridSpacingDecoration);
+        recyclerView.setHasFixedSize(true);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), this));
 
         pagingManager = new PagingManager<>();
