@@ -67,14 +67,14 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final Context context = parent.getContext();
         final LayoutInflater inflater = LayoutInflater.from(context);
-        View v;
+        View view;
         switch (viewType) {
             case VIEW_TYPE_PROGRESS:
-                v = inflater.inflate(R.layout.media_griditem_loading, parent, false);
-                return new LoadingHolder(v, itemHeight);
+                view = inflater.inflate(R.layout.media_griditem_loading, parent, false);
+                return new LoadingHolder(view, itemHeight);
             case VIEW_TYPE_ITEM:
-                v = inflater.inflate(R.layout.media_griditem, parent, false);
-                return new ViewHolder(v, itemHeight);
+                view = inflater.inflate(R.layout.media_griditem, parent, false);
+                return new ViewHolder(view, itemHeight);
             default:
                 throw new IllegalStateException("Unknown view type: " + viewType);
         }
@@ -145,25 +145,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    @Override
-    public void showLoading(boolean show) {
-        if (showLoading != show) {
-            boolean before = showLoading();
-            showLoading = show;
-            boolean after = showLoading();
-
-            if (before != after) {
-                if (after) {
-                    notifyItemInserted(getItemsSize());
-                } else {
-                    notifyItemRemoved(getItemsSize());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void clear() {
+    @Override public void clear() {
         if (items != null && !items.isEmpty()) {
             notifyItemRangeRemoved(0, items.size());
             items = null;
@@ -176,6 +158,22 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return items.get(position);
         } else {
             return null;
+        }
+    }
+
+    @Override public void showLoading(boolean show) {
+        if (showLoading != show) {
+            boolean before = showLoading();
+            showLoading = show;
+            boolean after = showLoading();
+
+            if (before != after) {
+                if (after) {
+                    notifyItemInserted(getItemsSize());
+                } else {
+                    notifyItemRemoved(getItemsSize());
+                }
+            }
         }
     }
 
@@ -244,20 +242,21 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @Override
         public Bitmap transform(Bitmap src) {
             // Code borrowed from https://stackoverflow.com/questions/23657811/how-to-mask-bitmap-with-lineargradient-shader-properly
-            int w = src.getWidth();
-            int h = src.getHeight();
-            Bitmap overlay = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            int width = src.getWidth();
+            int height = src.getHeight();
+            Bitmap overlay = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(overlay);
 
             canvas.drawBitmap(src, 0, 0, null);
             src.recycle();
 
             Paint paint = new Paint();
-            float gradientHeight = h / 2f;
-            LinearGradient shader = new LinearGradient(0, h - gradientHeight, 0, h, 0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.CLAMP);
+            float gradientHeight = height / 2f;
+            LinearGradient shader = new LinearGradient(0, height - gradientHeight, 0, height, 0xFFFFFFFF, 0x00FFFFFF,
+                    Shader.TileMode.CLAMP);
             paint.setShader(shader);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-            canvas.drawRect(0, h - gradientHeight, w, h, paint);
+            canvas.drawRect(0, height - gradientHeight, width, height, paint);
             return overlay;
         }
 
@@ -285,7 +284,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         private View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(View view, boolean hasFocus) {
                 focusOverlay.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
             }
         };
@@ -293,7 +292,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public ViewHolder(View itemView, int itemHeight) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.coverImage.setMinimumHeight(itemHeight);
+            coverImage.setMinimumHeight(itemHeight);
             itemView.setOnFocusChangeListener(onFocusChangeListener);
         }
 

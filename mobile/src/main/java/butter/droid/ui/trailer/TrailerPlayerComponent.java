@@ -17,21 +17,17 @@
 
 package butter.droid.ui.trailer;
 
-import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = TrailerPlayerModule.class
-)
-@ActivityScope
+@Subcomponent(modules = TrailerPlayerModule.class)
+@FragmentScope
 public interface TrailerPlayerComponent {
 
-    void inject(TrailerPlayerActivity activity);
+    void inject(TrailerPlayerFragment fragment);
 
-    @Subcomponent.Builder
-    interface Builder {
-
-        Builder trailerModule(TrailerPlayerModule module);
+    @Subcomponent.Builder interface Builder {
+        Builder trailerPlayerModule(TrailerPlayerModule module);
 
         TrailerPlayerComponent build();
     }

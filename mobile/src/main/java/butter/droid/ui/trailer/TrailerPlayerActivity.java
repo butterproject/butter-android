@@ -17,57 +17,36 @@
 
 package butter.droid.ui.trailer;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
-import butter.droid.R;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.torrent.TorrentService;
-import butter.droid.base.ui.dialog.DialogFactory;
-import butter.droid.base.ui.dialog.DialogFactory.Action;
-import butter.droid.base.ui.dialog.DialogFactory.ActionCallback;
-import butter.droid.fragments.VideoPlayerFragment;
 import butter.droid.ui.ButterBaseActivity;
-import javax.inject.Inject;
 
-public class TrailerPlayerActivity extends ButterBaseActivity implements TrailerPlayerView, VideoPlayerFragment.Callback {
+public class TrailerPlayerActivity extends ButterBaseActivity {
 
-    private final static String EXTRA_LOCATION = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_LOCATION";
-    private final static String EXTRA_DATA = "butter.droid.ui.trailer.TrailerPlayerActivity.EXTRA_DATA";
-
-    @Inject
-    TrailerPlayerPresenter presenter;
-
-    private VideoPlayerFragment videoPlayerFragment;
+    private static final String EXTRA_URI = "butter.droid.ui.trailer.TrailerPlayerActivity.uri";
+    private static final String EXTRA_MEDIA = "butter.droid.ui.trailer.TrailerPlayerActivity.media";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         MobileButterApplication.getAppContext()
                 .getComponent()
-                .trailerComponentBuilder()
-                .trailerModule(new TrailerPlayerModule(this))
-                .build()
                 .inject(this);
-
-        super.onCreate(savedInstanceState, R.layout.activity_videoplayer);
+        super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
-        final Media media = intent.getParcelableExtra(EXTRA_DATA);
-        final String youtubeUrl = intent.getStringExtra(EXTRA_LOCATION);
+        final Media media = intent.getParcelableExtra(EXTRA_MEDIA);
+        final String youtubeUrl = intent.getStringExtra(EXTRA_URI);
 
-        this.videoPlayerFragment = (VideoPlayerFragment) getSupportFragmentManager().findFragmentById(R.id.video_fragment);
-
-        presenter.onCreate(media, youtubeUrl);
-    }
-
-    @Override
-    protected void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
+        if (savedInstanceState == null) {
+            TrailerPlayerFragment fragment = TrailerPlayerFragment.newInstance(media, youtubeUrl);
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, fragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -76,49 +55,15 @@ public class TrailerPlayerActivity extends ButterBaseActivity implements Trailer
             case android.R.id.home:
                 finish();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public Long getResumePosition() {
-        return 0L;
-    }
-
-    @Override
-    public StreamInfo getInfo() {
-        return presenter.getStreamInfo();
-    }
-
-    @Override
-    public TorrentService getService() {
-        return null;
-    }
-
-    @Override
-    public void onDisableVideoPlayerSubsButton() {
-        videoPlayerFragment.enableSubsButton(false);
-    }
-
-    @Override
-    public void onNotifyMediaReady() {
-        videoPlayerFragment.onMediaReady();
-    }
-
-    @Override
-    public void onDisplayErrorVideoDialog() {
-        DialogFactory.createErrorFetchingYoutubeVideoDialog(this, new ActionCallback() {
-            @Override
-            public void onButtonClick(final Dialog which, final @Action int action) {
-                finish();
-            }
-        }).show();
     }
 
     public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TrailerPlayerActivity.class);
-        intent.putExtra(TrailerPlayerActivity.EXTRA_DATA, media);
-        intent.putExtra(TrailerPlayerActivity.EXTRA_LOCATION, url);
+        intent.putExtra(TrailerPlayerActivity.EXTRA_MEDIA, media);
+        intent.putExtra(TrailerPlayerActivity.EXTRA_URI, url);
         return intent;
     }
 }

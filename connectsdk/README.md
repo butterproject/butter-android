@@ -1,4 +1,4 @@
-#Connect SDK Android
+# Connect SDK Android
 Connect SDK is an open source framework that connects your mobile apps with multiple TV platforms. Because most TV platforms support a variety of protocols, Connect SDK integrates and abstracts the discovery and connectivity between all supported protocols.
 This project can be built in Android Studio or directly with Gradle. Eclipse IDE is not supported since 1.5.0 version.
 
@@ -8,7 +8,7 @@ For more information, visit our [website](http://www.connectsdk.com/).
 * [Platform documentation & FAQs](http://www.connectsdk.com/docs/android/)
 * [API documentation](http://www.connectsdk.com/apis/android/)
 
-##Dependencies
+## Dependencies
 This project has the following dependencies, some of which require manual setup. If you would like to use a version of the SDK which has no manual setup, consider using the [lite version](https://github.com/ConnectSDK/Connect-SDK-Android-Lite) of the SDK.
 
 This project has the following dependencies.
@@ -20,7 +20,7 @@ This project has the following dependencies.
 * [Connect-SDK-Android-FireTV](https://github.com/ConnectSDK/Connect-SDK-Android-FireTV) submodule
   - Requires [AmazonFling.framework](https://developer.amazon.com/public/apis/experience/fling/docs/amazon-fling-sdk-download)
 
-##Including Connect SDK in your app with Android Studio
+## Including Connect SDK in your app with Android Studio
 Edit your project's build.gradle to add this in the "dependencies" section
 ```groovy
 dependencies {
@@ -31,7 +31,7 @@ dependencies {
 This prebuilt library doesn't have Amazon Fling SDK support, because it’s not available on maven. You need to set the project up from sources
 if you want to have Amazon Fling SDK support.
 
-##Including Connect SDK in your app with Android Studio from sources
+## Including Connect SDK in your app with Android Studio from sources
 1. Open your terminal and execute these commands
     ```
     cd your_project_folder
@@ -57,7 +57,7 @@ if you want to have Amazon Fling SDK support.
 5. Sync project with gradle files
 6. Add permissions to your manifest
 
-###Permissions to include in manifest
+### Permissions to include in manifest
 * Required for SSDP & Chromecast/Zeroconf discovery
  - `android.permission.INTERNET`
  - `android.permission.CHANGE_WIFI_MULTICAST_STATE`
@@ -75,7 +75,7 @@ if you want to have Amazon Fling SDK support.
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
-###Metadata for application tag
+### Metadata for application tag
 This metadata tag is necessary to enable Chromecast support.
 
 ```xml
@@ -89,14 +89,14 @@ This metadata tag is necessary to enable Chromecast support.
 </application>
 ```
 
-###Proguard configuration
+### Proguard configuration
 Add the following line to your proguard configuration file (otherwise `DiscoveryManager` won't be able to set any `DiscoveryProvider`).
 
 ```
 -keep class com.connectsdk.**       { * ; }
 ```
 
-###Tests
+### Tests
 Connect SDK has unit tests for some parts of the code, and we are continuing to increase the test coverage.
 These tests are based on third party libraries such as Robolectric, Mockito and PowerMock. You can easily run these tests with Gradle:
 ```
@@ -108,14 +108,14 @@ gradle jacocoTestReport
 ```
 The test coverage report will be in this folder `Connect-SDK-Android/build/reports/jacoco/jacocoTestReport/html`.
 
-##Contact
+## Contact
 * Twitter [@ConnectSDK](https://www.twitter.com/ConnectSDK)
 * Ask a question on Stack Overflow with the [Connect-SDK tag](https://stackoverflow.com/tags/connect-sdk) (or [TV tag](https://stackoverflow.com/tags/tv))
 * General Inquiries info@connectsdk.com
 * Developer Support support@connectsdk.com
 * Partnerships partners@connectsdk.com
 
-##Credits
+## Credits
 Connect SDK for Android makes use of the following projects, some of which are open-source.
 
 * [Amazon Fling SDK](https://developer.amazon.com/fling)
@@ -132,7 +132,7 @@ These projects are used in tests:
 * [Robolectric](http://robolectric.org) (MIT)
 * [PowerMock](https://github.com/jayway/powermock) (Apache License, Version 2.0)
 
-##License
+## License
 Copyright (c) 2013-2015 LG Electronics.
 
 Licensed under the Apache License, Version 2.0 (the "License");

@@ -132,7 +132,7 @@
 		</activity>
 
         <activity
-            android:name="butter.droid.activities.SearchActivity"
+            android:name="butter.droid.ui.search.SearchActivity"
             android:theme="@style/Theme.Butter.Search" />
 
         <activity android:name="butter.droid.ui.terms.TermsActivity" />
@@ -152,7 +152,7 @@
 
 		<activity
             android:launchMode="singleTask"
-			android:name="butter.droid.activities.VideoPlayerActivity"
+			android:name="butter.droid.ui.player.VideoPlayerActivity"
 			android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -437,6 +437,10 @@
 		<activity
 			android:name="butter.droid.ui.trailer.TrailerPlayerActivity"
 			android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.base.WebViewActivity"
+            android:screenOrientation="sensorPortrait" />
 
         <service android:name="butter.droid.base.torrent.TorrentService" />
         <service android:name=".base.manager.internal.beaming.server.BeamServerService" />

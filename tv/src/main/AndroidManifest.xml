@@ -28,7 +28,7 @@
         android:required="false" />
     <uses-feature
         android:name="android.software.leanback"
-        android:required="false" />
+        android:required="true" />
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -161,7 +161,7 @@
         <activity android:name=".ui.search.TVSearchActivity" />
         <activity android:name=".activities.TVPreferencesActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".ui.loading.TVStreamLoadingActivity" android:noHistory="true" />
-        <activity android:name=".activities.TVVideoPlayerActivity" android:launchMode="singleTask" />
+        <activity android:name=".ui.player.TVVideoPlayerActivity" android:launchMode="singleTask" />
         <activity android:name=".activities.TVUpdateActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".ui.trailer.TVTrailerPlayerActivity" />
 

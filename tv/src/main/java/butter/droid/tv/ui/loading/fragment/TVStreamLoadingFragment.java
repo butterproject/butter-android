@@ -31,7 +31,7 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.tv.R;
-import butter.droid.tv.activities.TVVideoPlayerActivity;
+import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.utils.BackgroundUpdater;
 

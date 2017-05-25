@@ -17,34 +17,52 @@
 
 package butter.droid.ui.trailer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.view.WindowManager;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.phone.PhoneManager;
+import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.manager.internal.phone.PhoneManager;
-import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.manager.internal.audio.AudioManager;
+import butter.droid.manager.internal.brightness.BrightnessManager;
+import butter.droid.ui.player.VideoPlayerTouchHandler;
 import dagger.Module;
 import dagger.Provides;
+import org.videolan.libvlc.LibVLC;
 
-@Module
+@Module(includes = TrailerPlayerBindModule.class)
 public class TrailerPlayerModule {
 
     private final TrailerPlayerView view;
+    private final Activity activity;
 
-    public TrailerPlayerModule(TrailerPlayerView view) {
+    public TrailerPlayerModule(final TrailerPlayerView view, final Activity activity) {
         this.view = view;
+        this.activity = activity;
     }
 
-    @Provides
-    @ActivityScope
-    TrailerPlayerView provideView() {
+    @Provides @FragmentScope TrailerPlayerView provideView() {
         return view;
     }
 
-    @Provides
-    @ActivityScope
-    TrailerPlayerPresenter providePresenter(Context context, TrailerPlayerView trailerPlayerView, YouTubeManager youTubeManager,
-            NetworkManager networkManager, PhoneManager phoneManager) {
-        return new TrailerPlayerPresenterImpl(context, trailerPlayerView, youTubeManager, networkManager, phoneManager);
+    @Provides @FragmentScope TrailerPlayerPresenter providePresenter(TrailerPlayerView view, Context context,
+            PreferencesHandler preferencesHandler, AudioManager audioManager, BrightnessManager brightnessManager,
+            VideoPlayerTouchHandler touchHandler, VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager,
+            PhoneManager phoneManager) {
+        return new TrailerPlayerPresenterImpl(view, context, preferencesHandler, player, youTubeManager, networkManager,
+                phoneManager, brightnessManager, touchHandler, audioManager);
+    }
+
+    @Provides @FragmentScope Activity provideActivity() {
+        return activity;
+    }
+
+    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
+        return new VlcPlayer(libVLC, windowManager);
     }
 
 }

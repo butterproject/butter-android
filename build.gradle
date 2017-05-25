@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:2.3.2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
@@ -19,7 +19,7 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "25.3.0"
+    appCompatVersion = "25.3.1"
     buildToolsVersion = "25.0.0"
     targetSdk = 25
     compileSdk = 25
@@ -29,6 +29,8 @@ ext {
     daggerVersion = "2.9"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.3.0'
+    filePickerVersion = '1.1.0'
+    changeloglibVersion = '2.1.0'
 }
 
 allprojects {
@@ -38,6 +40,7 @@ allprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
         maven { url "https://jitpack.io" }
+        maven { url  "http://dl.bintray.com/lukaville/maven" }
     }
 
     //let project evaluate its script first

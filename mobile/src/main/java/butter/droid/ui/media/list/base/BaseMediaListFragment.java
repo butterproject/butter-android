@@ -36,26 +36,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingItemDecoration;
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import butter.droid.R;
 import butter.droid.base.providers.media.MediaProvider.Filters.Order;
 import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
-import butter.droid.fragments.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.manager.paging.IndexPagingListener;
 import butter.droid.manager.paging.PagingManager;
 import butter.droid.ui.media.detail.MediaDetailActivity;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
+import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.ui.media.list.base.list.MediaGridAdapter;
+import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingItemDecoration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.ArrayList;
+import javax.inject.Inject;
 
 /**
  * This fragment is the main screen for viewing a collection of media items.
@@ -82,7 +79,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
     @Inject BaseMediaListPresenter presenter;
 
-    private Context mContext;
+    private Context context;
     private MediaGridAdapter adapter;
     private GridLayoutManager layoutManager;
     private Integer columns = 2;
@@ -96,14 +93,14 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContext = getActivity();
+        context = getActivity();
 
         rootView = inflater.inflate(R.layout.fragment_media, container, false);
         ButterKnife.bind(this, rootView);
 
         columns = getResources().getInteger(R.integer.overview_cols);
 
-        layoutManager = new GridLayoutManager(mContext, columns);
+        layoutManager = new GridLayoutManager(context, columns);
         recyclerView.setLayoutManager(layoutManager);
 
         return rootView;
@@ -113,7 +110,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final MediaGridSpacingItemDecoration gridSpacingDecoration = new MediaGridSpacingItemDecoration(mContext, columns);
+        final MediaGridSpacingItemDecoration gridSpacingDecoration = new MediaGridSpacingItemDecoration(context, columns);
         final int itemHeight = gridSpacingDecoration.getItemHeight();
         final int itemWidth = gridSpacingDecoration.getItemWidth();
 

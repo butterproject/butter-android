@@ -41,9 +41,6 @@ public class AboutPresenterImpl extends BaseAboutPresenterImpl implements AboutP
             case R.id.git_button:
                 link = ABOUT_GIT;
                 break;
-            case R.id.blog_button:
-                link = ABOUT_BLOG;
-                break;
             case R.id.discuss_button:
                 link = ABOUT_DISCUSS;
                 break;

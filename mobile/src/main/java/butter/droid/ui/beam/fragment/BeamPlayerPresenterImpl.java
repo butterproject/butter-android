@@ -227,9 +227,9 @@ public class BeamPlayerPresenterImpl implements BeamPlayerPresenter, LaunchListe
                 view.hideSeekBar();
             }
 
-            if (!connectedDevice.hasCapability(VolumeControl.Volume_Get) ||
-                    !connectedDevice.hasCapability(VolumeControl.Volume_Set) ||
-                    !connectedDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
+            if (!connectedDevice.hasCapability(VolumeControl.Volume_Get)
+                    || !connectedDevice.hasCapability(VolumeControl.Volume_Set)
+                    || !connectedDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
                 hasVolumeControl = false;
                 view.disableVolumePanel();
             }

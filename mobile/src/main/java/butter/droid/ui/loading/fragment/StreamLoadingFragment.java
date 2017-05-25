@@ -38,7 +38,7 @@ import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.activities.VideoPlayerActivity;
+import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
@@ -61,7 +61,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
 
         ((StreamLoadingActivity) context).getComponent()
                 .streamLoadingFragmentComponentBuilder()
-                .stramLoadingFragmentModule(new StreamLoadingFragmentModule(this))
+                .streamLoadingFragmentModule(new StreamLoadingFragmentModule(this))
                 .build()
                 .inject(this);
     }

@@ -29,6 +29,7 @@ public interface ShowDetailComponent {
     void inject(ShowDetailFragment fragment);
 
     ShowDetailAboutComponent.Builder showDetailAboutBuilder();
+
     ShowDetailSeasonComponent.Builder showDetailSeasonBuilder();
 
     @Subcomponent.Builder interface Builder {

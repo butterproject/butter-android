@@ -36,6 +36,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import butter.droid.base.manager.internal.youtube.YouTubeManager;
+import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +58,7 @@ import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
-import butter.droid.tv.activities.TVVideoPlayerActivity;
+import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MorePresenter;
 import butter.droid.tv.ui.search.TVSearchActivity;
@@ -72,6 +74,7 @@ import okhttp3.Response;
 public class TVOverviewFragment extends BrowseFragment implements OnItemViewClickedListener, OnItemViewSelectedListener {
 
     @Inject ProviderManager providerManager;
+    @Inject YouTubeManager youTubeManager;
 
     private Integer mSelectedRow = 0;
 
@@ -373,6 +376,7 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
             public void onClick(DialogInterface dialogInterface, int index) {
                 dialogInterface.dismiss();
                 final String location = files[index];
+
                 if (location.equals("dialog")) {
                     final EditText dialogInput = new EditText(getActivity());
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -388,23 +392,26 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
                                 }
                             });
                     builder.show();
+                } else if (youTubeManager.isYouTubeUrl(location)) {
+                    Movie movie = new Movie(PlayerTestConstants.FILE_TYPES[index]);
+                    startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, location));
+                } else {
+                    final Movie media = new Movie();
+                    media.videoId = "bigbucksbunny";
+                    media.title = file_types[index];
+                    media.subtitles = new HashMap<>();
+                    media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
+
+                    providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
+                        @Override public void onFailure(Call call, IOException e) {
+                            TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
+                        }
+
+                        @Override public void onResponse(Call call, Response response) throws IOException {
+                            TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
+                        }
+                    });
                 }
-
-                final Movie media = new Movie();
-                media.videoId = "bigbucksbunny";
-                media.title = file_types[index];
-                media.subtitles = new HashMap<>();
-                media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
-
-                providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                    @Override public void onFailure(Call call, IOException e) {
-                        TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
-                    }
-
-                    @Override public void onResponse(Call call, Response response) throws IOException {
-                        TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null, location));
-                    }
-                });
             }
         });
 

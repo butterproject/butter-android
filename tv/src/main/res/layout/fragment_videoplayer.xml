@@ -17,27 +17,17 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:baselineAligned="false"
-	android:orientation="vertical"
-	android:background="@android:color/black">
-
-	<FrameLayout
-		android:id="@+id/frameLayout"
 		android:layout_width="match_parent"
-		tools:background="#88ffffff"
 		android:layout_height="match_parent"
-		android:foregroundGravity="clip_horizontal|clip_vertical">
+		android:baselineAligned="false"
+		android:orientation="vertical"
+		android:background="@android:color/black">
 
-		<SurfaceView
-			android:id="@+id/video_surface"
-			android:visibility="gone"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_gravity="center" />
-	</FrameLayout>
+	<SurfaceView
+		android:id="@+id/video_surface"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_gravity="center" />
 
 	<ProgressBar
 		android:id="@+id/progress_indicator"

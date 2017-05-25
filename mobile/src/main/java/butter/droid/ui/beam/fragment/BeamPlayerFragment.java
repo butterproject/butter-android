@@ -45,8 +45,8 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.fragments.dialog.LoadingBeamingDialogFragment;
-import butter.droid.fragments.dialog.OptionDialogFragment;
+import butter.droid.ui.beam.fragment.dialog.LoadingBeamingDialogFragment;
+import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.widget.SeekBar;
 import butterknife.BindView;
@@ -109,15 +109,14 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
         return rootView = inflater.inflate(R.layout.fragment_beamplayer, container, false);
     }
 
-    @Override
-    public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(v, savedInstanceState);
-        ButterKnife.bind(this, v);
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
 
         setupToolbar((AppCompatActivity) getActivity());
 
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
-        volumeBar.setOnSeekBarChangeListener(mVolumeBarChangeListener);
+        volumeBar.setOnSeekBarChangeListener(volumeBarChangeListener);
 
         presenter.onViewCreated();
     }
@@ -158,18 +157,22 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
 
     @Override
     public void onStreamStarted(Torrent torrent) {
+        // nothing to do
     }
 
     @Override
     public void onStreamPrepared(Torrent torrent) {
+        // nothing to do
     }
 
     @Override
-    public void onStreamError(Torrent torrent, Exception e) {
+    public void onStreamError(Torrent torrent, Exception exception) {
+        // nothing to do
     }
 
     @Override
     public void onStreamReady(Torrent torrent) {
+        // nothing to do
     }
 
     @Override
@@ -181,6 +184,7 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
 
     @Override
     public void onStreamStopped() {
+        // nothing to do
     }
 
     @Override public void tintProgress(@ColorInt int paletteColor) {
@@ -361,7 +365,7 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
         }
     };
 
-    public final SeekBar.OnSeekBarChangeListener mVolumeBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+    public final SeekBar.OnSeekBarChangeListener volumeBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
         }

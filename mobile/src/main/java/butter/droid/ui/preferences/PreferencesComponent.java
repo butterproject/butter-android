@@ -20,15 +20,14 @@ package butter.droid.ui.preferences;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = PreferencesModule.class
-)
+@Subcomponent(modules = PreferencesModule.class)
 @ActivityScope
 public interface PreferencesComponent {
 
     void inject(PreferencesActivity activity);
 
-    @Subcomponent.Builder interface Builder {
+    @Subcomponent.Builder
+    interface Builder {
 
         Builder preferencesModule(PreferencesModule module);
 
