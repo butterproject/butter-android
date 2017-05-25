@@ -51,7 +51,7 @@
         android:theme="@style/Theme.Butter.TV" >
 
         <activity
-            android:name=".activities.TVLaunchActivity"
+            android:name=".ui.launch.TVLaunchActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.HiddenActivity" >
             <intent-filter>
