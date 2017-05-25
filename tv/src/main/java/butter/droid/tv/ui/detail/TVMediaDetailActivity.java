@@ -46,7 +46,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
         component = TVButterApplication.getAppContext()
                 .getComponent()
                 .tvMediaDetailComponentBuilder()
-                .mediDetailModule(new TvMediDetailModule(this))
+                .mediaDetailModule(new TVMediaDetailModule(this))
                 .backgroundUpdaterModule(new BackgroundUpdaterModule(this))
                 .build();
         component.inject(this);
