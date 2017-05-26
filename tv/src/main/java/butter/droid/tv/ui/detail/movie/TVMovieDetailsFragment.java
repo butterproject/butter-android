@@ -19,115 +19,48 @@ package butter.droid.tv.ui.detail.movie;
 
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.providers.media.models.Media.Torrent;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.NetworkUtils;
-import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
-import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
-public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback, OnActionClickedListener {
+public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVMovieDetailsView {
 
-    @Inject ProviderManager providerManager;
+    @Inject TVMovieDetailsPresenter presenter;
     @Inject YouTubeManager youTubeManager;
     @Inject PreferencesHandler preferencesHandler;
-
-    private Movie getMovieItem() {
-        return (Movie) getMediaItem();
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TVButterApplication.getAppContext()
+        ((TVMediaDetailActivity) getActivity())
                 .getComponent()
+                .movieDetailComponentBuilder()
+                .movieDetailModule(new TVMovieDetailModule(this))
+                .build()
                 .inject(this);
-    }
 
-    @Override protected void loadDetails() {
-        ArrayList<Media> mediaList = new ArrayList<>();
-        mediaList.add(getMovieItem());
+        Movie item = getArguments().getParcelable(EXTRA_ITEM);
 
-        providerManager.getCurrentMediaProvider().getDetail(mediaList, 0, this);
+        presenter.onCreate(item);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
         return new MovieDetailsDescriptionPresenter();
     }
 
-    @Override protected void onDetailLoaded() {
-        addActions(getMovieItem());
-    }
-
-    @Override protected void addActions(Media item) {
-        if (item instanceof Movie) {
-            Movie movie = (Movie) item;
-
-            List<String> qualities = new ArrayList<>(movie.torrents.keySet());
-
-            if (movie.trailer != null) {
-                addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch),
-                        getResources().getString(R.string.trailer)));
-            }
-
-            for (String quality : qualities) {
-
-                Media.Torrent torrent = movie.torrents.get(quality);
-
-                //add action
-                addAction(new WatchAction((long) qualities.indexOf(quality), getResources().getString(
-                        R.string.watch), quality, torrent));
-            }
-        }
-    }
-
     @Override protected ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
         return null;
-    }
-
-    @Override
-    public void onActionClicked(Action a) {
-        if (a instanceof WatchAction) {
-            // check for network
-            if (!NetworkUtils.isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), R.string.network_message, Toast.LENGTH_SHORT).show();
-            } else {
-                WatchAction action = (WatchAction) a;
-                Media.Torrent torrent = action.getTorrent();
-                String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-                StreamInfo info = new StreamInfo(
-                        getMovieItem(),
-                        torrent.url,
-                        subtitleLanguage,
-                        action.getLabel2().toString());
-
-                TVStreamLoadingActivity.startActivity(getActivity(), info);
-            }
-        } else if (a instanceof TrailerAction) {
-            Movie movie = getMovieItem();
-            if (!youTubeManager.isYouTubeUrl(movie.trailer)) {
-                TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(movie, null, null, null, null, movie.trailer));
-            } else {
-                startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, movie.trailer));
-            }
-        }
     }
 
     public static Fragment newInstance(Media media) {
@@ -140,28 +73,15 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
         return fragment;
     }
 
-    public static class WatchAction extends android.support.v17.leanback.widget.Action {
-
-        private Media.Torrent mTorrent;
-
-        public WatchAction(long id, CharSequence label, CharSequence label2, Media.Torrent torrent) {
-            super(id, label, label2);
-            this.mTorrent = torrent;
-        }
-
-        public Media.Torrent getTorrent() {
-            return mTorrent;
-        }
-
-        public void setTorrent(Media.Torrent torrent) {
-            mTorrent = torrent;
-        }
+    @Override public void startTrailer(final Movie movie, final String trailer) {
+        startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, trailer));
     }
 
-    public static class TrailerAction extends android.support.v17.leanback.widget.Action {
+    @Override public void startMovie(final Movie item, final Torrent torrent, final String quality) {
+        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
+        StreamInfo info = new StreamInfo(item, torrent.url, subtitleLanguage, quality);
 
-        public TrailerAction(long id, CharSequence label1, CharSequence label2) {
-            super(id, label1, label2);
-        }
+        TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
+
 }

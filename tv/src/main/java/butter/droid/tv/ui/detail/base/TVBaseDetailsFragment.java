@@ -17,11 +17,10 @@
 
 package butter.droid.tv.ui.detail.base;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v17.leanback.app.DetailsSupportFragment;
 import android.support.v17.leanback.app.DetailsSupportFragmentBackgroundController;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
@@ -34,83 +33,82 @@ import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElement
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.PresenterSelector;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.ThreadUtils;
-import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
 import com.squareup.picasso.Target;
-import java.util.ArrayList;
 import javax.inject.Inject;
 
-public abstract class TVBaseDetailsFragment extends DetailsSupportFragment implements MediaProvider.Callback,
-        OnActionClickedListener {
+public abstract class TVBaseDetailsFragment extends DetailsSupportFragment implements TVBaseDetailView, OnActionClickedListener {
 
+    protected static final String EXTRA_ITEM = "butter.droid.tv.ui.detail.base.TVBaseDetailsFragment.item";
+
+    @Inject TVBaseDetailsPresenter presenter;
     @Inject Picasso picasso;
 
     private final DetailsSupportFragmentBackgroundController detailsBackground =
             new DetailsSupportFragmentBackgroundController(this);
 
-    public static final String EXTRA_ITEM = "item";
-
     private ArrayObjectAdapter adapter;
     private ClassPresenterSelector presenterSelector;
-
-    private Media item;
+    private DetailsOverviewRow detailsRow;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         detailsBackground.enableParallax();
-        item = getArguments().getParcelable(EXTRA_ITEM);
+    }
 
-        setupAdapter();
-        setupDetailsOverviewRowPresenter();
+    @Override public void onDestroy() {
+        super.onDestroy();
 
-        final DetailsOverviewRow detailRow = createDetailsOverviewRow(item.image);
-        adapter.add(detailRow);
+        presenter.onDestroy();
+        picasso.cancelRequest(detailsImageTarget);
+    }
 
-        loadDetails();
+    @Override public void initData(final Media item) {
+        presenterSelector = new ClassPresenterSelector();
+        createPresenters(presenterSelector);
+
+        adapter = new ArrayObjectAdapter(presenterSelector);
+
+        setupDetailsOverviewRowPresenter(item);
+
+        detailsRow = new DetailsOverviewRow(item);
+        adapter.add(detailsRow);
 
         setAdapter(adapter);
     }
 
-    protected abstract void loadDetails();
+    @Override public void updateOverview(final Media media) {
+        detailsRow.setItem(media);
+        adapter.notifyArrayItemRangeChanged(0, 1);
+        updateDetailImage(media);
+    }
+
+    @Override public void onActionClicked(final Action action) {
+        presenter.actionClicked(action.getId());
+    }
+
+    @Override public void addAction(final int id, @StringRes final int text1, @StringRes final int text2) {
+        addAction(id, text1, getString(text2));
+    }
+
+    @Override public void addAction(final int id, @StringRes final int text1, final String text2) {
+        addAction(new Action(id, getString(text1), text2));
+    }
 
     protected abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
-
-    protected abstract void onDetailLoaded();
 
     protected ArrayObjectAdapter getObjectArrayAdapter() {
         return adapter;
     }
 
-    protected Media getMediaItem() {
-        return item;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    private void setupAdapter() {
-        presenterSelector = new ClassPresenterSelector();
-        createPresenters(presenterSelector);
-
-        adapter = createAdapter(presenterSelector);
-    }
-
     protected abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
 
-    protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
-        return new ArrayObjectAdapter(selector);
-    }
-
-    private void setupDetailsOverviewRowPresenter() {
+    private void setupDetailsOverviewRowPresenter(Media item) {
         // Set detail background and style.
         FullWidthDetailsOverviewRowPresenter detailsPresenter = new FullWidthDetailsOverviewRowPresenter(getDetailPresenter());
         detailsPresenter.setBackgroundColor(item.color);
@@ -125,66 +123,28 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
 
-    private DetailsOverviewRow createDetailsOverviewRow(String imageUrl) {
-        final DetailsOverviewRow detailsRow = new DetailsOverviewRow(item);
-
-        picasso.load(imageUrl).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                detailsRow.setImageBitmap(getActivity(), bitmap);
-                adapter.notifyArrayItemRangeChanged(0, adapter.size());
-
-            }
-
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                if (VersionUtils.isLollipop()) {
-                    getActivity().startPostponedEnterTransition();
-                }
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        });
-        return detailsRow;
+    private void updateDetailImage(final Media item) {
+        picasso.load(item.image)
+                .into(detailsImageTarget);
     }
 
     protected void addAction(Action action) {
-        DetailsOverviewRow detailRow = (DetailsOverviewRow) adapter.get(0);
-        detailRow.addAction(action);
+        ((ArrayObjectAdapter) detailsRow.getActionsAdapter())
+                .add(action);
     }
 
-    protected abstract void addActions(Media item);
-
-    @Override
-    public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-        if (!isAdded()) {
-            return;
+    private final Target detailsImageTarget = new Target() {
+        @Override public void onBitmapLoaded(final Bitmap bitmap, final LoadedFrom from) {
+            detailsRow.setImageBitmap(getActivity(), bitmap);
         }
 
-        if (null == items || items.size() == 0) {
-            return;
+        @Override public void onBitmapFailed(final Drawable errorDrawable) {
+            // nothing to do
         }
 
-        final Media itemDetail = items.get(0);
-
-        item = itemDetail;
-
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override public void run() {
-                final DetailsOverviewRow detailRow = createDetailsOverviewRow(itemDetail.image);
-                adapter.replace(0, detailRow);
-                onDetailLoaded();
-            }
-        });
-    }
-
-    @Override
-    public void onFailure(Exception e) {
-        //todo: on load failure
-    }
+        @Override public void onPrepareLoad(final Drawable placeHolderDrawable) {
+            // nothing to do
+        }
+    };
 
 }

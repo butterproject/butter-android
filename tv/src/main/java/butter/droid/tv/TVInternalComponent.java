@@ -23,8 +23,6 @@ import butter.droid.base.providers.ProviderComponent;
 import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
-import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
-import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
@@ -68,11 +66,7 @@ public interface TVInternalComponent extends BaseInternalComponent {
 
     void inject(RecommendationService service);
 
-    void inject(TVMovieDetailsFragment fragment);
-
     void inject(TVMediaGridFragment fragment);
-
-    void inject(TVShowDetailsFragment fragment);
 
     void inject(TVUpdateFragment fragment);
 

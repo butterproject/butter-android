@@ -22,36 +22,24 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
-import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import butter.droid.tv.presenters.showdetail.EpisodeCardPresenter;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
-import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.inject.Inject;
 
-public class TVShowDetailsFragment extends TVBaseDetailsFragment implements MediaProvider.Callback,
-        OnActionClickedListener, EpisodeCardPresenter.Listener {
+public class TVShowDetailsFragment extends TVBaseDetailsFragment implements OnActionClickedListener, EpisodeCardPresenter.Listener {
 
     @Inject PreferencesHandler preferencesHandler;
 
@@ -70,36 +58,25 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements Medi
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TVButterApplication.getAppContext()
-                .getComponent()
-                .inject(this);
-    }
-
-    @Override public void loadDetails() {
-        ArrayList<Media> mediaList = new ArrayList<>();
-        mediaList.add(getShowItem());
-        mTvProvider.getDetail(mediaList, 0, this);
+//        TVButterApplication.getAppContext()
+//                .getComponent()
+//                .inject(this);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
         return new ShowDetailsDescriptionPresenter();
     }
 
-    @Override protected void onDetailLoaded() {
-        updateShowsAdapterContent();
-    }
+//    @Override protected void onDetailLoaded() {
+//        updateShowsAdapterContent();
+//    }
 
     @Override protected ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
         selector.addClassPresenter(DetailsOverviewRow.class, new EpisodeCardPresenter(getActivity()));
         return null;
     }
 
-    @Override protected void addActions(Media item) { }
-
-    @Override
-    protected ArrayObjectAdapter createAdapter(PresenterSelector selector) {
-        return new ArrayObjectAdapter(selector);
-    }
+//    @Override protected void addActions(Media item) { }
 
     @Override
     public void onActionClicked(Action action) {
@@ -124,52 +101,48 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements Medi
     }
 
     private void updateShowsAdapterContent() {
-        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer me, Integer other) {
-                return me - other;
-            }
-        });
-
-        for (Episode episode : getShowItem().episodes) {
-            // create list of season if does not exists
-            if (!seasons.containsKey(episode.season)) {
-                seasons.put(episode.season, new ArrayList<Episode>());
-            }
-
-            // add episode to the list
-            final List<Episode> seasonEpisodes = seasons.get(episode.season);
-            seasonEpisodes.add(episode);
-        }
-
-        ArrayObjectAdapter objectAdapter = getObjectArrayAdapter();
-
-        for (Integer seasonKey : seasons.descendingKeySet()) {
-            Collections.sort(seasons.get(seasonKey), new Comparator<Episode>() {
-                @Override
-                public int compare(Episode me, Episode other) {
-                    if (me.episode < other.episode) return -1;
-                    else if (me.episode > other.episode) return 1;
-                    return 0;
-                }
-            });
-
-            EpisodeCardPresenter presenter = new EpisodeCardPresenter(getActivity());
-            presenter.setOnClickListener(this);
-            ArrayObjectAdapter episodes = new ArrayObjectAdapter(presenter);
-
-            for (Episode episode : seasons.get(seasonKey)) {
-                episodes.add(episode);
-            }
-            HeaderItem header = new HeaderItem(seasonKey, String.format("Season %d", seasonKey));
-            objectAdapter.add(new ListRow(header, episodes));
-        }
-
-        objectAdapter.notifyArrayItemRangeChanged(0, objectAdapter.size());
-    }
-
-    private Show getShowItem() {
-        return (Show) getMediaItem();
+//        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
+//            @Override
+//            public int compare(Integer me, Integer other) {
+//                return me - other;
+//            }
+//        });
+//
+//        for (Episode episode : getShowItem().episodes) {
+//            // create list of season if does not exists
+//            if (!seasons.containsKey(episode.season)) {
+//                seasons.put(episode.season, new ArrayList<Episode>());
+//            }
+//
+//            // add episode to the list
+//            final List<Episode> seasonEpisodes = seasons.get(episode.season);
+//            seasonEpisodes.add(episode);
+//        }
+//
+//        ArrayObjectAdapter objectAdapter = getObjectArrayAdapter();
+//
+//        for (Integer seasonKey : seasons.descendingKeySet()) {
+//            Collections.sort(seasons.get(seasonKey), new Comparator<Episode>() {
+//                @Override
+//                public int compare(Episode me, Episode other) {
+//                    if (me.episode < other.episode) return -1;
+//                    else if (me.episode > other.episode) return 1;
+//                    return 0;
+//                }
+//            });
+//
+//            EpisodeCardPresenter presenter = new EpisodeCardPresenter(getActivity());
+//            presenter.setOnClickListener(this);
+//            ArrayObjectAdapter episodes = new ArrayObjectAdapter(presenter);
+//
+//            for (Episode episode : seasons.get(seasonKey)) {
+//                episodes.add(episode);
+//            }
+//            HeaderItem header = new HeaderItem(seasonKey, String.format("Season %d", seasonKey));
+//            objectAdapter.add(new ListRow(header, episodes));
+//        }
+//
+//        objectAdapter.notifyArrayItemRangeChanged(0, objectAdapter.size());
     }
 
     @SuppressWarnings("unchecked")
@@ -188,17 +161,17 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements Medi
     }
 
     private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-
-        Show show = getShowItem();
-
-        StreamInfo info = new StreamInfo(
-                episode,
-                show,
-                torrent.getValue().url,
-                subtitleLanguage,
-                torrent.getKey());
-
-        TVStreamLoadingActivity.startActivity(getActivity(), info, show);
+//        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
+//
+//        Show show = getShowItem();
+//
+//        StreamInfo info = new StreamInfo(
+//                episode,
+//                show,
+//                torrent.getValue().url,
+//                subtitleLanguage,
+//                torrent.getKey());
+//
+//        TVStreamLoadingActivity.startActivity(getActivity(), info, show);
     }
 }
