@@ -37,14 +37,14 @@ import butter.droid.tv.R;
 
 public class EpisodeCardPresenter extends Presenter {
 
-    private Context mContext;
-    private int mCardWidth;
-    private int mCardHeight;
+    private Context context;
+    private int cardWidth;
+    private int cardHeight;
     private Listener clickListener;
 
     public EpisodeCardPresenter(Context context) {
-        mCardWidth = (int) context.getResources().getDimension(R.dimen.card_thumbnail_width);
-        mCardHeight = (int) context.getResources().getDimension(R.dimen.card_thumbnail_height);
+        cardWidth = (int) context.getResources().getDimension(R.dimen.card_thumbnail_width);
+        cardHeight = (int) context.getResources().getDimension(R.dimen.card_thumbnail_height);
     }
 
     public void setOnClickListener(@NonNull Listener listener) {
@@ -53,14 +53,14 @@ public class EpisodeCardPresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        mContext = parent.getContext();
+        context = parent.getContext();
 
-        ImageCardView cardView = new ImageCardView(mContext);
+        ImageCardView cardView = new ImageCardView(context);
         cardView.setCardType(BaseCardView.CARD_TYPE_INFO_UNDER);
         cardView.setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
-        cardView.setBackgroundColor(ActivityCompat.getColor(mContext, R.color.default_background));
+        cardView.setBackgroundColor(ActivityCompat.getColor(context, R.color.default_background));
 
         return new ViewHolder(cardView);
     }
@@ -71,8 +71,8 @@ public class EpisodeCardPresenter extends Presenter {
         ((ViewHolder) viewHolder).setEpisode(episode);
         ((ViewHolder) viewHolder).getCardView().setTitleText(episode.title);
         ((ViewHolder) viewHolder).getCardView().setContentText(
-                String.format(mContext.getString(R.string.episode_number_format), episode.episode));
-        ((ViewHolder) viewHolder).getCardView().setMainImageDimensions(mCardWidth, mCardHeight);
+                String.format(context.getString(R.string.episode_number_format), episode.episode));
+        ((ViewHolder) viewHolder).getCardView().setMainImageDimensions(cardWidth, cardHeight);
         ((ViewHolder) viewHolder).updateCardViewImage(episode.image);
         ((ViewHolder) viewHolder).cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +99,7 @@ public class EpisodeCardPresenter extends Presenter {
             super(view);
             cardView = (ImageCardView) view;
             imageCardViewTarget = new PicassoImageCardViewTarget(cardView);
-            defaultImage = ActivityCompat.getDrawable(mContext, R.drawable.banner);
+            defaultImage = ActivityCompat.getDrawable(context, R.drawable.banner);
             cardView.setMainImage(defaultImage);
         }
 
@@ -116,9 +116,9 @@ public class EpisodeCardPresenter extends Presenter {
         }
 
         protected void updateCardViewImage(String uri) {
-            Picasso.with(mContext)
+            Picasso.with(context)
                     .load(uri)
-                    .resize(mCardWidth, mCardHeight)
+                    .resize(cardWidth, cardHeight)
                     .centerCrop()
                     .placeholder(defaultImage)
                     .error(defaultImage)
@@ -136,7 +136,7 @@ public class EpisodeCardPresenter extends Presenter {
 
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-            Drawable bitmapDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
+            Drawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
             mImageCardView.setMainImage(bitmapDrawable);
         }
 
