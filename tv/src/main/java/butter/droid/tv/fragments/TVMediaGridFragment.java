@@ -22,6 +22,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.app.VerticalGridFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
@@ -31,12 +32,6 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
@@ -47,9 +42,16 @@ import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.manager.internal.background.BackgroundUpdater;
+import butter.droid.tv.presenters.LoadingCardPresenter;
+import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
-import butter.droid.tv.utils.BackgroundUpdater;
+import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
+import com.squareup.picasso.Picasso;
 import hugo.weaving.DebugLog;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 
@@ -61,12 +63,13 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     private static final int NUM_COLUMNS = 6;
 
     @Inject ProviderManager providerManager;
+    @Inject Picasso picasso;
 
-    private List<MediaCardPresenter.MediaCardItem> mItems = new ArrayList<>();
-    private ArrayObjectAdapter mAdapter;
-    private Callback mCallback;
-    private BackgroundUpdater mBackgroundUpdater;
-    private int mCurrentPage = 1;
+    private List<MediaCardPresenter.MediaCardItem> items = new ArrayList<>();
+    private ArrayObjectAdapter adapter;
+    private Callback callback;
+    private BackgroundUpdater backgroundUpdater;
+    private int currentPage = 1;
 
     public static TVMediaGridFragment newInstance() {
         return new TVMediaGridFragment();
@@ -75,7 +78,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCallback = (Callback) context;
+        callback = (Callback) context;
     }
 
     @Override
@@ -96,8 +99,8 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
         Activity activity = getActivity();
         setTitle(StringUtils.capWords((String) activity.getTitle()));
 
-        if (activity instanceof Callback && mCallback == null) {
-            mCallback = (Callback) getActivity();
+        if (activity instanceof Callback && callback == null) {
+            callback = (Callback) getActivity();
         }
 
         loadItems();
@@ -105,23 +108,27 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
 
     private void setupFragment() {
         //setup background updater
-        mBackgroundUpdater = new BackgroundUpdater();
-        mBackgroundUpdater.initialise(getActivity(), R.color.black);
+        backgroundUpdater = BackgroundUpdater.newInstance(getActivity());
+        backgroundUpdater.initialise(getActivity(), R.color.black);
 
         VerticalGridPresenter gridPresenter = new VerticalGridPresenter();
         gridPresenter.setNumberOfColumns(NUM_COLUMNS);
         setGridPresenter(gridPresenter);
 
-        mAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
-        setAdapter(mAdapter);
+        ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+
+        adapter = new ArrayObjectAdapter(presenterSelector);
+        setAdapter(adapter);
 
         setOnItemViewClickedListener(this);
         setOnItemViewSelectedListener(this);
     }
 
     private MediaProvider.Filters getFilters() {
-        MediaProvider.Filters filters = new MediaProvider.Filters(mCallback.getFilters());
-        filters.page = mCurrentPage;
+        MediaProvider.Filters filters = new MediaProvider.Filters(callback.getFilters());
+        filters.page = currentPage;
         return filters;
     }
 
@@ -130,16 +137,16 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                mCurrentPage = filters.page;
+                currentPage = filters.page;
                 final List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
 
-                mItems.addAll(list);
+                TVMediaGridFragment.this.items.addAll(list);
 
-                final int previousSize = mAdapter.size();
+                final int previousSize = adapter.size();
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override public void run() {
-                        mAdapter.addAll(previousSize,list);
-                        mAdapter.notifyArrayItemRangeChanged(previousSize,list.size());
+                        adapter.addAll(previousSize,list);
+                        adapter.notifyArrayItemRangeChanged(previousSize,list.size());
                     }
                 });
             }
@@ -159,7 +166,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     }
 
     private void loadMore() {
-        mCurrentPage++;
+        currentPage++;
         loadItems();
     }
 
@@ -173,11 +180,10 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != mBackgroundUpdater) mBackgroundUpdater.destroy();
+        if (null != backgroundUpdater) backgroundUpdater.destroy();
     }
 
     private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
-        if (media.isLoading()) return;
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
                 view.getMainImageView(),
@@ -193,19 +199,17 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-            if (overviewItem.isLoading()) return;
-
-            mBackgroundUpdater.updateBackgroundAsync(((MediaCardPresenter.MediaCardItem) item).getMedia().headerImage);
+            backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
         }
 
         //really hacky way of making and 'endless' adapter
 
         //trigger items to update
-        int itemPosition = mItems.indexOf(item);
+        int itemPosition = items.indexOf(item);
 
         //when we are within 3 rows of the end, load more items
         if (itemPosition>getAdapter().size()-(NUM_COLUMNS*3)){
-            Timber.d("Loading more items: page "+mCurrentPage);
+            Timber.d("Loading more items: page "+ currentPage);
             loadMore();
         }
     }

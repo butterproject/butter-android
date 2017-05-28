@@ -19,63 +19,69 @@ package butter.droid.tv.presenters;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
-
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.utils.StringUtils;
 
 public class MorePresenter extends Presenter {
 
-	private Context context;
+    private Context context;
 
-	public MorePresenter(Context context) {
-		this.context = context.getApplicationContext();
-	}
+    public MorePresenter(Context context) {
+        this.context = context.getApplicationContext();
+    }
 
-	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent) {
-		final MoreCardView cardView = new MoreCardView(context);
-		return new ViewHolder(cardView);
-	}
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent) {
+        final MoreCardView cardView = new MoreCardView(context);
+        return new ViewHolder(cardView);
+    }
 
-	@Override
-	public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-		MoreItem moreItem = (MoreItem) item;
-		MoreCardView cardView = (MoreCardView) viewHolder.view;
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        MoreItem moreItem = (MoreItem) item;
+        MoreCardView cardView = (MoreCardView) viewHolder.view;
 
-		cardView.setTitleText(StringUtils.capWords(context.getString(moreItem.title).toLowerCase()));
-		cardView.setImageResource(moreItem.icon);
-	}
+        cardView.setTitleText(StringUtils.capWords(context.getString(moreItem.title).toLowerCase()));
+        cardView.setImageResource(moreItem.icon);
+    }
 
-	@Override
-	public void onUnbindViewHolder(ViewHolder viewHolder) {
-	}
+    @Override
+    public void onUnbindViewHolder(ViewHolder viewHolder) {
+    }
 
-	public static class MoreItem {
+    public static class MoreItem {
 
-		@StringRes private final int title;
-		private final int icon;
-		private final int id;
-		private MediaProvider.NavInfo navInfo;
+        @StringRes private final int title;
+        private final int icon;
+        private final int id;
+        private MediaProvider.NavInfo navInfo;
 
-		public MoreItem(int id, @StringRes int text, @DrawableRes int iconResId, @Nullable MediaProvider.NavInfo info) {
-			this.id = id;
-			icon = iconResId;
-			title = text;
-			this.navInfo = info;
-		}
+        public MoreItem(@NonNull MediaProvider.NavInfo info) {
+            this.id = info.getId();
+            icon = info.getIcon();
+            title = info.getLabel();
+            this.navInfo = info;
+        }
 
-		public int getId() {
-			return id;
-		}
+        public MoreItem(int id, @StringRes int text, @DrawableRes int iconResId) {
+            this.id = id;
+            icon = iconResId;
+            title = text;
+            this.navInfo = null;
+        }
 
-		public MediaProvider.NavInfo getNavInfo() {
-			return navInfo;
-		}
-	}
+        public int getId() {
+            return id;
+        }
+
+        public MediaProvider.NavInfo getNavInfo() {
+            return navInfo;
+        }
+    }
 
 
 }

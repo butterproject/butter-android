@@ -17,11 +17,10 @@
 
 package butter.droid.tv.activities;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.GuidedStepFragment;
-
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import butter.droid.tv.ui.preferences.TVPreferencesFragment;
@@ -38,9 +37,8 @@ public class TVPreferencesActivity extends TVBaseActivity {
         GuidedStepFragment.addAsRoot(this, new TVPreferencesFragment(), android.R.id.content);
     }
 
-    public static Intent startActivity(Activity activity) {
-        Intent intent = new Intent(activity, TVPreferencesActivity.class);
-        activity.startActivity(intent);
-        return intent;
+    public static Intent getIntent(Context context) {
+        return new Intent(context, TVPreferencesActivity.class);
     }
+
 }

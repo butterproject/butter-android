@@ -15,12 +15,9 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv;
+package butter.droid.tv.ui.main;
 
-import butter.droid.base.InternalBaseModule;
-import dagger.Module;
+public interface TVMainPresenter {
 
-@Module(includes = InternalBaseModule.class)
-public class InternalModule {
-
+    void onResume();
 }

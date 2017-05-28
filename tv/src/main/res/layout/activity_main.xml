@@ -19,10 +19,10 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_browse_fragment"
-    android:name="butter.droid.tv.fragments.TVOverviewFragment"
+    android:name="butter.droid.tv.ui.main.overview.TVOverviewFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.TVMainActivity"
+    tools:context=".ui.main.TVMainActivity"
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame"
 />

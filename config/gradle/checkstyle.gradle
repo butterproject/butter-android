@@ -21,3 +21,5 @@ task checkstyle(type: Checkstyle) {
         }
     }
 }
+
+check.dependsOn('checkstyle')

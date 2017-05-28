@@ -40,89 +40,89 @@ import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment;
 
 public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamLoadingView {
 
-	private final static String EXTRA_STREAM_INFO = "butter.droid.ui.loading.StreamLoadingActivity.info";
-	public final static String EXTRA_SHOW_INFO = "butter.droid.ui.loading.StreamLoadingActivity.show_info";
+    private static final String EXTRA_STREAM_INFO = "butter.droid.ui.loading.StreamLoadingActivity.info";
+    public static final String EXTRA_SHOW_INFO = "butter.droid.ui.loading.StreamLoadingActivity.show_info";
 
-	@Inject TVStreamLoadingPresenter presenter;
+    @Inject TVStreamLoadingPresenter presenter;
 
-	private TVStreamLoadingComponent component;
+    private TVStreamLoadingComponent component;
 
-	@Nullable private BaseStreamLoadingFragment fragment;
+    @Nullable private BaseStreamLoadingFragment fragment;
 
-	@SuppressLint("MissingSuperCall")
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		component = TVButterApplication.getAppContext()
-				.getComponent()
-				.streamLoadingComponentBuilder()
-				.streamLoadingModule(new TVStreamLoadingModule(this))
-				.build();
-		component.inject(this);
+    @SuppressLint("MissingSuperCall")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        component = TVButterApplication.getAppContext()
+                .getComponent()
+                .streamLoadingComponentBuilder()
+                .streamLoadingModule(new TVStreamLoadingModule(this))
+                .build();
+        component.inject(this);
 
-		super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState, 0);
 
-		StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-		Show show = getIntent().getParcelableExtra(EXTRA_SHOW_INFO);
-		presenter.onCreate(streamInfo, show, savedInstanceState != null);
-	}
+        StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
+        Show show = getIntent().getParcelableExtra(EXTRA_SHOW_INFO);
+        presenter.onCreate(streamInfo, show, savedInstanceState != null);
+    }
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		fragment.cancelStream();
-	}
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        fragment.cancelStream();
+    }
 
-	@Override
+    @Override
     public void onTorrentServiceDisconnected(final TorrentService service) {
-		if (null != fragment) {
-			fragment.onTorrentServiceDisconnected();
-		}
-	}
+        if (null != fragment) {
+            fragment.onTorrentServiceDisconnected();
+        }
+    }
 
-	@Override
-	public void onTorrentServiceConnected(final TorrentService service) {
-		if (null != fragment) {
-			fragment.onTorrentServiceConnected(getTorrentService());
-		}
-	}
+    @Override
+    public void onTorrentServiceConnected(final TorrentService service) {
+        if (null != fragment) {
+            fragment.onTorrentServiceConnected(getTorrentService());
+        }
+    }
 
-	@Override public void displayStreamLoadingFragment(@NonNull StreamInfo info, Show show) {
-		TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info, show);
-		getSupportFragmentManager()
-				.beginTransaction()
-				.add(android.R.id.content, fragment)
-				.commit();
+    @Override public void displayStreamLoadingFragment(@NonNull StreamInfo info, Show show) {
+        TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info, show);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(android.R.id.content, fragment)
+                .commit();
 
-		this.fragment = fragment;
-	}
+        this.fragment = fragment;
+    }
 
-	public TVStreamLoadingComponent getComponent() {
-		return component;
-	}
+    public TVStreamLoadingComponent getComponent() {
+        return component;
+    }
 
-	public static Intent startActivity(Activity activity, StreamInfo info) {
-		Intent i = new Intent(activity, TVStreamLoadingActivity.class);
-		i.putExtra(EXTRA_STREAM_INFO, info);
-		activity.startActivity(i);
-		return i;
-	}
+    public static Intent startActivity(Activity activity, StreamInfo info) {
+        Intent intent = new Intent(activity, TVStreamLoadingActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
+        activity.startActivity(intent);
+        return intent;
+    }
 
-	public static Intent startActivity(Activity activity, StreamInfo info, Show show) {
-		Intent i = new Intent(activity, TVStreamLoadingActivity.class);
-		i.putExtra(EXTRA_STREAM_INFO, info);
-		i.putExtra(EXTRA_SHOW_INFO, show);
-		activity.startActivity(i);
-		return i;
-	}
+    public static Intent startActivity(Activity activity, StreamInfo info, Show show) {
+        Intent intent = new Intent(activity, TVStreamLoadingActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
+        intent.putExtra(EXTRA_SHOW_INFO, show);
+        activity.startActivity(intent);
+        return intent;
+    }
 
-	public static Intent startActivity(Activity activity, StreamInfo info, Pair<View, String>... elements) {
-		Intent i = new Intent(activity, TVStreamLoadingActivity.class);
-		i.putExtra(EXTRA_STREAM_INFO, info);
+    public static Intent startActivity(Activity activity, StreamInfo info, Pair<View, String>... elements) {
+        Intent intent = new Intent(activity, TVStreamLoadingActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
 
-		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-				activity, elements);
-		ActivityCompat.startActivity(activity, i, options.toBundle());
-		return i;
-	}
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity, elements);
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
+        return intent;
+    }
 
 }

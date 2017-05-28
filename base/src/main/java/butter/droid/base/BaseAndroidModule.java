@@ -31,7 +31,7 @@ import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module
-public class AndroidModule {
+public class BaseAndroidModule {
 
     @Provides @Singleton ConnectivityManager provideConnectivityManager(Context context) {
         return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

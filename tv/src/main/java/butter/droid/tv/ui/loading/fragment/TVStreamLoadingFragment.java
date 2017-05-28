@@ -33,13 +33,13 @@ import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
-import butter.droid.tv.utils.BackgroundUpdater;
+import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 
 public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implements TVStreamLoadingFragmentView {
 
     protected static final String ARGS_SHOW_INFO = "butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment.show";
 
-    private final BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
+    private BackgroundUpdater mBackgroundUpdater;
 
     @Inject TVStreamLoadingFragmentPresenter presenter;
 
@@ -71,6 +71,7 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mBackgroundUpdater = BackgroundUpdater.newInstance(getActivity());
         mBackgroundUpdater.initialise(getActivity(), R.color.black);
     }
 

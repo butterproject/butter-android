@@ -151,7 +151,7 @@
         </activity>
 
         <!-- Activities -->
-        <activity android:name=".activities.TVMainActivity" />
+        <activity android:name=".ui.main.TVMainActivity" />
         <activity
             android:name=".ui.terms.TVTermsActivity"
             android:noHistory="true"

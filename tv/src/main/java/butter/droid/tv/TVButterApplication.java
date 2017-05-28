@@ -26,7 +26,7 @@ import butter.droid.base.utils.VersionUtils;
 
 public class TVButterApplication extends ButterApplication {
 
-    private InternalComponent component;
+    private TVInternalComponent component;
 
     @Override protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -39,7 +39,7 @@ public class TVButterApplication extends ButterApplication {
         }
     }
 
-    @Override public InternalComponent getComponent() {
+    @Override public TVInternalComponent getComponent() {
         return component;
     }
 
@@ -53,7 +53,7 @@ public class TVButterApplication extends ButterApplication {
                 .baseApplicationComponent(applicationComponent)
                 .build();
 
-        component = DaggerInternalComponent.builder()
+        component = DaggerTVInternalComponent.builder()
                 .providerComponent(providerComponent)
                 .build();
 

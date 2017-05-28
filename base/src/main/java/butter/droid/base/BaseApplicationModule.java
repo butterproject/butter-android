@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 
 @Module(
         includes = {
-                AndroidModule.class,
+                BaseAndroidModule.class,
                 DataModule.class
         }
 )
