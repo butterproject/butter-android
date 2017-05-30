@@ -119,7 +119,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
                 onHomePressed();
                 return true;
             case R.id.action_casting:
-                BeamDeviceSelectorDialogFragment.show(getFragmentManager());
+                BeamDeviceSelectorDialogFragment.show(getSupportFragmentManager());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -170,7 +170,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     }
 
     @Override public void displayDialog(@StringRes int title, @StringRes int message) {
-        MessageDialogFragment.show(getFragmentManager(), title, message);
+        MessageDialogFragment.show(getSupportFragmentManager(), title, message);
     }
 
     @Override public void playStream(StreamInfo streamInfo) {
