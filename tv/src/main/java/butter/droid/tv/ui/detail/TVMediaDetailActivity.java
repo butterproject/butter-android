@@ -25,7 +25,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import javax.inject.Inject;

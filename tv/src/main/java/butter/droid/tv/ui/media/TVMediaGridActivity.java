@@ -25,7 +25,7 @@ import android.support.annotation.StringRes;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVMediaGridActivity extends TVBaseActivity {
 

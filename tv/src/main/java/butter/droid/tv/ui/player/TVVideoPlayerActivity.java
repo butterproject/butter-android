@@ -27,7 +27,7 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;
 import javax.inject.Inject;
 

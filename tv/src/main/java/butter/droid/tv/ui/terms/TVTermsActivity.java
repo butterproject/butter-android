@@ -23,7 +23,7 @@ import android.os.Bundle;
 
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVTermsActivity extends TVBaseActivity {
 
