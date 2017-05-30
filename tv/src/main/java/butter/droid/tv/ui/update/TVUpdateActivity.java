@@ -15,24 +15,16 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities;
+package butter.droid.tv.ui.update;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
 
 public class TVUpdateActivity extends TVBaseActivity {
-
-	public static Intent startActivity(Context context) {
-		Intent intent = new Intent(context, TVUpdateActivity.class);
-		context.startActivity(intent);
-		return intent;
-	}
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +33,10 @@ public class TVUpdateActivity extends TVBaseActivity {
 				.inject(this);
 
 		super.onCreate(savedInstanceState,R.layout.activity_update);
+	}
+
+	public static Intent newIntent(Context context) {
+		return new Intent(context, TVUpdateActivity.class);
 	}
 
 }

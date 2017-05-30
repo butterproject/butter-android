@@ -162,7 +162,7 @@
         <activity android:name=".activities.TVPreferencesActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".ui.loading.TVStreamLoadingActivity" android:noHistory="true" />
         <activity android:name=".ui.player.TVVideoPlayerActivity" android:launchMode="singleTask" />
-        <activity android:name=".activities.TVUpdateActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
+        <activity android:name=".ui.update.TVUpdateActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".ui.trailer.TVTrailerPlayerActivity" />
 
       <service android:name="butter.droid.base.torrent.TorrentService" />

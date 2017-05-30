@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVUpdateActivity;
+import butter.droid.tv.ui.update.TVUpdateActivity;
 import butter.droid.tv.activities.base.TVBaseActivity;
 import javax.inject.Inject;
 
@@ -52,7 +52,7 @@ public class TVMainActivity extends TVBaseActivity implements TVMainView {
     }
 
     @Override public void showUpdateActivity() {
-        TVUpdateActivity.startActivity(this);
+        startActivity(TVUpdateActivity.newIntent(this));
     }
 
     public TVMainComponent getComponent() {

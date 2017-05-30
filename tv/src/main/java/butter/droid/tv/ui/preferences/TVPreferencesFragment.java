@@ -34,7 +34,7 @@ import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVUpdateActivity;
+import butter.droid.tv.ui.update.TVUpdateActivity;
 import butter.droid.tv.fragments.TVPreferencesListFragment;
 import butter.droid.tv.fragments.TVPreferencesListFragment.SelectionListener;
 import butter.droid.tv.ui.about.TvAboutFragment;
@@ -74,7 +74,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         butterUpdateManager.setListener(new ButterUpdateManager.Listener() {
             @Override
             public void updateAvailable(String filePath) {
-                TVUpdateActivity.startActivity(getActivity());
+                startActivity(TVUpdateActivity.newIntent(getActivity()));
             }
         });
     }

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.update;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -24,15 +24,12 @@ import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TVUpdateFragment extends GuidedStepFragment {
 
@@ -49,7 +46,8 @@ public class TVUpdateFragment extends GuidedStepFragment {
     @NonNull
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(Bundle savedInstanceState) {
-        return new GuidanceStylist.Guidance(getString(R.string.update_available), getString(R.string.new_update), getString(R.string.app_name), null);
+        return new GuidanceStylist.Guidance(getString(R.string.update_available), getString(R.string.new_update),
+                getString(R.string.app_name), null);
     }
 
     @Override
@@ -59,10 +57,10 @@ public class TVUpdateFragment extends GuidedStepFragment {
 
     @Override
     public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-        GuidedAction acceptAction = new GuidedAction.Builder().id(R.id.action_update_now).hasNext(true).title(getString(R.string.now)).build();
-        GuidedAction declineAction = new GuidedAction.Builder().id(R.id.action_update_later).hasNext(true).title(getString(R.string.later)).build();
-        actions.add(acceptAction);
-        actions.add(declineAction);
+        actions.add(new GuidedAction.Builder(getActivity()).id(R.id.action_update_now).hasNext(true)
+                .title(getString(R.string.now)).build());
+        actions.add(new GuidedAction.Builder(getActivity()).id(R.id.action_update_later).hasNext(true)
+                .title(getString(R.string.later)).build());
         super.onCreateActions(actions, savedInstanceState);
     }
 
@@ -75,14 +73,18 @@ public class TVUpdateFragment extends GuidedStepFragment {
                 updateIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
 
                 getActivity().startActivity(updateIntent);
+                getActivity().finish();
+                break;
             case R.id.action_update_later:
                 getActivity().finish();
-                return;
+                break;
+            default:
+                super.onGuidedActionClicked(action);
+                break;
         }
-        super.onGuidedActionClicked(action);
     }
 
-    public static class TermsGuidanceStylist extends GuidanceStylist {
+    private static class TermsGuidanceStylist extends GuidanceStylist {
 
         @Override
         public int onProvideLayoutId() {
