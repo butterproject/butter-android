@@ -21,9 +21,7 @@ import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
 import butter.droid.tv.activities.TVMediaGridActivity;
-import butter.droid.tv.activities.TVUpdateActivity;
 import butter.droid.tv.fragments.TVMediaGridFragment;
-import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TVAboutComponent;
@@ -40,6 +38,8 @@ import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
+import butter.droid.tv.ui.update.TVUpdateActivity;
+import butter.droid.tv.ui.update.TVUpdateFragment;
 import dagger.Component;
 
 @Internal @Component(
