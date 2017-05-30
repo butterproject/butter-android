@@ -153,8 +153,8 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
 
         final String[] file_types = PlayerTestConstants.FILE_TYPES;
 
-        builder.setTitle("Player Tests")
-                .setNegativeButton("Cancel",
+        builder.setTitle(R.string.overview_player_test)
+                .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int index) {
