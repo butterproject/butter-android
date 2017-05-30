@@ -70,7 +70,7 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
 
     @Override public void initData(final Media item) {
         presenterSelector = new ClassPresenterSelector();
-        createPresenters(presenterSelector);
+        populatePresenterSelector(presenterSelector);
 
         adapter = new ArrayObjectAdapter(presenterSelector);
 
@@ -106,7 +106,9 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         return adapter;
     }
 
-    protected abstract ClassPresenterSelector createPresenters(ClassPresenterSelector selector);
+    protected void populatePresenterSelector(ClassPresenterSelector selector) {
+        // override if needed
+    }
 
     private void setupDetailsOverviewRowPresenter(Media item) {
         // Set detail background and style.

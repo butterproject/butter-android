@@ -20,6 +20,7 @@ package butter.droid.tv.ui.detail;
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.ui.detail.movie.TVMovieDetailComponent;
+import butter.droid.tv.ui.detail.show.TVShowDetailComponent;
 import dagger.Subcomponent;
 
 @Subcomponent(modules = TVMediaDetailModule.class)
@@ -29,6 +30,8 @@ public interface TVMediaDetailComponent {
     void inject(TVMediaDetailActivity activity);
 
     TVMovieDetailComponent.Builder movieDetailComponentBuilder();
+
+    TVShowDetailComponent.Builder showDetailComponentBuilder();
 
     @Subcomponent.Builder interface Builder {
 

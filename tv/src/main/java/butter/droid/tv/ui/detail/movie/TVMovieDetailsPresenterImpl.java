@@ -27,13 +27,13 @@ import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TVMoviesDetailsPresenterImpl extends TVBaseDetailsPresenterImpl implements TVMovieDetailsPresenter {
+public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl implements TVMovieDetailsPresenter {
 
     private final TVMovieDetailsView view;
 
     private Movie item;
 
-    public TVMoviesDetailsPresenterImpl(final TVMovieDetailsView view, final ProviderManager providerManager) {
+    public TVMovieDetailsPresenterImpl(final TVMovieDetailsView view, final ProviderManager providerManager) {
         super(view, providerManager);
 
         this.view = view;

@@ -21,29 +21,34 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.support.v17.leanback.widget.Action;
+import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
-import android.support.v17.leanback.widget.OnActionClickedListener;
+import android.support.v17.leanback.widget.HeaderItem;
+import android.support.v17.leanback.widget.ListRow;
 import android.support.v4.app.Fragment;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.providers.media.models.Media.Torrent;
+import butter.droid.base.providers.media.models.Show;
+import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
-import butter.droid.tv.presenters.showdetail.EpisodeCardPresenter;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
+import butter.droid.tv.ui.detail.show.presenter.EpisodeCardPresenter;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.inject.Inject;
 
-public class TVShowDetailsFragment extends TVBaseDetailsFragment implements OnActionClickedListener, EpisodeCardPresenter.Listener {
 
-    @Inject PreferencesHandler preferencesHandler;
+public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVShowDetailsView, EpisodeCardPresenter.Listener {
 
-    private MediaProvider mTvProvider;// = new X();
+    @Inject TVShowDetailsPresenter presenter;
 
     public static Fragment newInstance(Media media) {
         TVShowDetailsFragment fragment = new TVShowDetailsFragment();
@@ -58,120 +63,66 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements OnAc
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        TVButterApplication.getAppContext()
-//                .getComponent()
-//                .inject(this);
+        ((TVMediaDetailActivity) getActivity())
+                .getComponent()
+                .showDetailComponentBuilder()
+                .snowDetailModule(new TVShowDetailModule(this))
+                .build()
+                .inject(this);
+
+        Show item = getArguments().getParcelable(EXTRA_ITEM);
+
+        presenter.onCreate(item);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
         return new ShowDetailsDescriptionPresenter();
     }
 
-//    @Override protected void onDetailLoaded() {
-//        updateShowsAdapterContent();
-//    }
-
-    @Override protected ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
-        selector.addClassPresenter(DetailsOverviewRow.class, new EpisodeCardPresenter(getActivity()));
-        return null;
-    }
-
-//    @Override protected void addActions(Media item) { }
-
-    @Override
-    public void onActionClicked(Action action) {
-        //no actions yet
+    @Override protected void populatePresenterSelector(ClassPresenterSelector selector) {
+        EpisodeCardPresenter presenter = new EpisodeCardPresenter(getActivity());
+        selector.addClassPresenter(DetailsOverviewRow.class, presenter);
     }
 
     @Override
     public void onEpisodeClicked(Episode episode) {
-        if (null == episode) {
-            return;
-        }
-
-        // start first torrent
-        if (episode.torrents.size() == 1) {
-            List<Map.Entry<String, Media.Torrent>> torrents = new ArrayList<>(episode.torrents.entrySet());
-            onTorrentSelected(episode, torrents.get(0));
-        }
-        // ask user which torrent
-        else {
-            showTorrentsDialog(episode, episode.torrents);
-        }
+        presenter.episodeClicked(episode);
     }
 
-    private void updateShowsAdapterContent() {
-//        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
-//            @Override
-//            public int compare(Integer me, Integer other) {
-//                return me - other;
-//            }
-//        });
-//
-//        for (Episode episode : getShowItem().episodes) {
-//            // create list of season if does not exists
-//            if (!seasons.containsKey(episode.season)) {
-//                seasons.put(episode.season, new ArrayList<Episode>());
-//            }
-//
-//            // add episode to the list
-//            final List<Episode> seasonEpisodes = seasons.get(episode.season);
-//            seasonEpisodes.add(episode);
-//        }
-//
-//        ArrayObjectAdapter objectAdapter = getObjectArrayAdapter();
-//
-//        for (Integer seasonKey : seasons.descendingKeySet()) {
-//            Collections.sort(seasons.get(seasonKey), new Comparator<Episode>() {
-//                @Override
-//                public int compare(Episode me, Episode other) {
-//                    if (me.episode < other.episode) return -1;
-//                    else if (me.episode > other.episode) return 1;
-//                    return 0;
-//                }
-//            });
-//
-//            EpisodeCardPresenter presenter = new EpisodeCardPresenter(getActivity());
-//            presenter.setOnClickListener(this);
-//            ArrayObjectAdapter episodes = new ArrayObjectAdapter(presenter);
-//
-//            for (Episode episode : seasons.get(seasonKey)) {
-//                episodes.add(episode);
-//            }
-//            HeaderItem header = new HeaderItem(seasonKey, String.format("Season %d", seasonKey));
-//            objectAdapter.add(new ListRow(header, episodes));
-//        }
-//
-//        objectAdapter.notifyArrayItemRangeChanged(0, objectAdapter.size());
+    @Override public void showSeasons(final TreeMap<Integer, List<Episode>> seasons) {
+        ArrayObjectAdapter objectAdapter = getObjectArrayAdapter();
+
+        for (Integer seasonKey : seasons.descendingKeySet()) {
+            EpisodeCardPresenter presenter = new EpisodeCardPresenter(getActivity());
+            presenter.setOnClickListener(this);
+            ArrayObjectAdapter episodes = new ArrayObjectAdapter(presenter);
+
+            for (Episode episode : seasons.get(seasonKey)) {
+                episodes.add(episode);
+            }
+            HeaderItem header = new HeaderItem(seasonKey, String.format(Locale.getDefault(), "Season %d", seasonKey));
+            objectAdapter.add(new ListRow(header, episodes));
+        }
+
+        objectAdapter.notifyArrayItemRangeChanged(1, objectAdapter.size());
     }
 
-    @SuppressWarnings("unchecked")
-    private void showTorrentsDialog(final Episode episode, final Map<String, Media.Torrent> torrents) {
+    @Override public void torrentSelected(final Show show, final StreamInfo streamInfo) {
+        TVStreamLoadingActivity.startActivity(getActivity(), streamInfo, show);
+    }
+
+    @Override public void pickTorrent(final Episode episode, final Map<String, Torrent> torrents) {
         ArrayList<String> choices = new ArrayList<>(torrents.keySet());
-        final ArrayList torrent = new ArrayList(torrents.entrySet());
+        final ArrayList<Map.Entry<String, Media.Torrent>> torrent = new ArrayList<>(torrents.entrySet());
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.choose_quality))
                 .setSingleChoiceItems(choices.toArray(new CharSequence[choices.size()]), 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        onTorrentSelected(episode, (Map.Entry<String, Media.Torrent>) torrent.get(which));
+                        presenter.torrentSelected(episode, torrent.get(which));
                         dialog.dismiss();
                     }
                 }).show();
     }
 
-    private void onTorrentSelected(Episode episode, Map.Entry<String, Media.Torrent> torrent) {
-//        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-//
-//        Show show = getShowItem();
-//
-//        StreamInfo info = new StreamInfo(
-//                episode,
-//                show,
-//                torrent.getValue().url,
-//                subtitleLanguage,
-//                torrent.getKey());
-//
-//        TVStreamLoadingActivity.startActivity(getActivity(), info, show);
-    }
 }

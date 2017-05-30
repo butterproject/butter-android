@@ -15,28 +15,30 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.detail.movie;
+package butter.droid.tv.ui.detail.show;
 
+import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = TVMovieDetailBindModule.class)
-public class TVMovieDetailModule {
+@Module(includes = TVShowDetailBindModule.class)
+public class TVShowDetailModule {
 
-    private final TVMovieDetailsView view;
+    private final TVShowDetailsView view;
 
-    public TVMovieDetailModule(final TVMovieDetailsView view) {
+    public TVShowDetailModule(final TVShowDetailsView view) {
         this.view = view;
     }
 
-    @Provides @FragmentScope public TVMovieDetailsView provideView() {
+    @Provides @FragmentScope TVShowDetailsView provideView() {
         return view;
     }
 
-    @Provides @FragmentScope public TVMovieDetailsPresenter providePresenter(TVMovieDetailsView view, ProviderManager providerManager) {
-        return new TVMovieDetailsPresenterImpl(view, providerManager);
+    @Provides @FragmentScope TVShowDetailsPresenter providePresenter(final TVShowDetailsView view, final ProviderManager providerManager,
+            final PreferencesHandler preferencesHandler) {
+        return new TVShowDetailPresenterImpl(view, providerManager, preferencesHandler);
     }
 
 }

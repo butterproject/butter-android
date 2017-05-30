@@ -19,10 +19,8 @@ package butter.droid.tv.ui.detail.movie;
 
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Media.Torrent;
 import butter.droid.base.providers.media.models.Movie;
@@ -37,7 +35,6 @@ import javax.inject.Inject;
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVMovieDetailsView {
 
     @Inject TVMovieDetailsPresenter presenter;
-    @Inject YouTubeManager youTubeManager;
     @Inject PreferencesHandler preferencesHandler;
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -59,8 +56,15 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
         return new MovieDetailsDescriptionPresenter();
     }
 
-    @Override protected ClassPresenterSelector createPresenters(ClassPresenterSelector selector) {
-        return null;
+    @Override public void startTrailer(final Movie movie, final String trailer) {
+        startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, trailer));
+    }
+
+    @Override public void startMovie(final Movie item, final Torrent torrent, final String quality) {
+        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
+        StreamInfo info = new StreamInfo(item, torrent.url, subtitleLanguage, quality);
+
+        TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
 
     public static Fragment newInstance(Media media) {
@@ -71,17 +75,6 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
 
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    @Override public void startTrailer(final Movie movie, final String trailer) {
-        startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, trailer));
-    }
-
-    @Override public void startMovie(final Movie item, final Torrent torrent, final String quality) {
-        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-        StreamInfo info = new StreamInfo(item, torrent.url, subtitleLanguage, quality);
-
-        TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
 
 }
