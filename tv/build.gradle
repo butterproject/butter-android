@@ -55,7 +55,8 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.mainConfig
+            // TODO should be added back by final release
+            //signingConfig signingConfigs.mainConfig
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -79,19 +80,15 @@ android {
     }
 }
 
-//./gradlew dependencyUpdates -Drevision=release
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
+    implementation "com.android.support:support-annotations:${rootProject.ext.appCompatVersion}"
+    implementation "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
+    implementation "com.android.support:leanback-v17:${rootProject.ext.appCompatVersion}"
 
-    compile "com.android.support:support-annotations:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:leanback-v17:${rootProject.ext.appCompatVersion}"
-    compile "com.squareup.picasso:picasso:2.5.2"
-
-    compile project(':base')
+    implementation project(':base')
 
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
-    provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+    compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }

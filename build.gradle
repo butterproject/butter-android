@@ -5,15 +5,17 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://maven.google.com/" }
         mavenCentral()
         jcenter()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
-        classpath "gradle.plugin.si.kamino.gradle:android-version:1.2.2"
+        classpath "gradle.plugin.si.kamino.gradle:android-version:1.2.3"
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
     }
 }
@@ -58,6 +60,7 @@ allprojects {
                     exclude 'META-INF/LICENSE.txt'
                     exclude 'META-INF/NOTICE.txt'
                     exclude 'META-INF/DEPENDENCIES.txt'
+                    exclude 'META-INF/MANIFEST.MF'
                 }
 
                 applicationVariants.all { variant ->
@@ -121,22 +124,23 @@ allprojects {
 
 static def renameOutputFiles(variant) {
     variant.outputs.each { output ->
-        def alignedOutputFile = output.outputFile
-        def unalignedOutputFile = output.packageApplication.outputFile
-        def outputFileName = alignedOutputFile.name
+        // TODO not yet supported in the new plugin. Reimplement when available
+        //def alignedOutputFile = output.outputFile
+        //def unalignedOutputFile = output.packageApplication.outputFile
+        //def outputFileName = alignedOutputFile.name
 
         // Customise APK filenames
-        if (outputFileName.contains("debug")) {
-            outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-        } else {
-            outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
-        }
+        //if (outputFileName.contains("debug")) {
+        //    outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
+        //} else {
+        //    outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
+        //}
 
-        if (variant.buildType.zipAlignEnabled) {
+        //if (variant.buildType.zipAlignEnabled) {
             // normal APK
-            output.outputFile = new File(alignedOutputFile.parent, outputFileName)
-        }
+        //    output.outputFile = new File(alignedOutputFile.parent, outputFileName)
+        //}
         // 'unaligned' APK
-        output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
+        //output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
     }
 }
