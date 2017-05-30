@@ -42,7 +42,7 @@ public class BackgroundUpdaterModule {
         return BackgroundManager.getInstance(activity);
     }
 
-    @Provides @Reusable Target providePicassaTarget(BackgroundManager backgroundManager) {
+    @Provides @Reusable Target providePicassoTarget(BackgroundManager backgroundManager) {
         return new PicassoBackgroundManagerTarget(backgroundManager);
     }
 

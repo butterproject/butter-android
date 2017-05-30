@@ -21,10 +21,8 @@ import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
 import butter.droid.tv.activities.TVMediaDetailActivity;
-import butter.droid.tv.activities.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
 import butter.droid.tv.activities.TVUpdateActivity;
-import butter.droid.tv.fragments.TVMediaGridFragment;
 import butter.droid.tv.fragments.TVMovieDetailsFragment;
 import butter.droid.tv.fragments.TVShowDetailsFragment;
 import butter.droid.tv.fragments.TVUpdateFragment;
@@ -34,6 +32,8 @@ import butter.droid.tv.ui.about.TVAboutComponent;
 import butter.droid.tv.ui.launch.TVLaunchComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.main.TVMainComponent;
+import butter.droid.tv.ui.media.TVMediaGridActivity;
+import butter.droid.tv.ui.media.TVMediaGridComponent;
 import butter.droid.tv.ui.player.TVVideoPlayerComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.search.TVSearchActivity;
@@ -72,8 +72,6 @@ public interface TVInternalComponent extends BaseInternalComponent {
 
     void inject(TVMovieDetailsFragment fragment);
 
-    void inject(TVMediaGridFragment fragment);
-
     void inject(TVShowDetailsFragment fragment);
 
     void inject(TVUpdateFragment fragment);
@@ -96,6 +94,8 @@ public interface TVInternalComponent extends BaseInternalComponent {
 
     TVLaunchComponent.Builder tvLaunchComponentBuilder();
 
-    TVMainComponent.Builder tvMaincomponentBuilder();
+    TVMainComponent.Builder tvMainComponentBuilder();
+
+    TVMediaGridComponent.Builder tvMediaGridComponentBuilder();
 
 }

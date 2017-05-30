@@ -47,7 +47,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
 import butter.droid.tv.activities.TVMediaDetailActivity;
-import butter.droid.tv.activities.TVMediaGridActivity;
+import butter.droid.tv.ui.media.TVMediaGridActivity;
 import butter.droid.tv.activities.TVPreferencesActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
@@ -176,7 +176,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     @Override public void openMediaActivity(@NonNull final NavInfo navInfo) {
-        TVMediaGridActivity.startActivity(getActivity(), navInfo.getLabel(), navInfo.getFilter(), navInfo.getOrder(), null);
+        startActivity(TVMediaGridActivity.newIntent(getActivity(), navInfo.getLabel(), navInfo.getFilter(), navInfo.getOrder(), null));
     }
 
     @Override public void setupMoviesRow() {

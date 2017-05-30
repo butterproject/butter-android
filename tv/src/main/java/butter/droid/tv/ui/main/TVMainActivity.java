@@ -36,7 +36,7 @@ public class TVMainActivity extends TVBaseActivity implements TVMainView {
     protected void onCreate(Bundle savedInstanceState) {
         component = TVButterApplication.getAppContext()
                 .getComponent()
-                .tvMaincomponentBuilder()
+                .tvMainComponentBuilder()
                 .mainModule(new TVMainModule(this))
                 .build();
         component.inject(this);
