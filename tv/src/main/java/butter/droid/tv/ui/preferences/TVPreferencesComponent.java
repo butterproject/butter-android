@@ -20,9 +20,7 @@ package butter.droid.tv.ui.preferences;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = TVPreferencesModule.class
-)
+@Subcomponent(modules = TVPreferencesModule.class)
 @FragmentScope
 public interface TVPreferencesComponent {
 

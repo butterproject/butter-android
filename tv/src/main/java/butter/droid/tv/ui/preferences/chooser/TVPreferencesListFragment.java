@@ -53,17 +53,17 @@ public class TVPreferencesListFragment extends GuidedStepFragment {
     public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
         String[] items = getArguments().getStringArray(ITEMS_ARG);
         int current = getArguments().getInt(CURRENT_POS, -1);
-        int i = 0;
+        int index = 0;
         if (items != null) {
             for (String item : items) {
                 actions.add(
                         new GuidedAction.Builder(getActivity())
-                                .id(i)
-                                .checked(i == current)
+                                .id(index)
+                                .checked(index == current)
                                 .title(item)
                                 .build()
                 );
-                i++;
+                index++;
             }
         }
     }

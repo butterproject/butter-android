@@ -15,21 +15,28 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.about;
+package butter.droid.tv.ui.media;
 
+import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import dagger.Module;
+import dagger.Provides;
 
-@Subcomponent(modules = TvAboutModule.class)
-@FragmentScope
-public interface TVAboutComponent {
+@Module(includes = BackgroundUpdaterModule.class)
+public class TVMediaGridModule {
 
-    void inject(TvAboutFragment fragment);
+    private final TVMediaGridView view;
 
-    @Subcomponent.Builder interface Builder {
-        Builder aboutModule(TvAboutModule module);
-
-        TVAboutComponent build();
+    public TVMediaGridModule(final TVMediaGridView view) {
+        this.view = view;
     }
 
+    @Provides @FragmentScope TVMediaGridView provideView() {
+        return view;
+    }
+
+    @Provides @FragmentScope TVMediaGridPresenter providePresenter(TVMediaGridView view, ProviderManager providerManager) {
+        return new TVMediaGridPresenterImpl(view, providerManager);
+    }
 }

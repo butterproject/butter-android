@@ -20,8 +20,6 @@ package butter.droid.tv;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.tv.activities.TVMediaGridActivity;
-import butter.droid.tv.fragments.TVMediaGridFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TVAboutComponent;
@@ -29,6 +27,8 @@ import butter.droid.tv.ui.detail.TVMediaDetailComponent;
 import butter.droid.tv.ui.launch.TVLaunchComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.main.TVMainComponent;
+import butter.droid.tv.ui.media.TVMediaGridActivity;
+import butter.droid.tv.ui.media.TVMediaGridComponent;
 import butter.droid.tv.ui.player.TVVideoPlayerComponent;
 import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
@@ -66,8 +66,6 @@ public interface TVInternalComponent extends BaseInternalComponent {
 
     void inject(RecommendationService service);
 
-    void inject(TVMediaGridFragment fragment);
-
     void inject(TVUpdateFragment fragment);
 
     void inject(RecommendationContentProvider contentProvider);
@@ -89,6 +87,8 @@ public interface TVInternalComponent extends BaseInternalComponent {
     TVLaunchComponent.Builder tvLaunchComponentBuilder();
 
     TVMainComponent.Builder tvMainComponentBuilder();
+
+    TVMediaGridComponent.Builder tvMediaGridComponentBuilder();
 
     TVMediaDetailComponent.Builder tvMediaDetailComponentBuilder();
 

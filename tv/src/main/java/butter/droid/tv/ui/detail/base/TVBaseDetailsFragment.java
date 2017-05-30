@@ -100,6 +100,11 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         addAction(new Action(id, getString(text1), text2));
     }
 
+    protected void addAction(Action action) {
+        ((ArrayObjectAdapter) detailsRow.getActionsAdapter())
+                .add(action);
+    }
+
     protected abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
 
     protected ArrayObjectAdapter getObjectArrayAdapter() {
@@ -128,11 +133,6 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
     private void updateDetailImage(final Media item) {
         picasso.load(item.image)
                 .into(detailsImageTarget);
-    }
-
-    protected void addAction(Action action) {
-        ((ArrayObjectAdapter) detailsRow.getActionsAdapter())
-                .add(action);
     }
 
     private final Target detailsImageTarget = new Target() {

@@ -30,7 +30,7 @@ import okhttp3.Call;
 
 public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter, Callback {
 
-        protected static final int ACTION_TRAILER = -1;
+    protected static final int ACTION_TRAILER = -1;
 
     private final TVBaseDetailView view;
     private final ProviderManager providerManager;
@@ -78,7 +78,7 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter, Callb
         });
     }
 
-    @Override public void onFailure(final Exception e) {
+    @Override public void onFailure(final Exception ex) {
         // TODO: 5/25/17 Show error message
     }
 

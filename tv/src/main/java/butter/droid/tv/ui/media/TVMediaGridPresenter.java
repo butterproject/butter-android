@@ -15,23 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.terms;
+package butter.droid.tv.ui.media;
 
-import butter.droid.base.ui.ActivityScope;
-import dagger.Subcomponent;
+import butter.droid.base.providers.media.MediaProvider.Filters;
 
-@Subcomponent(modules = TVTermsModule.class)
-@ActivityScope
-public interface TVTermsComponent {
+public interface TVMediaGridPresenter {
 
-    void inject(TVTermsFragment fragment);
+    void onCreate(Filters filter);
 
-    @Subcomponent.Builder interface Builder {
+    void onActivityCreated();
 
-        Builder termsModule(TVTermsModule module);
+    void loadNextPage();
 
-        TVTermsComponent build();
-
-    }
+    void onDestroy();
 
 }

@@ -35,7 +35,7 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment;
 
 public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamLoadingView {

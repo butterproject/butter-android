@@ -46,9 +46,6 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
-import butter.droid.tv.ui.detail.TVMediaDetailActivity;
-import butter.droid.tv.activities.TVMediaGridActivity;
-import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.presenters.LoadingCardPresenter;
@@ -56,8 +53,11 @@ import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.main.TVMainActivity;
+import butter.droid.tv.ui.media.TVMediaGridActivity;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
+import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import com.squareup.picasso.Picasso;
@@ -153,20 +153,23 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
 
         final String[] file_types = PlayerTestConstants.FILE_TYPES;
 
-        builder.setTitle("Player Tests")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                }).setSingleChoiceItems(file_types, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int index) {
-                dialogInterface.dismiss();
+        builder.setTitle(R.string.overview_player_test)
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int index) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                .setSingleChoiceItems(file_types, -1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int index) {
+                                dialogInterface.dismiss();
 
-                presenter.debugVideoSelected(index);
-            }
-        });
+                                presenter.debugVideoSelected(index);
+                            }
+                        });
 
         builder.show();
     }
@@ -176,7 +179,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     @Override public void openMediaActivity(@NonNull final NavInfo navInfo) {
-        TVMediaGridActivity.startActivity(getActivity(), navInfo.getLabel(), navInfo.getFilter(), navInfo.getOrder(), null);
+        startActivity(TVMediaGridActivity.newIntent(getActivity(), navInfo.getLabel(), navInfo.getFilter(), navInfo.getOrder(), null));
     }
 
     @Override public void setupMoviesRow() {
@@ -288,7 +291,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         setOnSearchClickedListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TVSearchActivity.startActivity(getActivity());
+                TVSearchActivity.newIntent(getActivity());
             }
         });
 

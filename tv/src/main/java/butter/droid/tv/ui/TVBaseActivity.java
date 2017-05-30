@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities.base;
+package butter.droid.tv.ui;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -57,7 +57,7 @@ public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 
     @Override
     public boolean onSearchRequested() {
-        TVSearchActivity.startActivity(this);
+        startActivity(TVSearchActivity.newIntent(this));
         return true;
     }
 

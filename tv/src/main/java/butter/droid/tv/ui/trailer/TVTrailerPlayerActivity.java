@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity {
 

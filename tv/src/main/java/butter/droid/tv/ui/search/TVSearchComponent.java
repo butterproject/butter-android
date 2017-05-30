@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.search;
 
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import dagger.Subcomponent;
 
 @Subcomponent(modules = TVSearchModule.class)
@@ -28,7 +29,9 @@ public interface TVSearchComponent {
 
     @Subcomponent.Builder interface Builder {
 
-        Builder searchModule(TVSearchModule modue);
+        Builder searchModule(TVSearchModule module);
+
+        Builder backgroundUpdaterModule(BackgroundUpdaterModule module);
 
         TVSearchComponent build();
 

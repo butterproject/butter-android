@@ -22,30 +22,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;
-import javax.inject.Inject;
 
 public class TVVideoPlayerActivity extends TVBaseActivity {
 
-    private final static String EXTRA_STREAM_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.streamInfo";
-    private final static String EXTRA_RESUME_POSITION = "butter.droid.tv.ui.player.TVVideoPlayerActivity.resumePosition";
-    private final static String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
+    private static final String EXTRA_STREAM_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.streamInfo";
+    private static final String EXTRA_RESUME_POSITION = "butter.droid.tv.ui.player.TVVideoPlayerActivity.resumePosition";
+    private static final String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
 
-    private final static String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.player.TVVideoPlayerActivity.videoFragment";
-
-    @Inject PrefManager prefManager;
+    private static final String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.player.TVVideoPlayerActivity.videoFragment";
 
     private TVVideoPlayerComponent component;
     private TVPlayerFragment fragment;
 
-    private StreamInfo mStreamInfo;
-    private boolean mCurrentStreamStopped = false;
+    private StreamInfo streamInfo;
+    private boolean currentStreamStopped = false;
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -60,7 +56,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         createStreamInfo();
 
         if (savedInstanceState == null) {
-            fragment = TVPlayerFragment.newInstance(mStreamInfo, 0);
+            fragment = TVPlayerFragment.newInstance(streamInfo, 0);
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, fragment, TAG_VIDEO_FRAGMENT)
                     .commit();
@@ -72,9 +68,9 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
 
     @Override
     protected void onDestroy() {
-        if (!mCurrentStreamStopped) {
+        if (!currentStreamStopped) {
             torrentStream.stopStreaming();
-            mCurrentStreamStopped = true;
+            currentStreamStopped = true;
         }
         super.onDestroy();
     }
@@ -112,14 +108,14 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     }
 
     private void createStreamInfo() {
-        mStreamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-        String location = mStreamInfo.getVideoLocation();
+        streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
+        String location = streamInfo.getVideoLocation();
 
         if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
             location = "file://" + location;
         }
 
-        mStreamInfo.setVideoLocation(location);
+        streamInfo.setVideoLocation(location);
     }
 
     public TVVideoPlayerComponent getComponent() {
@@ -131,19 +127,19 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     }
 
     public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {
-        Intent i = new Intent(context, TVVideoPlayerActivity.class);
-        i.putExtra(EXTRA_STREAM_INFO, info);
-        i.putExtra(EXTRA_RESUME_POSITION, resumePosition);
-        context.startActivity(i);
-        return i;
+        Intent intent = new Intent(context, TVVideoPlayerActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
+        intent.putExtra(EXTRA_RESUME_POSITION, resumePosition);
+        context.startActivity(intent);
+        return intent;
     }
 
     public static Intent startActivity(Context context, StreamInfo info, Show show) {
-        Intent i = new Intent(context, TVVideoPlayerActivity.class);
-        i.putExtra(EXTRA_STREAM_INFO, info);
-        i.putExtra(EXTRA_RESUME_POSITION, 0);
-        i.putExtra(EXTRA_SHOW_INFO, show);
-        context.startActivity(i);
-        return i;
+        Intent intent = new Intent(context, TVVideoPlayerActivity.class);
+        intent.putExtra(EXTRA_STREAM_INFO, info);
+        intent.putExtra(EXTRA_RESUME_POSITION, 0);
+        intent.putExtra(EXTRA_SHOW_INFO, show);
+        context.startActivity(intent);
+        return intent;
     }
 }

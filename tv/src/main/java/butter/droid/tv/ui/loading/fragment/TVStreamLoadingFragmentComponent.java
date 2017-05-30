@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.loading.fragment;
 
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import dagger.Subcomponent;
 
 @Subcomponent(modules = TVStreamLoadingFragmentModule.class)
@@ -29,6 +30,8 @@ public interface TVStreamLoadingFragmentComponent {
     @Subcomponent.Builder interface Builder {
 
         Builder tvStreamLoadingFragmentModule(TVStreamLoadingFragmentModule module);
+
+        Builder backgroundUpdaterModule(BackgroundUpdaterModule module);
 
         TVStreamLoadingFragmentComponent build();
 

@@ -16,7 +16,8 @@
   ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="en">
 
     <string name="app_name" translatable="false">Butter</string>
     <string name="cancel">Cancel</string>
@@ -380,5 +381,7 @@ By using \'BUTTER\' or accessing this site you affirm that you are either more t
 
     <!-- PTVSettingsFragment -->
     <string name="version_pref">Version</string>
+
+    <string name="overview_player_test">Player Tests</string>
 
 </resources>

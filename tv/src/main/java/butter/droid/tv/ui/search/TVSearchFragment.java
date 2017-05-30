@@ -33,6 +33,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.presenters.LoadingCardPresenter;
@@ -48,8 +49,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 
     @Inject TVSearchPresenter presenter;
     @Inject Picasso picasso;
-
-    private BackgroundUpdater backgroundUpdater;
+    @Inject BackgroundUpdater backgroundUpdater;
 
     private ArrayObjectAdapter rowsAdapter;
     private ListRowPresenter listRowPresenter;
@@ -62,6 +62,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
                 .getComponent()
                 .searchComponentBuilder()
                 .searchModule(new TVSearchModule(this))
+                .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))
                 .build()
                 .inject(this);
 
@@ -69,7 +70,6 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        backgroundUpdater = BackgroundUpdater.newInstance(getActivity());
         backgroundUpdater.initialise(getActivity(), R.color.black);
         listRowPresenter = new ListRowPresenter();
         listRowPresenter.setShadowEnabled(false);

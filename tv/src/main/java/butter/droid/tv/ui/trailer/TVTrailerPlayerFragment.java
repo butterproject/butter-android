@@ -25,8 +25,8 @@ import javax.inject.Inject;
 
 public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTrailerPlayerView {
 
-    private final static String ARG_URI = "butter.droid.tv.ui.trailer.TVTrailerPlayerFragment.uri";
-    private final static String ARG_MEDIA = "butter.droid.tv.ui.trailer.TVTrailerPlayerFragment.media";
+    private static final String ARG_URI = "butter.droid.tv.ui.trailer.TVTrailerPlayerFragment.uri";
+    private static final String ARG_MEDIA = "butter.droid.tv.ui.trailer.TVTrailerPlayerFragment.media";
 
     @Inject TVTrailerPlayerPresenter presenter;
 

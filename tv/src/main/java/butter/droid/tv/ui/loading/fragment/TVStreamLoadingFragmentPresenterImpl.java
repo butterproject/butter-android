@@ -55,8 +55,8 @@ public class TVStreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragm
     }
 
     @Override protected void startPlayerActivity(String location, int resumePosition) {
-		if (!playerStarted) {
-			streamInfo.setVideoLocation(location);
+        if (!playerStarted) {
+            streamInfo.setVideoLocation(location);
             if (show != null) {
                 view.startPlayerActivity(streamInfo, show);
             } else {

@@ -118,7 +118,7 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         // nothing to do
     }
 
-    @Override public void onStreamError(final Torrent torrent, final Exception e) {
+    @Override public void onStreamError(final Torrent torrent, final Exception ex) {
         // nothing to do
     }
 

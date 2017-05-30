@@ -106,6 +106,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
             case R.id.more_player_tests:
                 view.openTestPlayerPicker();
                 break;
+            default:
+                throw new IllegalStateException("Unknown item id");
         }
     }
 
@@ -126,7 +128,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
             media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
 
             providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                @Override public void onFailure(Call call, IOException e) {
+                @Override public void onFailure(Call call, IOException ex) {
                     view.startPlayerActivity(new StreamInfo(media, null, null, null, null, location));
                 }
 
@@ -198,7 +200,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
                     @DebugLog
                     @Override
-                    public void onFailure(Exception e) {
+                    public void onFailure(Exception ex) {
                         ThreadUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.activities.base;
+package butter.droid.tv.ui;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
@@ -114,7 +114,7 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
     }
 
     @Override
-    public void onStreamError(Torrent torrent, Exception e) {
+    public void onStreamError(Torrent torrent, Exception ex) {
 
     }
 

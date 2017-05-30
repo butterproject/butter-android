@@ -159,10 +159,11 @@
             android:noHistory="true"
             android:theme="@style/Theme.Butter.TV.GuidedStep" />
 
+        <activity android:name=".ui.media.TVMediaGridActivity" />
+
         <activity android:name=".ui.detail.TVMediaDetailActivity"
                 android:theme="@style/Theme.Leanback.Details"/>
 
-        <activity android:name=".activities.TVMediaGridActivity" />
         <activity android:name=".ui.search.TVSearchActivity" />
         <activity android:name=".ui.preferences.TVPreferencesActivity" android:theme="@style/Theme.Butter.TV.GuidedStep" />
         <activity android:name=".ui.loading.TVStreamLoadingActivity" android:noHistory="true" />

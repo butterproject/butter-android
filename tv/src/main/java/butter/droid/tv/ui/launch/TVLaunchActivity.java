@@ -72,16 +72,19 @@ public class TVLaunchActivity extends Activity implements TVLaunchView {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST: {
+            case PERMISSIONS_REQUEST:
                 if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     presenter.permissionsGranted();
                 } else {
                     presenter.permissionsDenied();
                 }
-            }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
         }
     }
 

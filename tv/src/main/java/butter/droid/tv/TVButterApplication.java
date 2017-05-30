@@ -34,7 +34,7 @@ public class TVButterApplication extends ButterApplication {
 
     @Override
     public void updateAvailable(String filePath) {
-        if(!VersionUtils.isAndroidTV()) {
+        if (!VersionUtils.isAndroidTV()) {
             super.updateAvailable(filePath);
         }
     }

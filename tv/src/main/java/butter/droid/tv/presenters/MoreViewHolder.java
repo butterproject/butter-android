@@ -28,10 +28,8 @@ import butter.droid.tv.R;
 
 public class MoreViewHolder extends Presenter.ViewHolder implements View.OnFocusChangeListener {
 
-    @BindView(R.id.text)
-    TextView textview;
-    @BindView(R.id.icon)
-    ImageView imageview;
+    @BindView(R.id.text) TextView textview;
+    @BindView(R.id.icon) ImageView imageview;
 
     public MoreViewHolder(View view) {
         super(view);
@@ -41,7 +39,7 @@ public class MoreViewHolder extends Presenter.ViewHolder implements View.OnFocus
     }
 
     @Override
-    public void onFocusChange(View v, boolean hasFocus) {
+    public void onFocusChange(View view, boolean hasFocus) {
         if (hasFocus) {
             textview.setVisibility(View.VISIBLE);
         } else {

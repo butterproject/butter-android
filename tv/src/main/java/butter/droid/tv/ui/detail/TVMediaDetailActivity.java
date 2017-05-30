@@ -25,7 +25,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import javax.inject.Inject;
@@ -91,7 +91,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
         return component;
     }
 
-    public static Intent getIntent(Context context, Media item){
+    public static Intent getIntent(Context context, Media item) {
         Intent intent = new Intent(context, TVMediaDetailActivity.class);
         intent.putExtra(EXTRA_ITEM, item);
         return intent;
