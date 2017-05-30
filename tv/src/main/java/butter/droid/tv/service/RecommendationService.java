@@ -48,8 +48,8 @@ public class RecommendationService extends IntentService {
 
     @Inject ProviderManager providerManager;
 
-    private ArrayList<Media> mMovies = new ArrayList<>();
-    private ArrayList<Media> mShows = new ArrayList<>();
+    private ArrayList<Media> movies = new ArrayList<>();
+    private ArrayList<Media> shows = new ArrayList<>();
 
     public RecommendationService() {
         super("RecommendationService");
@@ -58,8 +58,8 @@ public class RecommendationService extends IntentService {
     private static final int MAX_MOVIE_RECOMMENDATIONS = 3;
     private static final int MAX_SHOW_RECOMMENDATIONS = 3;
 
-    private int PRIORITY = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
-    private int TOTAL_COUNT=0;
+    private int priority = MAX_MOVIE_RECOMMENDATIONS + MAX_SHOW_RECOMMENDATIONS;
+    private int totalCount = 0;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -71,7 +71,7 @@ public class RecommendationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if(!VersionUtils.isAndroidTV()) {
+        if (!VersionUtils.isAndroidTV()) {
             return;
         }
 
@@ -92,26 +92,25 @@ public class RecommendationService extends IntentService {
         final AtomicBoolean mMoviesCallFinished = new AtomicBoolean(false);
         final AtomicBoolean mShowsCallFinished = new AtomicBoolean(false);
 
-
         //fetch movies
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
             Timber.d("Fetching movies");
             //noinspection ConstantConditions
             providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                     .getList(movieFilter, new MediaProvider.Callback() {
-                @Override
-                public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                    Timber.d(String.format("loaded %s movies", items.size()));
-                    mMovies.addAll(items);
-                    mMoviesCallFinished.set(true);
-                }
+                        @Override
+                        public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+                            Timber.d(String.format("loaded %s movies", items.size()));
+                            movies.addAll(items);
+                            mMoviesCallFinished.set(true);
+                        }
 
-                @Override
-                public void onFailure(Exception e) {
-                    Timber.d("Failed to fetch movies");
-                    mMoviesCallFinished.set(true);
-                }
-            });
+                        @Override
+                        public void onFailure(Exception ex) {
+                            Timber.d("Failed to fetch movies");
+                            mMoviesCallFinished.set(true);
+                        }
+                    });
         }
 
         /*
@@ -123,7 +122,7 @@ public class RecommendationService extends IntentService {
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
                 Timber.d(String.format("loaded %s shows", items.size()));
-                mShows.addAll(items);
+                shows.addAll(items);
                 mShowsCallFinished.set(true);
             }
 
@@ -151,9 +150,9 @@ public class RecommendationService extends IntentService {
         //process items
 
         Timber.d("Updating recommendation cards");
-        if (mMovies.size() == 0 && mShows.size() == 0)
+        if (movies.size() == 0 && shows.size() == 0) {
             return;
-
+        }
 
         RecommendationBuilder builder = new RecommendationBuilder()
                 .setContext(getApplicationContext())
@@ -167,15 +166,15 @@ public class RecommendationService extends IntentService {
         Timber.d("building movie recommendations");
         try {
             int count = 0;
-            for (Media media : mMovies) {
+            for (Media media : movies) {
                 Movie movie = (Movie) media;
 
                 Timber.d("Recommendation - " + movie.title);
-                PRIORITY--;
-                TOTAL_COUNT--;
+                priority--;
+                totalCount--;
                 builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(movie.headerImage, "UTF-8"))
-                        .setId(TOTAL_COUNT)
-                        .setPriority(PRIORITY)
+                        .setId(totalCount)
+                        .setPriority(priority)
                         .setTitle(movie.title)
                         .setDescription(movie.synopsis)
                         .setImage(movie.image)
@@ -196,18 +195,18 @@ public class RecommendationService extends IntentService {
         Timber.d("building show recommendations");
         try {
             int count = 0;
-            for (Media media : mShows) {
+            for (Media media : shows) {
                 Show show = (Show) media;
 
                 Timber.d("Recommendation - " + show.title);
 
                 Episode latestEpisode = findLatestEpisode(show);
 
-                PRIORITY--;
-                TOTAL_COUNT--;
+                priority--;
+                totalCount--;
                 builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(show.headerImage, "UTF-8"))
-                        .setId(TOTAL_COUNT)
-                        .setPriority(PRIORITY)
+                        .setId(totalCount)
+                        .setPriority(priority)
                         .setTitle(show.title)
                         .setDescription(latestEpisode == null ? "" : getString(R.string.episode_number_format, latestEpisode.episode))
                         .setImage(show.image)
@@ -225,7 +224,9 @@ public class RecommendationService extends IntentService {
     }
 
     private Episode findLatestEpisode(Show show) {
-        if (show.episodes == null || show.episodes.size() == 0) return null;
+        if (show.episodes == null || show.episodes.size() == 0) {
+            return null;
+        }
         return show.episodes.get(show.episodes.size());
     }
 

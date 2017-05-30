@@ -114,7 +114,7 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
     }
 
     @Override
-    public void onStreamError(Torrent torrent, Exception e) {
+    public void onStreamError(Torrent torrent, Exception ex) {
 
     }
 

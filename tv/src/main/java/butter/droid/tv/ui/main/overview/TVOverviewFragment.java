@@ -154,19 +154,22 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         final String[] file_types = PlayerTestConstants.FILE_TYPES;
 
         builder.setTitle("Player Tests")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                }).setSingleChoiceItems(file_types, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int index) {
-                dialogInterface.dismiss();
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int index) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                .setSingleChoiceItems(file_types, -1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int index) {
+                                dialogInterface.dismiss();
 
-                presenter.debugVideoSelected(index);
-            }
-        });
+                                presenter.debugVideoSelected(index);
+                            }
+                        });
 
         builder.show();
     }
@@ -288,7 +291,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         setOnSearchClickedListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TVSearchActivity.startActivity(getActivity());
+                TVSearchActivity.newIntent(getActivity());
             }
         });
 

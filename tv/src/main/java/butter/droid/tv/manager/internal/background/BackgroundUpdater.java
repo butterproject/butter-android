@@ -88,15 +88,6 @@ public class BackgroundUpdater {
                 .into(backgroundImageTarget);
     }
 
-//    protected void setDefaultBackground(Drawable background) {
-//        defaultBackground = background;
-//    }
-
-
-    protected void setDefaultBackground(int resourceId) {
-        defaultBackground = resourceId;
-    }
-
     /**
      * Updates the background immediately with a drawable
      *
@@ -104,6 +95,14 @@ public class BackgroundUpdater {
      */
     public void updateBackground(Drawable drawable) {
         backgroundManager.setDrawable(drawable);
+    }
+
+//    protected void setDefaultBackground(Drawable background) {
+//        defaultBackground = background;
+//    }
+
+    protected void setDefaultBackground(int resourceId) {
+        defaultBackground = resourceId;
     }
 
     /**
@@ -138,11 +137,4 @@ public class BackgroundUpdater {
         backgroundManager.release();
     }
 
-    /**
-     * @deprecated This is a temporary implementation that should be removed when moved to dagger.
-     */
-    public static BackgroundUpdater newInstance(Activity activity) {
-        BackgroundManager backgroundManager = BackgroundManager.getInstance(activity);
-        return new BackgroundUpdater(backgroundManager, new PicassoBackgroundManagerTarget(backgroundManager), Picasso.with(activity));
-    }
 }

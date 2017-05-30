@@ -17,10 +17,9 @@
 
 package butter.droid.tv.ui.search;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
@@ -28,21 +27,20 @@ import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVSearchActivity extends TVBaseActivity {
 
-	public static Intent startActivity(Activity activity) {
-		Intent intent = new Intent(activity, TVSearchActivity.class);
-		activity.startActivity(intent);
-		return intent;
-	}
+    /**
+     * Called when the activity is first created.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
 
-	/**
-	 * Called when the activity is first created.
-	 */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.inject(this);
+        super.onCreate(savedInstanceState, R.layout.activity_search);
+    }
 
-		super.onCreate(savedInstanceState, R.layout.activity_search);
-	}
+    public static Intent newIntent(Context context) {
+        return new Intent(context, TVSearchActivity.class);
+    }
+
 }

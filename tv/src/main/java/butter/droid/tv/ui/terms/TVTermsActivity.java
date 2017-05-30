@@ -27,17 +27,17 @@ import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVTermsActivity extends TVBaseActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		TVButterApplication.getAppContext()
-				.getComponent()
-				.inject(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        TVButterApplication.getAppContext()
+                .getComponent()
+                .inject(this);
 
-		super.onCreate(savedInstanceState,R.layout.activity_terms);
-	}
+        super.onCreate(savedInstanceState, R.layout.activity_terms);
+    }
 
-	public static Intent getIntent(Context context) {
-		return new Intent(context, TVTermsActivity.class);
-	}
+    public static Intent getIntent(Context context) {
+        return new Intent(context, TVTermsActivity.class);
+    }
 
 }

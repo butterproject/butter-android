@@ -57,7 +57,7 @@ public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 
     @Override
     public boolean onSearchRequested() {
-        TVSearchActivity.startActivity(this);
+        startActivity(TVSearchActivity.newIntent(this));
         return true;
     }
 

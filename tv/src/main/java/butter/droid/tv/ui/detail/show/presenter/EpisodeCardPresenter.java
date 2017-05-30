@@ -74,7 +74,7 @@ public class EpisodeCardPresenter extends Presenter {
         ((ViewHolder) viewHolder).updateCardViewImage(episode.image);
         ((ViewHolder) viewHolder).cardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (null != clickListener) {
                     clickListener.onEpisodeClicked(episode);
                 }

@@ -193,7 +193,8 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
             final Uri uri = intent.getData();
             final TVWebViewFragment fragment = TVWebViewFragment.newInstance(uri);
             final FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(android.R.id.content, fragment, TVWebViewFragment.TAG).addToBackStack(TVWebViewFragment.TAG).commit();
+            fm.beginTransaction().replace(android.R.id.content, fragment, TVWebViewFragment.TAG).addToBackStack(TVWebViewFragment.TAG)
+                    .commit();
         } else {
             startActivity(intent);
         }

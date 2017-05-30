@@ -35,18 +35,13 @@ import butter.droid.tv.R;
 
 public class MoreCardView extends BaseCardView implements View.OnFocusChangeListener {
 
-    private Palette.Swatch mCustomSelectedSwatch;
+    private Palette.Swatch customSelectedSwatch;
 
-    private Target mTarget;
+    private Target target;
 
-    @BindView(R.id.main_image)
-    ImageView imageView;
-
-    @BindView(R.id.title_text)
-    TextView titleTextView;
-
-    @BindView(R.id.info_field)
-    RelativeLayout infoAreaView;
+    @BindView(R.id.main_image) ImageView imageView;
+    @BindView(R.id.title_text) TextView titleTextView;
+    @BindView(R.id.info_field) RelativeLayout infoAreaView;
 
     public MoreCardView(Context context) {
         this(context, null);
@@ -60,9 +55,9 @@ public class MoreCardView extends BaseCardView implements View.OnFocusChangeList
         super(context, attrs, defStyle);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.more_card_view, this);
+        View view = inflater.inflate(R.layout.more_card_view, this);
 
-        ButterKnife.bind(this, v);
+        ButterKnife.bind(this, view);
 
         setBackgroundResource(R.color.default_background);
         setCardType(BaseCardView.CARD_TYPE_INFO_UNDER);
@@ -106,7 +101,7 @@ public class MoreCardView extends BaseCardView implements View.OnFocusChangeList
     }
 
     @Override
-    public void onFocusChange(View v, boolean hasFocus) {
+    public void onFocusChange(View view, boolean hasFocus) {
         if (hasFocus) {
             setBackgroundResource(R.color.primary_dark);
         } else {

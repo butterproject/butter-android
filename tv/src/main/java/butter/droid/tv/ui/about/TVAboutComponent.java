@@ -20,9 +20,7 @@ package butter.droid.tv.ui.about;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = TvAboutModule.class
-)
+@Subcomponent(modules = TvAboutModule.class)
 @FragmentScope
 public interface TVAboutComponent {
 

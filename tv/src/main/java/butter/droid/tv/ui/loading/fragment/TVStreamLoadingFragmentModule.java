@@ -23,10 +23,11 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = TVStreamLoadingFragmentBindModule.class)
+@Module(includes = {TVStreamLoadingFragmentBindModule.class, BackgroundUpdaterModule.class})
 public class TVStreamLoadingFragmentModule {
 
     private final TVStreamLoadingFragmentView view;

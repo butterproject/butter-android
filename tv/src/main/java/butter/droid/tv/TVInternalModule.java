@@ -21,10 +21,7 @@ import butter.droid.base.InternalBaseModule;
 import butter.droid.tv.manager.internal.TVInternalDataModule;
 import dagger.Module;
 
-@Module(includes = {
-        InternalBaseModule.class,
-        TVInternalDataModule.class
-})
+@Module(includes = {InternalBaseModule.class, TVInternalDataModule.class})
 public class TVInternalModule {
 
 }

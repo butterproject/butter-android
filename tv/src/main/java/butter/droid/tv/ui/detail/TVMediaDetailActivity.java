@@ -91,7 +91,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
         return component;
     }
 
-    public static Intent getIntent(Context context, Media item){
+    public static Intent getIntent(Context context, Media item) {
         Intent intent = new Intent(context, TVMediaDetailActivity.class);
         intent.putExtra(EXTRA_ITEM, item);
         return intent;

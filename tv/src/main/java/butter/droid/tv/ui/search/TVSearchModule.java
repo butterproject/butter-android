@@ -19,10 +19,11 @@ package butter.droid.tv.ui.search;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = BackgroundUpdaterModule.class)
 public class TVSearchModule {
 
     private final TVSearchView view;

@@ -20,9 +20,7 @@ package butter.droid.tv.ui.terms;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Subcomponent;
 
-@Subcomponent(
-        modules = TVTermsModule.class
-)
+@Subcomponent(modules = TVTermsModule.class)
 @ActivityScope
 public interface TVTermsComponent {
 

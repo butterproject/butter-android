@@ -91,7 +91,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
                     });
                 }
 
-                @Override public void onFailure(Exception e) {
+                @Override public void onFailure(Exception ex) {
 
                 }
             });
@@ -113,7 +113,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
                             });
                         }
 
-                        @Override public void onFailure(Exception e) {
+                        @Override public void onFailure(Exception ex) {
 
                         }
                     }

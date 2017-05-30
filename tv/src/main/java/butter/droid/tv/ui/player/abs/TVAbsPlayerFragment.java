@@ -250,7 +250,9 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
         @Override
         protected void onBindDescription(ViewHolder viewHolder, Object item) {
-            if (!(item instanceof StreamInfo)) return;
+            if (!(item instanceof StreamInfo)) {
+                return;
+            }
 
             StreamInfo streamInfo = (StreamInfo) item;
 
@@ -308,6 +310,9 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
                                 break;
                             case ACTION_CLOSE_CAPTION:
                                 adapter.add(new ClosedCaptioningAction(getContext()));
+                                break;
+                            default:
+                                // nothing to do
                                 break;
                         }
                         actionsList.add(i, customAction.getAction());
