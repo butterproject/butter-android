@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.presenters.showdetail;
+package butter.droid.tv.ui.detail.show.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,12 +28,10 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.tv.R;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class EpisodeCardPresenter extends Presenter {
 
@@ -88,6 +86,7 @@ public class EpisodeCardPresenter extends Presenter {
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
     }
 
+
     public class ViewHolder extends Presenter.ViewHolder {
 
         private Episode episode;
@@ -128,21 +127,21 @@ public class EpisodeCardPresenter extends Presenter {
 
     public class PicassoImageCardViewTarget implements Target {
 
-        private ImageCardView mImageCardView;
+        private ImageCardView imageCardView;
 
         public PicassoImageCardViewTarget(ImageCardView imageCardView) {
-            mImageCardView = imageCardView;
+            this.imageCardView = imageCardView;
         }
 
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
             Drawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
-            mImageCardView.setMainImage(bitmapDrawable);
+            imageCardView.setMainImage(bitmapDrawable);
         }
 
         @Override
         public void onBitmapFailed(Drawable drawable) {
-            mImageCardView.setMainImage(drawable);
+            imageCardView.setMainImage(drawable);
         }
 
         @Override

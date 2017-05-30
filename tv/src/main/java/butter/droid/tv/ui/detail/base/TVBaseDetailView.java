@@ -15,22 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.presenters;
+package butter.droid.tv.ui.detail.base;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.support.annotation.StringRes;
+import butter.droid.base.providers.media.models.Media;
 
-import butter.droid.base.providers.media.models.Show;
+public interface TVBaseDetailView {
 
-public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+    void initData(Media item);
 
-    @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        if (!(item instanceof Show)) {
-            return;
-        }
-        Show show = (Show) item;
-        viewHolder.getTitle().setText(show.title);
-        viewHolder.getSubtitle().setText(show.genre);
-        viewHolder.getBody().setText(show.synopsis);
-    }
+    void updateOverview(Media media);
+
+    void addAction(int id, @StringRes int text1, @StringRes int text2);
+
+    void addAction(int id, @StringRes int text1, String text2);
 }

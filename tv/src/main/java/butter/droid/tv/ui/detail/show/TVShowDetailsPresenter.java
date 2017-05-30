@@ -15,22 +15,19 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.presenters;
+package butter.droid.tv.ui.detail.show;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-
+import butter.droid.base.providers.media.models.Episode;
+import butter.droid.base.providers.media.models.Media.Torrent;
 import butter.droid.base.providers.media.models.Show;
+import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
+import java.util.Map.Entry;
 
-public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+public interface TVShowDetailsPresenter extends TVBaseDetailsPresenter {
 
-    @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        if (!(item instanceof Show)) {
-            return;
-        }
-        Show show = (Show) item;
-        viewHolder.getTitle().setText(show.title);
-        viewHolder.getSubtitle().setText(show.genre);
-        viewHolder.getBody().setText(show.synopsis);
-    }
+    void onCreate(Show item);
+
+    void episodeClicked(Episode episode);
+
+    void torrentSelected(Episode episode, Entry<String, Torrent> torrent);
 }

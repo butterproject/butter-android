@@ -15,22 +15,28 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.presenters;
+package butter.droid.tv.ui.detail;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import butter.droid.base.ui.ActivityScope;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import dagger.Module;
+import dagger.Provides;
 
-import butter.droid.base.providers.media.models.Show;
+@Module(includes = BackgroundUpdaterModule.class)
+public class TVMediaDetailModule {
 
-public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+    private final TVMediaDetailView view;
 
-    @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        if (!(item instanceof Show)) {
-            return;
-        }
-        Show show = (Show) item;
-        viewHolder.getTitle().setText(show.title);
-        viewHolder.getSubtitle().setText(show.genre);
-        viewHolder.getBody().setText(show.synopsis);
+    public TVMediaDetailModule(final TVMediaDetailView view) {
+        this.view = view;
     }
+
+    @Provides @ActivityScope TVMediaDetailView provideView() {
+        return view;
+    }
+
+    @Provides @ActivityScope TVMediaDetailPresenter providePresenter() {
+        return new TVMediaDetailPresenterImpl(view);
+    }
+
 }

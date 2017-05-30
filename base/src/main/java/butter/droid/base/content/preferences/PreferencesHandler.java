@@ -1,5 +1,8 @@
 package butter.droid.base.content.preferences;
 
+import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
+import static butter.droid.base.manager.internal.vlc.VLCOptions.ANDROID_WINDOW_CHROMA_RV_32_OPTION;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -32,8 +35,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.inject.Inject;
-
-import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
 
 @Reusable
 public class PreferencesHandler {
@@ -659,7 +660,7 @@ public class PreferencesHandler {
     }
 
     public String getPixelFormat() {
-        return prefManager.get(Prefs.PIXEL_FORMAT, null);
+        return prefManager.get(Prefs.PIXEL_FORMAT, ANDROID_WINDOW_CHROMA_RV_32_OPTION);
     }
 
     public String getDefaultQuality() {

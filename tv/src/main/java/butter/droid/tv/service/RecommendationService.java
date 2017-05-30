@@ -23,6 +23,7 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -39,7 +40,6 @@ import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.service.recommendation.RecommendationBuilder;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import timber.log.Timber;
@@ -230,7 +230,7 @@ public class RecommendationService extends IntentService {
     }
 
     private PendingIntent buildPendingIntent(Media media) {
-        Intent detailIntent = TVMediaDetailActivity.buildIntent(this, media);
+        Intent detailIntent = TVMediaDetailActivity.getIntent(this, media);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(TVMediaDetailActivity.class);
