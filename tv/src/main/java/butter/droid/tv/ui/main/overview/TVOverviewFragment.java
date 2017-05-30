@@ -46,9 +46,6 @@ import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
-import butter.droid.tv.activities.TVMediaDetailActivity;
-import butter.droid.tv.ui.media.TVMediaGridActivity;
-import butter.droid.tv.activities.TVPreferencesActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.presenters.LoadingCardPresenter;
@@ -56,8 +53,11 @@ import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.main.TVMainActivity;
+import butter.droid.tv.ui.media.TVMediaGridActivity;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
+import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import com.squareup.picasso.Picasso;
@@ -313,7 +313,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
             mediaItem.color = view.getCustomSelectedSwatch().getRgb();
         }
 
-        TVMediaDetailActivity.startActivity(getActivity(), options, mediaItem);
+        startActivity(TVMediaDetailActivity.getIntent(getActivity(), mediaItem), options);
     }
 
 }

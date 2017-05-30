@@ -19,12 +19,11 @@ package butter.droid.ui.media.detail.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 

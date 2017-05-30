@@ -32,22 +32,22 @@ import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
 import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVMediaDetailActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import javax.inject.Inject;
-
 
 /*
  * VerticalGridFragment shows a grid of videos
@@ -115,7 +115,6 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         backgroundUpdater.destroy();
     }
 
-
     @Override public void appendItems(final List<MediaCardItem> list) {
         int previousSize = adapter.size();
         adapter.addAll(previousSize, list);
@@ -144,15 +143,15 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         }
     }
 
-    private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
+    private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem item) {
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
                 view.getMainImageView(),
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
-        if (media.getMedia() instanceof Movie) {
-            TVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia());
-        } else if (media.getMedia() instanceof Show) {
-            TVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia());
+
+        Media media = item.getMedia();
+        if (media instanceof Movie || media instanceof Show) {
+            startActivity(TVMediaDetailActivity.getIntent(getActivity(), media), options);
         }
     }
 

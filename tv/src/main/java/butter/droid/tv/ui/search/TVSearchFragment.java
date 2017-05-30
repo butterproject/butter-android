@@ -33,7 +33,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
@@ -135,7 +135,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
                 if (object instanceof MediaCardPresenter.MediaCardItem) {
                     MediaCardPresenter.MediaCardItem item = (MediaCardPresenter.MediaCardItem) object;
                     Media media = item.getMedia();
-                    TVMediaDetailActivity.startActivity(getActivity(), media);
+                    startActivity(TVMediaDetailActivity.getIntent(getActivity(), media));
                 }
             }
         };

@@ -20,21 +20,17 @@ package butter.droid.tv;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.tv.activities.TVMediaDetailActivity;
-import butter.droid.tv.activities.TVPreferencesActivity;
-import butter.droid.tv.activities.TVUpdateActivity;
-import butter.droid.tv.fragments.TVMovieDetailsFragment;
-import butter.droid.tv.fragments.TVShowDetailsFragment;
-import butter.droid.tv.fragments.TVUpdateFragment;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.about.TVAboutComponent;
+import butter.droid.tv.ui.detail.TVMediaDetailComponent;
 import butter.droid.tv.ui.launch.TVLaunchComponent;
 import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
 import butter.droid.tv.ui.main.TVMainComponent;
 import butter.droid.tv.ui.media.TVMediaGridActivity;
 import butter.droid.tv.ui.media.TVMediaGridComponent;
 import butter.droid.tv.ui.player.TVVideoPlayerComponent;
+import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.preferences.TVPreferencesComponent;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import butter.droid.tv.ui.search.TVSearchComponent;
@@ -42,6 +38,8 @@ import butter.droid.tv.ui.terms.TVTermsActivity;
 import butter.droid.tv.ui.terms.TVTermsComponent;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
+import butter.droid.tv.ui.update.TVUpdateActivity;
+import butter.droid.tv.ui.update.TVUpdateFragment;
 import dagger.Component;
 
 @Internal @Component(
@@ -53,8 +51,6 @@ import dagger.Component;
 public interface TVInternalComponent extends BaseInternalComponent {
 
     void inject(TVButterApplication application);
-
-    void inject(TVMediaDetailActivity activity);
 
     void inject(TVMediaGridActivity activity);
 
@@ -69,10 +65,6 @@ public interface TVInternalComponent extends BaseInternalComponent {
     void inject(TVTrailerPlayerActivity activity);
 
     void inject(RecommendationService service);
-
-    void inject(TVMovieDetailsFragment fragment);
-
-    void inject(TVShowDetailsFragment fragment);
 
     void inject(TVUpdateFragment fragment);
 
@@ -97,5 +89,7 @@ public interface TVInternalComponent extends BaseInternalComponent {
     TVMainComponent.Builder tvMainComponentBuilder();
 
     TVMediaGridComponent.Builder tvMediaGridComponentBuilder();
+
+    TVMediaDetailComponent.Builder tvMediaDetailComponentBuilder();
 
 }

@@ -15,22 +15,28 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.presenters;
+package butter.droid.tv.ui.update;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
+import butter.droid.tv.activities.base.TVBaseActivity;
 
-import butter.droid.base.providers.media.models.Show;
+public class TVUpdateActivity extends TVBaseActivity {
 
-public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		TVButterApplication.getAppContext()
+				.getComponent()
+				.inject(this);
 
-    @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        if (!(item instanceof Show)) {
-            return;
-        }
-        Show show = (Show) item;
-        viewHolder.getTitle().setText(show.title);
-        viewHolder.getSubtitle().setText(show.genre);
-        viewHolder.getBody().setText(show.synopsis);
-    }
+		super.onCreate(savedInstanceState,R.layout.activity_update);
+	}
+
+	public static Intent newIntent(Context context) {
+		return new Intent(context, TVUpdateActivity.class);
+	}
+
 }
