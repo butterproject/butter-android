@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.fragments;
+package butter.droid.tv.ui.preferences.chooser;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,30 +24,17 @@ import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
 import android.view.View;
-
-import java.util.List;
-
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.tv.R;
+import java.util.List;
 
 public class TVPreferencesListFragment extends GuidedStepFragment {
 
-    private static final String TITLE_ARG = "titleres", ITEMS_ARG = "items", CURRENT_POS = "current";
+    private static final String TITLE_ARG = "butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.titleres";
+    private static final String ITEMS_ARG = "butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.items";
+    private static final String CURRENT_POS = "butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.current";
 
-    private SelectionListener mListener;
-
-
-    public static TVPreferencesListFragment newInstance(@StringRes int title, @NonNull String[] items, int currentPos, @NonNull SelectionListener listener) {
-        Bundle args = new Bundle();
-        args.putInt(TITLE_ARG, title);
-        args.putStringArray(ITEMS_ARG, items);
-        args.putInt(CURRENT_POS, currentPos);
-
-        TVPreferencesListFragment fragment = new TVPreferencesListFragment();
-        fragment.setArguments(args);
-        fragment.mListener = listener;
-        return fragment;
-    }
+    private SelectionListener listener;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -68,29 +55,41 @@ public class TVPreferencesListFragment extends GuidedStepFragment {
         int current = getArguments().getInt(CURRENT_POS, -1);
         int i = 0;
         if (items != null) {
-            for(String item : items) {
+            for (String item : items) {
                 actions.add(
-                    new GuidedAction.Builder()
-                            .id(i)
-                            .checked(i == current)
-                            .title(item)
-                            .build()
+                        new GuidedAction.Builder(getActivity())
+                                .id(i)
+                                .checked(i == current)
+                                .title(item)
+                                .build()
                 );
                 i++;
             }
         }
-
-        super.onCreateActions(actions, savedInstanceState);
     }
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         super.onGuidedActionClicked(action);
-        mListener.onSelect((int) action.getId());
+        listener.onSelect((int) action.getId());
         getFragmentManager().popBackStack();
     }
 
+    public static TVPreferencesListFragment newInstance(@StringRes int title, @NonNull String[] items, int currentPos,
+            @NonNull SelectionListener listener) {
+        Bundle args = new Bundle();
+        args.putInt(TITLE_ARG, title);
+        args.putStringArray(ITEMS_ARG, items);
+        args.putInt(CURRENT_POS, currentPos);
+
+        TVPreferencesListFragment fragment = new TVPreferencesListFragment();
+        fragment.setArguments(args);
+        fragment.listener = listener;
+        return fragment;
+    }
+
     public interface SelectionListener {
+
         void onSelect(int position);
     }
 }
