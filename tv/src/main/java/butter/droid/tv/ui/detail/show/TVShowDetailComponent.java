@@ -15,22 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.presenters;
+package butter.droid.tv.ui.detail.show;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import butter.droid.base.ui.FragmentScope;
+import dagger.Subcomponent;
 
-import butter.droid.base.providers.media.models.Show;
+@Subcomponent(modules = TVShowDetailModule.class)
+@FragmentScope
+public interface TVShowDetailComponent {
 
-public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+    void inject(TVShowDetailsFragment fragment);
 
-    @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        if (!(item instanceof Show)) {
-            return;
-        }
-        Show show = (Show) item;
-        viewHolder.getTitle().setText(show.title);
-        viewHolder.getSubtitle().setText(show.genre);
-        viewHolder.getBody().setText(show.synopsis);
+    @Subcomponent.Builder interface Builder {
+
+        Builder snowDetailModule(TVShowDetailModule module);
+
+        TVShowDetailComponent build();
+
     }
+
 }

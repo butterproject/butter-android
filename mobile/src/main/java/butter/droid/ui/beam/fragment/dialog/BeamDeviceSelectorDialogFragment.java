@@ -19,19 +19,16 @@ package butter.droid.ui.beam.fragment.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import com.connectsdk.device.ConnectableDevice;
-
-import javax.inject.Inject;
-
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceAdapter;
 import butter.droid.base.manager.internal.beaming.BeamManager;
+import com.connectsdk.device.ConnectableDevice;
+import javax.inject.Inject;
 
 public class BeamDeviceSelectorDialogFragment extends DialogFragment {
 

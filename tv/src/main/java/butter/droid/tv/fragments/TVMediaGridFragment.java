@@ -41,7 +41,7 @@ import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.activities.TVMediaDetailActivity;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
-
 
 /*
  * VerticalGridFragment shows a grid of videos
@@ -183,15 +182,16 @@ public class TVMediaGridFragment extends VerticalGridFragment implements OnItemV
         if (null != backgroundUpdater) backgroundUpdater.destroy();
     }
 
-    private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem media) {
+    private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem item) {
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
                 view.getMainImageView(),
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
-        if (media.getMedia() instanceof Movie)
-            TVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia());
-        else if (media.getMedia() instanceof Show)
-            TVMediaDetailActivity.startActivity(getActivity(), options, media.getMedia());
+
+        Media media = item.getMedia();
+        if (media instanceof Movie || media instanceof Show) {
+            startActivity(TVMediaDetailActivity.getIntent(getActivity(), media), options);
+        }
     }
 
     @SuppressWarnings("SuspiciousMethodCalls")
