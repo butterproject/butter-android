@@ -19,23 +19,26 @@ package butter.droid.base.manager.internal;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.util.VLCUtil;
+
+import java.util.ArrayList;
+
 import butter.droid.base.Constants;
 import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.VLCOptions;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.provider.mock.MockMovieMediaProvider;
 import dagger.Module;
 import dagger.Provides;
-import java.util.ArrayList;
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.util.VLCUtil;
 import timber.log.Timber;
 
 @Module
 public class InternalBaseManagerModule {
 
-    @Provides @Internal ProviderManager provideProviderManager(VodoProvider moviesProvider) {
+    @Provides @Internal ProviderManager provideProviderManager(MockMovieMediaProvider moviesProvider) {
         return new ProviderManager(moviesProvider, null);
     }
 

@@ -17,11 +17,15 @@
 
 package butter.droid.base.providers;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
-import com.google.gson.Gson;
+import butter.droid.provider.mock.MockMovieMediaProvider;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -37,6 +41,10 @@ public class ProviderModule {
     @Provides @ProviderScope
     public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson, SubsProvider subsProvider) {
         return new VodoProvider(client, gson, subsProvider);
+    }
+
+    @Provides @ProviderScope public MockMovieMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
+        return new MockMovieMediaProvider(context, gson);
     }
 
 }

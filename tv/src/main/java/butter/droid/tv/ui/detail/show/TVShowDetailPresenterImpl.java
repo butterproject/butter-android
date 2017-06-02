@@ -19,17 +19,15 @@ package butter.droid.tv.ui.detail.show;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Media.Torrent;
-import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Show;
+import butter.droid.provider.base.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -69,14 +67,14 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
             }
         });
 
-        for (Episode episode : show.episodes) {
+        for (Episode episode : show.getEpisodes()) {
             // create list of season if does not exists
-            if (!seasons.containsKey(episode.season)) {
-                seasons.put(episode.season, new ArrayList<Episode>());
+            if (!seasons.containsKey(episode.getSeasion())) {
+                seasons.put(episode.getSeasion(), new ArrayList<Episode>());
             }
 
             // add episode to the list
-            final List<Episode> seasonEpisodes = seasons.get(episode.season);
+            final List<Episode> seasonEpisodes = seasons.get(episode.getSeasion());
             seasonEpisodes.add(episode);
         }
 
@@ -84,7 +82,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
             Collections.sort(seasons.get(seasonKey), new Comparator<Episode>() {
                 @Override
                 public int compare(Episode me, Episode other) {
-                    return other.episode - me.episode;
+                    return other.getEpisode() - me.getEpisode();
                 }
             });
         }
@@ -94,12 +92,14 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     }
 
     @Override public void episodeClicked(final Episode episode) {
+        /*
         if (episode.torrents.size() == 1) {
-            List<Map.Entry<String, Media.Torrent>> torrent = new ArrayList<>(episode.torrents.entrySet());
+            List<Map.Entry<String, Torrent>> torrent = new ArrayList<>(episode.torrents.entrySet());
             startTorrent(episode, torrent.get(0));
         } else {
             view.pickTorrent(episode, episode.torrents);
         }
+        */
     }
 
     @Override public void torrentSelected(final Episode episode, final Entry<String, Torrent> torrent) {
@@ -110,13 +110,15 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
 
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
+        /*
         StreamInfo info = new StreamInfo(
                 episode,
                 item,
-                torrent.getValue().url,
+                torrent.getValue().getUrl(),
                 subtitleLanguage,
                 torrent.getKey());
 
         view.torrentSelected(item, info);
+        */
     }
 }

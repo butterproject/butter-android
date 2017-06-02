@@ -20,8 +20,8 @@ package butter.droid.tv.ui.main.overview;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Movie;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import java.util.List;
 

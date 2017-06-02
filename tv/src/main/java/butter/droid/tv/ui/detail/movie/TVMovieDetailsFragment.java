@@ -21,16 +21,17 @@ import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Media.Torrent;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Torrent;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVMovieDetailsView {
 
@@ -47,7 +48,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
                 .build()
                 .inject(this);
 
-        Movie item = getArguments().getParcelable(EXTRA_ITEM);
+        Movie item = Parcels.unwrap(getArguments().getParcelable(EXTRA_ITEM));
 
         presenter.onCreate(item);
     }
@@ -62,7 +63,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
 
     @Override public void startMovie(final Movie item, final Torrent torrent, final String quality) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-        StreamInfo info = new StreamInfo(item, torrent.url, subtitleLanguage, quality);
+        StreamInfo info = new StreamInfo(item, torrent.getUrl(), subtitleLanguage, quality);
 
         TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
@@ -71,7 +72,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
         TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_ITEM, media);
+        bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
 
         fragment.setArguments(bundle);
         return fragment;

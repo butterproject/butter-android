@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.main.overview;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -35,15 +34,13 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -155,20 +152,12 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
 
         builder.setTitle(R.string.overview_player_test)
                 .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int index) {
-                                dialogInterface.dismiss();
-                            }
-                        })
+                        (dialogInterface, index) -> dialogInterface.dismiss())
                 .setSingleChoiceItems(file_types, -1,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int index) {
-                                dialogInterface.dismiss();
+                        (dialogInterface, index) -> {
+                            dialogInterface.dismiss();
 
-                                presenter.debugVideoSelected(index);
-                            }
+                            presenter.debugVideoSelected(index);
                         });
 
         builder.show();
@@ -251,6 +240,8 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     @Override public void showCustomDebugUrl() {
+        // TODO
+        /*
         final EditText dialogInput = new EditText(getActivity());
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(dialogInput)
@@ -266,6 +257,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
                     }
                 });
         builder.show();
+        */
     }
 
     @Override public void startTrailerScreen(final Movie movie, final String location) {
@@ -288,12 +280,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     private void setupEventListeners() {
-        setOnSearchClickedListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TVSearchActivity.newIntent(getActivity());
-            }
-        });
+        setOnSearchClickedListener(view -> TVSearchActivity.newIntent(getActivity()));
 
         setOnItemViewClickedListener(this);
         setOnItemViewSelectedListener(this);
@@ -312,9 +299,10 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
         Media mediaItem = media.getMedia();
-        if (view.getCustomSelectedSwatch() != null) {
+        // TODO
+        /*if (view.getCustomSelectedSwatch() != null) {
             mediaItem.color = view.getCustomSelectedSwatch().getRgb();
-        }
+        }*/
 
         startActivity(TVMediaDetailActivity.getIntent(getActivity(), mediaItem), options);
     }

@@ -24,8 +24,8 @@ import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
+import butter.droid.provider.base.Media;
 import java.net.URLDecoder;
 import timber.log.Timber;
 
@@ -70,7 +70,7 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
     }
 
     @Override public void onViewCreated() {
-        view.setupControls(media.title);
+        view.setupControls(media.getTitle());
     }
 
     private class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {

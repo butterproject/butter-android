@@ -33,7 +33,7 @@ import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElement
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.provider.base.Media;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.LoadedFrom;
@@ -118,7 +118,8 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
     private void setupDetailsOverviewRowPresenter(Media item) {
         // Set detail background and style.
         FullWidthDetailsOverviewRowPresenter detailsPresenter = new FullWidthDetailsOverviewRowPresenter(getDetailPresenter());
-        detailsPresenter.setBackgroundColor(item.color);
+        // TODO
+        // detailsPresenter.setBackgroundColor(item.color);
         detailsPresenter.setOnActionClickedListener(this);
 
         final FullWidthDetailsOverviewSharedElementHelper sharedElementHelper = new FullWidthDetailsOverviewSharedElementHelper();
@@ -131,7 +132,7 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
     }
 
     private void updateDetailImage(final Media item) {
-        picasso.load(item.image)
+        picasso.load(item.getPoster())
                 .into(detailsImageTarget);
     }
 

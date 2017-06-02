@@ -18,9 +18,8 @@
 package butter.droid.base.ui.loading;
 
 import android.support.annotation.NonNull;
-
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Show;
 
 public interface BaseStreamLoadingView {
 

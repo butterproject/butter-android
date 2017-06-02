@@ -27,11 +27,11 @@ import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v4.app.Fragment;
-import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Media.Torrent;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Show;
+import butter.droid.provider.base.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
@@ -84,9 +84,16 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         selector.addClassPresenter(DetailsOverviewRow.class, presenter);
     }
 
+    // TODO
+    /*
     @Override
     public void onEpisodeClicked(Episode episode) {
         presenter.episodeClicked(episode);
+    }
+    */
+
+    @Override public void onEpisodeClicked(final butter.droid.base.providers.media.models.Episode row) {
+        // TODO
     }
 
     @Override public void showSeasons(final TreeMap<Integer, List<Episode>> seasons) {
@@ -113,7 +120,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
 
     @Override public void pickTorrent(final Episode episode, final Map<String, Torrent> torrents) {
         ArrayList<String> choices = new ArrayList<>(torrents.keySet());
-        final ArrayList<Map.Entry<String, Media.Torrent>> torrent = new ArrayList<>(torrents.entrySet());
+        final ArrayList<Map.Entry<String, Torrent>> torrent = new ArrayList<>(torrents.entrySet());
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.choose_quality))
                 .setSingleChoiceItems(choices.toArray(new CharSequence[choices.size()]), 0, new DialogInterface.OnClickListener() {

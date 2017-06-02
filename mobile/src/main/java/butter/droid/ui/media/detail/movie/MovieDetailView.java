@@ -18,8 +18,7 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.support.annotation.StringRes;
-
-import butter.droid.base.providers.media.models.Movie;
+import butter.droid.provider.base.Movie;
 
 public interface MovieDetailView {
     void initLayout(Movie movie);

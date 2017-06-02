@@ -18,9 +18,8 @@
 package butter.droid.ui.media.detail;
 
 import android.support.annotation.NonNull;
-
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Media;
 
 public interface MediaDetailPresenter {
     void onCreate(@NonNull Media media);

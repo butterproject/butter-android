@@ -72,9 +72,11 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
 
         filters.page = page;
+        // TODO
+        /*
         currentCall = providerManager.getCurrentMediaProvider()
                 .getList(items, new MediaProvider.Filters(filters), callback);
-
+        */
     }
 
     @Override public ArrayList<Media> getCurrentList() {

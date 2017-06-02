@@ -25,7 +25,6 @@ import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.subs.SubtitleDownloader;
@@ -34,6 +33,7 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
+import butter.droid.provider.base.Media;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
@@ -141,6 +141,8 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     @Override public void onSuccess(Map<String, String> items) {
+        // TODO
+        /*
         Media media = streamInfo.getMedia();
         media.subtitles = items;
 
@@ -168,6 +170,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
             SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(), streamInfo, playerManager, subtitleLanguage);
             subtitleDownloader.downloadSubtitle();
         }
+        */
     }
 
     @Override public void onFailure(Exception e) {

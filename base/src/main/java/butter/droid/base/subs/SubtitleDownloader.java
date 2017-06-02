@@ -2,18 +2,16 @@ package butter.droid.base.subs;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.utils.FileUtils;
+import butter.droid.provider.base.Media;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-
-import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.FileUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -84,6 +82,8 @@ public class SubtitleDownloader {
      * Invoked when subtitle download finished successfully.
      */
     private void onSubtitleDownloadSuccess() {
+        // TODO
+        /*
         if (listenerReference.get() == null) {
             return;
         }
@@ -98,6 +98,7 @@ public class SubtitleDownloader {
             e.printStackTrace();
             listener.onSubtitleDownloadCompleted(false, null);
         }
+        */
     }
 
     /**

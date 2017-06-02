@@ -21,14 +21,13 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider.Callback;
-import butter.droid.base.providers.media.MediaProvider.Filters;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.ThreadUtils;
-import java.util.ArrayList;
-import okhttp3.Call;
+import butter.droid.provider.base.Media;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
-public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter, Callback {
+public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
 
     protected static final int ACTION_TRAILER = -1;
 
@@ -37,7 +36,7 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter, Callb
 
     private Media item;
 
-    @Nullable private Call detailsCall;
+    @Nullable private Disposable detailsRequest;
 
     public TVBaseDetailsPresenterImpl(final TVBaseDetailView view, final ProviderManager providerManager) {
         this.view = view;
@@ -53,8 +52,9 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter, Callb
     }
 
     @Override @CallSuper public void onDestroy() {
-        if (detailsCall != null) {
-            detailsCall.cancel();
+        if (detailsRequest != null) {
+            detailsRequest.dispose();
+            detailsRequest = null;
         }
     }
 
@@ -62,35 +62,29 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter, Callb
         // override if needed
     }
 
-    @Override public void onSuccess(final Filters filters, final ArrayList<Media> items, final boolean changed) {
-        if (null == items || items.size() == 0) {
-            return;
-        }
-
-        final Media itemDetail = items.get(0);
-
-        item = itemDetail;
-
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override public void run() {
-                detailsLoaded(itemDetail);
-            }
-        });
-    }
-
-    @Override public void onFailure(final Exception ex) {
-        // TODO: 5/25/17 Show error message
-    }
-
     @CallSuper @MainThread protected void detailsLoaded(Media media) {
         view.updateOverview(media);
     }
 
     private void loadDetails() {
-        ArrayList<Media> mediaList = new ArrayList<>();
-        mediaList.add(item);
+        providerManager.getCurrentMediaProvider().detail(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Media>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        detailsRequest = d;
+                    }
 
-        detailsCall = providerManager.getCurrentMediaProvider().getDetail(mediaList, 0, this);
+                    @Override public void onSuccess(final Media value) {
+                        item = value;
+
+                        detailsLoaded(value);
+                    }
+
+                    @Override public void onError(final Throwable e) {
+                        // TODO: 5/25/17 Show error message
+                    }
+                });
     }
 
 }

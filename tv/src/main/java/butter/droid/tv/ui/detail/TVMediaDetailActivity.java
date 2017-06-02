@@ -21,14 +21,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.VersionUtils;
+import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import butter.droid.tv.ui.TVBaseActivity;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDetailView {
 
@@ -54,7 +55,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
         super.onCreate(savedInstanceState, R.layout.activity_media_details);
 
         backgroundUpdater.initialise(this, R.color.black);
-        Media media = getIntent().getParcelableExtra(EXTRA_ITEM);
+        Media media = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_ITEM));
 
         if (VersionUtils.isLollipop()) {
             postponeEnterTransition();
@@ -93,7 +94,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
     public static Intent getIntent(Context context, Media item) {
         Intent intent = new Intent(context, TVMediaDetailActivity.class);
-        intent.putExtra(EXTRA_ITEM, item);
+        intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
         return intent;
     }
 

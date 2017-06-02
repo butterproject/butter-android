@@ -18,12 +18,11 @@
 package butter.droid.ui.media.detail;
 
 import android.support.annotation.StringRes;
-
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Show;
 
 public interface MediaDetailView {
     void initMediaLayout(Media media);

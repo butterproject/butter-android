@@ -20,9 +20,10 @@ package butter.droid.tv.ui.trailer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.provider.base.Media;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
+import org.parceler.Parcels;
 
 public class TVTrailerPlayerActivity extends TVBaseActivity {
 
@@ -38,7 +39,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity {
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
-        final Media media = intent.getParcelableExtra(EXTRA_MEDIA);
+        final Media media = Parcels.unwrap(intent.getParcelableExtra(EXTRA_MEDIA));
         final String youtubeUrl = intent.getStringExtra(EXTRA_URI);
 
         if (savedInstanceState == null) {
@@ -52,7 +53,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity {
 
     public static Intent getIntent(final Context context, final Media media, final String url) {
         final Intent intent = new Intent(context, TVTrailerPlayerActivity.class);
-        intent.putExtra(EXTRA_MEDIA, media);
+        intent.putExtra(EXTRA_MEDIA, Parcels.wrap(media));
         intent.putExtra(EXTRA_URI, url);
         return intent;
     }

@@ -18,10 +18,9 @@
 package butter.droid.tv.ui.loading.fragment;
 
 import android.support.annotation.NonNull;
-
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentView;
+import butter.droid.provider.base.Show;
 
 public interface TVStreamLoadingFragmentView extends BaseStreamLoadingFragmentView {
 

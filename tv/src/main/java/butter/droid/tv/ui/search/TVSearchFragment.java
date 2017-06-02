@@ -30,16 +30,16 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
-import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
+import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import javax.inject.Inject;
@@ -129,14 +129,11 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
     }
 
     protected OnItemViewClickedListener getDefaultItemClickedListener() {
-        return new OnItemViewClickedListener() {
-            @Override public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object object, RowPresenter.ViewHolder rowViewHolder,
-                    Row row) {
-                if (object instanceof MediaCardPresenter.MediaCardItem) {
-                    MediaCardPresenter.MediaCardItem item = (MediaCardPresenter.MediaCardItem) object;
-                    Media media = item.getMedia();
-                    startActivity(TVMediaDetailActivity.getIntent(getActivity(), media));
-                }
+        return (itemViewHolder, object, rowViewHolder, row) -> {
+            if (object instanceof MediaCardItem) {
+                MediaCardItem item = (MediaCardItem) object;
+                Media media = item.getMedia();
+                startActivity(TVMediaDetailActivity.getIntent(getActivity(), media));
             }
         };
     }
@@ -148,7 +145,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
                 RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof MediaCardPresenter.MediaCardItem) {
                 MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-                backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
+                backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().getBackdrop());
             }
         }
     }

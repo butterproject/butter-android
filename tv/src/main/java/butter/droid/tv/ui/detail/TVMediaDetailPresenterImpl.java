@@ -17,11 +17,10 @@
 
 package butter.droid.tv.ui.detail;
 
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.media.models.Show;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Show;
 import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
-import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 
 public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
 
@@ -32,12 +31,13 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
     }
 
     @Override public void onCreate(final Media media) {
-        view.updateBackground(media.headerImage);
+        view.updateBackground(media.getPoster());
 
         if (media instanceof Movie) {
             view.displayFragment(TVMovieDetailsFragment.newInstance(media));
         } else if (media instanceof Show) {
-            view.displayFragment(TVShowDetailsFragment.newInstance(media));
+            // TODO
+            // view.displayFragment(TVShowDetailsFragment.newInstance(media));
         } else {
             throw new IllegalStateException("Unknow media type");
         }

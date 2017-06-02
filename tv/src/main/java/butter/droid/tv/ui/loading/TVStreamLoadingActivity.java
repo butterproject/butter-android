@@ -27,16 +27,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
-
-import butter.droid.base.torrent.TorrentService;
-import javax.inject.Inject;
-
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
+import butter.droid.provider.base.Show;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment;
+import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamLoadingView {
 
@@ -62,7 +61,7 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
         super.onCreate(savedInstanceState, 0);
 
         StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-        Show show = getIntent().getParcelableExtra(EXTRA_SHOW_INFO);
+        Show show = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_SHOW_INFO));
         presenter.onCreate(streamInfo, show, savedInstanceState != null);
     }
 
@@ -110,7 +109,7 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
     public static Intent startActivity(Activity activity, StreamInfo info, Show show) {
         Intent intent = new Intent(activity, TVStreamLoadingActivity.class);
         intent.putExtra(EXTRA_STREAM_INFO, info);
-        intent.putExtra(EXTRA_SHOW_INFO, show);
+        intent.putExtra(EXTRA_SHOW_INFO, Parcels.wrap(show));
         activity.startActivity(intent);
         return intent;
     }

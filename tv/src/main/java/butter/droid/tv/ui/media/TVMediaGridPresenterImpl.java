@@ -18,13 +18,8 @@
 package butter.droid.tv.ui.media;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.MediaProvider.Filters;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.presenters.MediaCardPresenter;
-import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
-import hugo.weaving.DebugLog;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Call;
@@ -67,6 +62,8 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
     }
 
     private void loadItems() {
+        // TODO
+        /*
         currentCall = providerManager.getCurrentMediaProvider().getList(null, filter, new MediaProvider.Callback() {
             @DebugLog
             @Override
@@ -94,5 +91,6 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
                 });
             }
         });
+        */
     }
 }

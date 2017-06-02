@@ -22,12 +22,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
+import butter.droid.provider.base.Show;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;
+import org.parceler.Parcels;
 
 public class TVVideoPlayerActivity extends TVBaseActivity {
 
@@ -138,7 +139,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         Intent intent = new Intent(context, TVVideoPlayerActivity.class);
         intent.putExtra(EXTRA_STREAM_INFO, info);
         intent.putExtra(EXTRA_RESUME_POSITION, 0);
-        intent.putExtra(EXTRA_SHOW_INFO, show);
+        intent.putExtra(EXTRA_SHOW_INFO, Parcels.wrap(show));
         context.startActivity(intent);
         return intent;
     }

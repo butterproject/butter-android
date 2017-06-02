@@ -42,6 +42,11 @@ android {
         abortOnError false
         lintConfig file('lint.xml')
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -59,7 +64,7 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:${rootProject.ext.okHttpVersion}"
     api 'com.squareup.picasso:picasso:2.5.2'
     api 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
-    api 'com.google.code.gson:gson:2.8.0'
+    api "com.google.code.gson:gson:${rootProject.ext.gsonVersion}"
     api "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
     api "com.github.gabrielemariotti.changeloglib:changelog:${changeloglibVersion}"
     api 'com.jakewharton.threetenabp:threetenabp:1.0.5'
@@ -72,6 +77,8 @@ dependencies {
 
     api 'com.butterproject:vlc-android-sdk:2.0.6'
     api project(':connectsdk')
+    api project(':provider:provider')
+    api project(':provider:mock')
 
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"

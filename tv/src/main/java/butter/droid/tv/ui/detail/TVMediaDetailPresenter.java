@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.detail;
 
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.provider.base.Media;
 
 public interface TVMediaDetailPresenter {
 

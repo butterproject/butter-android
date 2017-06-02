@@ -18,10 +18,8 @@
 package butter.droid.tv.presenters;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
 
 public class MovieDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
@@ -29,12 +27,13 @@ public class MovieDetailsDescriptionPresenter extends AbstractDetailsDescription
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
         Media itemWrapper = (Media) item;
         if (itemWrapper != null) {
-            viewHolder.getTitle().setText(itemWrapper.title);
-            viewHolder.getSubtitle().setText(itemWrapper.genre);
+            viewHolder.getTitle().setText(itemWrapper.getTitle());
+            // TODO
+            // viewHolder.getSubtitle().setText(itemWrapper.genre);
 
             if (itemWrapper instanceof Movie) {
                 Movie movieItem = (Movie) itemWrapper;
-                viewHolder.getBody().setText(movieItem.synopsis);
+                viewHolder.getBody().setText(movieItem.getSynopsis());
             }
         }
     }

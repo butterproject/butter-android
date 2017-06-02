@@ -20,17 +20,8 @@ package butter.droid.tv.ui.search;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.ThreadUtils;
-import butter.droid.tv.R;
-import butter.droid.tv.presenters.MediaCardPresenter;
-import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 
 public class TVSearchPresenterImpl implements TVSearchPresenter {
 
@@ -75,6 +66,8 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
         searchFilter.keywords = query;
         searchFilter.page = 1;
 
+        // TODO
+        /*
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
             MediaProvider mediaProvider = providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW);
             //noinspection ConstantConditions
@@ -120,6 +113,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
 
             );
         }
+        */
 
     }
 

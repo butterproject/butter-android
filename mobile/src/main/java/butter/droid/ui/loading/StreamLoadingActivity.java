@@ -29,16 +29,14 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
-
-import butter.droid.base.torrent.TorrentService;
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.ui.loading.fragment.StreamLoadingFragment;
+import butter.droid.base.torrent.TorrentService;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.loading.fragment.StreamLoadingFragment;
+import javax.inject.Inject;
 
 public class StreamLoadingActivity extends ButterBaseActivity implements StreamLoadingView {
 

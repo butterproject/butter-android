@@ -18,15 +18,13 @@
 package butter.droid.ui.media.detail;
 
 import android.support.annotation.NonNull;
-
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.torrent.TorrentHealth;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Show;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
@@ -50,7 +48,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
         view.initMediaLayout(media);
 
-        if (media.isMovie) {
+        if (media instanceof Movie) {
             view.displayMovie((Movie) media);
         } else if (media instanceof Show) {
             view.displayShow((Show) media);
@@ -65,9 +63,12 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
                 && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            String streamUrl = ((Movie) media).torrents.get(selectedQuality).url;
+            // TODO
+            /*
+            String streamUrl = ((Movie) media).getTorrents().get(selectedQuality).url;
             StreamInfo streamInfo = new StreamInfo(media, streamUrl, selectedSubtitleLanguage, selectedQuality);
             view.playStream(streamInfo);
+            */
         }
 
     }
@@ -89,13 +90,15 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
     }
 
     @Override public void healthClicked() {
+        // TODO
+        /*
         Movie movie = (Movie) this.media;
         int seeds = movie.torrents.get(selectedQuality).seeds;
         int peers = movie.torrents.get(selectedQuality).peers;
         TorrentHealth health = TorrentHealth.calculate(seeds, peers);
 
         view.displayHealthInfo(health, seeds, peers);
-
+        */
     }
 
 }

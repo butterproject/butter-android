@@ -25,13 +25,12 @@ import android.support.v17.leanback.widget.BaseCardView;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v7.graphics.Palette;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.AnimUtils;
+import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -91,15 +90,16 @@ public class MediaCardPresenter extends Presenter {
         Media item = overview.getMedia();
         final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 
-        cardView.setTitleText(item.title);
-        cardView.setContentText(!TextUtils.isEmpty(item.genre) ? item.genre : item.year);
+        cardView.setTitleText(item.getTitle());
+        // cardView.setContentText(!TextUtils.isEmpty(item.getGenres().length) ? item.getGenres() : item.getYear());
+        cardView.setContentText(String.valueOf(item.getYear()));
         cardView.getMainImageView().setAlpha(1f);
         cardView.getMainImageView().setPadding(0, 0, 0, 0);
         cardView.setMainImageDimensions(cardWidth, cardHeight);
         cardView.getMainImageView().setVisibility(View.GONE);
         cardView.setCustomSelectedSwatch(null);
 
-        if (item.image != null) {
+        if (item.getPoster() != null) {
             Target target = new Target() {
                 @Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                     Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
@@ -128,7 +128,7 @@ public class MediaCardPresenter extends Presenter {
                 }
             };
             //load image
-            picasso.load(item.image).resize(cardWidth, cardHeight).centerCrop().into(target);
+            picasso.load(item.getPoster()).resize(cardWidth, cardHeight).centerCrop().into(target);
             cardView.setTarget(target);
         } else {
             cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);

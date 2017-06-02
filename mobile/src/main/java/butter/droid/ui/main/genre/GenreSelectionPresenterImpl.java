@@ -41,11 +41,14 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     }
 
     @Override public void onViewCreated() {
+        // TODO
+        /*
         List<Genre> genreList = providerManager.getCurrentMediaProvider().getGenres();
         genres = mapGenres(genreList);
 
         view.displayGenres(genres);
         onGenreSelected(0);
+         */
     }
 
     @Override public void onGenreSelected(int position) {

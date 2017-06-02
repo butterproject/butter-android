@@ -22,23 +22,17 @@ import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.MediaProvider.Filters;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.ThreadUtils;
+import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
-import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
-import hugo.weaving.DebugLog;
-import java.io.IOException;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
@@ -49,6 +43,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     private int selectedRow = 0;
 
     @Nullable private Call movieListCall;
+    @Nullable private Disposable listRequest;
 
     public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager, final YouTubeManager youTubeManager) {
         this.view = view;
@@ -60,7 +55,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
         view.setupMoviesRow();
 //        view.setupTVShowsRow();
-        view.setupMoreMoviesRow(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).getNavigation());
+        // TODO
+//        view.setupMoreMoviesRow(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).getNavigation());
 //        view.setupMoreTVShowsRow(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW).getNavigation());
         view.setupMoreRow();
 
@@ -73,7 +69,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         }
 
         if (mediaItem != null) {
-            view.updateBackgroundImage(mediaItem.headerImage);
+            view.updateBackgroundImage(mediaItem.getBackdrop());
         }
     }
 
@@ -115,6 +111,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
         final String location = PlayerTestConstants.FILES[index];
 
+        // TODO
+        /*
         if (location.equals("dialog")) {
             view.showCustomDebugUrl();
         } else if (youTubeManager.isYouTubeUrl(location)) {
@@ -137,10 +135,11 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 }
             });
         }
+        */
     }
 
     @Override public void onDestroy() {
-        cancleMovieCall();
+        cancelMovieCall();
     }
 
     private void loadData() {
@@ -179,42 +178,44 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
         movieFilters.order = MediaProvider.Filters.Order.DESC;
 
-        cancleMovieCall();
-        movieListCall = providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
-                .getList(null, movieFilters, new MediaProvider.Callback() {
-                    @DebugLog
-                    @Override
-                    public void onSuccess(Filters filters, final ArrayList<Media> items, boolean changed) {
-                        ThreadUtils.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-                                view.displayMovies(list);
-
-                                if (selectedRow == 0) {
-                                    view.updateBackgroundImage(items.get(0).headerImage);
-                                }
-                            }
-                        });
+        cancelMovieCall();
+        providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).items()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<butter.droid.provider.base.Media>>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        listRequest = d;
                     }
 
-                    @DebugLog
-                    @Override
-                    public void onFailure(Exception ex) {
-                        ThreadUtils.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                view.showErrorMessage(R.string.movies_error);
-                            }
-                        });
+                    @Override public void onSuccess(final List<butter.droid.provider.base.Media> items) {
+                        List<MediaCardItem> cardItems = convertMediaToOverview(items);
+                        view.displayMovies(cardItems);
+
+                        if (selectedRow == 0) {
+                            view.updateBackgroundImage(items.get(0).getBackdrop());
+                        }
+                    }
+
+                    @Override public void onError(final Throwable e) {
+                        view.showErrorMessage(R.string.movies_error);
                     }
                 });
+
     }
 
-    private void cancleMovieCall() {
-        if (movieListCall != null) {
-            movieListCall.cancel();
-            movieListCall = null;
+    private void cancelMovieCall() {
+        if (listRequest != null) {
+            listRequest.dispose();
+            listRequest = null;
         }
     }
+
+    public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
+        List<MediaCardItem> list = new ArrayList<>();
+        for (Media media : items) {
+            list.add(new MediaCardItem(media));
+        }
+        return list;
+    }
+
 }

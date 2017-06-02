@@ -17,11 +17,19 @@
 
 package butter.droid.base.providers.subs;
 
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.providers.BaseProvider;
+import butter.droid.base.providers.media.models.Episode;
+import butter.droid.base.providers.media.models.Movie;
+import butter.droid.base.subs.FatalParsingException;
+import butter.droid.base.subs.FormatASS;
+import butter.droid.base.subs.FormatSRT;
+import butter.droid.base.subs.TimedTextObject;
+import butter.droid.base.utils.FileUtils;
+import butter.droid.provider.base.Media;
 import com.google.gson.Gson;
-
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -29,21 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.BaseProvider;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.subs.FatalParsingException;
-import butter.droid.base.subs.FormatASS;
-import butter.droid.base.subs.FormatSRT;
-import butter.droid.base.subs.TimedTextObject;
-import butter.droid.base.utils.FileUtils;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public abstract class SubsProvider extends BaseProvider {
 
@@ -78,13 +73,15 @@ public abstract class SubsProvider extends BaseProvider {
      * @return Call
      */
     public Call download(final Media media, final String languageCode, final okhttp3.Callback callback) {
+        // TODO
+        /*
         if (media.subtitles != null && media.subtitles.containsKey(languageCode)) {
             try {
                 Request request = new Request.Builder().url(media.subtitles.get(languageCode)).build();
                 Call call = client.newCall(request);
 
                 final File subsDirectory = playerManager.getStorageLocation();
-                final String fileName = media.videoId + "-" + languageCode;
+                final String fileName = media.getId() + "-" + languageCode;
                 final File srtPath = new File(subsDirectory, fileName + ".srt");
 
                 if (srtPath.exists()) {
@@ -155,6 +152,7 @@ public abstract class SubsProvider extends BaseProvider {
             }
         }
         callback.onFailure(null, new IOException("Wrong media"));
+        */
         return null;
     }
 

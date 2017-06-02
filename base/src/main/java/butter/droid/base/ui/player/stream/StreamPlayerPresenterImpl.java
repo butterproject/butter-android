@@ -27,16 +27,11 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.subs.Caption;
-import butter.droid.base.subs.SubtitleDownloader;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
-import butter.droid.base.utils.LocaleUtils;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Locale;
 import timber.log.Timber;
 
 public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements StreamPlayerPresenter {
@@ -73,7 +68,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
             throw new IllegalStateException("Stream info was not provided");
         }
 
-        super.onCreate(streamInfo.getMedia(), resumePosition);
+        super.onCreate(resumePosition);
 
         this.streamInfo = streamInfo;
 
@@ -117,6 +112,8 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
             return;
         }
 
+        // TODO
+        /*
         if (media == null || media.subtitles == null || media.subtitles.size() == 0) {
             media = null;
             onSubtitleEnabledStateChanged(false);
@@ -128,6 +125,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
             onSubtitleEnabledStateChanged(false);
             throw new IllegalArgumentException("Media doesn't have subtitle with specified language");
         }
+        */
 
         view.showTimedCaptionText(null);
         loadOrDownloadSubtitle();
@@ -139,7 +137,8 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void showSubsLanguageSettings() {
-
+        // TODO
+/*
         String[] subtitles = media.subtitles.keySet().toArray(new String[media.subtitles.size()]);
         Arrays.sort(subtitles);
 
@@ -163,6 +162,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         readableNames[readableNames.length - 1] = "Custom..";
 
         view.showPickSubsDialog(readableNames, adapterSubtitles, currentSubsLang);
+        */
     }
 
     @Override public void onSubsFileSelected(final File f) {
@@ -201,9 +201,12 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void onSubsClicked() {
+        // TODO
+        /*
         if (media != null && media.subtitles != null) {
             view.showSubsSelectorDialog();
         }
+        */
     }
 
     @Override public void streamProgressUpdated(final float progress) {
@@ -262,7 +265,8 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     private void loadOrDownloadSubtitle() {
-
+        // TODO
+        /*
         if (media == null) {
             throw new NullPointerException("Media is not available");
         }
@@ -283,6 +287,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         } catch (FileNotFoundException e) {
             subtitleDownloader.downloadSubtitle();
         }
+        */
     }
 
     private void loadMedia() {

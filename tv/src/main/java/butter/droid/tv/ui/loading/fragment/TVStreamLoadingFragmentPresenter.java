@@ -17,9 +17,9 @@
 
 package butter.droid.tv.ui.loading.fragment;
 
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenter;
+import butter.droid.provider.base.Show;
 
 public interface TVStreamLoadingFragmentPresenter extends BaseStreamLoadingFragmentPresenter {
     void onCreate(StreamInfo streamInfo, Show show);

@@ -122,8 +122,8 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
 
     private void displayTitle() {
         String title;
-        if (media != null && media.title != null) {
-            title = String.format("%s: %s", context.getString(R.string.now_playing), media.title);
+        if (media != null) {
+            title = String.format("%s: %s", context.getString(R.string.now_playing), media.getTitle());
         } else {
             title = context.getString(R.string.now_playing);
         }

@@ -24,16 +24,16 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import javax.inject.Inject;
-
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
+import butter.droid.provider.base.Show;
 import butter.droid.tv.R;
-import butter.droid.tv.ui.player.TVVideoPlayerActivity;
-import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
+import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
+import butter.droid.tv.ui.player.TVVideoPlayerActivity;
+import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implements TVStreamLoadingFragmentView {
 
@@ -48,6 +48,7 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
         ((TVStreamLoadingActivity) context).getComponent()
                 .streamLoadingFragmentComponentBuilder()
                 .tvStreamLoadingFragmentModule(new TVStreamLoadingFragmentModule(this))
+                .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))
                 .build()
                 .inject(this);
     }
@@ -57,7 +58,7 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
 
         Bundle arguments = getArguments();
         StreamInfo streamInfo = arguments.getParcelable(ARGS_STREAM_INFO);
-        Show show = arguments.getParcelable(ARGS_SHOW_INFO);
+        Show show = Parcels.unwrap(arguments.getParcelable(ARGS_SHOW_INFO));
         presenter.onCreate(streamInfo, show);
     }
 
@@ -88,7 +89,7 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
     public static TVStreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo, @Nullable Show show) {
         Bundle args = new Bundle();
         args.putParcelable(ARGS_STREAM_INFO, streamInfo);
-        args.putParcelable(ARGS_SHOW_INFO, show);
+        args.putParcelable(ARGS_SHOW_INFO, Parcels.wrap(show));
 
         TVStreamLoadingFragment fragment = new TVStreamLoadingFragment();
         fragment.setArguments(args);

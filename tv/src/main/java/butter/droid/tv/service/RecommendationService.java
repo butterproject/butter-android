@@ -22,26 +22,23 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.base.utils.VersionUtils;
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Show;
+import butter.droid.tv.R;
+import butter.droid.tv.TVButterApplication;
+import butter.droid.tv.service.recommendation.RecommendationBuilder;
+import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.inject.Inject;
-
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.media.models.Show;
-import butter.droid.base.utils.VersionUtils;
-import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.service.recommendation.RecommendationBuilder;
-import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import timber.log.Timber;
 
 public class RecommendationService extends IntentService {
@@ -95,6 +92,8 @@ public class RecommendationService extends IntentService {
         //fetch movies
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
             Timber.d("Fetching movies");
+            // TODO
+            /*
             //noinspection ConstantConditions
             providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                     .getList(movieFilter, new MediaProvider.Callback() {
@@ -111,6 +110,7 @@ public class RecommendationService extends IntentService {
                             mMoviesCallFinished.set(true);
                         }
                     });
+                    */
         }
 
         /*
@@ -135,6 +135,8 @@ public class RecommendationService extends IntentService {
         */
         mShowsCallFinished.set(true);
 
+        /*
+
         //wait for callbacks to finish
         while (!mShowsCallFinished.get() || !mMoviesCallFinished.get()) {
             Timber.d("Waiting on callbacks");
@@ -144,6 +146,7 @@ public class RecommendationService extends IntentService {
                 e.printStackTrace();
             }
         }
+        */
 
         Timber.d("mShowsCallFinished: " + mShowsCallFinished.get());
         Timber.d("mMoviesCallFinished: " + mMoviesCallFinished.get());
@@ -169,15 +172,15 @@ public class RecommendationService extends IntentService {
             for (Media media : movies) {
                 Movie movie = (Movie) media;
 
-                Timber.d("Recommendation - " + movie.title);
+                Timber.d("Recommendation - " + movie.getTitle());
                 priority--;
                 totalCount--;
-                builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(movie.headerImage, "UTF-8"))
+                builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(movie.getBackdrop(), "UTF-8"))
                         .setId(totalCount)
                         .setPriority(priority)
-                        .setTitle(movie.title)
-                        .setDescription(movie.synopsis)
-                        .setImage(movie.image)
+                        .setTitle(movie.getTitle())
+                        .setDescription(movie.getSynopsis())
+                        .setImage(movie.getPoster())
                         .setIntent(buildPendingIntent(movie))
                         .build();
 
@@ -198,18 +201,18 @@ public class RecommendationService extends IntentService {
             for (Media media : shows) {
                 Show show = (Show) media;
 
-                Timber.d("Recommendation - " + show.title);
+                Timber.d("Recommendation - " + show.getTitle());
 
                 Episode latestEpisode = findLatestEpisode(show);
 
                 priority--;
                 totalCount--;
-                builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(show.headerImage, "UTF-8"))
+                builder.setBackgroundContentUri(RecommendationContentProvider.CONTENT_URI + URLEncoder.encode(show.getBackdrop(), "UTF-8"))
                         .setId(totalCount)
                         .setPriority(priority)
-                        .setTitle(show.title)
-                        .setDescription(latestEpisode == null ? "" : getString(R.string.episode_number_format, latestEpisode.episode))
-                        .setImage(show.image)
+                        .setTitle(show.getTitle())
+                        .setDescription(latestEpisode == null ? "" : getString(R.string.episode_number_format, latestEpisode.getEpisode()))
+                        .setImage(show.getPoster())
                         .setIntent(buildPendingIntent(show))
                         .build();
 
@@ -224,10 +227,10 @@ public class RecommendationService extends IntentService {
     }
 
     private Episode findLatestEpisode(Show show) {
-        if (show.episodes == null || show.episodes.size() == 0) {
+        if (show.getEpisodes().length == 0) {
             return null;
         }
-        return show.episodes.get(show.episodes.size());
+        return show.getEpisodes()[show.getEpisodes().length - 1];
     }
 
     private PendingIntent buildPendingIntent(Media media) {
@@ -238,7 +241,7 @@ public class RecommendationService extends IntentService {
         stackBuilder.addNextIntent(detailIntent);
         // Ensure a unique PendingIntents, otherwise all recommendations end up with the same
         // PendingIntent
-        detailIntent.setAction(media.videoId);
+        detailIntent.setAction(media.getId());
 
         PendingIntent intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         return intent;

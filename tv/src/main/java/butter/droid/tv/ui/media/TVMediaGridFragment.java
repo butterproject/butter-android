@@ -32,10 +32,10 @@ import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
 import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Show;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -129,7 +129,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-            backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().headerImage);
+            backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().getBackdrop());
         }
 
         //really hacky way of making and 'endless' adapter

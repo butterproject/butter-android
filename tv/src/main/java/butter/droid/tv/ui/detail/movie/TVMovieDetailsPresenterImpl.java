@@ -18,14 +18,12 @@
 package butter.droid.tv.ui.detail.movie;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Media.Torrent;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl implements TVMovieDetailsPresenter {
 
@@ -54,26 +52,22 @@ public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl impl
 
     @Override public void actionClicked(final long actionId) {
         if (actionId == ACTION_TRAILER) {
-            view.startTrailer(item, item.trailer);
+            view.startTrailer(item, item.getTrailer());
         } else {
-            List<String> qualities = new ArrayList<>(item.torrents.keySet());
-            String quality = qualities.get((int) actionId);
-            Torrent torrent = item.torrents.get(quality);
-            view.startMovie(item, torrent, quality);
+            Torrent torrent = item.getTorrents()[(int) actionId];
+            view.startMovie(item, torrent, String.valueOf(torrent.getQuality()));
         }
     }
 
     private void addActions(Movie item) {
 
-        if (!StringUtils.isEmpty(item.trailer)) {
+        if (!StringUtils.isEmpty(item.getTrailer())) {
             view.addAction(ACTION_TRAILER, R.string.watch, R.string.trailer);
         }
 
-        List<String> qualities = new ArrayList<>(item.torrents.keySet());
-        for (int i = 0; i < qualities.size(); i++) {
-            String quality = qualities.get(i);
-
-            view.addAction(i, R.string.watch, quality);
+        for (int i = 0; i < item.getTorrents().length; i++) {
+            Torrent torrent = item.getTorrents()[i];
+            view.addAction(i, R.string.watch, String.valueOf(torrent.getQuality()));
         }
     }
 

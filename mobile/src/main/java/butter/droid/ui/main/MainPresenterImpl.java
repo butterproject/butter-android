@@ -22,30 +22,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsPresenterImpl;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainPresenterImpl implements MainPresenter {
 
@@ -121,6 +113,8 @@ public class MainPresenterImpl implements MainPresenter {
 
             // TODO: 11/29/16 Show progress while subtitles are loading
 
+            // TODO
+            /*
             providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
                 @Override public void onFailure(Call call, IOException ex) {
                     openStream(new StreamInfo(media, null, null, null, null, file));
@@ -130,16 +124,20 @@ public class MainPresenterImpl implements MainPresenter {
                     openStream(new StreamInfo(media, null, null, "en", null, file));
                 }
             });
+            */
         }
 
     }
 
     @Override public void openPlayerTestCustomUrl(String location) {
+        // TODO
+        /*
         Movie media = new Movie();
         media.videoId = "dialogtestvideo";
         media.title = "User input test video";
         StreamInfo info = new StreamInfo(media, null, null, null, null, location);
         openStream(info);
+        */
     }
 
     @Override public void storagePermissionDenied() {
@@ -194,9 +192,12 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     private void displayProviderData(@ProviderType int providerType) {
+        // TODO
+        /*
         MediaProvider provider = providerManager.getMediaProvider(providerType);
         boolean hasGenres = provider.getGenres() != null && provider.getGenres().size() > 0;
         view.displayProvider(ProviderUtils.getProviderTitle(providerType), hasGenres, provider.getNavigation());
+        */
     }
 
     private void openStream(StreamInfo info) {

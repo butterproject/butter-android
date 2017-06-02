@@ -25,8 +25,8 @@ import android.support.annotation.Nullable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.provider.MediaProvider;
 
 public class ProviderManager {
 
@@ -92,11 +92,13 @@ public class ProviderManager {
     }
 
     public SubsProvider getCurrentSubsProvider() {
-        return getCurrentMediaProvider().getSubsProvider();
+        return null;
+        // return getCurrentMediaProvider().getSubsProvider();
     }
 
     public boolean hasCurrentSubsProvider() {
-        return getCurrentMediaProvider().hasSubsProvider();
+        return false;
+        // return getCurrentMediaProvider().hasSubsProvider();
     }
 
 }

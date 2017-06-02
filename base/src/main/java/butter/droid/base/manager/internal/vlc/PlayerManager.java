@@ -27,14 +27,10 @@ import android.support.annotation.Nullable;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.internal.beaming.server.BeamServer;
-import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.Media;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -113,6 +109,7 @@ public class PlayerManager {
     }
 
     @Nullable public Intent externalPlayerIntent(Media media, String subLanguage, String location) {
+        /*
         final String defaultPlayer = preferencesHandler.getDefaultPlayer();
 
         if (!StringUtils.isEmpty(defaultPlayer)) {
@@ -121,7 +118,7 @@ public class PlayerManager {
                 Intent intent = new Intent();
                 if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
                         "no-subs")) {
-                    File subsLocation = new File(getStorageLocation(), media.videoId + "-" + subLanguage + ".srt");
+                    File subsLocation = new File(getStorageLocation(), media.getId() + "-" + subLanguage + ".srt");
                     BeamServer.setCurrentSubs(subsLocation);
                     intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
                     intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
@@ -148,7 +145,7 @@ public class PlayerManager {
                 return intent;
             }
         }
-
+        */
         return null;
     }
 
@@ -196,7 +193,7 @@ public class PlayerManager {
             throw new IllegalArgumentException("language must be specified");
         }
 
-        File subtitleFile = new File(getStorageLocation(), media.videoId + "-" + language + ".srt");
+        File subtitleFile = new File(getStorageLocation(), media.getId() + "-" + language + ".srt");
 
         if (subtitleFile.exists()) {
             return subtitleFile;

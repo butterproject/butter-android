@@ -19,24 +19,18 @@ package butter.droid.ui.media.detail.movie;
 
 import android.content.res.Resources;
 import android.text.TextUtils;
-
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Map;
-
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.base.utils.ThreadUtils;
+import butter.droid.provider.base.Movie;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
+import java.util.Locale;
 
 public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
@@ -79,10 +73,10 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     @Override public void openTrailer() {
-        if (!youTubeManager.isYouTubeUrl(movie.trailer)) {
-            parentPresenter.openVideoPlayer(new StreamInfo(movie, null, null, null, null, movie.trailer));
+        if (!youTubeManager.isYouTubeUrl(movie.getTrailer())) {
+            parentPresenter.openVideoPlayer(new StreamInfo(movie, null, null, null, null, movie.getTrailer()));
         } else {
-            parentPresenter.openYouTube(movie.trailer);
+            parentPresenter.openYouTube(movie.getTrailer());
         }
     }
 
@@ -93,7 +87,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     @Override public void openReadMore() {
-        view.showReadMoreDialog(movie.synopsis);
+        view.showReadMoreDialog(movie.getSynopsis());
     }
 
     @Override public void playMediaClicked() {
@@ -119,6 +113,8 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayMetaData() {
+        // TODO
+        /*
         StringBuilder sb = new StringBuilder(String.valueOf(movie.year));
         if (!TextUtils.isEmpty(movie.runtime)) {
             sb.append(" • ")
@@ -133,20 +129,24 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         }
 
         view.displayMetaData(sb);
+        */
     }
 
     private void displayRating() {
+        // TODO
+        /*
         if (!"-1".equals(movie.rating)) {
             Double rating = Double.parseDouble(movie.rating);
             view.displayRating(rating.intValue());
         } else {
             view.hideRating();
         }
+        */
     }
 
     private void displaySynopsis() {
-        if (!TextUtils.isEmpty(movie.synopsis)) {
-            view.displaySynopsis(movie.synopsis);
+        if (!TextUtils.isEmpty(movie.getSynopsis())) {
+            view.displaySynopsis(movie.getSynopsis());
         } else {
             view.hideSynopsis();
         }
@@ -154,6 +154,8 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
 
     private void displaySubtitles() {
+        // TODO
+        /*
         if (providerManager.hasCurrentSubsProvider()) {
             view.setSubtitleText(R.string.loading_subs);
             view.setSubtitleEnabled(false);
@@ -222,11 +224,14 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
             view.setSubtitleText(R.string.no_subs_available);
             view.setSubtitleEnabled(false);
         }
+        */
     }
 
     private void displayQualities() {
 
-        if (movie.torrents.size() > 0) {
+        if (movie.getTorrents().length > 0) {
+            // TODO
+            /*
             final String[] qualities = movie.torrents.keySet().toArray(new String[movie.torrents.size()]);
             SortUtils.sortQualities(qualities);
 
@@ -234,6 +239,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
             view.setQualities(qualities, quality);
             selectQuality(quality);
+            */
         }
 
     }

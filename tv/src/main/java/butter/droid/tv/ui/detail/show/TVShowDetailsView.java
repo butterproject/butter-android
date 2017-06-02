@@ -17,10 +17,10 @@
 
 package butter.droid.tv.ui.detail.show;
 
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Media.Torrent;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Show;
+import butter.droid.provider.base.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;
 import java.util.List;
 import java.util.Map;

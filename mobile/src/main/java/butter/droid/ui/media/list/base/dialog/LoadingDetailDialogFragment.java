@@ -29,9 +29,7 @@ import android.view.ViewGroup;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.utils.ThreadUtils;
 import java.util.ArrayList;
 import javax.inject.Inject;
 
@@ -66,7 +64,8 @@ public class LoadingDetailDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        providerManager.getCurrentMediaProvider().cancel();
+        // TODO
+        // providerManager.getCurrentMediaProvider().cancel();
     }
 
     @Override public void onAttach(final Context context) {
@@ -89,7 +88,8 @@ public class LoadingDetailDialogFragment extends DialogFragment {
         ArrayList<Media> currentList = callback.getCurrentList();
         int position = getArguments().getInt(ARG_MEDIA);
         final Media media = currentList.get(position);
-        providerManager.getCurrentMediaProvider().getDetail(currentList, position, new MediaProvider.Callback() {
+        // TODO
+        /*providerManager.getCurrentMediaProvider().getDetail(currentList, position, new MediaProvider.Callback() {
                     @Override
                     public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
                         if (!isAdded() || items.size() <= 0) {
@@ -127,7 +127,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
                     }
                 }
 
-        );
+        );*/
     }
 
     @Override
