@@ -6,20 +6,16 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.FileUtils;
-import butter.droid.provider.base.Media;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class SubtitleDownloader {
 
     private final SubsProvider subsProvider;
-    private final Media media;
+//    private final Media media;
     private final PlayerManager playerManager;
 
     private String subtitleLanguage;
@@ -36,26 +32,27 @@ public class SubtitleDownloader {
         subtitleLanguage = language;
         this.playerManager = playerManager;
 
-        media = streamInfo.getMedia();
-        if (media == null) {
-            throw new IllegalArgumentException("media from StreamInfo must not null");
-        }
+        // TODO: 6/4/17 Should be removed
+//        media = streamInfo.getMedia();
+//        if (media == null) {
+//            throw new IllegalArgumentException("media from StreamInfo must not null");
+//        }
     }
 
     public void downloadSubtitle() {
-        if (listenerReference == null) {
-            throw new IllegalArgumentException(
-                    "listener must not null. Call setSubtitleDownloaderListener() to sets one");
-        }
-        subsProvider.download(media, subtitleLanguage, new Callback() {
-            @Override public void onFailure(Call call, IOException e) {
-                onSubtitleDownloadFailed();
-            }
-
-            @Override public void onResponse(Call call, Response response) throws IOException {
-                onSubtitleDownloadSuccess();
-            }
-        });
+//        if (listenerReference == null) {
+//            throw new IllegalArgumentException(
+//                    "listener must not null. Call setSubtitleDownloaderListener() to sets one");
+//        }
+//        subsProvider.download(media, subtitleLanguage, new Callback() {
+//            @Override public void onFailure(Call call, IOException e) {
+//                onSubtitleDownloadFailed();
+//            }
+//
+//            @Override public void onResponse(Call call, Response response) throws IOException {
+//                onSubtitleDownloadSuccess();
+//            }
+//        });
     }
 
     public void parseSubtitle(@NonNull File subtitleFile) {

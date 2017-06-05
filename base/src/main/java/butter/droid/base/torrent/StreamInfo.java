@@ -28,8 +28,6 @@ import org.parceler.Parcels;
 
 public class StreamInfo implements Parcelable {
 
-    private String subtitleLanguage;
-    private String quality;
     private String torrentUrl;
     private String videoLocation;
     private String title;
@@ -56,8 +54,6 @@ public class StreamInfo implements Parcelable {
 
     public StreamInfo(@NonNull Streamable streamable, @NonNull Media media, String torrentUrl, String subtitleLanguage, String quality, String videoLocation) {
         this.torrentUrl = torrentUrl;
-        this.subtitleLanguage = subtitleLanguage;
-        this.quality = quality;
         this.videoLocation = videoLocation;
         this.streamable = streamable;
 
@@ -75,8 +71,6 @@ public class StreamInfo implements Parcelable {
     }
 
     private StreamInfo(Parcel in) {
-        this.subtitleLanguage = in.readString();
-        this.quality = in.readString();
         this.torrentUrl = in.readString();
         this.videoLocation = in.readString();
         this.imageUrl = in.readString();
@@ -108,14 +102,6 @@ public class StreamInfo implements Parcelable {
         return headerImageUrl;
     }
 
-    public String getSubtitleLanguage() {
-        return subtitleLanguage;
-    }
-
-    public String getQuality() {
-        return quality;
-    }
-
     public String getTorrentUrl() {
         return torrentUrl;
     }
@@ -132,10 +118,6 @@ public class StreamInfo implements Parcelable {
         return streamable;
     }
 
-    public void setSubtitleLanguage(String subtitleLanguage) {
-        this.subtitleLanguage = subtitleLanguage;
-    }
-
     public void setVideoLocation(String videoLocation) {
         this.videoLocation = videoLocation;
     }
@@ -147,8 +129,6 @@ public class StreamInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.subtitleLanguage);
-        dest.writeString(this.quality);
         dest.writeString(this.torrentUrl);
         dest.writeString(this.videoLocation);
         dest.writeString(this.imageUrl);

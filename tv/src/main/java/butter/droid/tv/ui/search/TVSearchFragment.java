@@ -66,6 +66,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
                 .build()
                 .inject(this);
 
+        presenter.onCreate();
     }
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {

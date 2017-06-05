@@ -15,17 +15,6 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider;
+package butter.droid.provider.base
 
-import android.support.annotation.NonNull;
-import butter.droid.provider.base.ItemsWrapper;
-import butter.droid.provider.base.Media;
-import io.reactivex.Single;
-
-public interface MediaProvider {
-
-    @NonNull Single<ItemsWrapper> items();
-
-    @NonNull Single<Media> detail(Media media);
-
-}
+data class ItemsWrapper(val media: List<Media>, val paging: Paging)

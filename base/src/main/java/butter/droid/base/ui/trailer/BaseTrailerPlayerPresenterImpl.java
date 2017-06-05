@@ -50,7 +50,7 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
     }
 
     @Override public void onCreate(final Media media, final String trailerUri, long resumePosition) {
-        super.onCreate(media, resumePosition);
+        super.onCreate(resumePosition);
 
         if (youTubeManager.isYouTubeUrl(trailerUri)) {
             queryYouTubeTask = new QueryYouTubeTask(youTubeManager, networkManager, phoneManager);
@@ -70,7 +70,7 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
     }
 
     @Override public void onViewCreated() {
-        view.setupControls(media.getTitle());
+//        view.setupControls(media.getTitle());
     }
 
     private class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {

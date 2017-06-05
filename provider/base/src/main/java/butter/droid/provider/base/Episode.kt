@@ -23,3 +23,4 @@ import org.parceler.ParcelConstructor
 @Parcel(Parcel.Serialization.BEAN)
 data class Episode @ParcelConstructor constructor(override val id: String, override val title: String, val orrents: Array<Torrent>, val watched: Boolean, val firstAired: Int, val overview: String, val episode: Int,
                                                   val seasion: Int) : Streamable
+

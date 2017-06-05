@@ -32,7 +32,6 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import java.io.File;
 import java.util.Collection;
-import timber.log.Timber;
 
 public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements StreamPlayerPresenter {
 
@@ -72,19 +71,19 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
         this.streamInfo = streamInfo;
 
-        if (streamInfo.getSubtitleLanguage() == null) {
-            // Get selected default subtitle
-            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-            streamInfo.setSubtitleLanguage(defaultSubtitle);
-            currentSubsLang = defaultSubtitle;
-            Timber.d("Using default subtitle: %s", currentSubsLang);
-        }
-
-        if (!streamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-            Timber.d("Download default subtitle");
-            currentSubsLang = streamInfo.getSubtitleLanguage();
-            loadOrDownloadSubtitle();
-        }
+//        if (streamInfo.getSubtitleLanguage() == null) {
+//            // Get selected default subtitle
+//            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
+//            streamInfo.setSubtitleLanguage(defaultSubtitle);
+//            currentSubsLang = defaultSubtitle;
+//            Timber.d("Using default subtitle: %s", currentSubsLang);
+//        }
+//
+//        if (!streamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+//            Timber.d("Download default subtitle");
+//            currentSubsLang = streamInfo.getSubtitleLanguage();
+//            loadOrDownloadSubtitle();
+//        }
     }
 
     @Override public void onResume() {
@@ -104,7 +103,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
 
         currentSubsLang = language;
-        streamInfo.setSubtitleLanguage(language);
+//        streamInfo.setSubtitleLanguage(language);
 
         if (currentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
             subs = null;

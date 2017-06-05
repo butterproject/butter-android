@@ -280,7 +280,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     private void setupEventListeners() {
-        setOnSearchClickedListener(view -> TVSearchActivity.newIntent(getActivity()));
+        setOnSearchClickedListener(view -> startActivity(TVSearchActivity.newIntent(getActivity())));
 
         setOnItemViewClickedListener(this);
         setOnItemViewSelectedListener(this);

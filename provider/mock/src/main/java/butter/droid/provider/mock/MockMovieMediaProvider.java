@@ -19,20 +19,18 @@ package butter.droid.provider.mock;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
-import butter.droid.provider.base.filter.Genre;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.util.List;
-
 import butter.droid.provider.AbsMediaProvider;
+import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
 import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Paging;
 import butter.droid.provider.base.Torrent;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.mock.model.MockMovies;
+import com.google.gson.Gson;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import java.io.IOException;
 import okio.BufferedSource;
 import okio.Okio;
 
@@ -46,7 +44,7 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
         this.gson = gson;
     }
 
-    @NonNull @Override public Single<List<Media>> items() {
+    @NonNull @Override public Single<ItemsWrapper> items() {
         return Single.fromCallable(() -> parseResponse("movies_list.json", MockMovies.class))
                 .map(MockMovies::getMovies)
                 .flatMapObservable(Observable::fromIterable)
@@ -55,7 +53,8 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
                         new Torrent[]{
                                 new Torrent(m.getTorrent(), 0L, 0, null, null, null)
                         }, m.getTrailer()))
-                .toList();
+                .toList()
+                .map(l -> new ItemsWrapper(l, new Paging("", false)));
     }
 
     @Override public Single<Media> detail(Media media) {

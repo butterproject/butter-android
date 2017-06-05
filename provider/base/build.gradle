@@ -52,15 +52,17 @@ repositories {
 }
 
 dependencies {
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
 
     api 'org.parceler:parceler-api:1.1.8'
     kapt 'org.parceler:parceler:1.1.8'
 
-    testCompile 'junit:junit:4.12'
+    testCompile "junit:junit:4.12"
+    testCompile 'org.mockito:mockito-core:2.7.1'
+
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestCompile 'org.mockito:mockito-android:2.7.1'
 }

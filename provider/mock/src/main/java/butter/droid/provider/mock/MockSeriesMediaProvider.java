@@ -18,16 +18,14 @@
 package butter.droid.provider.mock;
 
 import android.support.annotation.NonNull;
-
-import java.util.List;
-
 import butter.droid.provider.AbsMediaProvider;
+import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
 import io.reactivex.Single;
 
 public class MockSeriesMediaProvider extends AbsMediaProvider {
 
-    @NonNull @Override public Single<List<Media>> items() {
+    @NonNull @Override public Single<ItemsWrapper> items() {
         return null;
     }
 

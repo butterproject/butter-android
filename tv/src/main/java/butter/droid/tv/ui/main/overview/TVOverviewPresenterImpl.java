@@ -22,6 +22,7 @@ import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
@@ -32,7 +33,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
-import okhttp3.Call;
 
 public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
@@ -42,7 +42,6 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     private int selectedRow = 0;
 
-    @Nullable private Call movieListCall;
     @Nullable private Disposable listRequest;
 
     public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager, final YouTubeManager youTubeManager) {
@@ -182,17 +181,18 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).items()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<butter.droid.provider.base.Media>>() {
+                .subscribe(new SingleObserver<ItemsWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
                         listRequest = d;
                     }
 
-                    @Override public void onSuccess(final List<butter.droid.provider.base.Media> items) {
-                        List<MediaCardItem> cardItems = convertMediaToOverview(items);
+                    @Override public void onSuccess(final ItemsWrapper items) {
+                        List<Media> mediaItems = items.getMedia();
+                        List<MediaCardItem> cardItems = convertMediaToOverview(mediaItems);
                         view.displayMovies(cardItems);
 
                         if (selectedRow == 0) {
-                            view.updateBackgroundImage(items.get(0).getBackdrop());
+                            view.updateBackgroundImage(mediaItems.get(0).getBackdrop());
                         }
                     }
 

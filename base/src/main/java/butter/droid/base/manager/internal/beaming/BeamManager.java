@@ -56,7 +56,6 @@ import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -229,6 +228,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         }
 
         String subsLocation = null;
+        /*
         if(info.getSubtitleLanguage() != null && !info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
             File srtFile = new File(playerManager.getStorageLocation(), mStreamInfo.getStreamable().getId() + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
             BeamServer.setCurrentSubs(srtFile);
@@ -240,6 +240,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         } else {
             BeamServer.removeSubs();
         }
+        */
 
         try {
             URL url = new URL(location);

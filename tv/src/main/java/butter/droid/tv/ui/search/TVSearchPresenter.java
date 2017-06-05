@@ -23,4 +23,5 @@ public interface TVSearchPresenter {
 
     void onTextSubmitted(String query);
 
+    void onCreate();
 }
