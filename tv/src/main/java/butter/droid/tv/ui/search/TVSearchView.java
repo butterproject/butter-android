@@ -28,5 +28,5 @@ public interface TVSearchView {
 
     void showLoadingRow();
 
-    void addRow(@StringRes int title, List<MediaCardItem> items);
+    void replaceRow(int index, @StringRes int title, List<MediaCardItem> items);
 }

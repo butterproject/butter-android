@@ -17,25 +17,22 @@
 
 package butter.droid.tv.ui.search;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Pair;
+import android.support.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider.Filters;
-import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Single;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -48,12 +45,11 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
     private final TVSearchView view;
     private final ProviderManager providerManager;
 
-    private final SearchRunnable delayedLoad = new SearchRunnable();
     private final Filters searchFilter = new Filters();
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     private final CompositeDisposable searchRequests = new CompositeDisposable();
-    private final BehaviorSubject<String> querySubject = BehaviorSubject.create();
+    private final BehaviorSubject<SearchRequest> querySubject = BehaviorSubject.create();
+    private final PublishSubject<String> loadingSubject = PublishSubject.create();
 
     public TVSearchPresenterImpl(TVSearchView view, ProviderManager providerManager) {
         this.view = view;
@@ -61,146 +57,107 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
     }
 
     @Override public void onTextChanged(String newQuery) {
-        querySubject.onNext(newQuery);
+        querySubject.onNext(new SearchRequest(newQuery, false));
     }
 
     @Override public void onTextSubmitted(String query) {
-        // TODO: 6/4/17 Handle properly (no delay)
-        //        queryByWords(query);
+        querySubject.onNext(new SearchRequest(query, true));
     }
 
     @Override public void onCreate() {
-        querySubject.filter(q -> q.length() > 3)
-                .debounce(SEARCH_DELAY_MS, TimeUnit.MILLISECONDS)
-                .flatMap(q -> Single.zip(getProviderRequests(q), s -> (Pair<Integer, List<Media>>[]) s)
-                        .toObservable())
+
+        searchRequests.add(loadingSubject
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(q -> {
+                    view.clearData();
+                    view.showLoadingRow();
+                }));
+
+        querySubject.debounce(q ->
+                Observable.just(q)
+                        .delay(searchRequest -> {
+                            if (searchRequest.immediate) {
+                                return Observable.just(0L);
+                            } else {
+                                return Observable.timer(SEARCH_DELAY_MS, TimeUnit.MILLISECONDS);
+                            }
+                        }))
+                .map(q -> q.query)
+                .doOnNext(q -> Timber.d(q))
+                .distinct()
+                .filter(q -> q.length() > 3)
+                .doOnNext(loadingSubject::onNext)
+                .flatMap(q -> Single.just(q)
+                        .flatMapPublisher(q1 -> Single.concat(getProviderRequests(q1)))
+                        .toList()
+                        .toObservable()
+                        .subscribeOn(Schedulers.io()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Pair<Integer, List<Media>>[]>() {
+                .subscribe(new Observer<List<SearchResult>>() {
                     @Override public void onSubscribe(final Disposable d) {
                         searchRequests.add(d);
                     }
 
-                    @Override public void onNext(final Pair<Integer, List<Media>>[] value) {
-                        for (final Pair<Integer, List<Media>> provider : value) {
-                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(provider.second);
-                            view.addRow(provider.first, list);
+                    @Override public void onNext(final List<SearchResult> value) {
+                        for (int i = 0; i < value.size(); i++) {
+                            SearchResult provider = value.get(i);
+                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(provider.media);
+                            view.replaceRow(i, provider.title, list);
                         }
                     }
 
                     @Override public void onError(final Throwable e) {
-                        Timber.d("Test");
-                        // TODO: 6/4/17 Handle error
+                        // TODO: 6/11/17 Show error
+                        Timber.d("error");
                     }
 
                     @Override public void onComplete() {
-                        // should never happen
+                        Timber.d("complete");
                     }
                 });
     }
 
-    private void queryByWords(String words) {
-        querySubject.onNext(words);
-
-        view.clearData();
-        if (!TextUtils.isEmpty(words)) {
-            delayedLoad.setSearchQuery(words);
-            handler.removeCallbacks(delayedLoad);
-            handler.postDelayed(delayedLoad, SEARCH_DELAY_MS);
-        }
-    }
-
-    private List<Single<Pair<Integer, List<Media>>>> getProviderRequests(String query) {
+    private List<Single<SearchResult>> getProviderRequests(String query) {
         // TODO: 6/4/17 Add query and filters
-        List<Single<Pair<Integer, List<Media>>>> requests = new ArrayList<>();
+        List<Single<SearchResult>> requests = new ArrayList<>();
 
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
             requests.add(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                     .items()
-                    .map(itemsWrapper -> Pair.create(R.string.movie_results, itemsWrapper.getMedia())));
+                    .map(itemsWrapper -> new SearchResult(R.string.movie_results, itemsWrapper.getMedia())));
         }
 
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
             requests.add(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW)
                     .items()
-                    .map(itemsWrapper -> Pair.create(R.string.movie_results, itemsWrapper.getMedia())));
+                    .map(itemsWrapper -> new SearchResult(R.string.show_results, itemsWrapper.getMedia())));
         }
 
         return requests;
 
     }
 
+    private class SearchRequest {
 
-    private void loadRows(String query) {
-        view.clearData();
-        view.showLoadingRow();
+        private final String query;
+        private final boolean immediate;
 
-        searchFilter.keywords = query;
-        searchFilter.page = 1;
-
-        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
-            // TODO: 6/4/17 Add Filters
-            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW)
-                    .items()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<ItemsWrapper>() {
-                        @Override public void onSubscribe(final Disposable d) {
-                            searchRequests.add(d);
-                        }
-
-                        @Override public void onSuccess(final ItemsWrapper value) {
-                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(value.getMedia());
-                            view.addRow(R.string.show_results, list);
-                        }
-
-                        @Override public void onError(final Throwable e) {
-                            // TODO: 6/4/17 Handle errors
-                        }
-                    });
-        }
-
-
-//        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
-//            MediaProvider mediaProvider = providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE);
-//            //noinspection ConstantConditions
-//            mediaProvider.cancel();
-//            mediaProvider.getList(searchFilter, new MediaProvider.Callback() {
-//                        @Override
-//                        public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
-//                            ThreadUtils.runOnUiThread(new Runnable() {
-//                                @Override public void run() {
-//                                    List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-//                                    view.addRow(R.string.movie_results, list);
-//                                }
-//                            });
-//                        }
-//
-//                        @Override public void onFailure(Exception ex) {
-//
-//                        }
-//                    }
-//
-//            );
-//        }
-
-    }
-
-    private class SearchRunnable implements Runnable {
-
-        private volatile String searchQuery;
-
-        public SearchRunnable() {
-        }
-
-        public void run() {
-            loadRows(searchQuery);
-        }
-
-        public void setSearchQuery(String value) {
-            this.searchQuery = value;
+        private SearchRequest(final String query, final boolean immediate) {
+            this.query = query;
+            this.immediate = immediate;
         }
     }
 
+    private class SearchResult {
 
+        @StringRes private final int title;
+        private final List<Media> media;
+
+        public SearchResult(final int title, final List<Media> media) {
+            this.title = title;
+            this.media = media;
+        }
+
+    }
 }

@@ -120,13 +120,18 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
         rowsAdapter.add(loadingRow);
     }
 
-    @Override public void addRow(@StringRes int title, List<MediaCardItem> items) {
+    @Override public void replaceRow(int index, @StringRes int title, List<MediaCardItem> items) {
         rowsAdapter.remove(loadingRow);
 
         HeaderItem header = new HeaderItem(getString(title));
         ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity(), picasso));
         listRowAdapter.addAll(0, items);
-        rowsAdapter.add(new ListRow(header, listRowAdapter));
+        ListRow row = new ListRow(header, listRowAdapter);
+        if (rowsAdapter.size() > index) {
+            rowsAdapter.replace(index, row);
+        } else {
+            rowsAdapter.add(index, row);
+        }
     }
 
     protected OnItemViewClickedListener getDefaultItemClickedListener() {
