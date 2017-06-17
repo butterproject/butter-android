@@ -51,7 +51,6 @@ import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;

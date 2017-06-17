@@ -19,11 +19,8 @@ package butter.droid.base.providers.media.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import butter.droid.base.manager.internal.provider.ProviderManager;
 
 public class Movie extends Media implements Parcelable {
     public String type = "movie";
@@ -53,10 +50,6 @@ public class Movie extends Media implements Parcelable {
             Torrent torrent = in.readParcelable(Torrent.class.getClassLoader());
             torrents.put(key, torrent);
         }
-    }
-
-    @Override public int getProviderType() {
-        return ProviderManager.PROVIDER_TYPE_MOVIE;
     }
 
     @Override

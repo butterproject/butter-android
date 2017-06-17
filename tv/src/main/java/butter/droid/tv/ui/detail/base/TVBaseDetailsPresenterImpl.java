@@ -35,6 +35,7 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
     private final ProviderManager providerManager;
 
     private Media item;
+    private int providerId; // TODO: 6/17/17 This should probably go in some base class that would include both provider and media
 
     @Nullable private Disposable detailsRequest;
 
@@ -44,7 +45,8 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
     }
 
 
-    @CallSuper protected void onCreate(final Media item) {
+    @CallSuper protected void onCreate(final int providerId, final Media item) {
+        this.providerId = providerId;
         this.item = item;
 
         view.initData(item);
@@ -67,7 +69,8 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
     }
 
     private void loadDetails() {
-        providerManager.getCurrentMediaProvider().detail(item)
+        providerManager.getProvider(providerId)
+                .detail(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Media>() {

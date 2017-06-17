@@ -37,8 +37,8 @@ public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl impl
         this.view = view;
     }
 
-    @Override public void onCreate(final Movie item) {
-        super.onCreate(item);
+    @Override public void onCreate(final int providerId, final Movie item) {
+        super.onCreate(providerId, item);
 
         this.item = item;
     }

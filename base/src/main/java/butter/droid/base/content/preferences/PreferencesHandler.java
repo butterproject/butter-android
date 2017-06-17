@@ -19,7 +19,6 @@ import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PrefItem.SubtitleGenerator;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
 import butter.droid.base.manager.prefs.PrefManager;
@@ -618,8 +617,9 @@ public class PreferencesHandler {
         return prefManager.get(Prefs.AUTOMATIC_UPDATES, true);
     }
 
+    // FIXME: 6/17/17 Default provider shouldn't be saved based on index but rather classname in case order changes
     public int getDefaultProvider() {
-        return prefManager.get(Prefs.DEFAULT_PROVIDER, ProviderManager.PROVIDER_TYPE_MOVIE);
+        return prefManager.get(Prefs.DEFAULT_PROVIDER, 0);
     }
 
     @Nullable public String getDefaultPlayer() {

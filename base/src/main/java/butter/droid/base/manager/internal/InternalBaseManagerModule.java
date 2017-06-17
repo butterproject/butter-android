@@ -39,7 +39,7 @@ import timber.log.Timber;
 public class InternalBaseManagerModule {
 
     @Provides @Internal ProviderManager provideProviderManager(MockMovieMediaProvider moviesProvider) {
-        return new ProviderManager(moviesProvider, null);
+        return new ProviderManager(moviesProvider);
     }
 
     @Provides @Internal @Nullable LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {

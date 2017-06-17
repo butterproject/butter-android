@@ -22,6 +22,6 @@ import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
 
 public interface TVMovieDetailsPresenter extends TVBaseDetailsPresenter {
 
-    void onCreate(Movie item);
+    void onCreate(int providerId, Movie item);
 
 }

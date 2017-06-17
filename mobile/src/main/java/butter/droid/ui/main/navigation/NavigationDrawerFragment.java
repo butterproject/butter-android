@@ -38,7 +38,6 @@ import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.widget.decorator.OneShotDividerDecorator;
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.ui.main.MainActivity;
@@ -207,15 +206,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     public static class ProviderNavDrawerItem extends AbsNavDrawerItem {
 
-        @ProviderType private final int providerType;
+        private final int providerId;
 
-        public ProviderNavDrawerItem(@StringRes int title, @DrawableRes int icon, @ProviderType int providerType) {
+        public ProviderNavDrawerItem(@StringRes int title, @DrawableRes int icon, int providerId) {
             super(title, icon);
-            this.providerType = providerType;
+            this.providerId = providerId;
         }
 
-        @ProviderType public int getProviderType() {
-            return providerType;
+        public int getProviderId() {
+            return providerId;
         }
 
         @Override public int getType() {

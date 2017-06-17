@@ -20,6 +20,7 @@ package butter.droid.tv.ui.search;
 import android.support.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider.Filters;
+import butter.droid.provider.MediaProvider;
 import butter.droid.provider.base.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter;
@@ -102,7 +103,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
                     @Override public void onNext(final List<SearchResult> value) {
                         for (int i = 0; i < value.size(); i++) {
                             SearchResult provider = value.get(i);
-                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(provider.media);
+                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(provider.providerId, provider.media);
                             view.replaceRow(i, provider.title, list);
                         }
                     }
@@ -122,16 +123,12 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
         // TODO: 6/4/17 Add query and filters
         List<Single<SearchResult>> requests = new ArrayList<>();
 
-        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
-            requests.add(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
-                    .items(null)
-                    .map(itemsWrapper -> new SearchResult(R.string.movie_results, itemsWrapper.getMedia())));
-        }
-
-        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
-            requests.add(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW)
-                    .items(null)
-                    .map(itemsWrapper -> new SearchResult(R.string.show_results, itemsWrapper.getMedia())));
+        for (int i = 0; i < providerManager.getProviders().length; i++) {
+            MediaProvider provider = providerManager.getProvider(i);
+            final int providerId = i;
+            // TODO: 6/17/17 Define title of search row
+            requests.add(provider.items(null)
+                    .map(itemsWrapper -> new SearchResult(providerId, R.string.movie_results, itemsWrapper.getMedia())));
         }
 
         return requests;
@@ -151,10 +148,12 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
 
     private class SearchResult {
 
+        private final int providerId;
         @StringRes private final int title;
         private final List<Media> media;
 
-        public SearchResult(final int title, final List<Media> media) {
+        public SearchResult(final int providerId, final int title, final List<Media> media) {
+            this.providerId = providerId;
             this.title = title;
             this.media = media;
         }

@@ -71,9 +71,8 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     @Inject Picasso picasso;
 
     private ArrayObjectAdapter rowsAdapter;
-    private ArrayObjectAdapter showAdapter;
-    private ArrayObjectAdapter moviesAdapter;
-    private ArrayObjectAdapter moviesMoreAdapter;
+    private ArrayObjectAdapter[] mediaListAdapters;
+    private ArrayObjectAdapter[] moreOptionsAdapters;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,9 +128,10 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         presenter.rowSelected(index, mediaItem);
     }
 
-    @Override public void displayMovies(final List<MediaCardItem> list) {
-        moviesAdapter.clear();
-        moviesAdapter.addAll(0, list);
+    @Override public void displayProviderData(final int providerId, final List<MediaCardItem> list) {
+        ArrayObjectAdapter adapter = mediaListAdapters[providerId];
+        adapter.clear();
+        adapter.addAll(0, list);
     }
 
     @Override public void updateBackgroundImage(final String url) {
@@ -164,57 +164,26 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         startActivity(TVPreferencesActivity.getIntent(getActivity()));
     }
 
-    @Override public void openMediaActivity(@StringRes int title, @NonNull final Filter filter) {
-        startActivity(TVMediaGridActivity.newIntent(getActivity(), title, filter));
+    @Override public void openMediaActivity(@StringRes int title, final int providerId, @NonNull final Filter filter) {
+        startActivity(TVMediaGridActivity.newIntent(getActivity(), providerId, title, filter));
     }
 
-    @Override public void setupMoviesRow() {
-        ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
-        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+    @Override public void setupProviderRows(final int providerCount) {
+        mediaListAdapters = new ArrayObjectAdapter[providerCount];
+        moreOptionsAdapters = new ArrayObjectAdapter[providerCount];
 
-        moviesAdapter = new ArrayObjectAdapter(presenterSelector);
-        moviesAdapter.add(new LoadingCardItem());
-
-        HeaderItem moviesHeader = new HeaderItem(getString(R.string.top_movies));
-        rowsAdapter.add(new ListRow(moviesHeader, moviesAdapter));
-    }
-
-    @Override public void setupTVShowsRow() {
-        /*
-        HeaderItem showsHeader = new HeaderItem(0, getString(R.string.latest_shows));
-        MediaCardPresenter mediaCardPresenter = new MediaCardPresenter(getActivity());
-        showAdapter = new ArrayObjectAdapter(mediaCardPresenter);
-        showAdapter.add(new MediaCardPresenter.MediaCardItem(true));
-        rowsAdapter.add(new ListRow(showsHeader, showAdapter));
-        */
-    }
-
-    @Override public void setupMoreMoviesRow() {
-        HeaderItem moreMoviesHeader = new HeaderItem(getString(R.string.more_movies));
-        MorePresenter morePresenter = new MorePresenter(getActivity());
-        moviesMoreAdapter = new ArrayObjectAdapter(morePresenter);
-        rowsAdapter.add(new ListRow(moreMoviesHeader, moviesMoreAdapter));
-    }
-
-    @Override public void setupMoreTVShowsRow(final List<NavItem> navigation) {
-        /*
-        HeaderItem moreHeader = new HeaderItem(1, getString(R.string.more_shows));
-        MorePresenter morePresenter = new MorePresenter(getActivity());
-        ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
-
-        // add items
-        List<MediaProvider.NavInfo> navigation = mShowsProvider.getNavigation();
-        for (MediaProvider.NavInfo info : navigation) {
-            moreRowAdapter.add(new MorePresenter.MoreItem(
-                    info.getId(),
-                    info.getLabel(),
-                    info.getIcon(),
-                    info));
+        for (int i = 0; i < providerCount; i++) {
+            mediaListAdapters[i] = addNewMediaListAdapter();
+            moreOptionsAdapters[i] = addMoreOptionsAdapter();
         }
+    }
 
-        rowsAdapter.add(new ListRow(moreHeader, moreRowAdapter));
-        */
+    private ArrayObjectAdapter addMoreOptionsAdapter() {
+        HeaderItem moreOptionsHeader = new HeaderItem(getString(R.string.more_movies));
+        MorePresenter morePresenter = new MorePresenter(getActivity());
+        ArrayObjectAdapter moreOptionsAdapter = new ArrayObjectAdapter(morePresenter);
+        rowsAdapter.add(new ListRow(moreOptionsHeader, moreOptionsAdapter));
+        return moreOptionsAdapter;
     }
 
     @Override public void setupMoreRow() {
@@ -259,10 +228,25 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         TVVideoPlayerActivity.startActivity(getActivity(), streamInfo);
     }
 
-    @Override public void displayMoviesSorters(final List<NavItem> value) {
+    public void displayProviderSorters(int providerId, final List<NavItem> value) {
+        ArrayObjectAdapter moreOptionsAdapter = moreOptionsAdapters[providerId];
         for (final NavItem navItem : value) {
-            moviesMoreAdapter.add(new MorePresenter.MoreItem(navItem));
+            moreOptionsAdapter.add(new MorePresenter.MoreItem(navItem, providerId));
         }
+    }
+
+    private ArrayObjectAdapter addNewMediaListAdapter() {
+        ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+
+        ArrayObjectAdapter mediaAdapter = new ArrayObjectAdapter(presenterSelector);
+        mediaAdapter.add(new LoadingCardItem());
+
+        // TODO: 6/17/17 Define title
+        HeaderItem moviesHeader = new HeaderItem(getString(R.string.top_movies));
+        rowsAdapter.add(new ListRow(moviesHeader, mediaAdapter));
+        return mediaAdapter;
     }
 
     private void setupUIElements() {
@@ -301,7 +285,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
             mediaItem.color = view.getCustomSelectedSwatch().getRgb();
         }*/
 
-        startActivity(TVMediaDetailActivity.getIntent(getActivity(), mediaItem), options);
+        startActivity(TVMediaDetailActivity.getIntent(getActivity(), media.getProviderId(), mediaItem), options);
     }
 
 }

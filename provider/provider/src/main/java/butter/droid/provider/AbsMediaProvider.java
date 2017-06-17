@@ -17,5 +17,11 @@
 
 package butter.droid.provider;
 
+import android.support.annotation.StringRes;
+
 public abstract class AbsMediaProvider implements MediaProvider {
+
+    @StringRes @Override public int getLoadingMessage() {
+        return R.string.loading_data;
+    }
 }

@@ -46,8 +46,8 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
         this.preferencesHandler = preferencesHandler;
     }
 
-    @Override public void onCreate(final Show item) {
-        super.onCreate(item);
+    @Override public void onCreate(final int providerId, final Show item) {
+        super.onCreate(providerId, item);
 
         this.item = item;
     }

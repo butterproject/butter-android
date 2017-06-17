@@ -58,6 +58,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
 
     private static final String ARG_TITLE = "butter.droid.tv.ui.media.TVMediaGridFragment.title";
     private static final String ARG_FILTER = "butter.droid.tv.ui.media.TVMediaGridFragment.filter";
+    private static final String ARG_PROVIDER = "butter.droid.tv.ui.media.TVMediaGridFragment.provider";
 
     private static final int NUM_COLUMNS = 6;
 
@@ -84,8 +85,9 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
 
         Bundle args = getArguments();
 
+        int providerId = args.getInt(ARG_PROVIDER);
         Filter filter = Parcels.unwrap(args.getParcelable(ARG_FILTER));
-        presenter.onCreate(filter);
+        presenter.onCreate(providerId, filter);
     }
 
     @Override
@@ -146,7 +148,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
 
         Media media = item.getMedia();
         if (media instanceof Movie || media instanceof Show) {
-            startActivity(TVMediaDetailActivity.getIntent(getActivity(), media), options);
+            startActivity(TVMediaDetailActivity.getIntent(getActivity(), item.getProviderId(), media), options);
         }
     }
 
@@ -168,10 +170,11 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         setOnItemViewSelectedListener(this);
     }
 
-    public static TVMediaGridFragment newInstance(@StringRes int title, Filter filter) {
+    public static TVMediaGridFragment newInstance(final int provider, @StringRes int title, Filter filter) {
         final Bundle args = new Bundle();
-        args.putSerializable(ARG_TITLE, title);
+        args.putInt(ARG_TITLE, title);
         args.putParcelable(ARG_FILTER, Parcels.wrap(filter));
+        args.putInt(ARG_PROVIDER, provider);
 
         TVMediaGridFragment fragment = new TVMediaGridFragment();
         fragment.setArguments(args);

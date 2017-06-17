@@ -33,6 +33,7 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
     private final TVMediaGridView view;
     private final ProviderManager providerManager;
 
+    private int providerId;
     private Filter filter;
 
     private Disposable currentCall;
@@ -42,7 +43,8 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
         this.providerManager = providerManager;
     }
 
-    @Override public void onCreate(final Filter filter) {
+    @Override public void onCreate(final int providerId, final Filter filter) {
+        this.providerId = providerId;
         this.filter = filter;
     }
 
@@ -60,10 +62,10 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
 
     private void loadItems() {
         cancelCurrentCall();
-        providerManager.getCurrentMediaProvider().items(filter)
+        providerManager.getProvider(providerId).items(filter)
                 .map(ItemsWrapper::getMedia)
                 .flatMapObservable(Observable::fromIterable)
-                .map(MediaCardItem::new)
+                .map(media -> new MediaCardItem(providerId, media))
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

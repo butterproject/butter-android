@@ -17,8 +17,12 @@
 
 package butter.droid.provider;
 
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
+import android.support.annotation.StringRes;
 import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
 import butter.droid.provider.base.filter.Filter;
@@ -29,6 +33,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 import java.util.List;
 
+@RestrictTo(Scope.LIBRARY_GROUP)
 public interface MediaProvider {
 
     @NonNull Single<ItemsWrapper> items(@Nullable Filter filter);
@@ -46,5 +51,11 @@ public interface MediaProvider {
     @NonNull Maybe<List<Genre>> genres();
 
     @NonNull Maybe<List<NavItem>> navigation();
+
+    @StringRes int getLoadingMessage();
+
+    @DrawableRes int getIcon();
+
+    @StringRes int getName();
 
 }

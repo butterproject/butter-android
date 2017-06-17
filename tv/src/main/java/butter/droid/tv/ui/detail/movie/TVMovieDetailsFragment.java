@@ -48,9 +48,11 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
                 .build()
                 .inject(this);
 
-        Movie item = Parcels.unwrap(getArguments().getParcelable(EXTRA_ITEM));
+        Bundle arguments = getArguments();
+        final int providerId = arguments.getInt(EXTRA_PROVIDER);
+        final Movie item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
 
-        presenter.onCreate(item);
+        presenter.onCreate(providerId, item);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
@@ -68,10 +70,11 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
         TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
 
-    public static Fragment newInstance(Media media) {
+    public static Fragment newInstance(final int providerId, final Media media) {
         TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
 
         Bundle bundle = new Bundle();
+        bundle.putInt(EXTRA_PROVIDER, providerId);
         bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
 
         fragment.setArguments(bundle);

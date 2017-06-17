@@ -19,10 +19,7 @@ package butter.droid.base.providers.media.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.LinkedList;
-
-import butter.droid.base.manager.internal.provider.ProviderManager;
 
 public class Show extends Media implements Parcelable {
     public enum Status {CONTINUING, ENDED, CANCELED, NOT_AIRED_YET, UNKNOWN}
@@ -72,10 +69,6 @@ public class Show extends Media implements Parcelable {
             Episode episode = in.readParcelable(Episode.class.getClassLoader());
             episodes.add(episode);
         }
-    }
-
-    @Override public int getProviderType() {
-        return ProviderManager.PROVIDER_TYPE_SHOW;
     }
 
     @Override

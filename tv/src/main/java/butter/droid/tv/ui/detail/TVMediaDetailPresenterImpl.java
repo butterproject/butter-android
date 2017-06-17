@@ -30,14 +30,14 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
         this.view = view;
     }
 
-    @Override public void onCreate(final Media media) {
+    @Override public void onCreate(final int providerId, final Media media) {
         view.updateBackground(media.getPoster());
 
         if (media instanceof Movie) {
-            view.displayFragment(TVMovieDetailsFragment.newInstance(media));
+            view.displayFragment(TVMovieDetailsFragment.newInstance(providerId, media));
         } else if (media instanceof Show) {
             // TODO
-            // view.displayFragment(TVShowDetailsFragment.newInstance(media));
+            // view.displayFragment(TVShowDetailsFragment.newInstance(providerId, media));
         } else {
             throw new IllegalStateException("Unknow media type");
         }

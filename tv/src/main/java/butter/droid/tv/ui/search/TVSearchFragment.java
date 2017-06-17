@@ -139,7 +139,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
             if (object instanceof MediaCardItem) {
                 MediaCardItem item = (MediaCardItem) object;
                 Media media = item.getMedia();
-                startActivity(TVMediaDetailActivity.getIntent(getActivity(), media));
+                startActivity(TVMediaDetailActivity.getIntent(getActivity(), item.getProviderId(), media));
             }
         };
     }

@@ -21,7 +21,7 @@ import android.os.Bundle;
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
-import butter.droid.base.utils.ProviderUtils;
+import butter.droid.provider.MediaProvider;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.HeaderNavDrawerItem;
@@ -104,16 +104,9 @@ public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter 
 
         navItems.add(new HeaderNavDrawerItem());
 
-        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
-            navItems.add(new ProviderNavDrawerItem(ProviderUtils.getProviderTitle(ProviderManager.PROVIDER_TYPE_MOVIE),
-                    ProviderUtils.getProviderIcon(ProviderManager.PROVIDER_TYPE_MOVIE),
-                    ProviderManager.PROVIDER_TYPE_MOVIE));
-        }
-
-        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
-            navItems.add(new ProviderNavDrawerItem(ProviderUtils.getProviderTitle(ProviderManager.PROVIDER_TYPE_SHOW),
-                    ProviderUtils.getProviderIcon(ProviderManager.PROVIDER_TYPE_SHOW),
-                    ProviderManager.PROVIDER_TYPE_SHOW));
+        for (int i = 0; i < providerManager.getProviders().length; i++) {
+            final MediaProvider provider = providerManager.getProvider(i);
+            navItems.add(new ProviderNavDrawerItem(provider.getName(), provider.getIcon(), i));
         }
 
         navItems.add(new ScreenNavDrawerItem(R.string.preferences, R.drawable.ic_nav_settings,

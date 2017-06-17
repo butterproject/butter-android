@@ -19,7 +19,6 @@ package butter.droid.ui.media.list;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.utils.ProviderUtils;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
 import butter.droid.ui.main.genre.list.model.UiGenre;
@@ -42,7 +41,8 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
     }
 
     @Override protected int getLoadingMessage() {
-        return ProviderUtils.getProviderLoadingMessage(providerManager.getCurrentMediaProviderType());
+        // TODO: 6/17/17 provider index
+        return providerManager.getProvider(0).getLoadingMessage();
     }
 
     @Override public void onCreate() {

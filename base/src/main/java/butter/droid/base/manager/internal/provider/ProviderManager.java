@@ -17,78 +17,33 @@
 
 package butter.droid.base.manager.internal.provider;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.provider.MediaProvider;
 
 public class ProviderManager {
 
-    // region IntDef
+    @NonNull private final MediaProvider[] providers;
 
-    @IntDef({PROVIDER_TYPE_MOVIE, PROVIDER_TYPE_SHOW})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface ProviderType {
-    }
-
-    public static final int PROVIDER_TYPE_MOVIE = 0;
-    public static final int PROVIDER_TYPE_SHOW = 1;
-
-    // endregion IntDef
-
-    @Nullable private final MediaProvider movieProvider;
-    @Nullable private final MediaProvider showProvider;
-
-    @ProviderType private int currentProviderType;
-
-    public ProviderManager(@Nullable MediaProvider movieProvider, @Nullable MediaProvider showProvider) {
-        this.movieProvider = movieProvider;
-        this.showProvider = showProvider;
-
-        if (movieProvider != null) {
-            currentProviderType = PROVIDER_TYPE_MOVIE;
-        } else if (showProvider != null) {
-            currentProviderType = PROVIDER_TYPE_SHOW;
-        } else {
-            throw new IllegalStateException("No media providers vere provider");
+    public ProviderManager(@NonNull MediaProvider... providers) {
+        //noinspection ConstantConditions
+        if (providers == null || providers.length == 0) {
+            throw new IllegalStateException("No media providers available");
         }
+
+        this.providers = providers;
     }
 
-    @ProviderType public int getCurrentMediaProviderType() {
-        return currentProviderType;
+    @NonNull public MediaProvider getProvider(int providerId) {
+        return providers[providerId];
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @NonNull public MediaProvider getCurrentMediaProvider() {
-        return getMediaProvider(getCurrentMediaProviderType());
+    @NonNull public MediaProvider[] getProviders() {
+        return providers;
     }
 
-    @MainThread public void setCurrentProviderType(@ProviderType int providerType) {
-        if (getMediaProvider(providerType) != null) {
-            if (this.currentProviderType != providerType) {
-                this.currentProviderType = providerType;
-            }
-        } else {
-            throw new IllegalStateException("Provider for type no provided");
-        }
-    }
-
-    @Nullable public MediaProvider getMediaProvider(@ProviderType int providerType) {
-        if (providerType == PROVIDER_TYPE_MOVIE) {
-            return movieProvider;
-        } else {
-            return showProvider;
-        }
-    }
-
-    public boolean hasProvider(@ProviderType int providerType) {
-        return getMediaProvider(providerType) != null;
+    public int getProviderCount() {
+        return providers.length;
     }
 
     public SubsProvider getCurrentSubsProvider() {

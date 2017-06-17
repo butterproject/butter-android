@@ -28,7 +28,7 @@ import java.util.List;
 
 public interface TVOverviewView {
 
-    void displayMovies(final List<MediaCardItem> list);
+    void displayProviderData(int providerId, List<MediaCardItem> list);
 
     void updateBackgroundImage(String url);
 
@@ -38,23 +38,17 @@ public interface TVOverviewView {
 
     void openPreferencesScreen();
 
-    void openMediaActivity(@StringRes int title, @NonNull Filter filter);
+    void openMediaActivity(@StringRes int title, final int providerId, @NonNull Filter filter);
 
-    void setupMoviesRow();
-
-    void setupTVShowsRow();
-
-    void setupMoreMoviesRow();
-
-    void setupMoreTVShowsRow(List<NavItem> navigation);
+    void setupProviderRows(int count);
 
     void setupMoreRow();
 
     void showCustomDebugUrl();
 
-    void startTrailerScreen(final Movie movie, final String location);
+    void startTrailerScreen(Movie movie, String location);
 
     void startPlayerActivity(StreamInfo streamInfo);
 
-    void displayMoviesSorters(final List<NavItem> value);
+    void displayProviderSorters(int providerId, List<NavItem> value);
 }

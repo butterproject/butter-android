@@ -89,29 +89,27 @@ public class RecommendationService extends IntentService {
         final AtomicBoolean mMoviesCallFinished = new AtomicBoolean(false);
         final AtomicBoolean mShowsCallFinished = new AtomicBoolean(false);
 
+        // TODO: 6/17/17
         //fetch movies
-        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
-            Timber.d("Fetching movies");
-            // TODO
-            /*
-            //noinspection ConstantConditions
-            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
-                    .getList(movieFilter, new MediaProvider.Callback() {
-                        @Override
-                        public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                            Timber.d(String.format("loaded %s movies", items.size()));
-                            movies.addAll(items);
-                            mMoviesCallFinished.set(true);
-                        }
-
-                        @Override
-                        public void onFailure(Exception ex) {
-                            Timber.d("Failed to fetch movies");
-                            mMoviesCallFinished.set(true);
-                        }
-                    });
-                    */
-        }
+//        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
+//            Timber.d("Fetching movies");
+//            //noinspection ConstantConditions
+//            providerManager.getProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
+//                    .getList(movieFilter, new MediaProvider.Callback() {
+//                        @Override
+//                        public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
+//                            Timber.d(String.format("loaded %s movies", items.size()));
+//                            movies.addAll(items);
+//                            mMoviesCallFinished.set(true);
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Exception ex) {
+//                            Timber.d("Failed to fetch movies");
+//                            mMoviesCallFinished.set(true);
+//                        }
+//                    });
+//        }
 
         /*
         Disabled, since no shows provider
@@ -181,7 +179,8 @@ public class RecommendationService extends IntentService {
                         .setTitle(movie.getTitle())
                         .setDescription(movie.getSynopsis())
                         .setImage(movie.getPoster())
-                        .setIntent(buildPendingIntent(movie))
+                        // TODO: 6/17/17 Handle provider id
+                        .setIntent(buildPendingIntent(0, movie))
                         .build();
 
                 if (++count >= MAX_MOVIE_RECOMMENDATIONS) {
@@ -213,7 +212,8 @@ public class RecommendationService extends IntentService {
                         .setTitle(show.getTitle())
                         .setDescription(latestEpisode == null ? "" : getString(R.string.episode_number_format, latestEpisode.getEpisode()))
                         .setImage(show.getPoster())
-                        .setIntent(buildPendingIntent(show))
+                        // TODO: 6/17/17 Handle provider id
+                        .setIntent(buildPendingIntent(0, show))
                         .build();
 
                 if (++count >= MAX_SHOW_RECOMMENDATIONS) {
@@ -233,8 +233,9 @@ public class RecommendationService extends IntentService {
         return show.getEpisodes()[show.getEpisodes().length - 1];
     }
 
-    private PendingIntent buildPendingIntent(Media media) {
-        Intent detailIntent = TVMediaDetailActivity.getIntent(this, media);
+    private PendingIntent buildPendingIntent(final int providerId, final Media media) {
+        // TODO: 6/17/17 Pending intent can not rely on provider position
+        Intent detailIntent = TVMediaDetailActivity.getIntent(this, providerId, media);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(TVMediaDetailActivity.class);

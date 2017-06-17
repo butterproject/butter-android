@@ -20,11 +20,8 @@ package butter.droid.base.providers.media.models;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 
 public abstract class Media implements Parcelable {
     public String videoId;
@@ -66,8 +63,6 @@ public abstract class Media implements Parcelable {
             subtitles.put(in.readString(), in.readString());
         }
     }
-
-    @ProviderType public abstract int getProviderType();
 
     @Override
     public int describeContents() {

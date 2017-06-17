@@ -55,13 +55,10 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     @Override public void onActivityCreated() {
 
-        view.setupMoviesRow();
-//        view.setupTVShowsRow();
-        view.setupMoreMoviesRow();
-//        view.setupMoreTVShowsRow(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW).getNavigation());
+        view.setupProviderRows(providerManager.getProviderCount());
         view.setupMoreRow();
 
-        loadData();
+        loadProvidersData();
     }
 
     @Override public void rowSelected(final int index, @Nullable final Media mediaItem) {
@@ -80,14 +77,9 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 view.openPreferencesScreen();
                 break;
             case R.id.more_item_filter:
-                providerManager.setCurrentProviderType(ProviderManager.PROVIDER_TYPE_MOVIE);
                 //noinspection ConstantConditions
-                view.openMediaActivity(item.getTitle(), item.getFilter());
+                view.openMediaActivity(item.getTitle(), item.getProviderId(), item.getFilter());
                 break;
-            // TODO: 6/17/17
-//                providerManager.setCurrentProviderType(ProviderManager.PROVIDER_TYPE_SHOW);
-//                view.openMediaActivity(item.getTitle(), item.getFilter());
-//                break;
             case R.id.more_player_tests:
                 view.openTestPlayerPicker();
                 break;
@@ -132,44 +124,25 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         cancelMovieSortersCall();
     }
 
-    private void loadData() {
-        /*
-        final MediaProvider.Filters showsFilter = new MediaProvider.Filters();
-        showsFilter.sort = MediaProvider.Filters.Sort.DATE;
-        showsFilter.order = MediaProvider.Filters.Order.DESC;
+    private void loadProvidersData() {
+        for (int i = 0; i < providerManager.getProviderCount(); i++) {
+            loadProviderData(i);
+        }
+    }
 
-        mShowsProvider.getList(null, showsFilter, new MediaProvider.Callback() {
-            @DebugLog
-            @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-                showAdapter.clear();
-                showAdapter.addAll(0, list);
+    private void loadProviderData(final int providerId) {
+        loadProviderMedia(providerId);
+        loadProviderSorters(providerId);
+    }
 
-                if(selectedRow == 1)
-                    backgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
-            }
-
-            @DebugLog
-            @Override
-            public void onFailure(Exception e) {
-                e.printStackTrace();
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), R.string.encountered_error, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-        */
-
+    private void loadProviderMedia(final int providerId) {
         final MediaProvider.Filters movieFilters = new MediaProvider.Filters();
         movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
         movieFilters.order = MediaProvider.Filters.Order.DESC;
 
+        // TODO: 6/17/17 Disposable per provider
         cancelMovieCall();
-        providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).items(null)
+        providerManager.getProvider(providerId).items(null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {
@@ -179,8 +152,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
                     @Override public void onSuccess(final ItemsWrapper items) {
                         List<Media> mediaItems = items.getMedia();
-                        List<MediaCardItem> cardItems = convertMediaToOverview(mediaItems);
-                        view.displayMovies(cardItems);
+                        List<MediaCardItem> cardItems = convertMediaToOverview(providerId, mediaItems);
+                        view.displayProviderData(providerId, cardItems);
 
                         if (selectedRow == 0) {
                             view.updateBackgroundImage(mediaItems.get(0).getBackdrop());
@@ -192,13 +165,12 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                     }
                 });
 
-        loadSorters();
-
     }
 
-    private void loadSorters() {
+    private void loadProviderSorters(final int providerId) {
+        // TODO: 6/17/17 Disposable per provider
         cancelMovieSortersCall();
-        providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).navigation()
+        providerManager.getProvider(providerId).navigation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<List<NavItem>>() {
@@ -207,7 +179,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                     }
 
                     @Override public void onSuccess(final List<NavItem> value) {
-                        view.displayMoviesSorters(value);
+                        view.displayProviderSorters(providerId, value);
                     }
 
                     @Override public void onError(final Throwable e) {
@@ -234,10 +206,10 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         }
     }
 
-    public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
+    public static List<MediaCardItem> convertMediaToOverview(final int providerId, final List<Media> items) {
         List<MediaCardItem> list = new ArrayList<>();
         for (Media media : items) {
-            list.add(new MediaCardItem(media));
+            list.add(new MediaCardItem(providerId, media));
         }
         return list;
     }

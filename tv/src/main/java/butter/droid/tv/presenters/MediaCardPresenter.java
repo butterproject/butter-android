@@ -191,10 +191,16 @@ public class MediaCardPresenter extends Presenter {
 
     public static class MediaCardItem {
 
+        private final int providerId;
         private final Media media;
 
-        public MediaCardItem(Media media) {
+        public MediaCardItem(final int providerId, final Media media) {
+            this.providerId = providerId;
             this.media = media;
+        }
+
+        public int getProviderId() {
+            return providerId;
         }
 
         public Media getMedia() {
@@ -203,10 +209,10 @@ public class MediaCardPresenter extends Presenter {
 
     }
 
-    public static List<MediaCardItem> convertMediaToOverview(List<Media> items) {
+    public static List<MediaCardItem> convertMediaToOverview(int providerId, List<Media> items) {
         List<MediaCardItem> list = new ArrayList<>();
         for (Media media : items) {
-            list.add(new MediaCardItem(media));
+            list.add(new MediaCardItem(providerId, media));
         }
         return list;
     }

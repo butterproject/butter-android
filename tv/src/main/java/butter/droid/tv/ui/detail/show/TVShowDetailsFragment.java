@@ -44,21 +44,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 
 public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVShowDetailsView, EpisodeCardPresenter.Listener {
 
     @Inject TVShowDetailsPresenter presenter;
-
-    public static Fragment newInstance(Media media) {
-        TVShowDetailsFragment fragment = new TVShowDetailsFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_ITEM, media);
-
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +61,11 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
                 .build()
                 .inject(this);
 
-        Show item = getArguments().getParcelable(EXTRA_ITEM);
+        Bundle arguments = getArguments();
+        final int providerId = arguments.getInt(EXTRA_PROVIDER);
+        final Show item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
 
-        presenter.onCreate(item);
+        presenter.onCreate(providerId, item);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
@@ -130,6 +123,17 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
                         dialog.dismiss();
                     }
                 }).show();
+    }
+
+    public static Fragment newInstance(final int providerId, final Media media) {
+        TVShowDetailsFragment fragment = new TVShowDetailsFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.getInt(EXTRA_PROVIDER, providerId);
+        bundle.putParcelable(EXTRA_ITEM, media);
+
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
 }

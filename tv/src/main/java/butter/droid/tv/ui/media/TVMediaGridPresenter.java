@@ -21,7 +21,7 @@ import butter.droid.provider.base.filter.Filter;
 
 public interface TVMediaGridPresenter {
 
-    void onCreate(Filter filter);
+    void onCreate(int providerId, Filter filter);
 
     void onActivityCreated();
 

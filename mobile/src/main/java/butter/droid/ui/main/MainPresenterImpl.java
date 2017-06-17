@@ -32,6 +32,7 @@ import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.MediaProvider;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.preferences.PreferencesActivity;
 import butter.droid.ui.terms.TermsPresenterImpl;
@@ -66,8 +67,8 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override public void onCreate(boolean isInitial) {
         if (isInitial) {
-            @ProviderType int provider = preferencesHandler.getDefaultProvider();
-            view.initProviders(provider);
+            int providerId = preferencesHandler.getDefaultProvider();
+            view.initProviders(providerId);
         }
 
         userLearnedDrawer = prefManager.get(Prefs.DRAWER_LEARNED, false);
@@ -191,13 +192,11 @@ public class MainPresenterImpl implements MainPresenter {
         genreListeners.remove(listener);
     }
 
-    private void displayProviderData(@ProviderType int providerType) {
-        // TODO
-        /*
-        MediaProvider provider = providerManager.getMediaProvider(providerType);
-        boolean hasGenres = provider.getGenres() != null && provider.getGenres().size() > 0;
-        view.displayProvider(ProviderUtils.getProviderTitle(providerType), hasGenres, provider.getNavigation());
-        */
+    private void displayProviderData(int providerId) {
+        // TODO: 6/17/17
+//        MediaProđvider provider = providerManager.getProvider(providerId);
+//        boolean hasGenres = provider.getGenres() != null && provider.getGenres().size() > 0;
+//        view.displayProvider(provider.getName(), hasGenres, provider.getNavigation());
     }
 
     private void openStream(StreamInfo info) {

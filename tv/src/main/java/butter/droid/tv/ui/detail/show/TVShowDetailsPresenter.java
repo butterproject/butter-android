@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 
 public interface TVShowDetailsPresenter extends TVBaseDetailsPresenter {
 
-    void onCreate(Show item);
+    void onCreate(int providerId, Show item);
 
     void episodeClicked(Episode episode);
 

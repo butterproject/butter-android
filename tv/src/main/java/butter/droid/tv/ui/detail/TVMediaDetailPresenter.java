@@ -21,5 +21,5 @@ import butter.droid.provider.base.Media;
 
 public interface TVMediaDetailPresenter {
 
-    void onCreate(Media media);
+    void onCreate(int providerId, Media media);
 }

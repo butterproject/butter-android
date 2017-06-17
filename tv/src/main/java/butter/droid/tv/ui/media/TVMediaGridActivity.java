@@ -32,6 +32,7 @@ public class TVMediaGridActivity extends TVBaseActivity {
 
     private static final String EXTRA_TITLE = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_title";
     private static final String EXTRA_FILTER = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_filter";
+    private static final String EXTRA_PROVIDER = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_provider";
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -45,16 +46,18 @@ public class TVMediaGridActivity extends TVBaseActivity {
         Bundle extras = getIntent().getExtras();
         final Filter filter = Parcels.unwrap(extras.getParcelable(EXTRA_FILTER));
         @StringRes int title = extras.getInt(EXTRA_TITLE);
+        final int providerId = extras.getInt(EXTRA_PROVIDER);
 
         //add media fragment
-        getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance(title, filter))
+        getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance(providerId, title, filter))
                 .commit();
     }
 
-    public static Intent newIntent(Context context, @StringRes int title, Filter filter) {
+    public static Intent newIntent(Context context, final int providerId, @StringRes int title, Filter filter) {
         Intent intent = new Intent(context, TVMediaGridActivity.class);
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_FILTER, Parcels.wrap(filter));
+        intent.putExtra(EXTRA_PROVIDER, providerId);
         return intent;
     }
 

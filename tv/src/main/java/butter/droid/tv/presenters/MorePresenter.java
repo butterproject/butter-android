@@ -62,13 +62,14 @@ public class MorePresenter extends Presenter {
         private final int icon;
         private final int id;
         @Nullable private Filter filter;
+        private final int providerId;
 
-        public MoreItem(@NonNull NavItem nav) {
+        public MoreItem(@NonNull NavItem nav, final int providerId) {
             this.id = R.id.more_item_filter;
             this.icon = nav.getIcon();
             this.title = nav.getLabel();
             this.filter = nav.getFilter();
-
+            this.providerId = providerId;
         }
 
         public MoreItem(int id, @StringRes int text, @DrawableRes int iconResId) {
@@ -77,9 +78,10 @@ public class MorePresenter extends Presenter {
             }
 
             this.id = id;
-            icon = iconResId;
-            title = text;
+            this.icon = iconResId;
+            this.title = text;
             this.filter = null;
+            this.providerId = -1;
         }
 
         public int getId() {
@@ -92,6 +94,10 @@ public class MorePresenter extends Presenter {
 
         @Nullable public Filter getFilter() {
             return filter;
+        }
+
+        public int getProviderId() {
+            return providerId;
         }
     }
 

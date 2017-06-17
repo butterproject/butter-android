@@ -42,6 +42,7 @@ import javax.inject.Inject;
 
 public abstract class TVBaseDetailsFragment extends DetailsSupportFragment implements TVBaseDetailView, OnActionClickedListener {
 
+    protected static final String EXTRA_PROVIDER = "butter.droid.tv.ui.detail.base.TVBaseDetailsFragment.provider";
     protected static final String EXTRA_ITEM = "butter.droid.tv.ui.detail.base.TVBaseDetailsFragment.item";
 
     @Inject TVBaseDetailsPresenter presenter;
