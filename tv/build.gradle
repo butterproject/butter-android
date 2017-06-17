@@ -86,14 +86,14 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:${rootProject.ext.appCompatVersion}"
-    implementation "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
-    implementation "com.android.support:leanback-v17:${rootProject.ext.appCompatVersion}"
+    implementation "com.android.support:support-annotations:$appCompatVersion"
+    implementation "com.android.support:palette-v7:$appCompatVersion"
+    implementation "com.android.support:leanback-v17:$appCompatVersion"
 
     implementation project(':base')
 
-    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
-    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
-    compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+    compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 }

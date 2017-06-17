@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    api 'com.android.support:appcompat-v7:25.3.1'
+    api "com.android.support:appcompat-v7:$appCompatVersion"
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
 
     api 'org.parceler:parceler-api:1.1.8'
