@@ -20,12 +20,11 @@ package butter.droid.ui.media.list;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-
-import javax.inject.Inject;
-
-import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
+import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class MediaListFragment extends BaseMediaListFragment implements MediaListView {
 
@@ -55,12 +54,10 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
         presenter.onDestroy();
     }
 
-    public static BaseMediaListFragment newInstance(MediaProvider.Filters.Sort filter,
-            MediaProvider.Filters.Order defOrder, String genre) {
+    public static BaseMediaListFragment newInstance(final int providerId, final Filter filter) {
         Bundle args = new Bundle();
-        args.putSerializable(EXTRA_SORT, filter);
-        args.putSerializable(EXTRA_ORDER, defOrder);
-        args.putString(EXTRA_GENRE, genre);
+        args.putInt(EXTRA_PROVIDER, providerId);
+        args.putParcelable(EXTRA_FILTER, Parcels.wrap(filter));
 
         MediaListFragment fragment = new MediaListFragment();
         fragment.setArguments(args);

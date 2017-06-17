@@ -27,18 +27,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.R;
-import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Show;
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
+import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
 import butter.droid.widget.LinearList;
+import java.util.List;
+import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeasonView, OnClickListener {
 
@@ -63,7 +61,7 @@ public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeas
                 .inject(this);
 
         Bundle args = getArguments();
-        Show show = args.getParcelable(ARG_SHOW);
+        Show show = Parcels.unwrap(args.getParcelable(ARG_SHOW));
         int season = args.getInt(ARG_SEASON);
 
         presenter.onCreate(show, season);
@@ -113,7 +111,7 @@ public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeas
 
     public static ShowDetailSeasonFragment newInstance(Show show, int season) {
         Bundle args = new Bundle(2);
-        args.putParcelable(ARG_SHOW, show);
+        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
         args.putInt(ARG_SEASON, season);
 
         ShowDetailSeasonFragment fragment = new ShowDetailSeasonFragment();

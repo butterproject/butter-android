@@ -19,20 +19,19 @@ package butter.droid.ui.search;
 
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
-import okhttp3.OkHttpClient;
 
 public class SearchPresenterImpl extends BaseMediaListPresenterImpl implements SearchPresenter {
 
     private final SearchView view;
     private final NetworkManager networkManager;
 
-    public SearchPresenterImpl(SearchView view, ProviderManager providerManager, OkHttpClient client,
-            PreferencesHandler preferencesHandler, NetworkManager networkManager) {
-        super(view, providerManager, client, preferencesHandler);
+    public SearchPresenterImpl(SearchView view, ProviderManager providerManager, PreferencesHandler preferencesHandler,
+            NetworkManager networkManager) {
+        super(view, providerManager, preferencesHandler);
         this.view = view;
         this.networkManager = networkManager;
     }

@@ -40,6 +40,8 @@ import javax.inject.Inject;
 
 public class GenreSelectionFragment extends Fragment implements GenreSelectionView, RecyclerClickListener {
 
+    private static final String ARG_PROVIDER = "butter.droid.ui.main.genre.GenreSelectionFragment.provider";
+
     @Inject GenreSelectionPresenter presenter;
 
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
@@ -79,7 +81,9 @@ public class GenreSelectionFragment extends Fragment implements GenreSelectionVi
         adapter = new GenreAdapter(context);
         recyclerView.setAdapter(adapter);
 
-        presenter.onViewCreated();
+        int providerId = getArguments().getInt(ARG_PROVIDER);
+
+        presenter.onViewCreated(providerId);
     }
 
     @Override public void onItemClick(View view, int position) {
@@ -94,7 +98,12 @@ public class GenreSelectionFragment extends Fragment implements GenreSelectionVi
         adapter.notifyItemChanged(position);
     }
 
-    public static GenreSelectionFragment newInstance() {
-        return new GenreSelectionFragment();
+    public static GenreSelectionFragment newInstance(final int providerId) {
+        Bundle args = new Bundle(1);
+        args.putInt(ARG_PROVIDER, providerId);
+
+        GenreSelectionFragment fragment = new GenreSelectionFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

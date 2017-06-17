@@ -18,12 +18,11 @@
 package butter.droid.ui.search;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 
 @Module(includes = SearchBindModule.class)
 public class SearchModule {
@@ -39,7 +38,7 @@ public class SearchModule {
     }
 
     @Provides @FragmentScope SearchPresenter providePresenter(SearchView view, ProviderManager providerManager,
-            OkHttpClient client, PreferencesHandler preferencesHandler, NetworkManager networkManager) {
-        return new SearchPresenterImpl(view, providerManager, client, preferencesHandler, networkManager);
+            PreferencesHandler preferencesHandler, NetworkManager networkManager) {
+        return new SearchPresenterImpl(view, providerManager, preferencesHandler, networkManager);
     }
 }

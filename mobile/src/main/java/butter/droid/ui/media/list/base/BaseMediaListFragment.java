@@ -37,22 +37,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.base.providers.media.MediaProvider.Filters.Order;
-import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.manager.paging.IndexPagingListener;
 import butter.droid.manager.paging.PagingManager;
-import butter.droid.ui.media.detail.MediaDetailActivity;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
-import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment.Callback;
 import butter.droid.ui.media.list.base.list.MediaGridAdapter;
 import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingItemDecoration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 /**
  * This fragment is the main screen for viewing a collection of media items.
@@ -68,11 +66,11 @@ import javax.inject.Inject;
  * <p/>
  * This fragment can be instantiated with ether a SEARCH mode, or a NORMAL mode. SEARCH mode simply does not load any initial data.
  */
-public class BaseMediaListFragment extends Fragment implements BaseMediaListView, Callback, IndexPagingListener, RecyclerClickListener {
+public class BaseMediaListFragment extends Fragment implements BaseMediaListView, IndexPagingListener, RecyclerClickListener {
 
-    public static final String EXTRA_SORT = "extra_sort";
-    public static final String EXTRA_ORDER = "extra_order";
-    public static final String EXTRA_GENRE = "extra_genre";
+    public static final String EXTRA_PROVIDER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_provider";
+    public static final String EXTRA_FILTER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_filter";
+
     public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
     public static final int LOADING_DIALOG_FRAGMENT = 1;
@@ -129,12 +127,11 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Sort sort = (Sort) getArguments().getSerializable(EXTRA_SORT);
-        Order sortOrder = (Order) getArguments().getSerializable(EXTRA_ORDER);
-        String genre = getArguments().getString(EXTRA_GENRE);
+        Bundle arguments = getArguments();
+        int providerId = arguments.getInt(EXTRA_PROVIDER);
+        Filter filter = Parcels.unwrap(arguments.getParcelable(EXTRA_FILTER));
 
-        presenter.onActivityCreated(sort, sortOrder, genre);
-
+        presenter.onActivityCreated(providerId, filter);
     }
 
     @Override public void loadPage(int index, int pageSize) {
@@ -156,19 +153,17 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
             Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
             Palette.from(cover)
                     .maximumColorCount(5)
-                    .generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(Palette palette) {
-                            int vibrantColor = palette.getVibrantColor(Color.TRANSPARENT);
-                            int paletteColor;
-                            if (vibrantColor == Color.TRANSPARENT) {
-                                paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
-                            } else {
-                                paletteColor = vibrantColor;
-                            }
-                            media.color = paletteColor;
-                            showLoadingDialog(position);
+                    .generate(palette -> {
+                        int vibrantColor = palette.getVibrantColor(Color.TRANSPARENT);
+                        int paletteColor;
+                        if (vibrantColor == Color.TRANSPARENT) {
+                            paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
+                        } else {
+                            paletteColor = vibrantColor;
                         }
+                        // TODO: 6/17/17
+//                            media.color = paletteColor;
+                        showLoadingDialog(position);
                     });
         } else {
             showLoadingDialog(position);
@@ -186,7 +181,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void addItems(ArrayList<Media> items) {
+    @Override public void addItems(List<Media> items) {
         pagingManager.addItems(items);
     }
 
@@ -222,30 +217,31 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
         loadingFragment.show(getFragmentManager(), DIALOG_LOADING_DETAIL);
     }
 
-    /**
-     * Called when loading media details fails
-     */
-    @Override
-    public void onDetailLoadFailure() {
-        Snackbar.make(rootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Called when media details have been loaded. This should be called on a background thread.
-     *
-     * @param item
-     */
-    @Override
-    public void onDetailLoadSuccess(final Media item) {
-        startActivity(MediaDetailActivity.getIntent(getActivity(), item));
-    }
-
-    /**
-     * Called when loading media details
-     * @return mItems
-     */
-    @Override
-    public ArrayList<Media> getCurrentList() {
-        return presenter.getCurrentList();
-    }
+    // TODO: 6/17/17
+//    /**
+//     * Called when loading media details fails
+//     */
+//    @Override
+//    public void onDetailLoadFailure() {
+//        Snackbar.make(rootView, R.string.unknown_error, Snackbar.LENGTH_SHORT).show();
+//    }
+//
+//    /**
+//     * Called when media details have been loaded. This should be called on a background thread.
+//     *
+//     * @param item
+//     */
+//    @Override
+//    public void onDetailLoadSuccess(final Media item) {
+//        startActivity(MediaDetailActivity.getIntent(getActivity(), item));
+//    }
+//
+//    /**
+//     * Called when loading media details
+//     * @return mItems
+//     */
+//    @Override
+//    public ArrayList<Media> getCurrentList() {
+//        return presenter.getCurrentList();
+//    }
 }

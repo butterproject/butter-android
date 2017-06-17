@@ -18,10 +18,13 @@
 package butter.droid.ui.main.genre;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.models.Genre;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.genre.list.model.UiGenre;
-import java.util.ArrayList;
+import io.reactivex.Observable;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
@@ -40,15 +43,28 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
         this.parentPresenter = parentPresenter;
     }
 
-    @Override public void onViewCreated() {
-        // TODO
-        /*
-        List<Genre> genreList = providerManager.getCurrentMediaProvider().getGenres();
-        genres = mapGenres(genreList);
+    @Override public void onViewCreated(final int providerId) {
+        providerManager.getProvider(providerId).genres()
+                .flatMapObservable(Observable::fromIterable)
+                .map(i -> new UiGenre(i.getKey(), i.getName()))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<UiGenre>>() {
+                    @Override public void onSubscribe(final Disposable d) {
 
-        view.displayGenres(genres);
-        onGenreSelected(0);
-         */
+                    }
+
+                    @Override public void onSuccess(final List<UiGenre> value) {
+                        genres = value;
+                        view.displayGenres(genres);
+                        onGenreSelected(0);
+                    }
+
+                    @Override public void onError(final Throwable e) {
+
+                    }
+                });
     }
 
     @Override public void onGenreSelected(int position) {
@@ -67,16 +83,4 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
         }
     }
 
-    private List<UiGenre> mapGenres(List<Genre> genres) {
-        List<UiGenre> uiGenres = new ArrayList<>();
-
-        if (genres != null && genres.size() > 0) {
-            for (Genre genre : genres) {
-                uiGenres.add(new UiGenre(genre.getKey(), genre.getLabelId()));
-            }
-        }
-
-        return uiGenres;
-
-    }
 }

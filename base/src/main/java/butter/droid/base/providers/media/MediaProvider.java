@@ -19,18 +19,19 @@ package butter.droid.base.providers.media;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import butter.droid.base.R;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.nav.NavItem;
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.List;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
@@ -119,40 +120,52 @@ public abstract class MediaProvider extends BaseProvider {
 
     public static class NavInfo {
 
-        @IdRes private int id;
-        @DrawableRes private final int iconId;
-        @StringRes private int label;
-        private Filters.Sort sort;
-        private Filters.Order defOrder;
+        @IdRes private final int id;
+        @DrawableRes private final int icon;
+        @StringRes private final int label;
+        @Nullable private final Filter filter;
+        private final int providerId;
 
-        public NavInfo(@IdRes int id, Filters.Sort sort, Filters.Order defOrder, @StringRes int label, @DrawableRes int icon) {
+        public NavInfo(@NonNull NavItem item, final int providerId) {
+            this.id = R.id.nav_item_filter;
+            this.icon = item.getIcon();
+            this.label = item.getLabel();
+            this.providerId = providerId;
+            this.filter = item.getFilter();
+        }
+
+        public NavInfo(@IdRes final int id, @DrawableRes final int icon, @StringRes final int label, final int providerId) {
+            if (id == R.id.nav_item_filter) {
+                throw new IllegalStateException("Filter items have to have filter parameter set");
+            }
+
             this.id = id;
-            this.sort = sort;
-            this.defOrder = defOrder;
+            this.icon = icon;
             this.label = label;
-            iconId = icon;
+            this.providerId = providerId;
+            this.filter = null;
         }
 
-        public Filters.Sort getFilter() {
-            return sort;
-        }
-
-        @IdRes public int getId() {
+        public int getId() {
             return id;
         }
 
         @DrawableRes
         public int getIcon() {
-            return iconId;
-        }
-
-        public Filters.Order getOrder() {
-            return defOrder;
+            return icon;
         }
 
         @StringRes
         public int getLabel() {
             return label;
+        }
+
+        public int getProviderId() {
+            return providerId;
+        }
+
+        @Nullable public Filter getFilter() {
+            return filter;
         }
     }
 

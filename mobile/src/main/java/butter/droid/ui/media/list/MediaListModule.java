@@ -23,7 +23,6 @@ import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.main.MainPresenter;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 
 @Module(includes = MediaListBindModule.class)
 public class MediaListModule {
@@ -39,7 +38,7 @@ public class MediaListModule {
     }
 
     @Provides @FragmentScope MediaListPresenter providePresenter(MediaListView view, ProviderManager providerManager,
-            OkHttpClient client, PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
-        return new MediaListPresenterImpl(view, providerManager, client, preferencesHandler, parentPresenter);
+            PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
+        return new MediaListPresenterImpl(view, providerManager, preferencesHandler, parentPresenter);
     }
 }

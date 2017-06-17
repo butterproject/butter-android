@@ -17,15 +17,13 @@
 
 package butter.droid.ui.main;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-
-import java.util.List;
-
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Movie;
+import java.util.List;
 
 public interface MainView {
     void showTermsScreen();
@@ -46,18 +44,21 @@ public interface MainView {
 
     void checkIntentAction();
 
-    void initProviders(@ProviderType int provider);
-
-    void openDrawer();
+    void initProviders(int providerId);
 
     void closeDrawer();
 
     void openPreferenceScreen();
 
-    void displayProvider(@StringRes int title, boolean hasGenres, List<NavInfo> navigation);
+    void displayProvider(@StringRes int title, List<NavInfo> navigation);
 
     void onGenreChanged(String genre);
 
     void showFirsContentScreen();
 
+    void writeStateData(@NonNull Bundle outState, int selectedProviderId);
+
+    void setScreenTitle(@StringRes int title);
+
+    void openSearchScreen(int providerId);
 }

@@ -23,7 +23,6 @@ import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
-import okhttp3.OkHttpClient;
 
 public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implements MediaListPresenter, OnGenreChangeListener {
 
@@ -31,10 +30,9 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
     private final ProviderManager providerManager;
     private final MainPresenter parentPresenter;
 
-    public MediaListPresenterImpl(MediaListView view,
-            ProviderManager providerManager, OkHttpClient client,
-            PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
-        super(view, providerManager, client, preferencesHandler);
+    public MediaListPresenterImpl(MediaListView view, ProviderManager providerManager, PreferencesHandler preferencesHandler,
+            MainPresenter parentPresenter) {
+        super(view, providerManager, preferencesHandler);
         this.view = view;
         this.providerManager = providerManager;
         this.parentPresenter = parentPresenter;

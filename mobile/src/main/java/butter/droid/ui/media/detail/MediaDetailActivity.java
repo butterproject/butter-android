@@ -20,7 +20,6 @@ package butter.droid.ui.media.detail;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,7 +36,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import butter.droid.MobileButterApplication;
@@ -45,17 +43,17 @@ import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.providers.media.models.Media;
-import butter.droid.base.providers.media.models.Movie;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
+import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.dialog.MessageDialogFragment;
 import butter.droid.ui.media.detail.movie.MovieDetailFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
@@ -66,6 +64,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class MediaDetailActivity extends ButterBaseActivity implements MediaDetailView, EpisodeDialogFragment.FragmentListener {
 
@@ -105,7 +104,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         // parallaxLayout doesn't exist? Then this is a tablet or big screen device
         isTablet = floatingActionButton == null;
 
-        Media media = getIntent().getExtras().getParcelable(EXTRA_MEDIA);
+        Media media = Parcels.unwrap(getIntent().getExtras().getParcelable(EXTRA_MEDIA));
         if (media == null) {
             finish();
             return;
@@ -138,17 +137,19 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     }
 
     @Override public void initMediaLayout(Media media) {
-        getSupportActionBar().setTitle(media.title);
+        getSupportActionBar().setTitle(media.getTitle());
 
-        collapsingToolbar.setContentScrimColor(media.color);
-        collapsingToolbar.setStatusBarScrimColor(media.color);
+        // TODO: 6/17/17
+//        collapsingToolbar.setContentScrimColor(media.color);
+//        collapsingToolbar.setStatusBarScrimColor(media.color);
         collapsingToolbar.setTitleEnabled(false);
 
         // Calculate toolbar scrolling variables
         int topHeight = PixelUtils.getScreenHeight(this) / 3 * 2;
         if (!isTablet) {
             //noinspection ConstantConditions
-            floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(media.color));
+            // TODO: 6/17/17
+//            floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(media.color));
             bgImage.getLayoutParams().height = topHeight;
         } else {
             CoordinatorLayout.LayoutParams params =
@@ -182,7 +183,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         if (VersionUtils.isLollipop()) {
             scrollView.smoothScrollTo(0, 0);
             StreamLoadingActivity.startActivity(this, streamInfo,
-                    Pair.<View, String>create(bgImage, ViewCompat.getTransitionName(bgImage)));
+                    Pair.create(bgImage, ViewCompat.getTransitionName(bgImage)));
         } else {
             StreamLoadingActivity.startActivity(this, streamInfo);
         }
@@ -201,20 +202,15 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
                 getString(R.string.health_info, getString(health.getStringResource()), seeds, peers),
                 Snackbar.LENGTH_LONG);
 
-        snackbar.setAction(R.string.close, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                snackbar.dismiss();
-            }
-        });
+        snackbar.setAction(R.string.close, view -> snackbar.dismiss());
         snackbar.show();
 
     }
 
     private void loadBackgroundImage(Media media) {
-        String imageUrl = media.image;
+        String imageUrl = media.getPoster();
         if (isTablet || !PixelUtils.screenIsPortrait(this)) {
-            imageUrl = media.headerImage;
+            imageUrl = media.getBackdrop();
         }
 
         Picasso.with(this)
@@ -229,13 +225,14 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
     }
 
-    public static Intent getIntent(@NonNull Context context, @NonNull Media media) {
-        Intent intent = new Intent(context, MediaDetailActivity.class);
-        intent.putExtra(EXTRA_MEDIA, media);
-        return intent;
-    }
-
     public MediaDetailComponent getComponent() {
         return component;
     }
+
+    public static Intent getIntent(@NonNull Context context, @NonNull Media media) {
+        Intent intent = new Intent(context, MediaDetailActivity.class);
+        intent.putExtra(EXTRA_MEDIA, Parcels.wrap(media));
+        return intent;
+    }
+
 }

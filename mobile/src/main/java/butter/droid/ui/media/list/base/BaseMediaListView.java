@@ -18,17 +18,15 @@
 package butter.droid.ui.media.list.base;
 
 import android.support.annotation.StringRes;
-
-import java.util.ArrayList;
-
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.provider.base.Media;
+import java.util.List;
 
 public interface BaseMediaListView {
     void updateLoadingMessage(@StringRes int messageRes);
 
     void showData();
 
-    void addItems(ArrayList<Media> items);
+    void addItems(List<Media> items);
 
     void showEmpty();
 

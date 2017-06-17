@@ -23,4 +23,7 @@
     <item name="secondary_textview" type="id" />
     <item name="tertiary_textview" type="id" />
 
+    <item name="nav_item_filter" type="id" />
+    <item name="nav_item_genre" type="id" />
+
 </resources>

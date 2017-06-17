@@ -31,7 +31,6 @@ import butter.droid.manager.internal.brightness.BrightnessManager;
 import butter.droid.ui.player.VideoPlayerTouchHandler;
 import butter.droid.ui.player.VideoPlayerTouchHandler.OnVideoTouchListener;
 import com.connectsdk.device.ConnectableDevice;
-import java.util.Locale;
 
 public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
 
@@ -142,16 +141,17 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
 
     private void displayTitle() {
         String title;
-        if (media != null) {
-            if (this.streamInfo.getQuality() != null) {
-                title = String.format(Locale.getDefault(), "%s: %s (%s)", context.getString(R.string.now_playing), media.getTitle(),
-                        streamInfo.getQuality());
-            } else {
-                title = String.format("%s: %s", context.getString(R.string.now_playing), media.getTitle());
-            }
-        } else {
-            title = context.getString(R.string.now_playing);
-        }
+        // TODO: 6/17/17
+//        if (media != null) {
+//            if (this.streamInfo.getQuality() != null) {
+//                title = String.format(Locale.getDefault(), "%s: %s (%s)", context.getString(R.string.now_playing), media.getTitle(),
+//                        streamInfo.getQuality());
+//            } else {
+//                title = String.format("%s: %s", context.getString(R.string.now_playing), media.getTitle());
+//            }
+//        } else {
+        title = context.getString(R.string.now_playing);
+//        }
         view.displayTitle(title);
     }
 

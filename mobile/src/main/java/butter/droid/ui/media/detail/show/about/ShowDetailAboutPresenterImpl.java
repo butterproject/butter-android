@@ -17,14 +17,12 @@
 
 package butter.droid.ui.media.detail.show.about;
 
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
-import butter.droid.R;
-import butter.droid.base.providers.media.models.Show;
+import butter.droid.provider.base.Show;
+import butter.droid.provider.base.filter.Genre;
 
 public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
 
@@ -49,7 +47,7 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
     }
 
     @Override public void readMoreClicked() {
-        view.openSynopsisDialog(show.synopsis);
+        view.openSynopsisDialog(show.getSynopsis());
     }
 
     @Override public void onViewCreated() {
@@ -57,17 +55,16 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
     }
 
     private void displayShowData(@NonNull Show show) {
-        view.displayTitle(show.title);
-        displayRating(show.rating);
+        view.displayTitle(show.getTitle());
+        displayRating(show.getRating());
         displayMetaData(show);
-        displaySynopsis(show.synopsis);
-        view.displayImage(show.image);
+        displaySynopsis(show.getSynopsis());
+        view.displayImage(show.getPoster());
     }
 
-    private void displayRating(@Nullable String rating) {
-        if (!TextUtils.isEmpty(rating) && !rating.equals("-1")) {
-            Double ratingValue = Double.parseDouble(rating);
-            int ratingInt = ratingValue.intValue();
+    private void displayRating(@Nullable Float rating) {
+        if (rating != null) {
+            int ratingInt = (int) (rating * 10);
             String cd = "Rating: " + ratingInt + " out of 10";
             view.displayRating(ratingInt, cd);
         } else {
@@ -77,20 +74,21 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
 
     private void displayMetaData(@NonNull Show show) {
         StringBuilder metaDataStr = new StringBuilder();
-        metaDataStr.append(show.year);
+        metaDataStr.append(show.getYear());
 
-        if (show.status != Show.Status.UNKNOWN) {
-            metaDataStr.append(" • ");
-            if (show.status == Show.Status.CONTINUING) {
-                metaDataStr.append(context.getString(R.string.continuing));
-            } else {
-                metaDataStr.append(context.getString(R.string.ended));
-            }
-        }
+//        if (show.status != Show.Status.UNKNOWN) {
+//            metaDataStr.append(" • ");
+//            if (show.status == Show.Status.CONTINUING) {
+//                metaDataStr.append(context.getString(R.string.continuing));
+//            } else {
+//                metaDataStr.append(context.getString(R.string.ended));
+//            }
+//        }
 
-        if (!TextUtils.isEmpty(show.genre)) {
+        Genre[] genres = show.getGenres();
+        if (genres != null && genres.length > 0) {
             metaDataStr.append(" • ");
-            metaDataStr.append(show.genre);
+            metaDataStr.append(genres[0].getName());
         }
 
         view.displayMetaData(metaDataStr.toString());

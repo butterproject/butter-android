@@ -126,8 +126,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
      * <p/>
      * Updates the state of the list, closes the drawer, and fowards the event to the parent activity to handle.
      */
-    public void selectProvider(@ProviderType int providerType) {
-        presenter.selectProvider(providerType);
+    public void selectProvider(final int providerId) {
+        presenter.selectProvider(providerId);
     }
 
 

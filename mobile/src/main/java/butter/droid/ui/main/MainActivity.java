@@ -20,7 +20,6 @@ package butter.droid.ui.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -46,11 +45,9 @@ import butter.droid.base.Constants;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.base.providers.media.MediaProvider.NavInfo;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.Movie;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
@@ -75,11 +72,12 @@ import timber.log.Timber;
  */
 public class MainActivity extends ButterBaseActivity implements MainView {
 
+    private static final String EXTRA_PROVIDER = "butter.droid.ui.main.MainActivity.providerId";
+
     private static final int REQUEST_CODE_TERMS = 1;
     private static final int PERMISSIONS_REQUEST_STORAGE = 1;
 
     @Inject MainPresenter presenter;
-    @Inject ProviderManager providerManager;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_drawer_container) ScrimInsetsFrameLayout navigationDrawerContainer;
@@ -117,7 +115,12 @@ public class MainActivity extends ButterBaseActivity implements MainView {
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adapter);
 
-        presenter.onCreate(savedInstanceState == null);
+        int defaultProviderId = -1;
+        if (savedInstanceState != null) {
+            defaultProviderId = savedInstanceState.getInt(EXTRA_PROVIDER, defaultProviderId);
+        }
+
+        presenter.onCreate(defaultProviderId);
     }
 
     @Override
@@ -126,7 +129,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
         presenter.onResume();
 
-        setTitle(ProviderUtils.getProviderTitle(providerManager.getCurrentMediaProviderType()));
         supportInvalidateOptionsMenu();
 
         if (BeamServerService.getServer() != null) {
@@ -175,8 +177,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
                     presenter.playerTestClicked();
                     return true;
                 case R.id.action_search:
-                    //start the search activity
-                    startActivity(SearchActivity.getIntent(this));
+                    presenter.searchClicked();
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -187,6 +188,11 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     @Override public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        presenter.onSaveInstanceState(outState);
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -214,18 +220,10 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     @Override public void showPlayerTestDialog(String[] fileTypes) {
         new AlertDialog.Builder(this)
                 .setTitle("Player Tests")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setSingleChoiceItems(fileTypes, -1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int index) {
-                        dialogInterface.dismiss();
-                        presenter.onPlayerTestItemClicked(index);
-                    }
+                .setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss())
+                .setSingleChoiceItems(fileTypes, -1, (dialogInterface, index) -> {
+                    dialogInterface.dismiss();
+                    presenter.onPlayerTestItemClicked(index);
                 })
                 .show();
     }
@@ -236,12 +234,9 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
         new AlertDialog.Builder(MainActivity.this)
                 .setView(dialogInput)
-                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String location = dialogInput.getText().toString();
-                        presenter.openPlayerTestCustomUrl(location);
-                    }
+                .setPositiveButton("Start", (dialog, which) -> {
+                    String location = dialogInput.getText().toString();
+                    presenter.openPlayerTestCustomUrl(location);
                 })
                 .show();
     }
@@ -267,12 +262,8 @@ public class MainActivity extends ButterBaseActivity implements MainView {
         checkActions();
     }
 
-    @Override public void initProviders(@ProviderType int provider) {
-        navigationDrawerFragment.selectProvider(provider);
-    }
-
-    @Override public void openDrawer() {
-        drawerLayout.openDrawer(navigationDrawerContainer);
+    @Override public void initProviders(final int providerId) {
+        navigationDrawerFragment.selectProvider(providerId);
     }
 
     @Override public void closeDrawer() {
@@ -283,11 +274,12 @@ public class MainActivity extends ButterBaseActivity implements MainView {
         startActivity(PreferencesActivity.getIntent(this));
     }
 
-    @Override public void displayProvider(@StringRes int title, boolean hasGenres, List<NavInfo> navigation) {
+    @Override public void displayProvider(@StringRes int title, List<NavInfo> navigation) {
         setTitle(title);
-        adapter.setData(hasGenres, navigation);
+        adapter.setData(navigation);
 
-        tabs.getTabAt(hasGenres ? 1 : 0).select();
+        // TODO: 6/17/17
+//        tabs.getTabAt(hasGenres ? 1 : 0).select();
     }
 
     @Override public void onGenreChanged(String genre) {
@@ -296,6 +288,18 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
     @Override public void showFirsContentScreen() {
         tabs.getTabAt(1).select();
+    }
+
+    @Override public void writeStateData(@NonNull final Bundle outState, final int providerId) {
+        outState.putInt(EXTRA_PROVIDER, providerId);
+    }
+
+    @Override public void setScreenTitle(@StringRes final int title) {
+        setTitle(title);
+    }
+
+    @Override public void openSearchScreen(final int providerId) {
+        startActivity(SearchActivity.getIntent(this, providerId));
     }
 
     public MainComponent getComponent() {
@@ -328,19 +332,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-
-                presenter.drawerOpened();
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, 0);
-            }
-        };
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerToggle.syncState();
         drawerLayout.addDrawerListener(drawerToggle);
 

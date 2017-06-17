@@ -18,11 +18,9 @@
 package butter.droid.ui.media.detail.show.season;
 
 import android.support.annotation.ColorInt;
-
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Show;
 import java.util.List;
-
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Show;
 
 public interface ShowDetailSeasonView {
     void displayData(@ColorInt int color, List<Episode> episodes);

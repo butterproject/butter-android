@@ -25,14 +25,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import java.util.List;
-import java.util.Locale;
-
 import butter.droid.R;
-import butter.droid.base.providers.media.models.Episode;
+import butter.droid.provider.base.Episode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.List;
+import java.util.Locale;
 
 public class EpisodeListAdapter extends BaseAdapter {
 
@@ -98,13 +96,13 @@ public class EpisodeListAdapter extends BaseAdapter {
 
         void bind(Episode episode) {
 
-            if (!TextUtils.isEmpty(episode.title)) {
-                title.setText(episode.title);
+            if (!TextUtils.isEmpty(episode.getTitle())) {
+                title.setText(episode.getTitle());
             } else {
                 title.setText(R.string.no_title_available);
             }
 
-            number.setText(String.format(Locale.US, "E%d", episode.episode));
+            number.setText(String.format(Locale.US, "E%d", episode.getEpisode()));
             number.setTextColor(color);
 
         }

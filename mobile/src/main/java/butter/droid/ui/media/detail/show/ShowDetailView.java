@@ -18,11 +18,9 @@
 package butter.droid.ui.media.detail.show;
 
 import android.support.annotation.NonNull;
-
-import java.util.List;
-
-import butter.droid.base.providers.media.models.Show;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
+import java.util.List;
 
 public interface ShowDetailView {
     void displayData(@NonNull Show show, List<UiShowDetailItem> items);

@@ -18,7 +18,6 @@
 package butter.droid.ui.loading.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
@@ -62,16 +61,17 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
         if (beamManager.isConnected()) {
             view.startBeamActivity(streamInfo, resumePosition);
         } else {
-            Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
-                    location);
-
-            if (intent != null) {
-                playingExternal = true;
-                view.startExternalPlayer(intent);
-            } else {
-                playingExternal = false;
-                view.startPlayerActivity(streamInfo, resumePosition);
-            }
+            // TODO: 6/17/17
+//            Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
+//                    location);
+//
+//            if (intent != null) {
+//                playingExternal = true;
+//                view.startExternalPlayer(intent);
+//            } else {
+//                playingExternal = false;
+//                view.startPlayerActivity(streamInfo, resumePosition);
+//            }
         }
 
         if (!playingExternal) {
@@ -111,12 +111,13 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
     }
 
     @Override public void startExternalPlayer() {
-        Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
-                streamInfo.getVideoLocation());
-        if (intent != null) {
-            view.startExternalPlayer(intent);
-        } else {
-            // TODO: 3/1/17 Notify user
-        }
+        // TODO: 6/17/17
+        //        Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
+//                streamInfo.getVideoLocation());
+//        if (intent != null) {
+//            view.startExternalPlayer(intent);
+//        } else {
+//            // TODO: 3/1/17 Notify user
+//        }
     }
 }

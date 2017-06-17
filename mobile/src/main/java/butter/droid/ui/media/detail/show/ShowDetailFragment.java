@@ -27,8 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.R;
-import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.PixelUtils;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
 import butter.droid.ui.media.detail.show.pager.ShowDetailPagerAdapter;
@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class ShowDetailFragment extends Fragment implements ShowDetailView {
 
@@ -63,7 +64,7 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
                 .build();
         component.inject(this);
 
-        Show show = getArguments().getParcelable(ARG_SHOW);
+        Show show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
 
         presenter.onCreate(show);
     }
@@ -98,12 +99,7 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         boolean isTablet = aboutContainer != null;
 
         if (!isTablet) {
-            background.post(new Runnable() {
-                @Override
-                public void run() {
-                    background.getLayoutParams().height = background.getLayoutParams().height - tabs.getHeight();
-                }
-            });
+            background.post(() -> background.getLayoutParams().height = background.getLayoutParams().height - tabs.getHeight());
         }
 
         presenter.viewCreated(isTablet);
@@ -117,7 +113,8 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         }
 
         pagerAdapter.setData(show, items);
-        tabs.setSelectedTabIndicatorColor(show.color);
+        // TODO: 6/17/17
+        //        tabs.setSelectedTabIndicatorColor(show.color);
     }
 
     @Override
@@ -133,7 +130,7 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
 
     public static ShowDetailFragment newInstance(Show show) {
         Bundle args = new Bundle(1);
-        args.putParcelable(ARG_SHOW, show);
+        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
 
         ShowDetailFragment fragment = new ShowDetailFragment();
         fragment.setArguments(args);

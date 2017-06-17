@@ -18,7 +18,6 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -35,11 +34,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.Magnet;
-import butter.droid.base.torrent.TorrentHealth;
-import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
+import butter.droid.provider.base.Movie;
 import butter.droid.ui.media.detail.MediaDetailActivity;
+import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +47,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Arrays;
 import java.util.Locale;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
@@ -91,7 +90,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
         ButterKnife.bind(this, view);
 
-        Movie movie = getArguments().getParcelable(EXTRA_MOVIE);
+        Movie movie = Parcels.unwrap(getArguments().getParcelable(EXTRA_MOVIE));
         presenter.onCreate(movie);
     }
 
@@ -109,22 +108,24 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
             health.setVisibility(View.VISIBLE);
         }
 
-        TorrentHealth health = TorrentHealth.calculate(movie.torrents.get(quality).seeds,
-                movie.torrents.get(quality).peers);
-        this.health.setImageResource(health.getImageResource());
+        // TODO: 6/17/17  
+//        TorrentHealth health = TorrentHealth.calculate(movie.getTorrents().get(quality).seeds,
+//                movie.getTorrents().get(quality).peers);
+//        this.health.setImageResource(health.getImageResource());
     }
 
     @Override public void updateMagnet(Movie movie, String quality) {
-        if (magnet == null) {
-            magnet = new Magnet(getContext(), movie.torrents.get(quality).url);
-        }
-        magnet.setUrl(movie.torrents.get(quality).url);
+        // TODO: 6/17/17
+        //        if (magnet == null) {
+//            magnet = new Magnet(getContext(), movie.getTorrents().get(quality).url);
+//        }
+//        magnet.setUrl(movie.getTorrents().get(quality).url);
 
-        if (!magnet.canOpen()) {
-            openMagnet.setVisibility(View.GONE);
-        } else {
-            openMagnet.setVisibility(View.VISIBLE);
-        }
+//        if (!magnet.canOpen()) {
+//            openMagnet.setVisibility(View.GONE);
+//        } else {
+//            openMagnet.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Override public void showReadMoreDialog(String synopsis) {
@@ -224,40 +225,30 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
     @Override public void initLayout(Movie movie) {
 
-        title.setText(movie.title);
+        title.setText(movie.getTitle());
 
         subtitles.setFragmentManager(getFragmentManager());
         subtitles.setTitle(R.string.subtitles);
-        subtitles.setListener(new OptionSelector.SelectorListener() {
-            @Override
-            public void onSelectionChanged(int position, String value) {
-                presenter.subtitleSelected(position);
-            }
-        });
+        subtitles.setListener((position, value) -> presenter.subtitleSelected(position));
 
         quality.setFragmentManager(getFragmentManager());
         quality.setTitle(R.string.quality);
-        quality.setListener(new OptionSelector.SelectorListener() {
-            @Override
-            public void onSelectionChanged(int position, String value) {
-                setQuality(value);
-            }
-        });
+        quality.setListener((position, value) -> setQuality(value));
 
-        if (fab != null) {
-            fab.setBackgroundTintList(ColorStateList.valueOf(movie.color));
-        }
+//        if (fab != null) {
+//            fab.setBackgroundTintList(ColorStateList.valueOf(movie.color));
+//        }
 
-        watchTrailer.setVisibility(TextUtils.isEmpty(movie.trailer) ? View.GONE : View.VISIBLE);
+        watchTrailer.setVisibility(TextUtils.isEmpty(movie.getTrailer()) ? View.GONE : View.VISIBLE);
 
         if (coverImage != null) {
-            Picasso.with(coverImage.getContext()).load(movie.image).into(coverImage);
+            Picasso.with(coverImage.getContext()).load(movie.getBackdrop()).into(coverImage);
         }
     }
 
     public static MovieDetailFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_MOVIE, movie);
+        args.putParcelable(EXTRA_MOVIE, Parcels.wrap(movie));
 
         MovieDetailFragment fragment = new MovieDetailFragment();
         fragment.setArguments(args);

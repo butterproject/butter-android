@@ -17,14 +17,13 @@
 
 package butter.droid.ui.media.list.base;
 
+import butter.droid.provider.base.Media;
+import butter.droid.provider.base.filter.Filter;
 import java.util.ArrayList;
 
-import butter.droid.base.providers.media.MediaProvider.Filters.Order;
-import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
-import butter.droid.base.providers.media.models.Media;
-
 public interface BaseMediaListPresenter {
-    void onActivityCreated(Sort sort, Order sortOrder, String genre);
+
+    void onActivityCreated(int providerId, Filter filter);
 
     void loadNextPage(int index);
 

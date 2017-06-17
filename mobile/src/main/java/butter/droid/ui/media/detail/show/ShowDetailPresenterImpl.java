@@ -17,8 +17,8 @@
 
 package butter.droid.ui.media.detail.show;
 
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Show;
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailAbout;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailSeason;
@@ -67,9 +67,9 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
 
     private List<Integer> getAvailableSeasons() {
         final List<Integer> availableSeasons = new ArrayList<>();
-        for (Episode episode : show.episodes) {
-            if (!availableSeasons.contains(episode.season)) {
-                availableSeasons.add(episode.season);
+        for (Episode episode : show.getEpisodes()) {
+            if (!availableSeasons.contains(episode.getSeasion())) {
+                availableSeasons.add(episode.getSeasion());
             }
         }
         Collections.sort(availableSeasons);

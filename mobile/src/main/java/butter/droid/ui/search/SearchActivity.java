@@ -24,10 +24,8 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
@@ -39,6 +37,8 @@ import butterknife.BindView;
  * It must be started with a provider id, which then gets forwarded to the overview fragment
  */
 public class SearchActivity extends ButterBaseActivity {
+
+    private static final String EXTRA_PROVIDER = "butter.droid.ui.search.SearchActivity.provider";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.searchview) SearchView searchview;
@@ -61,17 +61,17 @@ public class SearchActivity extends ButterBaseActivity {
         searchview.onActionViewExpanded();
         searchview.setOnQueryTextListener(searchListener);
 
-        //dont re add the fragment if it exists
+        // don't re add the fragment if it exists
         if (null != savedInstanceState) {
             fragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-            return;
+        } else {
+            //create and add the media fragment
+            // TODO: 6/17/17 Handle null
+            Bundle extras = getIntent().getExtras();
+            fragment = SearchFragment.newInstance(extras.getInt(EXTRA_PROVIDER), null);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
         }
-
-        //create and add the media fragment
-        fragment = SearchFragment.newInstance(MediaProvider.Filters.Sort.POPULARITY,
-                MediaProvider.Filters.Order.DESC);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }
 
     private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
@@ -104,8 +104,10 @@ public class SearchActivity extends ButterBaseActivity {
         }
     }
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, SearchActivity.class);
+    public static Intent getIntent(final Context context, final int providerId) {
+        Intent intent = new Intent(context, SearchActivity.class);
+        intent.putExtra(EXTRA_PROVIDER, providerId);
+        return intent;
     }
 
 }

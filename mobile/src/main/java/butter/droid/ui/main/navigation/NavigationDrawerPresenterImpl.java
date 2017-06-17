@@ -20,7 +20,6 @@ package butter.droid.ui.main.navigation;
 import android.os.Bundle;
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.provider.MediaProvider;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
@@ -77,7 +76,7 @@ public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter 
             case AbsNavDrawerItem.TYPE_HEADER:
                 throw new IllegalStateException("Header item can not be clickable.");
             case AbsNavDrawerItem.TYPE_PROVIDER:
-                parentPresenter.selectProvider(((ProviderNavDrawerItem) item).getProviderType());
+                parentPresenter.selectProvider(((ProviderNavDrawerItem) item).getProviderId());
                 selectItem(position);
                 break;
             case AbsNavDrawerItem.TYPE_SCREEN:
@@ -88,11 +87,10 @@ public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter 
         }
     }
 
-    @Override public void selectProvider(@ProviderType int providerType) {
+    @Override public void selectProvider(final int providerId) {
         for (int i = 0; i < items.size(); i++) {
             AbsNavDrawerItem item = items.get(i);
-            if (item.getType() == AbsNavDrawerItem.TYPE_PROVIDER
-                    && ((ProviderNavDrawerItem) item).getProviderType() == providerType) {
+            if (item.getType() == AbsNavDrawerItem.TYPE_PROVIDER && ((ProviderNavDrawerItem) item).getProviderId() == providerId) {
                 selectItem(i);
                 return;
             }

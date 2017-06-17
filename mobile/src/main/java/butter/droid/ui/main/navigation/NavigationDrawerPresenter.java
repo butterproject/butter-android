@@ -18,8 +18,6 @@
 package butter.droid.ui.main.navigation;
 
 import android.os.Bundle;
-
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
 
 public interface NavigationDrawerPresenter {
@@ -33,5 +31,5 @@ public interface NavigationDrawerPresenter {
 
     void onMenuItemClicked(int position, AbsNavDrawerItem item);
 
-    void selectProvider(@ProviderType int providerType);
+    void selectProvider(int providerId);
 }

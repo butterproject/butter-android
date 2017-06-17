@@ -28,9 +28,9 @@ public final class Prefs {
 
     @StringDef({SUBTITLE_COLOR, SUBTITLE_SIZE, SUBTITLE_STROKE_WIDTH, SUBTITLE_STROKE_COLOR, SUBTITLE_DEFAULT_LANGUAGE,
             STORAGE_LOCATION, REMOVE_CACHE, HW_ACCELERATION, AUTOMATIC_UPDATES, DEFAULT_PROVIDER, DEFAULT_PLAYER,
-            DEFAULT_PLAYER_NAME, WIFI_ONLY, LOCALE, DRAWER_LEARNED, LIBTORRENT_CONNECTION_LIMIT,
-            LIBTORRENT_DOWNLOAD_LIMIT, LIBTORRENT_UPLOAD_LIMIT, LIBTORRENT_LISTENING_PORT, LIBTORRENT_AUTOMATIC_PORT,
-            SHOW_VPN, PIXEL_FORMAT, QUALITY_DEFAULT, CHECK_UPDATE, REPORT_BUG, CHANGE_LOG, NOTICE, VERSION, ABOUT})
+            DEFAULT_PLAYER_NAME, WIFI_ONLY, LOCALE, LIBTORRENT_CONNECTION_LIMIT, LIBTORRENT_DOWNLOAD_LIMIT, LIBTORRENT_UPLOAD_LIMIT,
+            LIBTORRENT_LISTENING_PORT, LIBTORRENT_AUTOMATIC_PORT, SHOW_VPN, PIXEL_FORMAT, QUALITY_DEFAULT, CHECK_UPDATE, REPORT_BUG,
+            CHANGE_LOG, NOTICE, VERSION, ABOUT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface PrefKey {
     }
@@ -57,7 +57,6 @@ public final class Prefs {
     public static final String DEFAULT_PLAYER_NAME = "default_player_name";
     public static final String WIFI_ONLY = "wifi_only";
     public static final String LOCALE = "app_locale";
-    public static final String DRAWER_LEARNED = "drawer_learned"; // TODO: 12/9/16 Do something about this
     public static final String LIBTORRENT_CONNECTION_LIMIT = "libtorrent_connectionlimit";
     public static final String LIBTORRENT_DOWNLOAD_LIMIT = "libtorrent_downloadlimit";
     public static final String LIBTORRENT_UPLOAD_LIMIT = "libtorrent_uploadlimit";

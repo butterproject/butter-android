@@ -18,7 +18,7 @@
 package butter.droid.ui.main.genre;
 
 public interface GenreSelectionPresenter {
-    void onViewCreated();
+    void onViewCreated(int providerId);
 
     void onGenreSelected(int position);
 }

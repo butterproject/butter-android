@@ -18,14 +18,14 @@
 package butter.droid.ui.main;
 
 import android.app.Activity;
-
-import butter.droid.base.manager.internal.provider.ProviderManager.ProviderType;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 
 public interface MainPresenter {
 
-    void onCreate(boolean isInitial);
+    void onCreate(final int selectedProviderId);
 
     void onResume();
 
@@ -39,9 +39,7 @@ public interface MainPresenter {
 
     void storagePermissionGranted();
 
-    void drawerOpened();
-
-    void selectProvider(@ProviderType int providerType);
+    void selectProvider(int providerId);
 
     void openMenuActivity(Class<? extends Activity> activityClass);
 
@@ -50,4 +48,8 @@ public interface MainPresenter {
     void addGenreListener(OnGenreChangeListener listener);
 
     void removeGenreListener(OnGenreChangeListener listener);
+
+    void onSaveInstanceState(@NonNull Bundle outState);
+
+    void searchClicked();
 }

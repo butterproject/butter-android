@@ -36,10 +36,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.manager.paging.PagingAdapter;
+import butter.droid.provider.base.Media;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
@@ -86,12 +86,12 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final ViewHolder videoViewHolder = (ViewHolder) viewHolder;
             final Media item = getItem(position);
 
-            videoViewHolder.title.setText(item.title);
-            videoViewHolder.year.setText(item.year);
+            videoViewHolder.title.setText(item.getTitle());
+            videoViewHolder.year.setText(item.getYear());
 
-            if (!TextUtils.isEmpty(item.image)) {
+            if (!TextUtils.isEmpty(item.getPoster())) {
                 final Context context = videoViewHolder.coverImage.getContext();
-                Picasso.with(context).load(item.image).resize(itemWidth, itemHeight).transform(DrawGradient.INSTANCE)
+                Picasso.with(context).load(item.getPoster()).resize(itemWidth, itemHeight).transform(DrawGradient.INSTANCE)
                         .into(videoViewHolder.coverImage);
             }
         }

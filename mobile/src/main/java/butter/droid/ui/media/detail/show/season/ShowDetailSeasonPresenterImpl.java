@@ -17,13 +17,11 @@
 
 package butter.droid.ui.media.detail.show.season;
 
+import butter.droid.provider.base.Episode;
+import butter.droid.provider.base.Show;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Show;
 
 public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter {
 
@@ -55,7 +53,8 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
     }
 
     @Override public void onViewCreated() {
-        view.displayData(show.color, episodes);
+        // TODO: 6/17/17
+//                view.displayData(show.color, episodes);
     }
 
     @Override public void episodeSelected(int position) {
@@ -66,22 +65,19 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
 
         List<Episode> episodes = new ArrayList<>();
 
-        for (Episode episode : show.episodes) {
-            if (episode.season == season) {
+        for (Episode episode : show.getEpisodes()) {
+            if (episode.getSeasion() == season) {
                 episodes.add(episode);
             }
         }
 
-        Collections.sort(episodes, new Comparator<Episode>() {
-            @Override
-            public int compare(Episode lhs, Episode rhs) {
-                if (lhs.episode < rhs.episode) {
-                    return -1;
-                } else if (lhs.episode > rhs.episode) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+        Collections.sort(episodes, (lhs, rhs) -> {
+            if (lhs.getEpisode() < rhs.getEpisode()) {
+                return -1;
+            } else if (lhs.getEpisode() > rhs.getEpisode()) {
+                return 1;
+            } else {
+                return 0;
             }
         });
 

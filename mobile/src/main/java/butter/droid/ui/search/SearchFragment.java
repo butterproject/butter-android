@@ -19,13 +19,12 @@ package butter.droid.ui.search;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
-import javax.inject.Inject;
-
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
+import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class SearchFragment extends BaseMediaListFragment implements SearchView {
 
@@ -52,10 +51,10 @@ public class SearchFragment extends BaseMediaListFragment implements SearchView 
         presenter.triggerSearch(query);
     }
 
-    public static SearchFragment newInstance(MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
+    public static SearchFragment newInstance(final int providerId, final Filter filter) {
         Bundle args = new Bundle();
-        args.putSerializable(EXTRA_SORT, filter);
-        args.putSerializable(EXTRA_ORDER, defOrder);
+        args.putInt(EXTRA_PROVIDER, providerId);
+        args.putParcelable(EXTRA_FILTER, Parcels.wrap(filter));
 
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);

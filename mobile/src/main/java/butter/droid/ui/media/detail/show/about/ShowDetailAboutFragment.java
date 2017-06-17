@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.base.providers.media.models.Show;
+import butter.droid.provider.base.Show;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butterknife.BindView;
@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 public class ShowDetailAboutFragment extends Fragment implements ShowDetailAboutView {
 
@@ -65,7 +66,7 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
                 .build()
                 .inject(this);
 
-        Show show = getArguments().getParcelable(ARG_SHOW);
+        Show show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
 
         presenter.onCreate(show);
     }
@@ -164,7 +165,7 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
 
     public static ShowDetailAboutFragment newInstance(Show show) {
         Bundle args = new Bundle();
-        args.putParcelable(ARG_SHOW, show);
+        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
 
         ShowDetailAboutFragment fragment = new ShowDetailAboutFragment();
         fragment.setArguments(args);

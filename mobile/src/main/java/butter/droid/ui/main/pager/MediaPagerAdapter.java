@@ -36,7 +36,6 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     private final Context context;
 
     private List<MediaProvider.NavInfo> items;
-    private boolean hasGenreTabs;
     private String genre;
 
     public MediaPagerAdapter(FragmentManager fm, Context context) {
@@ -48,10 +47,6 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         int cnt = 0;
 
-        if (hasGenreTabs) {
-            cnt++;
-        }
-
         if (items != null) {
             cnt += items.size();
         }
@@ -61,37 +56,27 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (hasGenreTabs) {
-            if (position == 0) {
-                return context.getString(R.string.genres).toUpperCase(LocaleUtils.getCurrent());
-            }
-
-            position--;
-        }
-
         return context.getString(items.get(position).getLabel()).toUpperCase(LocaleUtils.getCurrent());
     }
 
     @Override
     public Fragment getItem(int position) {
-        if (hasGenreTabs) {
-            if (position == 0) {
-                return GenreSelectionFragment.newInstance();
-            }
-
-            position--;
-        }
-
         NavInfo navInfo = items.get(position);
-        return MediaListFragment.newInstance(navInfo.getFilter(), navInfo.getOrder(), genre);
+        switch (navInfo.getId()) {
+            case R.id.nav_item_filter:
+                return MediaListFragment.newInstance(navInfo.getProviderId(), navInfo.getFilter());
+            case R.id.nav_item_genre:
+                return GenreSelectionFragment.newInstance(navInfo.getProviderId());
+            default:
+                throw new IllegalStateException("Unknown item type");
+        }
     }
 
     public void setGenre(String genre) {
         this.genre = genre;
     }
 
-    public void setData(boolean hasGenreTabs, List<NavInfo> items) {
-        this.hasGenreTabs = hasGenreTabs;
+    public void setData(List<NavInfo> items) {
         this.items = items;
         notifyDataSetChanged();
     }
