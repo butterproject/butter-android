@@ -64,4 +64,5 @@ public class TVMainActivity extends TVBaseActivity implements TVMainView {
         activity.startActivity(intent);
         return intent;
     }
+
 }

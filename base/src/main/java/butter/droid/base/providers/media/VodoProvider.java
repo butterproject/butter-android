@@ -23,24 +23,20 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.internal.LinkedTreeMap;
-
-import java.io.IOException;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
-
 import butter.droid.base.ButterApplication;
-import butter.droid.base.R;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.internal.LinkedTreeMap;
+import java.io.IOException;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -310,8 +306,8 @@ public class VodoProvider extends MediaProvider {
     @Override
     public List<NavInfo> getNavigation() {
         List<NavInfo> tabs = new ArrayList<>();
-        tabs.add(new NavInfo(R.id.yts_filter_a_to_z, Filters.Sort.ALPHABET, Filters.Order.ASC,
-                R.string.a_to_z, R.drawable.yts_filter_a_to_z));
+//        tabs.add(new NavInfo(R.id.yts_filter_a_to_z, Filters.Sort.ALPHABET, Filters.Order.ASC,
+//                R.string.a_to_z, R.drawable.yts_filter_a_to_z));
         return tabs;
     }
 

@@ -19,18 +19,25 @@ package butter.droid.provider.mock;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import butter.droid.provider.AbsMediaProvider;
 import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
 import butter.droid.provider.base.Movie;
 import butter.droid.provider.base.Paging;
 import butter.droid.provider.base.Torrent;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.filter.Sorter;
+import butter.droid.provider.base.nav.NavItem;
 import butter.droid.provider.mock.model.MockMovies;
 import com.google.gson.Gson;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import okio.BufferedSource;
 import okio.Okio;
 
@@ -44,7 +51,7 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
         this.gson = gson;
     }
 
-    @NonNull @Override public Single<ItemsWrapper> items() {
+    @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter) {
         return Single.fromCallable(() -> parseResponse("movies_list.json", MockMovies.class))
                 .map(MockMovies::getMovies)
                 .flatMapObservable(Observable::fromIterable)
@@ -59,6 +66,18 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
 
     @Override public Single<Media> detail(Media media) {
         return Single.just(media);
+    }
+
+    @NonNull @Override public Maybe<List<Sorter>> sorters() {
+        return Maybe.just(Arrays.asList(new Sorter("alphabet", R.string.sorter_alphabet)));
+    }
+
+    @NonNull @Override public Maybe<List<Genre>> genres() {
+        return Maybe.just(Arrays.asList(Genre.ACTION, Genre.ADVENTURE, Genre.ANIMATION));
+    }
+
+    @NonNull @Override public Maybe<List<NavItem>> navigation() {
+        return Maybe.just(Arrays.asList(new NavItem(0, R.string.genre_action, new Filter(Genre.ACTION, null))));
     }
 
     private <R> R parseResponse(String fileName, Class<R> tClass) {

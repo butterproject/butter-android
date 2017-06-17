@@ -15,21 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.mock;
+package butter.droid.provider.base
 
-import android.support.annotation.NonNull;
-import butter.droid.provider.AbsMediaProvider;
-import butter.droid.provider.base.ItemsWrapper;
-import butter.droid.provider.base.Media;
-import io.reactivex.Single;
+import butter.droid.provider.base.filter.Genre
+import org.parceler.Parcel
+import org.parceler.ParcelConstructor
 
-public class MockSeriesMediaProvider extends AbsMediaProvider {
-
-    @NonNull @Override public Single<ItemsWrapper> items() {
-        return null;
-    }
-
-    @NonNull @Override public Single<Media> detail(Media media) {
-        return null;
-    }
-}
+@Parcel(Parcel.Serialization.BEAN)
+data class Season @ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
+                                                 override val genres: Array<Genre>, override val rating: Float, override val poster: String?,
+                                                 override val backdrop: String, override val synopsis: String) : Media

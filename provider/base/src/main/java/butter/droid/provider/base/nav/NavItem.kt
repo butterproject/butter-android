@@ -15,18 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.media;
+package butter.droid.provider.base.nav
 
-import butter.droid.provider.base.filter.Filter;
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
+import butter.droid.provider.base.filter.Filter
 
-public interface TVMediaGridPresenter {
-
-    void onCreate(Filter filter);
-
-    void onActivityCreated();
-
-    void loadNextPage();
-
-    void onDestroy();
-
-}
+data class NavItem(@DrawableRes val icon: Int, @StringRes val label: Int, val filter: Filter?)

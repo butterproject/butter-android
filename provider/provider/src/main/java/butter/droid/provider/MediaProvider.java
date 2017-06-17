@@ -18,14 +18,33 @@
 package butter.droid.provider;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.filter.Sorter;
+import butter.droid.provider.base.nav.NavItem;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
+import java.util.List;
 
 public interface MediaProvider {
 
-    @NonNull Single<ItemsWrapper> items();
+    @NonNull Single<ItemsWrapper> items(@Nullable Filter filter);
 
     @NonNull Single<Media> detail(Media media);
+
+    /**
+     * @return List of supported Sorters for this provider.
+     */
+    @NonNull Maybe<List<Sorter>> sorters();
+
+    /**
+     * @return List of supported Genres for this provider.
+     */
+    @NonNull Maybe<List<Genre>> genres();
+
+    @NonNull Maybe<List<NavItem>> navigation();
 
 }

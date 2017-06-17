@@ -18,79 +18,74 @@
 package butter.droid.tv.ui.media;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider.Filters;
-import butter.droid.tv.presenters.MediaCardPresenter;
-import java.util.ArrayList;
+import butter.droid.provider.base.ItemsWrapper;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
+import io.reactivex.Observable;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import okhttp3.Call;
 
 public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
 
     private final TVMediaGridView view;
     private final ProviderManager providerManager;
 
-    private final List<MediaCardPresenter.MediaCardItem> items = new ArrayList<>();
+    private Filter filter;
 
-    private Filters filter;
-    private int currentPage = 1;
-
-    private Call currentCall;
+    private Disposable currentCall;
 
     public TVMediaGridPresenterImpl(final TVMediaGridView view, final ProviderManager providerManager) {
         this.view = view;
         this.providerManager = providerManager;
     }
 
-    @Override public void onCreate(final Filters filter) {
+    @Override public void onCreate(final Filter filter) {
         this.filter = filter;
     }
 
     @Override public void onActivityCreated() {
-
+        loadItems();
     }
 
     @Override public void loadNextPage() {
-        filter.page++;
         loadItems();
     }
 
     @Override public void onDestroy() {
-        if (currentCall !=  null) {
-            currentCall.cancel();
-            currentCall = null;
-        }
+        cancelCurrentCall();
     }
 
     private void loadItems() {
-        // TODO
-        /*
-        currentCall = providerManager.getCurrentMediaProvider().getList(null, filter, new MediaProvider.Callback() {
-            @DebugLog
-            @Override
-            public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {
-                currentPage = filters.page;
-                final List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-
-                TVMediaGridPresenterImpl.this.items.addAll(list);
-
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        view.appendItems(list);
+        cancelCurrentCall();
+        providerManager.getCurrentMediaProvider().items(filter)
+                .map(ItemsWrapper::getMedia)
+                .flatMapObservable(Observable::fromIterable)
+                .map(MediaCardItem::new)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<MediaCardItem>>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        currentCall = d;
                     }
-                });
-            }
 
-            @DebugLog
-            @Override
-            public void onFailure(Exception ex) {
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void onSuccess(final List<MediaCardItem> value) {
+                        view.appendItems(value);
+                    }
+
+                    @Override public void onError(final Throwable e) {
                         view.displayError("Error getting show list");
                     }
                 });
-            }
-        });
-        */
+    }
+
+    private void cancelCurrentCall() {
+        if (currentCall !=  null) {
+            currentCall.dispose();
+            currentCall = null;
+        }
     }
 }

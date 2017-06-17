@@ -18,9 +18,6 @@
 
 <resources>
 
-    <item name="progress_indicator" type="id" />
-    <item name="primary_textview" type="id" />
-    <item name="secondary_textview" type="id" />
-    <item name="tertiary_textview" type="id" />
+    <string name="sorter_alphabet">Alphabet</string>
 
 </resources>

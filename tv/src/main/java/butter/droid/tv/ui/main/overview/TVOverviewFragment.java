@@ -36,11 +36,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
 import butter.droid.base.PlayerTestConstants;
-import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.base.Media;
 import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -73,6 +73,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     private ArrayObjectAdapter rowsAdapter;
     private ArrayObjectAdapter showAdapter;
     private ArrayObjectAdapter moviesAdapter;
+    private ArrayObjectAdapter moviesMoreAdapter;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,10 +142,6 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void showErrorMessage(final String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
     @Override public void openTestPlayerPicker() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -167,8 +164,8 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         startActivity(TVPreferencesActivity.getIntent(getActivity()));
     }
 
-    @Override public void openMediaActivity(@NonNull final NavInfo navInfo) {
-        startActivity(TVMediaGridActivity.newIntent(getActivity(), navInfo.getLabel(), navInfo.getFilter(), navInfo.getOrder(), null));
+    @Override public void openMediaActivity(@StringRes int title, @NonNull final Filter filter) {
+        startActivity(TVMediaGridActivity.newIntent(getActivity(), title, filter));
     }
 
     @Override public void setupMoviesRow() {
@@ -193,20 +190,14 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         */
     }
 
-    @Override public void setupMoreMoviesRow(final List<NavInfo> navigation) {
+    @Override public void setupMoreMoviesRow() {
         HeaderItem moreMoviesHeader = new HeaderItem(getString(R.string.more_movies));
         MorePresenter morePresenter = new MorePresenter(getActivity());
-        ArrayObjectAdapter moreRowAdapter = new ArrayObjectAdapter(morePresenter);
-
-        // add items
-        for (MediaProvider.NavInfo info : navigation) {
-            moreRowAdapter.add(new MorePresenter.MoreItem(info));
-        }
-
-        rowsAdapter.add(new ListRow(moreMoviesHeader, moreRowAdapter));
+        moviesMoreAdapter = new ArrayObjectAdapter(morePresenter);
+        rowsAdapter.add(new ListRow(moreMoviesHeader, moviesMoreAdapter));
     }
 
-    @Override public void setupMoreTVShowsRow(final List<NavInfo> navigation) {
+    @Override public void setupMoreTVShowsRow(final List<NavItem> navigation) {
         /*
         HeaderItem moreHeader = new HeaderItem(1, getString(R.string.more_shows));
         MorePresenter morePresenter = new MorePresenter(getActivity());
@@ -266,6 +257,12 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
 
     @Override public void startPlayerActivity(final StreamInfo streamInfo) {
         TVVideoPlayerActivity.startActivity(getActivity(), streamInfo);
+    }
+
+    @Override public void displayMoviesSorters(final List<NavItem> value) {
+        for (final NavItem navItem : value) {
+            moviesMoreAdapter.add(new MorePresenter.MoreItem(navItem));
+        }
     }
 
     private void setupUIElements() {

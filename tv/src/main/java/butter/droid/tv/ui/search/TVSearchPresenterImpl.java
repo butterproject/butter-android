@@ -124,13 +124,13 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
 
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
             requests.add(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
-                    .items()
+                    .items(null)
                     .map(itemsWrapper -> new SearchResult(R.string.movie_results, itemsWrapper.getMedia())));
         }
 
         if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
             requests.add(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW)
-                    .items()
+                    .items(null)
                     .map(itemsWrapper -> new SearchResult(R.string.show_results, itemsWrapper.getMedia())));
         }
 

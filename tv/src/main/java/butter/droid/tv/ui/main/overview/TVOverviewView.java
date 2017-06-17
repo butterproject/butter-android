@@ -19,7 +19,8 @@ package butter.droid.tv.ui.main.overview;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import butter.droid.base.providers.media.MediaProvider.NavInfo;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.nav.NavItem;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.base.Movie;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
@@ -33,21 +34,19 @@ public interface TVOverviewView {
 
     void showErrorMessage(@StringRes int message);
 
-    void showErrorMessage(String message);
-
     void openTestPlayerPicker();
 
     void openPreferencesScreen();
 
-    void openMediaActivity(@NonNull NavInfo navInfo);
+    void openMediaActivity(@StringRes int title, @NonNull Filter filter);
 
     void setupMoviesRow();
 
     void setupTVShowsRow();
 
-    void setupMoreMoviesRow(List<NavInfo> navigation);
+    void setupMoreMoviesRow();
 
-    void setupMoreTVShowsRow(List<NavInfo> navigation);
+    void setupMoreTVShowsRow(List<NavItem> navigation);
 
     void setupMoreRow();
 
@@ -56,4 +55,6 @@ public interface TVOverviewView {
     void startTrailerScreen(final Movie movie, final String location);
 
     void startPlayerActivity(StreamInfo streamInfo);
+
+    void displayMoviesSorters(final List<NavItem> value);
 }

@@ -15,18 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.media;
+package butter.droid.provider.base.filter
 
-import butter.droid.provider.base.filter.Filter;
+import android.support.annotation.StringRes
+import org.parceler.Parcel
+import org.parceler.ParcelConstructor
 
-public interface TVMediaGridPresenter {
-
-    void onCreate(Filter filter);
-
-    void onActivityCreated();
-
-    void loadNextPage();
-
-    void onDestroy();
-
-}
+@Parcel(Parcel.Serialization.BEAN)
+data class Sorter @ParcelConstructor constructor(val key: String, @StringRes val name: Int)

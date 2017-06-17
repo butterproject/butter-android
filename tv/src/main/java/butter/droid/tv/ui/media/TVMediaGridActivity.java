@@ -22,17 +22,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
-import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
+import org.parceler.Parcels;
 
 public class TVMediaGridActivity extends TVBaseActivity {
 
     private static final String EXTRA_TITLE = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_title";
-    private static final String EXTRA_SORT = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_sort";
-    private static final String EXTRA_ORDER = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_order";
-    private static final String EXTRA_GENRE = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_genre";
+    private static final String EXTRA_FILTER = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_filter";
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -44,23 +43,18 @@ public class TVMediaGridActivity extends TVBaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_movie_media_grid);
 
         Bundle extras = getIntent().getExtras();
-        final MediaProvider.Filters.Sort sort = (MediaProvider.Filters.Sort) extras.getSerializable(EXTRA_SORT);
-        final MediaProvider.Filters.Order defOrder = (MediaProvider.Filters.Order) extras.getSerializable(EXTRA_ORDER);
-        final String genre = extras.getString(EXTRA_GENRE);
+        final Filter filter = Parcels.unwrap(extras.getParcelable(EXTRA_FILTER));
         @StringRes int title = extras.getInt(EXTRA_TITLE);
 
         //add media fragment
-        getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance(title, sort, defOrder, genre))
+        getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance(title, filter))
                 .commit();
     }
 
-    public static Intent newIntent(Context context, @StringRes int title, MediaProvider.Filters.Sort sort,
-            MediaProvider.Filters.Order defOrder, String genre) {
+    public static Intent newIntent(Context context, @StringRes int title, Filter filter) {
         Intent intent = new Intent(context, TVMediaGridActivity.class);
         intent.putExtra(EXTRA_TITLE, title);
-        intent.putExtra(EXTRA_GENRE, genre);
-        intent.putExtra(EXTRA_ORDER, defOrder);
-        intent.putExtra(EXTRA_SORT, sort);
+        intent.putExtra(EXTRA_FILTER, Parcels.wrap(filter));
         return intent;
     }
 

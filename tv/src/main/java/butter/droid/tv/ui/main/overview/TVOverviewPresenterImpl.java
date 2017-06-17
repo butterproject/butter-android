@@ -24,9 +24,11 @@ import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.provider.base.ItemsWrapper;
 import butter.droid.provider.base.Media;
+import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
+import io.reactivex.MaybeObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -43,6 +45,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     private int selectedRow = 0;
 
     @Nullable private Disposable listRequest;
+    @Nullable private Disposable sortersRequest;
 
     public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager, final YouTubeManager youTubeManager) {
         this.view = view;
@@ -54,8 +57,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
         view.setupMoviesRow();
 //        view.setupTVShowsRow();
-        // TODO
-//        view.setupMoreMoviesRow(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).getNavigation());
+        view.setupMoreMoviesRow();
 //        view.setupMoreTVShowsRow(providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW).getNavigation());
         view.setupMoreRow();
 
@@ -77,27 +79,15 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
             case R.id.more_item_settings:
                 view.openPreferencesScreen();
                 break;
-            case R.id.yts_filter_a_to_z:
-            case R.id.yts_filter_trending:
-            case R.id.yts_filter_release_date:
-            case R.id.yts_filter_popular_now:
-            case R.id.yts_filter_year:
-            case R.id.yts_filter_top_rated:
+            case R.id.more_item_filter:
                 providerManager.setCurrentProviderType(ProviderManager.PROVIDER_TYPE_MOVIE);
-                view.openMediaActivity(item.getNavInfo());
+                //noinspection ConstantConditions
+                view.openMediaActivity(item.getTitle(), item.getFilter());
                 break;
-            case R.id.eztv_filter_a_to_z:
-            case R.id.eztv_filter_trending:
-            case R.id.eztv_filter_last_updated:
-            case R.id.eztv_filter_popular_now:
-            case R.id.eztv_filter_year:
-            case R.id.eztv_filter_top_rated:
-                providerManager.setCurrentProviderType(ProviderManager.PROVIDER_TYPE_SHOW);
-                view.openMediaActivity(item.getNavInfo());
-                break;
-            case R.id.yts_filter_genres:
-                view.showErrorMessage("Not implemented yet");
-                break;
+            // TODO: 6/17/17
+//                providerManager.setCurrentProviderType(ProviderManager.PROVIDER_TYPE_SHOW);
+//                view.openMediaActivity(item.getTitle(), item.getFilter());
+//                break;
             case R.id.more_player_tests:
                 view.openTestPlayerPicker();
                 break;
@@ -139,6 +129,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     @Override public void onDestroy() {
         cancelMovieCall();
+        cancelMovieSortersCall();
     }
 
     private void loadData() {
@@ -178,7 +169,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         movieFilters.order = MediaProvider.Filters.Order.DESC;
 
         cancelMovieCall();
-        providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).items()
+        providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).items(null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {
@@ -201,12 +192,45 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                     }
                 });
 
+        loadSorters();
+
+    }
+
+    private void loadSorters() {
+        cancelMovieSortersCall();
+        providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE).navigation()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MaybeObserver<List<NavItem>>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        sortersRequest = d;
+                    }
+
+                    @Override public void onSuccess(final List<NavItem> value) {
+                        view.displayMoviesSorters(value);
+                    }
+
+                    @Override public void onError(final Throwable e) {
+                        // fail quietly
+                    }
+
+                    @Override public void onComplete() {
+                        // nothing to do
+                    }
+                });
     }
 
     private void cancelMovieCall() {
         if (listRequest != null) {
             listRequest.dispose();
             listRequest = null;
+        }
+    }
+
+    private void cancelMovieSortersCall() {
+        if (sortersRequest != null) {
+            sortersRequest.dispose();
+            sortersRequest = null;
         }
     }
 

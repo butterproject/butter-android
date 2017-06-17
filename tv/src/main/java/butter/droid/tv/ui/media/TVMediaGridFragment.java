@@ -31,11 +31,11 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.Media;
 import butter.droid.provider.base.Movie;
 import butter.droid.provider.base.Show;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -48,6 +48,7 @@ import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import javax.inject.Inject;
+import org.parceler.Parcels;
 
 /*
  * VerticalGridFragment shows a grid of videos
@@ -56,9 +57,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         OnItemViewSelectedListener {
 
     private static final String ARG_TITLE = "butter.droid.tv.ui.media.TVMediaGridFragment.title";
-    private static final String ARG_SORT = "butter.droid.tv.ui.media.TVMediaGridFragment.sort";
-    private static final String ARG_ORDER = "butter.droid.tv.ui.media.TVMediaGridFragment.order";
-    private static final String ARG_GENRE = "butter.droid.tv.ui.media.TVMediaGridFragment.genre";
+    private static final String ARG_FILTER = "butter.droid.tv.ui.media.TVMediaGridFragment.filter";
 
     private static final int NUM_COLUMNS = 6;
 
@@ -85,11 +84,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
 
         Bundle args = getArguments();
 
-        MediaProvider.Filters filter = new MediaProvider.Filters();
-        filter.sort = (MediaProvider.Filters.Sort) args.getSerializable(ARG_SORT);
-        filter.order = (MediaProvider.Filters.Order) args.getSerializable(ARG_ORDER);
-        filter.genre = args.getString(ARG_GENRE);
-
+        Filter filter = Parcels.unwrap(args.getParcelable(ARG_FILTER));
         presenter.onCreate(filter);
     }
 
@@ -173,13 +168,10 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         setOnItemViewSelectedListener(this);
     }
 
-    public static TVMediaGridFragment newInstance(@StringRes int title, MediaProvider.Filters.Sort sort,
-            MediaProvider.Filters.Order defOrder, String genre) {
+    public static TVMediaGridFragment newInstance(@StringRes int title, Filter filter) {
         final Bundle args = new Bundle();
         args.putSerializable(ARG_TITLE, title);
-        args.putSerializable(ARG_SORT, sort);
-        args.putSerializable(ARG_ORDER, defOrder);
-        args.putString(ARG_GENRE, genre);
+        args.putParcelable(ARG_FILTER, Parcels.wrap(filter));
 
         TVMediaGridFragment fragment = new TVMediaGridFragment();
         fragment.setArguments(args);
