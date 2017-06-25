@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.main.overview;
 
 import android.support.annotation.Nullable;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
 
 public interface TVOverviewPresenter {

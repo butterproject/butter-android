@@ -18,7 +18,7 @@
 package butter.droid.ui.media.list.base;
 
 import android.support.annotation.StringRes;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import java.util.List;
 
 public interface BaseMediaListView {

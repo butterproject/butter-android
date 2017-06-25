@@ -28,7 +28,7 @@ import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.module.Movie;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import java.util.Locale;
 

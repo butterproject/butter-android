@@ -22,7 +22,7 @@ import android.support.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.module.Movie;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import java.util.List;
 

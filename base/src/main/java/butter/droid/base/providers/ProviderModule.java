@@ -18,19 +18,19 @@
 package butter.droid.base.providers;
 
 import android.content.Context;
-
-import com.google.gson.Gson;
-
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
+import butter.droid.provider.base.ProviderScope;
 import butter.droid.provider.mock.MockMovieMediaProvider;
+import butter.droid.provider.vodo.VodoModule;
+import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 
-@Module
+@Module(includes = VodoModule.class)
 public class ProviderModule {
 
     @Provides @ProviderScope

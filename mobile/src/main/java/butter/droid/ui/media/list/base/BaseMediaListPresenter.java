@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.list.base;
 
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.filter.Filter;
 import java.util.ArrayList;
 

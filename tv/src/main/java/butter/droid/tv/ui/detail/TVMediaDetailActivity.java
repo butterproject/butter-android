@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;

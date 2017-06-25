@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;

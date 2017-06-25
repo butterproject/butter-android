@@ -19,7 +19,6 @@ package butter.droid.ui.media.list;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
@@ -42,8 +41,8 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
         presenter.onCreate();
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    @Override public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         pagingManager.getNextPage();
     }

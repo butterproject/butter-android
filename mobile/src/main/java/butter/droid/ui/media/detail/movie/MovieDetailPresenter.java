@@ -18,7 +18,7 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.support.annotation.MainThread;
-import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.module.Movie;
 
 public interface MovieDetailPresenter {
     void onCreate(Movie movie);

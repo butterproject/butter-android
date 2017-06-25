@@ -20,22 +20,18 @@ package butter.droid.ui.main.pager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-
-import java.util.List;
-
+import android.support.v4.app.FragmentStatePagerAdapter;
 import butter.droid.R;
-import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.ui.main.genre.GenreSelectionFragment;
 import butter.droid.ui.media.list.MediaListFragment;
+import java.util.List;
 
-public class MediaPagerAdapter extends FragmentPagerAdapter {
+public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     private final Context context;
 
-    private List<MediaProvider.NavInfo> items;
+    private List<NavInfo> items;
     private String genre;
 
     public MediaPagerAdapter(FragmentManager fm, Context context) {
@@ -57,6 +53,11 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return context.getString(items.get(position).getLabel()).toUpperCase(LocaleUtils.getCurrent());
+    }
+
+    @Override public int getItemPosition(final Object object) {
+        return POSITION_NONE;
+//        return super.getItemPosition(object);
     }
 
     @Override

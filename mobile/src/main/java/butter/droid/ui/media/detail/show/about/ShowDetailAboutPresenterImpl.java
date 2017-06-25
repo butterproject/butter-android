@@ -21,7 +21,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.filter.Genre;
 
 public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {

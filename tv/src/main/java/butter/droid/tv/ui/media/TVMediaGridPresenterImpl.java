@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.media;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.provider.base.ItemsWrapper;
+import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import io.reactivex.Observable;

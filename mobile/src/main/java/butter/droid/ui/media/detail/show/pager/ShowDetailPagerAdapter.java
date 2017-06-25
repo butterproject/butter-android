@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailSeason;

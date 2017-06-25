@@ -15,5 +15,4 @@
   ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<manifest package="butter.droid.provider.mock"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+<manifest package="butter.droid.provider.mock" />

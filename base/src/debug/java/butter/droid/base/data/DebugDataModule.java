@@ -15,11 +15,20 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.base.data;
 
-interface Streamable {
+import com.github.simonpercic.oklog3.OkLogInterceptor;
+import dagger.Module;
+import dagger.Provides;
+import dagger.multibindings.IntoSet;
+import javax.inject.Singleton;
+import okhttp3.Interceptor;
 
-    val id: String
-    val title: String
+@Module
+public class DebugDataModule {
+
+    @Provides @Singleton @IntoSet Interceptor provideOkLohInterceptor() {
+        return OkLogInterceptor.builder().build();
+    }
 
 }

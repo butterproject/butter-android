@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butter.droid.ui.ButterBaseActivity;
 import org.parceler.Parcels;
 

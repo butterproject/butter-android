@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail.show;
 
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 
 public interface ShowDetailPresenter {
     void onCreate(Show show);

@@ -30,7 +30,7 @@ import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;

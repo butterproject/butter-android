@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;

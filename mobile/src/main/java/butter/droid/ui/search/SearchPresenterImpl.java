@@ -22,6 +22,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
 
 public class SearchPresenterImpl extends BaseMediaListPresenterImpl implements SearchPresenter {
@@ -36,6 +37,13 @@ public class SearchPresenterImpl extends BaseMediaListPresenterImpl implements S
         this.networkManager = networkManager;
     }
 
+    @Override public void onActivityCreated(final int providerId, Filter filter) {
+        if (filter == null) {
+            filter = new Filter(null, null);
+        }
+        super.onActivityCreated(providerId, filter);
+    }
+
     public void triggerSearch(String searchQuery) {
 
         if (!networkManager.isNetworkConnected()) {
@@ -47,7 +55,7 @@ public class SearchPresenterImpl extends BaseMediaListPresenterImpl implements S
                 view.clearAdapter();
                 showLoaded();
             } else {
-                filters.keywords = searchQuery;
+                filter.setQuery(searchQuery);
                 view.refreshAdapter();
             }
         }

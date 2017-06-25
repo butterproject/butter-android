@@ -21,9 +21,9 @@ import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import butter.droid.provider.base.Media;
-import butter.droid.provider.base.Movie;
-import butter.droid.provider.base.Streamable;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Streamable;
 import org.parceler.Parcels;
 
 public class StreamInfo implements Parcelable {

@@ -15,15 +15,16 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.provider.base.module
 
 import butter.droid.provider.base.filter.Genre
+import butter.droid.provider.base.module.Episode
+import butter.droid.provider.base.module.Media
 import org.parceler.Parcel
 import org.parceler.ParcelConstructor
 
 @Parcel(Parcel.Serialization.BEAN)
-data class Episode @ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int, override val genres: Array<Genre>,
-                                                  override val rating: Float, override val poster: String?, override val backdrop: String,
-                                                  override val synopsis: String, val torrents: Array<Torrent>, val watched: Boolean,
-                                                  val overview: String, val episode: Int, val seasion: Int) : Media, Streamable
-
+data class Show @ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
+                                               override val genres: Array<Genre>, override val backdrop: String,
+                                               override val synopsis: String, override val rating: Float, override val poster: String,
+                                               val episodes: Array<Episode>) : Media

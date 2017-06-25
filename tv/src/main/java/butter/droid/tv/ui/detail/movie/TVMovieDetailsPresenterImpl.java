@@ -19,9 +19,9 @@ package butter.droid.tv.ui.detail.movie;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.Media;
-import butter.droid.provider.base.Movie;
-import butter.droid.provider.base.Torrent;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 

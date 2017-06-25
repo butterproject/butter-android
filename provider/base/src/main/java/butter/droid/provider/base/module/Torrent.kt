@@ -15,6 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.provider.base.module
 
-data class Paging(val endCursor: String?, val hasNextPage: Boolean)
+import org.parceler.Parcel
+import org.parceler.ParcelConstructor
+
+@org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
+data class Torrent @org.parceler.ParcelConstructor constructor(val url: String, val quality: Long, val size: Int, val fileSize: Long?, val peers: Int?,
+                                                               val seeds: Int?)

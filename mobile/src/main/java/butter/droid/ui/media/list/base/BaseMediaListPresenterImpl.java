@@ -22,10 +22,9 @@ import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider;
-import butter.droid.provider.base.ItemsWrapper;
-import butter.droid.provider.base.Media;
 import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.module.ItemsWrapper;
+import butter.droid.provider.base.module.Media;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -40,9 +39,9 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
     private final PreferencesHandler preferencesHandler;
 
     protected final ArrayList<Media> items = new ArrayList<>();
-    protected final MediaProvider.Filters filters = new MediaProvider.Filters();
+    protected Filter filter = null;
 
-    private int providerId;
+    protected int providerId;
 
     protected Disposable currentCall;
 
@@ -54,10 +53,9 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
     @Override public void onActivityCreated(final int providerId, final Filter filter) {
         this.providerId = providerId;
-        // TODO: 6/17/17  2
-        //        filters.sort = sort;
-//        filters.order = sortOrder;
-//        filters.genre = genre;
+        this.filter = filter;
+
+        // TODO: 6/17/17
 //        filters.langCode = LocaleUtils.toLocale(preferencesHandler.getLocale()).getLanguage();
     }
 
@@ -69,8 +67,8 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
             showLoading();
         }
 
-        filters.page = page;
-        providerManager.getProvider(providerId).items(null)
+//        filters.page = page;
+        providerManager.getProvider(providerId).items(filter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {
@@ -80,10 +78,12 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
                     @Override public void onSuccess(final ItemsWrapper value) {
                         view.addItems(value.getMedia());
+                        items.addAll(value.getMedia());
                         showLoaded();
                     }
 
                     @Override public void onError(final Throwable e) {
+                        // TODO: 6/24/17 Most of this is not relevant any more
                         if (e.getMessage().equals("Canceled")) {
                             showLoaded();
                         } else if (e.getMessage() != null

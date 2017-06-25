@@ -172,11 +172,7 @@ public class PagingManager<T> {
 
             @Override public void onChildViewAttachedToWindow(View view) {
                 final int position = layoutManager.findLastVisibleItemPosition();
-                handler.post(new Runnable() {
-                    @Override public void run() {
-                        onNewPosition(position);
-                    }
-                });
+                handler.post(() -> onNewPosition(position));
             }
 
             @Override public void onChildViewDetachedFromWindow(View view) {

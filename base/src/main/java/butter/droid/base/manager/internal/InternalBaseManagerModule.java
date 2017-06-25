@@ -20,6 +20,7 @@ package butter.droid.base.manager.internal;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
+import butter.droid.provider.vodo.VodoProvider;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.util.VLCUtil;
 
@@ -38,8 +39,8 @@ import timber.log.Timber;
 @Module
 public class InternalBaseManagerModule {
 
-    @Provides @Internal ProviderManager provideProviderManager(MockMovieMediaProvider moviesProvider) {
-        return new ProviderManager(moviesProvider);
+    @Provides @Internal ProviderManager provideProviderManager(VodoProvider vodoProvider, MockMovieMediaProvider moviesProvider) {
+        return new ProviderManager(vodoProvider, moviesProvider);
     }
 
     @Provides @Internal @Nullable LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {

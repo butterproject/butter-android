@@ -21,4 +21,8 @@ import org.parceler.Parcel
 import org.parceler.ParcelConstructor
 
 @Parcel(Parcel.Serialization.BEAN)
-data class Filter @ParcelConstructor constructor(val genre: Genre?, val sorter: Sorter?)
+data class Filter @ParcelConstructor constructor(val genre: Genre?, val sorter: Sorter?, var query: String?) {
+
+    constructor(genre: Genre?, sorter: Sorter?) : this(genre, sorter, null)
+
+}

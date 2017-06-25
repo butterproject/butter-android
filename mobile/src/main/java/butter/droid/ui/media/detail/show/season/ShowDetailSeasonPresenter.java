@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail.show.season;
 
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 
 public interface ShowDetailSeasonPresenter {
     void onCreate(Show show, int season);

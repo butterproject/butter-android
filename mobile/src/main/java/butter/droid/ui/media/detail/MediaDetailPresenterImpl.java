@@ -22,9 +22,9 @@ import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.Media;
-import butter.droid.provider.base.Movie;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Show;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 

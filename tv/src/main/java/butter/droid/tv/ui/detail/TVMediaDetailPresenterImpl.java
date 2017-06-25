@@ -17,9 +17,9 @@
 
 package butter.droid.tv.ui.detail;
 
-import butter.droid.provider.base.Media;
-import butter.droid.provider.base.Movie;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Show;
 import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
 
 public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {

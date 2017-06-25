@@ -22,13 +22,15 @@ import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 
-@Module
+@Module(includes = DataBindModule.class)
 public class DataModule {
 
     @Provides @Singleton public Cache provideCache(PreferencesHandler preferencesHandler) {
@@ -38,13 +40,20 @@ public class DataModule {
         return new Cache(cacheLocation, cacheSize);
     }
 
-    @Provides @Singleton public OkHttpClient provideOkHttpClient(Cache cache) {
-        return new Builder()
+    @Provides @Singleton public OkHttpClient provideOkHttpClient(Cache cache, Set<Interceptor> interceptors) {
+        Builder builder = new Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
-                .cache(cache)
-                .build();
+                .cache(cache);
+
+        if (interceptors != null && interceptors.size() > 0) {
+            for (final Interceptor interceptor : interceptors) {
+                builder.addInterceptor(interceptor);
+            }
+        }
+
+        return builder.build();
     }
 
     @Provides @Singleton public Gson provideGson() {

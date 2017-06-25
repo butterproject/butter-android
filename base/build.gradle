@@ -57,7 +57,9 @@ dependencies {
     api "com.android.support:appcompat-v7:$appCompatVersion"
     api "com.android.support:design:$appCompatVersion"
 
+    debugImplementation 'com.github.simonpercic:oklog3:2.1.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     api 'com.jakewharton.timber:timber:4.5.1'
@@ -79,6 +81,7 @@ dependencies {
     api project(':connectsdk')
     api project(':provider:provider')
     api project(':provider:mock')
+    api project(':provider:vodo')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"

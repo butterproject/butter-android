@@ -19,10 +19,10 @@ package butter.droid.tv.ui.detail.show;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.provider.base.Episode;
-import butter.droid.provider.base.Media;
-import butter.droid.provider.base.Show;
-import butter.droid.provider.base.Torrent;
+import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Show;
+import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 import java.util.ArrayList;
 import java.util.Collections;

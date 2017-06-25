@@ -35,7 +35,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.torrent.Magnet;
-import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.module.Movie;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionSelector;

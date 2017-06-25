@@ -20,7 +20,7 @@ package butter.droid.tv.ui.trailer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import org.parceler.Parcels;

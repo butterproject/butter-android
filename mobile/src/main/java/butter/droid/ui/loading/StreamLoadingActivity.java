@@ -33,7 +33,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.fragment.StreamLoadingFragment;
 import javax.inject.Inject;

@@ -20,9 +20,9 @@ package butter.droid.ui.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import butter.droid.base.providers.media.MediaProvider.NavInfo;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.module.Movie;
+import butter.droid.ui.main.pager.NavInfo;
 import java.util.List;
 
 public interface MainView {

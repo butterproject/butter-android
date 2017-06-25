@@ -15,19 +15,6 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.provider.base.module
 
-import butter.droid.provider.base.filter.Genre
-
-interface Media {
-
-    val id: String
-    val title: String
-    val year: Int
-    val genres: Array<Genre>
-    val rating: Float
-    val poster: String?
-    val backdrop: String
-    val synopsis: String
-
-}
+data class Paging(val endCursor: String?, val hasNextPage: Boolean)

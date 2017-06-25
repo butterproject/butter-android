@@ -15,13 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.provider.vodo.api;
 
-import butter.droid.provider.base.filter.Genre
-import org.parceler.Parcel
-import org.parceler.ParcelConstructor
+import butter.droid.provider.vodo.api.model.VodoResponse;
+import io.reactivex.Single;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
-@Parcel(Parcel.Serialization.BEAN)
-data class Season @ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
-                                                 override val genres: Array<Genre>, override val rating: Float, override val poster: String?,
-                                                 override val backdrop: String, override val synopsis: String) : Media
+public interface VodoService {
+
+    @GET("popcorn")
+    Single<VodoResponse> fetchMovies(@Query("query") String query, @Query("genre") String genre, @Query("sort_by") String sortBy,
+            @Query("order_by") String orderBy, @Query("lang") String lang, @Query("limit") int limit, @Query("page") int page);
+
+}

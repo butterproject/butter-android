@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.models.Media;
+import butter.droid.provider.base.module.Media;
 import java.util.ArrayList;
 import javax.inject.Inject;
 

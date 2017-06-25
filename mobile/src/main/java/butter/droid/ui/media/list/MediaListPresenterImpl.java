@@ -19,6 +19,8 @@ package butter.droid.ui.media.list;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
 import butter.droid.ui.main.genre.list.model.UiGenre;
@@ -39,8 +41,7 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
     }
 
     @Override protected int getLoadingMessage() {
-        // TODO: 6/17/17 provider index
-        return providerManager.getProvider(0).getLoadingMessage();
+        return providerManager.getProvider(providerId).getLoadingMessage();
     }
 
     @Override public void onCreate() {
@@ -52,14 +53,12 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
     }
 
     @Override public void onGenreChanged(UiGenre genre) {
-        changeGenre(genre.getKey());
-    }
-
-    private void changeGenre(String genre) {
-        if (!(filters.genre == null ? "" : filters.genre).equals(genre == null ? "" : genre)) {
-            filters.genre = genre;
+        Genre g = new Genre(genre.getKey(), genre.getLabel());
+        if (filter.getGenre() == null || !filter.getGenre().equals(g)) {
+            filter = new Filter(g, filter.getSorter(), filter.getQuery());
             items.clear();
             view.refreshAdapter();
         }
     }
+
 }

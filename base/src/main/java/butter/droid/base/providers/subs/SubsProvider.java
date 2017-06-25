@@ -26,7 +26,7 @@ import butter.droid.base.subs.FormatASS;
 import butter.droid.base.subs.FormatSRT;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.utils.FileUtils;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import com.google.gson.Gson;
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -24,7 +24,7 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 
 public class TVStreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmentPresenterImpl
         implements TVStreamLoadingFragmentPresenter {

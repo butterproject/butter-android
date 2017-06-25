@@ -18,8 +18,8 @@
 package butter.droid.tv.presenters;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import butter.droid.provider.base.Media;
-import butter.droid.provider.base.Movie;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Movie;
 
 public class MovieDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 

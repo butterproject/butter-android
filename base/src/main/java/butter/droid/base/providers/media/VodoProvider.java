@@ -303,13 +303,13 @@ public class VodoProvider extends MediaProvider {
         }
     }
 
-    @Override
-    public List<NavInfo> getNavigation() {
-        List<NavInfo> tabs = new ArrayList<>();
-//        tabs.add(new NavInfo(R.id.yts_filter_a_to_z, Filters.Sort.ALPHABET, Filters.Order.ASC,
-//                R.string.a_to_z, R.drawable.yts_filter_a_to_z));
-        return tabs;
-    }
+//    @Override
+//    public List<NavInfo> getNavigation() {
+//        List<NavInfo> tabs = new ArrayList<>();
+////        tabs.add(new NavInfo(R.id.yts_filter_a_to_z, Filters.Sort.ALPHABET, Filters.Order.ASC,
+////                R.string.a_to_z, R.drawable.yts_filter_a_to_z));
+//        return tabs;
+//    }
 
     @Override
     public List<Genre> getGenres() {

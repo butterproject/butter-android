@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
 import butter.droid.ui.media.detail.show.pager.ShowDetailPagerAdapter;

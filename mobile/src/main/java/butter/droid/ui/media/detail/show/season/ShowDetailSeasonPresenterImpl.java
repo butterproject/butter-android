@@ -17,8 +17,8 @@
 
 package butter.droid.ui.media.detail.show.season;
 
-import butter.droid.provider.base.Episode;
-import butter.droid.provider.base.Show;
+import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.module.Show;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

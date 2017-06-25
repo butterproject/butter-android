@@ -30,7 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import butter.droid.base.utils.AnimUtils;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butter.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;

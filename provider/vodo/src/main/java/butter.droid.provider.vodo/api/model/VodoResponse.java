@@ -15,14 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.providers;
+package butter.droid.provider.vodo.api.model;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+public class VodoResponse {
 
-import javax.inject.Scope;
+    private VodoMovie[] downloads;
 
-@Scope
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ProviderScope {
+    public VodoMovie[] getDownloads() {
+        return downloads;
+    }
 }

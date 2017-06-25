@@ -39,7 +39,7 @@ import butter.droid.R;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.manager.paging.PagingAdapter;
-import butter.droid.provider.base.Media;
+import butter.droid.provider.base.module.Media;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
@@ -87,7 +87,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final Media item = getItem(position);
 
             videoViewHolder.title.setText(item.getTitle());
-            videoViewHolder.year.setText(item.getYear());
+            videoViewHolder.year.setText(String.valueOf(item.getYear()));
 
             if (!TextUtils.isEmpty(item.getPoster())) {
                 final Context context = videoViewHolder.coverImage.getContext();

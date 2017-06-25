@@ -27,14 +27,13 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
-
-import com.google.gson.Gson;
-
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.providers.media.VodoProvider;
+import butter.droid.provider.base.ProviderScope;
 import butter.droid.provider.mock.MockMovieMediaProvider;
+import butter.droid.provider.vodo.VodoProvider;
+import com.google.gson.Gson;
 import dagger.Component;
 import okhttp3.OkHttpClient;
 

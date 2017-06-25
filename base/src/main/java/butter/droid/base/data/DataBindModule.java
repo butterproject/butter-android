@@ -15,6 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.base.data;
 
-data class ItemsWrapper(val media: List<Media>, val paging: Paging)
+import butter.droid.provider.base.ProviderScope;
+import dagger.Module;
+import dagger.multibindings.Multibinds;
+import java.util.Set;
+import okhttp3.Interceptor;
+
+@Module
+public interface DataBindModule {
+
+    @Multibinds @ProviderScope Set<Interceptor> provideIntercptors();
+
+}
