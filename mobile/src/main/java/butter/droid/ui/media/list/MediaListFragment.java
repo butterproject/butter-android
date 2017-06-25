@@ -47,12 +47,6 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
         pagingManager.getNextPage();
     }
 
-    @Override public void onDestroy() {
-        super.onDestroy();
-
-        presenter.onDestroy();
-    }
-
     public static BaseMediaListFragment newInstance(final int providerId, final Filter filter) {
         Bundle args = new Bundle();
         args.putInt(EXTRA_PROVIDER, providerId);

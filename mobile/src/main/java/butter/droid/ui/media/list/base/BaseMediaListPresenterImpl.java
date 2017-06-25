@@ -17,6 +17,7 @@
 
 package butter.droid.ui.media.list.base;
 
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
@@ -25,6 +26,8 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Paging;
+import butter.droid.provider.filter.Pager;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -43,7 +46,8 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
     protected int providerId;
 
-    protected Disposable currentCall;
+    protected Disposable listCall;
+    protected Disposable detailsCall;
 
     public BaseMediaListPresenterImpl(BaseMediaListView view, ProviderManager providerManager, PreferencesHandler preferencesHandler) {
         this.view = view;
@@ -59,25 +63,25 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 //        filters.langCode = LocaleUtils.toLocale(preferencesHandler.getLocale()).getLanguage();
     }
 
-    @Override public void loadNextPage(int page) {
-        cancelOngoingCall();
+    @Override public void loadNextPage(@Nullable String endCursor) {
+        cancelListCall();
 
         if (items.isEmpty()) {
             updateLoadingMessage(getLoadingMessage());
             showLoading();
         }
 
-//        filters.page = page;
-        providerManager.getProvider(providerId).items(filter)
+        providerManager.getProvider(providerId).items(filter, new Pager(endCursor))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
-                        currentCall = d;
+                        listCall = d;
                     }
 
                     @Override public void onSuccess(final ItemsWrapper value) {
-                        view.addItems(value.getMedia());
+                        Paging paging = value.getPaging();
+                        view.addItems(value.getMedia(), !paging.getHasNextPage(), paging.getEndCursor());
                         items.addAll(value.getMedia());
                         showLoaded();
                     }
@@ -88,7 +92,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                             showLoaded();
                         } else if (e.getMessage() != null
                                 && e.getMessage().equals(ButterApplication.getAppContext().getString(R.string.movies_error))) {
-                            view.addItems(null);
+                            view.addItems(null, false, null);
                             showLoaded();
                         } else {
                             Timber.e(e.getMessage());
@@ -99,18 +103,47 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                 });
     }
 
-    @Override public ArrayList<Media> getCurrentList() {
-        return items;
+    @Override public void onMediaItemClicked(final Media media) {
+        view.showMediaLoadingDialog();
+
+        cancelDetailsCall();
+        providerManager.getProvider(providerId).detail(media)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Media>() {
+                    @Override public void onSubscribe(final Disposable d) {
+
+                    }
+
+                    @Override public void onSuccess(final Media value) {
+                        view.showDetails(value);
+                    }
+
+                    @Override public void onError(final Throwable e) {
+                        view.showErrorMessage(R.string.unknown_error);
+                    }
+                });
     }
 
     @StringRes protected abstract int getLoadingMessage();
 
-    protected void cancelOngoingCall() {
-        if (currentCall != null) {
-            currentCall.dispose();
-            currentCall = null;
-        }
+    @Override public void onDestroy() {
+        cancelListCall();
+        cancelDetailsCall();
+    }
 
+    protected void cancelListCall() {
+        if (listCall != null) {
+            listCall.dispose();
+            listCall = null;
+        }
+    }
+
+    protected void cancelDetailsCall() {
+        if (detailsCall != null) {
+            detailsCall.dispose();
+            detailsCall = null;
+        }
     }
 
     private void showLoading() {

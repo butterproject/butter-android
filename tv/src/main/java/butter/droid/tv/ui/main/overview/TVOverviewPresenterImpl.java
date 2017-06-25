@@ -142,7 +142,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
         // TODO: 6/17/17 Disposable per provider
         cancelMovieCall();
-        providerManager.getProvider(providerId).items(null)
+        providerManager.getProvider(providerId).items(null, null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {

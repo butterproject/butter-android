@@ -153,20 +153,17 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
     @Override public void displaySynopsis(String synopsis) {
         this.synopsis.setText(synopsis);
-        this.synopsis.post(new Runnable() {
-            @Override
-            public void run() {
-                boolean ellipsized = false;
-                Layout layout = MovieDetailFragment.this.synopsis.getLayout();
-                int lines = layout.getLineCount();
-                if (lines > 0) {
-                    int ellipsisCount = layout.getEllipsisCount(lines - 1);
-                    if (ellipsisCount > 0) {
-                        ellipsized = true;
-                    }
+        this.synopsis.post(() -> {
+            boolean ellipsized = false;
+            Layout layout = MovieDetailFragment.this.synopsis.getLayout();
+            int lines = layout.getLineCount();
+            if (lines > 0) {
+                int ellipsisCount = layout.getEllipsisCount(lines - 1);
+                if (ellipsisCount > 0) {
+                    ellipsized = true;
                 }
-                readMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
             }
+            readMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
         });
 
         readMore.setVisibility(View.GONE);

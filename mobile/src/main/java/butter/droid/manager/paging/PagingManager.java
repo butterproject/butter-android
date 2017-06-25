@@ -24,16 +24,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnChildAttachStateChangeListener;
 import android.view.View;
-
 import java.util.List;
-
 import timber.log.Timber;
 
 public class PagingManager<T> {
 
-    private static final int DEFAULT_PAGE_SIZE = 20;
     private static final int DEFAULT_PRELOAD_POSITIONS = 5;
-    private static final int FIRST_PAGE_INDEX = 1;
 
     private int preloadPositionOffset = DEFAULT_PRELOAD_POSITIONS;
     private int lastVisibleItem;
@@ -46,17 +42,13 @@ public class PagingManager<T> {
     private PagingAdapter<T> adapter;
 
     private IndexPagingListener listener;
-    private int pageIndex;
+    @Nullable private String endCursor;
 
     public void setPreloadPositionOffset(int preloadPositionOffset) {
         this.preloadPositionOffset = preloadPositionOffset;
     }
 
-    public int getPageSize() {
-        return DEFAULT_PAGE_SIZE;
-    }
-
-    public void addItems(@Nullable List<T> items) {
+    public void addItems(@Nullable List<T> items, boolean completed, String endCursor) {
         if (refreshing) {
             adapter.clear();
             lastVisibleItem = 0;
@@ -68,10 +60,9 @@ public class PagingManager<T> {
 
         adapter.addItems(items);
 
-        int pageSize = items == null || items.size() == 0 ? 0 : items.size();
-        completed = pagingIsCompleted(pageSize);
+        this.completed = completed;
         if (!completed) {
-            onItemsAdded();
+            this.endCursor = endCursor;
         }
 
         setLoading(false);
@@ -79,10 +70,6 @@ public class PagingManager<T> {
 
     private boolean pagingIsCompleted(int itemsCount) {
         return itemsCount == 0;
-    }
-
-    protected void onItemsAdded() {
-        pageIndex++;
     }
 
     public boolean isCompleted() {
@@ -97,8 +84,8 @@ public class PagingManager<T> {
         return refreshing;
     }
 
-    protected int getPageIndex() {
-        return pageIndex;
+    @Nullable public String getEndCursor() {
+        return endCursor;
     }
 
     public void init(@NonNull RecyclerView recyclerView, @NonNull PagingAdapter<T> adapter,
@@ -116,7 +103,7 @@ public class PagingManager<T> {
         refreshing = false;
         lastVisibleItem = 0;
         lastVisibleItemInProgress = 0;
-        pageIndex = FIRST_PAGE_INDEX;
+        endCursor = null;
         setLoading(false);
     }
 
@@ -138,11 +125,11 @@ public class PagingManager<T> {
 
         setLoading(true);
 
-        loadNextPage(getPageSize());
+        loadNextPage();
     }
 
-    protected void loadNextPage(int pageSize) {
-        listener.loadPage(pageIndex, pageSize);
+    protected void loadNextPage() {
+        listener.loadPage(endCursor);
     }
 
     protected void onNewPosition(int position) {
@@ -189,11 +176,11 @@ public class PagingManager<T> {
 
     public void refresh() {
         refreshing = true;
-        loadFirstPage(getPageSize());
+        loadFirstPage();
     }
 
-    protected void loadFirstPage(int pageSize) {
-        pageIndex = FIRST_PAGE_INDEX;
-        loadNextPage(pageSize);
+    protected void loadFirstPage() {
+        endCursor = null;
+        loadNextPage();
     }
 }

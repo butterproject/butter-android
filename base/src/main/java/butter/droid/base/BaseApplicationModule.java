@@ -30,7 +30,7 @@ import javax.inject.Singleton;
         includes = {
                 BaseAndroidModule.class,
                 DataModule.class,
-                TypeModue.class
+                TypeModule.class
         }
 )
 public class BaseApplicationModule {

@@ -20,15 +20,16 @@ package butter.droid.provider.vodo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import butter.droid.provider.AbsMediaProvider;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.base.module.Torrent;
-import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.filter.Genre;
-import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.filter.Pager;
 import butter.droid.provider.vodo.api.VodoService;
 import butter.droid.provider.vodo.api.model.VodoMovie;
 import butter.droid.provider.vodo.api.model.VodoResponse;
@@ -66,7 +67,7 @@ public class VodoProvider extends AbsMediaProvider {
         this.vodoService = vodoService;
     }
 
-    @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter) {
+    @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter, @Nullable Pager pager) {
 
         String query = null; // TODO: 6/18/17
         String genre = null;
@@ -80,14 +81,23 @@ public class VodoProvider extends AbsMediaProvider {
             if (filter.getSorter() != null) {
                 sorter = filter.getSorter().getKey();
             }
+
+            query = filter.getQuery();
         }
 
-        return vodoService.fetchMovies(query, genre, sorter, null, null, ITEMS_PER_PAGE, 0)
+        final int page;
+        if (pager != null && pager.getEndCursor() != null) {
+            page = Integer.parseInt(pager.getEndCursor());
+        } else {
+            page = 0;
+        }
+
+        return vodoService.fetchMovies(query, genre, sorter, null, null, ITEMS_PER_PAGE, page)
                 .map(VodoResponse::getDownloads)
                 .flatMapObservable(Observable::fromArray)
                 .map(this::mapVodoMovie)
                 .toList()
-                .map(m -> new ItemsWrapper(m, new Paging(null, m.size() == ITEMS_PER_PAGE)));
+                .map(m -> new ItemsWrapper(m, new Paging(String.valueOf(page + 1), m.size() == ITEMS_PER_PAGE)));
     }
 
     @NonNull @Override public Single<Media> detail(final Media media) {

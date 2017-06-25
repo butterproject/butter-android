@@ -26,7 +26,7 @@ public interface BaseMediaListView {
 
     void showData();
 
-    void addItems(List<Media> items);
+    void addItems(List<Media> items, boolean completed, String endCursor);
 
     void showEmpty();
 
@@ -37,4 +37,8 @@ public interface BaseMediaListView {
     void refreshAdapter();
 
     void showLoading();
+
+    void showMediaLoadingDialog();
+
+    void showDetails(Media value);
 }

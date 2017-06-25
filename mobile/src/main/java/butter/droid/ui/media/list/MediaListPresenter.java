@@ -23,5 +23,4 @@ public interface MediaListPresenter extends BaseMediaListPresenter {
 
     void onCreate();
 
-    void onDestroy();
 }

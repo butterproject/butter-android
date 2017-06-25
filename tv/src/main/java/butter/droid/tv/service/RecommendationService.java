@@ -23,7 +23,6 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;
@@ -78,13 +77,13 @@ public class RecommendationService extends IntentService {
             e.printStackTrace();
         }
 
-        MediaProvider.Filters movieFilter = new MediaProvider.Filters();
-        movieFilter.order = MediaProvider.Filters.Order.DESC;
-        movieFilter.sort = MediaProvider.Filters.Sort.POPULARITY;
-
-        MediaProvider.Filters showsFilter = new MediaProvider.Filters();
-        showsFilter.order = MediaProvider.Filters.Order.DESC;
-        showsFilter.sort = MediaProvider.Filters.Sort.DATE;
+//        MediaProvider.Filters movieFilter = new MediaProvider.Filters();
+//        movieFilter.order = MediaProvider.Filters.Order.DESC;
+//        movieFilter.sort = MediaProvider.Filters.Sort.POPULARITY;
+//
+//        MediaProvider.Filters showsFilter = new MediaProvider.Filters();
+//        showsFilter.order = MediaProvider.Filters.Order.DESC;
+//        showsFilter.sort = MediaProvider.Filters.Sort.DATE;
 
         final AtomicBoolean mMoviesCallFinished = new AtomicBoolean(false);
         final AtomicBoolean mShowsCallFinished = new AtomicBoolean(false);

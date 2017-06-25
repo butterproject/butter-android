@@ -17,6 +17,8 @@
 
 package butter.droid.manager.paging;
 
+import android.support.annotation.Nullable;
+
 public interface IndexPagingListener {
-    void loadPage(int index, int pageSize);
+    void loadPage(@Nullable String endCursor);
 }

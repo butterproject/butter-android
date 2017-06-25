@@ -17,21 +17,20 @@
 
 package butter.droid;
 
-import butter.droid.ui.search.SearchActivity;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
-import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
-import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
 import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.about.AboutComponent;
 import butter.droid.ui.beam.BeamPlayerActivityComponent;
+import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
 import butter.droid.ui.loading.StreamLoadingComponent;
 import butter.droid.ui.main.MainComponent;
 import butter.droid.ui.media.detail.MediaDetailComponent;
+import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.player.VideoPlayerComponent;
 import butter.droid.ui.preferences.PreferencesComponent;
+import butter.droid.ui.search.SearchActivity;
 import butter.droid.ui.search.SearchComponent;
 import butter.droid.ui.terms.TermsComponent;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
@@ -53,8 +52,6 @@ public interface InternalComponent extends BaseInternalComponent {
     void inject(SearchActivity activity);
 
     void inject(TrailerPlayerActivity activity);
-
-    void inject(LoadingDetailDialogFragment fragment);
 
     void inject(EpisodeDialogFragment fragment);
 

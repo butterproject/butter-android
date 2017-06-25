@@ -17,10 +17,9 @@
 
 package butter.droid.base;
 
-import butter.droid.base.data.DebugDataModule;
 import dagger.Module;
 
-@Module(includes = DebugDataModule.class)
-public interface TypeModue {
+@Module
+public interface TypeModule {
 
 }

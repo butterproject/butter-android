@@ -15,19 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.list.base;
+package butter.droid.base;
 
-import android.support.annotation.Nullable;
-import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.data.DebugDataModule;
+import dagger.Module;
 
-public interface BaseMediaListPresenter {
+@Module(includes = DebugDataModule.class)
+public interface TypeModule {
 
-    void onActivityCreated(int providerId, Filter filter);
-
-    void loadNextPage(@Nullable String endCursor);
-
-    void onMediaItemClicked(Media media);
-
-    void onDestroy();
 }

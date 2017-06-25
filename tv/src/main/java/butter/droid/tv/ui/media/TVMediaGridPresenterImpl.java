@@ -62,7 +62,7 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
 
     private void loadItems() {
         cancelCurrentCall();
-        providerManager.getProvider(providerId).items(filter)
+        providerManager.getProvider(providerId).items(filter, null)
                 .map(ItemsWrapper::getMedia)
                 .flatMapObservable(Observable::fromIterable)
                 .map(media -> new MediaCardItem(providerId, media))

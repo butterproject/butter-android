@@ -15,12 +15,6 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base;
+package butter.droid.provider.filter
 
-import butter.droid.base.data.DebugDataModule;
-import dagger.Module;
-
-@Module
-public interface TypeModue {
-
-}
+data class Pager(val endCursor: String?)

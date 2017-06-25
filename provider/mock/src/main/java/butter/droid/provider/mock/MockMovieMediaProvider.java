@@ -21,15 +21,16 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import butter.droid.provider.AbsMediaProvider;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.base.module.Torrent;
-import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.filter.Genre;
-import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.filter.Pager;
 import butter.droid.provider.mock.model.MockMovies;
 import com.google.gson.Gson;
 import io.reactivex.Maybe;
@@ -51,7 +52,7 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
         this.gson = gson;
     }
 
-    @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter) {
+    @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter, @Nullable Pager pager) {
         return Single.fromCallable(() -> parseResponse("movies_list.json", MockMovies.class))
                 .map(MockMovies::getMovies)
                 .flatMapObservable(Observable::fromIterable)

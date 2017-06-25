@@ -23,12 +23,13 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
 import android.support.annotation.StringRes;
-import butter.droid.provider.base.module.ItemsWrapper;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
+import butter.droid.provider.base.module.ItemsWrapper;
+import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.filter.Pager;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import java.util.List;
@@ -36,7 +37,7 @@ import java.util.List;
 @RestrictTo(Scope.LIBRARY_GROUP)
 public interface MediaProvider {
 
-    @NonNull Single<ItemsWrapper> items(@Nullable Filter filter);
+    @NonNull Single<ItemsWrapper> items(@Nullable Filter filter, @Nullable Pager pager);
 
     @NonNull Single<Media> detail(Media media);
 

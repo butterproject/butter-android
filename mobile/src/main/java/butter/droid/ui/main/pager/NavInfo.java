@@ -28,51 +28,51 @@ import butter.droid.provider.base.nav.NavItem;
 
 public class NavInfo {
 
-        @IdRes private final int id;
-        @DrawableRes private final int icon;
-        @StringRes private final int label;
-        @Nullable private final Filter filter;
-        private final int providerId;
+    @IdRes private final int id;
+    @DrawableRes private final int icon;
+    @StringRes private final int label;
+    @Nullable private final Filter filter;
+    private final int providerId;
 
-        public NavInfo(@NonNull NavItem item, final int providerId) {
-            this.id = R.id.nav_item_filter;
-            this.icon = item.getIcon();
-            this.label = item.getLabel();
-            this.providerId = providerId;
-            this.filter = item.getFilter();
-        }
-
-        public NavInfo(@IdRes final int id, @DrawableRes final int icon, @StringRes final int label, final int providerId) {
-            if (id == R.id.nav_item_filter) {
-                throw new IllegalStateException("Filter items have to have filter parameter set");
-            }
-
-            this.id = id;
-            this.icon = icon;
-            this.label = label;
-            this.providerId = providerId;
-            this.filter = null;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        @DrawableRes
-        public int getIcon() {
-            return icon;
-        }
-
-        @StringRes
-        public int getLabel() {
-            return label;
-        }
-
-        public int getProviderId() {
-            return providerId;
-        }
-
-        @Nullable public Filter getFilter() {
-            return filter;
-        }
+    public NavInfo(@NonNull NavItem item, final int providerId) {
+        this.id = R.id.nav_item_filter;
+        this.icon = item.getIcon();
+        this.label = item.getLabel();
+        this.providerId = providerId;
+        this.filter = item.getFilter();
     }
+
+    public NavInfo(@IdRes final int id, @DrawableRes final int icon, @StringRes final int label, final int providerId) {
+        if (id == R.id.nav_item_filter) {
+            throw new IllegalStateException("Filter items have to have filter parameter set");
+        }
+
+        this.id = id;
+        this.icon = icon;
+        this.label = label;
+        this.providerId = providerId;
+        this.filter = null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @DrawableRes
+    public int getIcon() {
+        return icon;
+    }
+
+    @StringRes
+    public int getLabel() {
+        return label;
+    }
+
+    public int getProviderId() {
+        return providerId;
+    }
+
+    @Nullable public Filter getFilter() {
+        return filter;
+    }
+}

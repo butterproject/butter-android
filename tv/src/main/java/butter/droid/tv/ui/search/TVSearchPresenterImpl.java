@@ -127,7 +127,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
             MediaProvider provider = providerManager.getProvider(i);
             final int providerId = i;
             // TODO: 6/17/17 Define title of search row
-            requests.add(provider.items(null)
+            requests.add(provider.items(null, null)
                     .map(itemsWrapper -> new SearchResult(providerId, R.string.movie_results, itemsWrapper.getMedia())));
         }
 
