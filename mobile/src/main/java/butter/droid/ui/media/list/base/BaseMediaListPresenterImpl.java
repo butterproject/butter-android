@@ -28,7 +28,6 @@ import butter.droid.base.providers.media.MediaProvider.Filters.Sort;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.ThreadUtils;
-import hugo.weaving.DebugLog;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Call;
@@ -123,7 +122,6 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
     protected final MediaProvider.Callback callback = new MediaProvider.Callback() {
         @Override
-        @DebugLog
         public void onSuccess(MediaProvider.Filters filters, final ArrayList<Media> items, boolean changed) {
             List<Media> allItems = BaseMediaListPresenterImpl.this.items;
             allItems.addAll(items);
@@ -138,7 +136,6 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
         }
 
         @Override
-        @DebugLog
         public void onFailure(Exception ex) {
             if (ex.getMessage().equals("Canceled")) {
                 ThreadUtils.runOnUiThread(new Runnable() {

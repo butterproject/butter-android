@@ -31,7 +31,6 @@ import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
-import hugo.weaving.DebugLog;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,7 +181,6 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         cancleMovieCall();
         movieListCall = providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                 .getList(null, movieFilters, new MediaProvider.Callback() {
-                    @DebugLog
                     @Override
                     public void onSuccess(Filters filters, final ArrayList<Media> items, boolean changed) {
                         ThreadUtils.runOnUiThread(new Runnable() {
@@ -198,7 +196,6 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                         });
                     }
 
-                    @DebugLog
                     @Override
                     public void onFailure(Exception ex) {
                         ThreadUtils.runOnUiThread(new Runnable() {

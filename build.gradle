@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
@@ -47,32 +47,6 @@ allprojects {
     project.afterEvaluate {
         //only apply to projects that have the android plugin
         if (project.plugins.hasPlugin('com.android.application')) {
-            //global android setting
-            project.android {
-                packagingOptions {
-                    pickFirst '**/libjlibtorrent.so'
-                    exclude 'META-INF/beans.xml'
-                    exclude 'META-INF/DEPENDENCIES'
-                    exclude 'META-INF/LICENSE'
-                    exclude 'META-INF/NOTICE'
-                    exclude 'META-INF/LICENSE.txt'
-                    exclude 'META-INF/NOTICE.txt'
-                    exclude 'META-INF/DEPENDENCIES.txt'
-                }
-
-                applicationVariants.all { variant ->
-                    //rename output files
-                    renameOutputFiles(variant)
-                }
-
-                adbOptions {
-                    timeOutInMs 10 * 60 * 1000  // 10 minutes
-                }
-
-                dexOptions {
-                    javaMaxHeapSize "512M"
-                }
-            }
 
             project.androidVersion {
                 appVersion {
@@ -116,27 +90,5 @@ allprojects {
                 }
             }
         }
-    }
-}
-
-static def renameOutputFiles(variant) {
-    variant.outputs.each { output ->
-        def alignedOutputFile = output.outputFile
-        def unalignedOutputFile = output.packageApplication.outputFile
-        def outputFileName = alignedOutputFile.name
-
-        // Customise APK filenames
-        if (outputFileName.contains("debug")) {
-            outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
-        } else {
-            outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
-        }
-
-        if (variant.buildType.zipAlignEnabled) {
-            // normal APK
-            output.outputFile = new File(alignedOutputFile.parent, outputFileName)
-        }
-        // 'unaligned' APK
-        output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
     }
 }
