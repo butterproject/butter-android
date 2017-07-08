@@ -72,12 +72,6 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
      |          |-- main
      |                |-- java           # tv module java code
      |                `-- res            # tv module resources
-    `|-- vlc                             # vlc module (VLC mediaplayer library)
-     |    |-- build.gradle               # vlc module build script
-     |    `-- src
-     |          |-- main
-     |                |-- jniLibs        # native LibVLC libraries
-     |                |-- java           # LibVLC Java code
     `|-- connectsdk                      # connectsdk module
           |-- build.gradle               # connectsdk build script
           `-- src
