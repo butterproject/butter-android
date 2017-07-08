@@ -38,7 +38,7 @@ import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.manager.paging.PagingAdapter;
+import butter.droid.manager.internal.paging.PagingAdapter;
 import butter.droid.provider.base.module.Media;
 import butterknife.BindView;
 import butterknife.ButterKnife;

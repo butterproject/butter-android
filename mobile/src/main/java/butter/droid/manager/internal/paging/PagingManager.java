@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.manager.paging;
+package butter.droid.manager.internal.paging;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
