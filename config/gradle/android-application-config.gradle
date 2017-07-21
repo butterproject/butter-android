@@ -1,0 +1,70 @@
+/*
+ * This file is part of Butter.
+ *
+ * Butter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Butter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Butter. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+apply plugin: 'com.android.application'
+apply from: "${project.rootDir}/config/gradle/android-common-config.gradle"
+apply plugin: 'si.kamino.version'
+
+android {
+
+    packagingOptions {
+        pickFirst '**/libjlibtorrent.so'
+        exclude 'META-INF/beans.xml'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/DEPENDENCIES.txt'
+    }
+
+    applicationVariants.all { variant ->
+        //rename output files
+        renameOutputFiles(variant)
+    }
+
+    adbOptions {
+        timeOutInMs 10 * 60 * 1000  // 10 minutes
+    }
+
+    dexOptions {
+        javaMaxHeapSize "512M"
+    }
+
+}
+
+static def renameOutputFiles(variant) {
+//    variant.outputs.each { output ->
+//        def alignedOutputFile = output.outputFile
+//        def unalignedOutputFile = output.packageApplication.outputFile
+//        def outputFileName = alignedOutputFile.name
+//
+//        // Customise APK filenames
+//        if (outputFileName.contains("debug")) {
+//            outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
+//        } else {
+//            outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
+//        }
+//
+//        if (variant.buildType.zipAlignEnabled) {
+//            // normal APK
+//            output.outputFile = new File(alignedOutputFile.parent, outputFileName)
+//        }
+//        // 'unaligned' APK
+//        output.packageApplication.outputFile = new File(unalignedOutputFile.parent, outputFileName.replace(".apk", "-unaligned.apk"))
+//    }
+}

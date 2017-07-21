@@ -14,14 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
-apply plugin: 'com.android.application'
-apply plugin: 'si.kamino.version'
-apply plugin: 'hugo'
-apply from: '../config/gradle/checkstyle.gradle'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
+apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 
 androidVersion {
 
@@ -34,14 +27,9 @@ androidVersion {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
-
     defaultConfig {
         applicationId "butter.droid.tv"
         minSdkVersion 21
-        targetSdkVersion rootProject.ext.targetSdk
-        multiDexEnabled true
     }
 
     signingConfigs {

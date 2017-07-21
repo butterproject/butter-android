@@ -20,7 +20,6 @@ package butter.droid.base.providers.meta;
 import com.google.gson.Gson;
 
 import org.threeten.bp.LocalDate;
-
 import butter.droid.base.providers.BaseProvider;
 import okhttp3.OkHttpClient;
 
