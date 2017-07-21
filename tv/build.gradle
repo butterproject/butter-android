@@ -14,16 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
-
-buildscript {
-    repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath "gradle.plugin.si.kamino.gradle:android-version:1.2.2"
-    }
-}
-
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 
 androidVersion {
