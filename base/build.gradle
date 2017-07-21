@@ -33,38 +33,36 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:multidex:1.0.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:multidex:1.0.1'
+    api "com.android.support:support-v4:${rootProject.ext.appCompatVersion}"
+    api "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
+    api "com.android.support:appcompat-v7:${rootProject.ext.appCompatVersion}"
+    api "com.android.support:design:${rootProject.ext.appCompatVersion}"
 
-    compile "com.android.support:support-v4:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:appcompat-v7:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:design:${rootProject.ext.appCompatVersion}"
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    api 'com.jakewharton.timber:timber:4.5.1'
+    api "com.squareup.okhttp3:okhttp:${rootProject.ext.okHttpVersion}"
+    api 'com.squareup.picasso:picasso:2.5.2'
+    api 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+    api 'com.google.code.gson:gson:2.8.0'
+    api "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
+    api "com.github.gabrielemariotti.changeloglib:changelog:${changeloglibVersion}"
+    api 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    api 'com.koushikdutta.async:androidasync:2.1.9'
 
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile "com.squareup.okhttp3:okhttp:${rootProject.ext.okHttpVersion}"
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
-    compile 'com.google.code.gson:gson:2.7'
-    compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
-    compile 'com.uwetrottmann:trakt-java:4.6.2'
-    compile "com.github.gabrielemariotti.changeloglib:changelog:${changeloglibVersion}"
+    api "com.github.se-bastiaan:TorrentStream-Android:${torrentstreamVersion}"
 
-    compile 'com.koushikdutta.async:androidasync:2.1.8'
+    implementation 'de.timroes:aXMLRPC:1.8.1'
+    api "com.google.dagger:dagger:${rootProject.ext.daggerVersion}"
 
-    compile "com.github.se-bastiaan:TorrentStream-Android:${torrentstreamVersion}"
-
-    compile 'de.timroes:aXMLRPC:1.8.1'
-    compile "com.google.dagger:dagger:${rootProject.ext.daggerVersion}"
-
-    compile 'com.butterproject:vlc-android-sdk:2.0.6'
-    compile project(':connectsdk')
+    api 'com.butterproject:vlc-android-sdk:2.0.6'
+    api project(':connectsdk')
 
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
-    provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+    compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }
