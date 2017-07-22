@@ -23,7 +23,6 @@ import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 public interface TVShowDetailsView extends TVBaseDetailView {
@@ -32,5 +31,5 @@ public interface TVShowDetailsView extends TVBaseDetailView {
 
     void torrentSelected(Show show, StreamInfo streaminfo);
 
-    void pickTorrent(Episode episode, Map<String, Torrent> torrents);
+    void pickTorrent(Episode episode, Torrent[] torrents);
 }

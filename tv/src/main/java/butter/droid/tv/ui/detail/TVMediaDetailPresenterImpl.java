@@ -21,6 +21,7 @@ import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
 import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
+import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 
 public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
 
@@ -36,8 +37,7 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
         if (media instanceof Movie) {
             view.displayFragment(TVMovieDetailsFragment.newInstance(providerId, media));
         } else if (media instanceof Show) {
-            // TODO
-            // view.displayFragment(TVShowDetailsFragment.newInstance(providerId, media));
+             view.displayFragment(TVShowDetailsFragment.newInstance(providerId, media));
         } else {
             throw new IllegalStateException("Unknow media type");
         }

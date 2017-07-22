@@ -26,9 +26,7 @@ import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implements TVShowDetailsPresenter {
@@ -60,12 +58,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     }
 
     private void addSeasons(Show show) {
-        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer me, Integer other) {
-                return me - other;
-            }
-        });
+        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>((me, other) -> me - other);
 
         for (Episode episode : show.getEpisodes()) {
             // create list of season if does not exists
@@ -79,12 +72,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
         }
 
         for (Integer seasonKey : seasons.descendingKeySet()) {
-            Collections.sort(seasons.get(seasonKey), new Comparator<Episode>() {
-                @Override
-                public int compare(Episode me, Episode other) {
-                    return other.getEpisode() - me.getEpisode();
-                }
-            });
+            Collections.sort(seasons.get(seasonKey), (me, other) -> other.getEpisode() - me.getEpisode());
         }
 
         view.showSeasons(seasons);
@@ -92,21 +80,20 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     }
 
     @Override public void episodeClicked(final Episode episode) {
-        /*
-        if (episode.torrents.size() == 1) {
-            List<Map.Entry<String, Torrent>> torrent = new ArrayList<>(episode.torrents.entrySet());
-            startTorrent(episode, torrent.get(0));
+        Torrent[] torrents = episode.getTorrents();
+        if (torrents.length == 1) {
+//            List<Map.Entry<String, Torrent>> torrent = new ArrayList<>(episode.torrents.entrySet());
+            startTorrent(episode, torrents[0]);
         } else {
-            view.pickTorrent(episode, episode.torrents);
+            view.pickTorrent(episode, torrents);
         }
-        */
     }
 
-    @Override public void torrentSelected(final Episode episode, final Entry<String, Torrent> torrent) {
+    @Override public void torrentSelected(final Episode episode, final Torrent torrent) {
         startTorrent(episode, torrent);
     }
 
-    private void startTorrent(final Episode episode, final Entry<String, Torrent> torrent) {
+    private void startTorrent(final Episode episode, final Torrent torrent) {
 
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 

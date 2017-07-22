@@ -40,7 +40,6 @@ import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TreeMap;
 import javax.inject.Inject;
 import org.parceler.Parcels;
@@ -76,16 +75,8 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         selector.addClassPresenter(DetailsOverviewRow.class, presenter);
     }
 
-    // TODO
-    /*
-    @Override
-    public void onEpisodeClicked(Episode episode) {
-        presenter.episodeClicked(episode);
-    }
-    */
-
     @Override public void onEpisodeClicked(final Episode row) {
-        // TODO
+        presenter.episodeClicked(row);
     }
 
     @Override public void showSeasons(final TreeMap<Integer, List<Episode>> seasons) {
@@ -110,13 +101,16 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         TVStreamLoadingActivity.startActivity(getActivity(), streamInfo, show);
     }
 
-    @Override public void pickTorrent(final Episode episode, final Map<String, Torrent> torrents) {
-        ArrayList<String> choices = new ArrayList<>(torrents.keySet());
-        final ArrayList<Map.Entry<String, Torrent>> torrent = new ArrayList<>(torrents.entrySet());
+    @Override public void pickTorrent(final Episode episode, final Torrent[] torrents) {
+        ArrayList<String> choices = new ArrayList<>(torrents.length);
+        for (final Torrent torrent : torrents) {
+            choices.add(String.valueOf(torrent.getQuality()));
+        }
+
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.choose_quality))
                 .setSingleChoiceItems(choices.toArray(new CharSequence[choices.size()]), 0, (dialog, which) -> {
-                    presenter.torrentSelected(episode, torrent.get(which));
+                    presenter.torrentSelected(episode, torrents[which]);
                     dialog.dismiss();
                 }).show();
     }

@@ -21,7 +21,6 @@ import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
-import java.util.Map.Entry;
 
 public interface TVShowDetailsPresenter extends TVBaseDetailsPresenter {
 
@@ -29,5 +28,5 @@ public interface TVShowDetailsPresenter extends TVBaseDetailsPresenter {
 
     void episodeClicked(Episode episode);
 
-    void torrentSelected(Episode episode, Entry<String, Torrent> torrent);
+    void torrentSelected(Episode episode, Torrent torrent);
 }
