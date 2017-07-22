@@ -19,135 +19,24 @@ package butter.droid.manager.internal.paging;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnChildAttachStateChangeListener;
 import android.view.View;
-import java.util.List;
-import timber.log.Timber;
+import butter.droid.base.manager.internal.paging.BasePagingManager;
+import butter.droid.base.manager.internal.paging.CursorPagingListener;
+import butter.droid.base.manager.internal.paging.PagingAdapter;
 
-public class PagingManager<T> {
+public class PagingManager<T> extends BasePagingManager<T> {
 
     private static final int DEFAULT_PRELOAD_POSITIONS = 5;
 
-    private int preloadPositionOffset = DEFAULT_PRELOAD_POSITIONS;
-    private int lastVisibleItem;
-    private int lastVisibleItemInProgress;
-    private boolean completed;
-    private boolean loading;
-    private boolean refreshing;
-
     protected LinearLayoutManager layoutManager;
-    private PagingAdapter<T> adapter;
-
-    private IndexPagingListener listener;
-    @Nullable private String endCursor;
-
-    public void setPreloadPositionOffset(int preloadPositionOffset) {
-        this.preloadPositionOffset = preloadPositionOffset;
-    }
-
-    public void addItems(@Nullable List<T> items, boolean completed, String endCursor) {
-        if (refreshing) {
-            adapter.clear();
-            lastVisibleItem = 0;
-            lastVisibleItemInProgress = 0;
-            refreshing = false;
-        }
-
-        lastVisibleItem = lastVisibleItemInProgress;
-
-        adapter.addItems(items);
-
-        this.completed = completed;
-        if (!completed) {
-            this.endCursor = endCursor;
-        }
-
-        setLoading(false);
-    }
-
-    private boolean pagingIsCompleted(int itemsCount) {
-        return itemsCount == 0;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public boolean isLoading() {
-        return loading;
-    }
-
-    public boolean isRefreshing() {
-        return refreshing;
-    }
-
-    @Nullable public String getEndCursor() {
-        return endCursor;
-    }
-
     public void init(@NonNull RecyclerView recyclerView, @NonNull PagingAdapter<T> adapter,
-            @NonNull IndexPagingListener listener) {
-        this.adapter = adapter;
-        this.listener = listener;
-
+            @NonNull CursorPagingListener listener) {
         initForRecyclerView(recyclerView);
-        reset();
-    }
-
-    public void reset() {
-        adapter.clear();
-        completed = false;
-        refreshing = false;
-        lastVisibleItem = 0;
-        lastVisibleItemInProgress = 0;
-        endCursor = null;
-        setLoading(false);
-    }
-
-    public void getNextPage() {
-        if (refreshing) {
-            Timber.d("getNextPage: refreshing");
-            return;
-        }
-
-        if (completed) {
-            Timber.d("getNextPage: completed");
-            return;
-        }
-
-        if (loading) {
-            Timber.d("getNextPage: in progress");
-            return;
-        }
-
-        setLoading(true);
-
-        loadNextPage();
-    }
-
-    protected void loadNextPage() {
-        listener.loadPage(endCursor);
-    }
-
-    protected void onNewPosition(int position) {
-        if (position <= lastVisibleItem) {
-            return;
-        }
-
-        if (completed || refreshing || loading) {
-            return;
-        }
-
-        lastVisibleItemInProgress = position;
-
-        if (lastVisibleItemInProgress > adapter.getItemCount() - preloadPositionOffset) {
-            getNextPage();
-        } else {
-            lastVisibleItem = lastVisibleItemInProgress;
-        }
+        setPreloadPositionOffset(DEFAULT_PRELOAD_POSITIONS);
+        super.init(adapter, listener);
     }
 
     private void initForRecyclerView(RecyclerView recyclerView) {
@@ -167,20 +56,4 @@ public class PagingManager<T> {
         });
     }
 
-    public void setLoading(boolean loading) {
-        if (this.loading != loading) {
-            this.loading = loading;
-            adapter.showLoading(loading);
-        }
-    }
-
-    public void refresh() {
-        refreshing = true;
-        loadFirstPage();
-    }
-
-    protected void loadFirstPage() {
-        endCursor = null;
-        loadNextPage();
-    }
 }

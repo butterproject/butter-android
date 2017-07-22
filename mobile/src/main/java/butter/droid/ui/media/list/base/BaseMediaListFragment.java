@@ -33,7 +33,7 @@ import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.manager.internal.paging.IndexPagingListener;
+import butter.droid.base.manager.internal.paging.CursorPagingListener;
 import butter.droid.manager.internal.paging.PagingManager;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.Media;
@@ -61,7 +61,7 @@ import org.parceler.Parcels;
  * <p/>
  * This fragment can be instantiated with ether a SEARCH mode, or a NORMAL mode. SEARCH mode simply does not load any initial data.
  */
-public class BaseMediaListFragment extends Fragment implements BaseMediaListView, IndexPagingListener, RecyclerClickListener {
+public class BaseMediaListFragment extends Fragment implements BaseMediaListView, CursorPagingListener, RecyclerClickListener {
 
     public static final String EXTRA_PROVIDER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_provider";
     public static final String EXTRA_FILTER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_filter";

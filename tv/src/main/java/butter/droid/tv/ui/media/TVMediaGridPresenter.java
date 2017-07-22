@@ -25,7 +25,7 @@ public interface TVMediaGridPresenter {
 
     void onActivityCreated();
 
-    void loadNextPage();
+    void loadNextPage(final String endCursor);
 
     void onDestroy();
 

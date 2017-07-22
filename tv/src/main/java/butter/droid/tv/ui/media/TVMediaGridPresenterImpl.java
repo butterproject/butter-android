@@ -17,11 +17,16 @@
 
 package butter.droid.tv.ui.media;
 
+import android.support.annotation.Nullable;
+import android.util.Pair;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.module.ItemsWrapper;
+import butter.droid.provider.base.module.Paging;
+import butter.droid.provider.filter.Pager;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -49,33 +54,39 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
     }
 
     @Override public void onActivityCreated() {
-        loadItems();
+        loadItems(null);
     }
 
-    @Override public void loadNextPage() {
-        loadItems();
+    @Override public void loadNextPage(final String endCursor) {
+        loadItems(endCursor);
     }
 
     @Override public void onDestroy() {
         cancelCurrentCall();
     }
 
-    private void loadItems() {
+    private void loadItems(@Nullable String endCursor) {
         cancelCurrentCall();
-        providerManager.getProvider(providerId).items(filter, null)
-                .map(ItemsWrapper::getMedia)
-                .flatMapObservable(Observable::fromIterable)
-                .map(media -> new MediaCardItem(providerId, media))
-                .toList()
+        providerManager.getProvider(providerId).items(filter, new Pager(endCursor))
+                .flatMap(i -> Single.zip(
+                        Single.just(i)
+                                .map(ItemsWrapper::getMedia)
+                                .flatMapObservable(Observable::fromIterable)
+                                .map(media -> new MediaCardItem(providerId, media))
+                                .toList(),
+                        Single.just(i)
+                                .map(ItemsWrapper::getPaging),
+                        Pair::create
+                ))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<MediaCardItem>>() {
+                .subscribe(new SingleObserver<Pair<List<MediaCardItem>, Paging>>() {
                     @Override public void onSubscribe(final Disposable d) {
                         currentCall = d;
                     }
 
-                    @Override public void onSuccess(final List<MediaCardItem> value) {
-                        view.appendItems(value);
+                    @Override public void onSuccess(final Pair<List<MediaCardItem>, Paging> value) {
+                        view.appendItems(value.first, !value.second.getHasNextPage(), value.second.getEndCursor());
                     }
 
                     @Override public void onError(final Throwable e) {
@@ -85,7 +96,7 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
     }
 
     private void cancelCurrentCall() {
-        if (currentCall !=  null) {
+        if (currentCall != null) {
             currentCall.dispose();
             currentCall = null;
         }

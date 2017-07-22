@@ -18,9 +18,9 @@
 package butter.droid.tv.ui.media;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v17.leanback.app.VerticalGridFragment;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
@@ -31,15 +31,18 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
+import butter.droid.base.manager.internal.paging.CursorPagingListener;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
-import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import butter.droid.tv.manager.internal.paging.GridPagingAdapter;
+import butter.droid.tv.manager.internal.paging.GridPagingManager;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
@@ -54,7 +57,7 @@ import org.parceler.Parcels;
  * VerticalGridFragment shows a grid of videos
  */
 public class TVMediaGridFragment extends VerticalGridFragment implements TVMediaGridView, OnItemViewClickedListener,
-        OnItemViewSelectedListener {
+        OnItemViewSelectedListener, CursorPagingListener {
 
     private static final String ARG_TITLE = "butter.droid.tv.ui.media.TVMediaGridFragment.title";
     private static final String ARG_FILTER = "butter.droid.tv.ui.media.TVMediaGridFragment.filter";
@@ -66,7 +69,8 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
     @Inject BackgroundUpdater backgroundUpdater;
     @Inject Picasso picasso;
 
-    private ArrayObjectAdapter adapter;
+    private GridPagingAdapter adapter;
+    private GridPagingManager pagingManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,10 +116,10 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         backgroundUpdater.destroy();
     }
 
-    @Override public void appendItems(final List<MediaCardItem> list) {
-        int previousSize = adapter.size();
-        adapter.addAll(previousSize, list);
-        adapter.notifyArrayItemRangeChanged(previousSize, list.size());
+    @Override public void appendItems(final List<MediaCardItem> list, final boolean isFinished, final String endCursor) {
+        pagingManager.addItems(list, isFinished, endCursor);
+//        adapter.addAll(previousSize, list);
+//        adapter.notifyArrayItemRangeChanged(previousSize, list.size());
     }
 
     @Override public void displayError(final String message) {
@@ -132,12 +136,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         //really hacky way of making and 'endless' adapter
 
         //trigger items to update
-        int itemPosition = adapter.indexOf(item);
-
-        //when we are within 3 rows of the end, load more items
-        if (itemPosition > getAdapter().size() - (NUM_COLUMNS * 3)) {
-            presenter.loadNextPage();
-        }
+        pagingManager.onItemSelected(item);
     }
 
     private void onMediaItemClicked(ImageCardView view, MediaCardPresenter.MediaCardItem item) {
@@ -152,7 +151,6 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         }
     }
 
-
     private void setupUi() {
 
         VerticalGridPresenter gridPresenter = new VerticalGridPresenter();
@@ -163,8 +161,11 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
         presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
 
-        adapter = new ArrayObjectAdapter(presenterSelector);
+        adapter = new GridPagingAdapter(presenterSelector);
         setAdapter(adapter);
+
+        pagingManager = new GridPagingManager();
+        pagingManager.init(NUM_COLUMNS, adapter, this);
 
         setOnItemViewClickedListener(this);
         setOnItemViewSelectedListener(this);
@@ -181,4 +182,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         return fragment;
     }
 
+    @Override public void loadPage(@Nullable final String endCursor) {
+        presenter.loadNextPage(endCursor);
+    }
 }

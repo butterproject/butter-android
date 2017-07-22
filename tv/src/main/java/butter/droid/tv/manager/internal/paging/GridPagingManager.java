@@ -17,166 +17,28 @@
 
 package butter.droid.tv.manager.internal.paging;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import java.util.List;
-import timber.log.Timber;
+import butter.droid.base.manager.internal.paging.BasePagingManager;
+import butter.droid.base.manager.internal.paging.CursorPagingListener;
 
-public class GridPagingManager<T> {
+public class GridPagingManager<T> extends BasePagingManager<T> {
 
-    private static final int DEFAULT_PRELOAD_POSITIONS = 5;
+    private static final int DEFAULT_PRELOAD_POSITIONS = 3;
 
-    private int preloadPositionOffset = DEFAULT_PRELOAD_POSITIONS;
-    private int lastVisibleItem;
-    private int lastVisibleItemInProgress;
-    private boolean completed;
-    private boolean loading;
-    private boolean refreshing;
+    private ObjectPagingAdapter<T> adapter;
 
-    private RowPagingListener listener;
-    @Nullable private String endCursor;
-
-    public void setPreloadPositionOffset(int preloadPositionOffset) {
-        this.preloadPositionOffset = preloadPositionOffset;
-    }
-
-    public void addItems(@Nullable List<T> items, boolean completed, String endCursor) {
-        if (refreshing) {
-            adapter.clear();
-            lastVisibleItem = 0;
-            lastVisibleItemInProgress = 0;
-            refreshing = false;
+    public void init(int numColumns, @NonNull ObjectPagingAdapter<T> adapter, @NonNull CursorPagingListener listener) {
+        if (numColumns <= 0) {
+            throw new IllegalStateException("Grid has to have at least 1 column");
         }
 
-        lastVisibleItem = lastVisibleItemInProgress;
-
-        adapter.addItems(items);
-
-        this.completed = completed;
-        if (!completed) {
-            this.endCursor = endCursor;
-        }
-
-        setLoading(false);
-    }
-
-    private boolean pagingIsCompleted(int itemsCount) {
-        return itemsCount == 0;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public boolean isLoading() {
-        return loading;
-    }
-
-    public boolean isRefreshing() {
-        return refreshing;
-    }
-
-    @Nullable public String getEndCursor() {
-        return endCursor;
-    }
-
-    public void init(@NonNull RecyclerView recyclerView, @NonNull PagingAdapter<T> adapter,
-            @NonNull IndexPagingListener listener) {
         this.adapter = adapter;
-        this.listener = listener;
-
-        initForRecyclerView(recyclerView);
-        reset();
+        setPreloadPositionOffset(DEFAULT_PRELOAD_POSITIONS * numColumns);
+        super.init(adapter, listener);
     }
 
-    public void reset() {
-        adapter.clear();
-        completed = false;
-        refreshing = false;
-        lastVisibleItem = 0;
-        lastVisibleItemInProgress = 0;
-        endCursor = null;
-        setLoading(false);
-    }
-
-    public void getNextPage() {
-        if (refreshing) {
-            Timber.d("getNextPage: refreshing");
-            return;
-        }
-
-        if (completed) {
-            Timber.d("getNextPage: completed");
-            return;
-        }
-
-        if (loading) {
-            Timber.d("getNextPage: in progress");
-            return;
-        }
-
-        setLoading(true);
-
-        loadNextPage();
-    }
-
-    protected void loadNextPage() {
-        listener.loadPage(endCursor);
-    }
-
-    protected void onNewPosition(int position) {
-        if (position <= lastVisibleItem) {
-            return;
-        }
-
-        if (completed || refreshing || loading) {
-            return;
-        }
-
-        lastVisibleItemInProgress = position;
-
-        if (lastVisibleItemInProgress > adapter.getItemCount() - preloadPositionOffset) {
-            getNextPage();
-        } else {
-            lastVisibleItem = lastVisibleItemInProgress;
-        }
-    }
-
-    private void initForRecyclerView(RecyclerView recyclerView) {
-        layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
-        recyclerView.addOnChildAttachStateChangeListener(new OnChildAttachStateChangeListener() {
-
-            private final Handler handler = new Handler();
-
-            @Override public void onChildViewAttachedToWindow(View view) {
-                final int position = layoutManager.findLastVisibleItemPosition();
-                handler.post(() -> onNewPosition(position));
-            }
-
-            @Override public void onChildViewDetachedFromWindow(View view) {
-            }
-        });
-    }
-
-    public void setLoading(boolean loading) {
-        if (this.loading != loading) {
-            this.loading = loading;
-            adapter.showLoading(loading);
-        }
-    }
-
-    public void refresh() {
-        refreshing = true;
-        loadFirstPage();
-    }
-
-    protected void loadFirstPage() {
-        endCursor = null;
-        loadNextPage();
+    public void onItemSelected(Object item) {
+        int itemPosition = adapter.indexOf(item);
+        onNewPosition(itemPosition);
     }
 }

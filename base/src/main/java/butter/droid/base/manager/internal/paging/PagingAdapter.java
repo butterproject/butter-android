@@ -15,10 +15,20 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.manager.internal.paging;
+package butter.droid.base.manager.internal.paging;
 
 import android.support.annotation.Nullable;
 
-public interface RowPagingListener {
-    void loadPage(@Nullable String endCursor);
+import java.util.List;
+
+public interface PagingAdapter<T> {
+
+    int getItemCount();
+
+    void addItems(@Nullable List<T> items);
+
+    void showLoading(boolean show);
+
+    void clear();
+
 }

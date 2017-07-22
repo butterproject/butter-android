@@ -15,10 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.manager.internal.paging;
+package butter.droid.base.manager.internal.paging;
 
 import android.support.annotation.Nullable;
 
-public interface IndexPagingListener {
+public interface CursorPagingListener {
     void loadPage(@Nullable String endCursor);
 }

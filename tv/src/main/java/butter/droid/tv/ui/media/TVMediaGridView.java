@@ -22,7 +22,7 @@ import java.util.List;
 
 public interface TVMediaGridView {
 
-    void appendItems(List<MediaCardItem> list);
+    void appendItems(List<MediaCardItem> list, final boolean finished, final String endCursor);
 
     void displayError(String message);
 }

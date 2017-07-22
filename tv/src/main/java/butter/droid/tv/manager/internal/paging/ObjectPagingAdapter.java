@@ -1,4 +1,3 @@
-
 /*
  * This file is part of Butter.
  *
@@ -16,19 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.manager.internal.paging;
+package butter.droid.tv.manager.internal.paging;
 
-import android.support.annotation.Nullable;
+import butter.droid.base.manager.internal.paging.PagingAdapter;
 
-import java.util.List;
+public interface ObjectPagingAdapter<T> extends PagingAdapter<T> {
 
-public interface PagingAdapter<T> {
+    int indexOf(Object item);
 
-    int getItemCount();
-
-    void addItems(@Nullable List<T> items);
-
-    void showLoading(boolean show);
-
-    void clear();
 }
