@@ -32,8 +32,9 @@ public class PagingManager<T> extends BasePagingManager<T> {
     private static final int DEFAULT_PRELOAD_POSITIONS = 5;
 
     protected LinearLayoutManager layoutManager;
+
     public void init(@NonNull RecyclerView recyclerView, @NonNull PagingAdapter<T> adapter,
-            @NonNull CursorPagingListener listener) {
+                @NonNull CursorPagingListener listener) {
         initForRecyclerView(recyclerView);
         setPreloadPositionOffset(DEFAULT_PRELOAD_POSITIONS);
         super.init(adapter, listener);
