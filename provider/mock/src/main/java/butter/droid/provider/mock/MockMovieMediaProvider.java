@@ -82,6 +82,10 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
         return Maybe.just(Arrays.asList(new NavItem(0, R.string.genre_action, new Filter(Genre.ACTION, null))));
     }
 
+    @NonNull @Override public Single<Filter> getDefaultFilter() {
+        return Single.just(new Filter(null, null));
+    }
+
     @Override public int getLoadingMessage() {
         return R.string.loading_movies;
     }

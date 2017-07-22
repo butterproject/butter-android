@@ -116,6 +116,10 @@ public class VodoProvider extends AbsMediaProvider {
         return Maybe.just(NAV_ITEMS);
     }
 
+    @NonNull @Override public Single<Filter> getDefaultFilter() {
+        return Single.just(new Filter(null, SORTER_SEEDS));
+    }
+
     @Override public int getIcon() {
         return 0;
     }

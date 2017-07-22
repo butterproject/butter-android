@@ -53,6 +53,8 @@ public interface MediaProvider {
 
     @NonNull Maybe<List<NavItem>> navigation();
 
+    @NonNull Single<Filter> getDefaultFilter();
+
     @StringRes int getLoadingMessage();
 
     @DrawableRes int getIcon();

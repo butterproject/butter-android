@@ -19,14 +19,14 @@ package butter.droid.base.providers.subs;
 
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.BaseProvider;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.subs.FatalParsingException;
 import butter.droid.base.subs.FormatASS;
 import butter.droid.base.subs.FormatSRT;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.utils.FileUtils;
+import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Movie;
 import com.google.gson.Gson;
 import java.io.BufferedInputStream;
 import java.io.File;

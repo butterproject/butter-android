@@ -17,16 +17,14 @@
 
 package butter.droid.base.providers.subs;
 
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.module.Movie;
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.media.models.Episode;
-import butter.droid.base.providers.media.models.Movie;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -89,21 +87,21 @@ public class YSubsProvider extends SubsProvider {
 
     @Override
     public void getList(final Movie media, final Callback callback) {
-        final Request.Builder requestBuilder = new Request.Builder()
-                .url(API_URL + media.imdbId);
-
-        fetch(requestBuilder, media, new Callback() {
-            @Override
-            public void onSuccess(Map<String, String> items) {
-                callback.onSuccess(items);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                requestBuilder.url(MIRROR_URL + media.imdbId);
-                fetch(requestBuilder, media, callback);
-            }
-        });
+//        final Request.Builder requestBuilder = new Request.Builder()
+//                .url(API_URL + media.imdbId);
+//
+//        fetch(requestBuilder, media, new Callback() {
+//            @Override
+//            public void onSuccess(Map<String, String> items) {
+//                callback.onSuccess(items);
+//            }
+//
+//            @Override
+//            public void onFailure(Exception e) {
+//                requestBuilder.url(MIRROR_URL + media.imdbId);
+//                fetch(requestBuilder, media, callback);
+//            }
+//        });
     }
 
     @Override
@@ -123,7 +121,7 @@ public class YSubsProvider extends SubsProvider {
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     YSubsResponse result = mGson.fromJson(responseStr, YSubsResponse.class);
-                    callback.onSuccess(result.formatForButter(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
+//                    callback.onSuccess(result.formatForButter(PREFIX, LANGUAGE_MAPPING).get(media.imdbId));
                 }
             }
         });

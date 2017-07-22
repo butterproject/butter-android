@@ -19,7 +19,6 @@ package butter.droid.base.providers;
 
 import android.content.Context;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.media.VodoProvider;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.providers.subs.YSubsProvider;
 import butter.droid.provider.base.ProviderScope;
@@ -36,11 +35,6 @@ public class ProviderModule {
     @Provides @ProviderScope
     public SubsProvider provideSubsProvider(OkHttpClient client, Gson gson, PlayerManager playerManager) {
         return new YSubsProvider(client, gson, playerManager);
-    }
-
-    @Provides @ProviderScope
-    public VodoProvider provideVodoProvider(OkHttpClient client, Gson gson, SubsProvider subsProvider) {
-        return new VodoProvider(client, gson, subsProvider);
     }
 
     @Provides @ProviderScope public MockMovieMediaProvider provideMockMoviesProvider(Context context, Gson gson) {

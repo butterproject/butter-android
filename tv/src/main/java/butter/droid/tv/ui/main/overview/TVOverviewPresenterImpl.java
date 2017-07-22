@@ -23,7 +23,6 @@ import android.util.SparseArray;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
@@ -143,12 +142,10 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     }
 
     private void loadProviderMedia(final int providerId) {
-        final MediaProvider.Filters movieFilters = new MediaProvider.Filters();
-        movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
-        movieFilters.order = MediaProvider.Filters.Order.DESC;
-
         cancelMovieCall(providerId);
-        providerManager.getProvider(providerId).items(null, new Pager(null))
+        final butter.droid.provider.MediaProvider provider = providerManager.getProvider(providerId);
+        provider.getDefaultFilter()
+                .flatMap(f -> provider.items(f, new Pager(null)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {

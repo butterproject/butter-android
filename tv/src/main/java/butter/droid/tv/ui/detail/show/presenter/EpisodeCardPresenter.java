@@ -28,7 +28,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import butter.droid.base.providers.media.models.Episode;
+import butter.droid.provider.base.module.Episode;
 import butter.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -67,17 +67,14 @@ public class EpisodeCardPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         final Episode episode = (Episode) item;
         ((ViewHolder) viewHolder).setEpisode(episode);
-        ((ViewHolder) viewHolder).getCardView().setTitleText(episode.title);
+        ((ViewHolder) viewHolder).getCardView().setTitleText(episode.getTitle());
         ((ViewHolder) viewHolder).getCardView().setContentText(
-                String.format(context.getString(R.string.episode_number_format), episode.episode));
+                String.format(context.getString(R.string.episode_number_format), episode.getEpisode()));
         ((ViewHolder) viewHolder).getCardView().setMainImageDimensions(cardWidth, cardHeight);
-        ((ViewHolder) viewHolder).updateCardViewImage(episode.image);
-        ((ViewHolder) viewHolder).cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null != clickListener) {
-                    clickListener.onEpisodeClicked(episode);
-                }
+        ((ViewHolder) viewHolder).updateCardViewImage(episode.getBackdrop());
+        ((ViewHolder) viewHolder).cardView.setOnClickListener(view -> {
+            if (null != clickListener) {
+                clickListener.onEpisodeClicked(episode);
             }
         });
     }

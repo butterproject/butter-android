@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.detail.show;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -27,9 +26,9 @@ import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v4.app.Fragment;
-import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.R;
@@ -85,7 +84,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
     }
     */
 
-    @Override public void onEpisodeClicked(final butter.droid.base.providers.media.models.Episode row) {
+    @Override public void onEpisodeClicked(final Episode row) {
         // TODO
     }
 
@@ -116,12 +115,9 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         final ArrayList<Map.Entry<String, Torrent>> torrent = new ArrayList<>(torrents.entrySet());
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.choose_quality))
-                .setSingleChoiceItems(choices.toArray(new CharSequence[choices.size()]), 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.torrentSelected(episode, torrent.get(which));
-                        dialog.dismiss();
-                    }
+                .setSingleChoiceItems(choices.toArray(new CharSequence[choices.size()]), 0, (dialog, which) -> {
+                    presenter.torrentSelected(episode, torrent.get(which));
+                    dialog.dismiss();
                 }).show();
     }
 
@@ -130,7 +126,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
 
         Bundle bundle = new Bundle();
         bundle.getInt(EXTRA_PROVIDER, providerId);
-        bundle.putParcelable(EXTRA_ITEM, media);
+        bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
 
         fragment.setArguments(bundle);
         return fragment;

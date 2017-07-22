@@ -19,8 +19,8 @@ package butter.droid.tv.ui.search;
 
 import android.support.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.MediaProvider.Filters;
 import butter.droid.provider.MediaProvider;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.filter.Pager;
 import butter.droid.tv.R;
@@ -46,8 +46,6 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
 
     private final TVSearchView view;
     private final ProviderManager providerManager;
-
-    private final Filters searchFilter = new Filters();
 
     private final CompositeDisposable searchRequests = new CompositeDisposable();
     private final BehaviorSubject<SearchRequest> querySubject = BehaviorSubject.create();
@@ -121,14 +119,14 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
     }
 
     private List<Single<SearchResult>> getProviderRequests(String query) {
-        // TODO: 6/4/17 Add query and filters
+
         List<Single<SearchResult>> requests = new ArrayList<>();
 
         for (int i = 0; i < providerManager.getProviders().length; i++) {
             MediaProvider provider = providerManager.getProvider(i);
             final int providerId = i;
             // TODO: 6/17/17 Define title of search row
-            requests.add(provider.items(null, new Pager(null))
+            requests.add(provider.items(new Filter(null, null, query), new Pager(null))
                     .map(itemsWrapper -> new SearchResult(providerId, R.string.movie_results, itemsWrapper.getMedia())));
         }
 
