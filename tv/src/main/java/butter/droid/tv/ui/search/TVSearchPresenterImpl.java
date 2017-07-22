@@ -22,6 +22,7 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider.Filters;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.base.module.Media;
+import butter.droid.provider.filter.Pager;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
@@ -127,7 +128,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
             MediaProvider provider = providerManager.getProvider(i);
             final int providerId = i;
             // TODO: 6/17/17 Define title of search row
-            requests.add(provider.items(null, null)
+            requests.add(provider.items(null, new Pager(null))
                     .map(itemsWrapper -> new SearchResult(providerId, R.string.movie_results, itemsWrapper.getMedia())));
         }
 

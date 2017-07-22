@@ -17,7 +17,9 @@
 
 package butter.droid.tv.ui.main.overview;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
@@ -25,6 +27,7 @@ import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.filter.Pager;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
@@ -44,8 +47,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     private int selectedRow = 0;
 
-    @Nullable private Disposable listRequest;
-    @Nullable private Disposable sortersRequest;
+    @NonNull private final SparseArray<Disposable> listRequests = new SparseArray<>();
+    @NonNull private final SparseArray<Disposable> sortersRequests = new SparseArray<>();
 
     public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager, final YouTubeManager youTubeManager) {
         this.view = view;
@@ -120,8 +123,12 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     }
 
     @Override public void onDestroy() {
-        cancelMovieCall();
-        cancelMovieSortersCall();
+        for (int i = 0; i < listRequests.size(); i++) {
+            cancelMovieCall(listRequests.keyAt(i));
+        }
+        for (int i = 0; i < sortersRequests.size(); i++) {
+            cancelMovieSortersCall(sortersRequests.keyAt(i));
+        }
     }
 
     private void loadProvidersData() {
@@ -140,14 +147,13 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         movieFilters.sort = MediaProvider.Filters.Sort.POPULARITY;
         movieFilters.order = MediaProvider.Filters.Order.DESC;
 
-        // TODO: 6/17/17 Disposable per provider
-        cancelMovieCall();
-        providerManager.getProvider(providerId).items(null, null)
+        cancelMovieCall(providerId);
+        providerManager.getProvider(providerId).items(null, new Pager(null))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
-                        listRequest = d;
+                        listRequests.append(providerId, d);
                     }
 
                     @Override public void onSuccess(final ItemsWrapper items) {
@@ -168,14 +174,13 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     }
 
     private void loadProviderSorters(final int providerId) {
-        // TODO: 6/17/17 Disposable per provider
-        cancelMovieSortersCall();
+        cancelMovieSortersCall(providerId);
         providerManager.getProvider(providerId).navigation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<List<NavItem>>() {
                     @Override public void onSubscribe(final Disposable d) {
-                        sortersRequest = d;
+                        sortersRequests.put(providerId, d);
                     }
 
                     @Override public void onSuccess(final List<NavItem> value) {
@@ -192,17 +197,19 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 });
     }
 
-    private void cancelMovieCall() {
-        if (listRequest != null) {
-            listRequest.dispose();
-            listRequest = null;
+    private void cancelMovieCall(int providerId) {
+        Disposable d = listRequests.get(providerId);
+        if (d != null) {
+            d.dispose();
+            listRequests.remove(providerId);
         }
     }
 
-    private void cancelMovieSortersCall() {
-        if (sortersRequest != null) {
-            sortersRequest.dispose();
-            sortersRequest = null;
+    private void cancelMovieSortersCall(int providerId) {
+        Disposable d = sortersRequests.get(providerId);
+        if (d != null) {
+            d.dispose();
+            sortersRequests.remove(providerId);
         }
     }
 
