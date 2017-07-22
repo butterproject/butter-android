@@ -25,7 +25,7 @@ import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.R;
 
@@ -61,14 +61,14 @@ public class MorePresenter extends Presenter {
         @StringRes private final int title;
         private final int icon;
         private final int id;
-        @Nullable private Filter filter;
+        @Nullable private Sorter sorter;
         private final int providerId;
 
         public MoreItem(@NonNull NavItem nav, final int providerId) {
             this.id = R.id.more_item_filter;
             this.icon = nav.getIcon();
             this.title = nav.getLabel();
-            this.filter = nav.getFilter();
+            this.sorter = nav.getSorter();
             this.providerId = providerId;
         }
 
@@ -80,7 +80,7 @@ public class MorePresenter extends Presenter {
             this.id = id;
             this.icon = iconResId;
             this.title = text;
-            this.filter = null;
+            this.sorter = null;
             this.providerId = -1;
         }
 
@@ -92,8 +92,8 @@ public class MorePresenter extends Presenter {
             return title;
         }
 
-        @Nullable public Filter getFilter() {
-            return filter;
+        @Nullable public Sorter getSorter() {
+            return sorter;
         }
 
         public int getProviderId() {

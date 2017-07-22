@@ -53,7 +53,7 @@ public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implement
     }
 
     @Override public void onGenreChanged(UiGenre genre) {
-        Genre g = new Genre(genre.getKey(), genre.getLabel());
+        Genre g = genre.getGenre();
         if (filter.getGenre() == null || !filter.getGenre().equals(g)) {
             filter = new Filter(g, filter.getSorter(), filter.getQuery());
             items.clear();

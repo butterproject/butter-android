@@ -4,7 +4,7 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
-        kotlinVersion = '1.1.2-5'
+        kotlinVersion = '1.1.3-2'
     }
 
     repositories {
@@ -37,13 +37,13 @@ ext {
     torrentstreamVersion = '2.3.0'
     filePickerVersion = '1.1.0'
     changeloglibVersion = '2.1.0'
-    gsonVersion = '2.8.0'
+    gsonVersion = '2.8.1'
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven { url "https://maven.google.com/" }
+        google()
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
         maven { url "https://jitpack.io" }

@@ -46,6 +46,7 @@ import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.BeamPlayerActivity;
@@ -282,7 +283,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 //        tabs.getTabAt(hasGenres ? 1 : 0).select();
     }
 
-    @Override public void onGenreChanged(String genre) {
+    @Override public void onGenreChanged(Genre genre) {
         adapter.setGenre(genre);
     }
 

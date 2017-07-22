@@ -19,6 +19,6 @@ package butter.droid.provider.base.nav
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import butter.droid.provider.base.filter.Filter
+import butter.droid.provider.base.filter.Sorter
 
-data class NavItem(@DrawableRes val icon: Int, @StringRes val label: Int, val filter: Filter?)
+data class NavItem(@DrawableRes val icon: Int, @StringRes val label: Int, val sorter: Sorter?)

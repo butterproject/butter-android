@@ -29,6 +29,7 @@ import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
 import butter.droid.provider.vodo.api.VodoService;
 import butter.droid.provider.vodo.api.model.VodoMovie;
@@ -51,12 +52,12 @@ public class VodoProvider extends AbsMediaProvider {
             SORTER_TRENDING);
     private static final List<Genre> GENRES = Arrays.asList(Genre.DOCUMENTARY, Genre.DRAMA, Genre.HORROR, Genre.SCI_FI, Genre.THRILLER);
     private static final List<NavItem> NAV_ITEMS = Arrays.asList(
-            new NavItem(0, R.string.sorter_vodo_popularity, new Filter(null, SORTER_SEEDS)),
-            new NavItem(0, R.string.sorter_vodo_year, new Filter(null, SORTER_YEAR)),
-            new NavItem(0, R.string.sorter_vodo_date_added, new Filter(null, SORTER_DATE_ADDED)),
-            new NavItem(0, R.string.sorter_vodo_rating, new Filter(null, SORTER_RATING)),
-            new NavItem(0, R.string.sorter_vodo_alphabet, new Filter(null, SORTER_TITLE)),
-            new NavItem(0, R.string.sorter_vodo_trending, new Filter(null, SORTER_TRENDING))
+            new NavItem(0, R.string.sorter_vodo_popularity, SORTER_SEEDS),
+            new NavItem(0, R.string.sorter_vodo_year, SORTER_YEAR),
+            new NavItem(0, R.string.sorter_vodo_date_added, SORTER_DATE_ADDED),
+            new NavItem(0, R.string.sorter_vodo_rating, SORTER_RATING),
+            new NavItem(0, R.string.sorter_vodo_alphabet, SORTER_TITLE),
+            new NavItem(0, R.string.sorter_vodo_trending, SORTER_TRENDING)
     );
 
     private static final int ITEMS_PER_PAGE = 30;
@@ -116,8 +117,8 @@ public class VodoProvider extends AbsMediaProvider {
         return Maybe.just(NAV_ITEMS);
     }
 
-    @NonNull @Override public Single<Filter> getDefaultFilter() {
-        return Single.just(new Filter(null, SORTER_SEEDS));
+    @NonNull @Override public Single<Optional<Sorter>> getDefaultSorter() {
+        return Single.just(Optional.of(SORTER_SEEDS));
     }
 
     @Override public int getIcon() {

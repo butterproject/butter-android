@@ -76,8 +76,6 @@ android {
     }
 }
 
-//to check for dependency updates,
-//run ./gradlew dependencyUpdates -Drevision=release
 dependencies {
     implementation "com.android.support:recyclerview-v7:$appCompatVersion"
     implementation "com.android.support:mediarouter-v7:$appCompatVersion"

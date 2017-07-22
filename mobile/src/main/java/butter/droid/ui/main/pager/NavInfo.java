@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import butter.droid.base.R;
-import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.nav.NavItem;
 
 public class NavInfo {
@@ -31,7 +31,7 @@ public class NavInfo {
     @IdRes private final int id;
     @DrawableRes private final int icon;
     @StringRes private final int label;
-    @Nullable private final Filter filter;
+    @Nullable private final Sorter sorter;
     private final int providerId;
 
     public NavInfo(@NonNull NavItem item, final int providerId) {
@@ -39,7 +39,7 @@ public class NavInfo {
         this.icon = item.getIcon();
         this.label = item.getLabel();
         this.providerId = providerId;
-        this.filter = item.getFilter();
+        this.sorter = item.getSorter();
     }
 
     public NavInfo(@IdRes final int id, @DrawableRes final int icon, @StringRes final int label, final int providerId) {
@@ -51,7 +51,7 @@ public class NavInfo {
         this.icon = icon;
         this.label = label;
         this.providerId = providerId;
-        this.filter = null;
+        this.sorter = null;
     }
 
     public int getId() {
@@ -72,7 +72,7 @@ public class NavInfo {
         return providerId;
     }
 
-    @Nullable public Filter getFilter() {
-        return filter;
+    @Nullable public Sorter getSorter() {
+        return sorter;
     }
 }

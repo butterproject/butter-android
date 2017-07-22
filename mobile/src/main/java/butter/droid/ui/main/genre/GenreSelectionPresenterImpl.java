@@ -46,7 +46,7 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     @Override public void onViewCreated(final int providerId) {
         providerManager.getProvider(providerId).genres()
                 .flatMapObservable(Observable::fromIterable)
-                .map(i -> new UiGenre(i.getKey(), i.getName()))
+                .map(UiGenre::new)
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

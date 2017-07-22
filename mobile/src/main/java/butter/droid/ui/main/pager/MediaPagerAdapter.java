@@ -18,11 +18,14 @@
 package butter.droid.ui.main.pager;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import butter.droid.R;
 import butter.droid.base.utils.LocaleUtils;
+import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.ui.main.genre.GenreSelectionFragment;
 import butter.droid.ui.media.list.MediaListFragment;
 import java.util.List;
@@ -32,7 +35,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
     private final Context context;
 
     private List<NavInfo> items;
-    private String genre;
+    private Genre genre;
 
     public MediaPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -57,7 +60,6 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override public int getItemPosition(final Object object) {
         return POSITION_NONE;
-//        return super.getItemPosition(object);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         NavInfo navInfo = items.get(position);
         switch (navInfo.getId()) {
             case R.id.nav_item_filter:
-                return MediaListFragment.newInstance(navInfo.getProviderId(), navInfo.getFilter());
+                return MediaListFragment.newInstance(navInfo.getProviderId(), new Filter(genre, navInfo.getSorter()));
             case R.id.nav_item_genre:
                 return GenreSelectionFragment.newInstance(navInfo.getProviderId());
             default:
@@ -73,7 +75,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(@Nullable Genre genre) {
         this.genre = genre;
     }
 

@@ -17,29 +17,29 @@
 
 package butter.droid.ui.main.genre.list.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import butter.droid.provider.base.filter.Genre;
 
 public class UiGenre {
 
-    private final String key;
-    @StringRes private final int label;
+    @NonNull private final Genre genre;
     private boolean selected;
 
-    public UiGenre(String key, int label) {
-        this.key = key;
-        this.label = label;
+    public UiGenre(@NonNull Genre genre) {
+        this.genre = genre;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public int getLabel() {
-        return label;
+    @StringRes public int getLabel() {
+        return genre.getName();
     }
 
     public boolean isSelected() {
         return selected;
+    }
+
+    @NonNull public Genre getGenre() {
+        return genre;
     }
 
     public void setSelected(boolean selected) {

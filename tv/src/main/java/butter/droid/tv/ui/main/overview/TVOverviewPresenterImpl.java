@@ -23,6 +23,7 @@ import android.util.SparseArray;
 import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
+import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
@@ -80,7 +81,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 break;
             case R.id.more_item_filter:
                 //noinspection ConstantConditions
-                view.openMediaActivity(item.getTitle(), item.getProviderId(), item.getFilter());
+                view.openMediaActivity(item.getTitle(), item.getProviderId(), new Filter(null, item.getSorter()));
                 break;
             case R.id.more_player_tests:
                 view.openTestPlayerPicker();
@@ -144,8 +145,16 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     private void loadProviderMedia(final int providerId) {
         cancelMovieCall(providerId);
         final butter.droid.provider.MediaProvider provider = providerManager.getProvider(providerId);
-        provider.getDefaultFilter()
-                .flatMap(f -> provider.items(f, new Pager(null)))
+        provider.getDefaultSorter()
+                .flatMap(sorter -> {
+                    Filter f;
+                    if (sorter.isPresent()) {
+                        f = new Filter(null, sorter.get());
+                    } else {
+                        f = new Filter(null, null);
+                    }
+                    return provider.items(f, new Pager(null));
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ItemsWrapper>() {

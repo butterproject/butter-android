@@ -29,6 +29,7 @@ import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
@@ -53,7 +54,7 @@ public interface MediaProvider {
 
     @NonNull Maybe<List<NavItem>> navigation();
 
-    @NonNull Single<Filter> getDefaultFilter();
+    @NonNull Single<Optional<Sorter>> getDefaultSorter();
 
     @StringRes int getLoadingMessage();
 

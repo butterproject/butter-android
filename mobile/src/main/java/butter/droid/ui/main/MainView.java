@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.ui.main.pager.NavInfo;
 import java.util.List;
@@ -52,7 +53,7 @@ public interface MainView {
 
     void displayProvider(@StringRes int title, List<NavInfo> navigation);
 
-    void onGenreChanged(String genre);
+    void onGenreChanged(Genre genre);
 
     void showFirsContentScreen();
 

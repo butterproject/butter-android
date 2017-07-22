@@ -31,6 +31,7 @@ import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
 import butter.droid.provider.mock.model.MockMovies;
 import com.google.gson.Gson;
@@ -79,11 +80,11 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
     }
 
     @NonNull @Override public Maybe<List<NavItem>> navigation() {
-        return Maybe.just(Arrays.asList(new NavItem(0, R.string.genre_action, new Filter(Genre.ACTION, null))));
+        return Maybe.just(Arrays.asList(new NavItem(0, R.string.genre_action, null)));
     }
 
-    @NonNull @Override public Single<Filter> getDefaultFilter() {
-        return Single.just(new Filter(null, null));
+    @NonNull @Override public Single<Optional<Sorter>> getDefaultSorter() {
+        return Single.just(Optional.<Sorter>empty());
     }
 
     @Override public int getLoadingMessage() {

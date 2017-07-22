@@ -171,7 +171,7 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override public void onGenreChanged(UiGenre genre) {
-        view.onGenreChanged(genre.getKey());
+        view.onGenreChanged(genre.getGenre());
 
         if (genreListeners.size() > 0) {
             for (OnGenreChangeListener genreListener : genreListeners) {
