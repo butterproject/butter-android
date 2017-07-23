@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.13.0'
     testImplementation 'junit:junit:4.12'
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

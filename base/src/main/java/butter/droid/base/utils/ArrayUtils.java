@@ -15,17 +15,21 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base.module
+package butter.droid.base.utils;
 
-interface Media {
+public class ArrayUtils {
 
-    val id: String
-    val title: String
-    val year: Int
-    val genres: Array<butter.droid.provider.base.filter.Genre>
-    val rating: Float
-    val poster: String?
-    val backdrop: String
-    val synopsis: String
+    public static boolean contains(int[] array, int value) {
+        if (array != null && array.length > 0) {
+            for (final int i : array) {
+                if (i == value) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
 
 }

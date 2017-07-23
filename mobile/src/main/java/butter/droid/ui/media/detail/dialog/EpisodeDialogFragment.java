@@ -37,8 +37,8 @@ import android.widget.TextView;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.StreamInfo;
@@ -47,6 +47,7 @@ import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.widget.BottomSheetScrollView;
@@ -68,7 +69,7 @@ public class EpisodeDialogFragment extends DialogFragment {
 
     @Inject ProviderManager providerManager;
     @Inject PreferencesHandler preferencesHandler;
-    @Inject PlayerManager playerManager;
+    @Inject MediaDisplayManager mediaDisplayManager;
 
     private Integer threshold = 0;
     private Integer bottom = 0;
@@ -152,12 +153,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         }
 
         scrollView.animateScrollTo(0, ANIM_SPEED);
-        scrollView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dismiss();
-            }
-        }, ANIM_SPEED);
+        scrollView.postDelayed(this::dismiss, ANIM_SPEED);
     }
 
     @Override
@@ -175,20 +171,12 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        scrollView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //mMaxHeight = PixelUtils.getScreenHeight(activity) - PixelUtils.getPixelsFromDp(activity, 50);
-                int screenHeight = PixelUtils.getScreenHeight(activity);
-                int scroll = (screenHeight / 3) * 2;
-                scrollView.animateScrollTo(scroll, ANIM_SPEED);
-                scrollView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        opened = true;
-                    }
-                }, ANIM_SPEED);
-            }
+        scrollView.postDelayed(() -> {
+            //mMaxHeight = PixelUtils.getScreenHeight(activity) - PixelUtils.getPixelsFromDp(activity, 50);
+            int screenHeight = PixelUtils.getScreenHeight(activity);
+            int scroll = (screenHeight / 3) * 2;
+            scrollView.animateScrollTo(scroll, ANIM_SPEED);
+            scrollView.postDelayed(() -> opened = true, ANIM_SPEED);
         }, 250);
     }
 
@@ -216,32 +204,24 @@ public class EpisodeDialogFragment extends DialogFragment {
             synopsis.setText(R.string.no_synopsis_available);
         }
 
-        String seasonStr = Integer.toString(episode.getSeasion());
-        if (seasonStr.length() < 2) {
-            seasonStr = "0" + seasonStr;
-        }
-        String episodeStr = Integer.toString(episode.getEpisode());
-        if (episodeStr.length() < 2) {
-            episodeStr = "0" + episodeStr;
-        }
-
-        info.setText("S" + seasonStr + "E" + episodeStr);
+        info.setText(String.format(Locale.US, "S%02dE%02d", episode.getSeasion(), episode.getEpisode()));
 
         subtitles.setFragmentManager(getFragmentManager());
         quality.setFragmentManager(getFragmentManager());
         subtitles.setTitle(R.string.subtitles);
         quality.setTitle(R.string.quality);
 
-        // TODO: 6/17/17
-//        final String[] qualities = episode.getTorrents().keySet().toArray(new String[episode.torrents.size()]);
-//        SortUtils.sortQualities(qualities);
-//        quality.setData(qualities);
-//
-//        String quality = playerManager.getDefaultQuality(Arrays.asList(qualities));
-//        int qualityIndex = Arrays.asList(qualities).indexOf(quality);
-//        selectedQuality = quality;
-//        this.quality.setText(selectedQuality);
-//        this.quality.setDefault(qualityIndex);
+        final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(episode.getTorrents());
+        String[] formatDisplay = new String[formats.length];
+        for (int i = 0; i < formats.length; i++) {
+            formatDisplay[i] = mediaDisplayManager.getFormatDisplayName(formats[i]);
+        }
+        quality.setData(formatDisplay);
+
+        int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
+        selectedQuality = formatDisplay[defaultFormatIndex];
+        this.quality.setText(selectedQuality);
+        this.quality.setDefault(defaultFormatIndex);
 
         updateMagnet();
 
@@ -375,7 +355,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     @OnClick(R.id.synopsis)
-    public void readMoreClick(View view) {
+    public void readMoreClick() {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) {
             return;
         }
@@ -411,19 +391,9 @@ public class EpisodeDialogFragment extends DialogFragment {
         selectedSubtitleLanguage = language;
         if (!language.equals("no-subs")) {
             final Locale locale = LocaleUtils.toLocale(language);
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    subtitles.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
-                }
-            });
+            ThreadUtils.runOnUiThread(() -> subtitles.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale))));
         } else {
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    subtitles.setText(R.string.no_subs);
-                }
-            });
+            ThreadUtils.runOnUiThread(() -> subtitles.setText(R.string.no_subs));
         }
     }
 
@@ -437,7 +407,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     public interface FragmentListener {
-
         void playStream(StreamInfo streamInfo);
     }
 

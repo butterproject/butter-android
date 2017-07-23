@@ -120,22 +120,15 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @Override
     public void openSimpleChoiceSelector(@PrefKey final String key, @StringRes int title, String[] items, int value) {
-        openListDialog(title, items, value, new OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                presenter.onSimpleChaiseItemSelected(key, which);
-                dialog.dismiss();
-            }
+        openListDialog(title, items, value, (dialog, which) -> {
+            presenter.onSimpleChaiseItemSelected(key, which);
+            dialog.dismiss();
         });
     }
 
     @Override public void openColorSelector(@PrefKey final String key, @StringRes int title, @ColorInt int value) {
         ColorPickerDialogFragment fragment = ColorPickerDialogFragment
-                .newInstance(getString(title), value, new ColorPickerDialogFragment.ResultListener() {
-                    @Override
-                    public void onNewValue(int value) {
-                        presenter.onColorSelected(key, value);
-                    }
-                });
+                .newInstance(getString(title), value, value1 -> presenter.onColorSelected(key, value1));
         fragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 

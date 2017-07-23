@@ -37,7 +37,7 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
         if (media instanceof Movie) {
             view.displayFragment(TVMovieDetailsFragment.newInstance(providerId, media));
         } else if (media instanceof Show) {
-             view.displayFragment(TVShowDetailsFragment.newInstance(providerId, media));
+            view.displayFragment(TVShowDetailsFragment.newInstance(providerId, media));
         } else {
             throw new IllegalStateException("Unknow media type");
         }

@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.text.TextUtils;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
@@ -28,6 +29,7 @@ import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import java.util.Locale;
@@ -41,13 +43,15 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private final ProviderManager providerManager;
     private final PlayerManager playerManager;
     private final Resources resources;
+    private final MediaDisplayManager mediaDisplayManager;
 
     private Movie movie;
     private String[] subtitleLanguages;
 
     public MovieDetailPresenterImpl(MovieDetailView view, MediaDetailPresenter parentPresenter,
             YouTubeManager youTubeManager, PreferencesHandler preferencesHandler, ProviderManager providerManager,
-            PlayerManager playerManager, Resources resources) {
+            PlayerManager playerManager, Resources resources,
+            final MediaDisplayManager mediaDisplayManager) {
         this.view = view;
         this.parentPresenter = parentPresenter;
         this.youTubeManager = youTubeManager;
@@ -55,6 +59,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         this.providerManager = providerManager;
         this.playerManager = playerManager;
         this.resources = resources;
+        this.mediaDisplayManager = mediaDisplayManager;
     }
 
     @Override public void onCreate(Movie movie) {
@@ -228,18 +233,18 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayQualities() {
-
         if (movie.getTorrents().length > 0) {
-            // TODO
-            /*
-            final String[] qualities = movie.torrents.keySet().toArray(new String[movie.torrents.size()]);
-            SortUtils.sortQualities(qualities);
+            final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(movie.getTorrents());
 
-            String quality = playerManager.getDefaultQuality(Arrays.asList(qualities));
+            int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
 
-            view.setQualities(qualities, quality);
-            selectQuality(quality);
-            */
+            String[] qualities = new String[formats.length];
+            for (int i = 0; i < formats.length; i++) {
+                qualities[i] = mediaDisplayManager.getFormatDisplayName(formats[i]);
+            }
+
+            view.setQualities(qualities, qualities[defaultFormatIndex]);
+            selectQuality(qualities[defaultFormatIndex]);
         }
 
     }

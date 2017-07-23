@@ -168,22 +168,6 @@ public class PlayerManager {
         }
     }
 
-    public String getDefaultQuality(List<String> availableQualities) {
-        String quality = preferencesHandler.getDefaultQuality();
-        String[] fallbackOrder = new String[]{"720p", "480p", "1080p"};
-
-        if (availableQualities.indexOf(quality) == -1) {
-            for (String fallbackQuality : fallbackOrder) {
-                if (availableQualities.indexOf(fallbackQuality) != -1) {
-                    quality = fallbackQuality;
-                    break;
-                }
-            }
-        }
-
-        return quality;
-    }
-
     public File getStorageLocation() {
         return new File(preferencesHandler.getStorageLocation() + "/subs/");
     }

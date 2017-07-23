@@ -1,7 +1,6 @@
 package butter.droid.widget;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatImageView;
@@ -106,16 +105,13 @@ public class OptionSelector extends LinearLayout {
             }
 
             StringArraySelectorDialogFragment.showSingleChoice(fragmentManager, title, data, defaultOption,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            if (listener != null) {
-                                listener.onSelectionChanged(position, data[position]);
-                            }
-                            defaultOption = position;
-                            setText(data[position]);
-                            dialog.dismiss();
+                    (dialog, position) -> {
+                        if (listener != null) {
+                            listener.onSelectionChanged(position, data[position]);
                         }
+                        defaultOption = position;
+                        setText(data[position]);
+                        dialog.dismiss();
                     }
             );
         }

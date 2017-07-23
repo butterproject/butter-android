@@ -17,9 +17,9 @@
   -->
 
 <resources>
-    <integer-array name="video_qualities" translatable="false">
-        <item>1080</item>
-        <item>720</item>
-        <item>480</item>
-    </integer-array>
+
+    <string name="picker_format_normal">%1$dp</string>
+    <string name="picker_format_normal_4K">4K</string>
+    <string name="picker_format_3D">%1$dp 3D</string>
+
 </resources>

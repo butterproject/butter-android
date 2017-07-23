@@ -26,6 +26,7 @@ import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v4.app.Fragment;
+import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;
@@ -48,6 +49,7 @@ import org.parceler.Parcels;
 public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVShowDetailsView, EpisodeCardPresenter.Listener {
 
     @Inject TVShowDetailsPresenter presenter;
+    @Inject MediaDisplayManager mediaDisplayManager;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +106,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
     @Override public void pickTorrent(final Episode episode, final Torrent[] torrents) {
         ArrayList<String> choices = new ArrayList<>(torrents.length);
         for (final Torrent torrent : torrents) {
-            choices.add(String.valueOf(torrent.getQuality()));
+            choices.add(mediaDisplayManager.getFormatDisplayName(torrent.getFormat()));
         }
 
         new AlertDialog.Builder(getActivity())

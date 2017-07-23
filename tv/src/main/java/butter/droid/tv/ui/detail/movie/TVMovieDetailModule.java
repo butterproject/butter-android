@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.detail.movie;
 
+import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
@@ -35,8 +36,9 @@ public class TVMovieDetailModule {
         return view;
     }
 
-    @Provides @FragmentScope public TVMovieDetailsPresenter providePresenter(TVMovieDetailsView view, ProviderManager providerManager) {
-        return new TVMovieDetailsPresenterImpl(view, providerManager);
+    @Provides @FragmentScope public TVMovieDetailsPresenter providePresenter(TVMovieDetailsView view, ProviderManager providerManager,
+            MediaDisplayManager mediaDisplayManager) {
+        return new TVMovieDetailsPresenterImpl(view, providerManager, mediaDisplayManager);
     }
 
 }

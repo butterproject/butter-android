@@ -17,15 +17,12 @@
 
 package butter.droid.provider.base.module
 
-interface Media {
+const val FORMAT_NORMAL = 0
+const val FORMAT_3D = 1
 
-    val id: String
-    val title: String
-    val year: Int
-    val genres: Array<butter.droid.provider.base.filter.Genre>
-    val rating: Float
-    val poster: String?
-    val backdrop: String
-    val synopsis: String
+const val QUALITY_HD = 1080
+const val QUALITY_FULL_HD = 1080
+const val QUALITY_4K = 2160
 
-}
+@org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
+data class Format @org.parceler.ParcelConstructor constructor(val quality: Int, val type: Int)

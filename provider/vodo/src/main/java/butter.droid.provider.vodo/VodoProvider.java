@@ -23,6 +23,8 @@ import butter.droid.provider.AbsMediaProvider;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
+import butter.droid.provider.base.module.Format;
+import butter.droid.provider.base.module.FormatKt;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
@@ -131,11 +133,33 @@ public class VodoProvider extends AbsMediaProvider {
 
     private Movie mapVodoMovie(@NonNull VodoMovie vodoMovie) {
 
-        Torrent torrent = new Torrent(vodoMovie.getTorrentUrl(), 720, 0, vodoMovie.getSizeBytes(), null, null);
+        Torrent torrent = new Torrent(vodoMovie.getTorrentUrl(), parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), null, null);
 
         return new Movie(vodoMovie.getImdbCode(), vodoMovie.getMovieTitleClean(), vodoMovie.getMovieYear(), new Genre[0],
                 vodoMovie.getRating() / 10f, vodoMovie.getCoverImage(), vodoMovie.getCoverImage(), vodoMovie.getSynopsis(),
                 new Torrent[]{torrent}, null);
+    }
+
+    private Format parseFormat(@Nullable String vodoQuality) {
+        int formatType;
+        int quality;
+        if ("3D".equals(vodoQuality)) {
+            formatType = FormatKt.FORMAT_3D;
+            quality = 0;
+        } else {
+            formatType = FormatKt.FORMAT_NORMAL;
+            if (vodoQuality != null) {
+                try {
+                    quality = Integer.parseInt(vodoQuality.substring(0, vodoQuality.indexOf('p')));
+                } catch (NumberFormatException e) {
+                    quality = 0;
+                }
+            } else {
+                quality = 0;
+            }
+        }
+
+        return new Format(quality, formatType);
     }
 
 }

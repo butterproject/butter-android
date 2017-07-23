@@ -54,7 +54,7 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
 
     protected final String[] keys;
     private final String[] providers;
-    private final String[] qualities;
+    private final int[] qualities;
     private final String[] appLanguages;
     private final String[] subsLanguages;
 
@@ -70,7 +70,7 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
 
         keys = preferencesHandler.getPreferencesOrder(isTV);
         providers = resources.getStringArray(R.array.prefs_providers);
-        qualities = resources.getStringArray(R.array.video_qualities);
+        qualities = resources.getIntArray(R.array.video_qualities);
         subsLanguages = resources.getStringArray(R.array.subtitle_languages);
         appLanguages = resources.getStringArray(R.array.translation_languages);
         Arrays.sort(appLanguages);
@@ -199,8 +199,14 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
                 updateDefaultPlayer(item);
                 break;
             case Prefs.QUALITY_DEFAULT:
+                //noinspection SuspiciousMethodCalls
                 int selectedItem = Arrays.asList(qualities).indexOf(item.getValue());
-                view.openSimpleChoiceSelector(Prefs.QUALITY_DEFAULT, item.getTitleRes(), qualities, selectedItem);
+                String[] displayQualities = new String[qualities.length];
+                for (int i = 0; i < displayQualities.length; i++) {
+                    displayQualities[i] = String.format(Locale.US, "%dp", qualities[i]);
+                }
+
+                view.openSimpleChoiceSelector(Prefs.QUALITY_DEFAULT, item.getTitleRes(), displayQualities, selectedItem);
                 break;
             case Prefs.LOCALE:
                 updateLocale(item);

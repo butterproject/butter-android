@@ -169,12 +169,7 @@ public class PreferencesHandler {
                         .setPreferenceKey(Prefs.QUALITY_DEFAULT)
                         .hasNext(true)
                         .setValue(getDefaultQuality())
-                        .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
-                            @Override
-                            public String get(PrefItem item) {
-                                return (String) item.getValue();
-                            }
-                        })
+                        .setSubtitleGenerator(item -> String.format(Locale.US, "%dp", (Integer) item.getValue()))
                         .build();
             case Prefs.LOCALE:
                 return PrefItem.newBuilder()
@@ -663,8 +658,8 @@ public class PreferencesHandler {
         return prefManager.get(Prefs.PIXEL_FORMAT, ANDROID_WINDOW_CHROMA_RV_32_OPTION);
     }
 
-    public String getDefaultQuality() {
-        return prefManager.get(Prefs.QUALITY_DEFAULT, "720p");
+    public int getDefaultQuality() {
+        return prefManager.get(Prefs.QUALITY_DEFAULT, 720);
     }
 
     @ColorInt public int getSubtitleStrokeColor() {

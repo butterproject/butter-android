@@ -70,7 +70,7 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
     }
 
     @Override public void onViewCreated() {
-        view.setupControls(media.getTitle());
+//        view.setupControls(media.getTitle());
     }
 
     private class QueryYouTubeTask extends AsyncTask<String, Void, Uri> {

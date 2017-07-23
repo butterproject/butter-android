@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.detail.movie;
 
+import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.module.Media;
@@ -25,16 +26,20 @@ import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 
+
 public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl implements TVMovieDetailsPresenter {
 
     private final TVMovieDetailsView view;
+    private final MediaDisplayManager mediaDisplayManager;
 
     private Movie item;
 
-    public TVMovieDetailsPresenterImpl(final TVMovieDetailsView view, final ProviderManager providerManager) {
+    public TVMovieDetailsPresenterImpl(final TVMovieDetailsView view, final ProviderManager providerManager,
+            final MediaDisplayManager mediaDisplayManager) {
         super(view, providerManager);
 
         this.view = view;
+        this.mediaDisplayManager = mediaDisplayManager;
     }
 
     @Override public void onCreate(final int providerId, final Movie item) {
@@ -55,7 +60,7 @@ public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl impl
             view.startTrailer(item, item.getTrailer());
         } else {
             Torrent torrent = item.getTorrents()[(int) actionId];
-            view.startMovie(item, torrent, String.valueOf(torrent.getQuality()));
+            view.startMovie(item, torrent, mediaDisplayManager.getFormatDisplayName(torrent.getFormat()));
         }
     }
 
@@ -65,9 +70,11 @@ public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl impl
             view.addAction(ACTION_TRAILER, R.string.watch, R.string.trailer);
         }
 
-        for (int i = 0; i < item.getTorrents().length; i++) {
-            Torrent torrent = item.getTorrents()[i];
-            view.addAction(i, R.string.watch, String.valueOf(torrent.getQuality()));
+        Torrent[] torrents = item.getTorrents();
+        for (int i = 0; i < torrents.length; i++) {
+            Torrent torrent = torrents[i];
+            String text = mediaDisplayManager.getFormatDisplayName(torrent.getFormat());
+            view.addAction(i, R.string.watch, text);
         }
     }
 

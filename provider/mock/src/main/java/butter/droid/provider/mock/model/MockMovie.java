@@ -27,6 +27,7 @@ public class MockMovie {
     private String poster;
     private String backdrop;
     private String synopsis;
+    private int quality;
 
     public long getId() {
         return id;
@@ -58,5 +59,9 @@ public class MockMovie {
 
     public String getSynopsis() {
         return synopsis;
+    }
+
+    public int getQuality() {
+        return quality;
     }
 }

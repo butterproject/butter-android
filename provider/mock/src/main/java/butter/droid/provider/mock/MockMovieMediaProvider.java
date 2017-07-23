@@ -25,6 +25,8 @@ import butter.droid.provider.AbsMediaProvider;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
+import butter.droid.provider.base.module.Format;
+import butter.droid.provider.base.module.FormatKt;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
@@ -61,7 +63,7 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
                 .<Media>map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], 0, m.getPoster(),
                         m.getBackdrop(), m.getSynopsis(),
                         new Torrent[]{
-                                new Torrent(m.getTorrent(), 0L, 0, null, null, null)
+                                new Torrent(m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
                         }, m.getTrailer()))
                 .toList()
                 .map(l -> new ItemsWrapper(l, new Paging("", false)));
