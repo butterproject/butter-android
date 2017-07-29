@@ -23,7 +23,7 @@ before_install:
 
 before_script:
   - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -f -n emulator -k "system-images;$ANDROID_TARGET;default;$ANDROID_ABI"
-  - emulator -avd emulator -no-window -no-audio -wipe-data -no-boot-anim &
+  - $ANDROID_HOME/emulator/emulator -avd emulator -no-window -no-audio -wipe-data -no-boot-anim &
 
 script:
   - android-wait-for-emulator
