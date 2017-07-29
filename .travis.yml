@@ -7,21 +7,19 @@ env:
   global:
     - ADB_INSTALL_TIMEOUT=10
 
-android:
-  components:
-    - tools
-    - tools
-    - android-22
-    - android-25
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - extra-google-google_play_services
-    - extra-android-support
-    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 before_install:
+  - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+  - unzip -o sdk-tools-linux-3859397.zip -d $ANDROID_HOME/
   - chmod +x gradlew
   - cp -r config/ci/licenses $ANDROID_HOME/
-  
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "build-tools;26.0.1" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "emulator" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "platform-tools" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "platforms;android-25" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "sources;android-$ANDROID_TARGET" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "system-images;android-$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager --update --channel=3
+
 before_script:
   - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
@@ -32,3 +30,6 @@ script:
   - adb shell input keyevent 82 &
   - ./gradlew check connectedCheck -PdisablePreDex --stacktrace
 
+
+
+https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
