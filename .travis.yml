@@ -13,14 +13,14 @@ before_install:
   - unzip -o sdk-tools-linux-3859397.zip -d $ANDROID_HOME/
   - chmod +x gradlew
   - cp -r config/ci/licenses $ANDROID_HOME/
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "tools" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "build-tools;26.0.1" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "emulator" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "platform-tools" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "platforms;android-25" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "sources;android-$ANDROID_TARGET" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "system-images;android-$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager --update --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "tools" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.1" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "emulator" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "sources;android-$ANDROID_TARGET" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager --update --channel=3
 
 before_script:
   - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
