@@ -8,7 +8,7 @@ env:
     - ADB_INSTALL_TIMEOUT=10
 
 before_install:
-  - rm -rf $ANDROID_HOME/tools/lib/common.jar
+  - rm -rf $ANDROID_HOME/tools
   - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
   - unzip -o sdk-tools-linux-3859397.zip -d $ANDROID_HOME/
   - chmod +x gradlew
@@ -18,8 +18,8 @@ before_install:
   - $ANDROID_HOME/tools/bin/sdkmanager "emulator" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "sources;android-$ANDROID_TARGET" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "sources;$ANDROID_TARGET" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager --update --channel=3
 
 before_script:
