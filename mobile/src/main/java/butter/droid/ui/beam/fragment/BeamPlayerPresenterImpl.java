@@ -207,7 +207,7 @@ public class BeamPlayerPresenterImpl implements BeamPlayerPresenter, LaunchListe
 
         view.tintProgress(paletteColor);
 
-        String imageUrl = streamInfo.getImageUrl();
+        String imageUrl = streamInfo.getBackdropImage();
         if (!StringUtils.isEmpty(imageUrl)) {
             view.loadCoverImage(imageUrl);
         }

@@ -76,7 +76,7 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
         }
 
         BeamServerService.getServer().start();
-        title = streamInfo.getTitle() == null ? getString(R.string.the_video) : streamInfo.getTitle();
+        title = streamInfo.getFullTitle() == null ? getString(R.string.the_video) : streamInfo.getFullTitle();
 
         /*
         File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");

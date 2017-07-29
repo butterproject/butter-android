@@ -27,8 +27,11 @@ import android.support.annotation.Nullable;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.module.Media;
 import java.io.File;
@@ -108,56 +111,46 @@ public class PlayerManager {
         }
     }
 
-    @Nullable public Intent externalPlayerIntent(Media media, String subLanguage, String location) {
-        /*
+    @Nullable public Intent externalPlayerIntent(@NonNull StreamInfo streamInfo) {
+
         final String defaultPlayer = preferencesHandler.getDefaultPlayer();
 
         if (!StringUtils.isEmpty(defaultPlayer)) {
             String[] playerData = defaultPlayer.split(DELIMITER);
             if (playerData.length > 1) {
                 Intent intent = new Intent();
-                if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
-                        "no-subs")) {
-                    File subsLocation = new File(getStorageLocation(), media.getId() + "-" + subLanguage + ".srt");
-                    BeamServer.setCurrentSubs(subsLocation);
-                    intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
-                    intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
-                }
+//                if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
+//                        "no-subs")) {
+//                    File subsLocation = new File(getStorageLocation(), media.getId() + "-" + subLanguage + ".srt");
+//                    BeamServer.setCurrentSubs(subsLocation);
+//                    intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
+//                    intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
+//                }
 
-                BeamServer.setCurrentVideo(location);
+                BeamServer.setCurrentVideo(streamInfo.getStreamUrl());
                 BeamServerService.getServer().start();
 
                 intent.setClassName(playerData[1], playerData[0]);
                 intent.setAction(Intent.ACTION_VIEW);
+                // TODO: 7/29/17 Actual mime type!
                 intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
-
-                if (media != null) {
-                    if (media.isMovie) {
-                        intent.putExtra("title", media.title);
-                    } else {
-                        Episode episode = (Episode) media;
-                        intent.putExtra("title",
-                                String.format("%s S%dE%d - %s", episode.showName, episode.season, episode.episode,
-                                        episode.title));
-                    }
-                }
+                intent.putExtra(Intent.EXTRA_TITLE, streamInfo.getFullTitle());
 
                 return intent;
             }
         }
-        */
+
         return null;
     }
 
     /**
      * Start default video player if set, otherwise return {@code false} so that the application can handle the video itself
      *
-     * @param location Video location
      * @return {@code true} if activity started, {@code false} otherwise
-     * @deprecated Use {@link #externalPlayerIntent(Media, String, String)} instead.
+     * @deprecated Use {@link #externalPlayerIntent(StreamInfo)} instead.
      */
-    @Deprecated public boolean start(Media media, String subLanguage, String location) {
-        Intent intent = externalPlayerIntent(media, subLanguage, location);
+    @Deprecated public boolean start(StreamInfo streamInfo) {
+        Intent intent = externalPlayerIntent(streamInfo);
         if (intent != null) {
             Context context = ButterApplication.getAppContext();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

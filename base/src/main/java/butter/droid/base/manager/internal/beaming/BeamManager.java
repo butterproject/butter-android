@@ -19,7 +19,6 @@ package butter.droid.base.manager.internal.beaming;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
@@ -103,34 +102,23 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                         .setTitle(R.string.pairing_tv)
                         .setMessage(R.string.confirm_tv)
                         .setPositiveButton(android.R.string.ok, null)
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
                         .create();
 
         mPairingCodeDialog =
                 new AlertDialog.Builder(context)
                         .setTitle(R.string.enter_pairing_code)
                         .setView(mInput)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                if (mCurrentDevice != null) {
-                                    String value = mInput.getText().toString().trim();
-                                    mCurrentDevice.sendPairingKey(value);
-                                    mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
+                        .setPositiveButton(android.R.string.ok, (arg0, arg1) -> {
+                            if (mCurrentDevice != null) {
+                                String value = mInput.getText().toString().trim();
+                                mCurrentDevice.sendPairingKey(value);
                                 mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
                             }
+                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, whichButton) -> {
+                            dialog.dismiss();
+                            mInputManager.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
                         })
                         .create();
 
@@ -221,7 +209,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         mStreamInfo = info;
 
-        String location = info.getVideoLocation();
+        String location = info.getStreamUrl();
         if(!location.startsWith("http")) {
             BeamServer.setCurrentVideo(location);
             location = BeamServer.getVideoURL();
@@ -256,8 +244,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             e.printStackTrace();
         }
 
-        String title = info.getTitle();
-        String imageUrl = info.getImageUrl() == null ? "https://butterproject.org/images/header-logo.png" : info.getImageUrl();
+        String title = info.getFullTitle();
+        String imageUrl = info.getPosterImage() == null ? "https://butterproject.org/images/header-logo.png" : info.getPosterImage();
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
         if (mCurrentDevice != null) {

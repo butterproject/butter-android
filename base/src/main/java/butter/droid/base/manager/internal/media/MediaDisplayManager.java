@@ -23,10 +23,10 @@ import android.support.annotation.StringRes;
 import butter.droid.base.Internal;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.utils.SortUtils;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.FormatKt;
 import butter.droid.provider.base.module.Torrent;
+import java.util.Arrays;
 import javax.inject.Inject;
 
 @Internal
@@ -62,8 +62,7 @@ public class MediaDisplayManager {
             formats[i] = torrents[i].getFormat();
         }
 
-        SortUtils.sortFormats(formats);
-        return formats;
+        return sortFormats(formats);
     }
 
     public int getDefaultFormatIndex(Format[] availableForamts) {
@@ -93,5 +92,17 @@ public class MediaDisplayManager {
         }
     }
 
+    public Format[] sortFormats(Format[] formats) {
+        Arrays.sort(formats, (lhs, rhs) -> {
+            int i = lhs.getType() - rhs.getType();
+            if (i != 0) {
+                return i;
+            }
+
+            return lhs.getQuality() - rhs.getQuality();
+        });
+
+        return formats;
+    }
 
 }

@@ -99,8 +99,8 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         objectAdapter.notifyArrayItemRangeChanged(1, objectAdapter.size());
     }
 
-    @Override public void torrentSelected(final Show show, final StreamInfo streamInfo) {
-        TVStreamLoadingActivity.startActivity(getActivity(), streamInfo, show);
+    @Override public void torrentSelected(final StreamInfo streamInfo) {
+        TVStreamLoadingActivity.startActivity(getActivity(), streamInfo);
     }
 
     @Override public void pickTorrent(final Episode episode, final Torrent[] torrents) {

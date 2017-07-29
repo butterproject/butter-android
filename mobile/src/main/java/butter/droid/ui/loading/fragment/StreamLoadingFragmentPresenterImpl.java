@@ -18,6 +18,7 @@
 package butter.droid.ui.loading.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
@@ -56,22 +57,19 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
         loadBackgroundImage();
     }
 
-    @Override protected void startPlayerActivity(String location, int resumePosition) {
-        this.streamInfo.setVideoLocation(location);
+    @Override protected void startPlayerActivity(int resumePosition) {
         if (beamManager.isConnected()) {
             view.startBeamActivity(streamInfo, resumePosition);
         } else {
-            // TODO: 6/17/17
-//            Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
-//                    location);
-//
-//            if (intent != null) {
-//                playingExternal = true;
-//                view.startExternalPlayer(intent);
-//            } else {
-//                playingExternal = false;
-//                view.startPlayerActivity(streamInfo, resumePosition);
-//            }
+            Intent intent = playerManager.externalPlayerIntent(streamInfo);
+
+            if (intent != null) {
+                playingExternal = true;
+                view.startExternalPlayer(intent);
+            } else {
+                playingExternal = false;
+                view.startPlayerActivity(streamInfo, resumePosition);
+            }
         }
 
         if (!playingExternal) {
@@ -85,7 +83,8 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
     public void onStreamPrepared(Torrent torrent) {
         currentTorrent = torrent;
 
-        if (TextUtils.isEmpty(this.streamInfo.getTitle())) {
+        // TODO: 7/29/17 This does not make sense
+        if (TextUtils.isEmpty(this.streamInfo.getFullTitle())) {
             view.pickTorrentFile(currentTorrent.getFileNames());
         } else {
             super.onStreamPrepared(currentTorrent);
@@ -94,9 +93,11 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
 
     private void loadBackgroundImage() {
         if (null != streamInfo) {
-            String url = streamInfo.getImageUrl();
+            final String url;
             if (PixelUtils.isTablet(context)) {
-                url = streamInfo.getHeaderImageUrl();
+                url = streamInfo.getBackdropImage();
+            } else {
+                url = streamInfo.getPosterImage();
             }
 
             if (!TextUtils.isEmpty(url)) {
@@ -111,13 +112,11 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
     }
 
     @Override public void startExternalPlayer() {
-        // TODO: 6/17/17
-        //        Intent intent = playerManager.externalPlayerIntent(streamInfo.getMedia(), streamInfo.getSubtitleLanguage(),
-//                streamInfo.getVideoLocation());
-//        if (intent != null) {
-//            view.startExternalPlayer(intent);
-//        } else {
-//            // TODO: 3/1/17 Notify user
-//        }
+        Intent intent = playerManager.externalPlayerIntent(streamInfo);
+        if (intent != null) {
+            view.startExternalPlayer(intent);
+        } else {
+            // TODO: 3/1/17 Notify user
+        }
     }
 }

@@ -21,5 +21,5 @@ package butter.droid.provider.base.module
 data class Episode @org.parceler.ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int, override val genres: Array<butter.droid.provider.base.filter.Genre>,
                                                                override val rating: Float, override val poster: String?, override val backdrop: String,
                                                                override val synopsis: String, val torrents: Array<Torrent>, val watched: Boolean,
-                                                               val overview: String, val episode: Int, val seasion: Int) : Media, Streamable
+                                                               val overview: String, val episode: Int, val seasion: Int) : Media
 

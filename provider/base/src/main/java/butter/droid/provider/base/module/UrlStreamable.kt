@@ -15,24 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.utils;
+package butter.droid.provider.base.module
 
-import butter.droid.provider.base.module.Format;
-import java.util.Arrays;
-
-public class SortUtils {
-
-    public static Format[] sortFormats(Format[] formats) {
-        Arrays.sort(formats, (lhs, rhs) -> {
-            int i = lhs.getType() - rhs.getType();
-            if (i != 0) {
-                return i;
-            }
-
-            return lhs.getQuality() - rhs.getQuality();
-        });
-
-        return formats;
-    }
-
-}
+@org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
+data class UrlStreamable @org.parceler.ParcelConstructor constructor(override var url: String?): Streamable

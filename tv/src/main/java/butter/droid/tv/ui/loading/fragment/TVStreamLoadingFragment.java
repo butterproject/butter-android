@@ -26,18 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
-import butter.droid.provider.base.module.Show;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implements TVStreamLoadingFragmentView {
-
-    protected static final String ARGS_SHOW_INFO = "butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment.show";
 
     @Inject TVStreamLoadingFragmentPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
@@ -58,8 +54,7 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
 
         Bundle arguments = getArguments();
         StreamInfo streamInfo = arguments.getParcelable(ARGS_STREAM_INFO);
-        Show show = Parcels.unwrap(arguments.getParcelable(ARGS_SHOW_INFO));
-        presenter.onCreate(streamInfo, show);
+        presenter.onCreate(streamInfo);
     }
 
     @Override
@@ -82,14 +77,9 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
         TVVideoPlayerActivity.startActivity(getActivity(), streamInfo, resumePosition);
     }
 
-    @Override public void startPlayerActivity(StreamInfo streamInfo, @NonNull Show show) {
-        TVVideoPlayerActivity.startActivity(getActivity(), streamInfo, show);
-    }
-
-    public static TVStreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo, @Nullable Show show) {
+    public static TVStreamLoadingFragment newInstance(@NonNull StreamInfo streamInfo) {
         Bundle args = new Bundle();
         args.putParcelable(ARGS_STREAM_INFO, streamInfo);
-        args.putParcelable(ARGS_SHOW_INFO, Parcels.wrap(show));
 
         TVStreamLoadingFragment fragment = new TVStreamLoadingFragment();
         fragment.setArguments(args);

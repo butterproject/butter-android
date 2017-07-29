@@ -30,17 +30,14 @@ import android.view.View;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
-import butter.droid.provider.base.module.Show;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamLoadingView {
 
     private static final String EXTRA_STREAM_INFO = "butter.droid.ui.loading.StreamLoadingActivity.info";
-    public static final String EXTRA_SHOW_INFO = "butter.droid.ui.loading.StreamLoadingActivity.show_info";
 
     @Inject TVStreamLoadingPresenter presenter;
 
@@ -61,8 +58,7 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
         super.onCreate(savedInstanceState, 0);
 
         StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-        Show show = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_SHOW_INFO));
-        presenter.onCreate(streamInfo, show, savedInstanceState != null);
+        presenter.onCreate(streamInfo, savedInstanceState != null);
     }
 
     @Override
@@ -85,8 +81,8 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
         }
     }
 
-    @Override public void displayStreamLoadingFragment(@NonNull StreamInfo info, Show show) {
-        TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info, show);
+    @Override public void displayStreamLoadingFragment(@NonNull StreamInfo info) {
+        TVStreamLoadingFragment fragment = TVStreamLoadingFragment.newInstance(info);
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(android.R.id.content, fragment)
@@ -102,14 +98,6 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
     public static Intent startActivity(Activity activity, StreamInfo info) {
         Intent intent = new Intent(activity, TVStreamLoadingActivity.class);
         intent.putExtra(EXTRA_STREAM_INFO, info);
-        activity.startActivity(intent);
-        return intent;
-    }
-
-    public static Intent startActivity(Activity activity, StreamInfo info, Show show) {
-        Intent intent = new Intent(activity, TVStreamLoadingActivity.class);
-        intent.putExtra(EXTRA_STREAM_INFO, info);
-        intent.putExtra(EXTRA_SHOW_INFO, Parcels.wrap(show));
         activity.startActivity(intent);
         return intent;
     }

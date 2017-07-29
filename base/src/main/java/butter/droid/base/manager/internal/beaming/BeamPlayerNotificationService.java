@@ -154,7 +154,7 @@ public class BeamPlayerNotificationService extends Service {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
         NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
-                .setContentTitle(manager.getStreamInfo().getTitle() == null ? "Video" : manager.getStreamInfo().getTitle())
+                .setContentTitle(manager.getStreamInfo().getFullTitle() == null ? "Video" : manager.getStreamInfo().getFullTitle())
                 .setContentText(getResources().getString(R.string.app_name))
                 .setDeleteIntent(pendingIntent)
                 .setStyle(style)
@@ -204,8 +204,8 @@ public class BeamPlayerNotificationService extends Service {
 
             mediaControl.getPlayState(playStateListener);
 
-            if (manager.getStreamInfo().getImageUrl() != null) {
-                Picasso.with(this).load(manager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
+            if (manager.getStreamInfo().getPosterImage() != null) {
+                Picasso.with(this).load(manager.getStreamInfo().getPosterImage()).resize(400, 400).centerInside().into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         image = bitmap;

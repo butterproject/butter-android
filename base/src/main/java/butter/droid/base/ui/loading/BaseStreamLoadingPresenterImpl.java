@@ -18,7 +18,6 @@
 package butter.droid.base.ui.loading;
 
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.module.Show;
 
 public abstract class BaseStreamLoadingPresenterImpl implements BaseStreamLoadingPresenter {
 
@@ -28,10 +27,10 @@ public abstract class BaseStreamLoadingPresenterImpl implements BaseStreamLoadin
         this.view = view;
     }
 
-    @Override public void onCreate(StreamInfo info, Show show, boolean savedState) {
+    @Override public void onCreate(StreamInfo info, boolean savedState) {
         if (info != null) {
             if (!savedState) {
-                view.displayStreamLoadingFragment(info, show);
+                view.displayStreamLoadingFragment(info);
             }
         } else {
             throw new IllegalStateException("StreamInfo not present");

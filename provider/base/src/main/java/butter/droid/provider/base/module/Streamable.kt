@@ -19,7 +19,9 @@ package butter.droid.provider.base.module
 
 interface Streamable {
 
-    val id: String
-    val title: String
+    /**
+     * File to stream. This is not an torrent url
+     */
+    var url: String?
 
 }

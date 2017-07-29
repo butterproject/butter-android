@@ -24,17 +24,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.provider.base.module.Show;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;
-import org.parceler.Parcels;
 
 public class TVVideoPlayerActivity extends TVBaseActivity {
 
     private static final String EXTRA_STREAM_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.streamInfo";
     private static final String EXTRA_RESUME_POSITION = "butter.droid.tv.ui.player.TVVideoPlayerActivity.resumePosition";
-    private static final String EXTRA_SHOW_INFO = "butter.droid.tv.ui.player.TVVideoPlayerActivity.episodeInfo";
 
     private static final String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.player.TVVideoPlayerActivity.videoFragment";
 
@@ -110,21 +107,19 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
 
     private void createStreamInfo() {
         streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-        String location = streamInfo.getVideoLocation();
 
+        String location = streamInfo.getStreamUrl();
+
+        // TODO: 7/29/17 This should be handled earlier
         if (!location.startsWith("file://") && !location.startsWith("http://") && !location.startsWith("https://")) {
             location = "file://" + location;
         }
 
-        streamInfo.setVideoLocation(location);
+        streamInfo.setStreamUrl(location);
     }
 
     public TVVideoPlayerComponent getComponent() {
         return component;
-    }
-
-    public static Intent startActivity(Context context, StreamInfo info) {
-        return startActivity(context, info, 0);
     }
 
     public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {
@@ -135,11 +130,10 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         return intent;
     }
 
-    public static Intent startActivity(Context context, StreamInfo info, Show show) {
+    public static Intent startActivity(Context context, StreamInfo info) {
         Intent intent = new Intent(context, TVVideoPlayerActivity.class);
         intent.putExtra(EXTRA_STREAM_INFO, info);
         intent.putExtra(EXTRA_RESUME_POSITION, 0);
-        intent.putExtra(EXTRA_SHOW_INFO, Parcels.wrap(show));
         context.startActivity(intent);
         return intent;
     }

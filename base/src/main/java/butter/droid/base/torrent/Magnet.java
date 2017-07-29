@@ -33,7 +33,7 @@ import butter.droid.base.R;
 public class Magnet {
 
     private Context mContext;
-    private boolean mCanOpen = false;
+    private boolean canOpen = false;
     private Intent mOpenIntent;
 
     public Magnet(Context context, String magnetUrl) {
@@ -47,7 +47,7 @@ public class Magnet {
 
     public void setUrl(String magnetUrl) {
         if(magnetUrl == null) {
-            mCanOpen = false;
+            canOpen = false;
             return;
         }
 
@@ -69,9 +69,9 @@ public class Magnet {
             Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), mContext.getString(R.string.open_with));
             filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[filteredShareIntents.size()]));
             mOpenIntent = filteredIntent;
-            mCanOpen = true;
+            canOpen = true;
         } else {
-            mCanOpen = false;
+            canOpen = false;
         }
     }
 
@@ -82,7 +82,7 @@ public class Magnet {
     }
 
     public boolean canOpen() {
-        return mCanOpen;
+        return canOpen;
     }
 
 }

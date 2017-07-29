@@ -94,7 +94,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     @Override public void onViewCreated() {
         updateSubtitleSize(preferencesHandler.getSubtitleSize());
-        view.setupControls(streamInfo.getTitle());
+        view.setupControls(streamInfo.getFullTitle());
     }
 
     @Override public void onSubtitleLanguageSelected(final String language) {
@@ -290,14 +290,14 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     private void loadMedia() {
-        String videoLocation = streamInfo.getVideoLocation();
-        if (TextUtils.isEmpty(videoLocation)) {
-//            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
+        String videoLocation = streamInfo.getStreamUrl();
+        if (TextUtils.isEmpty(videoLocation)) {;
+            // TODO: 7/29/17 Show error
+        //            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
 //            getActivity().finish();
             return;
         }
 
-        videoLocation = streamInfo.getVideoLocation();
         if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
                 "http://") && !videoLocation.startsWith("https://")) {
             videoLocation = "file://" + videoLocation;

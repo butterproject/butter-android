@@ -53,7 +53,6 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
 
     private State state;
     private boolean hasSubs = false;
-    private String videoLocation;
     private SubsStatus subsStatus = SubsStatus.DOWNLOADING;
     private String subtitleLanguage = null;
     protected boolean playingExternal = false;
@@ -121,13 +120,13 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     @Override public void onStreamReady(Torrent torrent) {
-        videoLocation = torrent.getVideoFile().toString();
-        startPlayer(videoLocation);
+        streamInfo.setStreamUrl(torrent.getVideoFile().toString());
+        startPlayer();
     }
 
     @Override public void onStreamProgress(Torrent torrent, StreamStatus status) {
-        if (!StringUtils.isEmpty(videoLocation)) {
-            startPlayer(videoLocation);
+        if (!StringUtils.isEmpty(streamInfo.getStreamUrl())) {
+            startPlayer();
         }
 
         setState(State.STREAMING, status);
@@ -185,12 +184,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     protected void setState(final State state, final Object extra) {
         this.state = state;
 
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                updateView(state, extra);
-            }
-        });
+        ThreadUtils.runOnUiThread(() -> updateView(state, extra));
     }
 
     /**
@@ -233,26 +227,21 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
 
     }
 
-    protected abstract void startPlayerActivity(String location, int resumePosition);
+    protected abstract void startPlayerActivity(int resumePosition);
 
     /**
      * Starts the player for a torrent stream.
      * <p/>
      * Will either start an external player, or the internal one
      */
-    private void startPlayer(String location) {
+    private void startPlayer() {
         if (hasSubs && subsStatus == SubsStatus.DOWNLOADING) {
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setState(State.WAITING_SUBTITLES);
-                }
-            });
+            ThreadUtils.runOnUiThread(() -> setState(State.WAITING_SUBTITLES));
             return;
         }
 
         if (!playerStarted) {
-            startPlayerActivity(location, 0);
+            startPlayerActivity(0);
 //            view.startPlayerActivity(location);
 
             playerStarted = true;
@@ -282,29 +271,26 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
 
     private void updateStatus(final StreamStatus status) {
         final DecimalFormat df = new DecimalFormat("#############0.00");
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int progress;
-                if (!playingExternal) {
-                    progress = status.bufferProgress;
-                } else {
-                    progress = ((Float) status.progress).intValue();
-                }
-
-                String progressText = String.format(Locale.US, "%d%%", progress);
-
-                String speedText;
-                if (status.downloadSpeed / 1024 < 1000) {
-                    speedText = df.format(status.downloadSpeed / 1024) + " KB/s";
-                } else {
-                    speedText = df.format(status.downloadSpeed / 1048576) + " MB/s";
-                }
-
-                String seedsText = status.seeds + " " + context.getString(R.string.seeds);
-
-                view.displayDetails(progress, progressText, speedText, seedsText);
+        ThreadUtils.runOnUiThread(() -> {
+            int progress;
+            if (!playingExternal) {
+                progress = status.bufferProgress;
+            } else {
+                progress = ((Float) status.progress).intValue();
             }
+
+            String progressText = String.format(Locale.US, "%d%%", progress);
+
+            String speedText;
+            if (status.downloadSpeed / 1024 < 1000) {
+                speedText = df.format(status.downloadSpeed / 1024) + " KB/s";
+            } else {
+                speedText = df.format(status.downloadSpeed / 1048576) + " MB/s";
+            }
+
+            String seedsText = status.seeds + " " + context.getString(R.string.seeds);
+
+            view.displayDetails(progress, progressText, speedText, seedsText);
         });
     }
 

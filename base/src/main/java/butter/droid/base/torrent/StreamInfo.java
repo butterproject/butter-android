@@ -21,105 +21,73 @@ import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Streamable;
+import butter.droid.provider.base.module.Torrent;
+import java.util.Locale;
 import org.parceler.Parcels;
 
 public class StreamInfo implements Parcelable {
 
-    private String torrentUrl;
-    private String videoLocation;
-    private String title;
-    private String imageUrl;
-    private String headerImageUrl;
+    @NonNull private final Media media;
+    @Nullable private final Media parentMedia;
+    @NonNull private final Streamable streamable;
 
-    private String showTitle;
-    private String showEpisodeTitle;
-
-    private int color = Color.TRANSPARENT;
-    private Streamable streamable;
-
-    public StreamInfo(String torrentUrl) {
-        this(null, null, torrentUrl, null, null);
-    }
-
-    public StreamInfo(@NonNull Movie movie, String torrentUrl, String subtitleLanguage, String quality) {
-        this(movie, movie, torrentUrl, subtitleLanguage, quality);
-    }
-
-    public StreamInfo(@NonNull Streamable streamable, @NonNull Media media, String torrentUrl, String subtitleLanguage, String quality) {
-        this(streamable, media, torrentUrl, subtitleLanguage, quality, null);
-    }
-
-    public StreamInfo(@NonNull Streamable streamable, @NonNull Media media, String torrentUrl, String subtitleLanguage, String quality, String videoLocation) {
-        this.torrentUrl = torrentUrl;
-        this.videoLocation = videoLocation;
+    public StreamInfo(@NonNull Streamable streamable, @NonNull Media media, @Nullable Media parentMedia) {
         this.streamable = streamable;
+        this.media = media;
+        this.parentMedia = parentMedia;
 
-        if (media != null) { // TODO if media is show or movie
-            title = media.getTitle() + ": " + streamable.getTitle();
-            showTitle = media.getTitle();
-            showEpisodeTitle = streamable.getTitle();
-        } else {
-            title = media.getTitle();
-        }
-
-        imageUrl = media.getPoster();
-        headerImageUrl = media.getBackdrop();
         // color = media.color;
     }
 
     private StreamInfo(Parcel in) {
-        this.torrentUrl = in.readString();
-        this.videoLocation = in.readString();
-        this.imageUrl = in.readString();
-        this.headerImageUrl = in.readString();
-        this.title = in.readString();
-        this.color = in.readInt();
+        this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
+        this.parentMedia = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
         this.streamable = Parcels.unwrap(in.readParcelable(Streamable.class.getClassLoader()));
-        this.showTitle = in.readString();
-        this.showEpisodeTitle = in.readString();
     }
 
-    public String getTitle() {
-        return title;
+    @NonNull public String getFullTitle() {
+        if (parentMedia != null && !(parentMedia instanceof Show)) {
+            return String.format(Locale.US, "%s: %s", parentMedia.getTitle(), media.getTitle());
+        } else {
+            return media.getTitle();
+        }
     }
 
-    public String getShowTitle() {
-        return showTitle;
+    @NonNull public String getMediaTitle() {
+        return media.getTitle();
     }
 
-    public String getShowEpisodeTitle() {
-        return showEpisodeTitle;
+    @Nullable public String getParentMediaTitle() {
+        if (parentMedia != null) {
+            return parentMedia.getTitle();
+        } else {
+            return null;
+        }
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    @Nullable public String getTorrentUrl() {
+        if (streamable instanceof Torrent) {
+            return ((Torrent) streamable).getTorrentUrl();
+        } else {
+            return null;
+        }
     }
 
-    public String getHeaderImageUrl() {
-        return headerImageUrl;
+    public String getStreamUrl() {
+        return streamable.getUrl();
     }
 
-    public String getTorrentUrl() {
-        return torrentUrl;
-    }
-
-    public String getVideoLocation() {
-        return videoLocation;
+    public void setStreamUrl(final String url) {
+        streamable.setUrl(url);
     }
 
     public int getPaletteColor() {
-        return color;
-    }
-
-    public Streamable getStreamable() {
-        return streamable;
-    }
-
-    public void setVideoLocation(String videoLocation) {
-        this.videoLocation = videoLocation;
+        // TODO: 7/29/17 Color
+        return Color.TRANSPARENT;
     }
 
     @Override
@@ -129,15 +97,9 @@ public class StreamInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.torrentUrl);
-        dest.writeString(this.videoLocation);
-        dest.writeString(this.imageUrl);
-        dest.writeString(this.headerImageUrl);
-        dest.writeString(this.title);
-        dest.writeInt(this.color);
+        dest.writeParcelable(Parcels.wrap(this.media), 0);
+        dest.writeParcelable(Parcels.wrap(this.parentMedia), 0);
         dest.writeParcelable(Parcels.wrap(this.streamable), 0);
-        dest.writeString(this.showTitle);
-        dest.writeString(this.showEpisodeTitle);
     }
 
     public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
@@ -149,4 +111,25 @@ public class StreamInfo implements Parcelable {
             return new StreamInfo[size];
         }
     };
+
+    @Nullable public String getBackdropImage() {
+        if (media.getBackdrop() != null) {
+            return media.getBackdrop();
+        } else if (parentMedia != null) {
+            return parentMedia.getBackdrop();
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable public String getPosterImage() {
+        if (media.getPoster() != null) {
+            return media.getPoster();
+        } else if (parentMedia != null) {
+            return media.getPoster();
+        } else {
+            return null;
+        }
+    }
+
 }

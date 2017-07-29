@@ -18,20 +18,16 @@
 package butter.droid.tv.ui.loading.fragment;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;
-import butter.droid.provider.base.module.Show;
 
 public class TVStreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmentPresenterImpl
         implements TVStreamLoadingFragmentPresenter {
 
     private final TVStreamLoadingFragmentView view;
-
-    @Nullable private Show show;
 
     public TVStreamLoadingFragmentPresenterImpl(TVStreamLoadingFragmentView view,
             ProviderManager providerManager,
@@ -41,27 +37,14 @@ public class TVStreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragm
         this.view = view;
     }
 
-    @Override public void onCreate(StreamInfo streamInfo, Show show) {
-        super.onCreate(streamInfo);
-
-        this.show = show;
-    }
-
     @Override public void onCreate(StreamInfo streamInfo) {
         super.onCreate(streamInfo);
 
-        view.updateBackground(streamInfo.getHeaderImageUrl());
+        view.updateBackground(streamInfo.getBackdropImage());
     }
 
-    @Override protected void startPlayerActivity(String location, int resumePosition) {
-        if (!playerStarted) {
-            streamInfo.setVideoLocation(location);
-            if (show != null) {
-                view.startPlayerActivity(streamInfo, show);
-            } else {
-                view.startPlayerActivity(streamInfo, resumePosition);
-            }
-        }
+    @Override protected void startPlayerActivity(int resumePosition) {
+        view.startPlayerActivity(streamInfo, resumePosition);
     }
 
 }

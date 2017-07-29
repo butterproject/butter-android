@@ -19,6 +19,7 @@ package butter.droid.tv.ui.detail.show;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Show;
@@ -63,7 +64,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
         for (Episode episode : show.getEpisodes()) {
             // create list of season if does not exists
             if (!seasons.containsKey(episode.getSeasion())) {
-                seasons.put(episode.getSeasion(), new ArrayList<Episode>());
+                seasons.put(episode.getSeasion(), new ArrayList<>());
             }
 
             // add episode to the list
@@ -94,18 +95,10 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     }
 
     private void startTorrent(final Episode episode, final Torrent torrent) {
-
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
-        /*
-        StreamInfo info = new StreamInfo(
-                episode,
-                item,
-                torrent.getValue().getUrl(),
-                subtitleLanguage,
-                torrent.getKey());
+        StreamInfo info = new StreamInfo(torrent, episode, item);
 
-        view.torrentSelected(item, info);
-        */
+        view.torrentSelected(info);
     }
 }

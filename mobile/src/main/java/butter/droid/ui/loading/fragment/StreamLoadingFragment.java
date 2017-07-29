@@ -19,7 +19,6 @@ package butter.droid.ui.loading.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -31,22 +30,19 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
-
-import javax.inject.Inject;
-
 import butter.droid.R;
-import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.utils.VersionUtils;
+import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
+import butter.droid.ui.player.VideoPlayerActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.squareup.picasso.Picasso;
+import javax.inject.Inject;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment implements StreamLoadingFragmentView {
 
@@ -110,12 +106,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
 
     @Override public void pickTorrentFile(String[] fileNames) {
         StringArraySelectorDialogFragment.show(getChildFragmentManager(), R.string.select_file, fileNames, -1,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int position) {
-                        presenter.selectTorrentFile(position);
-                    }
-                });
+                (dialog, position) -> presenter.selectTorrentFile(position));
     }
 
     @Override public void startBeamActivity(StreamInfo streamInfo, int resumePosition) {
