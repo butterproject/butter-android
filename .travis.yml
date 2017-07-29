@@ -12,6 +12,7 @@ before_install:
   - unzip -o sdk-tools-linux-3859397.zip -d $ANDROID_HOME/
   - chmod +x gradlew
   - cp -r config/ci/licenses $ANDROID_HOME/
+  - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "tools" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "build-tools;26.0.1" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "emulator" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager sdkmanager "platform-tools" --channel=3
