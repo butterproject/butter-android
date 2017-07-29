@@ -29,7 +29,3 @@ script:
   - adb devices
   - adb shell input keyevent 82 &
   - ./gradlew check connectedCheck -PdisablePreDex --stacktrace
-
-
-
-https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
