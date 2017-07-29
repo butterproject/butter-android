@@ -22,8 +22,8 @@ before_install:
   - $ANDROID_HOME/tools/bin/sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
 
 before_script:
-  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
+  - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force --n emulator -k "system-images;$ANDROID_TARGET;default;$ANDROID_ABI" --target $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd emulator -no-window -no-audio -wipe-data -no-boot-anim &
 
 script:
   - android-wait-for-emulator
