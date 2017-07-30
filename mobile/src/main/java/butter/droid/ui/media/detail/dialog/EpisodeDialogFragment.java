@@ -41,7 +41,7 @@ import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.torrent.Magnet;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.StringUtils;

@@ -18,15 +18,16 @@
 package butter.droid.tv.ui.detail.base;
 
 import android.support.annotation.StringRes;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 
 public interface TVBaseDetailView {
 
-    void initData(Media item);
+    void initData(MediaWrapper item);
 
-    void updateOverview(Media media);
+    void updateOverview(MediaWrapper media);
 
     void addAction(int id, @StringRes int text1, @StringRes int text2);
 
     void addAction(int id, @StringRes int text1, String text2);
+
 }

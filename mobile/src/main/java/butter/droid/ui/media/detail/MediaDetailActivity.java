@@ -20,6 +20,7 @@ package butter.droid.ui.media.detail;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,7 +44,8 @@ import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PixelUtils;
@@ -104,7 +106,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         // parallaxLayout doesn't exist? Then this is a tablet or big screen device
         isTablet = floatingActionButton == null;
 
-        Media media = Parcels.unwrap(getIntent().getExtras().getParcelable(EXTRA_MEDIA));
+        MediaWrapper media = Parcels.unwrap(getIntent().getExtras().getParcelable(EXTRA_MEDIA));
         if (media == null) {
             finish();
             return;
@@ -136,20 +138,26 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         presenter.playMediaClicked();
     }
 
-    @Override public void initMediaLayout(Media media) {
+    @Override public void initMediaLayout(MediaWrapper mediaWrapper) {
+        Media media = mediaWrapper.getMedia();
         getSupportActionBar().setTitle(media.getTitle());
 
-        // TODO: 6/17/17
-//        collapsingToolbar.setContentScrimColor(media.color);
-//        collapsingToolbar.setStatusBarScrimColor(media.color);
+        int color = mediaWrapper.getColor();
+        if (mediaWrapper.hasColor()) {
+            collapsingToolbar.setContentScrimColor(color);
+            collapsingToolbar.setStatusBarScrimColor(color);
+        }
+
         collapsingToolbar.setTitleEnabled(false);
 
         // Calculate toolbar scrolling variables
         int topHeight = PixelUtils.getScreenHeight(this) / 3 * 2;
         if (!isTablet) {
-            //noinspection ConstantConditions
-            // TODO: 6/17/17
-//            floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(media.color));
+            if (mediaWrapper.hasColor()) {
+                //noinspection ConstantConditions
+                floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
+            }
+
             bgImage.getLayoutParams().height = topHeight;
         } else {
             CoordinatorLayout.LayoutParams params =
@@ -193,7 +201,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         startActivity(VideoPlayerActivity.getIntent(this, streamInfo));
     }
 
-    @Override public void openYouTube(Media media, String url) {
+    @Override public void openYouTube(MediaWrapper media, String url) {
         startActivity(TrailerPlayerActivity.getIntent(this, media, url));
     }
 
@@ -229,7 +237,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         return component;
     }
 
-    public static Intent getIntent(@NonNull Context context, @NonNull Media media) {
+    public static Intent getIntent(@NonNull Context context, @NonNull MediaWrapper media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);
         intent.putExtra(EXTRA_MEDIA, Parcels.wrap(media));
         return intent;

@@ -18,12 +18,12 @@
 package butter.droid.ui.media.detail;
 
 import android.support.annotation.NonNull;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.module.Torrent;
 
 public interface MediaDetailPresenter {
-    void onCreate(@NonNull Media media);
+    void onCreate(@NonNull MediaWrapper media);
 
     void playMediaClicked();
 

@@ -27,10 +27,9 @@ import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v4.app.Fragment;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.module.Episode;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
@@ -62,10 +61,9 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
                 .inject(this);
 
         Bundle arguments = getArguments();
-        final int providerId = arguments.getInt(EXTRA_PROVIDER);
-        final Show item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
+        final MediaWrapper item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
 
-        presenter.onCreate(providerId, item);
+        presenter.onCreate(item);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
@@ -117,11 +115,10 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
                 }).show();
     }
 
-    public static Fragment newInstance(final int providerId, final Media media) {
+    public static Fragment newInstance(final MediaWrapper media) {
         TVShowDetailsFragment fragment = new TVShowDetailsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.getInt(EXTRA_PROVIDER, providerId);
         bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
 
         fragment.setArguments(bundle);

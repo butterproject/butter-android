@@ -17,7 +17,7 @@
 
 package butter.droid.base.ui.loading;
 
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 
 public abstract class BaseStreamLoadingPresenterImpl implements BaseStreamLoadingPresenter {
 

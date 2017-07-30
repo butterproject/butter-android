@@ -41,7 +41,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;

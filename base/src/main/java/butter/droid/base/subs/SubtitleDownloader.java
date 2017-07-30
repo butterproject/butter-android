@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.utils.FileUtils;
 import java.io.File;
 import java.io.FileInputStream;

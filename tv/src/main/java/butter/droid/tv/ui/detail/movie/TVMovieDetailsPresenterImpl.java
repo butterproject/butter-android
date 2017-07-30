@@ -19,8 +19,8 @@ package butter.droid.tv.ui.detail.movie;
 
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.R;
@@ -32,8 +32,6 @@ public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl impl
     private final TVMovieDetailsView view;
     private final MediaDisplayManager mediaDisplayManager;
 
-    private Movie item;
-
     public TVMovieDetailsPresenterImpl(final TVMovieDetailsView view, final ProviderManager providerManager,
             final MediaDisplayManager mediaDisplayManager) {
         super(view, providerManager);
@@ -42,24 +40,22 @@ public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl impl
         this.mediaDisplayManager = mediaDisplayManager;
     }
 
-    @Override public void onCreate(final int providerId, final Movie item) {
-        super.onCreate(providerId, item);
-
-        this.item = item;
+    @Override public void onCreate(final MediaWrapper item) {
+        super.onCreate(item);
     }
 
-    @Override protected void detailsLoaded(final Media media) {
+    @Override protected void detailsLoaded(final MediaWrapper media) {
         super.detailsLoaded(media);
-        this.item = (Movie) media;
 
-        addActions(item);
+        addActions((Movie) media.getMedia());
     }
 
     @Override public void actionClicked(final long actionId) {
+        Movie movie = (Movie) item.getMedia();
         if (actionId == ACTION_TRAILER) {
-            view.startTrailer(item, item.getTrailer());
+            view.startTrailer(item, movie.getTrailer());
         } else {
-            Torrent torrent = item.getTorrents()[(int) actionId];
+            Torrent torrent = movie.getTorrents()[(int) actionId];
             view.startMovie(item, torrent, mediaDisplayManager.getFormatDisplayName(torrent.getFormat()));
         }
     }

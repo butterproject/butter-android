@@ -18,14 +18,14 @@
 package butter.droid.tv.ui.main.overview;
 
 import android.support.annotation.Nullable;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
 
 public interface TVOverviewPresenter {
 
     void onActivityCreated();
 
-    void rowSelected(int index, @Nullable final Media mediaItem);
+    void rowSelected(int index, @Nullable final MediaWrapper mediaItem);
 
     void moreItemClicked(MoreItem item);
 

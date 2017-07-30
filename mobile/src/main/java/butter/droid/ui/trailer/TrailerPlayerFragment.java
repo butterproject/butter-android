@@ -22,7 +22,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butter.droid.widget.StrokedRobotoTextView;
 import butterknife.BindView;
@@ -52,7 +52,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 
         Bundle args = getArguments();
         String uri = args.getString(ARG_URI);
-        Media media = Parcels.unwrap(args.getParcelable(ARG_MEDIA));
+        MediaWrapper media = Parcels.unwrap(args.getParcelable(ARG_MEDIA));
 
         presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
@@ -74,7 +74,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 //        }).show();
 //    }
 
-    public static TrailerPlayerFragment newInstance(final Media media, final String trailerUri) {
+    public static TrailerPlayerFragment newInstance(final MediaWrapper media, final String trailerUri) {
         Bundle args = new Bundle(2);
         args.putParcelable(ARG_MEDIA, Parcels.wrap(media));
         args.putString(ARG_URI, trailerUri);

@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.MobileButterApplication;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.ui.ButterBaseActivity;
 import org.parceler.Parcels;
 
@@ -39,7 +39,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity {
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();
-        final Media media = Parcels.unwrap(intent.getParcelableExtra(EXTRA_MEDIA));
+        final MediaWrapper media = Parcels.unwrap(intent.getParcelableExtra(EXTRA_MEDIA));
         final String youtubeUrl = intent.getStringExtra(EXTRA_URI);
 
         if (savedInstanceState == null) {
@@ -61,7 +61,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity {
         }
     }
 
-    public static Intent getIntent(final Context context, final Media media, final String url) {
+    public static Intent getIntent(final Context context, final MediaWrapper media, final String url) {
         final Intent intent = new Intent(context, TrailerPlayerActivity.class);
         intent.putExtra(TrailerPlayerActivity.EXTRA_MEDIA, Parcels.wrap(media));
         intent.putExtra(TrailerPlayerActivity.EXTRA_URI, url);

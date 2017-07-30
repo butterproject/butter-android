@@ -21,9 +21,8 @@ import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
@@ -49,32 +48,30 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
                 .inject(this);
 
         Bundle arguments = getArguments();
-        final int providerId = arguments.getInt(EXTRA_PROVIDER);
-        final Movie item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
+        final MediaWrapper item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
 
-        presenter.onCreate(providerId, item);
+        presenter.onCreate(item);
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
         return new MovieDetailsDescriptionPresenter();
     }
 
-    @Override public void startTrailer(final Movie movie, final String trailer) {
+    @Override public void startTrailer(final MediaWrapper movie, final String trailer) {
         startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, trailer));
     }
 
-    @Override public void startMovie(final Movie item, final Torrent torrent, final String quality) {
+    @Override public void startMovie(final MediaWrapper item, final Torrent torrent, final String quality) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-        StreamInfo info = new StreamInfo(torrent, item, null);
+        StreamInfo info = new StreamInfo(torrent, item.getMedia(), null);
 
         TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
 
-    public static Fragment newInstance(final int providerId, final Media media) {
+    public static Fragment newInstance(final MediaWrapper media) {
         TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putInt(EXTRA_PROVIDER, providerId);
         bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
 
         fragment.setArguments(bundle);

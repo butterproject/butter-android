@@ -19,20 +19,23 @@ package butter.droid.ui.media.list.base;
 
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.util.Pair;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.ItemsWrapper;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.filter.Pager;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
+import java.util.List;
 import timber.log.Timber;
 
 public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresenter {
@@ -41,7 +44,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
     private final ProviderManager providerManager;
     private final PreferencesHandler preferencesHandler;
 
-    protected final ArrayList<Media> items = new ArrayList<>();
+    protected final ArrayList<MediaWrapper> items = new ArrayList<>();
     protected Filter filter = null;
 
     protected int providerId;
@@ -71,18 +74,24 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
             showLoading();
         }
 
-        providerManager.getProvider(providerId).items(filter, new Pager(endCursor))
+        providerManager.getProvider(providerId)
+                .items(filter, new Pager(endCursor))
+                .flatMap(w -> Single.zip(Single.just(w.getPaging()),
+                        Observable.fromIterable(w.getMedia())
+                                .map(i -> new MediaWrapper(i, providerId))
+                                .toList(),
+                        Pair::create))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ItemsWrapper>() {
+                .subscribe(new SingleObserver<Pair<Paging, List<MediaWrapper>>>() {
                     @Override public void onSubscribe(final Disposable d) {
                         listCall = d;
                     }
 
-                    @Override public void onSuccess(final ItemsWrapper value) {
-                        Paging paging = value.getPaging();
-                        view.addItems(value.getMedia(), !paging.getHasNextPage(), paging.getEndCursor());
-                        items.addAll(value.getMedia());
+                    @Override public void onSuccess(final Pair<Paging, List<MediaWrapper>> value) {
+                        Paging paging = value.first;
+                        view.addItems(value.second, !paging.getHasNextPage(), paging.getEndCursor());
+                        items.addAll(value.second);
                         showLoaded();
                     }
 
@@ -103,19 +112,20 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                 });
     }
 
-    @Override public void onMediaItemClicked(final Media media) {
+    @Override public void onMediaItemClicked(final MediaWrapper media) {
         view.showMediaLoadingDialog();
 
         cancelDetailsCall();
-        providerManager.getProvider(providerId).detail(media)
+        providerManager.getProvider(providerId).detail(media.getMedia())
+                .map(m -> new MediaWrapper(m, media.getProviderId(), media.getColor()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Media>() {
+                .subscribe(new SingleObserver<MediaWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
 
                     }
 
-                    @Override public void onSuccess(final Media value) {
+                    @Override public void onSuccess(final MediaWrapper value) {
                         view.showDetails(value);
                     }
 

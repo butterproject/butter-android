@@ -20,6 +20,7 @@ package butter.droid.tv.ui.media;
 import android.support.annotation.Nullable;
 import android.util.Pair;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Paging;
@@ -67,12 +68,14 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
 
     private void loadItems(@Nullable String endCursor) {
         cancelCurrentCall();
-        providerManager.getProvider(providerId).items(filter, new Pager(endCursor))
+        providerManager.getProvider(providerId)
+                .items(filter, new Pager(endCursor))
                 .flatMap(i -> Single.zip(
                         Single.just(i)
                                 .map(ItemsWrapper::getMedia)
                                 .flatMapObservable(Observable::fromIterable)
-                                .map(media -> new MediaCardItem(providerId, media))
+                                .map(media -> new MediaWrapper(media, providerId))
+                                .map(MediaCardItem::new)
                                 .toList(),
                         Single.just(i)
                                 .map(ItemsWrapper::getPaging),

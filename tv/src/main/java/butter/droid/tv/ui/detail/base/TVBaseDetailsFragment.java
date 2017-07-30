@@ -33,7 +33,7 @@ import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElement
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.LoadedFrom;
@@ -42,7 +42,6 @@ import javax.inject.Inject;
 
 public abstract class TVBaseDetailsFragment extends DetailsSupportFragment implements TVBaseDetailView, OnActionClickedListener {
 
-    protected static final String EXTRA_PROVIDER = "butter.droid.tv.ui.detail.base.TVBaseDetailsFragment.provider";
     protected static final String EXTRA_ITEM = "butter.droid.tv.ui.detail.base.TVBaseDetailsFragment.item";
 
     @Inject TVBaseDetailsPresenter presenter;
@@ -69,7 +68,7 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         picasso.cancelRequest(detailsImageTarget);
     }
 
-    @Override public void initData(final Media item) {
+    @Override public void initData(final MediaWrapper item) {
         presenterSelector = new ClassPresenterSelector();
         populatePresenterSelector(presenterSelector);
 
@@ -83,7 +82,7 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         setAdapter(adapter);
     }
 
-    @Override public void updateOverview(final Media media) {
+    @Override public void updateOverview(final MediaWrapper media) {
         detailsRow.setItem(media);
         adapter.notifyArrayItemRangeChanged(0, 1);
         updateDetailImage(media);
@@ -116,11 +115,14 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         // override if needed
     }
 
-    private void setupDetailsOverviewRowPresenter(Media item) {
+    private void setupDetailsOverviewRowPresenter(MediaWrapper item) {
         // Set detail background and style.
         FullWidthDetailsOverviewRowPresenter detailsPresenter = new FullWidthDetailsOverviewRowPresenter(getDetailPresenter());
-        // TODO
-        // detailsPresenter.setBackgroundColor(item.color);
+
+        if (item.hasColor()) {
+            detailsPresenter.setBackgroundColor(item.getColor());
+        }
+
         detailsPresenter.setOnActionClickedListener(this);
 
         final FullWidthDetailsOverviewSharedElementHelper sharedElementHelper = new FullWidthDetailsOverviewSharedElementHelper();
@@ -132,8 +134,8 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
         presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
 
-    private void updateDetailImage(final Media item) {
-        picasso.load(item.getPoster())
+    private void updateDetailImage(final MediaWrapper item) {
+        picasso.load(item.getMedia().getPoster())
                 .into(detailsImageTarget);
     }
 

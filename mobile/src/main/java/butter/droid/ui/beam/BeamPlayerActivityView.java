@@ -17,7 +17,7 @@
 
 package butter.droid.ui.beam;
 
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 
 public interface BeamPlayerActivityView {
 

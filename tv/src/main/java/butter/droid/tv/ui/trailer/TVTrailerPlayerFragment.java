@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.trailer;
 
 import android.os.Bundle;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import javax.inject.Inject;
@@ -44,7 +44,7 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
 
         Bundle args = getArguments();
         String uri = args.getString(ARG_URI);
-        Media media = Parcels.unwrap(args.getParcelable(ARG_MEDIA));
+        MediaWrapper media = Parcels.unwrap(args.getParcelable(ARG_MEDIA));
 
         presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
@@ -56,7 +56,7 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
 //        }
 //    }).show();
 
-    public static TVTrailerPlayerFragment newInstance(final Media media, final String trailerUri) {
+    public static TVTrailerPlayerFragment newInstance(final MediaWrapper media, final String trailerUri) {
         Bundle args = new Bundle(2);
         args.putParcelable(ARG_MEDIA, Parcels.wrap(media));
         args.putString(ARG_URI, trailerUri);

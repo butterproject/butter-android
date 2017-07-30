@@ -19,17 +19,20 @@ package butter.droid.tv.ui.main.overview;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.util.SparseArray;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.ItemsWrapper;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.provider.filter.Pager;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
 import io.reactivex.MaybeObserver;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -60,13 +63,13 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         loadProvidersData();
     }
 
-    @Override public void rowSelected(final int index, @Nullable final Media mediaItem) {
+    @Override public void rowSelected(final int index, @Nullable final MediaWrapper mediaItem) {
         if (selectedRow != index) {
             selectedRow = index;
         }
 
         if (mediaItem != null) {
-            view.updateBackgroundImage(mediaItem.getBackdrop());
+            view.updateBackgroundImage(mediaItem.getMedia().getBackdrop());
         }
     }
 
@@ -117,20 +120,27 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                     }
                     return provider.items(f, new Pager(null));
                 })
+                .flatMap(w -> Single.zip(Single.just(w.getPaging()),
+                        Observable.fromIterable(w.getMedia())
+                                .map(m -> new MediaWrapper(m, providerId))
+                                .toList(),
+                        Pair::create
+                ))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ItemsWrapper>() {
+                .subscribe(new SingleObserver<Pair<Paging, List<MediaWrapper>>>() {
                     @Override public void onSubscribe(final Disposable d) {
                         listRequests.append(providerId, d);
                     }
 
-                    @Override public void onSuccess(final ItemsWrapper items) {
-                        List<Media> mediaItems = items.getMedia();
-                        List<MediaCardItem> cardItems = convertMediaToOverview(providerId, mediaItems);
+                    @Override public void onSuccess(final Pair<Paging, List<MediaWrapper>> items) {
+                        List<MediaWrapper> mediaItems = items.second;
+                        List<MediaCardItem> cardItems = convertMediaToOverview(mediaItems);
+
                         view.displayProviderData(providerId, cardItems);
 
                         if (selectedRow == 0) {
-                            view.updateBackgroundImage(mediaItems.get(0).getBackdrop());
+                            view.updateBackgroundImage(mediaItems.get(0).getMedia().getBackdrop());
                         }
                     }
 
@@ -181,10 +191,10 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         }
     }
 
-    private static List<MediaCardItem> convertMediaToOverview(final int providerId, final List<Media> items) {
+    private static List<MediaCardItem> convertMediaToOverview(final List<MediaWrapper> items) {
         List<MediaCardItem> list = new ArrayList<>();
-        for (Media media : items) {
-            list.add(new MediaCardItem(providerId, media));
+        for (MediaWrapper media : items) {
+            list.add(new MediaCardItem(media));
         }
         return list;
     }

@@ -28,7 +28,7 @@ import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.subs.TimedTextObject;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import java.io.File;
 import java.util.Collection;

@@ -18,14 +18,14 @@
 package butter.droid.ui.media.detail;
 
 import android.support.annotation.StringRes;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
 
 public interface MediaDetailView {
-    void initMediaLayout(Media media);
+    void initMediaLayout(MediaWrapper media);
 
     void displayMovie(Movie media);
 
@@ -37,7 +37,7 @@ public interface MediaDetailView {
 
     void openVideoPlayer(StreamInfo streamInfo);
 
-    void openYouTube(Media media, String url);
+    void openYouTube(MediaWrapper media, String url);
 
     void displayHealthInfo(TorrentHealth health, int seeds, int peers);
 }

@@ -18,7 +18,7 @@
 package butter.droid.base.ui.player.stream;
 
 import butter.droid.base.subs.SubtitleDownloader.ISubtitleDownloaderListener;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 import java.io.File;
 

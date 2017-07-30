@@ -32,11 +32,9 @@ import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
 import butter.droid.base.manager.internal.paging.CursorPagingListener;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Show;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -130,7 +128,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof MediaCardPresenter.MediaCardItem) {
             MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-            backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().getBackdrop());
+            backgroundUpdater.updateBackgroundAsync(overviewItem.getMediaWrapper().getMedia().getBackdrop());
         }
 
         //really hacky way of making and 'endless' adapter
@@ -145,9 +143,9 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
                 view.getMainImageView(),
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
-        Media media = item.getMedia();
-        if (media instanceof Movie || media instanceof Show) {
-            startActivity(TVMediaDetailActivity.getIntent(getActivity(), item.getProviderId(), media), options);
+        MediaWrapper media = item.getMediaWrapper();
+        if (media.isMovie() || media.isShow()) { // TODO: 7/30/17 Handle episodes and seasons
+            startActivity(TVMediaDetailActivity.getIntent(getActivity(), media), options);
         }
     }
 

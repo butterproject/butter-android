@@ -30,7 +30,7 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -138,8 +138,8 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
         return (itemViewHolder, object, rowViewHolder, row) -> {
             if (object instanceof MediaCardItem) {
                 MediaCardItem item = (MediaCardItem) object;
-                Media media = item.getMedia();
-                startActivity(TVMediaDetailActivity.getIntent(getActivity(), item.getProviderId(), media));
+                MediaWrapper media = item.getMediaWrapper();
+                startActivity(TVMediaDetailActivity.getIntent(getActivity(), media));
             }
         };
     }
@@ -151,7 +151,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
                 RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof MediaCardPresenter.MediaCardItem) {
                 MediaCardPresenter.MediaCardItem overviewItem = (MediaCardPresenter.MediaCardItem) item;
-                backgroundUpdater.updateBackgroundAsync(overviewItem.getMedia().getBackdrop());
+                backgroundUpdater.updateBackgroundAsync(overviewItem.getMediaWrapper().getMedia().getBackdrop());
             }
         }
     }

@@ -32,7 +32,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import butter.droid.R;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.ui.beam.BeamPlayerActivity;

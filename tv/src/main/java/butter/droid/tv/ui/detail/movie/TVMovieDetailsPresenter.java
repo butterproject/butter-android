@@ -17,11 +17,11 @@
 
 package butter.droid.tv.ui.detail.movie;
 
-import butter.droid.provider.base.module.Movie;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
 
 public interface TVMovieDetailsPresenter extends TVBaseDetailsPresenter {
 
-    void onCreate(int providerId, Movie item);
+    void onCreate(MediaWrapper item);
 
 }

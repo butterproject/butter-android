@@ -31,12 +31,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butter.droid.R;
+import butter.droid.base.manager.internal.paging.CursorPagingListener;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.base.manager.internal.paging.CursorPagingListener;
 import butter.droid.manager.internal.paging.PagingManager;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Media;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.list.base.dialog.LoadingDetailDialogFragment;
 import butter.droid.ui.media.list.base.list.MediaGridAdapter;
@@ -74,7 +74,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     private MediaGridAdapter adapter;
     private GridLayoutManager layoutManager;
     private Integer columns = 2;
-    protected PagingManager<Media> pagingManager;
+    protected PagingManager<MediaWrapper> pagingManager;
 
     View rootView;
     @BindView(R.id.progressOverlay) LinearLayout progressOverlay;
@@ -138,7 +138,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
     }
 
     @Override public void onItemClick(View view, final int position) {
-        final Media media = adapter.getItem(position);
+        final MediaWrapper media = adapter.getItem(position);
         presenter.onMediaItemClicked(media);
 
         // TODO: 6/25/17
@@ -178,7 +178,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void addItems(List<Media> items, boolean completed, String endCursor) {
+    @Override public void addItems(List<MediaWrapper> items, boolean completed, String endCursor) {
         pagingManager.addItems(items, completed, endCursor);
     }
 
@@ -214,7 +214,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
                 .commit();
     }
 
-    @Override public void showDetails(final Media item) {
+    @Override public void showDetails(final MediaWrapper item) {
         startActivity(MediaDetailActivity.getIntent(getActivity(), item));
     }
 

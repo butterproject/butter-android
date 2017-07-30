@@ -19,9 +19,9 @@ package butter.droid.tv.ui.search;
 
 import android.support.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.filter.Pager;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter;
@@ -102,7 +102,7 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
                     @Override public void onNext(final List<SearchResult> value) {
                         for (int i = 0; i < value.size(); i++) {
                             SearchResult provider = value.get(i);
-                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(provider.providerId, provider.media);
+                            List<MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(provider.media);
                             view.replaceRow(i, provider.title, list);
                         }
                     }
@@ -127,7 +127,10 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
             final int providerId = i;
             // TODO: 6/17/17 Define title of search row
             requests.add(provider.items(new Filter(null, null, query), new Pager(null))
-                    .map(itemsWrapper -> new SearchResult(providerId, R.string.movie_results, itemsWrapper.getMedia())));
+                    .flatMapObservable(w -> Observable.fromIterable(w.getMedia()))
+                    .map(m -> new MediaWrapper(m, providerId))
+                    .toList()
+                    .map(l -> new SearchResult(R.string.movie_results, l)));
         }
 
         return requests;
@@ -147,12 +150,10 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
 
     private class SearchResult {
 
-        private final int providerId;
         @StringRes private final int title;
-        private final List<Media> media;
+        private final List<MediaWrapper> media;
 
-        public SearchResult(final int providerId, final int title, final List<Media> media) {
-            this.providerId = providerId;
+        public SearchResult(final int title, final List<MediaWrapper> media) {
             this.title = title;
             this.media = media;
         }

@@ -25,7 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;

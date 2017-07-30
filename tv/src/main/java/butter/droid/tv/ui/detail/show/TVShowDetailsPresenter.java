@@ -17,14 +17,14 @@
 
 package butter.droid.tv.ui.detail.show;
 
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
-import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
 
 public interface TVShowDetailsPresenter extends TVBaseDetailsPresenter {
 
-    void onCreate(int providerId, Show item);
+    void onCreate(MediaWrapper item);
 
     void episodeClicked(Episode episode);
 

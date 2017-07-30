@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butter.droid.R;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.manager.internal.paging.PagingAdapter;
@@ -46,12 +47,12 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import java.util.List;
 
-public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PagingAdapter<Media> {
+public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PagingAdapter<MediaWrapper> {
 
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_PROGRESS = 1;
 
-    private List<Media> items;
+    private List<MediaWrapper> items;
 
     private final int itemHeight;
     private final int itemWidth;
@@ -84,12 +85,13 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
             final ViewHolder videoViewHolder = (ViewHolder) viewHolder;
-            final Media item = getItem(position);
+            final Media item = getItem(position).getMedia();
 
             videoViewHolder.title.setText(item.getTitle());
             videoViewHolder.year.setText(String.valueOf(item.getYear()));
 
             if (!TextUtils.isEmpty(item.getPoster())) {
+                // TODO: 7/30/17 Do we need color information here?
                 final Context context = videoViewHolder.coverImage.getContext();
                 Picasso.with(context).load(item.getPoster()).resize(itemWidth, itemHeight).transform(DrawGradient.INSTANCE)
                         .into(videoViewHolder.coverImage);
@@ -121,7 +123,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void addItems(@Nullable List<Media> items) {
+    public void addItems(@Nullable List<MediaWrapper> items) {
         if (this.items == null) {
             this.items = items;
 
@@ -153,7 +155,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Nullable
-    public Media getItem(int position) {
+    public MediaWrapper getItem(int position) {
         if (position < getItemsSize()) {
             return items.get(position);
         } else {

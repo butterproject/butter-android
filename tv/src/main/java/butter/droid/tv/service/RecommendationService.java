@@ -23,6 +23,7 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;
@@ -179,7 +180,7 @@ public class RecommendationService extends IntentService {
                         .setDescription(movie.getSynopsis())
                         .setImage(movie.getPoster())
                         // TODO: 6/17/17 Handle provider id
-                        .setIntent(buildPendingIntent(0, movie))
+//                        .setIntent(buildPendingIntent(0, movie))
                         .build();
 
                 if (++count >= MAX_MOVIE_RECOMMENDATIONS) {
@@ -212,7 +213,7 @@ public class RecommendationService extends IntentService {
                         .setDescription(latestEpisode == null ? "" : getString(R.string.episode_number_format, latestEpisode.getEpisode()))
                         .setImage(show.getPoster())
                         // TODO: 6/17/17 Handle provider id
-                        .setIntent(buildPendingIntent(0, show))
+//                        .setIntent(buildPendingIntent(show))
                         .build();
 
                 if (++count >= MAX_SHOW_RECOMMENDATIONS) {
@@ -232,16 +233,16 @@ public class RecommendationService extends IntentService {
         return show.getEpisodes()[show.getEpisodes().length - 1];
     }
 
-    private PendingIntent buildPendingIntent(final int providerId, final Media media) {
+    private PendingIntent buildPendingIntent(final MediaWrapper media) {
         // TODO: 6/17/17 Pending intent can not rely on provider position
-        Intent detailIntent = TVMediaDetailActivity.getIntent(this, providerId, media);
+        Intent detailIntent = TVMediaDetailActivity.getIntent(this, media);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(TVMediaDetailActivity.class);
         stackBuilder.addNextIntent(detailIntent);
         // Ensure a unique PendingIntents, otherwise all recommendations end up with the same
         // PendingIntent
-        detailIntent.setAction(media.getId());
+        detailIntent.setAction(media.getMedia().getId());
 
         PendingIntent intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         return intent;

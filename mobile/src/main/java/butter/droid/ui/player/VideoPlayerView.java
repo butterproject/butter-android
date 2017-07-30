@@ -18,7 +18,7 @@
 package butter.droid.ui.player;
 
 import android.support.annotation.NonNull;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 
 public interface VideoPlayerView {
 

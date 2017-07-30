@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.detail.show;
 
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;

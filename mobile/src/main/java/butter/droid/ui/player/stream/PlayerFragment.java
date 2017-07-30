@@ -32,7 +32,7 @@ import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.subs.Caption;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;

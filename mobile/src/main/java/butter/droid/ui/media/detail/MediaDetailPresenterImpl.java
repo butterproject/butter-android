@@ -21,9 +21,9 @@ import android.support.annotation.NonNull;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
@@ -34,7 +34,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
     private final PreferencesHandler preferencesHandler;
     private final NetworkManager networkManager;
 
-    private Media media;
+    private MediaWrapper media;
     private String selectedSubtitleLanguage;
     private Torrent selectedTorrent;
 
@@ -45,17 +45,16 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
         this.networkManager = networkManager;
     }
 
-    @Override public void onCreate(@NonNull Media media) {
+    @Override public void onCreate(@NonNull MediaWrapper media) {
         this.media = media;
 
         view.initMediaLayout(media);
 
-        if (media instanceof Movie) {
-            view.displayMovie((Movie) media);
-        } else if (media instanceof Show) {
-            view.displayShow((Show) media);
-
-        } else {
+        if (media.isMovie()) {
+            view.displayMovie((Movie) media.getMedia());
+        } else if (media.isShow()) {
+            view.displayShow((Show) media.getMedia());
+        } else { // TODO: 7/30/17 Support2 season and episode
             throw new IllegalStateException("Unknown show type");
         }
     }
@@ -65,7 +64,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
                 && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null);
+            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media.getMedia(), null);
             view.playStream(streamInfo);
         }
 
@@ -92,7 +91,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
         if (selectedTorrent != null) {
             torrent = selectedTorrent;
         } else {
-            Movie movie = (Movie) this.media;
+            Movie movie = (Movie) this.media.getMedia();
             torrent = movie.getTorrents()[0];
         }
 

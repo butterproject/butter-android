@@ -29,6 +29,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.provider.base.module.Media;
 import butter.droid.tv.R;
@@ -87,7 +88,7 @@ public class MediaCardPresenter extends Presenter {
 
     public void onBindMediaViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
 
-        Media item = overview.getMedia();
+        Media item = overview.getMediaWrapper().getMedia();
         final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 
         cardView.setTitleText(item.getTitle());
@@ -102,15 +103,13 @@ public class MediaCardPresenter extends Presenter {
         if (item.getPoster() != null) {
             Target target = new Target() {
                 @Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
-                        @Override public void onGenerated(Palette palette) {
-                            Palette.Swatch swatch = palette.getDarkMutedSwatch();
-                            cardView.setCustomSelectedSwatch(swatch);
+                    Palette.from(bitmap).maximumColorCount(16).generate(palette -> {
+                        Palette.Swatch swatch = palette.getDarkMutedSwatch();
+                        cardView.setCustomSelectedSwatch(swatch);
 
-                            cardView.getMainImageView().setImageBitmap(bitmap);
-                            cardView.getMainImageView().setVisibility(View.GONE);
-                            AnimUtils.fadeIn(cardView.getMainImageView());
-                        }
+                        cardView.getMainImageView().setImageBitmap(bitmap);
+                        cardView.getMainImageView().setVisibility(View.GONE);
+                        AnimUtils.fadeIn(cardView.getMainImageView());
                     });
                 }
 
@@ -191,28 +190,22 @@ public class MediaCardPresenter extends Presenter {
 
     public static class MediaCardItem {
 
-        private final int providerId;
-        private final Media media;
+        private final MediaWrapper media;
 
-        public MediaCardItem(final int providerId, final Media media) {
-            this.providerId = providerId;
+        public MediaCardItem(final MediaWrapper media) {
             this.media = media;
         }
 
-        public int getProviderId() {
-            return providerId;
-        }
-
-        public Media getMedia() {
+        public MediaWrapper getMediaWrapper() {
             return media;
         }
 
     }
 
-    public static List<MediaCardItem> convertMediaToOverview(int providerId, List<Media> items) {
+    public static List<MediaCardItem> convertMediaToOverview(List<MediaWrapper> items) {
         List<MediaCardItem> list = new ArrayList<>();
-        for (Media media : items) {
-            list.add(new MediaCardItem(providerId, media));
+        for (MediaWrapper media : items) {
+            list.add(new MediaCardItem(media));
         }
         return list;
     }

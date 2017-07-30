@@ -17,9 +17,9 @@
 
 package butter.droid.tv.ui.detail;
 
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 
 public interface TVMediaDetailPresenter {
 
-    void onCreate(int providerId, Media media);
+    void onCreate(MediaWrapper media);
 }

@@ -19,7 +19,7 @@ package butter.droid.ui.player;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.utils.StreamInfoUtils;
 
 public class VideoPlayerPresenterImpl implements VideoPlayerPresenter {

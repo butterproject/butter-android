@@ -19,7 +19,7 @@ package butter.droid.ui.player;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 
 public interface VideoPlayerPresenter {
 

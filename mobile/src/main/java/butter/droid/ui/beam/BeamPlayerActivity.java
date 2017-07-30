@@ -26,7 +26,7 @@ import android.view.View;
 import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;

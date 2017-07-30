@@ -18,8 +18,8 @@
 package butter.droid.ui.media.list.base;
 
 import android.support.annotation.Nullable;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Media;
 
 public interface BaseMediaListPresenter {
 
@@ -27,7 +27,7 @@ public interface BaseMediaListPresenter {
 
     void loadNextPage(@Nullable String endCursor);
 
-    void onMediaItemClicked(Media media);
+    void onMediaItemClicked(MediaWrapper media);
 
     void onDestroy();
 }

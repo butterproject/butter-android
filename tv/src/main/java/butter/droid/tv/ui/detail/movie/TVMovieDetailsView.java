@@ -17,13 +17,14 @@
 
 package butter.droid.tv.ui.detail.movie;
 
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;
 
 public interface TVMovieDetailsView extends TVBaseDetailView {
 
-    void startTrailer(Movie movie, String trailer);
+    void startTrailer(MediaWrapper movie, String trailer);
 
-    void startMovie(Movie item, Torrent torrent, final String quality);
+    void startMovie(MediaWrapper item, Torrent torrent, final String quality);
 }

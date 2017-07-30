@@ -18,7 +18,7 @@
 package butter.droid.ui.media.list.base;
 
 import android.support.annotation.StringRes;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import java.util.List;
 
 public interface BaseMediaListView {
@@ -26,7 +26,7 @@ public interface BaseMediaListView {
 
     void showData();
 
-    void addItems(List<Media> items, boolean completed, String endCursor);
+    void addItems(List<MediaWrapper> items, boolean completed, String endCursor);
 
     void showEmpty();
 
@@ -40,5 +40,5 @@ public interface BaseMediaListView {
 
     void showMediaLoadingDialog();
 
-    void showDetails(Media value);
+    void showDetails(MediaWrapper value);
 }

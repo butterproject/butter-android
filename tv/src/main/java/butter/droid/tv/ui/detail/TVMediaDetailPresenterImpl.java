@@ -17,9 +17,7 @@
 
 package butter.droid.tv.ui.detail;
 
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Show;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
 import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 
@@ -31,14 +29,14 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
         this.view = view;
     }
 
-    @Override public void onCreate(final int providerId, final Media media) {
-        view.updateBackground(media.getPoster());
+    @Override public void onCreate(final MediaWrapper media) {
+        view.updateBackground(media.getMedia().getPoster());
 
-        if (media instanceof Movie) {
-            view.displayFragment(TVMovieDetailsFragment.newInstance(providerId, media));
-        } else if (media instanceof Show) {
-            view.displayFragment(TVShowDetailsFragment.newInstance(providerId, media));
-        } else {
+        if (media.isMovie()) {
+            view.displayFragment(TVMovieDetailsFragment.newInstance(media));
+        } else if (media.isShow()) {
+            view.displayFragment(TVShowDetailsFragment.newInstance(media));
+        } else { // TODO: 7/30/17 Handle season and episode
             throw new IllegalStateException("Unknow media type");
         }
     }

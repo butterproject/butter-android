@@ -21,7 +21,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.provider.base.module.Media;
+import butter.droid.base.providers.model.MediaWrapper;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -34,8 +34,7 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
     private final TVBaseDetailView view;
     private final ProviderManager providerManager;
 
-    private Media item;
-    private int providerId; // TODO: 6/17/17 This should probably go in some base class that would include both provider and media
+    protected MediaWrapper item;
 
     @Nullable private Disposable detailsRequest;
 
@@ -45,8 +44,7 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
     }
 
 
-    @CallSuper protected void onCreate(final int providerId, final Media item) {
-        this.providerId = providerId;
+    @CallSuper protected void onCreate(final MediaWrapper item) {
         this.item = item;
 
         view.initData(item);
@@ -64,21 +62,22 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
         // override if needed
     }
 
-    @CallSuper @MainThread protected void detailsLoaded(Media media) {
+    @CallSuper @MainThread protected void detailsLoaded(MediaWrapper media) {
         view.updateOverview(media);
     }
 
     private void loadDetails() {
-        providerManager.getProvider(providerId)
-                .detail(item)
+        providerManager.getProvider(item.getProviderId())
+                .detail(item.getMedia())
+                .map(m -> new MediaWrapper(m, item.getProviderId(), item.getColor()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Media>() {
+                .subscribe(new SingleObserver<MediaWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
                         detailsRequest = d;
                     }
 
-                    @Override public void onSuccess(final Media value) {
+                    @Override public void onSuccess(final MediaWrapper value) {
                         item = value;
 
                         detailsLoaded(value);

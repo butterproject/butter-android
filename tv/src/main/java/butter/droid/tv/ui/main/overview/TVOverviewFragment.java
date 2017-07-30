@@ -34,8 +34,8 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -113,9 +113,9 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         int index = rowsAdapter.indexOf(row);
 
-        Media mediaItem = null;
+        MediaWrapper mediaItem = null;
         if (item instanceof MediaCardPresenter.MediaCardItem) {
-            mediaItem = ((MediaCardItem) item).getMedia();
+            mediaItem = ((MediaCardItem) item).getMediaWrapper();
         }
 
         presenter.rowSelected(index, mediaItem);
@@ -221,13 +221,13 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view.getMainImageView(),
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
-        Media mediaItem = media.getMedia();
+        MediaWrapper mediaItem = media.getMediaWrapper();
         // TODO
         /*if (view.getCustomSelectedSwatch() != null) {
             mediaItem.color = view.getCustomSelectedSwatch().getRgb();
         }*/
 
-        startActivity(TVMediaDetailActivity.getIntent(getActivity(), media.getProviderId(), mediaItem), options);
+        startActivity(TVMediaDetailActivity.getIntent(getActivity(), mediaItem), options);
     }
 
 }

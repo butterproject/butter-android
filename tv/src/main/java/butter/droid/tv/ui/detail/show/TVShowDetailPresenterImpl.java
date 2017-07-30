@@ -19,9 +19,9 @@ package butter.droid.tv.ui.detail.show;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.module.Episode;
-import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
@@ -35,8 +35,6 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     private final TVShowDetailsView view;
     private final PreferencesHandler preferencesHandler;
 
-    private Show item;
-
     public TVShowDetailPresenterImpl(final TVShowDetailsView view, final ProviderManager providerManager,
             final PreferencesHandler preferencesHandler) {
         super(view, providerManager);
@@ -45,17 +43,14 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
         this.preferencesHandler = preferencesHandler;
     }
 
-    @Override public void onCreate(final int providerId, final Show item) {
-        super.onCreate(providerId, item);
-
-        this.item = item;
+    @Override public void onCreate(final MediaWrapper item) {
+        super.onCreate(item);
     }
 
-    @Override protected void detailsLoaded(final Media media) {
+    @Override protected void detailsLoaded(final MediaWrapper media) {
         super.detailsLoaded(media);
-        this.item = (Show) media;
 
-        addSeasons(item);
+        addSeasons((Show) media.getMedia());
     }
 
     private void addSeasons(Show show) {
@@ -96,7 +91,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     private void startTorrent(final Episode episode, final Torrent torrent) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
-        StreamInfo info = new StreamInfo(torrent, episode, item);
+        StreamInfo info = new StreamInfo(torrent, episode, item.getMedia());
 
         view.torrentSelected(info);
     }

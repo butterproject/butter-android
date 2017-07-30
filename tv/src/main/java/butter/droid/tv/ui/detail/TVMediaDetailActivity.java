@@ -21,8 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.provider.base.module.Media;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -35,7 +35,6 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
     public static final String SHARED_ELEMENT_NAME = "hero";
 
-    private static final String EXTRA_PROVIDER = "butter.droid.tv.ui.detail.TVMediaDetailActivity.provider";
     private static final String EXTRA_ITEM = "butter.droid.tv.ui.detail.TVMediaDetailActivity.item";
 
     @Inject TVMediaDetailPresenter presenter;
@@ -57,14 +56,13 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
         backgroundUpdater.initialise(this, R.color.black);
         Bundle extras = getIntent().getExtras();
-        int providerId = extras.getInt(EXTRA_PROVIDER);
-        Media media = Parcels.unwrap(extras.getParcelable(EXTRA_ITEM));
+        final MediaWrapper media = Parcels.unwrap(extras.getParcelable(EXTRA_ITEM));
 
         if (VersionUtils.isLollipop()) {
             postponeEnterTransition();
         }
 
-        presenter.onCreate(providerId, media);
+        presenter.onCreate(media);
     }
 
     @Override
@@ -95,9 +93,8 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
         return component;
     }
 
-    public static Intent getIntent(final Context context, final int providerId, final Media item) {
+    public static Intent getIntent(final Context context, final MediaWrapper item) {
         Intent intent = new Intent(context, TVMediaDetailActivity.class);
-        intent.putExtra(EXTRA_PROVIDER, providerId);
         intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
         return intent;
     }
