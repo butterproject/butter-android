@@ -19,7 +19,6 @@
 <resources>
 
 
-    <item name="more_player_tests" type="id" />
     <item name="more_item_settings" type="id" />
     <item name="more_item_filter" type="id" />
 

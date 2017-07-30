@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.main.overview;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import dagger.Module;
@@ -37,9 +36,8 @@ public class TVOverviewModule {
         return view;
     }
 
-    @Provides @FragmentScope TVOverviewPresenter providePresenter(TVOverviewView view, ProviderManager providerManager,
-            YouTubeManager youTubeManager) {
-        return new TVOverviewPresenterImpl(view, providerManager, youTubeManager);
+    @Provides @FragmentScope TVOverviewPresenter providePresenter(TVOverviewView view, ProviderManager providerManager) {
+        return new TVOverviewPresenterImpl(view, providerManager);
     }
 
 }

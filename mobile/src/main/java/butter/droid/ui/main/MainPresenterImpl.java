@@ -25,13 +25,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import butter.droid.R;
-import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.MediaProvider;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.main.pager.NavInfo;
@@ -48,9 +44,7 @@ import java.util.List;
 public class MainPresenterImpl implements MainPresenter {
 
     private final MainView view;
-    private final YouTubeManager youTubeManager;
     private final ProviderManager providerManager;
-    private final BeamManager beamManager;
     private final Context context;
     private final PreferencesHandler preferencesHandler;
     private final PrefManager prefManager;
@@ -59,12 +53,10 @@ public class MainPresenterImpl implements MainPresenter {
 
     private int selectedProviderId;
 
-    public MainPresenterImpl(MainView view, YouTubeManager youTubeManager, ProviderManager providerManager,
-            BeamManager beamManager, Context context, PreferencesHandler preferencesHandler, PrefManager prefManager) {
+    public MainPresenterImpl(MainView view, ProviderManager providerManager, Context context, PreferencesHandler preferencesHandler,
+            PrefManager prefManager) {
         this.view = view;
-        this.youTubeManager = youTubeManager;
         this.providerManager = providerManager;
-        this.beamManager = beamManager;
         this.context = context;
         this.preferencesHandler = preferencesHandler;
         this.prefManager = prefManager;
@@ -95,56 +87,6 @@ public class MainPresenterImpl implements MainPresenter {
 
         displayProviderData(selectedProviderId);
 
-    }
-
-    @Override public void playerTestClicked() {
-        view.showPlayerTestDialog(PlayerTestConstants.FILE_TYPES);
-    }
-
-    @Override public void onPlayerTestItemClicked(int index) {
-
-        // TODO: 6/17/17
-//        final String file = PlayerTestConstants.FILES[index];
-//
-//        if (PlayerTestConstants.CUSTOM_FILE.equals(file)) {
-//            view.showPlayerTestUrlDialog();
-//        } else if (youTubeManager.isYouTubeUrl(file)) {
-//            Movie movie = new Movie(PlayerTestConstants.FILE_TYPES[index]);
-//            view.showYoutubeVideo(movie, file);
-//        } else {
-//            final Movie media = new Movie();
-//            media.videoId = "bigbucksbunny";
-//            media.title = PlayerTestConstants.FILE_TYPES[index];
-//            media.subtitles = new HashMap<>();
-//            media.subtitles.put("en", PlayerTestConstants.SUBTITLES_URL);
-//
-//            // TODO: 11/29/16 Show progress while subtitles are loading
-//
-//            // TODO
-//            /*
-//            providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-//                @Override public void onFailure(Call call, IOException ex) {
-//                    openStream(new StreamInfo(media, null, null, null, null, file));
-//                }
-//
-//                @Override public void onResponse(Call call, Response response) throws IOException {
-//                    openStream(new StreamInfo(media, null, null, "en", null, file));
-//                }
-//            });
-//            */
-//        }
-
-    }
-
-    @Override public void openPlayerTestCustomUrl(String location) {
-        // TODO
-        /*
-        Movie media = new Movie();
-        media.videoId = "dialogtestvideo";
-        media.title = "User input test video";
-        StreamInfo info = new StreamInfo(media, null, null, null, null, location);
-        openStream(info);
-        */
     }
 
     @Override public void storagePermissionDenied() {
@@ -227,14 +169,6 @@ public class MainPresenterImpl implements MainPresenter {
 
                     }
                 });
-    }
-
-    private void openStream(StreamInfo info) {
-        if (beamManager.isConnected()) {
-            view.showBeamPlayer(info);
-        } else {
-            view.showVideoPlayer(info);
-        }
     }
 
     public interface OnGenreChangeListener {

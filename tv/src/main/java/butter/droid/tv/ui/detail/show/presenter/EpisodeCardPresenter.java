@@ -66,13 +66,14 @@ public class EpisodeCardPresenter extends Presenter {
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         final Episode episode = (Episode) item;
-        ((ViewHolder) viewHolder).setEpisode(episode);
-        ((ViewHolder) viewHolder).getCardView().setTitleText(episode.getTitle());
-        ((ViewHolder) viewHolder).getCardView().setContentText(
+        ViewHolder vh = (ViewHolder) viewHolder;
+        vh.setEpisode(episode);
+        vh.getCardView().setTitleText(episode.getTitle());
+        vh.getCardView().setContentText(
                 String.format(context.getString(R.string.episode_number_format), episode.getEpisode()));
-        ((ViewHolder) viewHolder).getCardView().setMainImageDimensions(cardWidth, cardHeight);
-        ((ViewHolder) viewHolder).updateCardViewImage(episode.getBackdrop());
-        ((ViewHolder) viewHolder).cardView.setOnClickListener(view -> {
+        vh.getCardView().setMainImageDimensions(cardWidth, cardHeight);
+        vh.updateCardViewImage(episode.getBackdrop());
+        vh.cardView.setOnClickListener(view -> {
             if (null != clickListener) {
                 clickListener.onEpisodeClicked(episode);
             }

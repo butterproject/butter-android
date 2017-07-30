@@ -19,12 +19,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 	<item
-		android:id="@+id/action_playertests"
-		android:visible="false"
-		app:showAsAction="ifRoom"
-		android:icon="@drawable/ic_action_quality"
-		android:title="Player tests" />
-	<item
 		android:id="@+id/action_search"
 		android:icon="@drawable/ic_action_search"
 		app:showAsAction="ifRoom"

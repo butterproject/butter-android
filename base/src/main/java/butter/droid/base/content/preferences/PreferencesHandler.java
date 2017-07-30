@@ -25,6 +25,7 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
+import butter.droid.provider.base.module.FormatKt;
 import dagger.Reusable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -659,7 +660,7 @@ public class PreferencesHandler {
     }
 
     public int getDefaultQuality() {
-        return prefManager.get(Prefs.QUALITY_DEFAULT, 720);
+        return prefManager.get(Prefs.QUALITY_DEFAULT, FormatKt.QUALITY_HD);
     }
 
     @ColorInt public int getSubtitleStrokeColor() {

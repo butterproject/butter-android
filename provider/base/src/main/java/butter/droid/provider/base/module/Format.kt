@@ -20,7 +20,7 @@ package butter.droid.provider.base.module
 const val FORMAT_NORMAL = 0
 const val FORMAT_3D = 1
 
-const val QUALITY_HD = 1080
+const val QUALITY_HD = 720
 const val QUALITY_FULL_HD = 1080
 const val QUALITY_4K = 2160
 

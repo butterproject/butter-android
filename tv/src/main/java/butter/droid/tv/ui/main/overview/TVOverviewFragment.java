@@ -17,7 +17,6 @@
 
 package butter.droid.tv.ui.main.overview;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -35,13 +34,9 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
-import butter.droid.base.PlayerTestConstants;
-import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.filter.Filter;
+import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.nav.NavItem;
-import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
@@ -53,10 +48,8 @@ import butter.droid.tv.presenters.MorePresenter;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.main.TVMainActivity;
 import butter.droid.tv.ui.media.TVMediaGridActivity;
-import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.search.TVSearchActivity;
-import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import javax.inject.Inject;
@@ -142,24 +135,6 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void openTestPlayerPicker() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        final String[] file_types = PlayerTestConstants.FILE_TYPES;
-
-        builder.setTitle(R.string.overview_player_test)
-                .setNegativeButton(R.string.cancel,
-                        (dialogInterface, index) -> dialogInterface.dismiss())
-                .setSingleChoiceItems(file_types, -1,
-                        (dialogInterface, index) -> {
-                            dialogInterface.dismiss();
-
-                            presenter.debugVideoSelected(index);
-                        });
-
-        builder.show();
-    }
-
     @Override public void openPreferencesScreen() {
         startActivity(TVPreferencesActivity.getIntent(getActivity()));
     }
@@ -191,41 +166,8 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
         MorePresenter gridPresenter = new MorePresenter(getActivity());
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
 
-        if (BuildConfig.DEBUG) {
-            gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_player_tests, R.string.tests, R.drawable.more_player_tests));
-        }
-
         gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, R.string.preferences, R.drawable.ic_settings));
         rowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
-    }
-
-    @Override public void showCustomDebugUrl() {
-        // TODO
-        /*
-        final EditText dialogInput = new EditText(getActivity());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setView(dialogInput)
-                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Movie media = new Movie();
-                        media.videoId = "dialogtestvideo";
-                        media.title = "User input test video";
-
-                        TVVideoPlayerActivity.startActivity(getActivity(), new StreamInfo(media, null, null, null, null,
-                                dialogInput.getText().toString()), 0);
-                    }
-                });
-        builder.show();
-        */
-    }
-
-    @Override public void startTrailerScreen(final Movie movie, final String location) {
-        startActivity(TVTrailerPlayerActivity.getIntent(getActivity(), movie, location));
-    }
-
-    @Override public void startPlayerActivity(final StreamInfo streamInfo) {
-        TVVideoPlayerActivity.startActivity(getActivity(), streamInfo);
     }
 
     public void displayProviderSorters(int providerId, final List<NavItem> value) {

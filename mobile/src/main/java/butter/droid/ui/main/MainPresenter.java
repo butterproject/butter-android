@@ -29,12 +29,6 @@ public interface MainPresenter {
 
     void onResume();
 
-    void playerTestClicked();
-
-    void onPlayerTestItemClicked(int index);
-
-    void openPlayerTestCustomUrl(String location);
-
     void storagePermissionDenied();
 
     void storagePermissionGranted();

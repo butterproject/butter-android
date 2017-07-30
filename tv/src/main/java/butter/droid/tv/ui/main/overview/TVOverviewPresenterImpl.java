@@ -20,9 +20,7 @@ package butter.droid.tv.ui.main.overview;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
-import butter.droid.base.PlayerTestConstants;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.ItemsWrapper;
 import butter.droid.provider.base.module.Media;
@@ -43,17 +41,15 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     private final TVOverviewView view;
     private final ProviderManager providerManager;
-    private final YouTubeManager youTubeManager;
 
     private int selectedRow = 0;
 
     @NonNull private final SparseArray<Disposable> listRequests = new SparseArray<>();
     @NonNull private final SparseArray<Disposable> sortersRequests = new SparseArray<>();
 
-    public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager, final YouTubeManager youTubeManager) {
+    public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager) {
         this.view = view;
         this.providerManager = providerManager;
-        this.youTubeManager = youTubeManager;
     }
 
     @Override public void onActivityCreated() {
@@ -83,43 +79,9 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 //noinspection ConstantConditions
                 view.openMediaActivity(item.getTitle(), item.getProviderId(), new Filter(null, item.getSorter()));
                 break;
-            case R.id.more_player_tests:
-                view.openTestPlayerPicker();
-                break;
             default:
                 throw new IllegalStateException("Unknown item id");
         }
-    }
-
-    @Override public void debugVideoSelected(final int index) {
-
-        final String location = PlayerTestConstants.FILES[index];
-
-        // TODO
-        /*
-        if (location.equals("dialog")) {
-            view.showCustomDebugUrl();
-        } else if (youTubeManager.isYouTubeUrl(location)) {
-            Movie movie = new Movie(PlayerTestConstants.FILE_TYPES[index]);
-            view.startTrailerScreen(movie, location);
-        } else {
-            final Movie media = new Movie();
-            media.videoId = "bigbucksbunny";
-            media.title = PlayerTestConstants.FILE_TYPES[index];
-            media.subtitles = new HashMap<>();
-            media.subtitles.put("en", "http://sv244.cf/bbb-subs.srt");
-
-            providerManager.getCurrentSubsProvider().download(media, "en", new Callback() {
-                @Override public void onFailure(Call call, IOException ex) {
-                    view.startPlayerActivity(new StreamInfo(media, null, null, null, null, location));
-                }
-
-                @Override public void onResponse(Call call, Response response) throws IOException {
-                    view.startPlayerActivity(new StreamInfo(media, null, null, null, null, location));
-                }
-            });
-        }
-        */
     }
 
     @Override public void onDestroy() {
@@ -219,7 +181,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
         }
     }
 
-    public static List<MediaCardItem> convertMediaToOverview(final int providerId, final List<Media> items) {
+    private static List<MediaCardItem> convertMediaToOverview(final int providerId, final List<Media> items) {
         List<MediaCardItem> list = new ArrayList<>();
         for (Media media : items) {
             list.add(new MediaCardItem(providerId, media));

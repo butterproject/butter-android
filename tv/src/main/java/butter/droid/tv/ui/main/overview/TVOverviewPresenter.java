@@ -29,7 +29,5 @@ public interface TVOverviewPresenter {
 
     void moreItemClicked(MoreItem item);
 
-    void debugVideoSelected(int index);
-
     void onDestroy();
 }

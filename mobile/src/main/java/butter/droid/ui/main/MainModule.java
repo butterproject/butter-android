@@ -18,12 +18,9 @@
 package butter.droid.ui.main;
 
 import android.content.Context;
-
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.youtube.YouTubeManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.ActivityScope;
 import dagger.Module;
 import dagger.Provides;
@@ -41,11 +38,9 @@ public class MainModule {
         return view;
     }
 
-    @Provides @ActivityScope MainPresenter providePresenter(MainView view, YouTubeManager youTubeManager,
-            ProviderManager providerManager, BeamManager beamManager, Context context,
+    @Provides @ActivityScope MainPresenter providePresenter(MainView view, ProviderManager providerManager, Context context,
             PreferencesHandler preferencesHandler, PrefManager prefManager) {
-        return new MainPresenterImpl(view, youTubeManager, providerManager, beamManager, context, preferencesHandler,
-                prefManager);
+        return new MainPresenterImpl(view, providerManager, context, preferencesHandler, prefManager);
     }
 }
 
