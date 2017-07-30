@@ -18,6 +18,7 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -34,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;
@@ -92,7 +94,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
         ButterKnife.bind(this, view);
 
-        Movie movie = Parcels.unwrap(getArguments().getParcelable(EXTRA_MOVIE));
+        MediaWrapper movie = Parcels.unwrap(getArguments().getParcelable(EXTRA_MOVIE));
         presenter.onCreate(movie);
     }
 
@@ -220,7 +222,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         presenter.healthClicked();
     }
 
-    @Override public void initLayout(Movie movie) {
+    @Override public void initLayout(MediaWrapper mediaWrapper) {
+        Movie movie = (Movie) mediaWrapper.getMedia();
 
         title.setText(movie.getTitle());
 
@@ -232,9 +235,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         quality.setTitle(R.string.quality);
         quality.setListener((position, value) -> setQuality(position));
 
-//        if (fab != null) {
-//            fab.setBackgroundTintList(ColorStateList.valueOf(movie.color));
-//        }
+        if (fab != null && mediaWrapper.hasColor()) {
+            fab.setBackgroundTintList(ColorStateList.valueOf(mediaWrapper.getColor()));
+        }
 
         watchTrailer.setVisibility(TextUtils.isEmpty(movie.getTrailer()) ? View.GONE : View.VISIBLE);
 
@@ -243,7 +246,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         }
     }
 
-    public static MovieDetailFragment newInstance(Movie movie) {
+    public static MovieDetailFragment newInstance(MediaWrapper movie) {
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_MOVIE, Parcels.wrap(movie));
 

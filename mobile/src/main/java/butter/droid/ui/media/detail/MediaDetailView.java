@@ -21,15 +21,13 @@ import android.support.annotation.StringRes;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Show;
 
 public interface MediaDetailView {
     void initMediaLayout(MediaWrapper media);
 
-    void displayMovie(Movie media);
+    void displayMovie(MediaWrapper media);
 
-    void displayShow(Show media);
+    void displayShow(MediaWrapper media);
 
     void displayDialog(@StringRes int title, @StringRes int message);
 

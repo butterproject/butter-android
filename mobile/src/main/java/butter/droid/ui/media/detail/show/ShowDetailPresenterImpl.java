@@ -17,6 +17,7 @@
 
 package butter.droid.ui.media.detail.show;
 
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailAbout;
@@ -30,19 +31,18 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
 
     private final ShowDetailView view;
 
-    private Show show;
+    private MediaWrapper mediaWrapper;
 
     public ShowDetailPresenterImpl(ShowDetailView view) {
         this.view = view;
     }
 
-    @Override public void onCreate(Show show) {
-
+    @Override public void onCreate(MediaWrapper show) {
         if (show == null) {
             throw new IllegalStateException("Show not provided");
         }
 
-        this.show = show;
+        this.mediaWrapper = show;
 
     }
 
@@ -51,7 +51,7 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
         List<UiShowDetailItem> items = new ArrayList<>();
 
         if (isTablet) {
-            view.displayAboutData(show);
+            view.displayAboutData(mediaWrapper);
         } else {
             items.add(new UiShowDetailAbout());
         }
@@ -61,12 +61,13 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
             items.add(new UiShowDetailSeason(season));
         }
 
-        view.displayData(show, items);
+        view.displayData(mediaWrapper, items);
 
     }
 
     private List<Integer> getAvailableSeasons() {
         final List<Integer> availableSeasons = new ArrayList<>();
+        Show show = (Show) mediaWrapper.getMedia();
         for (Episode episode : show.getEpisodes()) {
             if (!availableSeasons.contains(episode.getSeasion())) {
                 availableSeasons.add(episode.getSeasion());

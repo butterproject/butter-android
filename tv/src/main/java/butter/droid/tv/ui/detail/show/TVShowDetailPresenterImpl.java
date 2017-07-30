@@ -78,20 +78,21 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     @Override public void episodeClicked(final Episode episode) {
         Torrent[] torrents = episode.getTorrents();
         if (torrents.length == 1) {
-            startTorrent(episode, torrents[0]);
+            torrentSelected(episode, torrents[0]);
         } else {
             view.pickTorrent(episode, torrents);
         }
     }
 
     @Override public void torrentSelected(final Episode episode, final Torrent torrent) {
-        startTorrent(episode, torrent);
+        // TODO: 7/30/17 We should probalby fech detail information
+        startTorrent(new MediaWrapper(episode, item.getProviderId(), item.getColor()), torrent);
     }
 
-    private void startTorrent(final Episode episode, final Torrent torrent) {
+    private void startTorrent(final MediaWrapper episode, final Torrent torrent) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
-        StreamInfo info = new StreamInfo(torrent, episode, item.getMedia());
+        StreamInfo info = new StreamInfo(torrent, episode, item);
 
         view.torrentSelected(info);
     }

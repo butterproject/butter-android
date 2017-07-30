@@ -51,8 +51,6 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Show;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
@@ -170,11 +168,11 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         loadBackgroundImage(media);
     }
 
-    @Override public void displayMovie(Movie movie) {
+    @Override public void displayMovie(MediaWrapper movie) {
         displayFragment(MovieDetailFragment.newInstance(movie));
     }
 
-    @Override public void displayShow(Show show) {
+    @Override public void displayShow(MediaWrapper show) {
         displayFragment(ShowDetailFragment.newInstance(show));
     }
 

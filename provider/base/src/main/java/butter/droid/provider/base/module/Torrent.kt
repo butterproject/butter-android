@@ -18,5 +18,5 @@
 package butter.droid.provider.base.module
 
 @org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
-data class Torrent @org.parceler.ParcelConstructor constructor(override val url: String, val format: Format, val size: Int,
-                                                               val fileSize: Long?, val peers: Int?, val seeds: Int?): Streamable
+data class Torrent @org.parceler.ParcelConstructor constructor(val url: String, val format: Format, val size: Int,
+                                                               val fileSize: Long?, val peers: Int?, val seeds: Int?)

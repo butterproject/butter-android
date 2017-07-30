@@ -17,35 +17,34 @@
 
 package butter.droid.base.providers.model;
 
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Show;
-import butter.droid.provider.base.module.Streamable;
+import butter.droid.provider.base.module.Torrent;
 import java.util.Locale;
 import org.parceler.Parcels;
 
 public class StreamInfo implements Parcelable {
 
-    @NonNull private final Media media;
-    @Nullable private final Media parentMedia;
-    @Nullable private final Streamable streamable;
+    @NonNull private final MediaWrapper media;
+    @Nullable private final MediaWrapper parentMedia;
+    @Nullable private final Torrent torrent;
 
     @Nullable private String streamUrl;
 
-    public StreamInfo(@NonNull Streamable streamable, @NonNull Media media, @Nullable Media parentMedia) {
-        this(streamable, media, parentMedia, null);
+    public StreamInfo(@NonNull Torrent torrent, @NonNull MediaWrapper media, @Nullable MediaWrapper parentMedia) {
+        this(torrent, media, parentMedia, null);
     }
 
-    public StreamInfo(@NonNull String streamUrl, @NonNull Media media, @Nullable Media parentMedia) {
+    public StreamInfo(@NonNull String streamUrl, @NonNull MediaWrapper media, @Nullable MediaWrapper parentMedia) {
         this(null, media, parentMedia, streamUrl);
     }
 
-    private StreamInfo(@Nullable Streamable streamable, @NonNull Media media, @Nullable Media parentMedia, @Nullable String streamUrl) {
-        this.streamable = streamable;
+    private StreamInfo(@Nullable Torrent torrent, @NonNull MediaWrapper media, @Nullable MediaWrapper parentMedia,
+            @Nullable String streamUrl) {
+        this.torrent = torrent;
         this.media = media;
         this.parentMedia = parentMedia;
         this.streamUrl = streamUrl;
@@ -56,34 +55,34 @@ public class StreamInfo implements Parcelable {
     private StreamInfo(Parcel in) {
         this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
         this.parentMedia = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
-        this.streamable = Parcels.unwrap(in.readParcelable(Streamable.class.getClassLoader()));
+        this.torrent = Parcels.unwrap(in.readParcelable(Torrent.class.getClassLoader()));
 
         this.streamUrl = in.readString();
     }
 
     @NonNull public String getFullTitle() {
-        if (parentMedia != null && !(parentMedia instanceof Show)) {
-            return String.format(Locale.US, "%s: %s", parentMedia.getTitle(), media.getTitle());
+        if (parentMedia != null && parentMedia.isShow()) {
+            return String.format(Locale.US, "%s: %s", getParentMediaTitle(), getMediaTitle());
         } else {
-            return media.getTitle();
+            return getMediaTitle();
         }
     }
 
     @NonNull public String getMediaTitle() {
-        return media.getTitle();
+        return media.getMedia().getTitle();
     }
 
     @Nullable public String getParentMediaTitle() {
         if (parentMedia != null) {
-            return parentMedia.getTitle();
+            return parentMedia.getMedia().getTitle();
         } else {
             return null;
         }
     }
 
     @Nullable public String getTorrentUrl() {
-        if (streamable != null) {
-            return streamable.getUrl();
+        if (torrent != null) {
+            return torrent.getUrl();
         } else {
             return null;
         }
@@ -98,8 +97,13 @@ public class StreamInfo implements Parcelable {
     }
 
     public int getPaletteColor() {
-        // TODO: 7/29/17 Color
-        return Color.TRANSPARENT;
+        if (media.hasColor()) {
+            return media.getColor();
+        } else if (parentMedia != null) {
+            return parentMedia.getColor();
+        } else {
+            return MediaWrapper.COLOR_NONE;
+        }
     }
 
     public boolean hasParentMedia() {
@@ -115,7 +119,7 @@ public class StreamInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(Parcels.wrap(this.media), 0);
         dest.writeParcelable(Parcels.wrap(this.parentMedia), 0);
-        dest.writeParcelable(Parcels.wrap(this.streamable), 0);
+        dest.writeParcelable(Parcels.wrap(this.torrent), 0);
 
         dest.writeString(streamUrl);
     }
@@ -131,20 +135,22 @@ public class StreamInfo implements Parcelable {
     };
 
     @Nullable public String getBackdropImage() {
+        Media media = this.media.getMedia();
         if (media.getBackdrop() != null) {
             return media.getBackdrop();
         } else if (parentMedia != null) {
-            return parentMedia.getBackdrop();
+            return parentMedia.getMedia().getBackdrop();
         } else {
             return null;
         }
     }
 
     @Nullable public String getPosterImage() {
+        Media media = this.media.getMedia();
         if (media.getPoster() != null) {
             return media.getPoster();
         } else if (parentMedia != null) {
-            return media.getPoster();
+            return this.media.getMedia().getPoster();
         } else {
             return null;
         }

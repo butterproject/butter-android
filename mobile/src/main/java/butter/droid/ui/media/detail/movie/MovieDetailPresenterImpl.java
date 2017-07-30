@@ -25,8 +25,9 @@ import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.filter.Genre;
@@ -47,7 +48,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private final Resources resources;
     private final MediaDisplayManager mediaDisplayManager;
 
-    private Movie movie;
+    private MediaWrapper mediaWrapper;
     private String[] subtitleLanguages;
 
     public MovieDetailPresenterImpl(MovieDetailView view, MediaDetailPresenter parentPresenter,
@@ -64,8 +65,8 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         this.mediaDisplayManager = mediaDisplayManager;
     }
 
-    @Override public void onCreate(Movie movie) {
-        this.movie = movie;
+    @Override public void onCreate(MediaWrapper movie) {
+        this.mediaWrapper = movie;
 
         if (movie != null) {
             view.initLayout(movie);
@@ -81,22 +82,23 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
     @Override public void openTrailer() {
         // TODO: 7/29/17 Null trailer
+        Movie movie = (Movie) this.mediaWrapper.getMedia();
         if (!youTubeManager.isYouTubeUrl(movie.getTrailer())) {
-            parentPresenter.openVideoPlayer(new StreamInfo(movie.getTrailer(), movie, null));
+            parentPresenter.openVideoPlayer(new StreamInfo(movie.getTrailer(), mediaWrapper, null));
         } else {
             parentPresenter.openYouTube(movie.getTrailer());
         }
     }
 
     @Override public void selectQuality(int position) {
-        Torrent torrent = movie.getTorrents()[position];
+        Torrent torrent = ((Movie) mediaWrapper.getMedia()).getTorrents()[position];
         parentPresenter.selectTottent(torrent);
         view.renderHealth(torrent);
         view.updateMagnet(torrent);
     }
 
     @Override public void openReadMore() {
-        view.showReadMoreDialog(movie.getSynopsis());
+        view.showReadMoreDialog(mediaWrapper.getMedia().getSynopsis());
     }
 
     @Override public void playMediaClicked() {
@@ -122,7 +124,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayMetaData() {
-        StringBuilder sb = new StringBuilder(String.valueOf(movie.getYear()));
+        StringBuilder sb = new StringBuilder(String.valueOf(mediaWrapper.getMedia().getYear()));
         // TODO: 7/30/17 Runtime
         //        if (!TextUtils.isEmpty(movie.runtime)) {
 //            sb.append(" • ")
@@ -131,7 +133,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 //                    .append(resources.getString(R.string.minutes));
 //        }
 
-        Genre[] genres = movie.getGenres();
+        Genre[] genres = mediaWrapper.getMedia().getGenres();
         if (genres.length > 0) {
             sb.append(" • ");
             for (int i = 0; i < genres.length; i++) {
@@ -146,16 +148,18 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayRating() {
-        if (movie.getRating() != null) {
-            view.displayRating((int) (movie.getRating() * 10));
+        Float rating = mediaWrapper.getMedia().getRating();
+        if (rating != null) {
+            view.displayRating((int) (rating * 10));
         } else {
             view.hideRating();
         }
     }
 
     private void displaySynopsis() {
-        if (!TextUtils.isEmpty(movie.getSynopsis())) {
-            view.displaySynopsis(movie.getSynopsis());
+        String synopsis = mediaWrapper.getMedia().getSynopsis();
+        if (!TextUtils.isEmpty(synopsis)) {
+            view.displaySynopsis(synopsis);
         } else {
             view.hideSynopsis();
         }
@@ -237,8 +241,9 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayQualities() {
-        if (movie.getTorrents().length > 0) {
-            final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(movie.getTorrents());
+        Torrent[] torrents = ((Movie) mediaWrapper.getMedia()).getTorrents();
+        if (torrents.length > 0) {
+            final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(torrents);
 
             int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
 

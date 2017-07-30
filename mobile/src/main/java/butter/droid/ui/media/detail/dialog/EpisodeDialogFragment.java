@@ -40,15 +40,15 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.meta.MetaProvider;
-import butter.droid.base.torrent.Magnet;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.torrent.Magnet;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Format;
-import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.widget.BottomSheetScrollView;
@@ -80,8 +80,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     private boolean opened;
     private String selectedSubtitleLanguage;
     private Torrent selectedTorrent;
-    private Episode episode;
-    private Show show;
+    private MediaWrapper episodeWrapper;
+    private MediaWrapper showWrapper;
     private Magnet magnet;
 
     @BindView(R.id.scrollview) BottomSheetScrollView scrollView;
@@ -97,22 +97,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     @BindView(R.id.magnet) @Nullable ImageButton openMagnet;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_Butter))
-                .inflate(R.layout.fragment_dialog_episode, container, false);
-        ButterKnife.bind(this, view);
-
-        // TODO: 6/17/17  
-//        playButton.setBackground(PixelUtils.changeDrawableColor(playButton.getContext(), R.drawable.play_button_circle, show.color));
-
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) placeholder.getLayoutParams();
-        layoutParams.height = PixelUtils.getScreenHeight(activity);
-        placeholder.setLayoutParams(layoutParams);
-
-        return view;
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -126,11 +110,30 @@ public class EpisodeDialogFragment extends DialogFragment {
         activity = getActivity();
         threshold = PixelUtils.getPixelsFromDp(activity, 220);
         bottom = PixelUtils.getPixelsFromDp(activity, 33);
-        show = Parcels.unwrap(getArguments().getParcelable(EXTRA_SHOW));
-        episode = Parcels.unwrap(getArguments().getParcelable(EXTRA_EPISODE));
+        showWrapper = Parcels.unwrap(getArguments().getParcelable(EXTRA_SHOW));
+        episodeWrapper = Parcels.unwrap(getArguments().getParcelable(EXTRA_EPISODE));
         // TODO: 6/17/17
         //        metaProvider = episode.getMetaProvider();
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = LayoutInflater.from(new ContextThemeWrapper(getActivity(), R.style.Theme_Butter))
+                .inflate(R.layout.fragment_dialog_episode, container, false);
+        ButterKnife.bind(this, view);
+
+        if (showWrapper.hasColor()) {
+            playButton.setBackground(PixelUtils.changeDrawableColor(playButton.getContext(), R.drawable.play_button_circle,
+                    showWrapper.getColor()));
+        }
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) placeholder.getLayoutParams();
+        layoutParams.height = PixelUtils.getScreenHeight(activity);
+        placeholder.setLayoutParams(layoutParams);
+
+        return view;
+    }
+
 
     @NonNull
     @Override
@@ -185,6 +188,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Episode episode = (Episode) episodeWrapper.getMedia();
         if (!TextUtils.isEmpty(episode.getTitle())) {
             title.setText(episode.getTitle());
             headerImage.setContentDescription(episode.getTitle());
@@ -362,7 +366,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         }
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle args = new Bundle();
-        args.putString("text", episode.getOverview());
+        args.putString("text", ((Episode) episodeWrapper.getMedia()).getOverview());
         synopsisDialogFragment.setArguments(args);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
@@ -370,7 +374,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     @OnClick(R.id.play_button)
     public void playClick() {
         smoothDismiss();
-        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episode, show);
+        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episodeWrapper, showWrapper);
         ((FragmentListener) getActivity()).playStream(streamInfo);
     }
 
@@ -395,7 +399,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         }
     }
 
-    public static EpisodeDialogFragment newInstance(Show show, Episode episode) {
+    public static EpisodeDialogFragment newInstance(MediaWrapper show, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_SHOW, Parcels.wrap(show));
@@ -405,6 +409,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     }
 
     public interface FragmentListener {
+
         void playStream(StreamInfo streamInfo);
     }
 

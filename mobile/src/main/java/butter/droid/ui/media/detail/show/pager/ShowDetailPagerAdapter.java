@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import butter.droid.provider.base.module.Show;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailSeason;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
 
-    private Show show;
+    private MediaWrapper show;
     private List<UiShowDetailItem> items;
     private Context context;
 
@@ -40,7 +40,7 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
-    public void setData(@NonNull Show show, List<UiShowDetailItem> items) {
+    public void setData(@NonNull MediaWrapper show, List<UiShowDetailItem> items) {
         this.show = show;
         this.items = items;
         notifyDataSetChanged();

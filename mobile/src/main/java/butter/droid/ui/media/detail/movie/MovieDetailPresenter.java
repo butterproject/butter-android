@@ -18,10 +18,10 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.support.annotation.MainThread;
-import butter.droid.provider.base.module.Movie;
+import butter.droid.base.providers.model.MediaWrapper;
 
 public interface MovieDetailPresenter {
-    void onCreate(Movie movie);
+    void onCreate(MediaWrapper movie);
 
     void openTrailer();
 

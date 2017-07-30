@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail.show.season;
 
-import android.graphics.Color;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Show;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
 
     private final ShowDetailSeasonView view;
 
-    private Show show;
+    private MediaWrapper show;
     private int season;
     private List<Episode> episodes;
 
@@ -37,8 +37,7 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
     }
 
 
-    @Override public void onCreate(Show show, int season) {
-
+    @Override public void onCreate(MediaWrapper show, int season) {
         if (show == null) {
             throw new IllegalStateException("Show not provided");
         }
@@ -54,19 +53,18 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
     }
 
     @Override public void onViewCreated() {
-        // TODO: 7/30/17 Color
-//        view.displayData(show.color, episodes);
-        view.displayData(Color.TRANSPARENT, episodes);
+        view.displayData(show.getColor(), episodes);
     }
 
     @Override public void episodeSelected(int position) {
         view.showEpisodeDialog(show, episodes.get(position));
     }
 
-    private void mapData(Show show, int season) {
+    private void mapData(MediaWrapper mediaWrapper, int season) {
 
         List<Episode> episodes = new ArrayList<>();
 
+        Show show = (Show) mediaWrapper.getMedia();
         for (Episode episode : show.getEpisodes()) {
             if (episode.getSeasion() == season) {
                 episodes.add(episode);

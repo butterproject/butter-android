@@ -23,4 +23,4 @@ import butter.droid.provider.base.filter.Genre
 data class Movie @org.parceler.ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
                                                              override val genres: Array<Genre>, override val rating: Float?, override val poster: String,
                                                              override val backdrop: String, override val synopsis: String,
-                                                             val torrents: Array<Torrent>, val trailer: String?) : Media
+                                                             override val torrents: Array<Torrent>, val trailer: String?) : Streamable

@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
@@ -66,7 +67,7 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
                 .build()
                 .inject(this);
 
-        Show show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
+        MediaWrapper show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
 
         presenter.onCreate(show);
     }
@@ -118,23 +119,20 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
     @Override public void displaySynopsis(String synopsis) {
         tvSynopsis.setVisibility(View.VISIBLE);
         tvSynopsis.setText(synopsis);
-        tvSynopsis.post(new Runnable() {
-            @Override
-            public void run() {
-                boolean ellipsized = false;
-                Layout layout = tvSynopsis.getLayout();
-                if (layout == null) {
-                    return;
-                }
-                int lines = layout.getLineCount();
-                if (lines > 0) {
-                    int ellipsisCount = layout.getEllipsisCount(lines - 1);
-                    if (ellipsisCount > 0) {
-                        ellipsized = true;
-                    }
-                }
-                infoButtons.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+        tvSynopsis.post(() -> {
+            boolean ellipsized = false;
+            Layout layout = tvSynopsis.getLayout();
+            if (layout == null) {
+                return;
             }
+            int lines = layout.getLineCount();
+            if (lines > 0) {
+                int ellipsisCount = layout.getEllipsisCount(lines - 1);
+                if (ellipsisCount > 0) {
+                    ellipsized = true;
+                }
+            }
+            infoButtons.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
         });
     }
 
@@ -163,7 +161,7 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
         }
     }
 
-    public static ShowDetailAboutFragment newInstance(Show show) {
+    public static ShowDetailAboutFragment newInstance(MediaWrapper show) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_SHOW, Parcels.wrap(show));
 

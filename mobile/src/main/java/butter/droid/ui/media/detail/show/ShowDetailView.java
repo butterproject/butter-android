@@ -18,12 +18,12 @@
 package butter.droid.ui.media.detail.show;
 
 import android.support.annotation.NonNull;
-import butter.droid.provider.base.module.Show;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 import java.util.List;
 
 public interface ShowDetailView {
-    void displayData(@NonNull Show show, List<UiShowDetailItem> items);
+    void displayData(@NonNull MediaWrapper show, List<UiShowDetailItem> items);
 
-    void displayAboutData(@NonNull Show show);
+    void displayAboutData(@NonNull MediaWrapper show);
 }

@@ -18,11 +18,11 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.support.annotation.StringRes;
-import butter.droid.provider.base.module.Movie;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Torrent;
 
 public interface MovieDetailView {
-    void initLayout(Movie movie);
+    void initLayout(MediaWrapper movie);
 
     void renderHealth(Torrent torrent);
 

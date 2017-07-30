@@ -25,7 +25,6 @@ import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Torrent;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {
@@ -51,10 +50,10 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
         view.initMediaLayout(media);
 
         if (media.isMovie()) {
-            view.displayMovie((Movie) media.getMedia());
+            view.displayMovie(media);
         } else if (media.isShow()) {
-            view.displayShow((Show) media.getMedia());
-        } else { // TODO: 7/30/17 Support2 season and episode
+            view.displayShow(media);
+        } else { // TODO: 7/30/17 Support season and episode
             throw new IllegalStateException("Unknown show type");
         }
     }
@@ -64,7 +63,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
                 && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media.getMedia(), null);
+            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null);
             view.playStream(streamInfo);
         }
 

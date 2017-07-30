@@ -17,8 +17,8 @@
 
 package butter.droid.provider.base.module
 
-interface Streamable {
+interface Streamable: Media {
 
-    val url: String
+    val torrents: Array<Torrent>
 
 }

@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.R;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.MediaDetailActivity;
@@ -64,7 +65,7 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
                 .build();
         component.inject(this);
 
-        Show show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
+        MediaWrapper show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
 
         presenter.onCreate(show);
     }
@@ -105,7 +106,7 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         presenter.viewCreated(isTablet);
     }
 
-    @Override public void displayData(@NonNull Show show, List<UiShowDetailItem> items) {
+    @Override public void displayData(@NonNull MediaWrapper show, List<UiShowDetailItem> items) {
         if (items.size() == 1) {
             tabs.setTabMode(TabLayout.MODE_FIXED);
         } else {
@@ -113,12 +114,14 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         }
 
         pagerAdapter.setData(show, items);
-        // TODO: 6/17/17
-        //        tabs.setSelectedTabIndicatorColor(show.color);
+
+        if (show.hasColor()) {
+            tabs.setSelectedTabIndicatorColor(show.getColor());
+        }
     }
 
     @Override
-    public void displayAboutData(@NonNull final Show show) {
+    public void displayAboutData(@NonNull final MediaWrapper show) {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.about_content, ShowDetailAboutFragment.newInstance(show))
                 .commit();
@@ -128,7 +131,7 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         return component;
     }
 
-    public static ShowDetailFragment newInstance(Show show) {
+    public static ShowDetailFragment newInstance(MediaWrapper show) {
         Bundle args = new Bundle(1);
         args.putParcelable(ARG_SHOW, Parcels.wrap(show));
 

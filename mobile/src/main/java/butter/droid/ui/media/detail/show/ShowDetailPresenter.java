@@ -17,10 +17,10 @@
 
 package butter.droid.ui.media.detail.show;
 
-import butter.droid.provider.base.module.Show;
+import butter.droid.base.providers.model.MediaWrapper;
 
 public interface ShowDetailPresenter {
-    void onCreate(Show show);
+    void onCreate(MediaWrapper show);
 
     void viewCreated(final boolean isTablet);
 }

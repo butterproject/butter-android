@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import butter.droid.R;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
@@ -61,7 +62,7 @@ public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeas
                 .inject(this);
 
         Bundle args = getArguments();
-        Show show = Parcels.unwrap(args.getParcelable(ARG_SHOW));
+        MediaWrapper show = Parcels.unwrap(args.getParcelable(ARG_SHOW));
         int season = args.getInt(ARG_SEASON);
 
         presenter.onCreate(show, season);
@@ -104,12 +105,12 @@ public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeas
         adapter.setData(color, episodes);
     }
 
-    @Override public void showEpisodeDialog(Show show, Episode episode) {
+    @Override public void showEpisodeDialog(MediaWrapper show, Episode episode) {
         EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(show, episode);
         fragment.show(getFragmentManager(), "episode_dialog");
     }
 
-    public static ShowDetailSeasonFragment newInstance(Show show, int season) {
+    public static ShowDetailSeasonFragment newInstance(MediaWrapper show, int season) {
         Bundle args = new Bundle(2);
         args.putParcelable(ARG_SHOW, Parcels.wrap(show));
         args.putInt(ARG_SEASON, season);

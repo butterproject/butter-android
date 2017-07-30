@@ -21,40 +21,41 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import butter.droid.provider.base.module.Show;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.module.Media;
 
 public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
 
     private final ShowDetailAboutView view;
     private final Context context;
 
-    private Show show;
+    private MediaWrapper showWrapper;
 
     public ShowDetailAboutPresenterImpl(ShowDetailAboutView view, Context context) {
         this.view = view;
         this.context = context;
     }
 
-    @Override public void onCreate(Show show) {
+    @Override public void onCreate(MediaWrapper show) {
 
         if (show == null) {
             throw new IllegalStateException("Show can not be null");
         }
 
-        this.show = show;
+        this.showWrapper = show;
 
     }
 
     @Override public void readMoreClicked() {
-        view.openSynopsisDialog(show.getSynopsis());
+        view.openSynopsisDialog(showWrapper.getMedia().getSynopsis());
     }
 
     @Override public void onViewCreated() {
-        displayShowData(show);
+        displayShowData(showWrapper.getMedia());
     }
 
-    private void displayShowData(@NonNull Show show) {
+    private void displayShowData(@NonNull Media show) {
         view.displayTitle(show.getTitle());
         displayRating(show.getRating());
         displayMetaData(show);
@@ -72,7 +73,7 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
         }
     }
 
-    private void displayMetaData(@NonNull Show show) {
+    private void displayMetaData(@NonNull Media show) {
         StringBuilder metaDataStr = new StringBuilder();
         metaDataStr.append(show.getYear());
 
@@ -86,7 +87,7 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
 //        }
 
         Genre[] genres = show.getGenres();
-        if (genres != null && genres.length > 0) {
+        if (genres.length > 0) {
             metaDataStr.append(" • ");
             metaDataStr.append(genres[0].getName());
         }

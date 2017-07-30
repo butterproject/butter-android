@@ -18,13 +18,16 @@
 package butter.droid.base.providers.model;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
+import org.parceler.Parcels;
 
-public class MediaWrapper {
+public class MediaWrapper implements Parcelable {
 
     public static final int COLOR_NONE = Color.TRANSPARENT;
 
@@ -42,6 +45,12 @@ public class MediaWrapper {
         this.media = media;
         this.providerId = providerId;
         this.color = color;
+    }
+
+    private MediaWrapper(Parcel in) {
+        this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
+        this.providerId = in.readInt();
+        this.color = in.readInt();
     }
 
     public Media getMedia() {
@@ -67,5 +76,27 @@ public class MediaWrapper {
     public boolean hasColor() {
         return color != COLOR_NONE;
     }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeParcelable(Parcels.wrap(media), flags);
+        dest.writeInt(providerId);
+        dest.writeInt(color);
+    }
+
+    public static final Creator<MediaWrapper> CREATOR = new Creator<MediaWrapper>() {
+        @Override
+        public MediaWrapper createFromParcel(Parcel in) {
+            return new MediaWrapper(in);
+        }
+
+        @Override
+        public MediaWrapper[] newArray(int size) {
+            return new MediaWrapper[size];
+        }
+    };
 
 }
