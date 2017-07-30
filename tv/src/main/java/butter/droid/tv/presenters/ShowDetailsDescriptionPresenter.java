@@ -18,6 +18,7 @@
 package butter.droid.tv.presenters;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Show;
 
 public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
@@ -29,8 +30,20 @@ public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionP
         }
         Show show = (Show) item;
         viewHolder.getTitle().setText(show.getTitle());
-        // TODO: 7/22/17
-//        viewHolder.getSubtitle().setText(show.getGenres());
+
+        Genre[] genres = show.getGenres();
+        if (genres.length > 0) {
+            StringBuffer genresText = new StringBuffer();
+            for (int i = 0; i < genres.length; i++) {
+                if (i != 0) {
+                    genresText.append(", ");
+                }
+                genresText.append(genres[i]);
+            }
+
+            viewHolder.getSubtitle().setText(genresText.toString());
+        }
+
         viewHolder.getBody().setText(show.getSynopsis());
     }
 }

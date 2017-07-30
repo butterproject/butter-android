@@ -38,7 +38,7 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
 
     private QueryYouTubeTask queryYouTubeTask;
 
-    private Media media;
+    protected Media media;
 
     public BaseTrailerPlayerPresenterImpl(final BaseTrailerPlayerView view, final PreferencesHandler preferencesHandler,
             final VlcPlayer player, final YouTubeManager youTubeManager,

@@ -49,6 +49,7 @@ import butter.droid.base.utils.ThreadUtils;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Show;
+import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.widget.BottomSheetScrollView;
 import butter.droid.widget.OptionSelector;
@@ -78,7 +79,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     private boolean touching;
     private boolean opened;
     private String selectedSubtitleLanguage;
-    private String selectedQuality;
+    private Torrent selectedTorrent;
     private Episode episode;
     private Show show;
     private Magnet magnet;
@@ -219,14 +220,15 @@ public class EpisodeDialogFragment extends DialogFragment {
         quality.setData(formatDisplay);
 
         int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
-        selectedQuality = formatDisplay[defaultFormatIndex];
-        this.quality.setText(selectedQuality);
+        // TODO: 7/30/17 Handle sorting
+        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
+        this.quality.setText(formatDisplay[defaultFormatIndex]);
         this.quality.setDefault(defaultFormatIndex);
 
         updateMagnet();
 
         this.quality.setListener((position, value) -> {
-            selectedQuality = value;
+            selectedTorrent = episode.getTorrents()[position];
             updateMagnet();
         });
 
@@ -340,18 +342,17 @@ public class EpisodeDialogFragment extends DialogFragment {
         if (openMagnet == null) {
             return;
         }
+        if (magnet == null) {
+            magnet = new Magnet(activity, selectedTorrent.getTorrentUrl());
+        } else {
+            magnet.setUrl(selectedTorrent.getTorrentUrl());
+        }
 
-        // TODO: 6/17/17
-//        if (magnet == null) {
-//            magnet = new Magnet(activity, episode.getTorrents().get(selectedQuality).url);
-//        }
-//        magnet.setUrl(episode.getTorrents().get(selectedQuality).url);
-
-//        if (!magnet.canOpen()) {
-//            openMagnet.setVisibility(View.GONE);
-//        } else {
-//            openMagnet.setVisibility(View.VISIBLE);
-//        }
+        if (!magnet.canOpen()) {
+            openMagnet.setVisibility(View.GONE);
+        } else {
+            openMagnet.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.synopsis)
@@ -369,11 +370,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     @OnClick(R.id.play_button)
     public void playClick() {
         smoothDismiss();
-        // TODO: 6/17/17  
-//        Media.Torrent torrent = episode.getTorrents().get(selectedQuality);
-//        StreamInfo streamInfo = new StreamInfo(episode, show, torrent.url, selectedSubtitleLanguage,
-//                selectedQuality);
-//        ((FragmentListener) getActivity()).playStream(streamInfo);
+        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episode, show);
+        ((FragmentListener) getActivity()).playStream(streamInfo);
     }
 
     @Nullable

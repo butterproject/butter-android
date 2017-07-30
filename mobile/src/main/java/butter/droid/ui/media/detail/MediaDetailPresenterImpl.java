@@ -22,9 +22,11 @@ import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
+import butter.droid.provider.base.module.Torrent;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
@@ -34,7 +36,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
     private Media media;
     private String selectedSubtitleLanguage;
-    private String selectedQuality;
+    private Torrent selectedTorrent;
 
     public MediaDetailPresenterImpl(MediaDetailView view, PreferencesHandler preferencesHandler,
             NetworkManager networkManager) {
@@ -63,18 +65,14 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
                 && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            // TODO
-            /*
-            String streamUrl = ((Movie) media).getTorrents().get(selectedQuality).url;
-            StreamInfo streamInfo = new StreamInfo(media, streamUrl, selectedSubtitleLanguage, selectedQuality);
+            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null);
             view.playStream(streamInfo);
-            */
         }
 
     }
 
-    @Override public void selectQuality(String quality) {
-        selectedQuality = quality;
+    @Override public void selectTottent(Torrent torrent) {
+        selectedTorrent = torrent;
     }
 
     @Override public void openVideoPlayer(StreamInfo streamInfo) {
@@ -90,15 +88,19 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
     }
 
     @Override public void healthClicked() {
-        // TODO
-        /*
-        Movie movie = (Movie) this.media;
-        int seeds = movie.torrents.get(selectedQuality).seeds;
-        int peers = movie.torrents.get(selectedQuality).peers;
+        Torrent torrent;
+        if (selectedTorrent != null) {
+            torrent = selectedTorrent;
+        } else {
+            Movie movie = (Movie) this.media;
+            torrent = movie.getTorrents()[0];
+        }
+
+        Integer seeds = torrent.getSeeds();
+        Integer peers = torrent.getPeers();
         TorrentHealth health = TorrentHealth.calculate(seeds, peers);
 
         view.displayHealthInfo(health, seeds, peers);
-        */
     }
 
 }

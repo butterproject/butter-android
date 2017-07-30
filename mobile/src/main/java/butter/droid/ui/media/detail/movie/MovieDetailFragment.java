@@ -35,7 +35,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.torrent.Magnet;
+import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionSelector;
@@ -94,8 +96,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         presenter.onCreate(movie);
     }
 
-    private void setQuality(String quality) {
-        presenter.selectQuality(quality);
+    private void setQuality(int position) {
+        presenter.selectQuality(position);
     }
 
     @Override
@@ -103,29 +105,26 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         super.onDetach();
     }
 
-    @Override public void renderHealth(Movie movie, String quality) {
+    @Override public void renderHealth(Torrent torrent) {
         if (health.getVisibility() == View.GONE) {
             health.setVisibility(View.VISIBLE);
         }
 
-        // TODO: 6/17/17  
-//        TorrentHealth health = TorrentHealth.calculate(movie.getTorrents().get(quality).seeds,
-//                movie.getTorrents().get(quality).peers);
-//        this.health.setImageResource(health.getImageResource());
+        TorrentHealth health = TorrentHealth.calculate(torrent.getSeeds(), torrent.getPeers());
+        this.health.setImageResource(health.getImageResource());
     }
 
-    @Override public void updateMagnet(Movie movie, String quality) {
-        // TODO: 6/17/17
-        //        if (magnet == null) {
-//            magnet = new Magnet(getContext(), movie.getTorrents().get(quality).url);
-//        }
-//        magnet.setUrl(movie.getTorrents().get(quality).url);
+    @Override public void updateMagnet(Torrent torrent) {
+        if (magnet == null) {
+            magnet = new Magnet(getContext(), torrent.getTorrentUrl());
+        }
+        magnet.setUrl(torrent.getUrl());
 
-//        if (!magnet.canOpen()) {
-//            openMagnet.setVisibility(View.GONE);
-//        } else {
-//            openMagnet.setVisibility(View.VISIBLE);
-//        }
+        if (!magnet.canOpen()) {
+            openMagnet.setVisibility(View.GONE);
+        } else {
+            openMagnet.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override public void showReadMoreDialog(String synopsis) {
@@ -230,7 +229,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
         quality.setFragmentManager(getFragmentManager());
         quality.setTitle(R.string.quality);
-        quality.setListener((position, value) -> setQuality(value));
+        quality.setListener((position, value) -> setQuality(position));
 
 //        if (fab != null) {
 //            fab.setBackgroundTintList(ColorStateList.valueOf(movie.color));

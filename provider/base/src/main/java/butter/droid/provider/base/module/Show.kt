@@ -18,13 +18,11 @@
 package butter.droid.provider.base.module
 
 import butter.droid.provider.base.filter.Genre
-import butter.droid.provider.base.module.Episode
-import butter.droid.provider.base.module.Media
 import org.parceler.Parcel
 import org.parceler.ParcelConstructor
 
 @Parcel(Parcel.Serialization.BEAN)
 data class Show @ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
                                                override val genres: Array<Genre>, override val backdrop: String,
-                                               override val synopsis: String, override val rating: Float, override val poster: String,
+                                               override val synopsis: String, override val rating: Float?, override val poster: String,
                                                val episodes: Array<Episode>) : Media

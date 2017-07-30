@@ -29,8 +29,10 @@ import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StringUtils;
+import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Torrent;
 import butter.droid.provider.base.module.UrlStreamable;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import java.util.Locale;
@@ -87,10 +89,11 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         }
     }
 
-    @Override public void selectQuality(String quality) {
-        parentPresenter.selectQuality(quality);
-        view.renderHealth(movie, quality);
-        view.updateMagnet(movie, quality);
+    @Override public void selectQuality(int position) {
+        Torrent torrent = movie.getTorrents()[position];
+        parentPresenter.selectTottent(torrent);
+        view.renderHealth(torrent);
+        view.updateMagnet(torrent);
     }
 
     @Override public void openReadMore() {
@@ -120,35 +123,35 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayMetaData() {
-        // TODO
-        /*
-        StringBuilder sb = new StringBuilder(String.valueOf(movie.year));
-        if (!TextUtils.isEmpty(movie.runtime)) {
-            sb.append(" • ")
-                    .append(movie.runtime)
-                    .append(' ')
-                    .append(resources.getString(R.string.minutes));
-        }
+        StringBuilder sb = new StringBuilder(String.valueOf(movie.getYear()));
+        // TODO: 7/30/17 Runtime
+        //        if (!TextUtils.isEmpty(movie.runtime)) {
+//            sb.append(" • ")
+//                    .append(movie.runtime)
+//                    .append(' ')
+//                    .append(resources.getString(R.string.minutes));
+//        }
 
-        if (!TextUtils.isEmpty(movie.genre)) {
-            sb.append(" • ")
-                    .append(movie.genre);
+        Genre[] genres = movie.getGenres();
+        if (genres.length > 0) {
+            sb.append(" • ");
+            for (int i = 0; i < genres.length; i++) {
+                if (i != 0) {
+                    sb.append(", ");
+                }
+                sb.append(genres[i].getName());
+            }
         }
 
         view.displayMetaData(sb);
-        */
     }
 
     private void displayRating() {
-        // TODO
-        /*
-        if (!"-1".equals(movie.rating)) {
-            Double rating = Double.parseDouble(movie.rating);
-            view.displayRating(rating.intValue());
+        if (movie.getRating() != null) {
+            view.displayRating((int) (movie.getRating() * 10));
         } else {
             view.hideRating();
         }
-        */
     }
 
     private void displaySynopsis() {
@@ -246,7 +249,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
             }
 
             view.setQualities(qualities, qualities[defaultFormatIndex]);
-            selectQuality(qualities[defaultFormatIndex]);
+            selectQuality(defaultFormatIndex);
         }
 
     }

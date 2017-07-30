@@ -60,7 +60,7 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
         return Single.fromCallable(() -> parseResponse("movies_list.json", MockMovies.class))
                 .map(MockMovies::getMovies)
                 .flatMapObservable(Observable::fromIterable)
-                .<Media>map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], 0, m.getPoster(),
+                .<Media>map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], null, m.getPoster(),
                         m.getBackdrop(), m.getSynopsis(),
                         new Torrent[]{
                                 new Torrent(null, m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)

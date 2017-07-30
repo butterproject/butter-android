@@ -83,7 +83,6 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     @Override public void episodeClicked(final Episode episode) {
         Torrent[] torrents = episode.getTorrents();
         if (torrents.length == 1) {
-//            List<Map.Entry<String, Torrent>> torrent = new ArrayList<>(episode.torrents.entrySet());
             startTorrent(episode, torrents[0]);
         } else {
             view.pickTorrent(episode, torrents);

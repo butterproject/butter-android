@@ -17,6 +17,7 @@
 
 package butter.droid.ui.media.detail.show.season;
 
+import android.graphics.Color;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Show;
 import java.util.ArrayList;
@@ -53,8 +54,9 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
     }
 
     @Override public void onViewCreated() {
-        // TODO: 6/17/17
-//                view.displayData(show.color, episodes);
+        // TODO: 7/30/17 Color
+//        view.displayData(show.color, episodes);
+        view.displayData(Color.TRANSPARENT, episodes);
     }
 
     @Override public void episodeSelected(int position) {
@@ -71,15 +73,7 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
             }
         }
 
-        Collections.sort(episodes, (lhs, rhs) -> {
-            if (lhs.getEpisode() < rhs.getEpisode()) {
-                return -1;
-            } else if (lhs.getEpisode() > rhs.getEpisode()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        Collections.sort(episodes, (lhs, rhs) -> lhs.getEpisode() - rhs.getEpisode());
 
         this.episodes = episodes;
 

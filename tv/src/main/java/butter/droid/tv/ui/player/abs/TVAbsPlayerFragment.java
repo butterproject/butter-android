@@ -256,12 +256,13 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
             StreamInfo streamInfo = (StreamInfo) item;
 
-//            if (streamInfo.isShow()) {
-//                viewHolder.getTitle().setText(streamInfo.getShowTitle());
-//                viewHolder.getSubtitle().setText(streamInfo.getShowEpisodeTitle());
-//            } else {
-//                viewHolder.getTitle().setText(streamInfo.getTitle());
-//            }
+            if (streamInfo.hasParentMedia()) {
+                viewHolder.getTitle().setText(streamInfo.getParentMediaTitle());
+                viewHolder.getSubtitle().setText(streamInfo.getMediaTitle());
+
+            } else {
+                viewHolder.getTitle().setText(streamInfo.getFullTitle());
+            }
         }
 
     }

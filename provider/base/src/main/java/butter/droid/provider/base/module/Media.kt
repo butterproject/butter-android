@@ -23,7 +23,7 @@ interface Media {
     val title: String
     val year: Int
     val genres: Array<butter.droid.provider.base.filter.Genre>
-    val rating: Float
+    val rating: Float?
     val poster: String?
     val backdrop: String
     val synopsis: String

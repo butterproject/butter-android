@@ -121,13 +121,12 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
     }
 
     private void displayTitle() {
-        // TODO: 6/17/17
         String title;
-//        if (media != null) {
-//            title = String.format("%s: %s", context.getString(R.string.now_playing), media.getTitle());
-//        } else {
-        title = context.getString(R.string.now_playing);
-//        }
+        if (media != null) {
+            title = String.format("%s: %s", context.getString(R.string.now_playing), media.getTitle());
+        } else {
+            title = context.getString(R.string.now_playing);
+        }
         view.displayTitle(title);
     }
 }

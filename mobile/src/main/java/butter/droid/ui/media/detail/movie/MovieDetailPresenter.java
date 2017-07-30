@@ -25,7 +25,7 @@ public interface MovieDetailPresenter {
 
     void openTrailer();
 
-    void selectQuality(String quality);
+    void selectQuality(int position);
 
     void openReadMore();
 

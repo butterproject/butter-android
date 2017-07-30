@@ -141,17 +141,17 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
 
     private void displayTitle() {
         String title;
-        // TODO: 6/17/17
-//        if (media != null) {
+        if (streamInfo != null) {
+            // TODO: 7/30/17 Do we need this?
 //            if (this.streamInfo.getQuality() != null) {
 //                title = String.format(Locale.getDefault(), "%s: %s (%s)", context.getString(R.string.now_playing), media.getTitle(),
 //                        streamInfo.getQuality());
 //            } else {
-//                title = String.format("%s: %s", context.getString(R.string.now_playing), media.getTitle());
+            title = String.format("%s: %s", context.getString(R.string.now_playing), streamInfo.getFullTitle());
 //            }
-//        } else {
-        title = context.getString(R.string.now_playing);
-//        }
+        } else {
+            title = context.getString(R.string.now_playing);
+        }
         view.displayTitle(title);
     }
 

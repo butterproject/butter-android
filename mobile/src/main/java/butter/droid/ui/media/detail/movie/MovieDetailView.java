@@ -19,13 +19,14 @@ package butter.droid.ui.media.detail.movie;
 
 import android.support.annotation.StringRes;
 import butter.droid.provider.base.module.Movie;
+import butter.droid.provider.base.module.Torrent;
 
 public interface MovieDetailView {
     void initLayout(Movie movie);
 
-    void renderHealth(Movie movie, String quality);
+    void renderHealth(Torrent torrent);
 
-    void updateMagnet(Movie movie, String quality);
+    void updateMagnet(Torrent torrent);
 
     void showReadMoreDialog(String synopsis);
 

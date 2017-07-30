@@ -90,6 +90,10 @@ public class StreamInfo implements Parcelable {
         return Color.TRANSPARENT;
     }
 
+    public boolean hasParentMedia() {
+        return parentMedia != null;
+    }
+
     @Override
     public int describeContents() {
         return 0;
