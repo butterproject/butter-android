@@ -21,6 +21,10 @@ apply plugin: 'si.kamino.version'
 
 android {
 
+    defaultConfig {
+        multiDexEnabled true
+    }
+
     packagingOptions {
         pickFirst '**/libjlibtorrent.so'
         exclude 'META-INF/beans.xml'
@@ -45,6 +49,10 @@ android {
         javaMaxHeapSize "512M"
     }
 
+}
+
+dependencies {
+    compile 'com.android.support:multidex:1.0.1'
 }
 
 static def renameOutputFiles(variant) {

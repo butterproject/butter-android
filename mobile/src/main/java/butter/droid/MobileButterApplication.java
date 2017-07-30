@@ -17,6 +17,8 @@
 
 package butter.droid;
 
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.DaggerProviderComponent;
@@ -45,6 +47,11 @@ public class MobileButterApplication extends ButterApplication {
                 .build();
 
         component.inject(this);
+    }
+
+    @Override protected void attachBaseContext(final Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static MobileButterApplication getAppContext() {

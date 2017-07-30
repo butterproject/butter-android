@@ -18,6 +18,7 @@
 package butter.droid.tv;
 
 import android.content.Context;
+import android.support.multidex.MultiDex;
 import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.DaggerProviderComponent;
@@ -27,10 +28,6 @@ import butter.droid.base.utils.VersionUtils;
 public class TVButterApplication extends ButterApplication {
 
     private TVInternalComponent component;
-
-    @Override protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-    }
 
     @Override
     public void updateAvailable(String filePath) {
@@ -58,6 +55,11 @@ public class TVButterApplication extends ButterApplication {
                 .build();
 
         component.inject(this);
+    }
+
+    @Override protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static TVButterApplication getAppContext() {
