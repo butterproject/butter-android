@@ -108,12 +108,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     }
 
     @Override public void renderHealth(Torrent torrent) {
-        if (health.getVisibility() == View.GONE) {
-            health.setVisibility(View.VISIBLE);
+        Integer seeds = torrent.getSeeds();
+        Integer peers = torrent.getPeers();
+        if (seeds != null && peers != null) {
+            TorrentHealth health = TorrentHealth.calculate(seeds, peers);
+            this.health.setImageResource(health.getImageResource());
+            this.health.setVisibility(View.VISIBLE);
+        } else {
+            health.setVisibility(View.GONE);
         }
-
-        TorrentHealth health = TorrentHealth.calculate(torrent.getSeeds(), torrent.getPeers());
-        this.health.setImageResource(health.getImageResource());
     }
 
     @Override public void updateMagnet(Torrent torrent) {
