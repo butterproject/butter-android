@@ -116,9 +116,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
     @Override public void updateMagnet(Torrent torrent) {
         if (magnet == null) {
-            magnet = new Magnet(getContext(), torrent.getTorrentUrl());
+            magnet = new Magnet(getContext(), torrent.getUrl());
+        } else {
+            magnet.setUrl(torrent.getUrl());
         }
-        magnet.setUrl(torrent.getUrl());
 
         if (!magnet.canOpen()) {
             openMagnet.setVisibility(View.GONE);

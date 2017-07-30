@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.module.UrlStreamable;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
@@ -116,7 +115,7 @@ public class TVLaunchActivity extends Activity implements TVLaunchView {
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "utf-8");
                 // TODO: 7/29/17 Null media
-                TVStreamLoadingActivity.startActivity(this, new StreamInfo(new UrlStreamable(streamUrl), null, null));
+                TVStreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, null, null));
                 finish();
                 return;
             } catch (UnsupportedEncodingException e) {

@@ -63,7 +63,7 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
                 .<Media>map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], null, m.getPoster(),
                         m.getBackdrop(), m.getSynopsis(),
                         new Torrent[]{
-                                new Torrent(null, m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
+                                new Torrent(m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
                         }, m.getTrailer()))
                 .toList()
                 .map(l -> new ItemsWrapper(l, new Paging("", false)));

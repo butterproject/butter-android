@@ -343,9 +343,9 @@ public class EpisodeDialogFragment extends DialogFragment {
             return;
         }
         if (magnet == null) {
-            magnet = new Magnet(activity, selectedTorrent.getTorrentUrl());
+            magnet = new Magnet(activity, selectedTorrent.getUrl());
         } else {
-            magnet.setUrl(selectedTorrent.getTorrentUrl());
+            magnet.setUrl(selectedTorrent.getUrl());
         }
 
         if (!magnet.canOpen()) {

@@ -20,7 +20,6 @@ package butter.droid.ui.player;
 import android.content.ContentResolver;
 import android.content.Intent;
 import butter.droid.base.torrent.StreamInfo;
-import butter.droid.provider.base.module.UrlStreamable;
 import butter.droid.utils.StreamInfoUtils;
 
 public class VideoPlayerPresenterImpl implements VideoPlayerPresenter {
@@ -43,7 +42,7 @@ public class VideoPlayerPresenterImpl implements VideoPlayerPresenter {
             String videoLocation = StreamInfoUtils.getActionViewVideoLocation(contentResolver, intent);
             if (videoLocation != null) {
                 // TODO: 7/29/17 Null media
-                this.streamInfo = new StreamInfo(new UrlStreamable(videoLocation), null, null);
+                this.streamInfo = new StreamInfo(videoLocation, null, null);
                 this.resumePosition = intent.getLongExtra("position", 0);
                 view.showVideoFragment(this.streamInfo, this.resumePosition);
             } else {

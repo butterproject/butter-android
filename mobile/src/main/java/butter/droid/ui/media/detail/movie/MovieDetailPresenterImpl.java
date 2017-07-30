@@ -33,7 +33,6 @@ import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
-import butter.droid.provider.base.module.UrlStreamable;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import java.util.Locale;
 
@@ -83,7 +82,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     @Override public void openTrailer() {
         // TODO: 7/29/17 Null trailer
         if (!youTubeManager.isYouTubeUrl(movie.getTrailer())) {
-            parentPresenter.openVideoPlayer(new StreamInfo(new UrlStreamable(movie.getTrailer()), movie, null));
+            parentPresenter.openVideoPlayer(new StreamInfo(movie.getTrailer(), movie, null));
         } else {
             parentPresenter.openYouTube(movie.getTrailer());
         }

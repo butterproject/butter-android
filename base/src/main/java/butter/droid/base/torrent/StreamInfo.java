@@ -25,7 +25,6 @@ import android.support.annotation.Nullable;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Show;
 import butter.droid.provider.base.module.Streamable;
-import butter.droid.provider.base.module.Torrent;
 import java.util.Locale;
 import org.parceler.Parcels;
 
@@ -33,12 +32,23 @@ public class StreamInfo implements Parcelable {
 
     @NonNull private final Media media;
     @Nullable private final Media parentMedia;
-    @NonNull private final Streamable streamable;
+    @Nullable private final Streamable streamable;
+
+    @Nullable private String streamUrl;
 
     public StreamInfo(@NonNull Streamable streamable, @NonNull Media media, @Nullable Media parentMedia) {
+        this(streamable, media, parentMedia, null);
+    }
+
+    public StreamInfo(@NonNull String streamUrl, @NonNull Media media, @Nullable Media parentMedia) {
+        this(null, media, parentMedia, streamUrl);
+    }
+
+    private StreamInfo(@Nullable Streamable streamable, @NonNull Media media, @Nullable Media parentMedia, @Nullable String streamUrl) {
         this.streamable = streamable;
         this.media = media;
         this.parentMedia = parentMedia;
+        this.streamUrl = streamUrl;
 
         // color = media.color;
     }
@@ -47,6 +57,8 @@ public class StreamInfo implements Parcelable {
         this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
         this.parentMedia = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
         this.streamable = Parcels.unwrap(in.readParcelable(Streamable.class.getClassLoader()));
+
+        this.streamUrl = in.readString();
     }
 
     @NonNull public String getFullTitle() {
@@ -70,19 +82,19 @@ public class StreamInfo implements Parcelable {
     }
 
     @Nullable public String getTorrentUrl() {
-        if (streamable instanceof Torrent) {
-            return ((Torrent) streamable).getTorrentUrl();
+        if (streamable != null) {
+            return streamable.getUrl();
         } else {
             return null;
         }
     }
 
-    public String getStreamUrl() {
-        return streamable.getUrl();
+    @Nullable public String getStreamUrl() {
+        return streamUrl;
     }
 
     public void setStreamUrl(final String url) {
-        streamable.setUrl(url);
+        streamUrl = url;
     }
 
     public int getPaletteColor() {
@@ -104,6 +116,8 @@ public class StreamInfo implements Parcelable {
         dest.writeParcelable(Parcels.wrap(this.media), 0);
         dest.writeParcelable(Parcels.wrap(this.parentMedia), 0);
         dest.writeParcelable(Parcels.wrap(this.streamable), 0);
+
+        dest.writeString(streamUrl);
     }
 
     public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {

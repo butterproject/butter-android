@@ -48,7 +48,6 @@ import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.UrlStreamable;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
@@ -317,7 +316,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
                 streamUrl = URLDecoder.decode(streamUrl, "UTF-8");
                 // TODO: 7/29/17 Check if actual torrent
                 // TODO: 7/29/17 Null media
-                StreamLoadingActivity.startActivity(this, new StreamInfo(new UrlStreamable(streamUrl), null, null));
+                StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, null, null));
                 finish();
             } catch (UnsupportedEncodingException e) {
                 Timber.d("Unknown encoding"); // this should never happen
