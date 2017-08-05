@@ -86,6 +86,11 @@ public class GenreSelectionFragment extends Fragment implements GenreSelectionVi
         presenter.onViewCreated(providerId);
     }
 
+    @Override public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
     @Override public void onItemClick(View view, int position) {
         presenter.onGenreSelected(position);
     }

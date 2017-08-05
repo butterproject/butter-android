@@ -20,9 +20,9 @@ package butter.droid.tv.ui.main.overview;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Pair;
-import android.util.SparseArray;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.utils.rx.KeyDisposable;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.module.Paging;
 import butter.droid.provider.base.nav.NavItem;
@@ -47,8 +47,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     private int selectedRow = 0;
 
-    @NonNull private final SparseArray<Disposable> listRequests = new SparseArray<>();
-    @NonNull private final SparseArray<Disposable> sortersRequests = new SparseArray<>();
+    @NonNull private final KeyDisposable listRequests = new KeyDisposable();
+    @NonNull private final KeyDisposable sortersRequests = new KeyDisposable();
 
     public TVOverviewPresenterImpl(final TVOverviewView view, final ProviderManager providerManager) {
         this.view = view;
@@ -88,12 +88,8 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     }
 
     @Override public void onDestroy() {
-        for (int i = 0; i < listRequests.size(); i++) {
-            cancelMovieCall(listRequests.keyAt(i));
-        }
-        for (int i = 0; i < sortersRequests.size(); i++) {
-            cancelMovieSortersCall(sortersRequests.keyAt(i));
-        }
+        listRequests.dispose();
+        sortersRequests.dispose();
     }
 
     private void loadProvidersData() {
@@ -130,7 +126,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Pair<Paging, List<MediaWrapper>>>() {
                     @Override public void onSubscribe(final Disposable d) {
-                        listRequests.append(providerId, d);
+                        listRequests.add(providerId, d);
                     }
 
                     @Override public void onSuccess(final Pair<Paging, List<MediaWrapper>> items) {
@@ -158,7 +154,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<List<NavItem>>() {
                     @Override public void onSubscribe(final Disposable d) {
-                        sortersRequests.put(providerId, d);
+                        sortersRequests.add(providerId, d);
                     }
 
                     @Override public void onSuccess(final List<NavItem> value) {
@@ -176,19 +172,11 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     }
 
     private void cancelMovieCall(int providerId) {
-        Disposable d = listRequests.get(providerId);
-        if (d != null) {
-            d.dispose();
-            listRequests.remove(providerId);
-        }
+        listRequests.disposeSingle(providerId);
     }
 
     private void cancelMovieSortersCall(int providerId) {
-        Disposable d = sortersRequests.get(providerId);
-        if (d != null) {
-            d.dispose();
-            sortersRequests.remove(providerId);
-        }
+        sortersRequests.disposeSingle(providerId);
     }
 
     private static List<MediaCardItem> convertMediaToOverview(final List<MediaWrapper> items) {

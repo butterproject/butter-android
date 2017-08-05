@@ -122,7 +122,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<MediaWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
-
+                        detailsCall = d;
                     }
 
                     @Override public void onSuccess(final MediaWrapper value) {

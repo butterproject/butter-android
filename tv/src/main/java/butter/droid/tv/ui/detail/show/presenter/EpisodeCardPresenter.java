@@ -68,12 +68,13 @@ public class EpisodeCardPresenter extends Presenter {
         final Episode episode = (Episode) item;
         ViewHolder vh = (ViewHolder) viewHolder;
         vh.setEpisode(episode);
-        vh.getCardView().setTitleText(episode.getTitle());
-        vh.getCardView().setContentText(
+        ImageCardView cardView = vh.getCardView();
+        cardView.setTitleText(episode.getTitle());
+        cardView.setContentText(
                 String.format(context.getString(R.string.episode_number_format), episode.getEpisode()));
-        vh.getCardView().setMainImageDimensions(cardWidth, cardHeight);
+        cardView.setMainImageDimensions(cardWidth, cardHeight);
         vh.updateCardViewImage(episode.getBackdrop());
-        vh.cardView.setOnClickListener(view -> {
+        cardView.setOnClickListener(view -> {
             if (null != clickListener) {
                 clickListener.onEpisodeClicked(episode);
             }

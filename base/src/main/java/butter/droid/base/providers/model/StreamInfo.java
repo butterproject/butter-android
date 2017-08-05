@@ -48,8 +48,6 @@ public class StreamInfo implements Parcelable {
         this.media = media;
         this.parentMedia = parentMedia;
         this.streamUrl = streamUrl;
-
-        // color = media.color;
     }
 
     private StreamInfo(Parcel in) {
@@ -124,16 +122,6 @@ public class StreamInfo implements Parcelable {
         dest.writeString(streamUrl);
     }
 
-    public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
-        public StreamInfo createFromParcel(Parcel source) {
-            return new StreamInfo(source);
-        }
-
-        public StreamInfo[] newArray(int size) {
-            return new StreamInfo[size];
-        }
-    };
-
     @Nullable public String getBackdropImage() {
         Media media = this.media.getMedia();
         if (media.getBackdrop() != null) {
@@ -155,5 +143,15 @@ public class StreamInfo implements Parcelable {
             return null;
         }
     }
+
+    public static final Creator<StreamInfo> CREATOR = new Creator<StreamInfo>() {
+        public StreamInfo createFromParcel(Parcel source) {
+            return new StreamInfo(source);
+        }
+
+        public StreamInfo[] newArray(int size) {
+            return new StreamInfo[size];
+        }
+    };
 
 }

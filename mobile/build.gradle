@@ -88,7 +88,7 @@ dependencies {
     implementation "com.github.angads25:filepicker:${filePickerVersion}"
     implementation 'com.github.johnkil.android-robototextview:robototextview:2.5.0'
     implementation 'com.sothree.slidinguppanel:library:3.3.0'
-    implementation "com.android.support:customtabs:${appCompatVersion}"
+    implementation "com.android.support:customtabs:$appCompatVersion"
 
     implementation project(':base')
 

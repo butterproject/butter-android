@@ -222,10 +222,10 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
         MediaWrapper mediaItem = media.getMediaWrapper();
-        // TODO
-        /*if (view.getCustomSelectedSwatch() != null) {
-            mediaItem.color = view.getCustomSelectedSwatch().getRgb();
-        }*/
+
+        if (view.getCustomSelectedSwatch() != null) {
+            mediaItem.setColor(view.getCustomSelectedSwatch().getRgb());
+        }
 
         startActivity(TVMediaDetailActivity.getIntent(getActivity(), mediaItem), options);
     }

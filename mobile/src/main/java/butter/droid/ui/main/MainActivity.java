@@ -41,8 +41,11 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.module.Clip;
+import butter.droid.provider.base.module.Media;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment;
@@ -182,6 +185,11 @@ public class MainActivity extends ButterBaseActivity implements MainView {
         presenter.onSaveInstanceState(outState);
     }
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_TERMS:
@@ -264,8 +272,9 @@ public class MainActivity extends ButterBaseActivity implements MainView {
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "UTF-8");
                 // TODO: 7/29/17 Check if actual torrent
-                // TODO: 7/29/17 Null media
-                StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, null, null));
+                final Media clip = new Clip("0", streamUrl, 0, new Genre[0], null, "", "", "",
+                        streamUrl);
+                StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, new MediaWrapper(clip, -1), null));
                 finish();
             } catch (UnsupportedEncodingException e) {
                 Timber.d("Unknown encoding"); // this should never happen

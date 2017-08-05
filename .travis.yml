@@ -18,7 +18,6 @@ before_install:
   - $ANDROID_HOME/tools/bin/sdkmanager "emulator" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "sources;$ANDROID_TARGET" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" --channel=3
 

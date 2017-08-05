@@ -25,7 +25,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.provider.base.filter.Genre;
+import butter.droid.provider.base.module.Clip;
+import butter.droid.provider.base.module.Media;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
@@ -114,8 +118,9 @@ public class TVLaunchActivity extends Activity implements TVLaunchView {
             String streamUrl = data.toString();
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-                // TODO: 7/29/17 Null media
-                TVStreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, null, null));
+                final Media media = new Clip("0", streamUrl, -1, new Genre[0], null, "", "", "",
+                        streamUrl);
+                TVStreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, new MediaWrapper(media, -1), null));
                 finish();
                 return;
             } catch (UnsupportedEncodingException e) {

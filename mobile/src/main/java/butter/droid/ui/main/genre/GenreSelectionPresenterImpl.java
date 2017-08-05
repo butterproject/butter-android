@@ -17,6 +17,8 @@
 
 package butter.droid.ui.main.genre;
 
+import android.support.annotation.MainThread;
+import android.support.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.genre.list.model.UiGenre;
@@ -33,6 +35,8 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     private final ProviderManager providerManager;
     private final MainPresenter parentPresenter;
 
+    @Nullable private Disposable genresDisposable;
+
     private List<UiGenre> genres;
     private int selectedGenrePosition = -1;
 
@@ -44,6 +48,8 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     }
 
     @Override public void onViewCreated(final int providerId) {
+        disposeGenres();
+
         providerManager.getProvider(providerId).genres()
                 .flatMapObservable(Observable::fromIterable)
                 .map(UiGenre::new)
@@ -52,7 +58,7 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<UiGenre>>() {
                     @Override public void onSubscribe(final Disposable d) {
-
+                        genresDisposable = d;
                     }
 
                     @Override public void onSuccess(final List<UiGenre> value) {
@@ -62,7 +68,7 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
                     }
 
                     @Override public void onError(final Throwable e) {
-
+                        // TODO: 8/5/17 Show error
                     }
                 });
     }
@@ -80,6 +86,17 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
             view.notifyItemUpdated(position);
 
             parentPresenter.onGenreChanged(genre);
+        }
+    }
+
+    @Override public void onDestroy() {
+        disposeGenres();
+    }
+
+    @MainThread private void disposeGenres() {
+        if (this.genresDisposable != null) {
+            this.genresDisposable.dispose();
+            this.genresDisposable = null;
         }
     }
 

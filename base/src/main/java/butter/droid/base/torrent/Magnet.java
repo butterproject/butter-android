@@ -33,12 +33,12 @@ import butter.droid.base.R;
 
 public class Magnet {
 
-    private Context mContext;
+    private Context context;
     private boolean canOpen = false;
-    private Intent mOpenIntent;
+    private Intent openIntent;
 
     public Magnet(Context context, String magnetUrl) {
-        mContext = context;
+        this.context = context;
         setUrl(magnetUrl);
     }
 
@@ -56,7 +56,7 @@ public class Magnet {
 
         List<Intent> filteredShareIntents = new ArrayList<>();
         Intent torrentIntent = new Intent(Intent.ACTION_VIEW, uri);
-        List<ResolveInfo> resolveInfoList = mContext.getPackageManager().queryIntentActivities(torrentIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> resolveInfoList = context.getPackageManager().queryIntentActivities(torrentIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
         for (ResolveInfo info : resolveInfoList) {
             if (!info.activityInfo.packageName.contains("pct.droid")) {     // Black listing the app its self
@@ -67,9 +67,9 @@ public class Magnet {
         }
 
         if (filteredShareIntents.size() > 0){
-            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), mContext.getString(R.string.open_with));
+            Intent filteredIntent = Intent.createChooser(filteredShareIntents.remove(0), context.getString(R.string.open_with));
             filteredIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, filteredShareIntents.toArray(new Parcelable[filteredShareIntents.size()]));
-            mOpenIntent = filteredIntent;
+            openIntent = filteredIntent;
             canOpen = true;
         } else {
             canOpen = false;
@@ -77,8 +77,8 @@ public class Magnet {
     }
 
     public void open(Activity activity) {
-        if(mOpenIntent != null) {
-            activity.startActivity(mOpenIntent);
+        if(openIntent != null) {
+            activity.startActivity(openIntent);
         }
     }
 

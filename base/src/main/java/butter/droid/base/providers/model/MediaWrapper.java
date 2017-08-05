@@ -65,6 +65,10 @@ public class MediaWrapper implements Parcelable {
         return color;
     }
 
+    public void setColor(final int color) {
+        this.color = color;
+    }
+
     public boolean isMovie() {
         return media instanceof Movie;
     }

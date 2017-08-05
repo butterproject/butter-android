@@ -28,6 +28,7 @@ import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.utils.rx.KeyDisposable;
 import butter.droid.provider.MediaProvider;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butter.droid.ui.main.pager.NavInfo;
@@ -50,6 +51,8 @@ public class MainPresenterImpl implements MainPresenter {
     private final PrefManager prefManager;
 
     private final List<OnGenreChangeListener> genreListeners = new ArrayList<>();
+
+    private final KeyDisposable providerDataDisposable = new KeyDisposable();
 
     private int selectedProviderId;
 
@@ -141,10 +144,15 @@ public class MainPresenterImpl implements MainPresenter {
 
     }
 
+    @Override public void onDestroy() {
+        providerDataDisposable.dispose();
+    }
+
     private void displayProviderData(final int providerId) {
         this.selectedProviderId = providerId;
         MediaProvider provider = providerManager.getProvider(providerId);
 
+        unsubscribeProviderId(providerId);
         Observable.concat(provider.genres()
                         .filter(genres -> genres != null && genres.size() > 0)
                         .map(g -> new NavInfo(R.id.nav_item_genre, 0, R.string.genres, providerId))
@@ -157,18 +165,23 @@ public class MainPresenterImpl implements MainPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<NavInfo>>() {
                     @Override public void onSubscribe(final Disposable d) {
-
+                        providerDataDisposable.add(providerId, d);
                     }
 
                     @Override public void onSuccess(final List<NavInfo> value) {
+                        // TODO: 8/5/17 Do we need this
 //                        boolean hasGenres = value.first != null && value.first.size() > 0;
                         view.displayProvider(provider.getName(), value);
                     }
 
                     @Override public void onError(final Throwable e) {
-
+                        // TODO: 8/5/17 Display error
                     }
                 });
+    }
+
+    private void unsubscribeProviderId(final int providerId) {
+        providerDataDisposable.disposeSingle(providerId);
     }
 
     public interface OnGenreChangeListener {

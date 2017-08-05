@@ -46,4 +46,6 @@ public interface MainPresenter {
     void onSaveInstanceState(@NonNull Bundle outState);
 
     void searchClicked();
+
+    void onDestroy();
 }

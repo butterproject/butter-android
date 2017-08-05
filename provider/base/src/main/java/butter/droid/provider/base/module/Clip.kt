@@ -15,12 +15,12 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.main.genre;
+package butter.droid.provider.base.module
 
-public interface GenreSelectionPresenter {
-    void onViewCreated(int providerId);
+import butter.droid.provider.base.filter.Genre
 
-    void onGenreSelected(int position);
-
-    void onDestroy();
-}
+@org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
+data class Clip @org.parceler.ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
+                                                             override val genres: Array<Genre>, override val rating: Float?, override val poster: String,
+                                                             override val backdrop: String, override val synopsis: String,
+                                                             val videoUrl: String) : Media

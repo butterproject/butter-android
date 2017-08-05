@@ -143,28 +143,27 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
 
         // TODO: 6/25/17
 //        RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
-//            ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
+//        ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 //
 //            if (coverImage.getDrawable() == null) {
 //                showLoadingDialog(position);
 //                return;
 //            }
-//
-//            Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
-//            Palette.from(cover)
-//                    .maximumColorCount(5)
-//                    .generate(palette -> {
-//                        int vibrantColor = palette.getVibrantColor(Color.TRANSPARENT);
-//                        int paletteColor;
-//                        if (vibrantColor == Color.TRANSPARENT) {
-//                            paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
-//                        } else {
-//                            paletteColor = vibrantColor;
-//                        }
-//                        // TODO: 6/17/17
-////                            media.color = paletteColor;
-//                        showLoadingDialog(position);
-//                    });
+////
+//        Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
+//        Palette.from(cover)
+//                .maximumColorCount(5)
+//                .generate(palette -> {
+//                    int vibrantColor = palette.getVibrantColor(Color.TRANSPARENT);
+//                    int paletteColor;
+//                    if (vibrantColor == Color.TRANSPARENT) {
+//                        paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
+//                    } else {
+//                        paletteColor = vibrantColor;
+//                    }
+//                    media.setColor(paletteColor);
+//                    showLoadingDialog(position);
+//                });
     }
 
     @Override public void updateLoadingMessage(@StringRes int messageRes) {
