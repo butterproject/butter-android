@@ -64,5 +64,8 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.4'
+    testImplementation 'org.mockito:mockito-core:2.8.47'
+    testImplementation 'com.squareup.retrofit2:retrofit-mock:2.3.0'
 
 }

@@ -56,10 +56,13 @@ public interface MediaProvider {
 
     @NonNull Single<Optional<Sorter>> getDefaultSorter();
 
+    // TODO: 8/5/17 This should be moved to procider configuration
     @StringRes int getLoadingMessage();
 
+    // TODO: 8/5/17 This should be moved to procider configuration
     @DrawableRes int getIcon();
 
+    // TODO: 8/5/17 This should be moved to procider configuration
     @StringRes int getName();
 
 }

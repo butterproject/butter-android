@@ -17,6 +17,14 @@
 
 package butter.droid.base.manager.internal.vlc;
 
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_16_9;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_HORIZONTAL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
+
 import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -31,15 +39,7 @@ import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.MediaPlayer.Event;
 import timber.log.Timber;
 
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_16_9;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_HORIZONTAL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
-
-public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
+public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, IVLCVout.OnNewVideoLayoutListener {
 
     @Nullable private final LibVLC libVLC;
     private final WindowManager windowManager;
@@ -135,7 +135,7 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
         if (!vlcVout.areViewsAttached()) {
             vlcVout.setVideoView(surface);
             vlcVout.addCallback(this);
-            vlcVout.attachViews();
+            vlcVout.attachViews(this);
         }
     }
 
@@ -193,10 +193,8 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
 
     }
 
-    @Override
-    public void onNewLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth, final int visibleHeight,
-            final int sarNum, final int sarDen) {
-
+    @Override public void onNewVideoLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth,
+            final int visibleHeight, final int sarNum, final int sarDen) {
         Display display = windowManager.getDefaultDisplay();
 
         Point size = new Point();
@@ -215,8 +213,32 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
         layoutHolder.sarDen = sarDen;
 
         updateSurfaceSize();
-
     }
+
+//    @Override
+//    public void onNewLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth, final int visibleHeight,
+//            final int sarNum, final int sarDen) {
+//
+//        Display display = windowManager.getDefaultDisplay();
+//
+//        Point size = new Point();
+//        display.getSize(size);
+//
+//        int screenWidth = size.x;
+//        int screenHeight = size.y;
+//
+//        vlcVout.setWindowSize(screenWidth, screenHeight);
+//
+//        layoutHolder.height = height;
+//        layoutHolder.width = width;
+//        layoutHolder.visibleHeight = visibleHeight;
+//        layoutHolder.visibleWidth = visibleWidth;
+//        layoutHolder.sarNum = sarNum;
+//        layoutHolder.sarDen = sarDen;
+//
+//        updateSurfaceSize();
+//
+//    }
 
     private void updateSurfaceSize() {
 
@@ -300,10 +322,10 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
         // nothing to do
     }
 
-    @Override
-    public void onHardwareAccelerationError(final IVLCVout ivlcVout) {
-        // nothing to do
-    }
+//    @Override
+//    public void onHardwareAccelerationError(final IVLCVout ivlcVout) {
+//        // nothing to do
+//    }
 
     private class LayoutHolder {
 

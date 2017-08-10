@@ -72,7 +72,7 @@ public class VodoProvider extends AbsMediaProvider {
 
     @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter, @Nullable Pager pager) {
 
-        String query = null; // TODO: 6/18/17
+        String query = null;
         String genre = null;
         String sorter = null;
 

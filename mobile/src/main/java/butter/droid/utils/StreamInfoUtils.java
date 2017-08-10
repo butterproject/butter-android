@@ -165,7 +165,7 @@ public final class StreamInfoUtils {
         try {
             inputPFD = contentResolver.openFileDescriptor(data, "r");
 
-            if (AndroidUtil.isHoneycombMr1OrLater()) {
+            if (AndroidUtil.isHoneycombMr1OrLater) {
                 return AndroidUtil.LocationToUri("fd://" + inputPFD.getFd()).toString();
             } else {
                 String fdString = inputPFD.getFileDescriptor().toString();
