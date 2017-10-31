@@ -14,7 +14,7 @@ before_install:
   - chmod +x gradlew
   - cp -r config/ci/licenses $ANDROID_HOME/
   - $ANDROID_HOME/tools/bin/sdkmanager "tools" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.1" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.0" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "emulator" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" --channel=3
   - $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" --channel=3

@@ -46,24 +46,24 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:indeterminate="true" />
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
             android:id="@+id/primary_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/loading_data" />
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
             android:id="@+id/secondary_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
             android:id="@+id/tertiary_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.devspark.robototextview.widget.RobotoButton
+        <TextView
             android:id="@+id/startexternal_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

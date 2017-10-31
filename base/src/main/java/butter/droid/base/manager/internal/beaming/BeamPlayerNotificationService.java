@@ -29,7 +29,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.media.app.NotificationCompat.MediaStyle;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
 import com.connectsdk.device.ConnectableDevice;
@@ -147,12 +148,13 @@ public class BeamPlayerNotificationService extends Service {
             return;
         }
 
-        NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
+        MediaStyle style = new MediaStyle();
 
         Intent intent = new Intent(this, BeamPlayerNotificationService.class);
         intent.setAction(ACTION_STOP);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
-        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+        // TODO: 10/31/17 Add category
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle(manager.getStreamInfo().getFullTitle() == null ? "Video" : manager.getStreamInfo().getFullTitle())
                 .setContentText(getResources().getString(R.string.app_name))

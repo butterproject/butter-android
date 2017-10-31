@@ -5,25 +5,24 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.devspark.robototextview.widget.RobotoTextView;
-
-public class StrokedRobotoTextView extends RobotoTextView {
+public class StrokedTextView extends AppCompatTextView {
 
     private int strokeColor;
     private float strokeWidth;
 
-    public StrokedRobotoTextView(Context context) {
+    public StrokedTextView(Context context) {
         super(context);
     }
 
-    public StrokedRobotoTextView(Context context, AttributeSet attrs) {
+    public StrokedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public StrokedRobotoTextView(Context context, AttributeSet attrs, int defStyle) {
+    public StrokedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

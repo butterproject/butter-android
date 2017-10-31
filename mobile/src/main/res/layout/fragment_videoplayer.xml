@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"/>
 
-    <butter.droid.widget.StrokedRobotoTextView
+    <butter.droid.widget.StrokedTextView
             android:id="@+id/subtitle_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                     android:layout_marginBottom="@dimen/player_controls_distance"
                     android:orientation="horizontal">
 
-                <com.devspark.robototextview.widget.RobotoTextView
+                <TextView
                         android:id="@+id/current_time"
                         android:layout_width="55dp"
                         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                         android:gravity="end"
                         tools:text="0:00"/>
 
-                <com.devspark.robototextview.widget.RobotoTextView
+                <TextView
                         android:id="@+id/length_time"
                         android:layout_width="55dp"
                         android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
             android:minHeight="?attr/actionBarSize"
             android:fitsSystemWindows="false"/>
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
             android:id="@+id/player_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

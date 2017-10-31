@@ -17,10 +17,10 @@
 -->
 
 <LinearLayout
-        android:id="@+id/content"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -51,7 +51,7 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-            <butter.droid.widget.AutoResizeRobotoTextView
+            <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,8 +59,10 @@
                     android:textColor="@color/text_color"
                     android:textDirection="locale"
                     android:textSize="42sp"
-                    app:typeface="roboto_medium"
-                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras leo dolor, condimentum." />
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras leo dolor, condimentum."/>
+            <!-- TODO font family -->
+            <!-- TODO auto sizing -->
+            <!--app:typeface="roboto_medium"-->
 
             <RatingBar
                     android:id="@+id/rating"
@@ -73,7 +75,7 @@
                     android:max="10"
                     android:progress="5"/>
 
-            <com.devspark.robototextview.widget.RobotoTextView
+            <TextView
                     android:id="@+id/meta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,7 +87,7 @@
 
         </LinearLayout>
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
                 android:id="@+id/synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,14 +119,17 @@
                 android:layout_below="@id/synopsis"
                 android:orientation="horizontal">
 
-            <com.devspark.robototextview.widget.RobotoButton
+            <Button
                     android:id="@+id/read_more"
                     style="@style/Theme.Butter.DetailButton"
                     android:layout_marginEnd="@dimen/detail_button_margin"
                     android:layout_marginRight="@dimen/detail_button_margin"
-                    android:text="@string/read_more"
-                    app:typeface="roboto_medium"/>
+                    android:text="@string/read_more"/>
+            <!-- TODO font family -->
+            <!--app:typeface="roboto_medium"-->
 
         </LinearLayout>
+
     </RelativeLayout>
+
 </LinearLayout>

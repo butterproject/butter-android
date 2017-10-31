@@ -36,7 +36,7 @@ import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
-import butter.droid.widget.StrokedRobotoTextView;
+import butter.droid.widget.StrokedTextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
@@ -56,7 +56,7 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
 
     @Inject PlayerPresenter presenter;
 
-    @BindView(R.id.subtitle_text) StrokedRobotoTextView subtitleText;
+    @BindView(R.id.subtitle_text) StrokedTextView subtitleText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

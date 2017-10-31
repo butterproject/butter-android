@@ -31,7 +31,7 @@
 		android:layout_height="match_parent"
 		app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
-	<com.devspark.robototextview.widget.RobotoTextView
+	<TextView
 		android:id="@+id/emptyView"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -55,13 +55,14 @@
 			android:indeterminate="true"
 			style="?android:attr/progressBarStyleLarge" />
 
-		<com.devspark.robototextview.widget.RobotoTextView
+		<TextView
 			android:id="@+id/progress_textview"
 			android:layout_width="wrap_content"
 			android:textAppearance="@style/TextAppearance.AppCompat.Body2"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/activity_vertical_margin"
 			android:text="@string/loading_data" />
+
 	</LinearLayout>
 
 </FrameLayout>

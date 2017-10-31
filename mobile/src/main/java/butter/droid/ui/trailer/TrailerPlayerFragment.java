@@ -24,7 +24,7 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
-import butter.droid.widget.StrokedRobotoTextView;
+import butter.droid.widget.StrokedTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 
     @Inject TrailerPlayerPresenter presenter;
 
-    @BindView(R.id.subtitle_text) StrokedRobotoTextView subtitleText;
+    @BindView(R.id.subtitle_text) StrokedTextView subtitleText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

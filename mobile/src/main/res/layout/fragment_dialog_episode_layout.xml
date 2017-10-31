@@ -16,196 +16,206 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <butter.droid.widget.BottomSheetScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:scrollbars="none">
-
-        <LinearLayout
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_alignParentBottom="true"
+            android:scrollbars="none">
 
-            <View
-                android:id="@+id/placeholder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:id="@+id/top"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@drawable/base_gradient" />
-
-            <LinearLayout
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg"
-                android:clipChildren="true"
                 android:orientation="vertical">
 
-                <RelativeLayout
+            <View
+                    android:id="@+id/placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <View
+                    android:id="@+id/top"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@drawable/base_gradient"/>
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/detail_vertical_offset">
+                    android:background="@color/bg"
+                    android:clipChildren="true"
+                    android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/header"
+                <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/overlay"
-                        android:clipChildren="true">
+                        android:layout_marginBottom="@dimen/detail_vertical_offset">
 
-                        <ImageView
-                            android:id="@+id/header_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="180dp"
-                            android:contentDescription="@string/app_name"
-                            android:scaleType="centerCrop" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="180dp"
-                            android:alpha="0.7"
-                            android:background="@drawable/base_gradient" />
-
-                        <LinearLayout
+                    <RelativeLayout
+                            android:id="@+id/header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginLeft="@dimen/detail_horizontal_offset"
-                            android:layout_marginStart="@dimen/detail_horizontal_offset"
-                            android:layout_marginEnd="75dp"
-                            android:layout_marginRight="75dp"
-                            android:orientation="vertical"
-                            android:paddingBottom="@dimen/detail_vertical_offset">
+                            android:background="@color/overlay"
+                            android:clipChildren="true">
 
-                            <com.devspark.robototextview.widget.RobotoTextView
-                                android:id="@+id/info"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAllCaps="true"
-                                android:textColor="@color/text_color"
-                                android:textSize="@dimen/detail_meta_text_size"
-                                app:typeface="roboto_medium"
-                                tools:text="S01E02" />
+                        <ImageView
+                                android:id="@+id/header_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="180dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="centerCrop"/>
 
-                            <com.devspark.robototextview.widget.RobotoTextView
-                                android:id="@+id/title"
-                                android:layout_width="wrap_content"
+                        <View
+                                android:layout_width="match_parent"
+                                android:layout_height="180dp"
+                                android:alpha="0.7"
+                                android:background="@drawable/base_gradient"/>
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_color"
-                                android:textSize="@dimen/detail_title_text_size"
-                                app:typeface="roboto_medium"
-                                tools:text="Show Title" />
+                                android:layout_marginStart="@dimen/detail_horizontal_offset"
+                                android:layout_marginEnd="75dp"
+                                android:layout_marginLeft="@dimen/detail_horizontal_offset"
+                                android:layout_marginRight="75dp"
+                                android:layout_alignParentBottom="true"
+                                android:paddingBottom="@dimen/detail_vertical_offset"
+                                android:orientation="vertical">
+
+                            <TextView
+                                    android:id="@+id/info"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="@dimen/detail_meta_text_size"
+                                    tools:text="S01E02"/>
+                            <!-- TODO font family -->
+                            <!--app:typeface="roboto_medium"-->
+
+                            <TextView
+                                    android:id="@+id/title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="@dimen/detail_title_text_size"
+                                    tools:text="Show Title"/>
+                            <!-- TODO font family -->
+                            <!--app:typeface="roboto_medium"-->
+
                         </LinearLayout>
+
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/header"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingTop="@dimen/detail_vertical_offset">
-
-                        <com.devspark.robototextview.widget.RobotoTextView
-                            android:id="@+id/aired"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
-                            android:layout_marginTop="@dimen/detail_meta_margin_top"
+                            android:layout_below="@id/header"
+                            android:paddingTop="@dimen/detail_vertical_offset"
                             android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/detail_horizontal_offset"
-                            android:paddingStart="@dimen/detail_horizontal_offset"
-                            android:textColor="@color/secondary_text_color"
-                            android:textSize="@dimen/detail_meta_text_size"
-                            tools:text="Aired: 12 dec 2014" />
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:id="@+id/aired"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/detail_meta_margin_top"
+                                android:layout_marginBottom="12dp"
+                                android:paddingStart="@dimen/detail_horizontal_offset"
+                                android:paddingLeft="@dimen/detail_horizontal_offset"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/secondary_text_color"
+                                android:textSize="@dimen/detail_meta_text_size"
+                                tools:text="Aired: 12 dec 2014"/>
 
                         <ImageButton
-                            android:layout_width="15dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@id/aired"
-                            android:layout_alignBottom="@id/aired"
-                            android:layout_toEndOf="@id/aired"
-                            android:layout_toRightOf="@id/aired"
-                            android:layout_marginLeft="6dp"
-                            android:layout_marginStart="6dp"
-                            android:id="@+id/magnet"
-                            app:srcCompat="@drawable/ic_action_magnet"
-                            android:background="@drawable/selectable_background"
-                            android:visibility="visible"
-                            tools:visibility="visible"
-                            android:scaleType="fitCenter"
-                            android:contentDescription="@string/magnet" />
+                                android:id="@+id/magnet"
+                                android:layout_width="15dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginLeft="6dp"
+                                android:layout_alignBottom="@id/aired"
+                                android:layout_alignTop="@id/aired"
+                                android:layout_toEndOf="@id/aired"
+                                android:layout_toRightOf="@id/aired"
+                                android:background="@drawable/selectable_background"
+                                android:contentDescription="@string/magnet"
+                                android:scaleType="fitCenter"
+                                android:visibility="visible"
+                                app:srcCompat="@drawable/ic_action_magnet"
+                                tools:visibility="visible"/>
 
-                        <com.devspark.robototextview.widget.RobotoTextView
-                            android:id="@+id/synopsis"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/aired"
-                            android:background="@drawable/selectable_background_list"
-                            android:ellipsize="end"
-                            android:maxLines="5"
-                            android:paddingEnd="@dimen/detail_horizontal_offset"
-                            android:paddingLeft="@dimen/detail_horizontal_offset"
-                            android:paddingRight="@dimen/detail_horizontal_offset"
-                            android:paddingStart="@dimen/detail_horizontal_offset"
-                            android:textColor="@color/text_color"
-                            android:textDirection="locale"
-                            android:textSize="@dimen/detail_desc_text_size"
-                            tools:text="Lorem ipsum dolor sit amet." />
+                        <TextView
+                                android:id="@+id/synopsis"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/aired"
+                                android:paddingStart="@dimen/detail_horizontal_offset"
+                                android:paddingEnd="@dimen/detail_horizontal_offset"
+                                android:paddingLeft="@dimen/detail_horizontal_offset"
+                                android:paddingRight="@dimen/detail_horizontal_offset"
+                                android:background="@drawable/selectable_background_list"
+                                android:ellipsize="end"
+                                android:maxLines="5"
+                                android:textColor="@color/text_color"
+                                android:textDirection="locale"
+                                android:textSize="@dimen/detail_desc_text_size"
+                                tools:text="Lorem ipsum dolor sit amet."/>
+
                     </RelativeLayout>
 
                     <android.support.v7.widget.AppCompatImageButton
-                        android:id="@+id/play_button"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="152dp"
-                        android:background="@drawable/play_button_circle"
-                        android:elevation="5dp"
-                        app:srcCompat="@drawable/ic_av_play_button" />
+                            android:id="@+id/play_button"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginTop="152dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/play_button_circle"
+                            android:elevation="5dp"
+                            app:srcCompat="@drawable/ic_av_play_button"/>
+
                 </RelativeLayout>
 
                 <View
-                    android:id="@+id/main_div"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/div_white" />
+                        android:id="@+id/main_div"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/div_white"/>
 
                 <butter.droid.widget.OptionSelector
-                    android:id="@+id/subtitles"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    app:optionIcon="@drawable/ic_av_subs"
-                    app:optionText="@string/subtitles" />
+                        android:id="@+id/subtitles"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        app:optionIcon="@drawable/ic_av_subs"
+                        app:optionText="@string/subtitles"/>
 
                 <View
-                    android:id="@+id/option_div_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/optionselector_text_margin_start"
-                    android:layout_marginStart="@dimen/optionselector_text_margin_start"
-                    android:background="@color/div_white" />
+                        android:id="@+id/option_div_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/optionselector_text_margin_start"
+                        android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+                        android:background="@color/div_white"/>
 
                 <butter.droid.widget.OptionSelector
-                    android:id="@+id/quality"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    app:optionIcon="@drawable/ic_action_quality"
-                    app:optionText="@string/quality" />
+                        android:id="@+id/quality"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        app:optionIcon="@drawable/ic_action_quality"
+                        app:optionText="@string/quality"/>
+
             </LinearLayout>
+
         </LinearLayout>
+
     </butter.droid.widget.BottomSheetScrollView>
+
 </RelativeLayout>

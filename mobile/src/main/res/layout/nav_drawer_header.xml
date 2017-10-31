@@ -43,7 +43,7 @@
 	<!--app:border_width="1dp"-->
 	<!--app:border_color="#E4E4E4"-->
 
-	<com.devspark.robototextview.widget.RobotoTextView
+	<TextView
 		android:id="@+id/title_textview"
 		tools:text="Lauren Ipsum"
 		android:visibility="gone"
@@ -57,7 +57,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
 
-	<com.devspark.robototextview.widget.RobotoTextView
+	<TextView
 		android:id="@+id/subtitle_textview"
 		tools:text="524 hours watched"
 		android:visibility="gone"

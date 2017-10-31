@@ -17,132 +17,137 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/content"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <RelativeLayout
-        android:id="@+id/base_info_block"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="100dp"
-        android:paddingLeft="@dimen/detail_horizontal_offset"
-        android:paddingRight="@dimen/detail_horizontal_offset"
-        android:paddingStart="@dimen/detail_horizontal_offset"
-        android:paddingEnd="@dimen/detail_horizontal_offset"
-        android:paddingBottom="@dimen/detail_vertical_offset"
-        android:paddingTop="@dimen/detail_vertical_offset"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:gravity="center_horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Show Title"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/detail_title_text_size"
-            app:typeface="roboto_medium" />
-
-        <LinearLayout
-            android:id="@+id/extras"
+    <RelativeLayout
+            android:id="@+id/base_info_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_rating_margin_top"
+            android:paddingTop="@dimen/detail_vertical_offset"
+            android:paddingBottom="@dimen/detail_vertical_offset"
+            android:paddingStart="@dimen/detail_horizontal_offset"
+            android:paddingEnd="@dimen/detail_horizontal_offset"
+            android:paddingLeft="@dimen/detail_horizontal_offset"
+            android:paddingRight="@dimen/detail_horizontal_offset"
             android:gravity="center_vertical"
-            android:layout_below="@id/title">
+            android:minHeight="100dp"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/detail_title_text_size"
+                tools:text="Show Title"/>
+        <!-- TODO font family -->
+        <!--app:typeface="roboto_medium"-->
+
+        <LinearLayout
+                android:id="@+id/extras"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_rating_margin_top"
+                android:layout_below="@id/title"
+                android:gravity="center_vertical">
 
             <RatingBar
-                android:id="@+id/rating"
-                android:layout_width="80dp"
-                android:layout_height="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:isIndicator="true"
-                style="@style/Theme.Butter.RatingBar"
-                android:max="10"
-                android:progress="5"/>
+                    android:id="@+id/rating"
+                    style="@style/Theme.Butter.RatingBar"
+                    android:layout_width="80dp"
+                    android:layout_height="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:isIndicator="true"
+                    android:max="10"
+                    android:progress="5"/>
 
             <butter.droid.widget.SquareImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginStart="6dp"
-                android:maxWidth="20dp"
-                android:id="@+id/health"
-                app:srcCompat="@drawable/ic_health_unknown"
-                android:scaleType="centerInside"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                    android:id="@+id/health"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:maxWidth="20dp"
+                    android:scaleType="centerInside"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_health_unknown"
+                    tools:visibility="visible"/>
 
             <ImageButton
-                android:layout_width="15dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginStart="6dp"
-                android:id="@+id/magnet"
-                app:srcCompat="@drawable/ic_action_magnet"
-                android:background="@drawable/selectable_background"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:scaleType="fitCenter"
-                android:contentDescription="@string/magnet" />
+                    android:id="@+id/magnet"
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:background="@drawable/selectable_background"
+                    android:contentDescription="@string/magnet"
+                    android:scaleType="fitCenter"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_action_magnet"
+                    tools:visibility="visible"/>
 
         </LinearLayout>
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/meta"
-            android:layout_below="@id/extras"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_meta_margin_top"
-            android:gravity="center_vertical"
-            tools:text="2013 ● 94 min ● Animation"
-            android:textSize="@dimen/detail_meta_text_size"
-            android:textColor="@color/secondary_text_color" />
+        <TextView
+                android:id="@+id/meta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_meta_margin_top"
+                android:layout_below="@id/extras"
+                android:gravity="center_vertical"
+                android:textColor="@color/secondary_text_color"
+                android:textSize="@dimen/detail_meta_text_size"
+                tools:text="2013 ● 94 min ● Animation"/>
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            android:id="@+id/synopsis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/meta"
-            android:layout_marginTop="@dimen/detail_vertical_offset"
-            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac scelerisque diam. Etiam porttitor nibh vitae purus luctus, a efficitur orci aliquam. Nulla varius mollis nisi at sagittis. Nam consectetur augue eu consequat feugiat. Aliquam."
-            android:textDirection="locale"
-            android:maxLines="5"
-            android:ellipsize="end"
-            android:textSize="@dimen/detail_desc_text_size"
-            android:textColor="@color/text_color" />
+        <TextView
+                android:id="@+id/synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_vertical_offset"
+                android:layout_below="@id/meta"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:textColor="@color/text_color"
+                android:textDirection="locale"
+                android:textSize="@dimen/detail_desc_text_size"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac scelerisque diam. Etiam porttitor nibh vitae purus luctus, a efficitur orci aliquam. Nulla varius mollis nisi at sagittis. Nam consectetur augue eu consequat feugiat. Aliquam."/>
+
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/info_buttons"
-        android:orientation="horizontal"
-        android:layout_below="@id/base_info_block"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/detail_vertical_offset"
-        >
-        <com.devspark.robototextview.widget.RobotoButton
-            style="@style/Theme.Butter.DetailButton"
-            android:id="@+id/read_more"
-            android:layout_marginRight="@dimen/detail_button_margin"
-            android:layout_marginEnd="@dimen/detail_button_margin"
-            android:text="@string/read_more"
-            app:typeface="roboto_medium"  />
+            android:id="@+id/info_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/base_info_block"
+            android:paddingBottom="@dimen/detail_vertical_offset"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="horizontal">
 
-        <com.devspark.robototextview.widget.RobotoButton
-            style="@style/Theme.Butter.DetailButton"
-            android:visibility="gone"
-            android:id="@+id/watch_trailer"
-            android:text="@string/watch_trailer"
-            app:typeface="roboto_medium"  />
+        <Button
+                android:id="@+id/read_more"
+                style="@style/Theme.Butter.DetailButton"
+                android:layout_marginEnd="@dimen/detail_button_margin"
+                android:layout_marginRight="@dimen/detail_button_margin"
+                android:text="@string/read_more"/>
+        <!-- TODO font family -->
+        <!--app:typeface="roboto_medium"-->
+
+        <Button
+                android:id="@+id/watch_trailer"
+                style="@style/Theme.Butter.DetailButton"
+                android:text="@string/watch_trailer"
+                android:visibility="gone"/>
+        <!-- TODO font family -->
+        <!--app:typeface="roboto_medium"-->
+
     </LinearLayout>
 
 </RelativeLayout>

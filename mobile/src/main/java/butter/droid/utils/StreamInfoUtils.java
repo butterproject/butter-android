@@ -165,12 +165,7 @@ public final class StreamInfoUtils {
         try {
             inputPFD = contentResolver.openFileDescriptor(data, "r");
 
-            if (AndroidUtil.isHoneycombMr1OrLater) {
-                return AndroidUtil.LocationToUri("fd://" + inputPFD.getFd()).toString();
-            } else {
-                String fdString = inputPFD.getFileDescriptor().toString();
-                return AndroidUtil.LocationToUri("fd://" + fdString.substring(15, fdString.length() - 1)).toString();
-            }
+            return AndroidUtil.LocationToUri("fd://" + inputPFD.getFd()).toString();
         } catch (FileNotFoundException e) {
             return null;
         }

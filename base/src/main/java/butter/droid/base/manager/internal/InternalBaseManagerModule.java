@@ -55,7 +55,7 @@ public class InternalBaseManagerModule {
                     .withVideoSkipFrame(true)
                     .withVideoSkipIDCT(true)
                     .withAndroidWindowChroma(chroma)
-                    .withStats(true)
+                     .withStats(true)
                     .withVerbosity(Constants.DEBUG_ENABLED)
                     .build();
             return new LibVLC(context, options);
