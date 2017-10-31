@@ -9,17 +9,17 @@ env:
 
 before_install:
   - rm -rf $ANDROID_HOME/tools
-  - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-  - unzip -o sdk-tools-linux-3859397.zip -d $ANDROID_HOME/
+  - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip >/dev/null
+  - unzip -o sdk-tools-linux-3859397.zip -d $ANDROID_HOME/ >/dev/null
   - chmod +x gradlew
   - cp -r config/ci/licenses $ANDROID_HOME/
-  - $ANDROID_HOME/tools/bin/sdkmanager "tools" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.0" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "emulator" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3
-  - $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" --channel=3
+  - $ANDROID_HOME/tools/bin/sdkmanager "tools" --channel=3 >/dev/null
+  - $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.0" --channel=3 >/dev/null
+  - $ANDROID_HOME/tools/bin/sdkmanager "emulator" --channel=3 >/dev/null
+  - $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" --channel=3 >/dev/null
+  - $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" --channel=3 >/dev/null
+  - $ANDROID_HOME/tools/bin/sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI" --channel=3 >/dev/null
+  - $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" --channel=3 >/dev/null
 
 before_script:
   - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -f -n emulator -k "system-images;$ANDROID_TARGET;default;$ANDROID_ABI"
