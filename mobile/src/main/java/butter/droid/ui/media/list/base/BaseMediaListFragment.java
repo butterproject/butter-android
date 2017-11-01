@@ -141,7 +141,7 @@ public class BaseMediaListFragment extends Fragment implements BaseMediaListView
         final MediaWrapper media = adapter.getItem(position);
         presenter.onMediaItemClicked(media);
 
-        // TODO: 6/25/17
+        // TODO: 6/25/17 Colors
 //        RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
 //        ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
 //

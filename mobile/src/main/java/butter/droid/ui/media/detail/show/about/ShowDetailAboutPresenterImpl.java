@@ -77,6 +77,7 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
         StringBuilder metaDataStr = new StringBuilder();
         metaDataStr.append(show.getYear());
 
+        // TODO: 11/1/17 Meta
 //        if (show.status != Show.Status.UNKNOWN) {
 //            metaDataStr.append(" • ");
 //            if (show.status == Show.Status.CONTINUING) {

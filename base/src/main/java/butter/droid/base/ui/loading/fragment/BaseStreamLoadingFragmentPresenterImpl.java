@@ -137,7 +137,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     @Override public void onSuccess(Map<String, String> items) {
-        // TODO
+        // TODO subs
         /*
         Media media = streamInfo.getMedia();
         media.subtitles = items;
@@ -252,6 +252,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * Downloads the subs file
      */
     private void loadSubtitles() {
+        // TODO: 11/1/17 Subs
 //        Media media = streamInfo.getMedia();
 //        if (media == null) {
 //            return;

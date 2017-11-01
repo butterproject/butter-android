@@ -119,7 +119,8 @@ public class PlayerManager {
             String[] playerData = defaultPlayer.split(DELIMITER);
             if (playerData.length > 1) {
                 Intent intent = new Intent();
-//                if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
+                // TODO: 11/1/17 Subtitles
+                //                if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
 //                        "no-subs")) {
 //                    File subsLocation = new File(getStorageLocation(), media.getId() + "-" + subLanguage + ".srt");
 //                    BeamServer.setCurrentSubs(subsLocation);

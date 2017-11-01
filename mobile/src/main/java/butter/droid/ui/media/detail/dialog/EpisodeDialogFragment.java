@@ -1,4 +1,4 @@
-/*
+    /*
  * This file is part of Butter.
  *
  * Butter is free software: you can redistribute it and/or modify
@@ -197,7 +197,7 @@ public class EpisodeDialogFragment extends DialogFragment {
             headerImage.setContentDescription(getString(R.string.no_title_available));
         }
 
-        // TODO: 6/17/17
+        // TODO: 6/17/17 meta provider
 //        aired.setVisibility(episode.aired > 0 ? View.VISIBLE : View.GONE);
 //        Date airedDate = new Date((long) episode.aired * 1000);
 //        aired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrent())
@@ -238,7 +238,7 @@ public class EpisodeDialogFragment extends DialogFragment {
 
         subtitles.setText(R.string.loading_subs);
         subtitles.setClickable(false);
-        // TODO: 6/17/17
+        // TODO: 6/17/17 subs
         //        if (providerManager.hasCurrentSubsProvider()) {
 //            providerManager.getCurrentSubsProvider().getList(episode, new SubsProvider.Callback() {
 //                @Override
@@ -328,7 +328,7 @@ public class EpisodeDialogFragment extends DialogFragment {
         });
 
         if (metaProvider != null) {
-            // TODO: 6/17/17
+            // TODO: 6/17/17 meta
             //            metaProvider.getEpisodeMeta(episode.imdbId, episode.getSeasion(), episode.getEpisode(),
 //                    (Callback) (metaData, ex) -> {
 //                        String imageUrl = episode.getBackdrop();

@@ -71,6 +71,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
         this.streamInfo = streamInfo;
 
+        // TODO: 11/1/17 Subs
 //        if (streamInfo.getSubtitleLanguage() == null) {
 //            // Get selected default subtitle
 //            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
@@ -111,7 +112,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
             return;
         }
 
-        // TODO
+        // TODO subs
         /*
         if (media == null || media.subtitles == null || media.subtitles.size() == 0) {
             media = null;
@@ -136,7 +137,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void showSubsLanguageSettings() {
-        // TODO
+        // TODO subs
 /*
         String[] subtitles = media.subtitles.keySet().toArray(new String[media.subtitles.size()]);
         Arrays.sort(subtitles);
@@ -200,7 +201,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void onSubsClicked() {
-        // TODO
+        // TODO subs
         /*
         if (media != null && media.subtitles != null) {
             view.showSubsSelectorDialog();
@@ -264,7 +265,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     private void loadOrDownloadSubtitle() {
-        // TODO
+        // TODO subs
         /*
         if (media == null) {
             throw new NullPointerException("Media is not available");

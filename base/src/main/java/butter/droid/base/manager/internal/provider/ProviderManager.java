@@ -46,6 +46,7 @@ public class ProviderManager {
         return providers.length;
     }
 
+    // TODO: 11/1/17 Subtitles
     public SubsProvider getCurrentSubsProvider() {
         return null;
         // return getCurrentMediaProvider().getSubsProvider();
