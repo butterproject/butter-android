@@ -50,7 +50,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
     @Inject Picasso picasso;
 
     @BindView(R.id.background_imageview) ImageView backgroundImageView;
-    @BindView(R.id.startexternal_button) Button startExternalButton;
+    @Nullable @BindView(R.id.startexternal_button) Button startExternalButton;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);

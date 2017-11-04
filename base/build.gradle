@@ -66,9 +66,9 @@ dependencies {
 
     api 'com.butterproject:vlc-android-sdk:2.0.6'
     api project(':connectsdk')
-    api project(':provider:provider')
-    api project(':provider:mock')
-    api project(':provider:vodo')
+    api project(':provider:media:provider')
+    api project(':provider:media:mock')
+    api project(':provider:media:vodo')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"

@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
-import butter.droid.provider.base.module.Show;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;

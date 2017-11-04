@@ -1,1 +1,2 @@
-include ':mobile', ':base', ':connectsdk', ':tv', ':provider:base', ':provider:provider', ':provider:mock', ':provider:vodo'
+include ':mobile', ':base', ':connectsdk', ':tv', ':provider:media:base', ':provider:media:provider', ':provider:media:mock',
+        ':provider:media:vodo'

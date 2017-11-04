@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.detail.movie;
 
 import butter.droid.base.providers.model.MediaWrapper;
-import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;
 
