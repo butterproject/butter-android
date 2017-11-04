@@ -31,8 +31,8 @@ import dagger.Provides;
 public class ProviderModule {
 
     @Provides @ProviderScope
-    public SubsProvider provideSubsProvider() {
-        return new MockSubsProvider();
+    public SubsProvider provideSubsProvider(final Context context) {
+        return new MockSubsProvider(context);
     }
 
     @Provides @ProviderScope public MockMovieMediaProvider provideMockMoviesProvider(Context context, Gson gson) {

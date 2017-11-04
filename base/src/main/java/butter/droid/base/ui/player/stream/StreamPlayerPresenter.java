@@ -36,10 +36,6 @@ public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter, ISubtit
 
     void onSubsFileSelected(final File f);
 
-    void showSubsSizeSettings();
-
-    void onSubsSizeChanged(int size);
-
     void showSubsTimingSettings();
 
     void onSubsTimingChanged(int offset);

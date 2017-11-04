@@ -19,6 +19,7 @@ package butter.droid.base.ui.player.stream;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -29,8 +30,13 @@ import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
+import butter.droid.provider.subs.model.Subs;
+import io.reactivex.MaybeObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.io.File;
-import java.util.Collection;
+import timber.log.Timber;
 
 public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements StreamPlayerPresenter {
 
@@ -42,6 +48,8 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     private final PlayerManager playerManager;
 
     protected StreamInfo streamInfo;
+
+    @Nullable private Disposable subsDisposable;
 
 //    private String currentSubsLang = SubsProvider.SUBTITLE_LANGUAGE_NONE;
     private File subsFile;
@@ -70,20 +78,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
         this.streamInfo = streamInfo;
 
-        // TODO: 11/1/17 Subs
-//        if (streamInfo.getSubtitleLanguage() == null) {
-//            // Get selected default subtitle
-//            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-//            streamInfo.setSubtitleLanguage(defaultSubtitle);
-//            currentSubsLang = defaultSubtitle;
-//            Timber.d("Using default subtitle: %s", currentSubsLang);
-//        }
-//
-//        if (!streamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-//            Timber.d("Download default subtitle");
-//            currentSubsLang = streamInfo.getSubtitleLanguage();
-//            loadOrDownloadSubtitle();
-//        }
+        loadDefaultSubtitles();
     }
 
     @Override public void onResume() {
@@ -92,8 +87,13 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         loadMedia();
     }
 
+    @Override public void onDestroy() {
+        super.onDestroy();
+
+        disposeSubs();
+    }
+
     @Override public void onViewCreated() {
-        updateSubtitleSize(preferencesHandler.getSubtitleSize());
         view.setupControls(streamInfo.getFullTitle());
     }
 
@@ -126,8 +126,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
         */
 
-        view.showTimedCaptionText(null);
-        loadOrDownloadSubtitle();
+        loadSubtitle();
     }
 
     @Override public void onSubtitleDownloadCompleted(final boolean isSuccessful, final TimedTextObject subtitleFile) {
@@ -182,21 +181,13 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         view.showSubsFilePicker();
     }
 
-    @Override public void showSubsSizeSettings() {
-        view.displaySubsSizeDialog();
-    }
-
-    @Override public void onSubsSizeChanged(final int size) {
-        updateSubtitleSize(size);
-    }
-
     @Override public void showSubsTimingSettings() {
         view.displaySubsTimingDialog(subtitleOffset);
     }
 
     @Override public void onSubsTimingChanged(final int value) {
+        // TODO: 11/4/17 Subtitle offset
         subtitleOffset = value;
-        view.showTimedCaptionText(null);
     }
 
     @Override public void onSubsClicked() {
@@ -239,31 +230,26 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         lastSubs = sub;
     }
 
-    protected final void progressSubtitleCaption() {
-        if (player.isPlaying() && subs != null) {
-            Collection<Caption> subtitles = subs.captions.values();
-            double currentTime = getCurrentTime() - subtitleOffset;
-            if (lastSubs != null && currentTime >= lastSubs.start.getMilliseconds() && currentTime <= lastSubs.end.getMilliseconds()) {
-                view.showTimedCaptionText(lastSubs);
-            } else {
-                for (Caption caption : subtitles) {
-                    if (currentTime >= caption.start.getMilliseconds() && currentTime <= caption.end.getMilliseconds()) {
-                        lastSubs = caption;
-                        view.showTimedCaptionText(caption);
-                        break;
-                    } else if (currentTime > caption.end.getMilliseconds()) {
-                        view.showTimedCaptionText(null);
-                    }
-                }
-            }
-        }
+    private void loadDefaultSubtitles() {
+        // TODO: 11/1/17 Subs
+//        if (streamInfo.getSubtitleLanguage() == null) {
+//            // Get selected default subtitle
+//            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
+//            streamInfo.setSubtitleLanguage(defaultSubtitle);
+//            currentSubsLang = defaultSubtitle;
+//            Timber.d("Using default subtitle: %s", currentSubsLang);
+//        }
+//
+//        if (!streamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+//            Timber.d("Download default subtitle");
+//            currentSubsLang = streamInfo.getSubtitleLanguage();
+//            loadSubtitle();
+//        }
+
+        loadSubtitle();
     }
 
-    private void updateSubtitleSize(final int size) {
-        view.updateSubtitleSize(size);
-    }
-
-    private void loadOrDownloadSubtitle() {
+    private void loadSubtitle() {
         // TODO subs
         /*
         if (media == null) {
@@ -287,23 +273,53 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
             subtitleDownloader.downloadSubtitle();
         }
         */
+
+        providerManager.getCurrentSubsProvider()
+                .downloadSubs(streamInfo.getMedia().getMedia(), "en")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MaybeObserver<Subs>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        disposeSubs();
+                        subsDisposable = d;
+                    }
+
+                    @Override public void onSuccess(final Subs subs) {
+                        loadSubs(subs.getFile());
+                    }
+
+                    @Override public void onError(final Throwable e) {
+                        // TODO show error loading subs
+                        Timber.d("Error loading subs");
+                    }
+
+                    @Override public void onComplete() {
+                        Timber.d("Maybe empty");
+                    }
+                });
+    }
+
+    private void disposeSubs() {
+        Disposable current = subsDisposable;
+        if (current != null) {
+            current.dispose();
+        }
     }
 
     private void loadMedia() {
         String videoLocation = streamInfo.getStreamUrl();
-        if (TextUtils.isEmpty(videoLocation)) {;
+        if (TextUtils.isEmpty(videoLocation)) {
             // TODO: 7/29/17 Show error
         //            Toast.makeText(getActivity(), "Error loading media", Toast.LENGTH_LONG).show();
 //            getActivity().finish();
-            return;
-        }
+        } else {
+            if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
+                    "http://") && !videoLocation.startsWith("https://")) {
+                videoLocation = "file://" + videoLocation;
+            }
 
-        if (!videoLocation.startsWith("file://") && !videoLocation.startsWith(
-                "http://") && !videoLocation.startsWith("https://")) {
-            videoLocation = "file://" + videoLocation;
+            loadMedia(Uri.parse(videoLocation));
         }
-
-        loadMedia(Uri.parse(videoLocation));
     }
 
 }

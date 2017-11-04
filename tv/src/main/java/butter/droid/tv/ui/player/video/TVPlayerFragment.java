@@ -18,11 +18,9 @@
 package butter.droid.tv.ui.player.video;
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
-import butter.droid.base.subs.Caption;
 import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
@@ -66,19 +64,6 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void showTimedCaptionText(final Caption caption) {
-        // TODO: 5/7/17 - will be implemented later
-    }
-
-    @Override
-    public void setupSubtitles(@ColorInt final int color, final int size, @ColorInt final int strokeColor, final int strokeWidth) {
-        // TODO: 5/17/17 - will be implemented later
-    }
-
-    @Override public void updateSubtitleSize(final int size) {
-        // TODO: 5/17/17 - will be implemented later
-    }
-
     @Override public void showSubsSelectorDialog() {
         // TODO: 5/7/17 - will be implemented later
     }
@@ -88,10 +73,6 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
     }
 
     @Override public void showSubsFilePicker() {
-        // TODO: 5/7/17 - will be implemented later
-    }
-
-    @Override public void displaySubsSizeDialog() {
         // TODO: 5/7/17 - will be implemented later
     }
 

@@ -17,17 +17,36 @@
 
 package butter.droid.provider.subs.mock;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.subs.SubsProvider;
 import butter.droid.provider.subs.model.Subs;
 import io.reactivex.Maybe;
+import java.io.File;
+import okio.BufferedSink;
+import okio.Okio;
 
 public class MockSubsProvider implements SubsProvider {
 
+    private final Context context;
+
+    public MockSubsProvider(final Context context) {
+        this.context = context;
+    }
+
     @Override public Maybe<Subs> downloadSubs(@NonNull final Media media, @NonNull final String language) {
-        return Maybe.fromCallable(() -> Uri.parse("file:///android_asset/big_buck_bunny.eng.srt"))
+        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny.eng.srt"))
+                .map(assetStream -> {
+                    File subsFile = new File(context.getCacheDir(), "big_buck_bunny.eng.srt");
+
+                    BufferedSink sink = Okio.buffer(Okio.sink(subsFile));
+                    sink.writeAll(Okio.source(assetStream));
+                    sink.close();
+
+                    return Uri.fromFile(subsFile);
+                })
                 .map(uri -> new Subs("en", uri));
     }
 }

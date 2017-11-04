@@ -118,6 +118,10 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         player.play();
     }
 
+    protected void loadSubs(@NonNull Uri uri) {
+        player.loadSubs(uri);
+    }
+
     protected long getCurrentTime() {
         return player.getTime();
     }

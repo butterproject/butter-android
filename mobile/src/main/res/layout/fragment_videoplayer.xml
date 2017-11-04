@@ -28,19 +28,13 @@
     <SurfaceView
             android:id="@+id/video_surface"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"/>
+            android:layout_height="match_parent"/>
 
-    <butter.droid.widget.StrokedTextView
-            android:id="@+id/subtitle_text"
+    <SurfaceView
+            android:id="@+id/surface_subs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/player_subtitles_margin"
-            android:layout_marginRight="@dimen/player_subtitles_margin"
-            android:layout_alignLeft="@dimen/player_subtitles_margin"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal"
-            android:textDirection="anyRtl"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"/>
 
     <ProgressBar
             android:id="@+id/progress_indicator"
@@ -178,8 +172,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/player_overlay"
-            android:minHeight="?attr/actionBarSize"
-            android:fitsSystemWindows="false"/>
+            android:fitsSystemWindows="false"
+            android:minHeight="?attr/actionBarSize"/>
 
     <TextView
             android:id="@+id/player_info"

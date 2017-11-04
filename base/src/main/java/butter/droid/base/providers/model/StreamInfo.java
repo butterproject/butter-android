@@ -66,6 +66,10 @@ public class StreamInfo implements Parcelable {
         }
     }
 
+    @NonNull public MediaWrapper getMedia() {
+        return media;
+    }
+
     @NonNull public String getMediaTitle() {
         return media.getMedia().getTitle();
     }

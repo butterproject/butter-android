@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.player.abs;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.VideoSupportFragment;
@@ -35,6 +36,7 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.media.session.PlaybackStateCompat.CustomAction;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -59,6 +61,8 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     private MediaMetadataCompat.Builder metadataBuilder;
     private PlayerMediaControllerGlue mediaControllerGlue;
 
+    private SurfaceView subsSurface;
+
     @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -77,6 +81,17 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
                 .addCustomAction(PlayerMediaControllerGlue.ACTION_SCALE, getString(R.string.scale), R.drawable.ic_av_aspect_ratio);
 
         metadataBuilder = new MediaMetadataCompat.Builder();
+    }
+
+    @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
+        subsSurface = (SurfaceView) inflater.inflate(android.support.v17.leanback.R.layout.lb_video_surface, root, false);
+        root.addView(subsSurface, 1); // above video view
+
+        subsSurface.setZOrderMediaOverlay(true);
+        subsSurface.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+
+        return root;
     }
 
     @Override public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
@@ -135,7 +150,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     }
 
     @Override public void attachVlcViews() {
-        player.attachToSurface(getSurfaceView());
+        player.attachToSurface(getSurfaceView(), subsSurface);
     }
 
     @Override public void showOverlay() {

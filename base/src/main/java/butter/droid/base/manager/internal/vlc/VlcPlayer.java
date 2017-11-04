@@ -35,6 +35,7 @@ import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SizePolicy;
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
+import org.videolan.libvlc.Media.Slave.Type;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.MediaPlayer.Event;
 import timber.log.Timber;
@@ -77,6 +78,10 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
 
         mediaPlayer.setMedia(media);
 
+    }
+
+    public void loadSubs(Uri uri) {
+        mediaPlayer.addSlave(Type.Subtitle, uri, true);
     }
 
     public void play() {
@@ -130,13 +135,15 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
         mediaPlayer.setRate(rate);
     }
 
-    public void attachToSurface(SurfaceView surface) {
+    public void attachToSurface(SurfaceView videSurface, SurfaceView subsSurface) {
         final IVLCVout vlcVout = mediaPlayer.getVLCVout();
 
         if (!vlcVout.areViewsAttached()) {
-            vlcVout.setVideoView(surface);
+            vlcVout.setVideoView(videSurface);
+            vlcVout.setSubtitlesView(subsSurface);
             vlcVout.addCallback(this);
 //            vlcVout.attachViews(this);
+            vlcVout.attachViews();
         }
     }
 

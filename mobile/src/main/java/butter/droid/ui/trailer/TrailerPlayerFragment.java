@@ -21,11 +21,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import butter.droid.MobileButterApplication;
-import butter.droid.R;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
-import butter.droid.widget.StrokedTextView;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import javax.inject.Inject;
 import org.parceler.Parcels;
@@ -36,8 +33,6 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
     private static final String ARG_MEDIA = "butter.droid.ui.trailer.TrailerPlayerFragment.media";
 
     @Inject TrailerPlayerPresenter presenter;
-
-    @BindView(R.id.subtitle_text) StrokedTextView subtitleText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +55,6 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
     @Override public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-
-        subtitleText.setVisibility(View.GONE);
     }
 
 //    @Override

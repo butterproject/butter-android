@@ -17,16 +17,10 @@
 
 package butter.droid.base.ui.player.stream;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
-import butter.droid.base.subs.Caption;
 import butter.droid.base.ui.player.base.BaseVideoPlayerView;
 
 public interface StreamPlayerView extends BaseVideoPlayerView {
-
-    void setupSubtitles(@ColorInt int color, int size, @ColorInt int strokeColor, int strokeWidth);
-
-    void updateSubtitleSize(int size);
 
     void showSubsSelectorDialog();
 
@@ -34,11 +28,7 @@ public interface StreamPlayerView extends BaseVideoPlayerView {
 
     void showSubsFilePicker();
 
-    void displaySubsSizeDialog();
-
     void displaySubsTimingDialog(int subtitleOffset);
-
-    void showTimedCaptionText(Caption caption);
 
     void displayStreamProgress(int progress);
 

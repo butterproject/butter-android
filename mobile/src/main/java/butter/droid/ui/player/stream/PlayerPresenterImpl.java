@@ -36,7 +36,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
 
     private final PlayerView view;
     private final Context context;
-    private final PreferencesHandler preferencesHandler;
     private final VideoPlayerTouchHandler touchHandler;
     private final BrightnessManager brightnessManager;
     private final VlcPlayer player;
@@ -51,7 +50,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
 
         this.view = view;
         this.context = context;
-        this.preferencesHandler = preferencesHandler;
         this.touchHandler = touchHandler;
         this.brightnessManager = brightnessManager;
         this.player = player;
@@ -61,9 +59,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
 
     @Override public void onViewCreated() {
         super.onViewCreated();
-
-        view.setupSubtitles(preferencesHandler.getSubtitleColor(), preferencesHandler.getSubtitleSize(),
-                preferencesHandler.getSubtitleStrokeColor(), preferencesHandler.getSubtitleStrokeWidth());
 
         touchHandler.setListener(this);
     }
@@ -95,7 +90,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
             setLastSubtitleCaption(null);
             setCurrentTime(progress);
-            progressSubtitleCaption();
         }
     }
 

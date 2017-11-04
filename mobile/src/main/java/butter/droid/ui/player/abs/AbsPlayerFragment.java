@@ -18,7 +18,7 @@
 package butter.droid.ui.player.abs;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -79,6 +79,7 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.video_surface) SurfaceView videoSurface;
+    @BindView(R.id.surface_subs) SurfaceView subsSurface;
     @BindView(R.id.control_bar) butter.droid.widget.SeekBar controlBar;
     @BindView(R.id.control_layout) RelativeLayout controlLayout;
     @BindView(R.id.progress_indicator) ProgressBar progressIndicator;
@@ -133,6 +134,9 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
         setupProgressBar();
         initControlls();
         setProgressVisible(true);
+
+        subsSurface.setZOrderMediaOverlay(true);
+        subsSurface.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
         presenter.onViewCreated();
     }
@@ -210,7 +214,7 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
     }
 
     @Override public void attachVlcViews() {
-        player.attachToSurface(videoSurface);
+        player.attachToSurface(videoSurface, subsSurface);
     }
 
     @Override public void showOverlay() {
@@ -249,12 +253,7 @@ public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVi
     @Override public void onErrorEncountered() {
         /* Encountered Error, exit player with a message */
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        getAppCompatActivity().finish();
-                    }
-                })
+                .setPositiveButton(R.string.ok, (dialog1, id) -> getAppCompatActivity().finish())
                 .setTitle(R.string.encountered_error_title)
                 .setMessage(R.string.encountered_error)
                 .create();
