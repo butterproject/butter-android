@@ -47,6 +47,7 @@ import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.VersionUtils;
+import org.videolan.libvlc.LibVLC;
 import timber.log.Timber;
 
 public abstract class ButterApplication extends Application implements ButterUpdateManager.Listener {
@@ -69,6 +70,7 @@ public abstract class ButterApplication extends Application implements ButterUpd
     public void onCreate() {
         super.onCreate();
         sThis = this;
+        LibVLC.loadLibraries();
 
         AndroidThreeTen.init(this);
 
