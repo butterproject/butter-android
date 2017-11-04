@@ -1,2 +1,2 @@
 include ':mobile', ':base', ':connectsdk', ':tv', ':provider:media:base', ':provider:media:provider', ':provider:media:mock',
-        ':provider:media:vodo'
+        ':provider:media:vodo', ':provider:subs:provider', ':provider:subs:mock'

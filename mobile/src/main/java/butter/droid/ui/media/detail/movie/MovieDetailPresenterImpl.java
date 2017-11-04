@@ -167,7 +167,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
 
     private void displaySubtitles() {
-        // TODO subtitles
+        // TODO subs
         /*
         if (providerManager.hasCurrentSubsProvider()) {
             view.setSubtitleText(R.string.loading_subs);
