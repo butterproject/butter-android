@@ -24,10 +24,9 @@ import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.subs.SubtitleDownloader;
 import butter.droid.base.subs.TimedTextObject;
-import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
@@ -36,10 +35,9 @@ import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import java.text.DecimalFormat;
 import java.util.Locale;
-import java.util.Map;
 
 public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
-        TorrentListener, SubtitleDownloader.ISubtitleDownloaderListener, SubsProvider.Callback{
+        TorrentListener, SubtitleDownloader.ISubtitleDownloaderListener {
 
     private final BaseStreamLoadingFragmentView view;
     private final ProviderManager providerManager;
@@ -136,7 +134,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         // nothing to do
     }
 
-    @Override public void onSuccess(Map<String, String> items) {
+//    @Override public void onSuccess(Map<String, String> items) {
         // TODO subs
         /*
         Media media = streamInfo.getMedia();
@@ -167,11 +165,11 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
             subtitleDownloader.downloadSubtitle();
         }
         */
-    }
+//    }
 
-    @Override public void onFailure(Exception e) {
-        subsStatus = SubsStatus.FAILURE;
-    }
+//    @Override public void onFailure(Exception e) {
+//        subsStatus = SubsStatus.FAILURE;
+//    }
 
     @Override public void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile) {
         subsStatus = isSuccessful ? SubsStatus.SUCCESS : SubsStatus.FAILURE;

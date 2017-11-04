@@ -70,6 +70,9 @@ dependencies {
     api project(':provider:media:mock')
     api project(':provider:media:vodo')
 
+    api project(':provider:subs:provider')
+    api project(':provider:subs:mock')
+
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 

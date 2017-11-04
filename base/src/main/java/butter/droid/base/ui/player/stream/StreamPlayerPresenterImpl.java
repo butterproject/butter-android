@@ -25,10 +25,9 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.subs.Caption;
 import butter.droid.base.subs.TimedTextObject;
-import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import java.io.File;
 import java.util.Collection;
@@ -44,7 +43,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     protected StreamInfo streamInfo;
 
-    private String currentSubsLang = SubsProvider.SUBTITLE_LANGUAGE_NONE;
+//    private String currentSubsLang = SubsProvider.SUBTITLE_LANGUAGE_NONE;
     private File subsFile;
     private TimedTextObject subs;
     private Caption lastSubs;
@@ -99,18 +98,18 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void onSubtitleLanguageSelected(final String language) {
-        if (currentSubsLang != null && (language == null || currentSubsLang.equals(language))) {
-            return;
-        }
-
-        currentSubsLang = language;
-//        streamInfo.setSubtitleLanguage(language);
-
-        if (currentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-            subs = null;
-            onSubtitleEnabledStateChanged(false);
-            return;
-        }
+//        if (currentSubsLang != null && (language == null || currentSubsLang.equals(language))) {
+//            return;
+//        }
+//
+//        currentSubsLang = language;
+////        streamInfo.setSubtitleLanguage(language);
+//
+//        if (currentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+//            subs = null;
+//            onSubtitleEnabledStateChanged(false);
+//            return;
+//        }
 
         // TODO subs
         /*

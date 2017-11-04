@@ -22,7 +22,6 @@ import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.provider.base.module.FormatKt;
@@ -271,12 +270,13 @@ public class PreferencesHandler {
                             public String get(PrefItem item) {
                                 String langCode = (String) item.getValue();
 
-                                if (SubsProvider.SUBTITLE_LANGUAGE_NONE.equals(langCode)) {
+                                // TODO: 11/4/17 Subs
+//                                if (SubsProvider.SUBTITLE_LANGUAGE_NONE.equals(langCode)) {
                                     return resources.getString(R.string.no_default_set);
-                                } else {
-                                    Locale locale = LocaleUtils.toLocale(langCode);
-                                    return locale.getDisplayName(locale);
-                                }
+//                                } else {
+//                                    Locale locale = LocaleUtils.toLocale(langCode);
+//                                    return locale.getDisplayName(locale);
+//                                }
                             }
                         })
                         .build();
@@ -594,7 +594,9 @@ public class PreferencesHandler {
     }
 
     public String getSubtitleDefaultLanguage() {
-        return prefManager.get(Prefs.SUBTITLE_DEFAULT_LANGUAGE, SubsProvider.SUBTITLE_LANGUAGE_NONE);
+        // TODO: 11/4/17 Subs
+        return null;
+//        return prefManager.get(Prefs.SUBTITLE_DEFAULT_LANGUAGE, SubsProvider.SUBTITLE_LANGUAGE_NONE);
     }
 
     public String getStorageLocation() {

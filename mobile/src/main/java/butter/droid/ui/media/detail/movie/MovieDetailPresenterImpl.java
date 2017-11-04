@@ -19,7 +19,6 @@ package butter.droid.ui.media.detail.movie;
 
 import android.content.res.Resources;
 import android.text.TextUtils;
-import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
@@ -27,15 +26,11 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
-import butter.droid.base.providers.subs.SubsProvider;
-import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
-import java.util.Locale;
 
 public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
@@ -110,12 +105,12 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         if (languages != null && languages.length > position) {
             String language = languages[position];
             parentPresenter.selectSubtitle(language);
-            if (!language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-                final Locale locale = LocaleUtils.toLocale(language);
-                view.setSubtitleText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
-            } else {
-                view.setSubtitleText(R.string.no_subs);
-            }
+//            if (!language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
+//                final Locale locale = LocaleUtils.toLocale(language);
+//                view.setSubtitleText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
+//            } else {
+//                view.setSubtitleText(R.string.no_subs);
+//            }
         }
     }
 

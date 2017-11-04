@@ -166,9 +166,11 @@ public class EpisodeDialogFragment extends DialogFragment {
         if (null != metaProvider) {
             metaProvider.cancel();
         }
-        if (providerManager.hasCurrentSubsProvider()) {
-            providerManager.getCurrentSubsProvider().cancel();
-        }
+
+        // TODO: 11/4/17 Subs
+//        if (providerManager.hasCurrentSubsProvider()) {
+//            providerManager.getCurrentSubsProvider().cancel();
+//        }
     }
 
     @Override

@@ -18,20 +18,22 @@
 package butter.droid.base.manager.internal.provider;
 
 import android.support.annotation.NonNull;
-import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.provider.MediaProvider;
+import butter.droid.provider.subs.SubsProvider;
 
 public class ProviderManager {
 
     @NonNull private final MediaProvider[] providers;
+    private final SubsProvider subsProvider; // TODO subs - should be per media provider
 
-    public ProviderManager(@NonNull MediaProvider... providers) {
+    public ProviderManager(SubsProvider subsProvider, @NonNull MediaProvider... providers) {
         //noinspection ConstantConditions
         if (providers == null || providers.length == 0) {
             throw new IllegalStateException("No media providers available");
         }
 
         this.providers = providers;
+        this.subsProvider = subsProvider;
     }
 
     @NonNull public MediaProvider getProvider(int providerId) {
@@ -46,15 +48,12 @@ public class ProviderManager {
         return providers.length;
     }
 
-    // TODO: 11/1/17 Subtitles
     public SubsProvider getCurrentSubsProvider() {
-        return null;
-        // return getCurrentMediaProvider().getSubsProvider();
+        return subsProvider;
     }
 
     public boolean hasCurrentSubsProvider() {
-        return false;
-        // return getCurrentMediaProvider().hasSubsProvider();
+        return subsProvider != null;
     }
 
 }
