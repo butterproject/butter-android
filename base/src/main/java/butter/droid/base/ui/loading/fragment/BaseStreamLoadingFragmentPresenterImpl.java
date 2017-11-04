@@ -25,8 +25,6 @@ import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.model.StreamInfo;
-import butter.droid.base.subs.SubtitleDownloader;
-import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
@@ -37,7 +35,7 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 
 public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
-        TorrentListener, SubtitleDownloader.ISubtitleDownloaderListener {
+        TorrentListener {
 
     private final BaseStreamLoadingFragmentView view;
     private final ProviderManager providerManager;
@@ -171,9 +169,9 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
 //        subsStatus = SubsStatus.FAILURE;
 //    }
 
-    @Override public void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile) {
-        subsStatus = isSuccessful ? SubsStatus.SUCCESS : SubsStatus.FAILURE;
-    }
+//    @Override public void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile) {
+//        subsStatus = isSuccessful ? SubsStatus.SUCCESS : SubsStatus.FAILURE;
+//    }
 
     protected void setState(final State state) {
         setState(state, null);

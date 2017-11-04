@@ -34,9 +34,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 import butter.droid.base.ButterApplication;
-import butter.droid.base.subs.FormatSRT;
-import butter.droid.base.subs.FormatVTT;
-import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.utils.FileUtils;
 import timber.log.Timber;
 
@@ -119,17 +116,17 @@ public class BeamServer {
         File srtFile = new File(sCurrentSubs.getAbsolutePath() + ".srt");
 
         try {
-            if (FileUtils.getFileExtension(file.getName()).equals("srt") && !vttFile.exists() && srtFile.exists()) {
-                FormatSRT srt = new FormatSRT();
-                TimedTextObject timedTextObject = srt.parseFile(file.getName(), FileUtils.getContentsAsString(file.getAbsolutePath()));
-                String[] vttStr = timedTextObject.toVTT();
-                FileUtils.saveStringFile(vttStr, vttFile);
-            } else if (FileUtils.getFileExtension(file.getName()).equals("vtt") && !srtFile.exists() && vttFile.exists()) {
-                FormatVTT vtt = new FormatVTT();
-                TimedTextObject timedTextObject = vtt.parseFile(file.getName(), FileUtils.getContentsAsString(file.getAbsolutePath()));
-                String[] srtStr = timedTextObject.toSRT();
-                FileUtils.saveStringFile(srtStr, srtFile);
-            }
+//            if (FileUtils.getFileExtension(file.getName()).equals("srt") && !vttFile.exists() && srtFile.exists()) {
+//                FormatSRT srt = new FormatSRT();
+//                TimedTextObject timedTextObject = srt.parseFile(file.getName(), FileUtils.getContentsAsString(file.getAbsolutePath()));
+//                String[] vttStr = timedTextObject.toVTT();
+//                FileUtils.saveStringFile(vttStr, vttFile);
+//            } else if (FileUtils.getFileExtension(file.getName()).equals("vtt") && !srtFile.exists() && vttFile.exists()) {
+//                FormatVTT vtt = new FormatVTT();
+//                TimedTextObject timedTextObject = vtt.parseFile(file.getName(), FileUtils.getContentsAsString(file.getAbsolutePath()));
+//                String[] srtStr = timedTextObject.toSRT();
+//                FileUtils.saveStringFile(srtStr, srtFile);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

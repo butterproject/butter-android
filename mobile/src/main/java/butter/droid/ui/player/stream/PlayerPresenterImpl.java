@@ -88,7 +88,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
 
     @Override public void onProgressChanged(final int progress) {
         if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
-            setLastSubtitleCaption(null);
             setCurrentTime(progress);
         }
     }

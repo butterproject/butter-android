@@ -19,11 +19,6 @@ package butter.droid.base.providers.subs;
 
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.BaseProvider;
-import butter.droid.base.subs.FatalParsingException;
-import butter.droid.base.subs.FormatASS;
-import butter.droid.base.subs.FormatSRT;
-import butter.droid.base.subs.TimedTextObject;
-import butter.droid.base.utils.FileUtils;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
@@ -163,9 +158,8 @@ public abstract class SubsProvider extends BaseProvider {
      * @param srtPath      Path where SRT should be saved
      * @param languageCode The language code
      * @throws IOException
-     * @throws FatalParsingException
      */
-    private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException, FatalParsingException {
+    private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException {
         String filename;
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         ZipEntry ze;
@@ -212,21 +206,21 @@ public abstract class SubsProvider extends BaseProvider {
      * @param inputStream  InputStream of data  @throws IOException
      */
     private static void parseFormatAndSave(String inputUrl, File srtPath, String languageCode, InputStream inputStream) throws IOException {
-        TimedTextObject subtitleObject = null;
-
-        String inputString = FileUtils.inputstreamToCharsetString(inputStream, languageCode);
-        String[] inputText = inputString.split("\n|\r\n");
-
-        if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {
-            FormatASS formatASS = new FormatASS();
-            subtitleObject = formatASS.parseFile(inputUrl, inputText);
-        } else if (inputUrl.contains(".srt")) {
-            FormatSRT formatSRT = new FormatSRT();
-            subtitleObject = formatSRT.parseFile(inputUrl, inputText);
-        }
-
-        if (subtitleObject != null) {
-            FileUtils.saveStringFile(subtitleObject.toSRT(), srtPath);
-        }
+//        TimedTextObject subtitleObject = null;
+//
+//        String inputString = FileUtils.inputstreamToCharsetString(inputStream, languageCode);
+//        String[] inputText = inputString.split("\n|\r\n");
+//
+//        if (inputUrl.contains(".ass") || inputUrl.contains(".ssa")) {
+//            FormatASS formatASS = new FormatASS();
+//            subtitleObject = formatASS.parseFile(inputUrl, inputText);
+//        } else if (inputUrl.contains(".srt")) {
+//            FormatSRT formatSRT = new FormatSRT();
+//            subtitleObject = formatSRT.parseFile(inputUrl, inputText);
+//        }
+//
+//        if (subtitleObject != null) {
+//            FileUtils.saveStringFile(subtitleObject.toSRT(), srtPath);
+//        }
     }
 }

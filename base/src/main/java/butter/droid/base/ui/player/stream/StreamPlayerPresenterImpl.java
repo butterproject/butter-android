@@ -27,8 +27,6 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.providers.model.StreamInfo;
-import butter.droid.base.subs.Caption;
-import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import butter.droid.provider.subs.model.Subs;
 import io.reactivex.MaybeObserver;
@@ -53,8 +51,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
 //    private String currentSubsLang = SubsProvider.SUBTITLE_LANGUAGE_NONE;
     private File subsFile;
-    private TimedTextObject subs;
-    private Caption lastSubs;
     private int subtitleOffset;
     private int streamerProgress;
 
@@ -129,10 +125,10 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         loadSubtitle();
     }
 
-    @Override public void onSubtitleDownloadCompleted(final boolean isSuccessful, final TimedTextObject subtitleFile) {
-        onSubtitleEnabledStateChanged(isSuccessful);
-        subs = subtitleFile;
-    }
+//    @Override public void onSubtitleDownloadCompleted(final boolean isSuccessful, final TimedTextObject subtitleFile) {
+//        onSubtitleEnabledStateChanged(isSuccessful);
+//        subs = subtitleFile;
+//    }
 
     @Override public void showSubsLanguageSettings() {
         // TODO subs
@@ -174,7 +170,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     @Override protected void seek(final int delta) {
         super.seek(delta);
 
-        lastSubs = null;
+//        lastSubs = null;
     }
 
     @Override public void showCustomSubsPicker() {
@@ -226,9 +222,9 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         // override if needed
     }
 
-    protected void setLastSubtitleCaption(Caption sub) {
-        lastSubs = sub;
-    }
+//    protected void setLastSubtitleCaption(Caption sub) {
+//        lastSubs = sub;
+//    }
 
     private void loadDefaultSubtitles() {
         // TODO: 11/1/17 Subs
