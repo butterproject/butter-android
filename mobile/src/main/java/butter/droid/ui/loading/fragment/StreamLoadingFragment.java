@@ -28,8 +28,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.providers.model.StreamInfo;
@@ -50,7 +50,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
     @Inject Picasso picasso;
 
     @BindView(R.id.background_imageview) ImageView backgroundImageView;
-    @Nullable @BindView(R.id.startexternal_button) Button startExternalButton;
+    @Nullable @BindView(R.id.startexternal_button) TextView startExternalButton;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
