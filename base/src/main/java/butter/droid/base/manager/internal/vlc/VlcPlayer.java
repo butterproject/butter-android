@@ -41,7 +41,6 @@ import org.videolan.libvlc.MediaPlayer.Event;
 import timber.log.Timber;
 
 public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, IVLCVout.OnNewVideoLayoutListener {
-//public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback {
 
     @Nullable private final LibVLC libVLC;
     private final WindowManager windowManager;
@@ -143,7 +142,6 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
             vlcVout.setSubtitlesView(subsSurface);
             vlcVout.addCallback(this);
             vlcVout.attachViews(this);
-//            vlcVout.attachViews();
         }
     }
 
@@ -195,7 +193,7 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
                 break;
             case MediaPlayer.Event.TimeChanged:
                 callback.progressChanged(event.getTimeChanged());
-//            case MediaPlayer.Event.PositionChanged:
+            case MediaPlayer.Event.PositionChanged:
                 break;
         }
 
@@ -222,31 +220,6 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
 
         updateSurfaceSize();
     }
-
-//    @Override
-//    public void onNewLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth, final int visibleHeight,
-//            final int sarNum, final int sarDen) {
-//
-//        Display display = windowManager.getDefaultDisplay();
-//
-//        Point size = new Point();
-//        display.getSize(size);
-//
-//        int screenWidth = size.x;
-//        int screenHeight = size.y;
-//
-//        vlcVout.setWindowSize(screenWidth, screenHeight);
-//
-//        layoutHolder.height = height;
-//        layoutHolder.width = width;
-//        layoutHolder.visibleHeight = visibleHeight;
-//        layoutHolder.visibleWidth = visibleWidth;
-//        layoutHolder.sarNum = sarNum;
-//        layoutHolder.sarDen = sarDen;
-//
-//        updateSurfaceSize();
-//
-//    }
 
     private void updateSurfaceSize() {
 
@@ -329,11 +302,6 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
     @Override public void onSurfacesDestroyed(final IVLCVout vlcVout) {
         // nothing to do
     }
-
-//    @Override
-//    public void onHardwareAccelerationError(final IVLCVout ivlcVout) {
-//        // nothing to do
-//    }
 
     private class LayoutHolder {
 
