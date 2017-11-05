@@ -222,7 +222,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView, Su
     }
 
     @OnClick(R.id.read_more) public void openReadMore() {
-        presenter.openReadMore  ();
+        presenter.openReadMore();
     }
 
     @OnClick(R.id.watch_trailer)
