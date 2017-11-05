@@ -20,6 +20,8 @@ package butter.droid.ui.media.detail.movie;
 import android.support.annotation.StringRes;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.provider.base.module.Torrent;
+import butter.droid.ui.media.detail.model.UiSubItem;
+import java.util.List;
 
 public interface MovieDetailView {
     void initLayout(MediaWrapper movie);
@@ -46,7 +48,9 @@ public interface MovieDetailView {
 
     void setSubtitleEnabled(boolean enabled);
 
-    void setSubsData(String[] names, int defaultIndex);
+    void displaySubsPicker(List<UiSubItem> items);
 
     void setQualities(String[] qualities, String quality);
+
+    void hideDialog();
 }

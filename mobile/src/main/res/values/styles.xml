@@ -42,6 +42,8 @@
         <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
         <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
         <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
+
+        <item name="optionPreviewStyle">@style/OptionPreview</item>
 	</style>
 
 	<style name="Theme.Butter" parent="Theme.Butter.Base" />
@@ -150,6 +152,12 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:radius">2dp</item>
         <item name="android:background">@drawable/selectable_background_rounded</item>
+    </style>
+
+    <style name="OptionPreview">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:minHeight">56dp</item>
     </style>
 
     <!-- Fix Toolbar metrics -->

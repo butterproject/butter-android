@@ -15,20 +15,23 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.subs;
+package butter.droid.provider.subs.model;
 
-import android.support.annotation.NonNull;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.subs.model.Sub;
-import butter.droid.provider.subs.model.Subs;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
-import java.util.List;
+public class Sub {
 
-public interface SubsProvider {
+    private final String language; // ISO language code
+    private final String name; // Usualy full language name
 
-    Single<List<Sub>> list(@NonNull Media media);
+    public Sub(final String language, final String name) {
+        this.language = language;
+        this.name = name;
+    }
 
-    Maybe<Subs> downloadSubs(@NonNull Media media, @NonNull String language);
+    public String getLanguage() {
+        return language;
+    }
 
+    public String getName() {
+        return name;
+    }
 }

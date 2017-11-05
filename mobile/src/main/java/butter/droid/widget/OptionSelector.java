@@ -15,6 +15,10 @@ import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * @deprecated Shoucl move to something like {@link OptionPreview}
+ */
+@Deprecated
 public class OptionSelector extends LinearLayout {
 
     View view;
@@ -45,8 +49,8 @@ public class OptionSelector extends LinearLayout {
         setClickable(true);
         setFocusable(true);
 
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = layoutInflater.inflate(R.layout.optionselector, this);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        view = layoutInflater.inflate(R.layout.item_option_selector, this);
         ButterKnife.bind(this, view);
 
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.OptionSelector, defStyle, 0);

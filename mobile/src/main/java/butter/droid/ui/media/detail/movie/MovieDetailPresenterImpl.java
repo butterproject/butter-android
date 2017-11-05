@@ -19,6 +19,7 @@ package butter.droid.ui.media.detail.movie;
 
 import android.content.res.Resources;
 import android.text.TextUtils;
+import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
@@ -26,11 +27,21 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
+import butter.droid.ui.media.detail.model.UiSubItem;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import java.util.Collections;
+import java.util.List;
 
 public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
@@ -44,7 +55,10 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private final MediaDisplayManager mediaDisplayManager;
 
     private MediaWrapper mediaWrapper;
-    private String[] subtitleLanguages;
+
+    // TODO: 11/5/17 Saved instance state
+    private List<UiSubItem> subtitleList;
+    private UiSubItem selectedSub;
 
     public MovieDetailPresenterImpl(MovieDetailView view, MediaDetailPresenter parentPresenter,
             YouTubeManager youTubeManager, PreferencesHandler preferencesHandler, ProviderManager providerManager,
@@ -100,22 +114,36 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         parentPresenter.playMediaClicked();
     }
 
-    @Override public void subtitleSelected(int position) {
-        String[] languages = this.subtitleLanguages;
-        if (languages != null && languages.length > position) {
-            String language = languages[position];
-            parentPresenter.selectSubtitle(language);
-//            if (!language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-//                final Locale locale = LocaleUtils.toLocale(language);
-//                view.setSubtitleText(StringUtils.uppercaseFirst(locale.getDisplayName(locale)));
-//            } else {
-//                view.setSubtitleText(R.string.no_subs);
-//            }
+    @Override public void subtitleSelected(UiSubItem item) {
+        UiSubItem selectedSub = this.selectedSub;
+        if (selectedSub != null) {
+            selectedSub.setSelected(false);
         }
+
+        this.selectedSub = item;
+        item.setSelected(true);
+
+        String language = item.getLanguage();
+        // TODO: 11/5/17 Subs
+//        parentPresenter.selectSubtitle(language);
+
+        if (language == null || SubsProvider.SUBTITLE_LANGUAGE_NONE.equals(language)) {
+            view.setSubtitleText(R.string.no_subs);
+        } else {
+            view.setSubtitleText(item.getName());
+        }
+        view.hideDialog();
     }
 
     @Override public void healthClicked() {
         parentPresenter.healthClicked();
+    }
+
+    @Override public void onSubtitlesClicked() {
+        List<UiSubItem> subtitleList = this.subtitleList;
+        if (subtitleList != null && !subtitleList.isEmpty()) {
+            view.displaySubsPicker(subtitleList);
+        } // else ignore click (TODO maybe show error)
     }
 
     private void displayMetaData() {
@@ -162,77 +190,68 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
 
     private void displaySubtitles() {
-        // TODO subs
-        /*
         if (providerManager.hasCurrentSubsProvider()) {
             view.setSubtitleText(R.string.loading_subs);
             view.setSubtitleEnabled(false);
 
-            providerManager.getCurrentSubsProvider().getList(movie, new SubsProvider.Callback() {
-                @Override
-                public void onSuccess(Map<String, String> subtitles) {
-                    if (subtitles == null || subtitles.isEmpty()) {
-                        ThreadUtils.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                view.setSubtitleText(R.string.no_subs_available);
-                            }
-                        });
-                        return;
-                    }
-
-                    movie.subtitles = subtitles;
-
-                    String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
-                    Arrays.sort(languages);
-                    final String[] adapterLanguages = new String[languages.length + 1];
-                    adapterLanguages[0] = SubsProvider.SUBTITLE_LANGUAGE_NONE;
-                    System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
-                    subtitleLanguages = adapterLanguages;
-
-                    final String[] readableNames = new String[adapterLanguages.length];
-                    for (int i = 0; i < readableNames.length; i++) {
-                        String language = adapterLanguages[i];
-                        if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-                            readableNames[i] = resources.getString(R.string.no_subs);
+            providerManager.getCurrentSubsProvider().list(mediaWrapper.getMedia())
+                    .flatMap(subs -> {
+                        if (subs.isEmpty()) {
+                            return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
                         } else {
-                            Locale locale = LocaleUtils.toLocale(language);
-                            readableNames[i] = locale.getDisplayName(locale);
+                            final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
+                            return Observable.fromIterable(subs)
+                                    .map(sub -> new UiSubItem(sub.getLanguage(), sub.getName(), defaultSubtitle.equals(sub.getLanguage())))
+                                    .startWith(new UiSubItem(null, null, defaultSubtitle.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)))
+                                    .toList();
                         }
-                    }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<List<UiSubItem>>() {
+                        @Override public void onSubscribe(final Disposable d) {
 
-                    String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-                    final int defaultIndex;
-                    if (subtitles.containsKey(defaultSubtitle)) {
-                        defaultIndex = Arrays.asList(adapterLanguages).indexOf(defaultSubtitle);
-                    } else {
-                        defaultIndex = Arrays.asList(adapterLanguages).indexOf(SubsProvider.SUBTITLE_LANGUAGE_NONE);
-                    }
-
-                    ThreadUtils.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            view.setSubtitleEnabled(true);
-                            view.setSubsData(readableNames, defaultIndex);
                         }
-                    });
-                }
 
-                @Override
-                public void onFailure(Exception ex) {
-                    ThreadUtils.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override public void onSuccess(final List<UiSubItem> subs) {
+                            if (subs.isEmpty()) {
+                                view.setSubtitleText(R.string.no_subs_available);
+                                subtitleList = null;
+                            } else {
+                                view.setSubtitleEnabled(true);
+                                subtitleList = subs;
+
+                                UiSubItem selectedItem = null;
+                                for (final UiSubItem sub : subs) {
+                                    if (sub.isSelected()) {
+                                        selectedItem = sub;
+                                        String name = sub.getName();
+                                        if (TextUtils.isEmpty(name)) {
+                                            view.setSubtitleText(R.string.no_subs);
+                                        } else {
+                                            view.setSubtitleText(name);
+                                        }
+                                        break;
+                                    }
+                                }
+                                if (selectedItem == null) {
+                                    selectedItem = subs.get(0);
+                                }
+
+                                selectedSub = selectedItem;
+                            }
+                        }
+
+                        @Override public void onError(final Throwable e) {
+                            subtitleList = null;
                             view.setSubtitleText(R.string.no_subs_available);
                             view.setSubtitleEnabled(false);
                         }
                     });
-                }
-            });
         } else {
             view.setSubtitleText(R.string.no_subs_available);
             view.setSubtitleEnabled(false);
         }
-        */
     }
 
     private void displayQualities() {

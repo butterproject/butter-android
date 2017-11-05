@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/optionselector_icon_margin_start"
+            android:layout_marginLeft="@dimen/optionselector_icon_margin_start"
+            android:layout_gravity="center_vertical|start"
+            android:duplicateParentState="true"
+            tools:src="@mipmap/ic_launcher"/>
+
+    <TextView
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/optionselector_text_margin_start"
+            android:layout_marginEnd="@dimen/optionselector_text_margin_end"
+            android:layout_marginLeft="@dimen/optionselector_text_margin_start"
+            android:layout_marginRight="@dimen/optionselector_text_margin_end"
+            android:layout_gravity="center_vertical"
+            android:duplicateParentState="true"
+            android:gravity="start"
+            android:lines="1"
+            android:textColor="@android:color/white"
+            android:textDirection="locale"
+            android:textSize="@dimen/optionselector_text_size"
+            tools:text="@string/app_name"/>
+
+</merge>

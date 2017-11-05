@@ -19,7 +19,6 @@ package butter.droid.ui.media.detail.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -46,12 +45,7 @@ public class MessageDialogFragment extends DialogFragment {
                 .setMessage(arguments.getString(ARG_MESSAGE));
 
         if (arguments.getBoolean(ARG_CANCELABLE, true)) {
-            builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            builder.setNegativeButton(R.string.ok, (dialog, which) -> dialog.dismiss());
             setCancelable(true);
         } else {
             setCancelable(false);

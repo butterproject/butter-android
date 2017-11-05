@@ -13,4 +13,6 @@
     <dimen name="second_keyline">80dp</dimen>
     <dimen name="toolbar_horizontal_padding">12dp</dimen>
 
+    <dimen name="bottom_sheet_width">600dp</dimen>
+
 </resources>

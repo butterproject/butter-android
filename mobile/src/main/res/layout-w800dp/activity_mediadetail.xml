@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <ImageView
-        android:id="@+id/bg_image"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ab_gradient"
-        android:scaleType="centerCrop"
-        android:transitionName="background"
-        android:importantForAccessibility="no"
-        android:fitsSystemWindows="true"/>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/parallax_header_height"
-        android:src="@drawable/ab_gradient"
-        android:importantForAccessibility="no"
-        android:fitsSystemWindows="true"/>
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="@android:color/transparent"
         android:fitsSystemWindows="true">
 
-        <butter.droid.widget.BurtterCollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+    <ImageView
+            android:id="@+id/bg_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@id/toolbar">
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ab_gradient"
+            android:transitionName="background"/>
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/parallax_header_height"
+            android:fitsSystemWindows="true"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ab_gradient"/>
+
+    <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <butter.droid.widget.BurtterCollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:toolbarId="@id/toolbar">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
         </butter.droid.widget.BurtterCollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:behavior_overlapTop="64dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:behavior_overlapTop="64dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/detail_card_margin"
-            android:layout_marginRight="@dimen/detail_card_margin"
-            android:background="@color/bg"
-            android:elevation="4dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:transitionName="content" />
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/detail_card_margin"
+                android:layout_marginRight="@dimen/detail_card_margin"
+                android:background="@color/bg"
+                android:elevation="4dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:transitionName="content"/>
 
     </android.support.v4.widget.NestedScrollView>
 

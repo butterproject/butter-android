@@ -16,21 +16,9 @@
   ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-
-    <declare-styleable name="ScrimInsetsView">
-        <attr name="insetForegroundColor" format="reference|color" />
-    </declare-styleable>
-
-    <declare-styleable name="OptionSelector">
-        <attr name="optionIcon" format="reference"/>
-        <attr name="optionText" format="string"/>
-    </declare-styleable>
-
-    <attr name="optionPreviewStyle" format="reference" />
-    <declare-styleable name="OptionPreview">
-        <attr name="op_icon" format="reference"/>
-        <attr name="op_text" format="string"/>
-    </declare-styleable>
-
-</resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/items_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg"
+        android:orientation="vertical" />

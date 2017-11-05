@@ -178,14 +178,13 @@
                     android:layout_below="@id/info_buttons"
                     android:background="@color/div_white"/>
 
-            <butter.droid.widget.OptionSelector
+            <butter.droid.widget.OptionPreview
                     android:id="@+id/subtitles"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/main_div"
-                    app:optionIcon="@drawable/ic_av_subs"
-                    app:optionText="@string/subtitles"
-                    />
+                    app:op_icon="@drawable/ic_av_subs"
+                    app:op_text="@string/subtitles" />
 
             <View
                     android:id="@+id/option_div_1"

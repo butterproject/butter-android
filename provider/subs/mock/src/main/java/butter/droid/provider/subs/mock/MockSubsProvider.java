@@ -22,9 +22,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.subs.SubsProvider;
+import butter.droid.provider.subs.model.Sub;
 import butter.droid.provider.subs.model.Subs;
 import io.reactivex.Maybe;
+import io.reactivex.Single;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import okio.BufferedSink;
 import okio.Okio;
 
@@ -36,10 +40,17 @@ public class MockSubsProvider implements SubsProvider {
         this.context = context;
     }
 
+    @Override public Single<List<Sub>> list(@NonNull final Media media) {
+        return Single.fromCallable(() -> Arrays.asList(
+                new Sub("en", "English"),
+                new Sub("pl", "Polish")
+        ));
+    }
+
     @Override public Maybe<Subs> downloadSubs(@NonNull final Media media, @NonNull final String language) {
-        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny.eng.srt"))
+        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny.pt.srt"))
                 .map(assetStream -> {
-                    File subsFile = new File(context.getCacheDir(), "big_buck_bunny.eng.srt");
+                    File subsFile = new File(context.getCacheDir(), "big_buck_bunny.pt.srt");
 
                     BufferedSink sink = Okio.buffer(Okio.sink(subsFile));
                     sink.writeAll(Okio.source(assetStream));

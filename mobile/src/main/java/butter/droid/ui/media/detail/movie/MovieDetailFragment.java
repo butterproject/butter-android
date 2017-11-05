@@ -41,7 +41,11 @@ import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.MediaDetailActivity;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
+import butter.droid.ui.media.detail.model.UiSubItem;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
+import butter.droid.widget.OptionPreview;
 import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,11 +53,12 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import com.squareup.picasso.Picasso;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class MovieDetailFragment extends Fragment implements MovieDetailView {
+public class MovieDetailFragment extends Fragment implements MovieDetailView, SubsPickerCallback {
 
     private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.MovieDetailFragment.movie";
 
@@ -70,9 +75,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     @BindView(R.id.watch_trailer) Button watchTrailer;
     @BindView(R.id.magnet) ImageButton openMagnet;
     @BindView(R.id.rating) RatingBar rating;
-    @BindView(R.id.subtitles) OptionSelector subtitles;
+    @BindView(R.id.subtitles) OptionPreview subtitlesPreview;
     @BindView(R.id.quality) OptionSelector quality;
     @Nullable @BindView(R.id.cover_image) ImageView coverImage;
+
+    private SubsPickerDialog subsDialog;
 
     @Override public void onAttach(final Context context) {
         super.onAttach(context);
@@ -93,6 +100,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+
+        subtitlesPreview.setOnClickListener(v -> presenter.onSubtitlesClicked());
 
         MediaWrapper movie = Parcels.unwrap(getArguments().getParcelable(EXTRA_MOVIE));
         presenter.onCreate(movie);
@@ -179,21 +188,31 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     }
 
     @Override public void setSubtitleText(@StringRes int subtitleText) {
-        subtitles.setText(subtitleText);
+        subtitlesPreview.setText(subtitleText);
     }
 
     @Override public void setSubtitleText(String subtitleText) {
-        subtitles.setText(subtitleText);
+        subtitlesPreview.setText(subtitleText);
     }
 
     @Override public void setSubtitleEnabled(boolean enabled) {
-        subtitles.setClickable(enabled);
+        subtitlesPreview.setClickable(enabled);
     }
 
-    @Override public void setSubsData(String[] names, int defaultIndex) {
-        subtitles.setData(names);
-        subtitles.setDefault(defaultIndex);
-        setSubtitleText(names[defaultIndex]);
+    @Override public void displaySubsPicker(List<UiSubItem> items) {
+        hideDialog();
+
+        SubsPickerDialog dialog = SubsPickerDialog.newInstance(items);
+        dialog.show(getChildFragmentManager(), "dialog");
+        subsDialog = dialog;
+    }
+
+    @Override public void hideDialog() {
+        SubsPickerDialog dialog = subsDialog;
+        if (dialog != null) {
+            dialog.dismiss();
+            subsDialog = null;
+        }
     }
 
     @Override public void setQualities(String[] qualities, String quality) {
@@ -203,7 +222,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     }
 
     @OnClick(R.id.read_more) public void openReadMore() {
-        presenter.openReadMore();
+        presenter.openReadMore  ();
     }
 
     @OnClick(R.id.watch_trailer)
@@ -230,10 +249,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
         title.setText(movie.getTitle());
 
-        subtitles.setFragmentManager(getFragmentManager());
-        subtitles.setTitle(R.string.subtitles);
-        subtitles.setListener((position, value) -> presenter.subtitleSelected(position));
-
         quality.setFragmentManager(getFragmentManager());
         quality.setTitle(R.string.quality);
         quality.setListener((position, value) -> setQuality(position));
@@ -247,6 +262,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         if (coverImage != null) {
             Picasso.with(coverImage.getContext()).load(movie.getBackdrop()).into(coverImage);
         }
+    }
+
+    @Override public void onSubsItemSelected(final int position, final UiSubItem item) {
+        presenter.subtitleSelected(item);
     }
 
     public static MovieDetailFragment newInstance(MediaWrapper movie) {

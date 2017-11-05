@@ -15,57 +15,50 @@
 ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/top"
         android:background="@color/bg"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <include
+    <include
             android:id="@+id/about_fragment"
-            layout="@layout/fragment_detail_about" />
+            layout="@layout/fragment_detail_about"/>
 
-        <View
+    <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:alpha="0.08"
-            android:background="@android:color/white" />
+            android:background="@android:color/white"/>
 
-        <View
+    <View
             android:id="@+id/main_div"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/div_white" />
+            android:background="@color/div_white"/>
 
-        <butter.droid.widget.OptionSelector
+    <butter.droid.widget.OptionPreview
             android:id="@+id/subtitles"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:optionIcon="@drawable/ic_av_subs"
-            app:optionText="@string/subtitles" />
+            android:layout_height="wrap_content"
+            app:op_icon="@drawable/ic_av_subs"
+            app:op_text="@string/subtitles"/>
 
-        <View
+    <View
             android:id="@+id/option_div_1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="48dp"
             android:layout_marginStart="48dp"
-            android:background="@color/div_white" />
+            android:layout_marginLeft="48dp"
+            android:background="@color/div_white"/>
 
-        <butter.droid.widget.OptionSelector
+    <butter.droid.widget.OptionSelector
             android:id="@+id/quality"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:optionIcon="@drawable/ic_action_quality"
-            app:optionText="@string/quality" />
+            app:optionText="@string/quality"/>
 
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
