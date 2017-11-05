@@ -1,7 +1,6 @@
 package butter.droid.base.content.preferences;
 
 import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
-import static butter.droid.base.manager.internal.vlc.VLCOptions.ANDROID_WINDOW_CHROMA_RV_32_OPTION;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -658,7 +657,7 @@ public class PreferencesHandler {
     }
 
     public String getPixelFormat() {
-        return prefManager.get(Prefs.PIXEL_FORMAT, ANDROID_WINDOW_CHROMA_RV_32_OPTION);
+        return prefManager.get(Prefs.PIXEL_FORMAT, "YV12");
     }
 
     public int getDefaultQuality() {

@@ -19,7 +19,6 @@ package butter.droid.base.manager.internal;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import butter.droid.base.Constants;
 import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
@@ -29,7 +28,6 @@ import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoProvider;
 import dagger.Module;
 import dagger.Provides;
-import java.util.ArrayList;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.util.VLCUtil;
 import timber.log.Timber;
@@ -47,17 +45,7 @@ public class InternalBaseManagerModule {
             Timber.e(VLCUtil.getErrorMsg());
             return null;
         } else {
-            final String chroma = preferencesHandler.getPixelFormat();
-            final ArrayList<String> options = new VLCOptions.Builder()
-                    .withVideoSkipLoopFilter()
-                    .withAudioTimeStreching(true)
-                    .withVideoSkipFrame(true)
-                    .withVideoSkipIDCT(true)
-                    .withAndroidWindowChroma(chroma)
-                     .withStats(true)
-                    .withVerbosity(Constants.DEBUG_ENABLED)
-                    .build();
-            return new LibVLC(context, options);
+            return new LibVLC(context, VLCOptions.getLibOptions());
         }
     }
 

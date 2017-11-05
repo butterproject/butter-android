@@ -17,146 +17,130 @@
 
 package butter.droid.base.manager.internal.vlc;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
+import android.preference.PreferenceManager;
+import butter.droid.base.ButterApplication;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.libvlc.util.VLCUtil;
+import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class VLCOptions {
 
-    private static final String TAG = "VLCConfig";
+    public static ArrayList<String> getLibOptions() {
+        final Context context = ButterApplication.getAppContext();
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-    public static final String AUDIO_TIME_STRECH_OPTION = "--audio-time-stretch";
-    public static final String NO_AUDIO_TIME_STRECH_OPTION = "--no-audio-time-stretch";
+        ArrayList<String> options = new ArrayList<String>(50);
 
-    public static final String DEBLOCKING_OPTION = "--avcodec-skiploopfilter";
-    public static final String DEBLOCKING_NONE = "0";
-    public static final String DEBLOCKING_NON_REF = "1";
-    public static final String DEBLOCKING_BIDIR = "2";
-    public static final String DEBLOCKING_NON_KEY = "3";
-    public static final String DEBLOCKING_ALL = "4";
+        final boolean timeStrechingDefault = Build.VERSION.SDK_INT >= VERSION_CODES.KITKAT;
+        final boolean timeStreching = pref.getBoolean("enable_time_stretching_audio", timeStrechingDefault);
+        final String subtitlesEncoding = pref.getString("subtitle_text_encoding", "");
+        final boolean frameSkip = pref.getBoolean("enable_frame_skip", false);
+        String chroma = pref.getString("chroma_format", "YV12");
+        if (chroma.equals("YV12"))
+            chroma = "";
+        final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
 
-    public static final String SKIP_FRAME_OPTION = "--avcodec-skip-frame";
-    public static final String SKIP_FRAME_NONE = "0";
-    public static final String SKIP_FRAME_P_FRAMES = "2";
+        int deblocking = -1;
+        try {
+            deblocking = getDeblocking(Integer.parseInt(pref.getString("deblocking", "-1")));
+        } catch (NumberFormatException ignored) {}
 
-    public static final String SKIP_IDCT_OPTION = "--avcodec-skip-idct";
-    public static final String SKIP_IDCT_NONE = "0";
-    public static final String SKIP_IDCT_P_FRAMES = "2";
+        int networkCaching = pref.getInt("network_caching_value", 0);
+        if (networkCaching > 60000)
+            networkCaching = 60000;
+        else if (networkCaching < 0)
+            networkCaching = 0;
 
-    public static final String SUBTITLES_ENCODING_OPTION = "--subsdec-encoding";
-    public static final String UTF8 = "UTF-8";
+        final String freetypeRelFontsize = pref.getString("subtitles_size", "16");
+        final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
+        final String freetypeColor = pref.getString("subtitles_color", "16777215");
+        final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
+        final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
 
-    public static final String STATS_OPTION = "--stats";
+        /* CPU intensive plugin, setting for slow devices */
+        options.add(timeStreching ? "--audio-time-stretch" : "--no-audio-time-stretch");
+        options.add("--avcodec-skiploopfilter");
+        options.add("" + deblocking);
+        options.add("--avcodec-skip-frame");
+        options.add(frameSkip ? "2" : "0");
+        options.add("--avcodec-skip-idct");
+        options.add(frameSkip ? "2" : "0");
+        options.add("--subsdec-encoding");
+        options.add(subtitlesEncoding);
+        options.add("--stats");
+        /* XXX: why can't the default be fine ? #7792 */
+        if (networkCaching > 0)
+            options.add("--network-caching=" + networkCaching);
+        options.add("--android-display-chroma");
+        options.add(chroma);
+        options.add("--audio-resampler");
+        options.add(getResampler());
 
-    public static final String ANDROID_WINDOW_CHROMA_OPTION = "--androidwindow-chroma";
-    public static final String ANDROID_WINDOW_CHROMA_RV_32_OPTION = "RV32";
-    public static final String ANDROID_WINDOW_CHROMA_RV_16_OPTION = "RV16";
-    public static final String ANDROID_WINDOW_CHROMA_YV_12_OPTION = "YV12";
+        options.add("--freetype-rel-fontsize=" + freetypeRelFontsize);
+        if (freetypeBold)
+            options.add("--freetype-bold");
+        options.add("--freetype-color=" + freetypeColor);
+        if (freetypeBackground)
+            options.add("--freetype-background-opacity=128");
+        else
+            options.add("--freetype-background-opacity=0");
+        if (opengl == 1)
+            options.add("--vout=gles2,none");
+        else if (opengl == 0)
+            options.add("--vout=android_display,none");
 
-    public static final String NETWORK_CACHING_OPTION = "--network-caching";
+        /* Configure keystore */
+        options.add("--keystore");
+        if (AndroidUtil.isMarshMallowOrLater)
+            options.add("file_crypt,none");
+        else
+            options.add("file_plaintext,none");
+        options.add("--keystore-file");
+        options.add(new File(context.getDir("keystore", Context.MODE_PRIVATE), "file").getAbsolutePath());
 
-    private static final String VERBOSITY_HIGH = "-vvv";
-    private static final String VERBOSITY_MEDIUM = "-vv";
+        options.add(verboseMode ? "-vv" : "-v");
 
-    // Complete description of options here: https://wiki.videolan.org/VLC_command-line_help/
-    public static class Builder {
+        return options;
+    }
 
-        private String audioTimeStreching;
-        private String deblocking;
-        private String skipFrame;
-        private String skipIDCT;
-        private String subtitlesEncoding;
-        private String stats;
-        private String androidWindowChroma;
-        private String networkCaching;
-        private String verbosityLevel;
+    private static String getResampler() {
+        final VLCUtil.MachineSpecs m = VLCUtil.getMachineSpecs();
+        return (m == null || m.processors > 2) ? "soxr" : "ugly";
+    }
 
-        public Builder() {
-            this.audioTimeStreching = NO_AUDIO_TIME_STRECH_OPTION;
-            this.deblocking = DEBLOCKING_NONE;
-            this.skipFrame = SKIP_FRAME_NONE;
-            this.skipIDCT = SKIP_IDCT_NONE;
-            this.subtitlesEncoding = UTF8;
-            this.stats = STATS_OPTION;
-            this.androidWindowChroma = ANDROID_WINDOW_CHROMA_RV_32_OPTION;
-            this.networkCaching = "0";
+    private static int getDeblocking(int deblocking) {
+        int ret = deblocking;
+        if (deblocking < 0) {
+            /**
+             * Set some reasonable sDeblocking defaults:
+             *
+             * Skip all (4) for armv6 and MIPS by default
+             * Skip non-ref (1) for all armv7 more than 1.2 Ghz and more than 2 cores
+             * Skip non-key (3) for all devices that don't meet anything above
+             */
+            VLCUtil.MachineSpecs m = VLCUtil.getMachineSpecs();
+            if (m == null)
+                return ret;
+            if ((m.hasArmV6 && !(m.hasArmV7)) || m.hasMips)
+                ret = 4;
+            else if (m.frequency >= 1200 && m.processors > 2)
+                ret = 1;
+            else if (m.bogoMIPS >= 1200 && m.processors > 2) {
+                ret = 1;
+                Timber.d("Used bogoMIPS due to lack of frequency info");
+            } else
+                ret = 3;
+        } else if (deblocking > 4) { // sanity check
+            ret = 3;
         }
-
-        public Builder withAudioTimeStreching(boolean audioTimeStreching) {
-            this.audioTimeStreching = audioTimeStreching ? AUDIO_TIME_STRECH_OPTION : NO_AUDIO_TIME_STRECH_OPTION;
-            return this;
-        }
-
-        public Builder withVideoSkipLoopFilter() {
-            final VLCUtil.MachineSpecs m = VLCUtil.getMachineSpecs();
-            if (m == null) {
-                this.deblocking = DEBLOCKING_NONE;
-                return this;
-            }
-            if ((m.hasArmV6 && !(m.hasArmV7)) || m.hasMips) {
-                this.deblocking = DEBLOCKING_ALL;
-            } else if ((m.frequency >= 1200 && m.processors > 2) || (m.bogoMIPS >= 1200 && m.processors > 2)) {
-                this.deblocking = DEBLOCKING_NON_REF;
-            } else {
-                this.deblocking = DEBLOCKING_NON_KEY;
-            }
-            return this;
-        }
-
-        public Builder withVideoSkipFrame(boolean skipFrame) {
-            this.skipFrame = skipFrame ? SKIP_FRAME_P_FRAMES : SKIP_FRAME_NONE;
-            return this;
-        }
-
-        public Builder withVideoSkipIDCT(boolean skipIDCT) {
-            this.skipIDCT = skipIDCT ? SKIP_IDCT_P_FRAMES : SKIP_IDCT_NONE;
-            return this;
-        }
-
-        public Builder withSubtitlesEncoding(String encoding) {
-            this.subtitlesEncoding = encoding;
-            return this;
-        }
-
-        public Builder withNetworkCaching(long time, TimeUnit timeUnit) {
-            final long millis = timeUnit.toMillis(time);
-            return this;
-        }
-
-        public Builder withAndroidWindowChroma(String chroma) {
-            this.androidWindowChroma = chroma;
-            return this;
-        }
-
-        public Builder withStats(boolean stats) {
-            this.stats = stats ? STATS_OPTION : "";
-            return this;
-        }
-
-        public Builder withVerbosity(boolean enabled) {
-            this.verbosityLevel = enabled ? VERBOSITY_HIGH : VERBOSITY_MEDIUM;
-            return this;
-        }
-
-        public ArrayList<String> build() {
-            final ArrayList<String> options = new ArrayList<>();
-            options.add(audioTimeStreching);
-            options.add(DEBLOCKING_OPTION);
-            options.add(deblocking);
-            options.add(SKIP_FRAME_OPTION);
-            options.add(skipFrame);
-            options.add(SKIP_IDCT_OPTION);
-            options.add(skipIDCT);
-            options.add(subtitlesEncoding);
-            options.add(stats);
-            options.add(ANDROID_WINDOW_CHROMA_OPTION);
-            options.add(androidWindowChroma);
-            options.add(NETWORK_CACHING_OPTION);
-            options.add(networkCaching);
-            options.add(verbosityLevel);
-            return options;
-        }
+        return ret;
     }
 
 }
