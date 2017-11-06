@@ -56,9 +56,7 @@ dependencies {
     api "com.jakewharton:butterknife:$butterknifeVersion"
     api "com.github.gabrielemariotti.changeloglib:changelog:${changeloglibVersion}"
     api 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-    api 'com.koushikdutta.async:androidasync:2.1.9'
-
-    api "com.github.se-bastiaan:TorrentStream-Android:${torrentstreamVersion}"
+    api "com.github.TorrentStream:TorrentStream-Android:${torrentstreamVersion}"
 
     implementation 'de.timroes:aXMLRPC:1.8.1'
     api "com.google.dagger:dagger:$daggerVersion"
