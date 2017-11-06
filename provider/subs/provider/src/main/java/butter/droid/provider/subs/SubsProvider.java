@@ -17,18 +17,18 @@
 
 package butter.droid.provider.subs;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import butter.droid.provider.base.module.Media;
-import butter.droid.provider.subs.model.Sub;
-import butter.droid.provider.subs.model.Subs;
+import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import java.util.List;
 
 public interface SubsProvider {
 
-    Single<List<Sub>> list(@NonNull Media media);
+    Single<List<Subtitle>> list(@NonNull Media media);
 
-    Maybe<Subs> downloadSubs(@NonNull Media media, @NonNull String language);
+    Maybe<Uri> downloadSubs(@NonNull Media media, @NonNull Subtitle subtitle);
 
 }

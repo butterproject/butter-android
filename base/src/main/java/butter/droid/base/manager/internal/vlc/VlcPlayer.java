@@ -190,6 +190,10 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
                 if (callback != null) {
                     callback.playerError();
                 }
+                Timber.d("Error");
+                break;
+            case MediaPlayer.Event.Buffering:
+                Timber.d("Buffering");
                 break;
             case MediaPlayer.Event.TimeChanged:
                 callback.progressChanged(event.getTimeChanged());

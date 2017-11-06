@@ -124,8 +124,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         item.setSelected(true);
 
         String language = item.getLanguage();
-        // TODO: 11/5/17 Subs
-//        parentPresenter.selectSubtitle(language);
+        parentPresenter.selectSubtitle(item.getSubtitle());
 
         if (language == null || SubsProvider.SUBTITLE_LANGUAGE_NONE.equals(language)) {
             view.setSubtitleText(R.string.no_subs);
@@ -201,8 +200,8 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
                         } else {
                             final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                             return Observable.fromIterable(subs)
-                                    .map(sub -> new UiSubItem(sub.getLanguage(), sub.getName(), defaultSubtitle.equals(sub.getLanguage())))
-                                    .startWith(new UiSubItem(null, null, defaultSubtitle.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)))
+                                    .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
+                                    .startWith(new UiSubItem(null, defaultSubtitle.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)))
                                     .toList();
                         }
                     })

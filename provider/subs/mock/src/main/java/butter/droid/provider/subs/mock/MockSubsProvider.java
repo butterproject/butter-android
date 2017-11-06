@@ -18,46 +18,34 @@
 package butter.droid.provider.subs.mock;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import butter.droid.provider.base.module.Media;
-import butter.droid.provider.subs.SubsProvider;
-import butter.droid.provider.subs.model.Sub;
-import butter.droid.provider.subs.model.Subs;
+import butter.droid.provider.subs.AbsSubsProvider;
+import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import java.io.File;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import okio.BufferedSink;
-import okio.Okio;
 
-public class MockSubsProvider implements SubsProvider {
+public class MockSubsProvider extends AbsSubsProvider {
 
     private final Context context;
 
     public MockSubsProvider(final Context context) {
+        super(context);
         this.context = context;
     }
 
-    @Override public Single<List<Sub>> list(@NonNull final Media media) {
+    @Override public Single<List<Subtitle>> list(@NonNull final Media media) {
         return Single.fromCallable(() -> Arrays.asList(
-                new Sub("en", "English"),
-                new Sub("pl", "Polish")
+                new Subtitle("en", "English"),
+                new Subtitle("pl", "Polish")
         ));
     }
 
-    @Override public Maybe<Subs> downloadSubs(@NonNull final Media media, @NonNull final String language) {
-        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny.pt.srt"))
-                .map(assetStream -> {
-                    File subsFile = new File(context.getCacheDir(), "big_buck_bunny.pt.srt");
-
-                    BufferedSink sink = Okio.buffer(Okio.sink(subsFile));
-                    sink.writeAll(Okio.source(assetStream));
-                    sink.close();
-
-                    return Uri.fromFile(subsFile);
-                })
-                .map(uri -> new Subs("en", uri));
+    @Override protected Maybe<InputStream> provideSubs(@NonNull final Media media, @NonNull final Subtitle subtitle) {
+        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny.pt.srt"));
     }
+
 }

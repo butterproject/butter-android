@@ -28,6 +28,8 @@ import butter.droid.base.providers.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
+import butter.droid.provider.base.module.Media;
+import butter.droid.provider.subs.SubsProvider;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
@@ -43,14 +45,9 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     protected final PlayerManager playerManager;
     private final Context context;
 
-    private enum SubsStatus {SUCCESS, FAILURE, DOWNLOADING}
-
     protected StreamInfo streamInfo;
 
     private State state;
-    private boolean hasSubs = false;
-    private SubsStatus subsStatus = SubsStatus.DOWNLOADING;
-    private String subtitleLanguage = null;
     protected boolean playingExternal = false;
     protected Boolean playerStarted = false;
 
@@ -92,7 +89,6 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      */
     @Override public void startStream() {
         String torrentUrl = streamInfo.getTorrentUrl();
-
         view.startStreamUrl(torrentUrl);
     }
 
@@ -129,6 +125,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     @Override public void onStreamStopped() {
+        // TODO should probably do something here?
         // nothing to do
     }
 
@@ -231,39 +228,30 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * Will either start an external player, or the internal one
      */
     private void startPlayer() {
-        if (hasSubs && subsStatus == SubsStatus.DOWNLOADING) {
-            ThreadUtils.runOnUiThread(() -> setState(State.WAITING_SUBTITLES));
-            return;
-        }
+//        if (streamInfo.getSubtitle() != null) { // TODO and downloading
+//
+//        }
+//
+//        if (hasSubs && subsStatus == SubsStatus.DOWNLOADING) {
+//            return;
+//        }
 
-        if (!playerStarted) {
-            startPlayerActivity(0);
-//            view.startPlayerActivity(location);
-
-            playerStarted = true;
-        }
+        startPlayerActivity(0);
+        playerStarted = true;
     }
 
     /**
      * Downloads the subs file
      */
     private void loadSubtitles() {
-        // TODO: 11/1/17 Subs
-//        Media media = streamInfo.getMedia();
-//        if (media == null) {
-//            return;
-//        }
-//
-//        SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
-//        if (subsProvider == null) {
-//            return;
-//        }
-//
-//        if (streamInfo.isShow()) {
-//            subsProvider.getList((Episode) media, this);
-//        } else {
-//            subsProvider.getList((Movie) media, this);
-//        }
+        Media media = streamInfo.getMedia().getMedia();
+        SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
+        if (subsProvider == null) {
+            return;
+        }
+
+//        subsProvider.downloadSubs(media, streamInfo.getSubtitle())
+//                .subscribe();
     }
 
     private void updateStatus(final StreamStatus status) {

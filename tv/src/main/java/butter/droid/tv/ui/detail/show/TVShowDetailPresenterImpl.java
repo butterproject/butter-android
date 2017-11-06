@@ -92,7 +92,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     private void startTorrent(final MediaWrapper episode, final Torrent torrent) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
-        StreamInfo info = new StreamInfo(torrent, episode, item);
+        StreamInfo info = new StreamInfo(torrent, episode, item, subtitle);
 
         view.torrentSelected(info);
     }

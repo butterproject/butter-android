@@ -23,9 +23,11 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.providers.model.MediaWrapper;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.subs.model.Subtitle;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
@@ -34,7 +36,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
     private final NetworkManager networkManager;
 
     private MediaWrapper media;
-    private String selectedSubtitleLanguage;
+    private Subtitle subtitle;
     private Torrent selectedTorrent;
 
     public MediaDetailPresenterImpl(MediaDetailView view, PreferencesHandler preferencesHandler,
@@ -63,7 +65,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
                 && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null);
+            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null, new SubtitleWrapper(subtitle));
             view.playStream(streamInfo);
         }
 
@@ -81,8 +83,8 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
         view.openYouTube(media, url);
     }
 
-    @Override public void selectSubtitle(String language) {
-        selectedSubtitleLanguage = language;
+    @Override public void selectSubtitle(Subtitle subtitle) {
+        subtitle = subtitle;
     }
 
     @Override public void healthClicked() {

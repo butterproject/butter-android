@@ -27,8 +27,8 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
-import butter.droid.provider.subs.model.Subs;
 import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -246,53 +246,38 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     private void loadSubtitle() {
-        // TODO subs
-        /*
-        if (media == null) {
-            throw new NullPointerException("Media is not available");
-        }
+        SubtitleWrapper subtitle = streamInfo.getSubtitle();
+        if (subtitle != null) {
+            Uri fileUri = subtitle.getFileUri();
+            if (fileUri != null) { // TODO file exists
+                loadSubs(fileUri);
+            } else {
+                providerManager.getCurrentSubsProvider()
+                        .downloadSubs(streamInfo.getMedia().getMedia(), subtitle.getSubtitle())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new MaybeObserver<Uri>() {
+                            @Override public void onSubscribe(final Disposable d) {
+                                disposeSubs();
+                                subsDisposable = d;
+                            }
 
-        if (currentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-            return;
-        }
+                            @Override public void onSuccess(final Uri subs) {
+                                subtitle.setFileUri(subs); // TODO should be saved in instance sate so we can reuse subs
+                                loadSubs(subs);
+                            }
 
-        SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(), streamInfo, playerManager,
-                currentSubsLang);
-        subtitleDownloader.setSubtitleDownloaderListener(this);
+                            @Override public void onError(final Throwable e) {
+                                // TODO show error loading subs
+                                Timber.d("Error loading subs");
+                            }
 
-        try {
-            subsFile = playerManager.getDownloadedSubtitleFile(media, currentSubsLang);
-            if (subsFile != null && subsFile.exists()) {
-                subtitleDownloader.parseSubtitle(subsFile);
+                            @Override public void onComplete() {
+                                Timber.d("Maybe empty");
+                            }
+                        });
             }
-        } catch (FileNotFoundException e) {
-            subtitleDownloader.downloadSubtitle();
         }
-        */
-
-        providerManager.getCurrentSubsProvider()
-                .downloadSubs(streamInfo.getMedia().getMedia(), "en")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MaybeObserver<Subs>() {
-                    @Override public void onSubscribe(final Disposable d) {
-                        disposeSubs();
-                        subsDisposable = d;
-                    }
-
-                    @Override public void onSuccess(final Subs subs) {
-                        loadSubs(subs.getFile());
-                    }
-
-                    @Override public void onError(final Throwable e) {
-                        // TODO show error loading subs
-                        Timber.d("Error loading subs");
-                    }
-
-                    @Override public void onComplete() {
-                        Timber.d("Maybe empty");
-                    }
-                });
     }
 
     private void disposeSubs() {

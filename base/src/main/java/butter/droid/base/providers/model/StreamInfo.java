@@ -21,8 +21,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.subs.model.Subtitle;
 import java.util.Locale;
 import org.parceler.Parcels;
 
@@ -31,29 +33,33 @@ public class StreamInfo implements Parcelable {
     @NonNull private final MediaWrapper media;
     @Nullable private final MediaWrapper parentMedia;
     @Nullable private final Torrent torrent;
+    @Nullable private final SubtitleWrapper subtitle;
 
     @Nullable private String streamUrl;
 
-    public StreamInfo(@NonNull Torrent torrent, @NonNull MediaWrapper media, @Nullable MediaWrapper parentMedia) {
-        this(torrent, media, parentMedia, null);
+    public StreamInfo(@NonNull final Torrent torrent, @NonNull final MediaWrapper media, @Nullable final MediaWrapper parentMedia,
+            @Nullable final SubtitleWrapper subtitle) {
+        this(torrent, media, parentMedia, null, subtitle);
     }
 
-    public StreamInfo(@NonNull String streamUrl, @NonNull MediaWrapper media, @Nullable MediaWrapper parentMedia) {
-        this(null, media, parentMedia, streamUrl);
+    public StreamInfo(@NonNull final String streamUrl, @NonNull final MediaWrapper media, @Nullable final MediaWrapper parentMedia) {
+        this(null, media, parentMedia, streamUrl, null);
     }
 
-    private StreamInfo(@Nullable Torrent torrent, @NonNull MediaWrapper media, @Nullable MediaWrapper parentMedia,
-            @Nullable String streamUrl) {
+    private StreamInfo(@Nullable final Torrent torrent, @NonNull final MediaWrapper media, @Nullable final MediaWrapper parentMedia,
+            @Nullable final String streamUrl, @Nullable final SubtitleWrapper subtitle) {
         this.torrent = torrent;
         this.media = media;
         this.parentMedia = parentMedia;
         this.streamUrl = streamUrl;
+        this.subtitle = subtitle;
     }
 
     private StreamInfo(Parcel in) {
         this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
         this.parentMedia = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
         this.torrent = Parcels.unwrap(in.readParcelable(Torrent.class.getClassLoader()));
+        this.subtitle = in.readParcelable(Subtitle.class.getClassLoader());
 
         this.streamUrl = in.readString();
     }
@@ -68,6 +74,10 @@ public class StreamInfo implements Parcelable {
 
     @NonNull public MediaWrapper getMedia() {
         return media;
+    }
+
+    @Nullable public SubtitleWrapper getSubtitle() {
+        return subtitle;
     }
 
     @NonNull public String getMediaTitle() {
@@ -122,6 +132,7 @@ public class StreamInfo implements Parcelable {
         dest.writeParcelable(Parcels.wrap(this.media), 0);
         dest.writeParcelable(Parcels.wrap(this.parentMedia), 0);
         dest.writeParcelable(Parcels.wrap(this.torrent), 0);
+        dest.writeParcelable(subtitle, 0);
 
         dest.writeString(streamUrl);
     }

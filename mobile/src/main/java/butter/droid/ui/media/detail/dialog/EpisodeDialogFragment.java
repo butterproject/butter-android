@@ -376,7 +376,8 @@ public class EpisodeDialogFragment extends DialogFragment {
     @OnClick(R.id.play_button)
     public void playClick() {
         smoothDismiss();
-        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episodeWrapper, showWrapper);
+        // TODO Subs
+        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episodeWrapper, showWrapper, null);
         ((FragmentListener) getActivity()).playStream(streamInfo);
     }
 

@@ -19,29 +19,26 @@ package butter.droid.ui.media.detail.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import butter.droid.provider.subs.model.Subtitle;
 
 public class UiSubItem implements Parcelable {
 
-    private final String language;
-    private final String name;
+    private final Subtitle subtitle;
     private boolean selected;
 
-    public UiSubItem(final String language, final String name, final boolean selected) {
-        this.language = language;
-        this.name = name;
+    public UiSubItem(final Subtitle subtitle, final boolean selected) {
+        this.subtitle = subtitle;
         this.selected = selected;
     }
 
     protected UiSubItem(Parcel in) {
-        language = in.readString();
-        name = in.readString();
+        subtitle = in.readParcelable(Subtitle.class.getClassLoader());
         selected = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(android.os.Parcel dest, int flags) {
-        dest.writeString(language);
-        dest.writeString(name);
+        dest.writeParcelable(subtitle, 0);
         dest.writeByte((byte) (selected ? 1 : 0));
     }
 
@@ -50,12 +47,24 @@ public class UiSubItem implements Parcelable {
         return 0;
     }
 
+    public Subtitle getSubtitle() {
+        return subtitle;
+    }
+
     public String getLanguage() {
-        return language;
+        if (subtitle != null) {
+            return subtitle.getLanguage();
+        } else {
+            return null;
+        }
     }
 
     public String getName() {
-        return name;
+        if (subtitle != null) {
+            return subtitle.getName();
+        } else {
+            return null;
+        }
     }
 
     public boolean isSelected() {
