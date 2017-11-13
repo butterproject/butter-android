@@ -101,7 +101,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
     @Override public void selectQuality(int position) {
         Torrent torrent = ((Movie) mediaWrapper.getMedia()).getTorrents()[position];
-        parentPresenter.selectTottent(torrent);
+        parentPresenter.selectTorrent(torrent);
         view.renderHealth(torrent);
         view.updateMagnet(torrent);
     }

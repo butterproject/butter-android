@@ -28,7 +28,7 @@ public interface MediaDetailPresenter {
 
     void playMediaClicked();
 
-    void selectTottent(Torrent torrent);
+    void selectTorrent(Torrent torrent);
 
     void openVideoPlayer(StreamInfo streamInfo);
 

@@ -65,13 +65,18 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
                 && networkManager.isNetworkConnected()) {
             view.displayDialog(R.string.wifi_only, R.string.wifi_only_message);
         } else {
-            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null, new SubtitleWrapper(subtitle));
+            SubtitleWrapper subtitle = null;
+            if (this.subtitle != null) {
+                subtitle = new SubtitleWrapper(this.subtitle);
+            }
+
+            StreamInfo streamInfo = new StreamInfo(selectedTorrent, media, null, subtitle);
             view.playStream(streamInfo);
         }
 
     }
 
-    @Override public void selectTottent(Torrent torrent) {
+    @Override public void selectTorrent(Torrent torrent) {
         selectedTorrent = torrent;
     }
 

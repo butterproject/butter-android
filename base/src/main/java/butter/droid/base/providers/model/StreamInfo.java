@@ -76,6 +76,10 @@ public class StreamInfo implements Parcelable {
         return media;
     }
 
+    public boolean hasSubtitles() {
+        return subtitle != null;
+    }
+
     @Nullable public SubtitleWrapper getSubtitle() {
         return subtitle;
     }

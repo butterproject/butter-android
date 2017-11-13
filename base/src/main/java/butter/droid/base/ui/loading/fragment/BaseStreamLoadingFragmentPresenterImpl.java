@@ -25,6 +25,7 @@ import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
@@ -228,7 +229,8 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * Will either start an external player, or the internal one
      */
     private void startPlayer() {
-//        if (streamInfo.getSubtitle() != null) { // TODO and downloading
+        if (streamInfo.hasSubtitles() || )
+        //        if (streamInfo.getSubtitle() != null) { // TODO and downloading
 //
 //        }
 //
@@ -250,8 +252,11 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
             return;
         }
 
-//        subsProvider.downloadSubs(media, streamInfo.getSubtitle())
-//                .subscribe();
+        SubtitleWrapper subtitle = streamInfo.getSubtitle();
+        if (subtitle != null) {
+            subsProvider.downloadSubs(media, subtitle.getSubtitle())
+                    .subscribe();
+        }
     }
 
     private void updateStatus(final StreamStatus status) {

@@ -20,14 +20,16 @@ package butter.droid.base.providers.subs.model;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import butter.droid.provider.subs.model.Subtitle;
 
 public class SubtitleWrapper implements Parcelable {
 
-    private final Subtitle subtitle;
-    private Uri fileUri;
+    @NonNull private final Subtitle subtitle;
+    @Nullable private Uri fileUri;
 
-    public SubtitleWrapper(final Subtitle subtitle) {
+    public SubtitleWrapper(@NonNull final Subtitle subtitle) {
         this.subtitle = subtitle;
     }
 
@@ -47,15 +49,15 @@ public class SubtitleWrapper implements Parcelable {
         return 0;
     }
 
-    public Subtitle getSubtitle() {
+    @NonNull public Subtitle getSubtitle() {
         return subtitle;
     }
 
-    public Uri getFileUri() {
+    @Nullable public Uri getFileUri() {
         return fileUri;
     }
 
-    public void setFileUri(final Uri fileUri) {
+    public void setFileUri(@Nullable final Uri fileUri) {
         this.fileUri = fileUri;
     }
 
