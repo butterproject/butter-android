@@ -32,7 +32,7 @@ ext {
     okHttpVersion = "3.4.2"
     daggerVersion = "2.9"
     javaxAnnotationVersion = "1.2"
-    torrentstreamVersion = '2.3.0'
+    torrentstreamVersion = '2.4.0'
     filePickerVersion = '1.1.0'
     changeloglibVersion = '2.1.0'
     gsonVersion = '2.8.1'
