@@ -17,15 +17,15 @@
 
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 
-androidVersion {
-
-    appVersion {
-        major 0
-        minor 2
-        build 8
-    }
-
-}
+//androidVersion {
+//
+//    appVersion {
+//        major 0
+//        minor 2
+//        build 8
+//    }
+//
+//}
 
 android {
     compileSdkVersion rootProject.ext.compileSdk

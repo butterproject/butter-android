@@ -18,6 +18,7 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
@@ -34,6 +35,9 @@ import butter.droid.provider.subs.SubsProvider;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import io.reactivex.MaybeObserver;
+import io.reactivex.annotations.Nullable;
+import io.reactivex.disposables.Disposable;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
@@ -49,6 +53,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     protected StreamInfo streamInfo;
 
     private State state;
+    @Nullable private Disposable subtitleDisposable;
     protected boolean playingExternal = false;
     protected Boolean playerStarted = false;
 
@@ -109,7 +114,6 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         } else {
             setState(State.ERROR, context.getString(R.string.unknown_error));
         }
-
     }
 
     @Override public void onStreamReady(Torrent torrent) {
@@ -118,10 +122,6 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     @Override public void onStreamProgress(Torrent torrent, StreamStatus status) {
-        if (!StringUtils.isEmpty(streamInfo.getStreamUrl())) {
-            startPlayer();
-        }
-
         setState(State.STREAMING, status);
     }
 
@@ -129,47 +129,6 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         // TODO should probably do something here?
         // nothing to do
     }
-
-//    @Override public void onSuccess(Map<String, String> items) {
-        // TODO subs
-        /*
-        Media media = streamInfo.getMedia();
-        media.subtitles = items;
-
-        subsStatus = SubsStatus.SUCCESS;
-        hasSubs = false;
-
-        if (media.subtitles == null || media.subtitles.size() == 0) {
-            return;
-        }
-
-        if (streamInfo.getSubtitleLanguage() == null) {
-            String language = preferencesHandler.getSubtitleDefaultLanguage();
-            if (media.subtitles.containsKey(language)) {
-                streamInfo.setSubtitleLanguage(language);
-            } else {
-                streamInfo.setSubtitleLanguage(SubsProvider.SUBTITLE_LANGUAGE_NONE);
-            }
-        }
-
-        if (streamInfo.getSubtitleLanguage() != null && !streamInfo.getSubtitleLanguage().equals(
-                SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-            subtitleLanguage = streamInfo.getSubtitleLanguage();
-            subsStatus = SubsStatus.DOWNLOADING;
-            hasSubs = true;
-            SubtitleDownloader subtitleDownloader = new SubtitleDownloader(providerManager.getCurrentSubsProvider(), streamInfo, playerManager, subtitleLanguage);
-            subtitleDownloader.downloadSubtitle();
-        }
-        */
-//    }
-
-//    @Override public void onFailure(Exception e) {
-//        subsStatus = SubsStatus.FAILURE;
-//    }
-
-//    @Override public void onSubtitleDownloadCompleted(boolean isSuccessful, TimedTextObject subtitleFile) {
-//        subsStatus = isSuccessful ? SubsStatus.SUCCESS : SubsStatus.FAILURE;
-//    }
 
     protected void setState(final State state) {
         setState(state, null);
@@ -188,6 +147,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
      */
     protected void updateView(State state, Object extra) {
+        // TODO: 11/14/17 This should be nicer
         switch (state) {
             case UNINITIALISED:
                 view.displayPrimaryText(null);
@@ -229,14 +189,13 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * Will either start an external player, or the internal one
      */
     private void startPlayer() {
-        if (streamInfo.hasSubtitles() || )
-        //        if (streamInfo.getSubtitle() != null) { // TODO and downloading
-//
-//        }
-//
-//        if (hasSubs && subsStatus == SubsStatus.DOWNLOADING) {
-//            return;
-//        }
+        if (streamInfo.hasSubtitles() && subtitleDisposable != null && !subtitleDisposable.isDisposed()) {
+            return;
+        }
+
+        if (StringUtils.isEmpty(streamInfo.getStreamUrl())) {
+            return;
+        }
 
         startPlayerActivity(0);
         playerStarted = true;
@@ -255,7 +214,23 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
         if (subtitle != null) {
             subsProvider.downloadSubs(media, subtitle.getSubtitle())
-                    .subscribe();
+                    .subscribe(new MaybeObserver<Uri>() {
+                        @Override public void onSubscribe(final Disposable d) {
+                            subtitleDisposable = d;
+                        }
+
+                        @Override public void onSuccess(final Uri uri) {
+                            streamInfo.getSubtitle().setFileUri(uri);
+                        }
+
+                        @Override public void onError(final Throwable e) {
+                            startPlayer();
+                        }
+
+                        @Override public void onComplete() {
+                            startPlayer();
+                        }
+                    });
         }
     }
 

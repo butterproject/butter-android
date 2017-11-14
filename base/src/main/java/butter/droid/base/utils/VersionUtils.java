@@ -63,7 +63,7 @@ public class VersionUtils {
             PackageInfo info = manager.getPackageInfo(ButterApplication.getAppContext().getPackageName(), 0);
             Integer versionCode = info.versionCode;
 
-            if(info.versionName.contains("local"))
+            if(info.versionName != null && info.versionName.contains("local"))
                 return "local";
 
             if(versionCode > 50000000) {
