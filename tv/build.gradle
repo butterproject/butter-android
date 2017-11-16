@@ -16,15 +16,15 @@
  */
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 
-//androidVersion {
-//
-//    appVersion {
-//        major 0
-//        minor 1
-//        build 2
-//    }
-//
-//}
+androidVersion {
+
+    appVersion {
+        major 0
+        minor 1
+        build 2
+    }
+
+}
 
 android {
     defaultConfig {

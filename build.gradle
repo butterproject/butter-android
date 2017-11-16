@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
@@ -15,7 +15,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.1.0-alpha03'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -52,48 +51,47 @@ allprojects {
         //only apply to projects that have the android plugin
         if (project.plugins.hasPlugin('com.android.application')) {
 
-//            project.androidVersion {
-//                appVersion {
-//                    versionCode {
-//                        digits 2
-//                    }
-//                }
+            project.androidVersion {
+                appVersion {
+                    versionCode {
+                        digits 2
+                    }
+                }
 
-//                TODO fix for in stant run needed
-//                splits {
-//                    abi {
-//                        armeabi {
-//                            versionCode(IncreaseVersionCode) {
-//                                add 1000000
-//                            }
-//                        }
-//
-//                        "armeabi-v7a" {
-//                            versionCode(IncreaseVersionCode) {
-//                                add 2000000
-//                            }
-//                        }
-//
-//                        "arm64-v8a" {
-//                            versionCode(IncreaseVersionCode) {
-//                                add 3000000
-//                            }
-//                        }
-//
-//                        x86 {
-//                            versionCode(IncreaseVersionCode) {
-//                                add 4000000
-//                            }
-//                        }
-//
-//                        x86_64 {
-//                            versionCode(IncreaseVersionCode) {
-//                                add 5000000
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+                splits {
+                    abi {
+                        armeabi {
+                            versionCode(IncreaseVersionCode) {
+                                add 1000000
+                            }
+                        }
+
+                        "armeabi-v7a" {
+                            versionCode(IncreaseVersionCode) {
+                                add 2000000
+                            }
+                        }
+
+                        "arm64-v8a" {
+                            versionCode(IncreaseVersionCode) {
+                                add 3000000
+                            }
+                        }
+
+                        x86 {
+                            versionCode(IncreaseVersionCode) {
+                                add 4000000
+                            }
+                        }
+
+                        x86_64 {
+                            versionCode(IncreaseVersionCode) {
+                                add 5000000
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
