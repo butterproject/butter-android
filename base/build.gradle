@@ -44,9 +44,9 @@ dependencies {
     api "com.android.support:design:$appCompatVersion"
 
     debugImplementation 'com.github.simonpercic:oklog3:2.2.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
 
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     api 'com.jakewharton.timber:timber:4.5.1'
     api "com.squareup.okhttp3:okhttp:$okHttpVersion"
