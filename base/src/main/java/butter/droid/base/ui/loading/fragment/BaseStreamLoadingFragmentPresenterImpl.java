@@ -31,8 +31,6 @@ import butter.droid.base.utils.ThreadUtils;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
-import java.text.DecimalFormat;
-import java.util.Locale;
 
 public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
         TorrentListener {
@@ -186,7 +184,6 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     /**
      * Update the view based on a state.
      *
-     * @param state
      * @param extra - an optional extra piece of data relating to the state, such as an error message, or status data
      */
     protected void updateView(State state, Object extra) {
@@ -267,28 +264,27 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     }
 
     private void updateStatus(final StreamStatus status) {
-        final DecimalFormat df = new DecimalFormat("#############0.00");
-        ThreadUtils.runOnUiThread(() -> {
-            int progress;
-            if (!playingExternal) {
-                progress = status.bufferProgress;
-            } else {
-                progress = ((Float) status.progress).intValue();
-            }
+        int progress;
+        if (!playingExternal) {
+            progress = status.bufferProgress;
+        } else {
+            progress = ((Float) status.progress).intValue();
+        }
 
-            String progressText = String.format(Locale.US, "%d%%", progress);
+        String progressText = progress + "%";
 
-            String speedText;
-            if (status.downloadSpeed / 1024 < 1000) {
-                speedText = df.format(status.downloadSpeed / 1024) + " KB/s";
-            } else {
-                speedText = df.format(status.downloadSpeed / 1048576) + " MB/s";
-            }
+        String speedText;
+        if (status.downloadSpeed / 1024 < 1000) {
+            int i = (int) (status.downloadSpeed / 102.4);
+            speedText = i / 10 + "." + i % 10 + " KB/s";
+        } else {
+            int i = (int) (status.downloadSpeed / 104857.6);
+            speedText = i / 10 + "." + i % 10 + " MB/s";
+        }
 
-            String seedsText = status.seeds + " " + context.getString(R.string.seeds);
+        String seedsText = status.seeds + " " + context.getString(R.string.seeds);
 
-            view.displayDetails(progress, progressText, speedText, seedsText);
-        });
+        view.displayDetails(progress, progressText, speedText, seedsText);
     }
 
 }

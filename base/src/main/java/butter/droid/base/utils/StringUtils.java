@@ -45,6 +45,12 @@ import java.util.Locale;
 
 public class StringUtils {
 
+    private static final DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+
+    static {
+        formatter.applyPattern("00");
+    }
+
     /**
      * Convert time to a string
      *
@@ -63,12 +69,10 @@ public class StringUtils {
         int hours = (int) millis;
 
         String time;
-        DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        format.applyPattern("00");
         if (millis > 0) {
-            time = (negative ? "-" : "") + hours + ":" + format.format(min) + ":" + format.format(sec);
+            time = (negative ? "-" : "") + hours + ":" + formatter.format(min) + ":" + formatter.format(sec);
         } else {
-            time = (negative ? "-" : "") + min + ":" + format.format(sec);
+            time = (negative ? "-" : "") + min + ":" + formatter.format(sec);
         }
 
         return time;
