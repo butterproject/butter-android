@@ -63,7 +63,8 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
 
     @Override public void startMovie(final MediaWrapper item, final Torrent torrent, final String quality) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-        StreamInfo info = new StreamInfo(torrent, item, null, subtitle);
+        // TODO Subs
+        StreamInfo info = new StreamInfo(torrent, item, null, null);
 
         TVStreamLoadingActivity.startActivity(getActivity(), info);
     }
