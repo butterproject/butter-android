@@ -25,9 +25,8 @@ import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.providers.model.MediaWrapper;
-import butter.droid.base.providers.model.StreamInfo;
-import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.providers.media.model.MediaWrapper;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Format;
 import butter.droid.provider.base.module.Movie;
@@ -126,7 +125,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         String language = item.getLanguage();
         parentPresenter.selectSubtitle(item.getSubtitle());
 
-        if (language == null || SubsProvider.SUBTITLE_LANGUAGE_NONE.equals(language)) {
+        if (language == null) {
             view.setSubtitleText(R.string.no_subs);
         } else {
             view.setSubtitleText(item.getName());
@@ -201,7 +200,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
                             final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                             return Observable.fromIterable(subs)
                                     .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
-                                    .startWith(new UiSubItem(null, defaultSubtitle.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)))
+                                    .startWith(new UiSubItem(null, defaultSubtitle == null))
                                     .toList();
                         }
                     })

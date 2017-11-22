@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.trailer;
 
 import android.os.Bundle;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import javax.inject.Inject;

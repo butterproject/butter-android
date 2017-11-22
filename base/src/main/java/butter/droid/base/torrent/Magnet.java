@@ -25,7 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Parcelable;
 
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import java.util.ArrayList;
 import java.util.List;
 

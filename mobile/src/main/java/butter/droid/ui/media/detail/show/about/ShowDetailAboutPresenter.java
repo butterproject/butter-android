@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail.show.about;
 
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 
 public interface ShowDetailAboutPresenter {
     void onCreate(MediaWrapper show);

@@ -30,6 +30,7 @@ import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.provider.mock.MockMovieMediaProvider;
+import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoProvider;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -48,6 +49,8 @@ public interface BaseInternalComponent {
     VodoProvider vodoProvider();
 
     MockMovieMediaProvider mockMoviesProvider();
+
+    MockSubsProvider mockSubsProvider();
 
     OkHttpClient okHttpClient();
 

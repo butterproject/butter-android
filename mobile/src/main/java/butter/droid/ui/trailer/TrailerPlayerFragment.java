@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import butter.droid.MobileButterApplication;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.ButterKnife;
 import javax.inject.Inject;

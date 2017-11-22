@@ -35,9 +35,8 @@ import timber.log.Timber;
 @Module
 public class InternalBaseManagerModule {
 
-    @Provides @Internal ProviderManager provideProviderManager(final Context context, final VodoProvider vodoProvider, final MockMovieMediaProvider moviesProvider) {
-        // TODO subs - move subs to dagger
-        return new ProviderManager(new MockSubsProvider(context), vodoProvider, moviesProvider);
+    @Provides @Internal ProviderManager provideProviderManager(final MockSubsProvider subsProvider, final VodoProvider vodoProvider, final MockMovieMediaProvider moviesProvider) {
+        return new ProviderManager(subsProvider, vodoProvider, moviesProvider);
     }
 
     @Provides @Internal @Nullable LibVLC provideLibVLC(Context context, PreferencesHandler preferencesHandler) {

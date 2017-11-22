@@ -19,7 +19,7 @@ package butter.droid.tv.ui.search;
 
 import android.support.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.filter.Pager;

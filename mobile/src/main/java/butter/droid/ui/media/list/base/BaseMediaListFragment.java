@@ -32,7 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.manager.internal.paging.CursorPagingListener;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.manager.internal.paging.PagingManager;

@@ -39,4 +39,8 @@ public class ProviderModule {
         return new MockMovieMediaProvider(context, gson);
     }
 
+    @Provides @ProviderScope MockSubsProvider provideMockSubsProvider(final Context context) {
+        return new MockSubsProvider(context);
+    }
+
 }

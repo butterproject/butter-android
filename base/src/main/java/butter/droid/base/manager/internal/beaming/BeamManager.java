@@ -29,7 +29,7 @@ import butter.droid.base.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
 import com.connectsdk.device.ConnectableDevice;

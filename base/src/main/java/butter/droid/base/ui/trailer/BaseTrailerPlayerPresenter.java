@@ -17,7 +17,7 @@
 
 package butter.droid.base.ui.trailer;
 
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 
 public interface BaseTrailerPlayerPresenter extends BaseVideoPlayerPresenter {

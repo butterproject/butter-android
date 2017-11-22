@@ -18,7 +18,7 @@
 package butter.droid.ui.media.detail.movie;
 
 import android.support.annotation.StringRes;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.ui.media.detail.model.UiSubItem;
 import java.util.List;

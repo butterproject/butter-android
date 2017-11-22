@@ -25,7 +25,7 @@ import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;

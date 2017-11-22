@@ -18,7 +18,7 @@
 package butter.droid.ui.media.list.base;
 
 import android.support.annotation.Nullable;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
 
 public interface BaseMediaListPresenter {

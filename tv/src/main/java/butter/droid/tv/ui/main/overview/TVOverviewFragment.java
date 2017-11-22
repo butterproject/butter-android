@@ -34,7 +34,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.R;

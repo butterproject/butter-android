@@ -33,7 +33,7 @@ import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElement
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.LoadedFrom;

@@ -19,8 +19,8 @@ package butter.droid.ui.player;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import butter.droid.base.providers.model.MediaWrapper;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.MediaWrapper;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Clip;
 import butter.droid.provider.base.module.Media;

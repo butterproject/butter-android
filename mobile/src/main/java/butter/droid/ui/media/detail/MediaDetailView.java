@@ -18,8 +18,8 @@
 package butter.droid.ui.media.detail;
 
 import android.support.annotation.StringRes;
-import butter.droid.base.providers.model.MediaWrapper;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.MediaWrapper;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
 
 public interface MediaDetailView {

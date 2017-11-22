@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
