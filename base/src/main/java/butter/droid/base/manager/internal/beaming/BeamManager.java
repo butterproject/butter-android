@@ -183,14 +183,17 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public VolumeControl getVolumeControl() {
-        if (mCurrentDevice != null && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
+        if (mCurrentDevice != null && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice
+                .hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
             return mCurrentDevice.getCapability(VolumeControl.class);
         }
         return null;
     }
 
     public boolean stopVideo() {
-        if (!mConnected || mLaunchSession == null) return false;
+        if (!mConnected || mLaunchSession == null) {
+            return false;
+        }
 
         mLaunchSession.close(null);
         mLaunchSession = null;
@@ -205,12 +208,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public void playVideo(StreamInfo info, final MediaPlayer.LaunchListener listener) {
-        if (!mConnected) listener.onError(ServiceCommandError.getError(503));
+        if (!mConnected) {
+            listener.onError(ServiceCommandError.getError(503));
+        }
 
         mStreamInfo = info;
 
         String location = info.getStreamUrl();
-        if(!location.startsWith("http")) {
+        if (!location.startsWith("http")) {
             BeamServer.setCurrentVideo(location);
             location = BeamServer.getVideoURL();
         }
@@ -219,7 +224,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         // TODO: 11/1/17 Subtitles
         /*
         if(info.getSubtitleLanguage() != null && !info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
-            File srtFile = new File(playerManager.getStorageLocation(), mStreamInfo.getStreamable().getId() + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
+            File srtFile = new File(playerManager.getStorageLocation(), mStreamInfo.getStreamable().getId() đ
+                    + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
             BeamServer.setCurrentSubs(srtFile);
             if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
                 subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
@@ -233,12 +239,14 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         try {
             URL url = new URL(location);
-            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(),
+                    url.getRef());
             location = uri.toString();
 
-            if(subsLocation != null) {
+            if (subsLocation != null) {
                 URL subsUrl = new URL(subsLocation);
-                URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(), subsUrl.getPort(), subsUrl.getPath(), subsUrl.getQuery(), subsUrl.getRef());
+                URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(), subsUrl.getPort(), subsUrl.getPath(),
+                        subsUrl.getQuery(), subsUrl.getRef());
                 subsLocation = subsUri.toString();
             }
         } catch (MalformedURLException | URISyntaxException e) {
@@ -256,22 +264,26 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 @Override
                 public void onSuccess(MediaPlayer.MediaLaunchObject object) {
                     mLaunchSession = object.launchSession;
-                    if (listener != null)
+                    if (listener != null) {
                         listener.onSuccess(object);
+                    }
                 }
 
                 @Override
                 public void onError(ServiceCommandError error) {
                     Timber.e(error.getMessage());
-                    if (listener != null)
+                    if (listener != null) {
                         listener.onError(error);
+                    }
                 }
             });
         }
     }
 
     public void connect(ConnectableDevice castingDevice) {
-        if (castingDevice == mCurrentDevice) return;
+        if (castingDevice == mCurrentDevice) {
+            return;
+        }
 
         if (mCurrentDevice != null) {
             mCurrentDevice.removeListener(this);
@@ -295,8 +307,9 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             mCurrentDevice.removeListener(this);
         }
 
-        for (BeamListener listener : mListeners)
+        for (BeamListener listener : mListeners) {
             listener.updateBeamIcon();
+        }
 
         onDeviceDisconnected(mCurrentDevice);
 
@@ -338,21 +351,25 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         }
 
         mConnected = true;
-        for (BeamListener listener : mListeners)
+        for (BeamListener listener : mListeners) {
             listener.updateBeamIcon();
+        }
 
-        for(ConnectableDeviceListener listener : mDeviceListeners)
+        for (ConnectableDeviceListener listener : mDeviceListeners) {
             listener.onDeviceReady(device);
+        }
     }
 
     @Override
     public void onDeviceDisconnected(ConnectableDevice device) {
         mConnected = false;
-        for (BeamListener listener : mListeners)
+        for (BeamListener listener : mListeners) {
             listener.updateBeamIcon();
+        }
 
-        for(ConnectableDeviceListener listener : mDeviceListeners)
+        for (ConnectableDeviceListener listener : mDeviceListeners) {
             listener.onDeviceDisconnected(device);
+        }
     }
 
     @Override
@@ -369,27 +386,31 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 break;
         }
 
-        for(ConnectableDeviceListener listener : mDeviceListeners)
+        for (ConnectableDeviceListener listener : mDeviceListeners) {
             listener.onPairingRequired(device, service, pairingType);
+        }
     }
 
     @Override
     public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {
-        for(ConnectableDeviceListener listener : mDeviceListeners)
+        for (ConnectableDeviceListener listener : mDeviceListeners) {
             listener.onCapabilityUpdated(device, added, removed);
+        }
     }
 
     @Override
     public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) {
         Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_SHORT).show();
-        for(ConnectableDeviceListener listener : mDeviceListeners)
+        for (ConnectableDeviceListener listener : mDeviceListeners) {
             listener.onConnectionFailed(device, error);
+        }
     }
 
     @Override
     public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
-        for (BeamListener listener : mListeners)
+        for (BeamListener listener : mListeners) {
             listener.updateBeamIcon();
+        }
     }
 
     @Override
@@ -404,8 +425,9 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             mCurrentDevice = null;
         }
 
-        for (BeamListener listener : mListeners)
+        for (BeamListener listener : mListeners) {
             listener.updateBeamIcon();
+        }
     }
 
     @Override
@@ -414,6 +436,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     public interface BeamListener {
+
         void updateBeamIcon();
     }
 

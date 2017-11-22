@@ -131,6 +131,8 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
                     prefManager.save(key, subsLanguages[position - 1]);
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unknown preference");
         }
     }
 
@@ -140,6 +142,8 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
             case Prefs.SUBTITLE_STROKE_COLOR:
                 prefManager.save(key, color);
                 break;
+            default:
+                throw new IllegalStateException("Unknown preference");
         }
     }
 
@@ -153,6 +157,8 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
             case Prefs.LIBTORRENT_LISTENING_PORT:
                 prefManager.save(key, value);
                 break;
+            default:
+                throw new IllegalStateException("Unknown preference");
         }
     }
 
@@ -170,6 +176,8 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
                     view.showMessage(R.string.not_writable);
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unknown preference");
 
         }
     }

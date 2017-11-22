@@ -56,15 +56,16 @@ public abstract class SubsProvider extends BaseProvider {
     public abstract void getList(Episode episode, Callback callback);
 
     public interface Callback {
+
         void onSuccess(Map<String, String> items);
 
         void onFailure(Exception e);
     }
 
     /**
-     * @param media        Media data
+     * @param media Media data
      * @param languageCode Code of language
-     * @param callback     Network callback
+     * @param callback Network callback
      * @return Call
      */
     public Call download(final Media media, final String languageCode, final okhttp3.Callback callback) {
@@ -154,10 +155,9 @@ public abstract class SubsProvider extends BaseProvider {
     /**
      * Unpack ZIP and save SRT
      *
-     * @param is           InputStream from network
-     * @param srtPath      Path where SRT should be saved
+     * @param is InputStream from network
+     * @param srtPath Path where SRT should be saved
      * @param languageCode The language code
-     * @throws IOException
      */
     private static void unpack(InputStream is, File srtPath, String languageCode) throws IOException {
         String filename;
@@ -166,7 +166,9 @@ public abstract class SubsProvider extends BaseProvider {
 
         while ((ze = zis.getNextEntry()) != null) {
             filename = ze.getName();
-            if (filename.contains("_MACOSX")) continue;
+            if (filename.contains("_MACOSX")) {
+                continue;
+            }
 
             if (isSubFormat(filename)) {
                 parseFormatAndSave(filename, srtPath, languageCode, zis);
@@ -200,10 +202,10 @@ public abstract class SubsProvider extends BaseProvider {
     /**
      * Parse the text, convert and save to SRT file
      *
-     * @param inputUrl     Original network location
-     * @param srtPath      Place where SRT should be saved
+     * @param inputUrl Original network location
+     * @param srtPath Place where SRT should be saved
      * @param languageCode The language code
-     * @param inputStream  InputStream of data  @throws IOException
+     * @param inputStream InputStream of data  @throws IOException
      */
     private static void parseFormatAndSave(String inputUrl, File srtPath, String languageCode, InputStream inputStream) throws IOException {
 //        TimedTextObject subtitleObject = null;

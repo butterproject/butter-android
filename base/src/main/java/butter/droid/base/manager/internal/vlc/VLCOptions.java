@@ -36,27 +36,31 @@ public class VLCOptions {
         final Context context = ButterApplication.getAppContext();
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        ArrayList<String> options = new ArrayList<String>(50);
+        final ArrayList<String> options = new ArrayList<String>(50);
 
         final boolean timeStrechingDefault = Build.VERSION.SDK_INT >= VERSION_CODES.KITKAT;
         final boolean timeStreching = pref.getBoolean("enable_time_stretching_audio", timeStrechingDefault);
         final String subtitlesEncoding = pref.getString("subtitle_text_encoding", "");
         final boolean frameSkip = pref.getBoolean("enable_frame_skip", false);
         String chroma = pref.getString("chroma_format", "YV12");
-        if (chroma.equals("YV12"))
+        if (chroma.equals("YV12")) {
             chroma = "";
+        }
         final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
 
         int deblocking = -1;
         try {
             deblocking = getDeblocking(Integer.parseInt(pref.getString("deblocking", "-1")));
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+            Timber.d("Error formatting");
+        }
 
         int networkCaching = pref.getInt("network_caching_value", 0);
-        if (networkCaching > 60000)
+        if (networkCaching > 60000) {
             networkCaching = 60000;
-        else if (networkCaching < 0)
+        } else if (networkCaching < 0) {
             networkCaching = 0;
+        }
 
         final String freetypeRelFontsize = pref.getString("subtitles_size", "16");
         final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
@@ -76,32 +80,37 @@ public class VLCOptions {
         options.add(subtitlesEncoding);
         options.add("--stats");
         /* XXX: why can't the default be fine ? #7792 */
-        if (networkCaching > 0)
+        if (networkCaching > 0) {
             options.add("--network-caching=" + networkCaching);
+        }
         options.add("--android-display-chroma");
         options.add(chroma);
         options.add("--audio-resampler");
         options.add(getResampler());
 
         options.add("--freetype-rel-fontsize=" + freetypeRelFontsize);
-        if (freetypeBold)
+        if (freetypeBold) {
             options.add("--freetype-bold");
+        }
         options.add("--freetype-color=" + freetypeColor);
-        if (freetypeBackground)
+        if (freetypeBackground) {
             options.add("--freetype-background-opacity=128");
-        else
+        } else {
             options.add("--freetype-background-opacity=0");
-        if (opengl == 1)
+        }
+        if (opengl == 1) {
             options.add("--vout=gles2,none");
-        else if (opengl == 0)
+        } else if (opengl == 0) {
             options.add("--vout=android_display,none");
+        }
 
         /* Configure keystore */
         options.add("--keystore");
-        if (AndroidUtil.isMarshMallowOrLater)
+        if (AndroidUtil.isMarshMallowOrLater) {
             options.add("file_crypt,none");
-        else
+        } else {
             options.add("file_plaintext,none");
+        }
         options.add("--keystore-file");
         options.add(new File(context.getDir("keystore", Context.MODE_PRIVATE), "file").getAbsolutePath());
 
@@ -126,17 +135,19 @@ public class VLCOptions {
              * Skip non-key (3) for all devices that don't meet anything above
              */
             VLCUtil.MachineSpecs m = VLCUtil.getMachineSpecs();
-            if (m == null)
+            if (m == null) {
                 return ret;
-            if ((m.hasArmV6 && !(m.hasArmV7)) || m.hasMips)
+            }
+            if ((m.hasArmV6 && !(m.hasArmV7)) || m.hasMips) {
                 ret = 4;
-            else if (m.frequency >= 1200 && m.processors > 2)
+            } else if (m.frequency >= 1200 && m.processors > 2) {
                 ret = 1;
-            else if (m.bogoMIPS >= 1200 && m.processors > 2) {
+            } else if (m.bogoMIPS >= 1200 && m.processors > 2) {
                 ret = 1;
                 Timber.d("Used bogoMIPS due to lack of frequency info");
-            } else
+            } else {
                 ret = 3;
+            }
         } else if (deblocking > 4) { // sanity check
             ret = 3;
         }

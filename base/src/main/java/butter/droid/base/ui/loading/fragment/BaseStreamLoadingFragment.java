@@ -70,7 +70,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment implements Base
     private TorrentService service;
 
     public enum State {
-        UNINITIALISED, WAITING_TORRENT, WAITING_SUBTITLES, BUFFERING, STREAMING, ERROR;
+        UNINITIALISED, WAITING_TORRENT, WAITING_SUBTITLES, BUFFERING, STREAMING, ERROR
     }
 
     @Override

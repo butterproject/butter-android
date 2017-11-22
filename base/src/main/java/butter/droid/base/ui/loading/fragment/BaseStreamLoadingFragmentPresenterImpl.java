@@ -173,6 +173,8 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
                 view.displayPrimaryText(R.string.waiting_torrent);
                 view.clearTexts();
                 break;
+            default:
+                throw new IllegalArgumentException("Unknown state");
 
         }
 

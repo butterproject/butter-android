@@ -34,12 +34,11 @@ public class ResourceUtils {
         final TypedValue typedValue = new TypedValue(); // create a new typed value to received the resolved attribute
         // value
         final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        if (!theme.resolveAttribute(resId, typedValue, true)) // if we can't resolve the value
-        {
+        if (!theme.resolveAttribute(resId, typedValue, true)) { // if we can't resolve the value
             throw new Resources.NotFoundException("Resource ID #0x" + Integer.toHexString(resId));
         }
-        if (typedValue.type != TypedValue.TYPE_DIMENSION) // if the value isn't of the correct type
-        {
+
+        if (typedValue.type != TypedValue.TYPE_DIMENSION) { // if the value isn't of the correct type
             throw new Resources.NotFoundException("Resource ID #0x" + Integer.toHexString(resId) + " type #0x"
                     + Integer.toHexString(typedValue.type) + " is not valid");
         }

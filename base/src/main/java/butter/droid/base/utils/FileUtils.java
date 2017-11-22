@@ -33,7 +33,9 @@ public class FileUtils {
     public static boolean recursiveDelete(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
-            if (children == null) return false;
+            if (children == null) {
+                return false;
+            }
             for (String child : children) {
                 recursiveDelete(new File(file, child));
             }
@@ -47,7 +49,6 @@ public class FileUtils {
      *
      * @param src Source
      * @param dst Destionation
-     * @throws IOException
      */
     public static void copy(File src, File dst) throws IOException {
         FileInputStream inStream = new FileInputStream(src);

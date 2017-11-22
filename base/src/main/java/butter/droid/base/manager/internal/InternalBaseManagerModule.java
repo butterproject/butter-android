@@ -35,7 +35,8 @@ import timber.log.Timber;
 @Module
 public class InternalBaseManagerModule {
 
-    @Provides @Internal ProviderManager provideProviderManager(final Context context, final VodoProvider vodoProvider, final MockMovieMediaProvider moviesProvider) {
+    @Provides @Internal ProviderManager provideProviderManager(final Context context, final VodoProvider vodoProvider,
+            final MockMovieMediaProvider moviesProvider) {
         // TODO subs - move subs to dagger
         return new ProviderManager(new MockSubsProvider(context), vodoProvider, moviesProvider);
     }

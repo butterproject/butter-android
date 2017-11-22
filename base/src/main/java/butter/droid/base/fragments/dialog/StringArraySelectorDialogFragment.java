@@ -31,8 +31,13 @@ import butter.droid.base.R;
 
 public class StringArraySelectorDialogFragment extends DialogFragment {
 
-    public static final String ARRAY = "array", TITLE = "title", MODE = "mode", POSITION = "position";
-    public static final int NORMAL = 0, SINGLE_CHOICE = 1;
+    public static final String ARRAY = "array";
+    public static final String TITLE = "title";
+    public static final String MODE = "mode";
+    public static final String POSITION = "position";
+
+    public static final int NORMAL = 0;
+    public static final int SINGLE_CHOICE = 1;
 
     private DialogInterface.OnClickListener mOnClickListener;
 
@@ -45,7 +50,8 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if (getArguments() == null || !getArguments().containsKey(ARRAY) || !getArguments().containsKey(TITLE) || mOnClickListener == null) {
+        if (getArguments() == null || !getArguments().containsKey(ARRAY) || !getArguments().containsKey(TITLE)
+                || mOnClickListener == null) {
             return builder.create();
         }
 
@@ -82,41 +88,50 @@ public class StringArraySelectorDialogFragment extends DialogFragment {
         mOnClickListener = dialogClickListener;
     }
 
-    public static void show(FragmentManager fm, int titleRes, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
-        show(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
-    }
-
-    public static void show(FragmentManager fm, int titleRes, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
-        show(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
-    }
-
-    public static void show(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
-        String[] itemsArray = items.toArray(new String[items.size()]);
-        show(fm, title, itemsArray, defaultPosition, dialogClickListener);
-    }
-
-    public static void show(FragmentManager fm, String title, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
-        show(fm, title, items, defaultPosition, NORMAL, dialogClickListener);
-    }
-
-    public static void showSingleChoice(FragmentManager fm, int titleRes, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+    public static void showSingleChoice(FragmentManager fm, int titleRes, List<String> items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
         showSingleChoice(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
     }
 
-    public static void showSingleChoice(FragmentManager fm, int titleRes, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+    public static void showSingleChoice(FragmentManager fm, int titleRes, String[] items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
         showSingleChoice(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
     }
 
-    public static void showSingleChoice(FragmentManager fm, String title, List<String> items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+    public static void showSingleChoice(FragmentManager fm, String title, List<String> items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
         String[] itemsArray = items.toArray(new String[items.size()]);
         showSingleChoice(fm, title, itemsArray, defaultPosition, dialogClickListener);
     }
 
-    public static void showSingleChoice(FragmentManager fm, String title, String[] items, int defaultPosition, DialogInterface.OnClickListener dialogClickListener) {
+    public static void showSingleChoice(FragmentManager fm, String title, String[] items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
         show(fm, title, items, defaultPosition, SINGLE_CHOICE, dialogClickListener);
     }
 
-    private static void show(FragmentManager fm, String title, String[] items, int defaultPosition, int mode, DialogInterface.OnClickListener dialogClickListener) {
+    public static void show(FragmentManager fm, int titleRes, List<String> items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
+    }
+
+    public static void show(FragmentManager fm, int titleRes, String[] items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, ButterApplication.getAppContext().getString(titleRes), items, defaultPosition, dialogClickListener);
+    }
+
+    public static void show(FragmentManager fm, String title, List<String> items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
+        String[] itemsArray = items.toArray(new String[items.size()]);
+        show(fm, title, itemsArray, defaultPosition, dialogClickListener);
+    }
+
+    public static void show(FragmentManager fm, String title, String[] items, int defaultPosition,
+            DialogInterface.OnClickListener dialogClickListener) {
+        show(fm, title, items, defaultPosition, NORMAL, dialogClickListener);
+    }
+
+    private static void show(FragmentManager fm, String title, String[] items, int defaultPosition, int mode,
+            DialogInterface.OnClickListener dialogClickListener) {
         Bundle args = new Bundle();
         args.putString(TITLE, title);
         args.putStringArray(ARRAY, items);

@@ -16,6 +16,7 @@
  */
 
 package butter.droid.base.torrent;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,7 @@ public class TorrentBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equals(STOP)) {
+        if (intent.getAction().equals(STOP)) {
             TorrentService.stop();
         }
     }

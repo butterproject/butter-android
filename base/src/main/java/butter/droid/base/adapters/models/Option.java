@@ -44,9 +44,10 @@ public class Option implements Comparable<Option> {
 
     @Override
     public int compareTo(Option o) {
-        if (this.name != null)
+        if (this.name != null) {
             return this.name.toLowerCase(LocaleUtils.getCurrent()).compareTo(o.getName().toLowerCase(LocaleUtils.getCurrent()));
-        else
+        } else {
             throw new IllegalArgumentException();
+        }
     }
 }

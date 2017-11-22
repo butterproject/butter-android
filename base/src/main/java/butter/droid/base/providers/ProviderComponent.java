@@ -39,8 +39,7 @@ import okhttp3.OkHttpClient;
 
 @Component(
         dependencies = BaseApplicationComponent.class,
-        modules = ProviderModule.class
-)
+        modules = ProviderModule.class)
 @ProviderScope
 public interface ProviderComponent {
 

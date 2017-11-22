@@ -44,8 +44,9 @@ public class VersionUtils {
 
     public static boolean isUsingCorrectBuild() {
         String buildAbi = getBuildAbi();
-        if(BuildConfig.GIT_BRANCH.equalsIgnoreCase("local"))
+        if (BuildConfig.GIT_BRANCH.equalsIgnoreCase("local")) {
             return true;
+        }
 
         String deviceAbi;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -63,18 +64,19 @@ public class VersionUtils {
             PackageInfo info = manager.getPackageInfo(ButterApplication.getAppContext().getPackageName(), 0);
             Integer versionCode = info.versionCode;
 
-            if(info.versionName != null && info.versionName.contains("local"))
+            if (info.versionName != null && info.versionName.contains("local")) {
                 return "local";
+            }
 
-            if(versionCode > 50000000) {
+            if (versionCode > 50000000) {
                 return "x86_64";
-            } else if(versionCode > 40000000) {
+            } else if (versionCode > 40000000) {
                 return "x86";
-            } else if(versionCode > 30000000) {
+            } else if (versionCode > 30000000) {
                 return "arm64-v8a";
-            } else if(versionCode > 20000000) {
+            } else if (versionCode > 20000000) {
                 return "armeabi-v7a";
-            } else if(versionCode > 10000000) {
+            } else if (versionCode > 10000000) {
                 return "armeabi";
             }
         } catch (PackageManager.NameNotFoundException e) {

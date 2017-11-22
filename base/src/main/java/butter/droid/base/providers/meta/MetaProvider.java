@@ -30,9 +30,10 @@ public abstract class MetaProvider extends BaseProvider {
     }
 
     public static class MetaData {
+
         public String title;
         public Integer year;
-        public String imdb_id;
+        public String imdbId;
         public LocalDate released;
         public String trailer;
         public Integer runtime;
@@ -44,6 +45,7 @@ public abstract class MetaProvider extends BaseProvider {
         public String[] genres;
 
         public static class Images {
+
             public String poster;
             public String backdrop;
 
@@ -59,6 +61,7 @@ public abstract class MetaProvider extends BaseProvider {
     }
 
     public interface Callback {
+
         public void onResult(MetaData metaData, Exception e);
     }
 

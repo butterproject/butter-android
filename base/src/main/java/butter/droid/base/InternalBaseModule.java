@@ -21,10 +21,12 @@ import butter.droid.base.data.internal.InternalBaseDataModule;
 import butter.droid.base.manager.internal.InternalBaseManagerModule;
 import dagger.Module;
 
-@Module(includes = {
-        InternalBaseDataModule.class,
-        InternalBaseManagerModule.class,
-})
+@Module(
+        includes = {
+                InternalBaseDataModule.class,
+                InternalBaseManagerModule.class
+        }
+)
 public class InternalBaseModule {
 
 }

@@ -21,9 +21,9 @@ import butter.droid.base.torrent.TorrentService;
 
 public interface TorrentActivity {
 
-	TorrentService getTorrentService();
+    TorrentService getTorrentService();
 
-	void onTorrentServiceConnected(final TorrentService service);
+    void onTorrentServiceConnected(final TorrentService service);
 
-	void onTorrentServiceDisconnected(final TorrentService service);
+    void onTorrentServiceDisconnected(final TorrentService service);
 }

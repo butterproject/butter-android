@@ -5,14 +5,14 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.widget.TextView;
 
-public class StrokedTextView extends TextView {
+public class StrokedTextView extends AppCompatTextView {
 
-    private int mStrokeColor;
-    private float mStrokeWidth;
+    private int strokeColor;
+    private float strokeWidth;
 
     public StrokedTextView(Context context) {
         super(context);
@@ -27,27 +27,28 @@ public class StrokedTextView extends TextView {
     }
 
     public void setStrokeColor(int color) {
-        mStrokeColor = color;
+        strokeColor = color;
     }
 
     public void setStrokeWidth(int unit, int size) {
         Context c = getContext();
         Resources r;
 
-        if (c == null)
+        if (c == null) {
             r = Resources.getSystem();
-        else
+        } else {
             r = c.getResources();
+        }
 
-        mStrokeWidth = TypedValue.applyDimension(unit, size, r.getDisplayMetrics());
+        strokeWidth = TypedValue.applyDimension(unit, size, r.getDisplayMetrics());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        ColorStateList states = getTextColors();
+        final ColorStateList states = getTextColors();
         getPaint().setStyle(Paint.Style.STROKE);
-        getPaint().setStrokeWidth(mStrokeWidth);
-        setTextColor(mStrokeColor);
+        getPaint().setStrokeWidth(strokeWidth);
+        setTextColor(strokeColor);
         super.onDraw(canvas);
 
         getPaint().setStyle(Paint.Style.FILL);

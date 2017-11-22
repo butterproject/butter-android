@@ -51,6 +51,36 @@ public class PrefManager {
     }
 
     /**
+     * Save a boolean to the central {@link ObscuredSharedPreferences}
+     *
+     * @param key     Key of the preference
+     * @param value   Value of the preference
+     */
+    public void save(String key, boolean value) {
+        preferences.edit().putBoolean(key, value).apply();
+    }
+
+    /**
+     * Save a long to the central {@link ObscuredSharedPreferences}
+     *
+     * @param key     Key of the preference
+     * @param value   Value of the preference
+     */
+    public void save(String key, long value) {
+        preferences.edit().putLong(key, value).apply();
+    }
+
+    /**
+     * Save a int to the central {@link ObscuredSharedPreferences}
+     *
+     * @param key     Key of the preference
+     * @param value   Value of the preference
+     */
+    public void save(String key, int value) {
+        preferences.edit().putInt(key, value).apply();
+    }
+
+    /**
      * Get a saved string from the central {@link ObscuredSharedPreferences}
      *
      * @param key          Key of the preference
@@ -59,16 +89,6 @@ public class PrefManager {
      */
     public String get(String key, String defaultValue) {
         return preferences.getString(key, defaultValue);
-    }
-
-    /**
-     * Save a boolean to the central {@link ObscuredSharedPreferences}
-     *
-     * @param key     Key of the preference
-     * @param value   Value of the preference
-     */
-    public void save(String key, boolean value) {
-        preferences.edit().putBoolean(key, value).apply();
     }
 
     /**
@@ -83,16 +103,6 @@ public class PrefManager {
     }
 
     /**
-     * Save a long to the central {@link ObscuredSharedPreferences}
-     *
-     * @param key     Key of the preference
-     * @param value   Value of the preference
-     */
-    public void save(String key, long value) {
-        preferences.edit().putLong(key, value).apply();
-    }
-
-    /**
      * Get a saved long from the central {@link ObscuredSharedPreferences}
      *
      * @param key          Key of the preference
@@ -101,16 +111,6 @@ public class PrefManager {
      */
     public long get(String key, long defaultValue) {
         return preferences.getLong(key, defaultValue);
-    }
-
-    /**
-     * Save a int to the central {@link ObscuredSharedPreferences}
-     *
-     * @param key     Key of the preference
-     * @param value   Value of the preference
-     */
-    public void save(String key, int value) {
-        preferences.edit().putInt(key, value).apply();
     }
 
     /**

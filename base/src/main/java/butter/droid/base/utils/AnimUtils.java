@@ -26,7 +26,9 @@ import butter.droid.base.ButterApplication;
 public class AnimUtils {
 
     public static void fadeIn(View v) {
-        if (v.getVisibility() == View.VISIBLE) return;
+        if (v.getVisibility() == View.VISIBLE) {
+            return;
+        }
         Animation fadeInAnim = AnimationUtils.loadAnimation(ButterApplication.getAppContext(), android.R.anim.fade_in);
         v.setVisibility(View.VISIBLE);
         v.startAnimation(fadeInAnim);
@@ -34,7 +36,9 @@ public class AnimUtils {
     }
 
     public static void fadeOut(View v) {
-        if (v.getVisibility() == View.INVISIBLE) return;
+        if (v.getVisibility() == View.INVISIBLE) {
+            return;
+        }
         Animation fadeOutAnim = AnimationUtils.loadAnimation(ButterApplication.getAppContext(), android.R.anim.fade_out);
         v.startAnimation(fadeOutAnim);
         v.setVisibility(View.INVISIBLE);

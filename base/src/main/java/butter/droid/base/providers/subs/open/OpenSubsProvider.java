@@ -80,7 +80,8 @@ public class OpenSubsProvider extends SubsProvider {
 //                                    }
 //
 //                                    // episode check
-//                                    if (Integer.parseInt(item.get("SeriesIMDBParent")) != Integer.parseInt(episode.imdbId.replace("tt", ""))) {
+//                                    if (Integer.parseInt(item.get("SeriesIMDBParent"))
+//                                              != Integer.parseInt(episode.imdbId.replace("tt", ""))) {
 //                                        continue;
 //                                    }
 //                                    if (!item.get("SeriesSeason").equals(seasonStr)) {
@@ -104,7 +105,8 @@ public class OpenSubsProvider extends SubsProvider {
 //                                    if (!episodeMap.containsKey(lang)) {
 //                                        episodeMap.put(lang, url);
 //                                        scoreMap.put(lang, new Integer[]{score, downloads});
-//                                    } else if (score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0] && downloads > scoreMap.get(lang)[1])) {
+//                                    } else if (score > scoreMap.get(lang)[0] || (score == scoreMap.get(lang)[0]
+//                                              && downloads > scoreMap.get(lang)[1])) {
 //                                        episodeMap.put(lang, url);
 //                                        scoreMap.put(lang, new Integer[]{score, downloads});
 //                                    }
@@ -182,12 +184,12 @@ public class OpenSubsProvider extends SubsProvider {
      * Search for subtitles by imdbId, season and episode
      *
      * @param episode Episode
-     * @param token   Login token
+     * @param token Login token
      * @return SRT URL
      */
     private void search(Episode episode, String token, XMLRPCCallback callback) {
         Map<String, String> option = new HashMap<>();
-//        option.put("imdbid", episode.imdbId.replace("tt", ""));
+//        option.put("imdbId", episode.imdbId.replace("tt", ""));
 //        option.put("season", String.format(Locale.US, "%d", episode.season));
 //        option.put("episode", String.format(Locale.US, "%d", episode.episode));
         option.put("sublanguageid", "all");

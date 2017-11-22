@@ -165,6 +165,7 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
     @Override public void onEvent(final Event event) {
         switch (event.type) {
             case MediaPlayer.Event.Opening:
+                // nothing to do
                 break;
             case MediaPlayer.Event.Playing:
                 if (callback != null) {
@@ -193,7 +194,12 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
                 break;
             case MediaPlayer.Event.TimeChanged:
                 callback.progressChanged(event.getTimeChanged());
+                break;
             case MediaPlayer.Event.PositionChanged:
+                // nothing to do
+                break;
+            default:
+                // nothing to do
                 break;
         }
 
@@ -233,7 +239,8 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
         double displayHeight = layoutHolder.displaySize.y;
 
         // compute the aspect ratio
-        double aspectRatio, visibleWidth;
+        double aspectRatio;
+        double visibleWidth;
         if (layoutHolder.sarNum == layoutHolder.sarDen) {
             /* No indication about the density, assuming 1:1 */
             visibleWidth = layoutHolder.visibleWidth;
@@ -282,6 +289,9 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
             case SURFACE_ORIGINAL:
                 displayHeight = layoutHolder.visibleHeight;
                 displayWidth = visibleWidth;
+                break;
+            default:
+                // nothing to do
                 break;
         }
 

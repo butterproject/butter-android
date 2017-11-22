@@ -46,8 +46,9 @@ public class FileSelectorDialogFragment extends DialogFragment {
     private Listener mListener;
 
     public static void show(FragmentManager fm, Listener listener) {
-        if (sFragment != null)
+        if (sFragment != null) {
             return;
+        }
 
         sFragment = new FileSelectorDialogFragment();
         sFragment.show(fm, "overlay_fragment");
@@ -55,8 +56,9 @@ public class FileSelectorDialogFragment extends DialogFragment {
     }
 
     public static void hide() {
-        if (sFragment == null)
+        if (sFragment == null) {
             return;
+        }
 
         sFragment.dismiss();
         sFragment = null;
@@ -64,7 +66,7 @@ public class FileSelectorDialogFragment extends DialogFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialog_fileselector, container);
-        list = (ListView) view.findViewById(android.R.id.list);
+        list = view.findViewById(android.R.id.list);
 
         currentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         fill(currentDir);
@@ -90,16 +92,17 @@ public class FileSelectorDialogFragment extends DialogFragment {
                     files.add(new Option(file.getName(), "File Size: " + file.length(), file.getAbsolutePath()));
                 }
             }
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
+            // TODO handle this
         }
 
         Collections.sort(dir);
         Collections.sort(files);
         dir.addAll(files);
 
-        if (!f.getName().equalsIgnoreCase("sdcard"))
+        if (!f.getName().equalsIgnoreCase("sdcard")) {
             dir.add(0, new Option("..", "Parent Directory", f.getParent()));
+        }
 
         adapter = new FileArrayAdapter(getActivity(), android.R.layout.simple_list_item_2, dir);
 
@@ -118,8 +121,9 @@ public class FileSelectorDialogFragment extends DialogFragment {
                     currentDir = new File(o.getPath());
                     fill(currentDir);
                 } else {
-                    if (mListener != null)
+                    if (mListener != null) {
                         mListener.onFileSelected(new File(o.getPath()));
+                    }
                 }
             }
         });

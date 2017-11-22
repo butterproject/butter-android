@@ -31,7 +31,7 @@ public class Format {
      * @param pFormatString one of the comma separated strings in the "fmt_list" parameter
      */
     public Format(String pFormatString) {
-        String formatVars[] = pFormatString.split("/");
+        String[] formatVars = pFormatString.split("/");
         mId = Integer.parseInt(formatVars[0]);
     }
 

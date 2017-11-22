@@ -30,8 +30,9 @@ public class PackageUtils {
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         for (ApplicationInfo packageInfo : packages) {
-            if(packageInfo.packageName.equals(packageName))
+            if (packageInfo.packageName.equals(packageName)) {
                 return true;
+            }
         }
 
         return false;

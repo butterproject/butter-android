@@ -29,7 +29,10 @@ public class ThreadUtils {
      */
     public static void runOnUiThread(Runnable runnable) {
         Thread uiThread = Looper.getMainLooper().getThread();
-        if (Thread.currentThread() != uiThread) new Handler(Looper.getMainLooper()).post(runnable);
-        else runnable.run();
+        if (Thread.currentThread() != uiThread) {
+            new Handler(Looper.getMainLooper()).post(runnable);
+        } else {
+            runnable.run();
+        }
     }
 }

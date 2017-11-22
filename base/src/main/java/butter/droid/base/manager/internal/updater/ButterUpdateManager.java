@@ -78,17 +78,17 @@ import okio.Okio;
 public class ButterUpdateManager extends Observable {
 
     public static int NOTIFICATION_ID = 0x808C049;
-    public final String STATUS_NO_UPDATE = "no_updates";
-    public final String STATUS_GOT_UPDATE = "got_update";
+    public static final String STATUS_NO_UPDATE = "no_updates";
+    public static final String STATUS_GOT_UPDATE = "got_update";
 
-    private final long MINUTES = 60 * 1000;
-    private final long HOURS = 60 * MINUTES;
-    private final long DAYS = 24 * HOURS;
-    private final long WAKEUP_INTERVAL = 15 * MINUTES;
-    private long UPDATE_INTERVAL = 3 * HOURS;
+    private static final long MINUTES = 60 * 1000;
+    private static final long HOURS = 60 * MINUTES;
+    private static final long DAYS = 24 * HOURS;
+    private static final long WAKEUP_INTERVAL = 15 * MINUTES;
+    private static long UPDATE_INTERVAL = 3 * HOURS;
 
     public static final String ANDROID_PACKAGE = "application/vnd.android.package-archive";
-    private final String DATA_URLS[] = BuildConfig.UPDATE_URLS;
+    private static final String[] DATA_URLS = BuildConfig.UPDATE_URLS;
     private Integer mCurrentUrl = 0;
 
     public static final String LAST_UPDATE_CHECK = "update_check";
@@ -142,7 +142,7 @@ public class ButterUpdateManager extends Observable {
         ApplicationInfo appinfo = context.getApplicationInfo();
 
         if (new File(appinfo.sourceDir).lastModified() > this.prefManager.get(SHA1_TIME, 0L)) {
-            this.prefManager.save(SHA1_KEY, SHA1(appinfo.sourceDir));
+            this.prefManager.save(SHA1_KEY, hashSHA1(appinfo.sourceDir));
             this.prefManager.save(SHA1_TIME, System.currentTimeMillis());
 
             String updateFile = this.prefManager.get(UPDATE_FILE, "");
@@ -258,7 +258,7 @@ public class ButterUpdateManager extends Observable {
 
                     ApplicationInfo appinfo = mContext.getApplicationInfo();
                     if ((channel == null || channel.checksum.equals(
-                            SHA1(appinfo.sourceDir)) || channel.versionCode <= mVersionCode) && VersionUtils.isUsingCorrectBuild()) {
+                            hashSHA1(appinfo.sourceDir)) || channel.versionCode <= mVersionCode) && VersionUtils.isUsingCorrectBuild()) {
                         setChanged();
                         notifyObservers(STATUS_NO_UPDATE);
                     } else {
@@ -299,7 +299,7 @@ public class ButterUpdateManager extends Observable {
                             Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
 
                     prefManager.getPrefs().edit()
-                            .putString(SHA1_KEY, SHA1(updateFilePath))
+                            .putString(SHA1_KEY, hashSHA1(updateFilePath))
                             .putString(UPDATE_FILE, updateFilePath)
                             .putLong(SHA1_TIME, System.currentTimeMillis())
                             .apply();
@@ -332,14 +332,13 @@ public class ButterUpdateManager extends Observable {
         }
     };
 
-    private String SHA1(String filename) {
-        final int BUFFER_SIZE = 8192;
-        byte[] buf = new byte[BUFFER_SIZE];
+    private String hashSHA1(String filename) {
+        byte[] buf = new byte[8192];
         int length;
         try {
             FileInputStream fis = new FileInputStream(filename);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            MessageDigest md = MessageDigest.getInstance("SHA1");
+            MessageDigest md = MessageDigest.getInstance("hashSHA1");
             while ((length = bis.read(buf)) != -1) {
                 md.update(buf, 0, length);
             }
@@ -358,13 +357,14 @@ public class ButterUpdateManager extends Observable {
     }
 
     private static int crc32(String str) {
-        byte bytes[] = str.getBytes();
+        byte[] bytes = str.getBytes();
         Checksum checksum = new CRC32();
         checksum.update(bytes, 0, bytes.length);
         return (int) checksum.getValue();
     }
 
     public interface Listener {
+
         void updateAvailable(String fileName);
     }
 

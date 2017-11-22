@@ -1,18 +1,3 @@
-/**
- * Copyright 2015 Steve Liles
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.sjl.foreground;
 
 import android.app.Activity;
@@ -38,24 +23,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * 2.b) Register to be notified (useful in Service or other non-UI components):
  *
- *   Foreground.Listener myListener = new Foreground.Listener(){
- *       public void onBecameForeground(){
- *           // ... whatever you want to do
- *       }
- *       public void onBecameBackground(){
- *           // ... whatever you want to do
- *       }
- *   }
+ * Foreground.Listener myListener = new Foreground.Listener(){
+ * public void onBecameForeground(){
+ * // ... whatever you want to do
+ * }
+ * public void onBecameBackground(){
+ * // ... whatever you want to do
+ * }
+ * }
  *
- *   public void onCreate(){
- *      super.onCreate();
- *      Foreground.get(getApplication()).addListener(listener);
- *   }
+ * public void onCreate(){
+ * super.onCreate();
+ * Foreground.get(getApplication()).addListener(listener);
+ * }
  *
- *   public void onDestroy(){
- *      super.onCreate();
- *      Foreground.get(getApplication()).removeListener(listener);
- *   }
+ * public void onDestroy(){
+ * super.onCreate();
+ * Foreground.get(getApplication()).removeListener(listener);
+ * }
  */
 public class Foreground implements Application.ActivityLifecycleCallbacks {
 
@@ -63,20 +48,24 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
     public static final long CHECK_DELAY = 2000;
 
     public interface Listener {
+
         void onBecameForeground();
 
         void onBecameBackground();
     }
 
     public interface Binding {
+
         void unbind();
     }
 
     private interface Callback {
+
         void invoke(Listener listener);
     }
 
     private static class Listeners {
+
         private List<WeakReference<Listener>> listeners = new CopyOnWriteArrayList<>();
 
         public Binding add(Listener listener) {
@@ -94,10 +83,11 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
                 try {
                     WeakReference<Listener> wr = it.next();
                     Listener l = wr.get();
-                    if (l != null)
+                    if (l != null) {
                         callback.invoke(l);
-                    else
+                    } else {
                         it.remove();
+                    }
                 } catch (Exception exc) {
                     Log.e(TAG, "Listener threw exception!", exc);
                 }

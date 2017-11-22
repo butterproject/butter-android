@@ -128,6 +128,7 @@ public class YSubsProvider extends SubsProvider {
     }
 
     private class YSubsResponse {
+
         public boolean success;
         public int subtitles;
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, Object>>>> subs;
@@ -141,7 +142,9 @@ public class YSubsProvider extends SubsProvider {
                     HashMap<String, ArrayList<HashMap<String, Object>>> langMap = subs.get(imdbId);
                     String[] langs = getKeys(langMap);
                     for (String lang : langs) {
-                        if (langMap.get(lang).size() <= 0) continue;
+                        if (langMap.get(lang).size() <= 0) {
+                            continue;
+                        }
                         ArrayList<HashMap<String, Object>> subMap = langMap.get(lang);
                         int currentRating = -1;
                         String currentSub = "";

@@ -126,7 +126,7 @@ public class YouTubeManager {
         final String fmtList = URLDecoder.decode(argMap.get("fmt_list"), "utf-8");
         final List<Format> formats = new ArrayList<>();
         if (null != fmtList) {
-            final String formatStrs[] = fmtList.split(",");
+            final String[] formatStrs = fmtList.split(",");
 
             for (String lFormatStr : formatStrs) {
                 final Format format = new Format(lFormatStr);
@@ -137,7 +137,7 @@ public class YouTubeManager {
         //Populate the list of streams for the video
         final String streamList = argMap.get("url_encoded_fmt_stream_map");
         if (null != streamList) {
-            final String streamStrs[] = streamList.split(",");
+            final String[] streamStrs = streamList.split(",");
             final List<VideoStream> streams = new ArrayList<>();
             for (String streamStr : streamStrs) {
                 final VideoStream lStream = new VideoStream(streamStr);

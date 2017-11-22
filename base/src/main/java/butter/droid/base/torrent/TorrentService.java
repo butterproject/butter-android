@@ -17,6 +17,8 @@
 
 package butter.droid.base.torrent;
 
+import static butter.droid.base.ButterApplication.getAppContext;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -47,8 +49,6 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-import static butter.droid.base.ButterApplication.getAppContext;
-
 public class TorrentService extends Service implements TorrentListener {
 
     public static final Integer NOTIFICATION_ID = 3423423;
@@ -63,7 +63,9 @@ public class TorrentService extends Service implements TorrentListener {
     private Torrent mCurrentTorrent;
     private StreamStatus mStreamStatus;
 
-    private boolean mInForeground = false, mIsReady = false, mStopped = false;
+    private boolean mInForeground = false;
+    private boolean mIsReady = false;
+    private boolean mStopped = false;
 
     private IBinder mBinder = new ServiceBinder();
     private List<TorrentListener> mListener = new ArrayList<>();
@@ -73,6 +75,7 @@ public class TorrentService extends Service implements TorrentListener {
     private Timer mUpdateTimer;
 
     public class ServiceBinder extends Binder {
+
         public TorrentService getService() {
             return TorrentService.this;
         }
@@ -402,6 +405,7 @@ public class TorrentService extends Service implements TorrentListener {
     }
 
     private class UpdateTask extends TimerTask {
+
         @Override
         public void run() {
             if (mInForeground) {

@@ -54,9 +54,9 @@ public enum TorrentHealth {
                 return GOOD;
             case 3:
                 return EXCELLENT;
+            default:
+                return UNKNOWN;
         }
-
-        return UNKNOWN;
     }
 
     public int getImageResource() {
@@ -93,7 +93,7 @@ public enum TorrentHealth {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public Drawable getImageDrawable(Context context) {
-        if(VersionUtils.isLollipop()) {
+        if (VersionUtils.isLollipop()) {
             return context.getResources().getDrawable(getImageResource(), null);
         }
         return context.getResources().getDrawable(getImageResource());

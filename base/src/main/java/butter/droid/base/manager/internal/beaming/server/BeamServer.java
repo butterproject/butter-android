@@ -20,7 +20,7 @@ package butter.droid.base.manager.internal.beaming.server;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
-
+import butter.droid.base.ButterApplication;
 import com.koushikdutta.async.AsyncServer;
 import com.koushikdutta.async.http.Headers;
 import com.koushikdutta.async.http.HttpDate;
@@ -28,29 +28,31 @@ import com.koushikdutta.async.http.server.AsyncHttpServer;
 import com.koushikdutta.async.http.server.AsyncHttpServerRequest;
 import com.koushikdutta.async.http.server.AsyncHttpServerResponse;
 import com.koushikdutta.async.http.server.HttpServerRequestCallback;
-
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
-
-import butter.droid.base.ButterApplication;
-import butter.droid.base.utils.FileUtils;
 import timber.log.Timber;
 
 public class BeamServer {
 
-    public static final FileType
-            MP4 = new FileType("mp4", "video/mp4", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            AVI = new FileType("avi", "video/x-msvideo", "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            MKV = new FileType("mkv", "video/x-matroska", "DLNA.ORG_PN=AVC_MKV_MP_HD_AC3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming"),
-            SRT = new FileType("srt", "application/x-subrip", "*", ""),
-            VTT = new FileType("vtt", "text/vtt", "*", "");
+    public static final FileType MP4 = new FileType("mp4", "video/mp4",
+            "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000", "Streaming");
+    public static final FileType AVI = new FileType("avi", "video/x-msvideo",
+                    "DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+                    "Streaming");
+    public static final FileType MKV = new FileType("mkv", "video/x-matroska",
+                    "DLNA.ORG_PN=AVC_MKV_MP_HD_AC3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+                    "Streaming");
+    public static final FileType SRT = new FileType("srt", "application/x-subrip", "*", "");
+    public static final FileType VTT = new FileType("vtt", "text/vtt", "*", "");
     private static FileType[] FILE_TYPES = {MP4, AVI, MKV};
     private static FileType[] SUB_TYPES = {SRT, VTT};
-    private static HashMap<String, FileType> EXTENSIONS, CONTENT_TYPES;
+    private static HashMap<String, FileType> EXTENSIONS;
+    private static HashMap<String, FileType> CONTENT_TYPES;
     private static String sHost;
     private static Integer sPort;
-    private static File sCurrentVideo = null, sCurrentSubs = null;
+    private static File sCurrentVideo = null;
+    private static File sCurrentSubs = null;
     private AsyncServer mAsyncServer = new AsyncServer();
     private AsyncHttpServer mHttpServer;
     private PowerManager.WakeLock mWakeLock;
@@ -86,7 +88,7 @@ public class BeamServer {
             mHttpServer.addAction("HEAD", "/video." + localFileType.extension, localVideoFileReponse);
         }
 
-        for(FileType localSubsFileType : SUB_TYPES) {
+        for (FileType localSubsFileType : SUB_TYPES) {
             SubtitleFileResponse localSubsFileReponse = new SubtitleFileResponse(localSubsFileType);
             mHttpServer.get("/video." + localSubsFileType.extension, localSubsFileReponse);
             mHttpServer.addAction("HEAD", "/video." + localSubsFileType.extension, localSubsFileReponse);
@@ -105,8 +107,12 @@ public class BeamServer {
         sCurrentVideo = file;
     }
 
+    public static void setCurrentVideo(String file) {
+        setCurrentVideo(new File(file));
+    }
+
     public static void setCurrentSubs(File file) {
-        if(file == null) {
+        if (file == null) {
             sCurrentSubs = null;
             return;
         }
@@ -130,10 +136,6 @@ public class BeamServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void setCurrentVideo(String file) {
-        setCurrentVideo(new File(file));
     }
 
     public static void setCurrentSubs(String file) {
@@ -172,19 +174,24 @@ public class BeamServer {
     }
 
     public void stop() {
-        if(mHttpServer != null)
+        if (mHttpServer != null) {
             mHttpServer.stop();
+        }
         AsyncServer.getDefault().stop();
-        if(mAsyncServer != null)
+        if (mAsyncServer != null) {
             mAsyncServer.stop();
+        }
 
-        if(mWifiLock != null && mWifiLock.isHeld())
-        mWifiLock.release();
-        if(mWakeLock != null && mWakeLock.isHeld())
-        mWakeLock.release();
+        if (mWifiLock != null && mWifiLock.isHeld()) {
+            mWifiLock.release();
+        }
+        if (mWakeLock != null && mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
     }
 
     public static class FileType {
+
         public final String dlnaContentFeatures;
         public final String dlnaTransferMode;
         public final String extension;
@@ -221,6 +228,7 @@ public class BeamServer {
     }
 
     class VideoFileReponse implements HttpServerRequestCallback {
+
         FileType mFileType;
 
         public VideoFileReponse(FileType fileType) {
@@ -241,6 +249,7 @@ public class BeamServer {
     }
 
     class SubtitleFileResponse implements HttpServerRequestCallback {
+
         FileType mFileType;
 
         public SubtitleFileResponse(FileType fileType) {

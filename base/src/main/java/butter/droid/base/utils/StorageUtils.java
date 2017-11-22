@@ -67,8 +67,9 @@ public class StorageUtils {
 
                         // don't add the default mount path
                         // it's already in the list.
-                        if (!element.equals("/mnt/sdcard"))
+                        if (!element.equals("/mnt/sdcard")) {
                             mMounts.add(element);
+                        }
                     }
                 }
             }
@@ -86,10 +87,12 @@ public class StorageUtils {
                         String[] lineElements = line.split(" ");
                         String element = lineElements[2];
 
-                        if (element.contains(":"))
+                        if (element.contains(":")) {
                             element = element.substring(0, element.indexOf(":"));
-                        if (!element.equals("/mnt/sdcard"))
+                        }
+                        if (!element.equals("/mnt/sdcard")) {
                             mVold.add(element);
+                        }
                     }
                 }
             }
@@ -97,11 +100,11 @@ public class StorageUtils {
             e.printStackTrace();
         }
 
-
         for (int i = 0; i < mMounts.size(); i++) {
             String mount = mMounts.get(i);
-            if (!mVold.contains(mount))
+            if (!mVold.contains(mount)) {
                 mMounts.remove(i--);
+            }
         }
         mVold.clear();
 
@@ -230,7 +233,9 @@ public class StorageUtils {
             commaOffset -= 3;
         }
 
-        if (suffix != null) resultBuffer.append(suffix);
+        if (suffix != null) {
+            resultBuffer.append(suffix);
+        }
         return resultBuffer.toString();
     }
 }

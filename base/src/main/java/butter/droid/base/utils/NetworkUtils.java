@@ -31,9 +31,9 @@ import butter.droid.base.ButterApplication;
 @Deprecated
 public class NetworkUtils {
 
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      * is wifi connected
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     /**
      * Get whether or not a wifi connection is currently connected.
@@ -49,7 +49,7 @@ public class NetworkUtils {
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      * is ethernet connected
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     /**
      * Get whether or not an ethernet connection is currently connected.
@@ -63,9 +63,9 @@ public class NetworkUtils {
         }
     }
 
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	 * is network connected
-	 * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     * is network connected
+     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     /**
      * Get whether or not any network connection is present (eg. wifi, 3G, etc.).

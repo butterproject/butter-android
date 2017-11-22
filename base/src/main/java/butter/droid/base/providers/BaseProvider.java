@@ -63,7 +63,7 @@ public abstract class BaseProvider {
     /**
      * Enqueue request with callback
      *
-     * @param request         Request
+     * @param request Request
      * @param requestCallback Callback
      * @return Call
      */
@@ -122,17 +122,19 @@ public abstract class BaseProvider {
                 stringBuilder.append(URLEncoder.encode(pair.getName(), "utf-8"));
                 stringBuilder.append("=");
                 stringBuilder.append(URLEncoder.encode(pair.getValue(), "utf-8"));
-                if (i + 1 != valuePairs.size()) stringBuilder.append("&");
+                if (i + 1 != valuePairs.size()) {
+                    stringBuilder.append("&");
+                }
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-
         return stringBuilder.toString();
     }
 
     public class NameValuePair {
+
         private String mName;
         private String mValue;
 
