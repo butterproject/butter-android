@@ -17,7 +17,7 @@
 
 package butter.droid.ui.beam.fragment;
 
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 
 public interface BeamPlayerPresenter {
 

@@ -42,7 +42,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
 import java.util.ArrayList;

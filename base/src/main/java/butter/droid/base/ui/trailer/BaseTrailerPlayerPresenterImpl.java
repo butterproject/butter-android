@@ -24,7 +24,7 @@ import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import java.net.URLDecoder;
 import timber.log.Timber;

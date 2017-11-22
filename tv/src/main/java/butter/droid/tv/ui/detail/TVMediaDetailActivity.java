@@ -21,7 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;

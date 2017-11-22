@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.detail;
 
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
 import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 

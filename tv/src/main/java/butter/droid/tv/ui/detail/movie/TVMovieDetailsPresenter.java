@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.detail.movie;
 
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
 
 public interface TVMovieDetailsPresenter extends TVBaseDetailsPresenter {

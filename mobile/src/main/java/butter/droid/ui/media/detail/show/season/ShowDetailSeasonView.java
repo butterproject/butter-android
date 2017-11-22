@@ -18,7 +18,7 @@
 package butter.droid.ui.media.detail.show.season;
 
 import android.support.annotation.ColorInt;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
 import java.util.List;
 

@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butterknife.BindView;

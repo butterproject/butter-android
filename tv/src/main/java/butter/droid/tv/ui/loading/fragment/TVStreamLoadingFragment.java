@@ -24,7 +24,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;

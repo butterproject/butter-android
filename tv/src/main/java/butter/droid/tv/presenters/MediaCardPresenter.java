@@ -29,7 +29,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.provider.base.module.Media;
 import butter.droid.tv.R;

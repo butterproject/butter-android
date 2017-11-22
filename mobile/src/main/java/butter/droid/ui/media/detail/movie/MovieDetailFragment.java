@@ -35,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;

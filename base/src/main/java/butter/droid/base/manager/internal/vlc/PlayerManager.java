@@ -30,7 +30,7 @@ import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.module.Media;
 import java.io.File;

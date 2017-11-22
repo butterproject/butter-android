@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.base.providers.model;
+package butter.droid.base.providers.media.model;
 
 import android.graphics.Color;
 import android.os.Parcel;

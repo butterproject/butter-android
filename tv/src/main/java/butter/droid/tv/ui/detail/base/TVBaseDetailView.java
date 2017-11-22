@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.detail.base;
 
 import android.support.annotation.StringRes;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 
 public interface TVBaseDetailView {
 

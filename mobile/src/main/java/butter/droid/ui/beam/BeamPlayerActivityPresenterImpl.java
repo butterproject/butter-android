@@ -18,7 +18,7 @@
 package butter.droid.ui.beam;
 
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 
 public class BeamPlayerActivityPresenterImpl implements BeamPlayerActivityPresenter {
 

@@ -21,7 +21,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

@@ -23,7 +23,7 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Media;

@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;

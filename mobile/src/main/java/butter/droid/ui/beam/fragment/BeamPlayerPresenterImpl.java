@@ -21,7 +21,7 @@ import android.support.annotation.Nullable;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.providers.model.StreamInfo;
+import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.ui.beam.BeamPlayerActivityPresenter;
 import com.connectsdk.device.ConnectableDevice;

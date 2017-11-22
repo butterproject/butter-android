@@ -27,7 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butter.droid.R;
-import butter.droid.base.providers.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
