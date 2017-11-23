@@ -1,2 +1,3 @@
-include ':mobile', ':base', ':connectsdk', ':tv', ':provider:media:base', ':provider:media:provider', ':provider:media:mock',
-        ':provider:media:vodo', ':provider:subs:provider', ':provider:subs:mock'
+include ':mobile', ':base', ':tv', ':provider:media:base', ':provider:media:provider', ':provider:media:mock',
+        ':provider:media:vodo', ':provider:subs:provider', ':provider:subs:mock',
+        ':connectsdk:core', ':connectsdk:modules:firetv', ':connectsdk:modules:google_cast'

@@ -63,7 +63,11 @@ dependencies {
     api "com.google.dagger:dagger:$daggerVersion"
 
     api 'com.butterproject:vlc-android-sdk:2.5.7.1'
-    api project(':connectsdk')
+
+    api project(':connectsdk:core')
+    api project(':connectsdk:modules:firetv')
+    api project(':connectsdk:modules:google_cast')
+
     api project(':provider:media:provider')
     api project(':provider:media:mock')
     api project(':provider:media:vodo')
