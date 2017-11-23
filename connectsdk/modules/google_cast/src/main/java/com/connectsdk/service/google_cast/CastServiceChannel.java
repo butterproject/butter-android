@@ -28,7 +28,7 @@ import com.google.android.gms.cast.CastDevice;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CastServiceChannel implements Cast.MessageReceivedCallback{
+public class CastServiceChannel implements Cast.MessageReceivedCallback {
     String webAppId;
     CastWebAppSession session;
 
