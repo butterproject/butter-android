@@ -31,6 +31,7 @@ import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
+import butter.droid.base.manager.internal.foreground.ForegroundManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
@@ -38,7 +39,6 @@ import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.VersionUtils;
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.picasso.Picasso;
 import java.io.File;
@@ -54,6 +54,7 @@ public abstract class ButterApplication extends Application implements ButterUpd
     @Inject ButterUpdateManager updateManager;
     @Inject BeamManager beamManager;
     @Inject PreferencesHandler preferencesHandler;
+    @Inject ForegroundManager foregroundManager; // inject just so it is initialized
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -73,7 +74,6 @@ public abstract class ButterApplication extends Application implements ButterUpd
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
         LeakCanary.install(this);
-        Foreground.init(this);
 
         Constants.DEBUG_ENABLED = false;
         try {

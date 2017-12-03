@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 
 @Module(
         includes = {
+                BaseApplicationBindModule.class,
                 BaseAndroidModule.class,
                 DataModule.class,
                 TypeModule.class
@@ -41,7 +42,7 @@ public class BaseApplicationModule {
         this.application = application;
     }
 
-    @Provides @Singleton public Context provideContext() {
+    @Provides @Singleton public ButterApplication provdeButterApplication() {
         return application;
     }
 

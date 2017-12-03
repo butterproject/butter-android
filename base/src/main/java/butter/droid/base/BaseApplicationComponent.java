@@ -17,6 +17,7 @@
 
 package butter.droid.base;
 
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -35,6 +36,8 @@ import okhttp3.OkHttpClient;
 public interface BaseApplicationComponent {
 
     Context context();
+
+    Application application();
 
     OkHttpClient okHttpClient();
 
