@@ -24,9 +24,7 @@ import android.support.v4.app.Fragment;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.ui.TVBaseActivity;
 import javax.inject.Inject;
 import org.parceler.Parcels;
@@ -40,18 +38,8 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
     @Inject TVMediaDetailPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
 
-    private TVMediaDetailComponent component;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        component = TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .tvMediaDetailComponentBuilder()
-                .mediaDetailModule(new TVMediaDetailModule(this))
-                .backgroundUpdaterModule(new BackgroundUpdaterModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_media_details);
 
         backgroundUpdater.initialise(this, R.color.black);
@@ -87,10 +75,6 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
     @Override public void updateBackground(String url) {
         backgroundUpdater.updateBackground(url);
-    }
-
-    public TVMediaDetailComponent getComponent() {
-        return component;
     }
 
     public static Intent getIntent(final Context context, final MediaWrapper item) {

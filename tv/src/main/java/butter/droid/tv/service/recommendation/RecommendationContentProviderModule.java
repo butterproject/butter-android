@@ -15,18 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.about;
+package butter.droid.tv.service.recommendation;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v17.leanback.widget.GuidedAction;
+import dagger.Module;
 
-import java.util.List;
+@Module
+public class RecommendationContentProviderModule {
 
-import butter.droid.base.ui.about.BaseAboutPresenter;
-
-public interface TvAboutPresenter extends BaseAboutPresenter {
-    void aboutButtonClicked(@AboutLinks int id);
-
-    void createActions(@NonNull Context context, @NonNull List<GuidedAction> actions);
 }

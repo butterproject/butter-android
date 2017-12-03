@@ -17,10 +17,11 @@
 
 package butter.droid.tv.ui.trailer;
 
+import android.content.Context;
 import android.os.Bundle;
 import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
+import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
@@ -31,15 +32,12 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
 
     @Inject TVTrailerPlayerPresenter presenter;
 
-    @Override public void onCreate(final Bundle savedInstanceState) {
-        TVTrailerPlayerActivity activity = (TVTrailerPlayerActivity) getActivity();
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .tvTrailerPlayerComponentBuilder()
-                .trailerPlayerModule(new TVTrailerPlayerModule(this, activity))
-                .build()
-                .inject(this);
+    @Override public void onAttach(final Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
+    @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();

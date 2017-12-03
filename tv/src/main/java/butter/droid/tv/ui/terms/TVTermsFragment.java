@@ -18,34 +18,30 @@
 package butter.droid.tv.ui.terms;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
+import dagger.android.AndroidInjection;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TVTermsFragment extends GuidedStepFragment implements TVTermsView {
 
     @Inject TVTermsPresenter presenter;
     @Inject PrefManager prefManager;
 
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .termsComponentBuilder()
-                .termsModule(new TVTermsModule(this))
-                .build()
-                .inject(this);
     }
 
     @NonNull

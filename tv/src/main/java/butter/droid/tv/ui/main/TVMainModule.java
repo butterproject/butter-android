@@ -17,25 +17,33 @@
 
 package butter.droid.tv.ui.main;
 
+import android.app.Activity;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.ui.main.TVMainModule.TVMainBindModule;
+import butter.droid.tv.ui.main.overview.TVOverviewFragment;
+import butter.droid.tv.ui.main.overview.TVOverviewModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = TVMainBindModule.class)
 public class TVMainModule {
-
-    private final TVMainView view;
-
-    public TVMainModule(final TVMainView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope TVMainView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope TVMainPresenter providePresenter(TVMainView view, ButterUpdateManager updateManager) {
         return new TVMainPresenterImpl(view, updateManager);
+    }
+
+    @Module
+    public interface TVMainBindModule {
+        @Binds TVMainView bindView(TVMainActivity activity);
+
+        @Binds Activity bindActivity(TVMainActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = TVOverviewModule.class)
+        TVOverviewFragment contributeTVOverviewFragmentInjector();
     }
 }

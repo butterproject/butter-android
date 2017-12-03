@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.detail.movie;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v4.app.Fragment;
@@ -25,10 +26,10 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
-import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
+import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
@@ -37,15 +38,13 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
     @Inject TVMovieDetailsPresenter presenter;
     @Inject PreferencesHandler preferencesHandler;
 
+    @Override public void onAttach(final Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((TVMediaDetailActivity) getActivity())
-                .getComponent()
-                .movieDetailComponentBuilder()
-                .movieDetailModule(new TVMovieDetailModule(this))
-                .build()
-                .inject(this);
 
         Bundle arguments = getArguments();
         final MediaWrapper item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));

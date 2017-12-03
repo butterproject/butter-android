@@ -20,23 +20,20 @@ package butter.droid.tv.ui.launch;
 import android.content.Context;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.tv.ui.launch.TVLaunchModule.TVLaunchBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = TVLaunchBindModule.class)
 public class TVLaunchModule {
-
-    private final TVLaunchView view;
-
-    public TVLaunchModule(final TVLaunchView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope public TVLaunchView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope public TVLaunchPresenter providePresneter(TVLaunchView view, Context context, PrefManager prefManager) {
         return new TVLaunchPresenterImpl(view, context, prefManager);
+    }
+
+    @Module
+    public interface TVLaunchBindModule {
+        @Binds TVLaunchView bindView(TVLaunchActivity activity);
     }
 }

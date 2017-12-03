@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.update;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ import android.support.v17.leanback.widget.GuidedAction;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
+import dagger.android.AndroidInjection;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -35,12 +36,13 @@ public class TVUpdateFragment extends GuidedStepFragment {
 
     @Inject PrefManager prefManager;
 
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
     }
 
     @NonNull

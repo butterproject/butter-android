@@ -15,26 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.loading.fragment;
+package butter.droid.tv.ui.about;
 
-import butter.droid.base.ui.FragmentScope;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
-import dagger.Subcomponent;
+import butter.droid.base.ui.about.BaseAboutView;
 
-@Subcomponent(modules = TVStreamLoadingFragmentModule.class)
-@FragmentScope
-public interface TVStreamLoadingFragmentComponent {
-
-    void inject(TVStreamLoadingFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-
-        Builder tvStreamLoadingFragmentModule(TVStreamLoadingFragmentModule module);
-
-        Builder backgroundUpdaterModule(BackgroundUpdaterModule module);
-
-        TVStreamLoadingFragmentComponent build();
-
-    }
+public interface TVAboutView extends BaseAboutView {
 
 }

@@ -20,19 +20,13 @@ package butter.droid.tv.ui.terms;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVTermsActivity extends TVBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_terms);
     }
 

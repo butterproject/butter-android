@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.search;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -32,15 +33,14 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
+import dagger.android.AndroidInjection;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -55,17 +55,13 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
     private ListRowPresenter listRowPresenter;
     private ListRow loadingRow;
 
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .searchComponentBuilder()
-                .searchModule(new TVSearchModule(this))
-                .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))
-                .build()
-                .inject(this);
-
         presenter.onCreate();
     }
 

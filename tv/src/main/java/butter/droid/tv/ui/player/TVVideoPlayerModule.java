@@ -17,9 +17,17 @@
 
 package butter.droid.tv.ui.player;
 
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.ui.player.video.TVPlayerFragment;
+import butter.droid.tv.ui.player.video.TVPlayerModule;
 import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
 @Module
-public class TVVideoPlayerModule {
+public interface TVVideoPlayerModule {
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = TVPlayerModule.class)
+    abstract TVPlayerFragment contributeTVPlayerFragmentInjector();
 
 }

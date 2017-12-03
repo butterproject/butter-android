@@ -17,17 +17,18 @@
 
 package butter.droid.tv.ui.player.video;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.tv.R;
-import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 
 public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerView, TorrentListener {
@@ -36,15 +37,13 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
 
     @Inject TVPlayerPresenter presenter;
 
+    @Override public void onAttach(final Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((TVVideoPlayerActivity) getActivity())
-                .getComponent()
-                .tvPlayerComponentBuilder()
-                .tvPlayerModule(new TVPlayerModule(this))
-                .build()
-                .inject(this);
-
         super.onCreate(savedInstanceState);
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);

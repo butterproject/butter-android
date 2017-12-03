@@ -18,7 +18,6 @@
 package butter.droid.tv.manager.internal.background;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.BackgroundManager;
 import com.squareup.picasso.Target;
 import dagger.Module;
@@ -27,16 +26,6 @@ import dagger.Reusable;
 
 @Module
 public class BackgroundUpdaterModule {
-
-    @NonNull private final Activity activity;
-
-    public BackgroundUpdaterModule(@NonNull final Activity activity) {
-        this.activity = activity;
-    }
-
-    @Provides @Reusable Activity provideActivity() {
-        return activity;
-    }
 
     @Provides @Reusable BackgroundManager backgroundManager(Activity activity) {
         return BackgroundManager.getInstance(activity);

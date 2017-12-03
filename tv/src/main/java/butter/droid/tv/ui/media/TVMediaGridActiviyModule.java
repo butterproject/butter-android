@@ -17,24 +17,19 @@
 
 package butter.droid.tv.ui.media;
 
+import android.app.Activity;
 import butter.droid.base.ui.FragmentScope;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
-import dagger.Subcomponent;
+import dagger.Binds;
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
-@Subcomponent(modules = TVMediaGridModule.class)
-@FragmentScope
-public interface TVMediaGridComponent {
+@Module
+public interface TVMediaGridActiviyModule {
 
-    void inject(TVMediaGridFragment fragment);
+    @Binds Activity bindActivity(TVMediaGridActivity activity);
 
-    @Subcomponent.Builder interface Builder {
-
-        Builder mediaGridModule(TVMediaGridModule module);
-
-        Builder backgroundUpdaterModule(BackgroundUpdaterModule module);
-
-        TVMediaGridComponent build();
-
-    }
+    @FragmentScope
+    @ContributesAndroidInjector(modules = TVMediaGridModule.class)
+    TVMediaGridFragment contributeTVMediaGridFragmentInjector();
 
 }

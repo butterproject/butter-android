@@ -26,4 +26,6 @@ public interface TVTrailerPlayerBindModule {
 
     @Binds TVAbsPlayerPresenter bindBasePresenter(TVTrailerPlayerPresenter presenter);
 
+    @Binds TVTrailerPlayerView bindView(TVTrailerPlayerFragment fragment);
+
 }

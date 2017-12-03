@@ -36,9 +36,7 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.manager.internal.paging.GridPagingAdapter;
 import butter.droid.tv.manager.internal.paging.GridPagingManager;
 import butter.droid.tv.presenters.LoadingCardPresenter;
@@ -73,14 +71,6 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .tvMediaGridComponentBuilder()
-                .mediaGridModule(new TVMediaGridModule(this))
-                .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))
-                .build()
-                .inject(this);
 
         backgroundUpdater.initialise(getActivity(), R.color.black);
         setupUi();

@@ -21,26 +21,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.ui.update.TVUpdateActivity;
 import butter.droid.tv.ui.TVBaseActivity;
+import butter.droid.tv.ui.update.TVUpdateActivity;
 import javax.inject.Inject;
 
 public class TVMainActivity extends TVBaseActivity implements TVMainView {
 
     @Inject TVMainPresenter presenter;
 
-    private TVMainComponent component;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        component = TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .tvMainComponentBuilder()
-                .mainModule(new TVMainModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_main);
     }
 
@@ -53,10 +43,6 @@ public class TVMainActivity extends TVBaseActivity implements TVMainView {
 
     @Override public void showUpdateActivity() {
         startActivity(TVUpdateActivity.newIntent(this));
-    }
-
-    public TVMainComponent getComponent() {
-        return component;
     }
 
     public static Intent startActivity(Activity activity) {

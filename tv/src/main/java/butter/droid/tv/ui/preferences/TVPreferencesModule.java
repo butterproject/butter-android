@@ -25,27 +25,24 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.ui.preferences.TVPreferencesModule.TVPreferencesBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = TVPreferencesBindModule.class)
 public class TVPreferencesModule {
-
-    private final TVPreferencesView view;
-
-    public TVPreferencesModule(TVPreferencesView view) {
-        this.view = view;
-    }
-
-    @FragmentScope @Provides TVPreferencesView provideView() {
-        return view;
-    }
 
     @FragmentScope @Provides TVPreferencesPresenter providePresenter(TVPreferencesView view, Context context,
             PreferencesHandler preferencesHandler, Resources resources, PrefManager prefManager,
             PlayerManager playerManager, ButterUpdateManager updateManager) {
         return new TVPreferencesPresenterImpl(view, context, preferencesHandler, resources, prefManager,
                 playerManager, updateManager);
+    }
+
+    @Module
+    public interface TVPreferencesBindModule {
+        @Binds TVPreferencesView bindView(TVPreferencesFragment fragment);
     }
 
 }

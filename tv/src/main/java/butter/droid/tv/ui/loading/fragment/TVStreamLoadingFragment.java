@@ -17,7 +17,6 @@
 
 package butter.droid.tv.ui.loading.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,8 +27,6 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
-import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.player.TVVideoPlayerActivity;
 import javax.inject.Inject;
 
@@ -37,17 +34,6 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment implement
 
     @Inject TVStreamLoadingFragmentPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
-
-    @Override public void onAttach(Context context) {
-        super.onAttach(context);
-
-        ((TVStreamLoadingActivity) context).getComponent()
-                .streamLoadingFragmentComponentBuilder()
-                .tvStreamLoadingFragmentModule(new TVStreamLoadingFragmentModule(this))
-                .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))
-                .build()
-                .inject(this);
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

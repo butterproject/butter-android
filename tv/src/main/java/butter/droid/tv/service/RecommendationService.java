@@ -17,7 +17,6 @@
 
 package butter.droid.tv.service;
 
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
@@ -30,10 +29,10 @@ import butter.droid.provider.base.module.Media;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Show;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.recommendation.RecommendationBuilder;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
+import dagger.android.DaggerIntentService;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class RecommendationService extends IntentService {
+public class RecommendationService extends DaggerIntentService {
 
     @Inject ProviderManager providerManager;
 
@@ -60,10 +59,6 @@ public class RecommendationService extends IntentService {
 
     @Override public void onCreate() {
         super.onCreate();
-
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
     }
 
     @Override

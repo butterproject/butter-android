@@ -18,25 +18,22 @@
 package butter.droid.tv.ui.terms;
 
 import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.ui.terms.TVTermsModule.TVTermsBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = TVTermsBindModule.class)
 public class TVTermsModule {
 
-    private final TVTermsView view;
-
-    public TVTermsModule(TVTermsView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope TVTermsView provideView() {
-        return view;
-    }
-
-    @Provides @ActivityScope TVTermsPresenter providePresenter(TVTermsView view, PrefManager prefManager) {
+    @Provides @FragmentScope TVTermsPresenter providePresenter(TVTermsView view, PrefManager prefManager) {
         return new TVTermsPresenterImpl(view, prefManager);
+    }
+
+    @Module
+    public interface TVTermsBindModule {
+        @Binds TVTermsView bindView(TVTermsFragment fragment);
     }
 
 }

@@ -21,21 +21,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 
 
 public class TVSearchActivity extends TVBaseActivity {
 
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_search);
     }
 

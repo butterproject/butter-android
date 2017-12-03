@@ -17,26 +17,45 @@
 
 package butter.droid.tv.ui.detail;
 
+import android.app.Activity;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import butter.droid.tv.ui.detail.TVMediaDetailModule.TVMediaDetailBindModule;
+import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
+import butter.droid.tv.ui.detail.movie.TVMovieDetailsModule;
+import butter.droid.tv.ui.detail.show.TVShowDetailModule;
+import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module(includes = BackgroundUpdaterModule.class)
+@Module(includes = {
+        BackgroundUpdaterModule.class,
+        TVMediaDetailBindModule.class}
+)
 public class TVMediaDetailModule {
 
-    private final TVMediaDetailView view;
-
-    public TVMediaDetailModule(final TVMediaDetailView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope TVMediaDetailView provideView() {
-        return view;
-    }
-
-    @Provides @ActivityScope TVMediaDetailPresenter providePresenter() {
+    @Provides @ActivityScope TVMediaDetailPresenter providePresenter(TVMediaDetailView view) {
         return new TVMediaDetailPresenterImpl(view);
+    }
+
+    @Module
+    public interface TVMediaDetailBindModule {
+
+        @Binds TVMediaDetailView bindView(TVMediaDetailActivity activity);
+
+        @Binds Activity bindActivity(TVMediaDetailActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = TVMovieDetailsModule.class)
+        TVMovieDetailsFragment contributeTVMovieDetailFragmentInjector();
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = TVShowDetailModule.class)
+        TVShowDetailsFragment contributeTVShowDetailFragmentInjector();
+
     }
 
 }

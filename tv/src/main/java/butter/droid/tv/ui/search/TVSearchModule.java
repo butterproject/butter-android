@@ -18,26 +18,27 @@
 package butter.droid.tv.ui.search;
 
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import butter.droid.tv.ui.search.TVSearchModule.TVSearchBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = BackgroundUpdaterModule.class)
+@Module(includes = {
+        BackgroundUpdaterModule.class,
+        TVSearchBindModule.class}
+)
 public class TVSearchModule {
 
-    private final TVSearchView view;
-
-    public TVSearchModule(TVSearchView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope TVSearchView provideView() {
-        return view;
-    }
-
-    @Provides @ActivityScope TVSearchPresenter providePresenter(TVSearchView view, ProviderManager providerManager) {
+    @Provides @FragmentScope TVSearchPresenter providePresenter(TVSearchView view, ProviderManager providerManager) {
         return new TVSearchPresenterImpl(view, providerManager);
+    }
+
+    @Module
+    public interface TVSearchBindModule {
+
+        @Binds TVSearchView bindView(TVSearchFragment fragment);
     }
 
 }

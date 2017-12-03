@@ -26,9 +26,9 @@ import java.util.List;
 import butter.droid.base.ui.about.BaseAboutPresenterImpl;
 import butter.droid.tv.R;
 
-public class TvAboutPresenterImpl extends BaseAboutPresenterImpl implements TvAboutPresenter {
+public class TVAboutPresenterImpl extends BaseAboutPresenterImpl implements TVAboutPresenter {
 
-    public TvAboutPresenterImpl(TvAboutView view) {
+    public TVAboutPresenterImpl(TVAboutView view) {
         super(view);
     }
 

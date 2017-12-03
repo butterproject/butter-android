@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui;
 
+import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -31,15 +32,24 @@ import butterknife.ButterKnife;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasFragmentInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
 
-public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity, ServiceConnection {
+public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity, ServiceConnection,
+        HasFragmentInjector, HasSupportFragmentInjector {
 
+    @Inject DispatchingAndroidInjector<Fragment> fragmentInjector;
+    @Inject DispatchingAndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector;
     @Inject PreferencesHandler preferencesHandler;
 
     protected TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
+        AndroidInjection.inject(this);
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
@@ -131,5 +141,14 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
     @Override
     public void onStreamStopped() {
 
+    }
+
+    @Override
+    public AndroidInjector<Fragment> fragmentInjector() {
+        return fragmentInjector;
+    }
+
+    @Override public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
+        return supportFragmentInjector;
     }
 }

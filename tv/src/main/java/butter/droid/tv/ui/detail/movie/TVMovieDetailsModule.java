@@ -23,18 +23,8 @@ import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = TVMovieDetailBindModule.class)
-public class TVMovieDetailModule {
-
-    private final TVMovieDetailsView view;
-
-    public TVMovieDetailModule(final TVMovieDetailsView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope public TVMovieDetailsView provideView() {
-        return view;
-    }
+@Module(includes = TVMovieDetailsBindModule.class)
+public class TVMovieDetailsModule {
 
     @Provides @FragmentScope public TVMovieDetailsPresenter providePresenter(TVMovieDetailsView view, ProviderManager providerManager,
             MediaDisplayManager mediaDisplayManager) {

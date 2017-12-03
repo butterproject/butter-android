@@ -26,4 +26,6 @@ public interface TVShowDetailBindModule {
 
     @Binds TVBaseDetailsPresenter bindBasePresenter(TVShowDetailsPresenter presenter);
 
+    @Binds TVShowDetailsView bindView(TVShowDetailsFragment fragment);
+
 }

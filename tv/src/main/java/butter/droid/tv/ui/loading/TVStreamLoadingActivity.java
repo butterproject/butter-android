@@ -30,7 +30,6 @@ import android.view.View;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment;
 import javax.inject.Inject;
@@ -41,20 +40,11 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
 
     @Inject TVStreamLoadingPresenter presenter;
 
-    private TVStreamLoadingComponent component;
-
     @Nullable private BaseStreamLoadingFragment fragment;
 
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        component = TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .streamLoadingComponentBuilder()
-                .streamLoadingModule(new TVStreamLoadingModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, 0);
 
         StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
@@ -89,10 +79,6 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
                 .commit();
 
         this.fragment = fragment;
-    }
-
-    public TVStreamLoadingComponent getComponent() {
-        return component;
     }
 
     public static Intent startActivity(Activity activity, StreamInfo info) {

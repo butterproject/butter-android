@@ -32,16 +32,6 @@ import org.videolan.libvlc.LibVLC;
 @Module(includes = TVPlayerBindModule.class)
 public class TVPlayerModule {
 
-    private final TVPlayerView view;
-
-    public TVPlayerModule(final TVPlayerView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope TVPlayerView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope TVPlayerPresenter providePresenter(TVPlayerView view, Context context, PreferencesHandler preferencesHandler,
             ProviderManager providerManager, PlayerManager playerManager, VlcPlayer vlcPlayer) {
         return new TVPlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager, vlcPlayer);

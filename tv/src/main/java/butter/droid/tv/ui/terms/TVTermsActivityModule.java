@@ -15,21 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.about;
+package butter.droid.tv.ui.terms;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import dagger.Module;
 
-@Subcomponent(modules = TvAboutModule.class)
-@FragmentScope
-public interface TVAboutComponent {
-
-    void inject(TvAboutFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-        Builder aboutModule(TvAboutModule module);
-
-        TVAboutComponent build();
-    }
+@Module
+public class TVTermsActivityModule {
 
 }

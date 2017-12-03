@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.preferences;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -33,13 +34,13 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
-import butter.droid.tv.ui.update.TVUpdateActivity;
+import butter.droid.tv.ui.about.TVAboutFragment;
 import butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment;
 import butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.SelectionListener;
-import butter.droid.tv.ui.about.TvAboutFragment;
 import butter.droid.tv.ui.preferences.fragment.TVChangeLogDialogFragment;
 import butter.droid.tv.ui.preferences.fragment.TVWebViewFragment;
+import butter.droid.tv.ui.update.TVUpdateActivity;
+import dagger.android.AndroidInjection;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -50,14 +51,12 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     @Inject ButterUpdateManager butterUpdateManager;
     @Inject PreferencesHandler preferencesHandler;
 
-    @Override public void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .preferencesComponentBuilder()
-                .preferencesModule(new TVPreferencesModule(this))
-                .build()
-                .inject(this);
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
+    }
 
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         presenter.onCreate();
@@ -218,7 +217,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     }
 
     @Override public void showAboutScreen() {
-        GuidedStepFragment.add(getFragmentManager(), new TvAboutFragment());
+        GuidedStepFragment.add(getFragmentManager(), new TVAboutFragment());
     }
 
 }

@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.detail.show;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -33,10 +34,10 @@ import butter.droid.provider.base.module.Episode;
 import butter.droid.provider.base.module.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
-import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.detail.show.presenter.EpisodeCardPresenter;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
+import dagger.android.support.AndroidSupportInjection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -50,15 +51,13 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
     @Inject TVShowDetailsPresenter presenter;
     @Inject MediaDisplayManager mediaDisplayManager;
 
+    @Override public void onAttach(final Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((TVMediaDetailActivity) getActivity())
-                .getComponent()
-                .showDetailComponentBuilder()
-                .snowDetailModule(new TVShowDetailModule(this))
-                .build()
-                .inject(this);
 
         Bundle arguments = getArguments();
         final MediaWrapper item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));

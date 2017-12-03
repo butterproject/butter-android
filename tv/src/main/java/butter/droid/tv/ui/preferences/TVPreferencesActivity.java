@@ -21,17 +21,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.GuidedStepFragment;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVPreferencesActivity extends TVBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
-
         super.onCreate(savedInstanceState);
         GuidedStepFragment.addAsRoot(this, new TVPreferencesFragment(), android.R.id.content);
     }

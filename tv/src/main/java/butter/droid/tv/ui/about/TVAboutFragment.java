@@ -18,6 +18,7 @@
 package butter.droid.tv.ui.about;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,27 +28,22 @@ import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidanceStylist.Guidance;
 import android.support.v17.leanback.widget.GuidedAction;
 import android.support.v4.content.ContextCompat;
-
+import butter.droid.tv.R;
 import butter.droid.tv.ui.preferences.fragment.TVWebViewFragment;
+import dagger.android.AndroidInjection;
 import java.util.List;
-
 import javax.inject.Inject;
 
-import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
+public class TVAboutFragment extends GuidedStepFragment implements TVAboutView {
 
-public class TvAboutFragment extends GuidedStepFragment implements TvAboutView {
+    @Inject TVAboutPresenter presenter;
 
-    @Inject TvAboutPresenter presenter;
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .aboutComponentBuilder()
-                .aboutModule(new TvAboutModule(this))
-                .build()
-                .inject(this);
-
         super.onCreate(savedInstanceState);
     }
 

@@ -53,9 +53,7 @@ import butter.droid.ui.trailer.TrailerPlayerActivityModule;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
-@Module(includes = {
-        BaseInjectorModule.class
-})
+@Module(includes = BaseInjectorModule.class)
 public abstract class InjectorModule {
 
     @ActivityScope

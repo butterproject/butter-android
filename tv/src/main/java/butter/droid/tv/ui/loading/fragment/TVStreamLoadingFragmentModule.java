@@ -30,16 +30,6 @@ import dagger.Provides;
 @Module(includes = {TVStreamLoadingFragmentBindModule.class, BackgroundUpdaterModule.class})
 public class TVStreamLoadingFragmentModule {
 
-    private final TVStreamLoadingFragmentView view;
-
-    public TVStreamLoadingFragmentModule(TVStreamLoadingFragmentView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope public TVStreamLoadingFragmentView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope
     public TVStreamLoadingFragmentPresenter providePresenter(TVStreamLoadingFragmentView view,
             ProviderManager providerManager, PreferencesHandler preferencesHandler, PlayerManager playerManager,

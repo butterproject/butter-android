@@ -15,26 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.main;
+package butter.droid.tv.service;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.tv.ui.main.overview.TVOverviewComponent;
-import dagger.Subcomponent;
+import dagger.Module;
 
-@Subcomponent(modules = TVMainModule.class)
-@ActivityScope
-public interface TVMainComponent {
-
-    void inject(TVMainActivity activity);
-
-    TVOverviewComponent.Builder overviewComponentBuilder();
-
-    @Subcomponent.Builder interface Builder {
-
-        Builder mainModule(TVMainModule module);
-
-        TVMainComponent build();
-
-    }
+@Module
+public class RecommendationModule {
 
 }

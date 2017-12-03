@@ -17,24 +17,32 @@
 
 package butter.droid.tv.ui.loading;
 
+import android.app.Activity;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.ui.loading.TVStreamLoadingModule.TVStreamLoadingBindModule;
+import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragment;
+import butter.droid.tv.ui.loading.fragment.TVStreamLoadingFragmentModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = TVStreamLoadingBindModule.class)
 public class TVStreamLoadingModule {
-
-    private final TVStreamLoadingView view;
-
-    public TVStreamLoadingModule(TVStreamLoadingView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope public TVStreamLoadingView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope public TVStreamLoadingPresenter providePresenter(TVStreamLoadingView view) {
         return new TVStreamLoadingPresenterImpl(view);
+    }
+
+    @Module
+    public interface TVStreamLoadingBindModule {
+        @Binds TVStreamLoadingView bindView(TVStreamLoadingActivity activity);
+
+        @Binds Activity bindActivity(TVStreamLoadingActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = TVStreamLoadingFragmentModule.class)
+        abstract TVStreamLoadingFragment contributeTVStreamLoadingFragmentInjector();
     }
 }

@@ -24,10 +24,13 @@ import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.DaggerProviderComponent;
 import butter.droid.base.providers.ProviderComponent;
 import butter.droid.base.utils.VersionUtils;
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
 
 public class TVButterApplication extends ButterApplication {
 
-    private TVInternalComponent component;
+    private ApplicationComponent appComponent;
+    private ProviderComponent providerComponent;
 
     @Override
     public void updateAvailable(String filePath) {
@@ -36,25 +39,22 @@ public class TVButterApplication extends ButterApplication {
         }
     }
 
-    @Override public TVInternalComponent getInternalComponent() {
-        return component;
-    }
+    @Override protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        if (appComponent == null) {
+            appComponent = DaggerApplicationComponent.builder()
+                    .baseApplicationModule(new BaseApplicationModule(this))
+                    .build();
+        }
 
-    @Override protected void inject() {
+        if (providerComponent == null) {
+            providerComponent = DaggerProviderComponent.builder()
+                    .baseApplicationComponent(appComponent)
+                    .build();
+        }
 
-        ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .build();
-
-        ProviderComponent providerComponent = DaggerProviderComponent.builder()
-                .baseApplicationComponent(applicationComponent)
-                .build();
-
-        component = DaggerTVInternalComponent.builder()
+        return DaggerTVInternalComponent.builder()
                 .providerComponent(providerComponent)
-                .build();
-
-        component.inject(this);
+                .create(this);
     }
 
     @Override protected void attachBaseContext(Context base) {
@@ -65,5 +65,4 @@ public class TVButterApplication extends ButterApplication {
     public static TVButterApplication getAppContext() {
         return (TVButterApplication) ButterApplication.getAppContext();
     }
-
 }

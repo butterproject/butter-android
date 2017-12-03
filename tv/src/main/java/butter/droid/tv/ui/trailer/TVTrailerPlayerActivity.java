@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import org.parceler.Parcels;
 
@@ -32,10 +31,6 @@ public class TVTrailerPlayerActivity extends TVBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
-
         super.onCreate(savedInstanceState, 0);
 
         final Intent intent = getIntent();

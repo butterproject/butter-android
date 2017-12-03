@@ -20,24 +20,25 @@ package butter.droid.tv.ui.main.overview;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
+import butter.droid.tv.ui.main.overview.TVOverviewModule.TVOverviewBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = BackgroundUpdaterModule.class)
+@Module(includes = {
+        BackgroundUpdaterModule.class,
+        TVOverviewBindModule.class}
+)
 public class TVOverviewModule {
-
-    private final TVOverviewView view;
-
-    public TVOverviewModule(final TVOverviewView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope TVOverviewView provideView() {
-        return view;
-    }
 
     @Provides @FragmentScope TVOverviewPresenter providePresenter(TVOverviewView view, ProviderManager providerManager) {
         return new TVOverviewPresenterImpl(view, providerManager);
+    }
+
+    @Module
+    public interface TVOverviewBindModule {
+
+        @Binds TVOverviewView bindView(TVOverviewFragment fragment);
     }
 
 }

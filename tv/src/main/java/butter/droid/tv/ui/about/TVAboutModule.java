@@ -17,8 +17,22 @@
 
 package butter.droid.tv.ui.about;
 
-import butter.droid.base.ui.about.BaseAboutView;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.tv.ui.about.TVAboutModule.TVAboutBindModule;
+import dagger.Binds;
+import dagger.Module;
+import dagger.Provides;
 
-public interface TvAboutView extends BaseAboutView {
+@Module(includes = TVAboutBindModule.class)
+public class TVAboutModule {
+
+    @Provides @FragmentScope TVAboutPresenter provideAboutPresenter(TVAboutView view) {
+        return new TVAboutPresenterImpl(view);
+    }
+
+    @Module
+    public interface TVAboutBindModule {
+        @Binds TVAboutView bindView(TVAboutFragment fragment);
+    }
 
 }

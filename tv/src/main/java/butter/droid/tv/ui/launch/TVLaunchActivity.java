@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.launch;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,16 +29,16 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.module.Clip;
 import butter.droid.provider.base.module.Media;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.service.RecommendationService;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.main.TVMainActivity;
 import butter.droid.tv.ui.terms.TVTermsActivity;
+import dagger.android.DaggerActivity;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.inject.Inject;
 
-public class TVLaunchActivity extends Activity implements TVLaunchView {
+public class TVLaunchActivity extends DaggerActivity implements TVLaunchView {
 
     private static final int REQUEST_CODE_TERMS = 1;
     private static final int PERMISSIONS_REQUEST = 1232;
@@ -49,14 +48,6 @@ public class TVLaunchActivity extends Activity implements TVLaunchView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .tvLaunchComponentBuilder()
-                .launchModule(new TVLaunchModule(this))
-                .build()
-                .inject(this);
-
         presenter.onCreate();
     }
 

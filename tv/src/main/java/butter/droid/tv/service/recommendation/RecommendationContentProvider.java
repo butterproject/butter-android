@@ -17,36 +17,30 @@
 
 package butter.droid.tv.service.recommendation;
 
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
-
+import dagger.android.DaggerContentProvider;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-
 import javax.inject.Inject;
-
-import butter.droid.tv.TVButterApplication;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
 import okhttp3.Response;
 
-public class RecommendationContentProvider extends ContentProvider {
+public class RecommendationContentProvider extends DaggerContentProvider {
 
     public static String AUTHORITY = "pct.droid.tv.RecommendationContentProvider";
     public static String CONTENT_URI = "content://" + AUTHORITY + "/";
 
     @Inject OkHttpClient client;
-
-    private boolean initialized;
 
     @Override
     public boolean onCreate() {
@@ -142,16 +136,7 @@ public class RecommendationContentProvider extends ContentProvider {
     }
 
     private OkHttpClient getOkHttpClient() {
-        init();
         return client;
-    }
-
-    private void init() {
-        if (!initialized) {
-            TVButterApplication.getAppContext()
-                    .getInternalComponent()
-                    .inject(this);
-        }
     }
 
 }

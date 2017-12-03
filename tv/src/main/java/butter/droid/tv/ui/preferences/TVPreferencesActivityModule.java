@@ -15,15 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.detail.movie;
+package butter.droid.tv.ui.preferences;
 
-import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
-import dagger.Binds;
 import dagger.Module;
 
 @Module
-public interface TVMovieDetailBindModule {
-
-    @Binds TVBaseDetailsPresenter bindBasePresenter(TVMovieDetailsPresenter presenter);
+public class TVPreferencesActivityModule {
 
 }

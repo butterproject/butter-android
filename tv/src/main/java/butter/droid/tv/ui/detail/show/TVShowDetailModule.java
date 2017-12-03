@@ -26,16 +26,6 @@ import dagger.Provides;
 @Module(includes = TVShowDetailBindModule.class)
 public class TVShowDetailModule {
 
-    private final TVShowDetailsView view;
-
-    public TVShowDetailModule(final TVShowDetailsView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope TVShowDetailsView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope TVShowDetailsPresenter providePresenter(final TVShowDetailsView view, final ProviderManager providerManager,
             final PreferencesHandler preferencesHandler) {
         return new TVShowDetailPresenterImpl(view, providerManager, preferencesHandler);

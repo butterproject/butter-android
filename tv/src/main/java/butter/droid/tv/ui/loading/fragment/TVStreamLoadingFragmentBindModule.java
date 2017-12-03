@@ -26,4 +26,6 @@ public interface TVStreamLoadingFragmentBindModule {
 
     @Binds BaseStreamLoadingFragmentPresenter bindBasePresenter(TVStreamLoadingFragmentPresenter presenter);
 
+    @Binds TVStreamLoadingFragmentView bindView(TVStreamLoadingFragment fragment);
+
 }

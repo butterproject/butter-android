@@ -42,14 +42,11 @@ public abstract class TVBaseActivity extends TVTorrentBaseActivity {
                     .setCancelable(false)
                     .show();
 
-            updateManager.setListener(new ButterUpdateManager.Listener() {
-                @Override
-                public void updateAvailable(String updateFile) {
-                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
-                    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(installIntent);
-                }
+            updateManager.setListener(updateFile -> {
+                Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                installIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
+                installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(installIntent);
             });
             updateManager.checkUpdatesManually();
         }

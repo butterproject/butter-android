@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.main.overview;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -39,24 +40,20 @@ import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
-import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.presenters.LoadingCardPresenter;
 import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.presenters.MorePresenter;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
-import butter.droid.tv.ui.main.TVMainActivity;
 import butter.droid.tv.ui.media.TVMediaGridActivity;
 import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import com.squareup.picasso.Picasso;
+import dagger.android.AndroidInjection;
 import java.util.List;
 import javax.inject.Inject;
 
-/*
- * Main class to show BrowseFragment with header and rows of videos
- */
 public class TVOverviewFragment extends BrowseFragment implements TVOverviewView, OnItemViewClickedListener, OnItemViewSelectedListener {
 
     @Inject TVOverviewPresenter presenter;
@@ -67,15 +64,9 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     private ArrayObjectAdapter[] mediaListAdapters;
     private ArrayObjectAdapter[] moreOptionsAdapters;
 
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        ((TVMainActivity) getActivity()).getComponent()
-                .overviewComponentBuilder()
-                .overviewModule(new TVOverviewModule(this))
-                .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))
-                .build()
-                .inject(this);
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
     }
 
     @Override

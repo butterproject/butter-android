@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import butter.droid.tv.ui.player.video.TVPlayerFragment;
 
@@ -35,7 +34,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
 
     private static final String TAG_VIDEO_FRAGMENT = "butter.droid.tv.ui.player.TVVideoPlayerActivity.videoFragment";
 
-    private TVVideoPlayerComponent component;
     private TVPlayerFragment fragment;
 
     private StreamInfo streamInfo;
@@ -44,12 +42,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        component = TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .tvVideoPlayerComponentBuilder()
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, 0);
         createStreamInfo();
 
@@ -116,10 +108,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
         }
 
         streamInfo.setStreamUrl(location);
-    }
-
-    public TVVideoPlayerComponent getComponent() {
-        return component;
     }
 
     public static Intent startActivity(Context context, StreamInfo info, @SuppressWarnings("UnusedParameters") long resumePosition) {

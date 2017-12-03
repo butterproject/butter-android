@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
-import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.ui.TVBaseActivity;
 import org.parceler.Parcels;
 
@@ -37,10 +36,6 @@ public class TVMediaGridActivity extends TVBaseActivity {
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TVButterApplication.getAppContext()
-                .getInternalComponent()
-                .inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_movie_media_grid);
 
         Bundle extras = getIntent().getExtras();

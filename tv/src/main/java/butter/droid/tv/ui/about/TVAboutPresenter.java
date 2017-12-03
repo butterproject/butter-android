@@ -17,25 +17,16 @@
 
 package butter.droid.tv.ui.about;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Module;
-import dagger.Provides;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v17.leanback.widget.GuidedAction;
 
-@Module
-public class TvAboutModule {
+import java.util.List;
 
-    private final TvAboutView view;
+import butter.droid.base.ui.about.BaseAboutPresenter;
 
-    public TvAboutModule(TvAboutView view) {
-        this.view = view;
-    }
+public interface TVAboutPresenter extends BaseAboutPresenter {
+    void aboutButtonClicked(@AboutLinks int id);
 
-    @Provides @FragmentScope TvAboutView provideAboutView() {
-        return view;
-    }
-
-    @Provides @FragmentScope TvAboutPresenter provideAboutPresenter(TvAboutView view) {
-        return new TvAboutPresenterImpl(view);
-    }
-
+    void createActions(@NonNull Context context, @NonNull List<GuidedAction> actions);
 }

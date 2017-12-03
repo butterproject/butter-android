@@ -20,27 +20,8 @@ package butter.droid.tv;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.tv.service.RecommendationService;
-import butter.droid.tv.service.recommendation.RecommendationContentProvider;
-import butter.droid.tv.ui.about.TVAboutComponent;
-import butter.droid.tv.ui.detail.TVMediaDetailComponent;
-import butter.droid.tv.ui.launch.TVLaunchComponent;
-import butter.droid.tv.ui.loading.TVStreamLoadingComponent;
-import butter.droid.tv.ui.main.TVMainComponent;
-import butter.droid.tv.ui.media.TVMediaGridActivity;
-import butter.droid.tv.ui.media.TVMediaGridComponent;
-import butter.droid.tv.ui.player.TVVideoPlayerComponent;
-import butter.droid.tv.ui.preferences.TVPreferencesActivity;
-import butter.droid.tv.ui.preferences.TVPreferencesComponent;
-import butter.droid.tv.ui.search.TVSearchActivity;
-import butter.droid.tv.ui.search.TVSearchComponent;
-import butter.droid.tv.ui.terms.TVTermsActivity;
-import butter.droid.tv.ui.terms.TVTermsComponent;
-import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
-import butter.droid.tv.ui.trailer.TVTrailerPlayerComponent;
-import butter.droid.tv.ui.update.TVUpdateActivity;
-import butter.droid.tv.ui.update.TVUpdateFragment;
 import dagger.Component;
+import dagger.android.AndroidInjector;
 
 @Internal @Component(
         dependencies = {
@@ -48,48 +29,13 @@ import dagger.Component;
         },
         modules = TVInternalModule.class
 )
-public interface TVInternalComponent extends BaseInternalComponent {
+public interface TVInternalComponent extends AndroidInjector<TVButterApplication>, BaseInternalComponent {
 
-    void inject(TVButterApplication application);
+    @Component.Builder
+    abstract class Builder extends AndroidInjector.Builder<TVButterApplication> {
 
-    void inject(TVMediaGridActivity activity);
+        abstract Builder providerComponent(ProviderComponent component);
 
-    void inject(TVPreferencesActivity activity);
-
-    void inject(TVSearchActivity activity);
-
-    void inject(TVUpdateActivity activity);
-
-    void inject(TVTermsActivity activity);
-
-    void inject(TVTrailerPlayerActivity activity);
-
-    void inject(RecommendationService service);
-
-    void inject(TVUpdateFragment fragment);
-
-    void inject(RecommendationContentProvider contentProvider);
-
-    TVPreferencesComponent.Builder preferencesComponentBuilder();
-
-    TVTermsComponent.Builder termsComponentBuilder();
-
-    TVAboutComponent.Builder aboutComponentBuilder();
-
-    TVStreamLoadingComponent.Builder streamLoadingComponentBuilder();
-
-    TVSearchComponent.Builder searchComponentBuilder();
-
-    TVTrailerPlayerComponent.Builder tvTrailerPlayerComponentBuilder();
-
-    TVVideoPlayerComponent.Builder tvVideoPlayerComponentBuilder();
-
-    TVLaunchComponent.Builder tvLaunchComponentBuilder();
-
-    TVMainComponent.Builder tvMainComponentBuilder();
-
-    TVMediaGridComponent.Builder tvMediaGridComponentBuilder();
-
-    TVMediaDetailComponent.Builder tvMediaDetailComponentBuilder();
+    }
 
 }

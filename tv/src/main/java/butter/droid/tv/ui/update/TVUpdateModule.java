@@ -15,23 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.player;
+package butter.droid.tv.ui.update;
 
-import android.view.WindowManager;
-import butter.droid.tv.ui.player.video.TVPlayerComponent;
-import dagger.Subcomponent;
+import dagger.Module;
 
-@Subcomponent
-public interface TVVideoPlayerComponent {
-
-    void inject(TVVideoPlayerActivity activity);
-
-    TVPlayerComponent.Builder tvPlayerComponentBuilder();
-
-    WindowManager windowManager();
-
-    @Subcomponent.Builder interface Builder {
-        TVVideoPlayerComponent build();
-    }
+@Module
+public class TVUpdateModule {
 
 }

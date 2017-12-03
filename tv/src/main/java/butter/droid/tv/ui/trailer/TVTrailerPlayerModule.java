@@ -17,7 +17,6 @@
 
 package butter.droid.tv.ui.trailer;
 
-import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -33,26 +32,10 @@ import org.videolan.libvlc.LibVLC;
 @Module(includes = TVTrailerPlayerBindModule.class)
 public class TVTrailerPlayerModule {
 
-    private final TVTrailerPlayerView view;
-    private final Activity activity;
-
-    public TVTrailerPlayerModule(final TVTrailerPlayerView view, final Activity activity) {
-        this.view = view;
-        this.activity = activity;
-    }
-
-    @Provides @FragmentScope TVTrailerPlayerView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, PreferencesHandler preferencesHandler,
             VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager, PhoneManager phoneManager) {
         return new TVTrailerPlayerPresenterImpl(view, preferencesHandler, player, youTubeManager, networkManager,
                 phoneManager);
-    }
-
-    @Provides @FragmentScope Activity provideActivity() {
-        return activity;
     }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
