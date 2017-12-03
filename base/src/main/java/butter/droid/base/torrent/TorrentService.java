@@ -30,13 +30,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.foreground.ForegroundListener;
+import butter.droid.base.manager.internal.foreground.ForegroundManager;
 import butter.droid.base.ui.TorrentActivity;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.TorrentOptions;
 import com.github.se_bastiaan.torrentstream.TorrentStream;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
-import com.sjl.foreground.Foreground;
 import dagger.android.DaggerService;
 import java.io.File;
 import java.text.DecimalFormat;
@@ -56,12 +57,12 @@ public class TorrentService extends DaggerService implements TorrentListener {
     private static TorrentService sThis;
 
     @Inject PreferencesHandler preferencesHandler;
+    @Inject ForegroundManager foregroundManager;
 
-    private TorrentStream mTorrentStream;
+    private TorrentStream torrentStream;
     private Torrent mCurrentTorrent;
     private StreamStatus mStreamStatus;
 
-    private boolean mInForeground = false;
     private boolean mIsReady = false;
     private boolean mStopped = false;
 
@@ -84,7 +85,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
         super.onCreate();
 
         sThis = this;
-        Foreground.get().addListener(mForegroundListener);
+        foregroundManager.setListener(foregroundListener);
 
         final TorrentOptions.Builder builder = new TorrentOptions.Builder()
                 .removeFilesAfterStop(true)
@@ -99,7 +100,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
         final TorrentOptions options = builder.build();
 
-        mTorrentStream = TorrentStream.init(options);
+        torrentStream = TorrentStream.init(options);
     }
 
     @Override
@@ -109,6 +110,8 @@ public class TorrentService extends DaggerService implements TorrentListener {
         if (mWakeLock != null && mWakeLock.isHeld()) {
             mWakeLock.release();
         }
+
+        foregroundManager.setListener(null);
     }
 
     @Override
@@ -121,7 +124,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
     public IBinder onBind(Intent intent) {
         Timber.d("onBind");
 
-        if (mInForeground) {
+        if (foregroundManager.isInForeground()) {
             stopForeground();
         }
 
@@ -133,7 +136,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
         super.onRebind(intent);
         Timber.d("onRebind");
 
-        if (mInForeground) {
+        if (foregroundManager.isInForeground()) {
             stopForeground();
         }
     }
@@ -141,14 +144,14 @@ public class TorrentService extends DaggerService implements TorrentListener {
     public void setCurrentActivity(TorrentActivity activity) {
         mCurrentActivityClass = activity.getClass();
 
-        if (mInForeground) {
+        if (foregroundManager.isInForeground()) {
             stopForeground();
             startForeground();
         }
     }
 
     public void startForeground() {
-        if (Foreground.get().isForeground()) {
+        if (foregroundManager.isInForeground()) {
             return;
         }
         if (mCurrentActivityClass == null) {
@@ -215,7 +218,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
         Timber.d("streamTorrent");
         mStopped = false;
 
-        if (mTorrentStream.isStreaming()) {
+        if (torrentStream.isStreaming()) {
             return;
         }
 
@@ -242,35 +245,35 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
         final TorrentOptions options = builder.build();
 
-        mTorrentStream.setOptions(options);
+        torrentStream.setOptions(options);
 
         mIsReady = false;
-        mTorrentStream.addListener(this);
-        mTorrentStream.startStream(torrentUrl);
+        torrentStream.addListener(this);
+        torrentStream.startStream(torrentUrl);
     }
 
     public void stopStreaming() {
         mStopped = true;
-        mTorrentStream.removeListener(this);
+        torrentStream.removeListener(this);
 
         if (mWakeLock != null && mWakeLock.isHeld()) {
             mWakeLock.release();
         }
 
-        if (!mTorrentStream.isStreaming()) {
+        if (!torrentStream.isStreaming()) {
             return;
         }
 
         stopForeground();
 
-        mTorrentStream.stopStream();
+        torrentStream.stopStream();
         mIsReady = false;
 
         Timber.d("Stopped torrent and removed files if possible");
     }
 
     public boolean isStreaming() {
-        return mTorrentStream.isStreaming();
+        return torrentStream.isStreaming();
     }
 
     public boolean isReady() {
@@ -307,34 +310,12 @@ public class TorrentService extends DaggerService implements TorrentListener {
         sThis.stopStreaming();
     }
 
-    private Foreground.Listener mForegroundListener = new Foreground.Listener() {
-        @Override
-        public void onBecameForeground() {
-            if (!mTorrentStream.isStreaming()) {
-                mTorrentStream.resumeSession();
-            } else {
-                mInForeground = false;
-                stopForeground();
-            }
-        }
-
-        @Override
-        public void onBecameBackground() {
-            if (!mTorrentStream.isStreaming()) {
-                mTorrentStream.pauseSession();
-            } else {
-                mInForeground = true;
-                startForeground();
-            }
-        }
-    };
-
     public Torrent getCurrentTorrent() {
         return mCurrentTorrent;
     }
 
     public String getCurrentTorrentUrl() {
-        return mTorrentStream.getCurrentTorrentUrl();
+        return torrentStream.getCurrentTorrentUrl();
     }
 
     @Override
@@ -378,7 +359,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
             }
         }
 
-        if (mInForeground) {
+        if (foregroundManager.isInForeground()) {
             mStreamStatus = streamStatus;
         }
     }
@@ -402,12 +383,30 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
         @Override
         public void run() {
-            if (mInForeground) {
+            if (foregroundManager.isInForeground()) {
                 startForeground();
             } else {
                 stopForeground();
             }
         }
     }
+
+    private ForegroundListener foregroundListener = new ForegroundListener() {
+        @Override public void isInForeground(final boolean inForeground) {
+            if (inForeground) {
+                if (!torrentStream.isStreaming()) {
+                    torrentStream.resumeSession();
+                } else {
+                    stopForeground();
+                }
+            } else {
+                if (!torrentStream.isStreaming()) {
+                    torrentStream.pauseSession();
+                } else {
+                    startForeground();
+                }
+            }
+        }
+    };
 
 }
