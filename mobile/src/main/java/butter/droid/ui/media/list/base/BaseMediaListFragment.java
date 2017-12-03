@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,6 +42,7 @@ import butter.droid.ui.media.list.base.list.MediaGridAdapter;
 import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingItemDecoration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
 import org.parceler.Parcels;
@@ -61,7 +61,7 @@ import org.parceler.Parcels;
  * <p/>
  * This fragment can be instantiated with ether a SEARCH mode, or a NORMAL mode. SEARCH mode simply does not load any initial data.
  */
-public class BaseMediaListFragment extends Fragment implements BaseMediaListView, CursorPagingListener, RecyclerClickListener {
+public class BaseMediaListFragment extends DaggerFragment implements BaseMediaListView, CursorPagingListener, RecyclerClickListener {
 
     public static final String EXTRA_PROVIDER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_provider";
     public static final String EXTRA_FILTER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_filter";

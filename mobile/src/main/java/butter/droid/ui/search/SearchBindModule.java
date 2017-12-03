@@ -29,4 +29,6 @@ public interface SearchBindModule {
 
     @Binds BaseMediaListPresenter bindBasePresenter(SearchPresenter presenter);
 
+    @Binds SearchView bindView(SearchFragment fragment);
+
 }

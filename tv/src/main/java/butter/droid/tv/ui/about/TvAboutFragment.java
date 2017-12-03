@@ -42,7 +42,7 @@ public class TvAboutFragment extends GuidedStepFragment implements TvAboutView {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .aboutComponentBuilder()
                 .aboutModule(new TvAboutModule(this))
                 .build()

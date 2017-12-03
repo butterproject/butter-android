@@ -26,27 +26,24 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
+import butter.droid.ui.media.detail.movie.MovieDetailModule.MovieDetailBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = MovieDetailBindModule.class)
 public class MovieDetailModule {
-
-    private final MovieDetailView view;
-
-    public MovieDetailModule(MovieDetailView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope MovieDetailView provideView() {
-        return view;
-    }
 
     @Provides @FragmentScope MovieDetailPresenter providePresenter(MovieDetailView view,
             MediaDetailPresenter parentPresenter, YouTubeManager youTubeManager, PreferencesHandler preferencesHandler,
             ProviderManager providerManager, PlayerManager playerManager, Resources resources, MediaDisplayManager mediaDisplayManager) {
         return new MovieDetailPresenterImpl(view, parentPresenter, youTubeManager, preferencesHandler, providerManager,
                 playerManager, resources, mediaDisplayManager);
+    }
+
+    @Module
+    public interface MovieDetailBindModule {
+        @Binds MovieDetailView bindView(MovieDetailFragment fragment);
     }
 
 }

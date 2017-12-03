@@ -19,18 +19,16 @@ package butter.droid.ui.beam.fragment.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceAdapter;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import com.connectsdk.device.ConnectableDevice;
+import dagger.android.support.DaggerAppCompatDialogFragment;
 import javax.inject.Inject;
 
-public class BeamDeviceSelectorDialogFragment extends DialogFragment {
+public class BeamDeviceSelectorDialogFragment extends DaggerAppCompatDialogFragment {
 
     @Inject BeamManager beamManager;
 
@@ -39,10 +37,6 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .inject(this);
     }
 
     @Override
@@ -51,33 +45,20 @@ public class BeamDeviceSelectorDialogFragment extends DialogFragment {
         if (!beamManager.isConnected()) {
             adapter = new BeamDeviceAdapter(getActivity(), beamManager);
             builder = new AlertDialog.Builder(getActivity())
-                    .setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            ConnectableDevice device = adapter.getItem(position);
-                            beamManager.connect(device);
-                            dismiss();
-                        }
+                    .setSingleChoiceItems(adapter, -1, (dialog, position) -> {
+                        ConnectableDevice device = adapter.getItem(position);
+                        beamManager.connect(device);
+                        dismiss();
                     })
                     .setTitle(R.string.select_beaming)
                     .setNegativeButton(R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }
+                            (dialog, which) -> dialog.dismiss()
                     );
             return builder.create();
         } else if (beamManager.getConnectedDevice() != null) {
             builder = new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.connected_to) + " " + beamManager.getConnectedDevice().getFriendlyName())
-                    .setNeutralButton(R.string.disconnect, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            beamManager.disconnect();
-                        }
-                    });
+                    .setNeutralButton(R.string.disconnect, (dialog, which) -> beamManager.disconnect());
             return builder.create();
         } else {
             return super.onCreateDialog(savedInstanceState);

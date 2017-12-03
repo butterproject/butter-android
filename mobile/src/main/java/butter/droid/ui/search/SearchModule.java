@@ -27,18 +27,9 @@ import dagger.Provides;
 @Module(includes = SearchBindModule.class)
 public class SearchModule {
 
-    private final SearchView view;
-
-    public SearchModule(SearchView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope SearchView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope SearchPresenter providePresenter(SearchView view, ProviderManager providerManager,
             PreferencesHandler preferencesHandler, NetworkManager networkManager) {
         return new SearchPresenterImpl(view, providerManager, preferencesHandler, networkManager);
     }
+
 }

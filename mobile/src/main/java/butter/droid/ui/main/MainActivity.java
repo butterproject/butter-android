@@ -37,7 +37,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
@@ -80,7 +79,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     @BindView(R.id.tabs) TabLayout tabs;
     @BindView(R.id.pager) ViewPager viewPager;
 
-    private MainComponent component;
     private NavigationDrawerFragment navigationDrawerFragment;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
@@ -89,13 +87,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        component = MobileButterApplication.getAppContext()
-                .getComponent()
-                .mainComponentBuilder()
-                .mainModule(new MainModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
         setSupportActionBar(toolbar);
@@ -258,10 +249,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
     @Override public void openSearchScreen(final int providerId) {
         startActivity(SearchActivity.getIntent(this, providerId));
-    }
-
-    public MainComponent getComponent() {
-        return component;
     }
 
     private void checkActions() {

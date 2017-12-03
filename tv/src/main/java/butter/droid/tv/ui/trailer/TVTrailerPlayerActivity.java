@@ -33,7 +33,7 @@ public class TVTrailerPlayerActivity extends TVBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .inject(this);
 
         super.onCreate(savedInstanceState, 0);

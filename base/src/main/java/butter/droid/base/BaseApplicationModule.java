@@ -35,6 +35,7 @@ import javax.inject.Singleton;
 )
 public class BaseApplicationModule {
 
+    // TODO remove
     private final ButterApplication application;
 
     public BaseApplicationModule(ButterApplication application) {

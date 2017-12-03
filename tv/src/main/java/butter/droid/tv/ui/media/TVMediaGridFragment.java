@@ -75,7 +75,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         super.onCreate(savedInstanceState);
 
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .tvMediaGridComponentBuilder()
                 .mediaGridModule(new TVMediaGridModule(this))
                 .backgroundUpdaterModule(new BackgroundUpdaterModule(getActivity()))

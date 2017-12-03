@@ -20,7 +20,6 @@ package butter.droid.ui.trailer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import butter.droid.MobileButterApplication;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.ButterKnife;
@@ -36,13 +35,6 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .trailerComponentBuilder()
-                .trailerPlayerModule(new TrailerPlayerModule(this, getActivity()))
-                .build()
-                .inject(this);
-
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();

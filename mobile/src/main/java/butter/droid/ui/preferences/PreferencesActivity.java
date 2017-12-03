@@ -31,7 +31,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
@@ -74,13 +73,6 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .preferencesComponentBuilder()
-                .preferencesModule(new PreferencesModule(this))
-                .build()
-                .inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_preferences);
         setSupportActionBar(toolbar);
 

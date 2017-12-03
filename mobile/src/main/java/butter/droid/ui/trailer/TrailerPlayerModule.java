@@ -17,7 +17,6 @@
 
 package butter.droid.ui.trailer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
@@ -37,28 +36,12 @@ import org.videolan.libvlc.LibVLC;
 @Module(includes = TrailerPlayerBindModule.class)
 public class TrailerPlayerModule {
 
-    private final TrailerPlayerView view;
-    private final Activity activity;
-
-    public TrailerPlayerModule(final TrailerPlayerView view, final Activity activity) {
-        this.view = view;
-        this.activity = activity;
-    }
-
-    @Provides @FragmentScope TrailerPlayerView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope TrailerPlayerPresenter providePresenter(TrailerPlayerView view, Context context,
             PreferencesHandler preferencesHandler, AudioManager audioManager, BrightnessManager brightnessManager,
             VideoPlayerTouchHandler touchHandler, VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager,
             PhoneManager phoneManager) {
         return new TrailerPlayerPresenterImpl(view, context, preferencesHandler, player, youTubeManager, networkManager,
                 phoneManager, brightnessManager, touchHandler, audioManager);
-    }
-
-    @Provides @FragmentScope Activity provideActivity() {
-        return activity;
     }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {

@@ -20,23 +20,20 @@ package butter.droid.ui.media.detail.show.about;
 import android.content.Context;
 
 import butter.droid.base.ui.SubFragmentScope;
+import butter.droid.ui.media.detail.show.about.ShowDetailAboutModule.ShowDetailAboudBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = ShowDetailAboudBindModule.class)
 public class ShowDetailAboutModule {
-
-    private final ShowDetailAboutView view;
-
-    public ShowDetailAboutModule(ShowDetailAboutView view) {
-        this.view = view;
-    }
-
-    @Provides @SubFragmentScope ShowDetailAboutView provideView() {
-        return view;
-    }
 
     @Provides @SubFragmentScope ShowDetailAboutPresenter providePresenter(ShowDetailAboutView view, Context context) {
         return new ShowDetailAboutPresenterImpl(view, context);
+    }
+
+    @Module
+    public interface ShowDetailAboudBindModule {
+        @Binds ShowDetailAboutView bindView(ShowDetailAboutFragment fragment);
     }
 }

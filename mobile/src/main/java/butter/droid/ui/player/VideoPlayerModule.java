@@ -17,26 +17,34 @@
 
 package butter.droid.ui.player;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.ui.player.VideoPlayerModule.VideoPlayerBindModule;
+import butter.droid.ui.player.stream.PlayerFragment;
+import butter.droid.ui.player.stream.PlayerModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = VideoPlayerBindModule.class)
 public class VideoPlayerModule {
-
-    private final VideoPlayerView view;
-
-    public VideoPlayerModule(final VideoPlayerView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope VideoPlayerView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope VideoPlayerPresenter providePresenter(VideoPlayerView view, ContentResolver contentResolver) {
         return new VideoPlayerPresenterImpl(view, contentResolver);
+    }
+
+    @Module
+    public interface VideoPlayerBindModule {
+        @Binds VideoPlayerView bindView(VideoPlayerActivity activity);
+
+        @Binds Activity bindActivity(VideoPlayerActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = PlayerModule.class)
+        PlayerFragment contributePlayerFragmentInjector();
     }
 
 }

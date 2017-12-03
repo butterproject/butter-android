@@ -19,12 +19,16 @@ package butter.droid;
 
 import butter.droid.base.InternalBaseModule;
 import butter.droid.manager.internal.InternalDataModule;
+import butter.droid.ui.InjectorModule;
 import dagger.Module;
+import dagger.android.support.AndroidSupportInjectionModule;
 
 @Module(
         includes = {
                 InternalBaseModule.class,
-                InternalDataModule.class
+                InternalDataModule.class,
+                InjectorModule.class,
+                AndroidSupportInjectionModule.class
         }
 )
 public class InternalModule {

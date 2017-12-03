@@ -20,7 +20,6 @@ package butter.droid.ui.media.list;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
 import javax.inject.Inject;
 import org.parceler.Parcels;
@@ -31,13 +30,6 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((MainActivity) getActivity()).getComponent()
-                .mediaListComponentBuilder()
-                .mediaListModule(new MediaListModule(this))
-                .build()
-                .inject(this);
-
         presenter.onCreate();
     }
 

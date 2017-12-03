@@ -22,7 +22,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -30,9 +29,10 @@ import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatActivity;
 import javax.inject.Inject;
 
-public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentActivity {
+public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implements TorrentActivity {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -44,8 +44,9 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     private TorrentService torrentStream;
 
     protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        String language = preferencesHandler.getLocale();
-        LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
+        // TODO: 12/3/17 After injection
+        //        String language = preferencesHandler.getLocale();
+//        LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
 
         if (layoutId != 0) {

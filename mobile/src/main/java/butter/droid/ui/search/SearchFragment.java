@@ -19,7 +19,6 @@ package butter.droid.ui.search;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
@@ -32,13 +31,6 @@ public class SearchFragment extends BaseMediaListFragment implements SearchView 
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .searchComponentBuilder()
-                .searchModule(new SearchModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {

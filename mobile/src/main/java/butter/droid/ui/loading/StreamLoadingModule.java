@@ -18,24 +18,21 @@
 package butter.droid.ui.loading;
 
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.ui.loading.StreamLoadingModule.StremLoadingBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = StremLoadingBindModule.class)
 public class StreamLoadingModule {
-
-    private final StreamLoadingView view;
-
-    public StreamLoadingModule(StreamLoadingView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope StreamLoadingView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope StreamLoadingPresenter providePresenter(StreamLoadingView view) {
         return new StreamLoadingPresenterImpl(view);
+    }
+
+    @Module
+    public interface StremLoadingBindModule {
+        @Binds StreamLoadingView bindsView(StreamLoadingActivity activity);
     }
 
 }

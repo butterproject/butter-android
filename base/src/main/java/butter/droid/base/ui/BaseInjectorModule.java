@@ -15,26 +15,19 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.beam;
+package butter.droid.base.ui;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.beam.fragment.BeamPlayerComponent;
-import dagger.Subcomponent;
+import butter.droid.base.torrent.ServiceScope;
+import butter.droid.base.torrent.TorrentService;
+import butter.droid.base.torrent.TorrentServiceModule;
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
-@Subcomponent(modules = BeamPlayerActivityModule.class)
-@ActivityScope
-public interface BeamPlayerActivityComponent {
+@Module
+public abstract class BaseInjectorModule {
 
-    void inject(BeamPlayerActivity activity);
-
-    BeamPlayerComponent.Builder beamPlayerComponentBuilder();
-
-    @Subcomponent.Builder interface Builder {
-
-        Builder beamPlayerActivityModule(BeamPlayerActivityModule module);
-
-        BeamPlayerActivityComponent build();
-
-    }
+    @ServiceScope
+    @ContributesAndroidInjector(modules = TorrentServiceModule.class)
+    abstract TorrentService contributeTorrentServiceInjector();
 
 }

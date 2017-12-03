@@ -20,24 +20,35 @@ package butter.droid.ui.media.detail;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.ui.media.detail.MediaDetailModule.MediaDetailBindModule;
+import butter.droid.ui.media.detail.movie.MovieDetailFragment;
+import butter.droid.ui.media.detail.movie.MovieDetailModule;
+import butter.droid.ui.media.detail.show.ShowDetailFragment;
+import butter.droid.ui.media.detail.show.ShowDetailModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = MediaDetailBindModule.class)
 public class MediaDetailModule {
-
-    private final MediaDetailView view;
-
-    public MediaDetailModule(MediaDetailView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope MediaDetailView provideMediaDetailView() {
-        return view;
-    }
 
     @Provides @ActivityScope MediaDetailPresenter provideMediaDetailPresenter(MediaDetailView view,
             PreferencesHandler preferencesHandler, NetworkManager networkManager) {
         return new MediaDetailPresenterImpl(view, preferencesHandler, networkManager);
+    }
+
+    @Module
+    public interface MediaDetailBindModule {
+        @Binds MediaDetailView bindView(MediaDetailActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = MovieDetailModule.class)
+        MovieDetailFragment contributeMovieDetailFragmentInjector();
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = ShowDetailModule.class)
+        ShowDetailFragment contributeShowDetailFragmentInjector();
     }
 }

@@ -20,22 +20,8 @@ package butter.droid;
 import butter.droid.base.BaseInternalComponent;
 import butter.droid.base.Internal;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.ui.about.AboutActivity;
-import butter.droid.ui.about.AboutComponent;
-import butter.droid.ui.beam.BeamPlayerActivityComponent;
-import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
-import butter.droid.ui.loading.StreamLoadingComponent;
-import butter.droid.ui.main.MainComponent;
-import butter.droid.ui.media.detail.MediaDetailComponent;
-import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
-import butter.droid.ui.player.VideoPlayerComponent;
-import butter.droid.ui.preferences.PreferencesComponent;
-import butter.droid.ui.search.SearchActivity;
-import butter.droid.ui.search.SearchComponent;
-import butter.droid.ui.terms.TermsComponent;
-import butter.droid.ui.trailer.TrailerPlayerActivity;
-import butter.droid.ui.trailer.TrailerPlayerComponent;
 import dagger.Component;
+import dagger.android.AndroidInjector;
 
 @Internal @Component(
         dependencies = {
@@ -43,38 +29,13 @@ import dagger.Component;
         },
         modules = InternalModule.class
 )
-public interface InternalComponent extends BaseInternalComponent {
+public interface InternalComponent extends AndroidInjector<MobileButterApplication>, BaseInternalComponent {
 
-    void inject(MobileButterApplication application);
+    @Component.Builder
+    abstract class Builder extends AndroidInjector.Builder<MobileButterApplication> {
 
-    void inject(AboutActivity activity);
+        abstract Builder providerComponent(ProviderComponent component);
 
-    void inject(SearchActivity activity);
-
-    void inject(TrailerPlayerActivity activity);
-
-    void inject(EpisodeDialogFragment fragment);
-
-    void inject(BeamDeviceSelectorDialogFragment fragment);
-
-    MainComponent.Builder mainComponentBuilder();
-
-    PreferencesComponent.Builder preferencesComponentBuilder();
-
-    TermsComponent.Builder termsComponentBuilder();
-
-    MediaDetailComponent.Builder mediaDetailsComponentBuilder();
-
-    AboutComponent.Builder aboutComponentBuilder();
-
-    StreamLoadingComponent.Builder streamLoadingComponentBuilder();
-
-    SearchComponent.Builder searchComponentBuilder();
-
-    TrailerPlayerComponent.Builder trailerComponentBuilder();
-
-    BeamPlayerActivityComponent.Builder beamPlayerActivityComponentBuilder();
-
-    VideoPlayerComponent.Builder videoPlayerComponentBuilder();
+    }
 
 }

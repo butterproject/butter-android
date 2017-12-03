@@ -45,7 +45,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         component = TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .tvVideoPlayerComponentBuilder()
                 .build();
         component.inject(this);

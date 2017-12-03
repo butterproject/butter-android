@@ -51,7 +51,7 @@ public class TVLaunchActivity extends Activity implements TVLaunchView {
         super.onCreate(savedInstanceState);
 
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .tvLaunchComponentBuilder()
                 .launchModule(new TVLaunchModule(this))
                 .build()

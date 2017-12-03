@@ -15,23 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.loading.fragment;
+package butter.droid.base.torrent;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import dagger.Module;
 
-@Subcomponent(modules = StreamLoadingFragmentModule.class)
-@FragmentScope
-public interface StreamLoadingFragmentComponent {
-
-    void inject(StreamLoadingFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-
-        Builder streamLoadingFragmentModule(StreamLoadingFragmentModule module);
-
-        StreamLoadingFragmentComponent build();
-
-    }
+@Module
+public class TorrentServiceModule {
 
 }

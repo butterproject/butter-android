@@ -15,23 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.show.season;
+package butter.droid.ui.search;
 
-import butter.droid.base.ui.SubFragmentScope;
-import dagger.Subcomponent;
+import dagger.Module;
 
-@Subcomponent(modules = ShowDetailSeasonModule.class)
-@SubFragmentScope
-public interface ShowDetailSeasonComponent {
-
-    void inject(ShowDetailSeasonFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-
-        Builder showDetailSeasonModule(ShowDetailSeasonModule module);
-
-        ShowDetailSeasonComponent build();
-
-    }
+@Module
+public class SearchActivityModule {
 
 }

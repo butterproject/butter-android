@@ -20,7 +20,6 @@ package butter.droid.ui.main.genre;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
@@ -30,15 +29,15 @@ import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.main.genre.list.GenreAdapter;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GenreSelectionFragment extends Fragment implements GenreSelectionView, RecyclerClickListener {
+public class GenreSelectionFragment extends DaggerFragment implements GenreSelectionView, RecyclerClickListener {
 
     private static final String ARG_PROVIDER = "butter.droid.ui.main.genre.GenreSelectionFragment.provider";
 
@@ -51,12 +50,6 @@ public class GenreSelectionFragment extends Fragment implements GenreSelectionVi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((MainActivity) getActivity()).getComponent()
-                .genreSelectionBuilder()
-                .genresSelectionModule(new GenreSelectionModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override

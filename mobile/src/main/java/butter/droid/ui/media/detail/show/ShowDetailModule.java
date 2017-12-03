@@ -18,23 +18,34 @@
 package butter.droid.ui.media.detail.show;
 
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.base.ui.SubFragmentScope;
+import butter.droid.ui.media.detail.show.ShowDetailModule.ShowDetailBindModule;
+import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
+import butter.droid.ui.media.detail.show.about.ShowDetailAboutModule;
+import butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment;
+import butter.droid.ui.media.detail.show.season.ShowDetailSeasonModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = ShowDetailBindModule.class)
 public class ShowDetailModule {
-
-    private final ShowDetailView view;
-
-    public ShowDetailModule(ShowDetailView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope ShowDetailView provideView() {
-        return view;
-    }
 
     @Provides @FragmentScope ShowDetailPresenter providePresenter(ShowDetailView view) {
         return new ShowDetailPresenterImpl(view);
+    }
+
+    @Module
+    public interface ShowDetailBindModule {
+        @Binds ShowDetailView bindView(ShowDetailFragment fragment);
+
+        @SubFragmentScope
+        @ContributesAndroidInjector(modules = ShowDetailAboutModule.class)
+        ShowDetailAboutFragment contributeShowDetailAboutFragmentInjector();
+
+        @SubFragmentScope
+        @ContributesAndroidInjector(modules = ShowDetailSeasonModule.class)
+        ShowDetailSeasonFragment contributeShowDetailSeasonFragmentInjector();
     }
 }

@@ -21,7 +21,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +30,14 @@ import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.module.Episode;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
-import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
 import butter.droid.widget.LinearList;
+import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeasonView, OnClickListener {
+public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDetailSeasonView, OnClickListener {
 
     private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.show";
     private static final String ARG_SEASON = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.season";
@@ -52,13 +51,6 @@ public class ShowDetailSeasonFragment extends Fragment implements ShowDetailSeas
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((ShowDetailFragment) getParentFragment())
-                .getComponent()
-                .showDetailSeasonBuilder()
-                .showDetailSeasonModule(new ShowDetailSeasonModule(this))
-                .build()
-                .inject(this);
 
         Bundle args = getArguments();
         MediaWrapper show = Parcels.unwrap(args.getParcelable(ARG_SHOW));

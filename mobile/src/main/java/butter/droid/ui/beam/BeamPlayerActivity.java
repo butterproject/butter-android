@@ -23,15 +23,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.beam.fragment.BeamPlayerFragment;
 import butter.droid.ui.player.VideoPlayerActivity;
+import butter.droid.ui.player.dialog.OptionDialogFragment;
 import javax.inject.Inject;
 
 public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayerActivityView {
@@ -43,22 +42,12 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
 
     @Inject BeamPlayerActivityPresenter presenter;
 
-    private BeamPlayerActivityComponent component;
-
     private BeamPlayerFragment fragment;
     private String title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-        component = MobileButterApplication.getAppContext()
-                .getComponent()
-                .beamPlayerActivityComponentBuilder()
-                .beamPlayerActivityModule(new BeamPlayerActivityModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, 0);
 
         setShowCasting(true);
@@ -143,10 +132,6 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     @Override public void fallbackToVideoPlayer(final StreamInfo streamInfo, final int resumePosition) {
         startActivity(VideoPlayerActivity.getIntent(this, streamInfo, resumePosition));
         closePlayer();
-    }
-
-    public BeamPlayerActivityComponent getComponent() {
-        return component;
     }
 
     private void showExitDialog() {

@@ -29,21 +29,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butter.droid.R;
+import butter.droid.base.widget.recycler.RecyclerClickListener;
+import butter.droid.base.widget.recycler.RecyclerItemClickListener;
+import butter.droid.ui.main.navigation.list.NavigationAdapter;
+import butter.droid.widget.decorator.OneShotDividerDecorator;
+import dagger.android.support.DaggerFragment;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
-
 import javax.inject.Inject;
 
-import butter.droid.R;
-import butter.droid.widget.decorator.OneShotDividerDecorator;
-import butter.droid.base.widget.recycler.RecyclerClickListener;
-import butter.droid.base.widget.recycler.RecyclerItemClickListener;
-import butter.droid.ui.main.MainActivity;
-import butter.droid.ui.main.navigation.list.NavigationAdapter;
-
-public class NavigationDrawerFragment extends Fragment implements NavigationDrawerView, RecyclerClickListener {
+public class NavigationDrawerFragment extends DaggerFragment implements NavigationDrawerView, RecyclerClickListener {
 
     /** Remember the position of the selected item. */
     static final String STATE_SELECTED_POSITION
@@ -59,13 +56,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((MainActivity) getActivity()).getComponent()
-                .navigationDrawerBuilder()
-                .navigationDrawerModule(new NavigationDrawerModule(this))
-                .build()
-                .inject(this);
-
         int savedPosition = 0;
         if (savedInstanceState != null) {
             savedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);

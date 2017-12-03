@@ -27,16 +27,6 @@ import dagger.Provides;
 @Module(includes = MediaListBindModule.class)
 public class MediaListModule {
 
-    private final MediaListView view;
-
-    public MediaListModule(MediaListView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope MediaListView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope MediaListPresenter providePresenter(MediaListView view, ProviderManager providerManager,
             PreferencesHandler preferencesHandler, MainPresenter parentPresenter) {
         return new MediaListPresenterImpl(view, providerManager, preferencesHandler, parentPresenter);

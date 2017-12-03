@@ -92,6 +92,7 @@ dependencies {
     implementation project(':base')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"

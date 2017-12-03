@@ -34,7 +34,7 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
     @Override public void onCreate(final Bundle savedInstanceState) {
         TVTrailerPlayerActivity activity = (TVTrailerPlayerActivity) getActivity();
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .tvTrailerPlayerComponentBuilder()
                 .trailerPlayerModule(new TVTrailerPlayerModule(this, activity))
                 .build()

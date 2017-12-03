@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,40 +28,32 @@ import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
 import butter.droid.ui.media.detail.show.pager.ShowDetailPagerAdapter;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class ShowDetailFragment extends Fragment implements ShowDetailView {
+public class ShowDetailFragment extends DaggerFragment implements ShowDetailView {
 
     private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.ShowDetailFragment.show";
 
     @Inject ShowDetailPresenter presenter;
-
 
     @BindView(R.id.pager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabs;
     @Nullable @BindView(R.id.about_content) ViewGroup aboutContainer;
     @Nullable @BindView(R.id.background) View background;
 
-    private ShowDetailComponent component;
     private ShowDetailPagerAdapter pagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        component = ((MediaDetailActivity) getActivity()).getComponent()
-                .showDetailComponentBuilder()
-                .showDetailModule(new ShowDetailModule(this))
-                .build();
-        component.inject(this);
 
         MediaWrapper show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
 
@@ -124,10 +115,6 @@ public class ShowDetailFragment extends Fragment implements ShowDetailView {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.about_content, ShowDetailAboutFragment.newInstance(show))
                 .commit();
-    }
-
-    public ShowDetailComponent getComponent() {
-        return component;
     }
 
     public static ShowDetailFragment newInstance(MediaWrapper show) {

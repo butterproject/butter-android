@@ -29,7 +29,7 @@ public class TVPreferencesActivity extends TVBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .inject(this);
 
         super.onCreate(savedInstanceState);

@@ -45,7 +45,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         component = TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .tvMediaDetailComponentBuilder()
                 .mediaDetailModule(new TVMediaDetailModule(this))
                 .backgroundUpdaterModule(new BackgroundUpdaterModule(this))

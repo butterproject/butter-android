@@ -15,27 +15,21 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail;
+package butter.droid.ui.trailer;
 
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.ui.media.detail.movie.MovieDetailComponent;
-import butter.droid.ui.media.detail.show.ShowDetailComponent;
-import dagger.Subcomponent;
+import android.app.Activity;
+import butter.droid.base.ui.FragmentScope;
+import dagger.Binds;
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
-@Subcomponent (modules = MediaDetailModule.class)
-@ActivityScope
-public interface MediaDetailComponent {
+@Module
+public interface TrailerPlayerActivityModule {
 
-    void inject(MediaDetailActivity activity);
+    @Binds Activity bindActivity(TrailerPlayerActivity activity);
 
-    MovieDetailComponent.Builder movieDetailComponentBuilder();
-
-    ShowDetailComponent.Builder showDetailComponentBuilder();
-
-    @Subcomponent.Builder interface Builder {
-        Builder mediaDetailModule(MediaDetailModule module);
-
-        MediaDetailComponent build();
-    }
+    @FragmentScope
+    @ContributesAndroidInjector(modules = TrailerPlayerModule.class)
+    TrailerPlayerFragment contributeTrailerPlayerFragmentInjector();
 
 }

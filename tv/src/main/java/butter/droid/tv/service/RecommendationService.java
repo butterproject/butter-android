@@ -62,7 +62,7 @@ public class RecommendationService extends IntentService {
         super.onCreate();
 
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .inject(this);
     }
 

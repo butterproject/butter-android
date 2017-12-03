@@ -26,4 +26,6 @@ public interface StreamLoadingFragmentBindModule {
 
     @Binds BaseStreamLoadingFragmentPresenter bindBasePresenter(StreamLoadingFragmentPresenter presenter);
 
+    @Binds StreamLoadingFragmentView bindView(StreamLoadingFragment fragment);
+
 }

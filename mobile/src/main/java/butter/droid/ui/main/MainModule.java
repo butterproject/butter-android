@@ -22,25 +22,42 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.ui.main.MainModule.MainBindModule;
+import butter.droid.ui.main.genre.GenreSelectionFragment;
+import butter.droid.ui.main.genre.GenreSelectionModule;
+import butter.droid.ui.main.navigation.NavigationDrawerFragment;
+import butter.droid.ui.main.navigation.NavigationDrawerModule;
+import butter.droid.ui.media.list.MediaListFragment;
+import butter.droid.ui.media.list.MediaListModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = MainBindModule.class)
 public class MainModule {
-
-    private final MainView view;
-
-    public MainModule(MainView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope MainView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope MainPresenter providePresenter(MainView view, ProviderManager providerManager, Context context,
             PreferencesHandler preferencesHandler, PrefManager prefManager) {
         return new MainPresenterImpl(view, providerManager, context, preferencesHandler, prefManager);
+    }
+
+    @Module
+    public interface MainBindModule {
+        @Binds MainView bindView(MainActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = NavigationDrawerModule.class)
+        NavigationDrawerFragment contributeNavigationDrawerFragmentInjector();
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = GenreSelectionModule.class)
+        GenreSelectionFragment contributeGenreSelecionFragmentInjector();
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = MediaListModule.class)
+        MediaListFragment contributeMediaListFragmentInjector();
     }
 }
 

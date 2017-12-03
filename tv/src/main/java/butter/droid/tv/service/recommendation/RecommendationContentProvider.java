@@ -149,7 +149,7 @@ public class RecommendationContentProvider extends ContentProvider {
     private void init() {
         if (!initialized) {
             TVButterApplication.getAppContext()
-                    .getComponent()
+                    .getInternalComponent()
                     .inject(this);
         }
     }

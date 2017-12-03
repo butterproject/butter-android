@@ -17,7 +17,6 @@
 
 package butter.droid.base;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -41,11 +40,12 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.sjl.foreground.Foreground;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.picasso.Picasso;
+import dagger.android.support.DaggerApplication;
 import java.io.File;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public abstract class ButterApplication extends Application implements ButterUpdateManager.Listener {
+public abstract class ButterApplication extends DaggerApplication implements ButterUpdateManager.Listener {
 
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
@@ -67,8 +67,6 @@ public abstract class ButterApplication extends Application implements ButterUpd
         sThis = this;
 
         AndroidThreeTen.init(this);
-
-        inject();
 
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
 
@@ -150,10 +148,6 @@ public abstract class ButterApplication extends Application implements ButterUpd
             nm.notify(ButterUpdateManager.NOTIFICATION_ID, notificationBuilder.build());
         }
     }
-
-    public abstract BaseInternalComponent getComponent();
-
-    protected abstract void inject();
 
     public static ButterApplication getAppContext() {
         return sThis;

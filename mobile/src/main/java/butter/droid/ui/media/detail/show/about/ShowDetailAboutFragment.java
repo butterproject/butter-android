@@ -19,7 +19,6 @@ package butter.droid.ui.media.detail.show.about;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,15 +32,15 @@ import android.widget.TextView;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
-import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.squareup.picasso.Picasso;
+import dagger.android.support.DaggerFragment;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class ShowDetailAboutFragment extends Fragment implements ShowDetailAboutView {
+public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetailAboutView {
 
     private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment.show";
 
@@ -59,12 +58,6 @@ public class ShowDetailAboutFragment extends Fragment implements ShowDetailAbout
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((ShowDetailFragment) getParentFragment()).getComponent()
-                .showDetailAboutBuilder()
-                .showDetailAboutModule(new ShowDetailAboutModule(this))
-                .build()
-                .inject(this);
 
         MediaWrapper show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
 

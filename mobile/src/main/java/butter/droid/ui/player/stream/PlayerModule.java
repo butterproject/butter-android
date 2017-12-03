@@ -17,7 +17,6 @@
 
 package butter.droid.ui.player.stream;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
@@ -37,27 +36,11 @@ import org.videolan.libvlc.LibVLC;
 @Module(includes = PlayerBindModule.class)
 public class PlayerModule {
 
-    private final PlayerView view;
-    private final Activity activity;
-
-    public PlayerModule(final PlayerView view, final Activity activity) {
-        this.view = view;
-        this.activity = activity;
-    }
-
-    @Provides @FragmentScope PlayerView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PreferencesHandler preferencesHandler,
             ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager, AudioManager audioManager,
             BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player) {
         return new PlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager,
                 beamManager, brightnessManager, audioManager, touchHandler, player);
-    }
-
-    @Provides @FragmentScope Activity provideActivity() {
-        return activity;
     }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {

@@ -24,26 +24,24 @@ import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.ui.preferences.PreferencesModule.PreferencesBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = PreferencesBindModule.class)
 public class PreferencesModule {
-
-    private final PreferencesView view;
-
-    public PreferencesModule(PreferencesView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope PreferencesView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope PreferencesPresenter providePresenter(PreferencesView view,
             PrefManager prefManager, PreferencesHandler preferencesHandler, Resources resources,
             PlayerManager playerManager, ButterUpdateManager updateManager) {
         return new PreferencesPresenterImpl(view, prefManager, preferencesHandler, resources, playerManager,
                 updateManager);
+    }
+
+    @Module public interface PreferencesBindModule {
+
+        @Binds PreferencesView bindView(PreferencesActivity activity);
+
     }
 }

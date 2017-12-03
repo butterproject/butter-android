@@ -19,23 +19,28 @@ package butter.droid.ui.beam;
 
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.base.ui.FragmentScope;
+import butter.droid.ui.beam.BeamPlayerActivityModule.BeamPlayerActivityBindModule;
+import butter.droid.ui.beam.fragment.BeamPlayerFragment;
+import butter.droid.ui.beam.fragment.BeamPlayerModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module
+@Module(includes = BeamPlayerActivityBindModule.class)
 public class BeamPlayerActivityModule {
-
-    private final BeamPlayerActivityView view;
-
-    public BeamPlayerActivityModule(final BeamPlayerActivityView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope BeamPlayerActivityView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope BeamPlayerActivityPresenter providePresenter(BeamPlayerActivityView view, BeamManager beamManager) {
         return new BeamPlayerActivityPresenterImpl(view, beamManager);
+    }
+
+    @Module
+    public interface BeamPlayerActivityBindModule {
+        @Binds BeamPlayerActivityView bindView(BeamPlayerActivity activity);
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = BeamPlayerModule.class)
+        BeamPlayerFragment contributeBeamPlayerFragmentInjector();
     }
 }

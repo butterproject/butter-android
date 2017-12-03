@@ -15,21 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.about;
+package butter.droid.ui.media.detail.dialog;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import dagger.Module;
 
-@Subcomponent(modules = AboutModule.class)
-@FragmentScope
-public interface AboutComponent {
-
-    void inject(AboutFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-        Builder aboutModule(AboutModule module);
-
-        AboutComponent build();
-    }
+@Module
+public class EpisodeDialogModule {
 
 }

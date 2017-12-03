@@ -29,4 +29,6 @@ public interface MediaListBindModule {
 
     @Binds BaseMediaListPresenter bindsBasePresenter(MediaListPresenter presenter);
 
+    @Binds MediaListView bindView(MediaListFragment fragment);
+
 }

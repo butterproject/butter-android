@@ -49,7 +49,7 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         component = TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .streamLoadingComponentBuilder()
                 .streamLoadingModule(new TVStreamLoadingModule(this))
                 .build();

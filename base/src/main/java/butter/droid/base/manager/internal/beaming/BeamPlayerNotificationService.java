@@ -31,7 +31,6 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.app.NotificationCompat.MediaStyle;
-import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
@@ -59,9 +58,10 @@ public class BeamPlayerNotificationService extends Service {
     @Override public void onCreate() {
         super.onCreate();
 
-        ButterApplication.getAppContext()
-                .getComponent()
-                .inject(this);
+        // TODO
+//        ButterApplication.getAppContext()
+//                .getInternalComponent()
+//                .inject(this);
     }
 
     @Override

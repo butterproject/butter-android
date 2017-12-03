@@ -52,7 +52,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
 
     @Override public void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .preferencesComponentBuilder()
                 .preferencesModule(new TVPreferencesModule(this))
                 .build()

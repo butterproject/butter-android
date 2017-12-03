@@ -18,24 +18,21 @@
 package butter.droid.ui.about;
 
 import butter.droid.base.ui.FragmentScope;
+import butter.droid.ui.about.AboutModule.AboutBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = AboutBindModule.class)
 public class AboutModule {
-
-    private final AboutView view;
-
-    public AboutModule(AboutView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope AboutView provideAboutView() {
-        return view;
-    }
 
     @Provides @FragmentScope AboutPresenter provideAboutPresenter(AboutView view) {
         return new AboutPresenterImpl(view);
+    }
+
+    @Module
+    public interface AboutBindModule {
+        @Binds AboutView bindsView(AboutFragment activity);
     }
 
 }

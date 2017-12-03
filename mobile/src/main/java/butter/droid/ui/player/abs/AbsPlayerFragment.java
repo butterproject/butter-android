@@ -27,7 +27,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -63,9 +62,10 @@ import butter.droid.ui.player.VideoPlayerTouchHandler;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.support.DaggerFragment;
 import javax.inject.Inject;
 
-public class AbsPlayerFragment extends Fragment implements AbsPlayerView, BaseVideoPlayerView, OnSystemUiVisibilityChangeListener {
+public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, BaseVideoPlayerView, OnSystemUiVisibilityChangeListener {
 
     protected static final String ARG_RESUME_POSITION = "butter.droid.ui.player.abs.AbsPlayerFragment.resumePosition";
 

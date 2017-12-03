@@ -22,15 +22,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-
-import javax.inject.Inject;
-
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
+import javax.inject.Inject;
 
 public class TermsActivity extends ButterBaseActivity implements TermsView {
 
@@ -40,13 +37,6 @@ public class TermsActivity extends ButterBaseActivity implements TermsView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .termsComponentBuilder()
-                .termsModule(new TermsModule(this))
-                .build()
-                .inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_terms);
         setSupportActionBar(toolbar);
 

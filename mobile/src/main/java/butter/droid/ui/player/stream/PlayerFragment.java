@@ -27,7 +27,6 @@ import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.OnClick;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
@@ -46,13 +45,6 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        VideoPlayerActivity activity = (VideoPlayerActivity) getActivity();
-        activity.getComponent()
-                .playerComponentBuilder()
-                .playerModule(new PlayerModule(this, activity))
-                .build()
-                .inject(this);
-
         super.onCreate(savedInstanceState);
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);

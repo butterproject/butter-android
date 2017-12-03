@@ -20,24 +20,21 @@ package butter.droid.ui.main.navigation;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.main.MainPresenter;
+import butter.droid.ui.main.navigation.NavigationDrawerModule.NavigationDrawerBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = NavigationDrawerBindModule.class)
 public class NavigationDrawerModule {
-
-    private final NavigationDrawerView view;
-
-    public NavigationDrawerModule(NavigationDrawerView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope NavigationDrawerView provideView() {
-        return view;
-    }
 
     @Provides @FragmentScope NavigationDrawerPresenter providePresenter(NavigationDrawerView view,
             ProviderManager providerManager, MainPresenter parentPresenter) {
         return new NavigationDrawerPresenterImpl(view, providerManager, parentPresenter);
+    }
+
+    @Module
+    public interface NavigationDrawerBindModule {
+        @Binds NavigationDrawerView bindView(NavigationDrawerFragment fragment);
     }
 }

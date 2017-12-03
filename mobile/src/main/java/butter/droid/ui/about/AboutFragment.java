@@ -22,32 +22,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.utils.ButterCustomTabActivityHelper;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.support.DaggerFragment;
 import javax.inject.Inject;
 
-public class AboutFragment extends Fragment implements AboutView {
+public class AboutFragment extends DaggerFragment implements AboutView {
 
     @Inject AboutPresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .aboutComponentBuilder()
-                .aboutModule(new AboutModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override

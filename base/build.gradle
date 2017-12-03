@@ -61,6 +61,8 @@ dependencies {
 
     implementation 'de.timroes:aXMLRPC:1.8.1'
     api "com.google.dagger:dagger:$daggerVersion"
+    api "com.google.dagger:dagger-android:$daggerVersion"
+    api "com.google.dagger:dagger-android-support:$daggerVersion"
 
     api 'com.butterproject:vlc-android-sdk:2.5.7.1'
 
@@ -76,6 +78,7 @@ dependencies {
     api project(':provider:subs:mock')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"

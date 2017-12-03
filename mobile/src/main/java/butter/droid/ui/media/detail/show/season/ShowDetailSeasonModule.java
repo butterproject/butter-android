@@ -18,23 +18,20 @@
 package butter.droid.ui.media.detail.show.season;
 
 import butter.droid.base.ui.SubFragmentScope;
+import butter.droid.ui.media.detail.show.season.ShowDetailSeasonModule.ShowDetailSeasonBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = ShowDetailSeasonBindModule.class)
 public class ShowDetailSeasonModule {
-
-    private final ShowDetailSeasonView view;
-
-    public ShowDetailSeasonModule(ShowDetailSeasonView view) {
-        this.view = view;
-    }
-
-    @Provides @SubFragmentScope ShowDetailSeasonView provideView() {
-        return view;
-    }
 
     @Provides @SubFragmentScope ShowDetailSeasonPresenter providePresneter(ShowDetailSeasonView view) {
         return new ShowDetailSeasonPresenterImpl(view);
+    }
+
+    @Module
+    public interface ShowDetailSeasonBindModule {
+        @Binds ShowDetailSeasonView bindView(ShowDetailSeasonFragment fragment);
     }
 }

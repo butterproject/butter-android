@@ -20,17 +20,15 @@ package butter.droid.base.ui.loading.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import javax.inject.Inject;
-
 import butter.droid.base.R2;
 import butter.droid.base.torrent.TorrentService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerFragment;
+import javax.inject.Inject;
 
 
 /**
@@ -52,7 +50,7 @@ import butterknife.ButterKnife;
  * <p/>
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
-public abstract class BaseStreamLoadingFragment extends Fragment implements BaseStreamLoadingFragmentView {
+public abstract class BaseStreamLoadingFragment extends DaggerFragment implements BaseStreamLoadingFragmentView {
 
     protected static final String ARGS_STREAM_INFO = "butter.droid.fragments.StreamLoadingFragment.streamInfo";
 

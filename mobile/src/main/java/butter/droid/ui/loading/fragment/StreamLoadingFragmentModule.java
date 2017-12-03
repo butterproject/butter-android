@@ -32,16 +32,6 @@ import dagger.Provides;
 )
 public class StreamLoadingFragmentModule {
 
-    private final StreamLoadingFragmentView view;
-
-    public StreamLoadingFragmentModule(StreamLoadingFragmentView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope public StreamLoadingFragmentView provideView() {
-        return view;
-    }
-
     @Provides @FragmentScope public StreamLoadingFragmentPresenter providePresenter(StreamLoadingFragmentView view,
             ProviderManager providerManager, PreferencesHandler preferencesHandler, PlayerManager playerManager,
             Context context, BeamManager beamManager) {

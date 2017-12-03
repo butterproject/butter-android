@@ -26,4 +26,6 @@ public interface PlayerBindModule {
 
     @Binds AbsPlayerPresenter bindBasePresenter(PlayerPresenter presenter);
 
+    @Binds PlayerView bindView(PlayerFragment fragment);
+
 }

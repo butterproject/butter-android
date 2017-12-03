@@ -15,21 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.trailer;
+package butter.droid.base.torrent;
 
-import butter.droid.base.ui.FragmentScope;
-import dagger.Subcomponent;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import javax.inject.Scope;
 
-@Subcomponent(modules = TrailerPlayerModule.class)
-@FragmentScope
-public interface TrailerPlayerComponent {
-
-    void inject(TrailerPlayerFragment fragment);
-
-    @Subcomponent.Builder interface Builder {
-        Builder trailerPlayerModule(TrailerPlayerModule module);
-
-        TrailerPlayerComponent build();
-    }
-
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ServiceScope {
 }

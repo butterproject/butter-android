@@ -17,7 +17,6 @@
 
 package butter.droid.ui.beam.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -30,7 +29,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +45,6 @@ import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.ui.beam.fragment.dialog.LoadingBeamingDialogFragment;
 import butter.droid.ui.player.dialog.OptionDialogFragment;
-import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.widget.SeekBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,9 +55,10 @@ import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import dagger.android.support.DaggerFragment;
 import javax.inject.Inject;
 
-public class BeamPlayerFragment extends Fragment implements BeamPlayerView, TorrentListener {
+public class BeamPlayerFragment extends DaggerFragment implements BeamPlayerView, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.ui.beam.fragment.BeamPlayerFragment.streamInfo";
     private static final String ARG_RESUME_POSITION = "butter.droid.ui.beam.fragment.BeamPlayerFragment.resumePosition";
@@ -83,19 +81,8 @@ public class BeamPlayerFragment extends Fragment implements BeamPlayerView, Torr
     @Override public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((BeamPlayerActivity) getActivity()).getComponent()
-                .beamPlayerComponentBuilder()
-                .beamPlayerModule(new BeamPlayerModule(this))
-                .build()
-                .inject(this);
-
         loadingDialog = LoadingBeamingDialogFragment.newInstance();
-        loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                presenter.closePlayer();
-            }
-        });
+        loadingDialog.setOnCancelListener(dialogInterface -> presenter.closePlayer());
         loadingDialog.show(getChildFragmentManager(), "overlay_fragment");
 
         Bundle arguments = getArguments();

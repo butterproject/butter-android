@@ -39,7 +39,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
@@ -74,8 +73,6 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
 
     @Inject MediaDetailPresenter presenter;
 
-    private MediaDetailComponent component;
-
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.fab) @Nullable FloatingActionButton floatingActionButton;
@@ -86,14 +83,6 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        component = MobileButterApplication.getAppContext()
-                .getComponent()
-                .mediaDetailsComponentBuilder()
-                .mediaDetailModule(new MediaDetailModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, R.layout.activity_mediadetail);
         setSupportActionBar(toolbar);
         setShowCasting(true);
@@ -229,10 +218,6 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     private void displayFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
-    }
-
-    public MediaDetailComponent getComponent() {
-        return component;
     }
 
     public static Intent getIntent(@NonNull Context context, @NonNull MediaWrapper media) {

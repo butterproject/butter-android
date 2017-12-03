@@ -20,24 +20,21 @@ package butter.droid.ui.beam.fragment;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.beam.BeamPlayerActivityPresenter;
+import butter.droid.ui.beam.fragment.BeamPlayerModule.BeamPlayerBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = BeamPlayerBindModule.class)
 public class BeamPlayerModule {
-
-    private final BeamPlayerView view;
-
-    public BeamPlayerModule(final BeamPlayerView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope BeamPlayerView provideView() {
-        return view;
-    }
 
     @Provides @FragmentScope BeamPlayerPresenter providePresenter(BeamPlayerView view, BeamManager beamManager,
             BeamPlayerActivityPresenter parentPresenter) {
         return new BeamPlayerPresenterImpl(view, beamManager, parentPresenter);
+    }
+
+    @Module
+    public interface BeamPlayerBindModule {
+        @Binds BeamPlayerView bindView(BeamPlayerFragment fragment);
     }
 }

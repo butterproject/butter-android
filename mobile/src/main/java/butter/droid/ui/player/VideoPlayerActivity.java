@@ -22,12 +22,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.ButterBaseActivity;
+import butter.droid.ui.player.dialog.OptionDialogFragment;
 import butter.droid.ui.player.stream.PlayerFragment;
 import javax.inject.Inject;
 
@@ -40,18 +39,10 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Inject VideoPlayerPresenter presenter;
 
-    private VideoPlayerComponent component;
     private PlayerFragment fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        component = MobileButterApplication.getAppContext()
-                .getComponent()
-                .videoPlayerComponentBuilder()
-                .videoPlayerModule(new VideoPlayerModule(this))
-                .build();
-        component.inject(this);
-
         super.onCreate(savedInstanceState, 0);
 
         setShowCasting(true);
@@ -118,10 +109,6 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
                     public void onSelectionNegative() {
                     }
                 });
-    }
-
-    public VideoPlayerComponent getComponent() {
-        return component;
     }
 
     @Override

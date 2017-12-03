@@ -41,7 +41,7 @@ public class TVTermsFragment extends GuidedStepFragment implements TVTermsView {
         super.onCreate(savedInstanceState);
 
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .termsComponentBuilder()
                 .termsModule(new TVTermsModule(this))
                 .build()

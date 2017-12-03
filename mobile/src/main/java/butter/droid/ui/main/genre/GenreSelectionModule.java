@@ -20,25 +20,22 @@ package butter.droid.ui.main.genre;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.main.MainPresenter;
+import butter.droid.ui.main.genre.GenreSelectionModule.GereSelectionBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = GereSelectionBindModule.class)
 public class GenreSelectionModule {
-
-    private final GenreSelectionView view;
-
-    public GenreSelectionModule(GenreSelectionView view) {
-        this.view = view;
-    }
-
-    @Provides @FragmentScope GenreSelectionView provideView() {
-        return view;
-    }
 
     @Provides @FragmentScope GenreSelectionPresenter providePresenter(GenreSelectionView view,
             ProviderManager providerManager, MainPresenter parentPresenter) {
         return new GenreSelectionPresenterImpl(view, providerManager, parentPresenter);
+    }
+
+    @Module
+    public interface GereSelectionBindModule {
+        @Binds GenreSelectionView bindView(GenreSelectionFragment fragment);
     }
 
 }

@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -34,14 +33,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.meta.MetaProvider;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
@@ -57,11 +55,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.squareup.picasso.Picasso;
+import dagger.android.support.DaggerAppCompatDialogFragment;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class EpisodeDialogFragment extends DialogFragment {
+public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 
     private static final String EXTRA_EPISODE = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.episode";
     private static final String EXTRA_SHOW = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.show";
@@ -99,11 +98,6 @@ public class EpisodeDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        MobileButterApplication.getAppContext()
-                .getComponent()
-                .inject(this);
-
         setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Episode);
         setCancelable(false);
 

@@ -36,7 +36,6 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.ui.beam.BeamPlayerActivity;
-import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,12 +53,6 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
-
-        ((StreamLoadingActivity) context).getComponent()
-                .streamLoadingFragmentComponentBuilder()
-                .streamLoadingFragmentModule(new StreamLoadingFragmentModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {

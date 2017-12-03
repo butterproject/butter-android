@@ -17,13 +17,11 @@
 
 package butter.droid.ui.media.detail.movie;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -40,7 +38,6 @@ import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.module.Movie;
 import butter.droid.provider.base.module.Torrent;
-import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
 import butter.droid.ui.media.detail.model.UiSubItem;
@@ -52,13 +49,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import com.squareup.picasso.Picasso;
+import dagger.android.support.DaggerFragment;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class MovieDetailFragment extends Fragment implements MovieDetailView, SubsPickerCallback {
+public class MovieDetailFragment extends DaggerFragment implements MovieDetailView, SubsPickerCallback {
 
     private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.MovieDetailFragment.movie";
 
@@ -80,15 +78,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView, Su
     @Nullable @BindView(R.id.cover_image) ImageView coverImage;
 
     private SubsPickerDialog subsDialog;
-
-    @Override public void onAttach(final Context context) {
-        super.onAttach(context);
-        ((MediaDetailActivity) context).getComponent()
-                .movieDetailComponentBuilder()
-                .movieDetailModule(new MovieDetailModule(this))
-                .build()
-                .inject(this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,

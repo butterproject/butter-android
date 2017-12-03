@@ -39,7 +39,7 @@ public class TVUpdateFragment extends GuidedStepFragment {
         super.onCreate(savedInstanceState);
 
         TVButterApplication.getAppContext()
-                .getComponent()
+                .getInternalComponent()
                 .inject(this);
     }
 

@@ -17,12 +17,9 @@
 
 package butter.droid.base.torrent;
 
-import static butter.droid.base.ButterApplication.getAppContext;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -40,6 +37,7 @@ import com.github.se_bastiaan.torrentstream.TorrentOptions;
 import com.github.se_bastiaan.torrentstream.TorrentStream;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import com.sjl.foreground.Foreground;
+import dagger.android.DaggerService;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class TorrentService extends Service implements TorrentListener {
+public class TorrentService extends DaggerService implements TorrentListener {
 
     public static final Integer NOTIFICATION_ID = 3423423;
 
@@ -84,10 +82,6 @@ public class TorrentService extends Service implements TorrentListener {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        getAppContext()
-                .getComponent()
-                .inject(this);
 
         sThis = this;
         Foreground.get().addListener(mForegroundListener);

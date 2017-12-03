@@ -23,31 +23,13 @@ import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.DaggerProviderComponent;
 import butter.droid.base.providers.ProviderComponent;
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
 
 public class MobileButterApplication extends ButterApplication {
 
-    private InternalComponent component;
-
-    public InternalComponent getComponent() {
-        return component;
-    }
-
-    @Override protected void inject() {
-
-        ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .build();
-
-        ProviderComponent providerComponent = DaggerProviderComponent.builder()
-                .baseApplicationComponent(applicationComponent)
-                .build();
-
-        component = DaggerInternalComponent.builder()
-                .providerComponent(providerComponent)
-                .build();
-
-        component.inject(this);
-    }
+    private ApplicationComponent appComponent;
+    private ProviderComponent providerComponent;
 
     @Override protected void attachBaseContext(final Context base) {
         super.attachBaseContext(base);
@@ -58,4 +40,21 @@ public class MobileButterApplication extends ButterApplication {
         return (MobileButterApplication) ButterApplication.getAppContext();
     }
 
+    @Override protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        if (appComponent == null) {
+            appComponent = DaggerApplicationComponent.builder()
+                    .baseApplicationModule(new BaseApplicationModule(this))
+                    .build();
+        }
+
+        if (providerComponent == null) {
+            providerComponent = DaggerProviderComponent.builder()
+                    .baseApplicationComponent(appComponent)
+                    .build();
+        }
+
+        return DaggerInternalComponent.builder()
+                .providerComponent(providerComponent)
+                .create(this);
+    }
 }

@@ -19,24 +19,21 @@ package butter.droid.ui.terms;
 
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.ActivityScope;
+import butter.droid.ui.terms.TermsModule.TermsBindModule;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = TermsBindModule.class)
 public class TermsModule {
-
-    private final TermsView view;
-
-    public TermsModule(TermsView view) {
-        this.view = view;
-    }
-
-    @Provides @ActivityScope TermsView provideView() {
-        return view;
-    }
 
     @Provides @ActivityScope TermsPresenter providePresenter(TermsView view, PrefManager prefManager) {
         return new TermsPresenterImpl(view, prefManager);
+    }
+
+    @Module
+    public interface TermsBindModule {
+        @Binds TermsView bindView(TermsActivity activity);
     }
 
 }
