@@ -316,23 +316,6 @@ public class TorrentService extends Service implements TorrentListener {
         sThis.stopStreaming();
     }
 
-    private ForegroundListener foregroundListener = new ForegroundListener() {
-        @Override public void isInForeground(final boolean inForeground) {
-            if (inForeground) {
-                if (!torrentStream.isStreaming()) {
-                    torrentStream.resumeSession();
-                } else {
-                    stopForeground();
-                }
-            } else {
-                if (!torrentStream.isStreaming()) {
-                    torrentStream.pauseSession();
-                } else {
-                    startForeground();
-                }
-            }
-        }
-    };
     public Torrent getCurrentTorrent() {
         return mCurrentTorrent;
     }
@@ -413,5 +396,23 @@ public class TorrentService extends Service implements TorrentListener {
             }
         }
     }
+
+    private ForegroundListener foregroundListener = new ForegroundListener() {
+        @Override public void isInForeground(final boolean inForeground) {
+            if (inForeground) {
+                if (!torrentStream.isStreaming()) {
+                    torrentStream.resumeSession();
+                } else {
+                    stopForeground();
+                }
+            } else {
+                if (!torrentStream.isStreaming()) {
+                    torrentStream.pauseSession();
+                } else {
+                    startForeground();
+                }
+            }
+        }
+    };
 
 }
