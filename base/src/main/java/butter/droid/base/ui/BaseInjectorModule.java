@@ -17,6 +17,8 @@
 
 package butter.droid.base.ui;
 
+import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationModule;
+import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.torrent.ServiceScope;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.torrent.TorrentServiceModule;
@@ -29,5 +31,9 @@ public abstract class BaseInjectorModule {
     @ServiceScope
     @ContributesAndroidInjector(modules = TorrentServiceModule.class)
     abstract TorrentService contributeTorrentServiceInjector();
+
+    @ServiceScope
+    @ContributesAndroidInjector(modules = BeamPlayerNotificationModule.class)
+    abstract BeamPlayerNotificationService contributeBeamPlayerNotificationServiceInjector();
 
 }
