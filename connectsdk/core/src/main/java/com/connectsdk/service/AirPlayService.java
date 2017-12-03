@@ -23,7 +23,6 @@ package com.connectsdk.service;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
 import com.connectsdk.core.Util;
@@ -45,10 +44,6 @@ import com.connectsdk.service.config.ServiceConfig;
 import com.connectsdk.service.config.ServiceDescription;
 import com.connectsdk.service.sessions.LaunchSession;
 import com.connectsdk.service.sessions.LaunchSession.LaunchSessionType;
-
-import org.apache.http.protocol.HTTP;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +61,7 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import org.json.JSONObject;
 
 public class AirPlayService extends DeviceService implements MediaPlayer, MediaControl {
     public static final String X_APPLE_SESSION_ID = "X-Apple-Session-ID";
@@ -536,7 +532,7 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                     sb.append(serviceCommand.getTarget());
 
                     HttpConnection connection = HttpConnection.newInstance(URI.create(sb.toString()));
-                    connection.setHeader(HTTP.USER_AGENT, "ConnectSDK MediaControl/1.0");
+                    connection.setHeader("User-Agent", "ConnectSDK MediaControl/1.0");
                     connection.setHeader(X_APPLE_SESSION_ID, mSessionId);
                     if (password != null) {
                         String authorization = getAuthenticate(serviceCommand.getHttpMethod(), serviceCommand.getTarget(), authenticate);

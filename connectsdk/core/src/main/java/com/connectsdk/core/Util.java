@@ -20,6 +20,16 @@
 
 package com.connectsdk.core;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Handler;
+import android.os.Looper;
+import com.connectsdk.service.capability.listeners.ErrorListener;
+import com.connectsdk.service.capability.listeners.ResponseListener;
+import com.connectsdk.service.command.ServiceCommandError;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -27,18 +37,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.http.conn.util.InetAddressUtils;
-
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.os.Looper;
-
-import com.connectsdk.service.capability.listeners.ErrorListener;
-import com.connectsdk.service.capability.listeners.ResponseListener;
-import com.connectsdk.service.command.ServiceCommandError;
 
 public final class Util {
     static public String T = "Connect SDK";
@@ -132,15 +130,23 @@ public final class Util {
     }
 
     public static boolean isIPv4Address(String ipAddress) {
-        return InetAddressUtils.isIPv4Address(ipAddress);
+        try {
+            return Inet4Address.getByName(ipAddress) != null;
+        } catch (UnknownHostException ex) {
+            return false;
+        }
     }
 
     public static boolean isIPv6Address(String ipAddress) {
-        return InetAddressUtils.isIPv6Address(ipAddress);
+        try {
+            return Inet6Address.getByName(ipAddress) != null;
+        } catch (UnknownHostException ex) {
+            return false;
+        }
     }
 
     public static InetAddress getIpAddress(Context context) throws UnknownHostException {
-        WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiMgr = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
         int ip = wifiInfo.getIpAddress();
 
