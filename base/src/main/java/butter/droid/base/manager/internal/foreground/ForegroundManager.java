@@ -44,7 +44,7 @@ public class ForegroundManager implements ComponentCallbacks2, ActivityLifecycle
         application.registerActivityLifecycleCallbacks(this);
         application.registerComponentCallbacks(this);
 
-        final PowerManager powerManager = (PowerManager) application.getSystemService(Context.POWER_SERVICE)
+        final PowerManager powerManager = (PowerManager) application.getSystemService(Context.POWER_SERVICE);
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         application.registerReceiver(new BroadcastReceiver() {
