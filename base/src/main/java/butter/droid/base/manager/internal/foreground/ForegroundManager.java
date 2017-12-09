@@ -26,7 +26,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.PowerManager;
 import butter.droid.base.Internal;
 import javax.inject.Inject;
 
@@ -40,10 +43,19 @@ public class ForegroundManager implements ComponentCallbacks2, ActivityLifecycle
     public ForegroundManager(final Application application) {
         application.registerActivityLifecycleCallbacks(this);
         application.registerComponentCallbacks(this);
+
+        final PowerManager powerManager = (PowerManager) application.getSystemService(Context.POWER_SERVICE)
+
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         application.registerReceiver(new BroadcastReceiver() {
             @Override public void onReceive(Context context, Intent intent) {
-                setInForeground(false);
+                if (VERSION.SDK_INT >= VERSION_CODES.KITKAT_WATCH) {
+                    if (!powerManager.isInteractive()) {
+                        setInForeground(false);
+                    }
+                } else if (!powerManager.isScreenOn()){
+                    setInForeground(false);
+                }
             }
         }, filter);
     }

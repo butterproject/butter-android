@@ -2,7 +2,7 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
-        kotlinVersion = '1.1.60'
+        kotlinVersion = '1.2.0'
     }
 
     repositories {
@@ -22,7 +22,7 @@ buildscript {
 }
 
 ext {
-    appCompatVersion = "27.0.1"
+    appCompatVersion = "27.0.2"
     buildToolsVersion = "26.0.2"
     targetSdk = 26
     compileSdk = 26
