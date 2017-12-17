@@ -31,6 +31,7 @@ import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
@@ -39,9 +40,6 @@ import butter.droid.tv.ui.detail.show.presenter.EpisodeCardPresenter;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import dagger.android.support.AndroidSupportInjection;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeMap;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
@@ -78,18 +76,21 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         presenter.episodeClicked(row);
     }
 
-    @Override public void showSeasons(final TreeMap<Integer, List<Episode>> seasons) {
+    @Override public void showSeasons(final Season[] seasons) {
         ArrayObjectAdapter objectAdapter = getObjectArrayAdapter();
 
-        for (Integer seasonKey : seasons.descendingKeySet()) {
+        for (int i = 0; i < seasons.length; i++) {
+            Season season = seasons[i];
+
+            HeaderItem header = new HeaderItem(i, season.getTitle());
+
             EpisodeCardPresenter presenter = new EpisodeCardPresenter(getActivity());
             presenter.setOnClickListener(this);
             ArrayObjectAdapter episodes = new ArrayObjectAdapter(presenter);
 
-            for (Episode episode : seasons.get(seasonKey)) {
+            for (final Episode episode : season.getEpisodes()) {
                 episodes.add(episode);
             }
-            HeaderItem header = new HeaderItem(seasonKey, String.format(Locale.getDefault(), "Season %d", seasonKey));
             objectAdapter.add(new ListRow(header, episodes));
         }
 

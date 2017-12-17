@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+// TODO this needs to be rewritten
 public class RecommendationService extends DaggerIntentService {
 
     @Inject ProviderManager providerManager;
@@ -222,10 +223,11 @@ public class RecommendationService extends DaggerIntentService {
     }
 
     private Episode findLatestEpisode(Show show) {
-        if (show.getEpisodes().length == 0) {
-            return null;
-        }
-        return show.getEpisodes()[show.getEpisodes().length - 1];
+//        if (show.getEpisodes().length == 0) {
+//            return null;
+//        }
+//        return show.getEpisodes()[show.getEpisodes().length - 1];
+        return null;
     }
 
     private PendingIntent buildPendingIntent(final MediaWrapper media) {

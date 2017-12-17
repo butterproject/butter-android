@@ -19,14 +19,13 @@ package butter.droid.tv.ui.detail.show;
 
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;
-import java.util.List;
-import java.util.TreeMap;
 
 public interface TVShowDetailsView extends TVBaseDetailView {
 
-    void showSeasons(TreeMap<Integer, List<Episode>> seasons);
+    void showSeasons(Season[] seasons);
 
     void torrentSelected(StreamInfo streaminfo);
 
