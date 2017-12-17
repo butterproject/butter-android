@@ -20,6 +20,7 @@ package butter.droid.ui.media.detail.show.season;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import butter.droid.R;
-import butter.droid.base.providers.media.model.MediaWrapper;
+import butter.droid.base.providers.media.model.MediaMeta;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Season;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
@@ -40,6 +41,7 @@ import org.parceler.Parcels;
 
 public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDetailSeasonView, OnClickListener {
 
+    private static final String ARG_MEDIA_META = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.mediaMeta";
     private static final String ARG_SEASON = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.season";
 
     @Inject ShowDetailSeasonPresenter presenter;
@@ -53,13 +55,14 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
+        MediaMeta mediaMeta = args.getParcelable(ARG_MEDIA_META);
         Season season = Parcels.unwrap(args.getParcelable(ARG_SEASON));
 
-        presenter.onCreate(season);
+        presenter.onCreate(mediaMeta, season);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_showdetail_season, container, false);
         if (container != null) {
             view.setMinimumHeight(container.getMinimumHeight());
@@ -68,7 +71,7 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
         return view;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         rootView = (LinearList) view;
@@ -95,13 +98,14 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
         adapter.setData(color, episodes);
     }
 
-    @Override public void showEpisodeDialog(MediaWrapper show, Episode episode) {
-        EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(show, episode);
+    @Override public void showEpisodeDialog(MediaMeta mediaMeta, Episode episode) {
+        EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(mediaMeta, episode);
         fragment.show(getFragmentManager(), "episode_dialog");
     }
 
-    public static ShowDetailSeasonFragment newInstance(final Season season) {
+    public static ShowDetailSeasonFragment newInstance(final MediaMeta mediaMeta, final Season season) {
         Bundle args = new Bundle(2);
+        args.putParcelable(ARG_MEDIA_META, mediaMeta);
         args.putParcelable(ARG_SEASON, Parcels.wrap(season));
 
         ShowDetailSeasonFragment fragment = new ShowDetailSeasonFragment();

@@ -37,6 +37,7 @@ import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.media.model.MediaMeta;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.meta.MetaProvider;
@@ -62,8 +63,8 @@ import org.parceler.Parcels;
 
 public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 
+    private static final String EXTRA_MEDIA_META = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.mediaMeta";
     private static final String EXTRA_EPISODE = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.episode";
-    private static final String EXTRA_SHOW = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.show";
 
     private static final int ANIM_SPEED = 200;
 
@@ -79,8 +80,8 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     private boolean opened;
     private String selectedSubtitleLanguage;
     private Torrent selectedTorrent;
-    private MediaWrapper episodeWrapper;
-    private MediaWrapper showWrapper;
+    private MediaMeta mediaMeta;
+    private Episode episode;
     private Magnet magnet;
 
     @BindView(R.id.scrollview) BottomSheetScrollView scrollView;
@@ -104,8 +105,9 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         activity = getActivity();
         threshold = PixelUtils.getPixelsFromDp(activity, 220);
         bottom = PixelUtils.getPixelsFromDp(activity, 33);
-        showWrapper = Parcels.unwrap(getArguments().getParcelable(EXTRA_SHOW));
-        episodeWrapper = Parcels.unwrap(getArguments().getParcelable(EXTRA_EPISODE));
+        Bundle args = getArguments();
+        mediaMeta = args.getParcelable(EXTRA_MEDIA_META);
+        episode = Parcels.unwrap(args.getParcelable(EXTRA_EPISODE));
         // TODO: 6/17/17
         //        metaProvider = episode.getMetaProvider();
     }
@@ -116,9 +118,9 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
                 .inflate(R.layout.fragment_dialog_episode, container, false);
         ButterKnife.bind(this, view);
 
-        if (showWrapper.hasColor()) {
+        if (mediaMeta.hasColor()) {
             playButton.setBackground(PixelUtils.changeDrawableColor(playButton.getContext(), R.drawable.play_button_circle,
-                    showWrapper.getColor()));
+                    mediaMeta.getColor()));
         }
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) placeholder.getLayoutParams();
@@ -184,7 +186,6 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Episode episode = (Episode) episodeWrapper.getMedia();
         if (!TextUtils.isEmpty(episode.getTitle())) {
             title.setText(episode.getTitle());
             headerImage.setContentDescription(episode.getTitle());
@@ -370,8 +371,9 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     @OnClick(R.id.play_button)
     public void playClick() {
         smoothDismiss();
-        // TODO Subs
-        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episodeWrapper, showWrapper, null);
+        // TODO Subs & parent
+//        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episodeWrapper, showWrapper, null);
+        StreamInfo streamInfo = new StreamInfo(selectedTorrent, new MediaWrapper(episode, mediaMeta), null, null);
         ((FragmentListener) getActivity()).playStream(streamInfo);
     }
 
@@ -396,10 +398,10 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         }
     }
 
-    public static EpisodeDialogFragment newInstance(MediaWrapper show, Episode episode) {
+    public static EpisodeDialogFragment newInstance(MediaMeta mediaMeta, Episode episode) {
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_SHOW, Parcels.wrap(show));
+        args.putParcelable(EXTRA_MEDIA_META, mediaMeta);
         args.putParcelable(EXTRA_EPISODE, Parcels.wrap(episode));
         frag.setArguments(args);
         return frag;

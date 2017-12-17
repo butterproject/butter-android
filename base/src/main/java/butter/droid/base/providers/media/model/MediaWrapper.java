@@ -17,7 +17,6 @@
 
 package butter.droid.base.providers.media.model;
 
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
@@ -30,44 +29,46 @@ import org.parceler.Parcels;
 
 public class MediaWrapper implements Parcelable {
 
-    public static final int COLOR_NONE = Color.TRANSPARENT;
-
     @NonNull private final Media media;
-    private final int providerId;
+    @NonNull private final MediaMeta mediaMeta;
 
-    @ColorInt private int color = COLOR_NONE;
-
-    public MediaWrapper(final Media media, final int providerId) {
+    public MediaWrapper(@NonNull final Media media, final int providerId) {
         this.media = media;
-        this.providerId = providerId;
+        this.mediaMeta = new MediaMeta(providerId);
     }
 
-    public MediaWrapper(final Media media, final int providerId, final int color) {
+    public MediaWrapper(@NonNull final Media media, final int providerId, final int color) {
+        this(media, new MediaMeta(providerId, color));
+    }
+
+    public MediaWrapper(@NonNull final Media media, @NonNull final MediaMeta mediaMeta) {
         this.media = media;
-        this.providerId = providerId;
-        this.color = color;
+        this.mediaMeta = mediaMeta;
     }
 
     private MediaWrapper(Parcel in) {
         this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
-        this.providerId = in.readInt();
-        this.color = in.readInt();
+        this.mediaMeta = Parcels.unwrap(in.readParcelable(MediaMeta.class.getClassLoader()));
     }
 
-    public Media getMedia() {
+    @NonNull public Media getMedia() {
         return media;
     }
 
+    @NonNull public MediaMeta getMediaMeta() {
+        return mediaMeta;
+    }
+
     public int getProviderId() {
-        return providerId;
+        return mediaMeta.getProviderId();
     }
 
-    public int getColor() {
-        return color;
+    @ColorInt public int getColor() {
+        return mediaMeta.getColor();
     }
 
-    public void setColor(final int color) {
-        this.color = color;
+    public void setColor(@ColorInt final int color) {
+        this.mediaMeta.setColor(color);
     }
 
     public boolean isMovie() {
@@ -83,7 +84,7 @@ public class MediaWrapper implements Parcelable {
     }
 
     public boolean hasColor() {
-        return color != COLOR_NONE;
+        return mediaMeta.hasColor();
     }
 
     @Override public int describeContents() {
@@ -92,8 +93,7 @@ public class MediaWrapper implements Parcelable {
 
     @Override public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeParcelable(Parcels.wrap(media), flags);
-        dest.writeInt(providerId);
-        dest.writeInt(color);
+        dest.writeParcelable(Parcels.wrap(mediaMeta), flags);
     }
 
     public static final Creator<MediaWrapper> CREATOR = new Creator<MediaWrapper>() {

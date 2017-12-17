@@ -67,7 +67,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
 
     @Override public void torrentSelected(final Episode episode, final Torrent torrent) {
         // TODO: 7/30/17 We should probalby fech detail information
-        startTorrent(new MediaWrapper(episode, item.getProviderId(), item.getColor()), torrent);
+        startTorrent(new MediaWrapper(episode, item.getMediaMeta()), torrent);
     }
 
     private void startTorrent(final MediaWrapper episode, final Torrent torrent) {

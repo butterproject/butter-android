@@ -17,10 +17,11 @@
 
 package butter.droid.ui.media.detail.show.season;
 
+import butter.droid.base.providers.media.model.MediaMeta;
 import butter.droid.provider.base.model.Season;
 
 public interface ShowDetailSeasonPresenter {
-    void onCreate(Season season);
+    void onCreate(MediaMeta mediaMeta, Season season);
 
     void onViewCreated();
 
