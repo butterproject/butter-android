@@ -15,12 +15,8 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base.module
-
-import butter.droid.provider.base.filter.Genre
+package butter.droid.provider.base.model
 
 @org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
-data class Movie @org.parceler.ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
-                                                             override val genres: Array<Genre>, override val rating: Float?, override val poster: String,
-                                                             override val backdrop: String, override val synopsis: String,
-                                                             override val torrents: Array<Torrent>, val trailer: String?) : Streamable
+data class Torrent @org.parceler.ParcelConstructor constructor(val url: String, val format: Format, val size: Int,
+                                                               val fileSize: Long?, val peers: Int?, val seeds: Int?)

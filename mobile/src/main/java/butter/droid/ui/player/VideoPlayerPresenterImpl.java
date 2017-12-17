@@ -22,8 +22,8 @@ import android.content.Intent;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
-import butter.droid.provider.base.module.Clip;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Clip;
+import butter.droid.provider.base.model.Media;
 import butter.droid.utils.StreamInfoUtils;
 
 public class VideoPlayerPresenterImpl implements VideoPlayerPresenter {

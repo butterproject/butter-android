@@ -23,7 +23,7 @@ import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.VLCOptions;
-import butter.droid.provider.mock.MockMovieMediaProvider;
+import butter.droid.provider.mock.MockMediaProvider;
 import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoProvider;
 import dagger.Module;
@@ -36,7 +36,7 @@ import timber.log.Timber;
 public class InternalBaseManagerModule {
 
     @Provides @Internal ProviderManager provideProviderManager(final MockSubsProvider subsProvider, 
-            final VodoProvider vodoProvider, final MockMovieMediaProvider moviesProvider) {
+            final VodoProvider vodoProvider, final MockMediaProvider moviesProvider) {
         return new ProviderManager(subsProvider, vodoProvider, moviesProvider);
     }
 

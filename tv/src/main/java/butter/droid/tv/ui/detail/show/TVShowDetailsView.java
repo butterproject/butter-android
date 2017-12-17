@@ -18,8 +18,8 @@
 package butter.droid.tv.ui.detail.show;
 
 import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.provider.base.module.Episode;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailView;
 import java.util.List;
 import java.util.TreeMap;

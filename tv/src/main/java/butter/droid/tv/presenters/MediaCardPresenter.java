@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.AnimUtils;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import butter.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;

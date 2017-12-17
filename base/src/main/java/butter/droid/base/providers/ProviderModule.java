@@ -19,7 +19,7 @@ package butter.droid.base.providers;
 
 import android.content.Context;
 import butter.droid.provider.base.ProviderScope;
-import butter.droid.provider.mock.MockMovieMediaProvider;
+import butter.droid.provider.mock.MockMediaProvider;
 import butter.droid.provider.subs.SubsProvider;
 import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoModule;
@@ -35,8 +35,8 @@ public class ProviderModule {
         return new MockSubsProvider(context);
     }
 
-    @Provides @ProviderScope public MockMovieMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
-        return new MockMovieMediaProvider(context, gson);
+    @Provides @ProviderScope public MockMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
+        return new MockMediaProvider(context, gson);
     }
 
     @Provides @ProviderScope MockSubsProvider provideMockSubsProvider(final Context context) {

@@ -30,7 +30,7 @@ import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.SubsProvider;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;

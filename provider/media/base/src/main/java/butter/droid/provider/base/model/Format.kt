@@ -15,15 +15,14 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base
+package butter.droid.provider.base.model
 
-import org.junit.Assert
-import org.junit.Test
+const val FORMAT_NORMAL = 0
+const val FORMAT_3D = 1
 
-class MockMovieMediaProviderTest {
+const val QUALITY_HD = 720
+const val QUALITY_FULL_HD = 1080
+const val QUALITY_4K = 2160
 
-    @Test fun firstTest() {
-        Assert.assertTrue(true)
-    }
-
-}
+@org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
+data class Format @org.parceler.ParcelConstructor constructor(val quality: Int, val type: Int)

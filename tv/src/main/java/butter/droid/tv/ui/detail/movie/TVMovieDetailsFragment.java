@@ -24,7 +24,7 @@ import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;

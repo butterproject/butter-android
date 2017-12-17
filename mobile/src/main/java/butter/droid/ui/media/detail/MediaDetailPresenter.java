@@ -20,7 +20,7 @@ package butter.droid.ui.media.detail;
 import android.support.annotation.NonNull;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.subs.model.Subtitle;
 
 public interface MediaDetailPresenter {

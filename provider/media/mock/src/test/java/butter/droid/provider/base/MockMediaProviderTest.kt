@@ -15,14 +15,15 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base.module
+package butter.droid.provider.base
 
-import butter.droid.provider.base.filter.Genre
-import org.parceler.Parcel
-import org.parceler.ParcelConstructor
+import org.junit.Assert
+import org.junit.Test
 
-@Parcel(Parcel.Serialization.BEAN)
-data class Show @ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
-                                               override val genres: Array<Genre>, override val backdrop: String,
-                                               override val synopsis: String, override val rating: Float?, override val poster: String,
-                                               val episodes: Array<Episode>) : Media
+class MockMediaProviderTest {
+
+    @Test fun firstTest() {
+        Assert.assertTrue(true)
+    }
+
+}

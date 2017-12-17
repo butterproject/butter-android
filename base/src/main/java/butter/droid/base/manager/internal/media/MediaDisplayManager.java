@@ -23,9 +23,9 @@ import android.support.annotation.StringRes;
 import butter.droid.base.Internal;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.provider.base.module.Format;
-import butter.droid.provider.base.module.FormatKt;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Format;
+import butter.droid.provider.base.model.FormatKt;
+import butter.droid.provider.base.model.Torrent;
 import java.util.Arrays;
 import javax.inject.Inject;
 

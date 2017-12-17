@@ -49,7 +49,7 @@ import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;

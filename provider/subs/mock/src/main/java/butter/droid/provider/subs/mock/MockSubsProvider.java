@@ -19,7 +19,7 @@ package butter.droid.provider.subs.mock;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.AbsSubsProvider;
 import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;

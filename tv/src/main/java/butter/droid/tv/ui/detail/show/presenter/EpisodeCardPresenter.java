@@ -28,7 +28,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.model.Episode;
 import butter.droid.tv.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;

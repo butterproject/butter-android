@@ -21,7 +21,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Base64;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
 import java.io.File;

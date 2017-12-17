@@ -32,7 +32,7 @@ import butter.droid.base.BaseApplicationComponent;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.provider.base.ProviderScope;
-import butter.droid.provider.mock.MockMovieMediaProvider;
+import butter.droid.provider.mock.MockMediaProvider;
 import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoProvider;
 import com.google.gson.Gson;
@@ -53,7 +53,7 @@ public interface ProviderComponent {
 
     VodoProvider vodoProvider();
 
-    MockMovieMediaProvider mockMoviesProvider();
+    MockMediaProvider mockMoviesProvider();
 
     MockSubsProvider mockSubsProvider();
 

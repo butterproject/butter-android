@@ -15,6 +15,6 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base.module
+package butter.droid.provider.base.model
 
 data class Paging(val endCursor: String?, val hasNextPage: Boolean)
