@@ -118,7 +118,7 @@ public class StreamInfo implements Parcelable {
         } else if (parentMedia != null) {
             return parentMedia.getColor();
         } else {
-            return MediaWrapper.COLOR_NONE;
+            return MediaMeta.COLOR_NONE;
         }
     }
 

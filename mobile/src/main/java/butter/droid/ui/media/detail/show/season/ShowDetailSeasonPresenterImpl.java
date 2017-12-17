@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail.show.season;
 
-import android.graphics.Color;
+import butter.droid.base.providers.media.model.MediaMeta;
 import butter.droid.provider.base.model.Season;
 import java.util.Arrays;
 
@@ -25,29 +25,32 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
 
     private final ShowDetailSeasonView view;
 
+    private MediaMeta mediaMeta;
     private Season season;
 
     public ShowDetailSeasonPresenterImpl(ShowDetailSeasonView view) {
         this.view = view;
     }
 
-
-    @Override public void onCreate(Season season) {
+    @Override public void onCreate(MediaMeta mediaMeta, Season season) {
+        if (mediaMeta == null) {
+            throw new IllegalStateException("Media Meta not provided");
+        }
         if (season == null) {
             throw new IllegalStateException("Season not present");
         }
 
+        this.mediaMeta = mediaMeta;
         this.season = season;
     }
 
     @Override public void onViewCreated() {
-        // TODO do someting with color
-        view.displayData(Color.TRANSPARENT, Arrays.asList(season.getEpisodes()));
+        view.displayData(mediaMeta.getColor(), Arrays.asList(season.getEpisodes()));
     }
 
     @Override public void episodeSelected(int position) {
-        // TODO show info? do we need it
-        view.showEpisodeDialog(null, season.getEpisodes()[position]);
+        // TODO media wrapper
+        view.showEpisodeDialog(mediaMeta, season.getEpisodes()[position]);
     }
 
 }
