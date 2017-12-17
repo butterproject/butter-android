@@ -18,13 +18,12 @@
 package butter.droid.ui.media.detail.show;
 
 import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailAbout;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailSeason;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ShowDetailPresenterImpl implements ShowDetailPresenter {
@@ -56,8 +55,7 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
             items.add(new UiShowDetailAbout());
         }
 
-        List<Integer> availableSeasons = getAvailableSeasons();
-        for (int season : availableSeasons) {
+        for (Season season : getAvailableSeasons()) {
             items.add(new UiShowDetailSeason(season));
         }
 
@@ -65,16 +63,9 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
 
     }
 
-    private List<Integer> getAvailableSeasons() {
-        final List<Integer> availableSeasons = new ArrayList<>();
+    private Season[] getAvailableSeasons() {
         Show show = (Show) mediaWrapper.getMedia();
-        for (Episode episode : show.getEpisodes()) {
-            if (!availableSeasons.contains(episode.getSeasion())) {
-                availableSeasons.add(episode.getSeasion());
-            }
-        }
-        Collections.sort(availableSeasons);
-        return availableSeasons;
+        return show.getSeasons();
     }
 
 }

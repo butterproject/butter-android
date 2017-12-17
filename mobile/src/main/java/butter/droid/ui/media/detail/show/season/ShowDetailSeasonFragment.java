@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Season;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
 import butter.droid.widget.LinearList;
@@ -39,7 +40,7 @@ import org.parceler.Parcels;
 
 public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDetailSeasonView, OnClickListener {
 
-    private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.show";
+//    private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.show";
     private static final String ARG_SEASON = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.season";
 
     @Inject ShowDetailSeasonPresenter presenter;
@@ -53,10 +54,10 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        MediaWrapper show = Parcels.unwrap(args.getParcelable(ARG_SHOW));
-        int season = args.getInt(ARG_SEASON);
+//        MediaWrapper show = Parcels.unwrap(args.getParcelable(ARG_SHOW));
+        Season season = Parcels.unwrap(args.getParcelable(ARG_SEASON));
 
-        presenter.onCreate(show, season);
+        presenter.onCreate(season);
     }
 
     @Override
@@ -101,10 +102,10 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
         fragment.show(getFragmentManager(), "episode_dialog");
     }
 
-    public static ShowDetailSeasonFragment newInstance(MediaWrapper show, int season) {
+    public static ShowDetailSeasonFragment newInstance(final Season season) {
         Bundle args = new Bundle(2);
-        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
-        args.putInt(ARG_SEASON, season);
+//        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
+        args.putParcelable(ARG_SEASON, Parcels.wrap(season));
 
         ShowDetailSeasonFragment fragment = new ShowDetailSeasonFragment();
         fragment.setArguments(args);

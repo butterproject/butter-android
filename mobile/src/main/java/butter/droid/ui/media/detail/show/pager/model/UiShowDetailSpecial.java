@@ -21,10 +21,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import butter.droid.R;
+import butter.droid.provider.base.model.Season;
 
+// TODO should be same as season as only title is different (we can reuse fragments)
 public class UiShowDetailSpecial extends UiShowDetailSeason {
 
-    public UiShowDetailSpecial(int season) {
+    public UiShowDetailSpecial(Season season) {
         super(season);
     }
 

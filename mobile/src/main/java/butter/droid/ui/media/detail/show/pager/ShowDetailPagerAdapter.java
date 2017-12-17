@@ -54,7 +54,7 @@ public class ShowDetailPagerAdapter extends FragmentPagerAdapter {
                 return ShowDetailAboutFragment.newInstance(show);
             case UiShowDetailItem.SHOW_DETAIL_SPECIAL:
             case UiShowDetailItem.SHOW_DETAIL_SEASON:
-                return ShowDetailSeasonFragment.newInstance(show, ((UiShowDetailSeason) item).getSeason());
+                return ShowDetailSeasonFragment.newInstance(((UiShowDetailSeason) item).getSeason());
             default:
                 throw new IllegalStateException("Unknown item type.");
         }

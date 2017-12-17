@@ -83,6 +83,7 @@ public class EpisodeListAdapter extends BaseAdapter {
     public void setData(@ColorInt int color, List<Episode> data) {
         this.color = color;
         this.data = data;
+        notifyDataSetChanged();
     }
 
     class ViewHolder {

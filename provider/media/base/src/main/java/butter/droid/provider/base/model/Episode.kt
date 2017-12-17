@@ -21,7 +21,6 @@ import butter.droid.provider.base.filter.Genre;
 
 @org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
 data class Episode @org.parceler.ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int, override val genres: Array<Genre>,
-                                                               override val rating: Float?, override val poster: String?, override val backdrop: String,
-                                                               override val synopsis: String, override val torrents: Array<Torrent>, val watched: Boolean,
-                                                               val overview: String, val episode: Int, val seasion: Int) : Streamable
+        override val rating: Float?, override val poster: String?, override val backdrop: String, override val synopsis: String,
+        override val torrents: Array<Torrent>, val episode: Int) : Streamable
 

@@ -19,18 +19,17 @@ package butter.droid.ui.media.detail.show.pager.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
-import butter.droid.R;
+import butter.droid.provider.base.model.Season;
 
 public class UiShowDetailSeason implements UiShowDetailItem {
 
-    private final int season;
+    private final Season season;
 
-    public UiShowDetailSeason(int season) {
+    public UiShowDetailSeason(Season season) {
         this.season = season;
     }
 
-    public int getSeason() {
+    public Season getSeason() {
         return season;
     }
 
@@ -39,7 +38,7 @@ public class UiShowDetailSeason implements UiShowDetailItem {
     }
 
     @Override public String getTitle(@NonNull Context context) {
-        return context.getString(R.string.season) + " " + season;
+        return season.getTitle();
     }
 
 }

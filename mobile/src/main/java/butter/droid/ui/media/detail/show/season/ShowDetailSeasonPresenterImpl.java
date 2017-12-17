@@ -17,64 +17,37 @@
 
 package butter.droid.ui.media.detail.show.season;
 
-import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.provider.base.model.Episode;
-import butter.droid.provider.base.model.Show;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import android.graphics.Color;
+import butter.droid.provider.base.model.Season;
+import java.util.Arrays;
 
 public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter {
 
     private final ShowDetailSeasonView view;
 
-    private MediaWrapper show;
-    private int season;
-    private List<Episode> episodes;
+    private Season season;
 
     public ShowDetailSeasonPresenterImpl(ShowDetailSeasonView view) {
         this.view = view;
     }
 
 
-    @Override public void onCreate(MediaWrapper show, int season) {
-        if (show == null) {
-            throw new IllegalStateException("Show not provided");
+    @Override public void onCreate(Season season) {
+        if (season == null) {
+            throw new IllegalStateException("Season not present");
         }
 
-        if (season < 0) {
-            throw new IllegalStateException("Season not valid");
-        }
-
-        this.show = show;
         this.season = season;
-        mapData(show, season);
-
     }
 
     @Override public void onViewCreated() {
-        view.displayData(show.getColor(), episodes);
+        // TODO do someting with color
+        view.displayData(Color.TRANSPARENT, Arrays.asList(season.getEpisodes()));
     }
 
     @Override public void episodeSelected(int position) {
-        view.showEpisodeDialog(show, episodes.get(position));
-    }
-
-    private void mapData(MediaWrapper mediaWrapper, int season) {
-
-        List<Episode> episodes = new ArrayList<>();
-
-        Show show = (Show) mediaWrapper.getMedia();
-        for (Episode episode : show.getEpisodes()) {
-            if (episode.getSeasion() == season) {
-                episodes.add(episode);
-            }
-        }
-
-        Collections.sort(episodes, (lhs, rhs) -> lhs.getEpisode() - rhs.getEpisode());
-
-        this.episodes = episodes;
-
+        // TODO show info? do we need it
+        view.showEpisodeDialog(null, season.getEpisodes()[position]);
     }
 
 }

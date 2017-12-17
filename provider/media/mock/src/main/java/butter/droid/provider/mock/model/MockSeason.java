@@ -17,7 +17,7 @@
 
 package butter.droid.provider.mock.model;
 
-public class MockShow {
+public class MockSeason {
 
     private long id;
     private String title;
@@ -25,7 +25,7 @@ public class MockShow {
     private String poster;
     private String backdrop;
     private String synopsis;
-    private MockSeason[] seasons;
+    private MockEpisode[] episodes;
 
     public long getId() {
         return id;
@@ -51,8 +51,7 @@ public class MockShow {
         return synopsis;
     }
 
-    public MockSeason[] getSeasons() {
-        return seasons;
+    public MockEpisode[] getEpisodes() {
+        return episodes;
     }
-
 }

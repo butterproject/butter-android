@@ -199,13 +199,13 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 //        aired.setText(String.format(getString(R.string.aired), new SimpleDateFormat("MMMM dd, yyyy", LocaleUtils.getCurrent())
 //                .format(airedDate)));
 
-        if (!TextUtils.isEmpty(episode.getOverview())) {
-            synopsis.setText(episode.getOverview());
-        } else {
-            synopsis.setText(R.string.no_synopsis_available);
-        }
+//        if (!TextUtils.isEmpty(episode.getOverview())) {
+//            synopsis.setText(episode.getOverview());
+//        } else {
+//            synopsis.setText(R.string.no_synopsis_available);
+//        }
 
-        info.setText(String.format(Locale.US, "S%02dE%02d", episode.getSeasion(), episode.getEpisode()));
+//        info.setText(String.format(Locale.US, "S%02dE%02d", episode.getSeasion(), episode.getEpisode()));
 
         subtitles.setFragmentManager(getFragmentManager());
         quality.setFragmentManager(getFragmentManager());
@@ -362,7 +362,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         }
         SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
         Bundle args = new Bundle();
-        args.putString("text", ((Episode) episodeWrapper.getMedia()).getOverview());
+//        args.putString("text", ((Episode) episodeWrapper.getMedia()).getOverview());
         synopsisDialogFragment.setArguments(args);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }

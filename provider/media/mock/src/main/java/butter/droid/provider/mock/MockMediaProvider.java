@@ -32,12 +32,15 @@ import butter.droid.provider.base.model.ItemsWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Paging;
+import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
+import butter.droid.provider.mock.model.MockEpisode;
 import butter.droid.provider.mock.model.MockMovies;
+import butter.droid.provider.mock.model.MockSeason;
 import butter.droid.provider.mock.model.MockShows;
 import com.google.gson.Gson;
 import io.reactivex.Maybe;
@@ -117,7 +120,7 @@ public class MockMediaProvider extends AbsMediaProvider {
                 .flattenAsObservable(mockMovies -> mockMovies)
                 .map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], null, m.getPoster(),
                         m.getBackdrop(), m.getSynopsis(),
-                        new Torrent[]{
+                        new Torrent[] {
                                 new Torrent(m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
                         }, m.getTrailer()));
     }
@@ -127,11 +130,35 @@ public class MockMediaProvider extends AbsMediaProvider {
                 .map(MockShows::getShow)
                 .flattenAsObservable(mockShows -> mockShows)
                 .map(s -> new Show(String.valueOf(s.getId()), s.getTitle(), s.getYear(), new Genre[0], s.getBackdrop(), s.getSynopsis(), null,
-                        s.getPoster(), new Episode[0]));
+                        s.getPoster(), mapSeasons(s.getSeasons())));
     }
 
     private BufferedSource getFile(String fileName) throws IOException {
         String file = String.format("mock/%s", fileName);
         return Okio.buffer(Okio.source(context.getAssets().open(file)));
+    }
+
+    private Season[] mapSeasons(MockSeason[] mockSeasons) {
+        Season[] seasons = new Season[mockSeasons.length];
+        for (int i = 0; i < mockSeasons.length; i++) {
+            MockSeason season = mockSeasons[i];
+            seasons[i] = new Season(String.valueOf(season.getId()), season.getTitle(), season.getYear(), new Genre[0],
+                    null, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()));
+        }
+        return seasons;
+    }
+
+    private Episode[] mapEpisodes(MockEpisode[] mockEpisodes) {
+        Episode[] episodes = new Episode[mockEpisodes.length];
+        for (int i = 0; i < mockEpisodes.length; i++) {
+            MockEpisode episode = mockEpisodes[i];
+            episodes[i] = new Episode(String.valueOf(episode.getId()), episode.getTitle(), episode.getYear(), new Genre[0],
+                    null, episode.getPoster(), episode.getBackdrop(), episode.getSynopsis(),
+                    new Torrent[] {
+                            new Torrent(episode.getTorrent(), new Format(episode.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
+                    }, episode.getEpisdoe());
+        }
+        return episodes;
+
     }
 }
