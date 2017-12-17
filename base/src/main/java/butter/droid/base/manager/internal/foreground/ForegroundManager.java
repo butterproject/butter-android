@@ -53,7 +53,7 @@ public class ForegroundManager implements ComponentCallbacks2, ActivityLifecycle
                     if (!powerManager.isInteractive()) {
                         setInForeground(false);
                     }
-                } else if (!powerManager.isScreenOn()){
+                } else if (!powerManager.isScreenOn()) {
                     setInForeground(false);
                 }
             }

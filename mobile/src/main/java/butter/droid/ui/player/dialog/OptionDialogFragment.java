@@ -20,7 +20,6 @@ package butter.droid.ui.player.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -41,23 +40,17 @@ public class OptionDialogFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getArguments().getString(ARG_TITLE))
                 .setMessage(getArguments().getString(ARG_MESSAGE))
-                .setPositiveButton(getArguments().getString(ARG_POS_BUT), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (listener != null) {
-                            listener.onSelectionPositive();
-                        }
-                        dialog.dismiss();
+                .setPositiveButton(getArguments().getString(ARG_POS_BUT), (dialog, which) -> {
+                    if (listener != null) {
+                        listener.onSelectionPositive();
                     }
+                    dialog.dismiss();
                 })
-                .setNegativeButton(getArguments().getString(ARG_NEG_BUT), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (listener != null) {
-                            listener.onSelectionNegative();
-                        }
-                        dialog.dismiss();
+                .setNegativeButton(getArguments().getString(ARG_NEG_BUT), (dialog, which) -> {
+                    if (listener != null) {
+                        listener.onSelectionNegative();
                     }
+                    dialog.dismiss();
                 })
                 .create();
     }
