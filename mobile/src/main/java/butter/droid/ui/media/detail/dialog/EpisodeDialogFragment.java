@@ -118,10 +118,10 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
                 .inflate(R.layout.fragment_dialog_episode, container, false);
         ButterKnife.bind(this, view);
 
-//        if (showWrapper.hasColor()) {
-//            playButton.setBackground(PixelUtils.changeDrawableColor(playButton.getContext(), R.drawable.play_button_circle,
-//                    showWrapper.getColor()));
-//        }
+        if (mediaMeta.hasColor()) {
+            playButton.setBackground(PixelUtils.changeDrawableColor(playButton.getContext(), R.drawable.play_button_circle,
+                    mediaMeta.getColor()));
+        }
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) placeholder.getLayoutParams();
         layoutParams.height = PixelUtils.getScreenHeight(activity);
