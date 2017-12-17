@@ -113,10 +113,12 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
     }
 
     @Override public void onMediaItemClicked(final MediaWrapper media) {
+        // TODO this should be done in detail screen
         view.showMediaLoadingDialog();
 
         cancelDetailsCall();
-        providerManager.getProvider(providerId).detail(media.getMedia())
+        providerManager.getProvider(providerId)
+                .detail(media.getMedia())
                 .map(m -> new MediaWrapper(m, media.getProviderId(), media.getColor()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

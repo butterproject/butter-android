@@ -19,13 +19,11 @@ package butter.droid.ui.media.detail.movie.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
-
 import butter.droid.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,13 +40,7 @@ public class SynopsisDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setNeutralButton(R.string.close,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }
+                .setNeutralButton(R.string.close, (dialog, which) -> dialog.dismiss()
                 );
 
         synopsisText.setText(getArguments().getString(ARG_SYNOPSIS));

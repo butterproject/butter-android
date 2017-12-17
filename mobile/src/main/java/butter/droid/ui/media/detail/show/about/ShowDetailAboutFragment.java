@@ -139,10 +139,7 @@ public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetai
             return;
         }
 
-        SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
-        Bundle args = new Bundle();
-        args.putString("text", synopsis);
-        synopsisDialogFragment.setArguments(args);
+        SynopsisDialogFragment synopsisDialogFragment = SynopsisDialogFragment.newInstance(synopsis);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
     }
 
