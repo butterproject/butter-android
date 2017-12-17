@@ -165,6 +165,10 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         displayFragment(ShowDetailFragment.newInstance(show));
     }
 
+    @Override public void displaySeason(MediaWrapper show) {
+        displayFragment(ShowDetailFragment.newInstance(show));
+    }
+
     @Override public void displayDialog(@StringRes int title, @StringRes int message) {
         MessageDialogFragment.show(getSupportFragmentManager(), title, message);
     }

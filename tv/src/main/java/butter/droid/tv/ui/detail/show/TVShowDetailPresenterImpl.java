@@ -22,6 +22,7 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
@@ -46,11 +47,13 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     @Override protected void detailsLoaded(final MediaWrapper media) {
         super.detailsLoaded(media);
 
-        addSeasons((Show) media.getMedia());
-    }
-
-    private void addSeasons(Show show) {
-        view.showSeasons(show.getSeasons());
+        if (media.isShow()) {
+            view.showSeasons(((Show) media.getMedia()).getSeasons());
+        } else if (media.isSeason()) {
+            view.showSeasons(new Season[] { ((Season) media.getMedia()) });
+        } else {
+            throw new IllegalStateException("Unsupported media type");
+        }
     }
 
     @Override public void episodeClicked(final Episode episode) {

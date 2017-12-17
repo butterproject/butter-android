@@ -38,4 +38,6 @@ public interface MediaDetailView {
     void openYouTube(MediaWrapper media, String url);
 
     void displayHealthInfo(TorrentHealth health, int seeds, int peers);
+
+    void displaySeason(MediaWrapper media);
 }

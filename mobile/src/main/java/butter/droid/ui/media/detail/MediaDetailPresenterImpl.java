@@ -55,7 +55,9 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
             view.displayMovie(media);
         } else if (media.isShow()) {
             view.displayShow(media);
-        } else { // TODO: 7/30/17 Support season and episode
+        } else if (media.isSeason()) {
+            view.displaySeason(media);
+        } else { // TODO: 7/30/17 Support episode
             throw new IllegalStateException("Unknown show type");
         }
     }

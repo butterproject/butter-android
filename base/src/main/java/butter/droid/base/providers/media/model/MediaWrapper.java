@@ -24,6 +24,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
+import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import org.parceler.Parcels;
 
@@ -75,6 +76,10 @@ public class MediaWrapper implements Parcelable {
 
     public boolean isShow() {
         return media instanceof Show;
+    }
+
+    public boolean isSeason() {
+        return media instanceof Season;
     }
 
     public boolean hasColor() {

@@ -64,8 +64,14 @@ public class ShowDetailPresenterImpl implements ShowDetailPresenter {
     }
 
     private Season[] getAvailableSeasons() {
-        Show show = (Show) mediaWrapper.getMedia();
-        return show.getSeasons();
+        if (mediaWrapper.isShow()) {
+            Show show = (Show) mediaWrapper.getMedia();
+            return show.getSeasons();
+        } else if (mediaWrapper.isSeason()) {
+            return new Season[] { (Season) mediaWrapper.getMedia() };
+        } else {
+            throw new IllegalStateException("Unsupported media type");
+        }
     }
 
 }

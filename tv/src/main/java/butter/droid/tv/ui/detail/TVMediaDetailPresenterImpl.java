@@ -36,7 +36,9 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
             view.displayFragment(TVMovieDetailsFragment.newInstance(media));
         } else if (media.isShow()) {
             view.displayFragment(TVShowDetailsFragment.newInstance(media));
-        } else { // TODO: 7/30/17 Handle season and episode
+        } else if (media.isSeason()) {
+            view.displayFragment(TVShowDetailsFragment.newInstance(media));
+        } else { // TODO: 7/30/17 Handle episode
             throw new IllegalStateException("Unknow media type");
         }
     }
