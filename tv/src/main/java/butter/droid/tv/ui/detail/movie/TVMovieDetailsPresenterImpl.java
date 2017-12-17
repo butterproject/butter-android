@@ -21,8 +21,8 @@ import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Movie;
+import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 

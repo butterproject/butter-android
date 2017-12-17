@@ -26,7 +26,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.module.Paging;
+import butter.droid.provider.base.model.Paging;
 import butter.droid.provider.filter.Pager;
 import io.reactivex.Observable;
 import io.reactivex.Single;

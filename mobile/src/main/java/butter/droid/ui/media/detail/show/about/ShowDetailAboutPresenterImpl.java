@@ -23,7 +23,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Genre;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 
 public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
 

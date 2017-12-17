@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.model.Episode;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
 import butter.droid.widget.LinearList;

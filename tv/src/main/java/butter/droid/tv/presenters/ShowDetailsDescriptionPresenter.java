@@ -19,7 +19,7 @@ package butter.droid.tv.presenters;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import butter.droid.provider.base.filter.Genre;
-import butter.droid.provider.base.module.Show;
+import butter.droid.provider.base.model.Show;
 
 public class ShowDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 

@@ -15,11 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base.module
+package butter.droid.provider.base.model
 
-import butter.droid.provider.base.filter.Genre
+interface Media {
 
-@org.parceler.Parcel(org.parceler.Parcel.Serialization.BEAN)
-data class Season @org.parceler.ParcelConstructor constructor(override val id: String, override val title: String, override val year: Int,
-                                                              override val genres: Array<Genre>, override val rating: Float?, override val poster: String?,
-                                                              override val backdrop: String, override val synopsis: String) : butter.droid.provider.base.module.Media
+    val id: String
+    val title: String
+    val year: Int
+    val genres: Array<butter.droid.provider.base.filter.Genre>
+    val rating: Float?
+    val poster: String?
+    val backdrop: String
+    val synopsis: String
+
+}

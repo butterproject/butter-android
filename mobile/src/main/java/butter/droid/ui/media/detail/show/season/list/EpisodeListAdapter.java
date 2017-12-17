@@ -26,7 +26,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butter.droid.R;
-import butter.droid.provider.base.module.Episode;
+import butter.droid.provider.base.model.Episode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;

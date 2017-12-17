@@ -23,7 +23,7 @@ import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
-import butter.droid.provider.base.module.FormatKt;
+import butter.droid.provider.base.model.FormatKt;
 import dagger.Reusable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

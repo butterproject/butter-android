@@ -25,8 +25,8 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.torrent.TorrentHealth;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Movie;
+import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.subs.model.Subtitle;
 
 public class MediaDetailPresenterImpl implements MediaDetailPresenter {

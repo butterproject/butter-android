@@ -32,7 +32,7 @@ import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;

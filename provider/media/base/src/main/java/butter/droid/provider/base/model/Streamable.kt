@@ -15,6 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.base.module
+package butter.droid.provider.base.model
 
-data class ItemsWrapper(val media: List<Media>, val paging: Paging)
+interface Streamable: Media {
+
+    val torrents: Array<Torrent>
+
+}

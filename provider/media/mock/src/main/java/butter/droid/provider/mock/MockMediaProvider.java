@@ -25,17 +25,20 @@ import butter.droid.provider.AbsMediaProvider;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
-import butter.droid.provider.base.module.Format;
-import butter.droid.provider.base.module.FormatKt;
-import butter.droid.provider.base.module.ItemsWrapper;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Paging;
-import butter.droid.provider.base.module.Torrent;
+import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Format;
+import butter.droid.provider.base.model.FormatKt;
+import butter.droid.provider.base.model.ItemsWrapper;
+import butter.droid.provider.base.model.Media;
+import butter.droid.provider.base.model.Movie;
+import butter.droid.provider.base.model.Paging;
+import butter.droid.provider.base.model.Show;
+import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
 import butter.droid.provider.mock.model.MockMovies;
+import butter.droid.provider.mock.model.MockShows;
 import com.google.gson.Gson;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
@@ -46,25 +49,19 @@ import java.util.List;
 import okio.BufferedSource;
 import okio.Okio;
 
-public class MockMovieMediaProvider extends AbsMediaProvider {
+public class MockMediaProvider extends AbsMediaProvider {
 
     private final Context context;
     private final Gson gson;
 
-    public MockMovieMediaProvider(Context context, Gson gson) {
+    public MockMediaProvider(Context context, Gson gson) {
         this.context = context;
         this.gson = gson;
     }
 
     @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter, @Nullable Pager pager) {
-        return Single.fromCallable(() -> parseResponse("movies_list.json", MockMovies.class))
-                .map(MockMovies::getMovies)
-                .flatMapObservable(Observable::fromIterable)
-                .<Media>map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], null, m.getPoster(),
-                        m.getBackdrop(), m.getSynopsis(),
-                        new Torrent[]{
-                                new Torrent(m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
-                        }, m.getTrailer()))
+        return parseMovies()
+                .concatWith(parseShows())
                 .toList()
                 .map(l -> new ItemsWrapper(l, new Paging("", false)));
     }
@@ -112,6 +109,25 @@ public class MockMovieMediaProvider extends AbsMediaProvider {
             throw new RuntimeException("Error reading file", e);
         }
 
+    }
+
+    private Observable<Media> parseMovies() {
+        return Single.fromCallable(() -> parseResponse("movie_list.json", MockMovies.class))
+                .map(MockMovies::getMovies)
+                .flattenAsObservable(mockMovies -> mockMovies)
+                .map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], null, m.getPoster(),
+                        m.getBackdrop(), m.getSynopsis(),
+                        new Torrent[]{
+                                new Torrent(m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
+                        }, m.getTrailer()));
+    }
+
+    private Observable<Media> parseShows() {
+        return Single.fromCallable(() -> parseResponse("show_list.json", MockShows.class))
+                .map(MockShows::getShow)
+                .flattenAsObservable(mockShows -> mockShows)
+                .map(s -> new Show(String.valueOf(s.getId()), s.getTitle(), s.getYear(), new Genre[0], s.getBackdrop(), s.getSynopsis(), null,
+                        s.getPoster(), new Episode[0]));
     }
 
     private BufferedSource getFile(String fileName) throws IOException {

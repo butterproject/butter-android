@@ -40,7 +40,7 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.base.manager.internal.paging.PagingAdapter;
-import butter.droid.provider.base.module.Media;
+import butter.droid.provider.base.model.Media;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;

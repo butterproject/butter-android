@@ -22,9 +22,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import butter.droid.provider.base.module.Media;
-import butter.droid.provider.base.module.Movie;
-import butter.droid.provider.base.module.Show;
+import butter.droid.provider.base.model.Media;
+import butter.droid.provider.base.model.Movie;
+import butter.droid.provider.base.model.Show;
 import org.parceler.Parcels;
 
 public class MediaWrapper implements Parcelable {
